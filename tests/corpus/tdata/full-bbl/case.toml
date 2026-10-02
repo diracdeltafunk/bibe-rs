@@ -1,0 +1,5 @@
+description = "biber's own full .bbl fixture (t/full-bbl.t)"
+source = "vendor/biber/t/tdata/full-bbl.bcf"
+args = ["--noconf", "full-bbl.bcf"]
+outputs = ["full-bbl.bbl"]
+tags = ["suite:tdata"]

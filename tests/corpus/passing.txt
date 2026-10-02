@@ -1,0 +1,3 @@
+# Corpus cases bibers is required to pass (the ratchet). Checked by
+# `cargo test -p bibers --test corpus`. Regenerate with
+# `cargo xtask corpus --update-passing`; never remove a line to make CI green.

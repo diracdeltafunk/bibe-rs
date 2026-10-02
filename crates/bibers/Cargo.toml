@@ -1,0 +1,23 @@
+[package]
+name = "bibers"
+description = "A fast, biber-compatible bibliography processor for biblatex"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+[[bin]]
+name = "bibers"
+path = "src/main.rs"
+
+[dependencies]
+bibers-core.workspace = true
+
+[dev-dependencies]
+bibers-testkit.workspace = true
+
+[lints]
+workspace = true
