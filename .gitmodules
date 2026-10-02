@@ -1,0 +1,3 @@
+[submodule "vendor/biber"]
+	path = vendor/biber
+	url = https://github.com/plk/biber.git

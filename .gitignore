@@ -1,0 +1,13 @@
+# Rust
+/target/
+**/*.rs.bk
+
+# Local experiment area (bug reproducers get migrated into tests/corpus/bugs/)
+/scratch/
+
+# Source-built Perl oracle (O3), built by tools/oracle/build-perl-oracle.sh
+/vendor/perl/
+/vendor/perl-build/
+
+# macOS
+.DS_Store
