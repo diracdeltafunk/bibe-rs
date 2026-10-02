@@ -319,7 +319,7 @@ Not planned at all: the deprecated `bblxml` and `dot` outputs (with `--dot-inclu
 - `docs/compat.md` plus the quirk registry document the differences;
 - releasing under the Artistic License 2.0 satisfies both (a) and (c).
 
-**Recommendation: license bibers under the Artistic License 2.0** (SPDX `Artistic-2.0`), keeping the copyright notices of François Charette and Philip Kime alongside ours. This is the only choice with no grey area: it matches upstream, lets the maintainers take our fixes, and is still permissive (commercial use and embedding allowed). MIT OR Apache-2.0 is the Rust norm, but because of §10 it would be misleading for the biber-derived crates.
+**Decision: bibers is licensed under the Artistic License 2.0** (SPDX `Artistic-2.0`), keeping the copyright notices of François Charette and Philip Kime alongside ours. This is the only choice with no grey area: it matches upstream, lets the maintainers take our fixes, and is still permissive (commercial use and embedding allowed). MIT OR Apache-2.0 is the Rust norm, but because of §10 it would be misleading for the biber-derived crates.
 
 **Third-party-derived crates keep their upstream terms,** each crate with its own `license` field and NOTICE:
 - `ucollate` ports Unicode::Collate and its tables, which are under Perl 5 terms (Artistic 1.0 or GPL-1.0+). DUCET is under the Unicode License v3, which is permissive.
@@ -336,5 +336,6 @@ Not planned at all: the deprecated `bblxml` and `dot` outputs (with `--dot-inclu
 | 2 | Scope | P2 features are **deferred to M4** (listed in §8). **Deprecated features are dropped:** `bblxml` and `dot` outputs, and `--dot-include`. Legacy CLI aliases (`--bibencoding`, `--outfile`, `--tool-align`, …) are kept because they are cheap and scripts use them. |
 | 3 | Oracle O3 | **Approved.** Source-built perl 5.42.0 + pinned CPAN deps under `vendor/perl` (gitignored), built by `tools/oracle/build-perl-oracle.sh`. |
 | 4 | Version target | **biber 2.22** (submodule pinned at tag `v2.22`), then follow 2.23. |
-| 5 | Name / licence | Binary and crate name **`bibers`**. Licence: **Artistic-2.0 recommended** (§9). *Awaiting confirmation.* |
+| 5 | Name / licence | Binary and crate name **`bibers`**. Licence: **Artistic-2.0** (§9; top-level `LICENSE`). |
+| 7 | Behaviour differences | Every difference from biber is recorded in **`docs/compat.md`** (DC-NNN ids, referenced from code and from the test-harness allow-list). |
 | 6 | Git | Repo initialised, biber added as a submodule at `vendor/biber` (v2.22), docs committed. |
