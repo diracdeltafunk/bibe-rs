@@ -1,5 +1,7 @@
 # 01 — Data input and parsing (biber 2.22)
 
+> **Superseded (2026-10-02):** this report's advice to port btparse's `names.c`/`format_name.c` "line for line" is overruled. btparse is LGPL-2.0+, so bibers reimplements it spec-first without translating the C code. See PLAN.md §9 and §10 #8. The behavioural findings below remain valid.
+
 Scope: everything that turns data sources into `Biber::Entry` objects. This covers datasource location, encodings, the BibTeX parser (Text::BibTeX/btparse) and how biber drives it, LaTeX decoding, sourcemaps, per-datatype field handlers, names, dates, annotations, XDATA references at input, and biblatexml (summarised).
 
 Source: `/Users/ben/bibe-rs/vendor/biber`. It is identical to the installed biber 2.22 except for the version string. I diffed the vendor tree against the PAR cache (`biber --cache`, `inc/lib/Biber`). The bundled **Text::BibTeX is version 0.91** (Perl 5.42), and its Perl wrapper source is readable in the PAR cache under `inc/lib/Text/BibTeX*.pm`. The C library `libbtparse.dylib` is binary only.
