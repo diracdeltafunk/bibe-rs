@@ -48,6 +48,7 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-014 | Order in which mincrossrefs/minxrefs-promoted entries are added (visible with `sorting=none` or sort ties) | First-reference order | BB-061 | planned |
 | DC-015 | Order of dynamic sets under `\nocite{*}` | `.bcf` declaration order | BB-062 | planned |
 | DC-016 | Order of deferred WARN messages in `.blg`/stdout | Emission order (deterministic) | BB-065 | planned |
+| DC-017 | Which cycle is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | planned |
 
 ## 2. Reproduced biber bugs (Quirk switches)
 

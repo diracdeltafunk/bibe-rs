@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Oracle O3: run biber 2.22 from the pinned source tree (built copy in
+# vendor/perl-build/biber-src) with the pinned perl in vendor/perl.
+# Data files (bcf.xsl, recode_data.xml, biber-tool.conf, schemata) are found
+# relative to Biber.pm, i.e. in biber-src/blib/lib/Biber, as in an installed biber.
+# Build first with tools/oracle/build-perl-oracle.sh.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+PERL="$ROOT/vendor/perl/bin/perl"
+SRC="$ROOT/vendor/perl-build/biber-src"
+if [ ! -x "$PERL" ] || [ ! -f "$SRC/blib/lib/Biber.pm" ]; then
+  echo "biber-src: oracle not built; run tools/oracle/build-perl-oracle.sh" >&2
+  exit 127
+fi
+# Hermetic: ignore any user local::lib / PERL5LIB / PERL5OPT.
+unset PERL5LIB PERL_LOCAL_LIB_ROOT PERL5OPT
+exec "$PERL" -I"$SRC/blib/lib" "$SRC/blib/script/biber" "$@"

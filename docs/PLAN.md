@@ -181,7 +181,7 @@ Exact output equality with a real biber is the bar, so the project is built arou
 |---|---|---|
 | **O1: biber 2.22 binary** (TeX Live 2026, sha256 recorded) | End-to-end `.bbl`/`.blg`/exit code; `--tool` output (parsed+mapped `.bib`) as a parser-level probe; `--debug` "Sorting object for key …" lines to diff pre-collation sort data; `--sortdebug` | Installed. HEAD `lib/` == v2.22, and `.blg` file:line tags point straight into `vendor/biber` |
 | **O2: system Perl Unicode::Collate 1.29** (`/usr/bin/perl`) | Sort-key bytes and `viewSortKey` for any string/locale/option combination; same DUCET 13 and tailorings as biber's 1.31 | Installed |
-| **O3: source-built biber** (perl 5.42.0 + CPAN deps pinned to the PAR cache versions, under `vendor/perl`; `tools/oracle/`) | Function-level differential fuzzing (`parsename`, `latex_decode`, `normalise_string_*`, date parsing, `rangelen`, sourcemap step evaluation); running biber's own `t/*.t`; instrumenting intermediate state; trying candidate upstream fixes | Being built (approved, §10). Usage, versions and parity results: `tools/oracle/README.md` |
+| **O3: source-built biber** (perl 5.42.0 + CPAN deps pinned to the PAR cache versions, under `vendor/perl`; `tools/oracle/`) | Function-level differential fuzzing (`parsename`, `latex_decode`, `normalise_string_*`, date parsing, `rangelen`, sourcemap step evaluation); running biber's own `t/*.t`; instrumenting intermediate state; trying candidate upstream fixes | **Built** (`tools/oracle/biber-src`). All 1,275 of biber's own tests pass. Byte-identical `.bbl` to O1 on 60/60 parity cases. Details: `tools/oracle/README.md` |
 
 ### 6.2 Test layers
 
@@ -323,8 +323,12 @@ Not planned at all: the deprecated `bblxml` and `dot` outputs (with `--dot-inclu
 
 **Third-party-derived crates keep their upstream terms,** each crate with its own `license` field and NOTICE:
 - `ucollate` ports Unicode::Collate and its tables, which are under Perl 5 terms (Artistic 1.0 or GPL-1.0+). DUCET is under the Unicode License v3, which is permissive.
-- `btparse` ports Text-BibTeX's btparse C library. Its exact licence is being checked from the dist by the oracle build; see `tools/oracle/README.md`.
-- `perl-compat` embeds RangeMessage.xml (ISBN International) and possibly Lingua::Translit tables. Check their terms before embedding.
+- **btparse is LGPL-2.0-or-later** (verified from the Text-BibTeX 0.91 dist; its PCCTS-generated parts are public domain). A direct translation of `names.c`/`format_name.c` would be an LGPL derived work, which sits awkwardly in a statically linked Artistic-2.0 binary. **Decision pending (§10 #8).** Options:
+  - (a) **spec-first reimplementation**: write a behavioural spec of btparse name splitting and parsing from its documentation, BibTeX's documented rules and black-box differential tests against O1/O3, then implement from the spec without translating the C code. bibers stays wholly Artistic-2.0. Differential fuzzing gives the same correctness assurance. *Recommended.*
+  - (b) a separately licensed `btparse` crate under LGPL-2.0-or-later. This is allowed, but every bibers binary then carries LGPL relinking obligations.
+- `ucollate`'s tailoring data (`Locale/*.pl`) is itself derived from CLDR (Unicode licence, permissive).
+- Lingua::Translit tables are under Perl terms. Business-ISBN-Data is Artistic-2.0, but its `RangeMessage.xml` is ISBN International data with **no licence statement**. Prefer fetching the range file from isbn-international.org at build or run time over vendoring it, or ask.
+- biber's `recode_data.xml` is Artistic-2.0, same as us.
 
 ---
 
@@ -337,5 +341,6 @@ Not planned at all: the deprecated `bblxml` and `dot` outputs (with `--dot-inclu
 | 3 | Oracle O3 | **Approved.** Source-built perl 5.42.0 + pinned CPAN deps under `vendor/perl` (gitignored), built by `tools/oracle/build-perl-oracle.sh`. |
 | 4 | Version target | **biber 2.22** (submodule pinned at tag `v2.22`), then follow 2.23. |
 | 5 | Name / licence | Binary and crate name **`bibers`**. Licence: **Artistic-2.0** (§9; top-level `LICENSE`). |
-| 7 | Behaviour differences | Every difference from biber is recorded in **`docs/compat.md`** (DC-NNN ids, referenced from code and from the test-harness allow-list). |
 | 6 | Git | Repo initialised, biber added as a submodule at `vendor/biber` (v2.22), docs committed. |
+| 7 | Behaviour differences | Every difference from biber is recorded in **`docs/compat.md`** (DC-NNN ids, referenced from code and from the test-harness allow-list). |
+| 8 | btparse licence (LGPL) | *Pending:* spec-first reimplementation recommended (§9). |

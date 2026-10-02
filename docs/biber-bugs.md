@@ -104,6 +104,7 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-063 | C | bblxml.pm:705-708 | `<bbl:keyalias>` order is random (the `.bbl` writer sorts them; bblxml does not). | 05-B14 |
 | BB-064 | R | dot.pm:266 | `sort values %$v` sorts hashrefs by memory address, so `.dot` edge order can vary. | 05-B17 |
 | BB-065 | C | (logging) | Warning order in `.blg`/stdout differs between identical runs (observed with `-V`). Minor, but it defeats log diffing. | 02 §6 |
+| BB-112 | V | Biber.pm:1450 (`resolve_xdata` over `values %$self`, Entries.pm:68); Entry.pm:913 | With circular XDATA references, the fatal error names a random cycle, and the number of warnings before the exit varies. Repro: in a copy of `t/tdata`, run `biber --noconf xdata.bcf` repeatedly. The ERROR alternates between `'loop'<->'loop:3'` and `'lxd1:loop'<->'lxd2:loop'` (2 vs 6 times in 8 runs). | O3 build |
 
 ## 5. CLI, config and logging issues
 
