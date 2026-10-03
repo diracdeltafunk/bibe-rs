@@ -37,6 +37,9 @@ mod translate;
 pub use interp::{InterpError, MatchCtx, Template, quotemeta};
 pub use translate::translate;
 
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex, OnceLock};
+
 use pcre2::bytes::{CaptureLocations, Regex, RegexBuilder};
 
 /// A regex error.
@@ -67,10 +70,12 @@ impl std::error::Error for RegexError {}
 pub struct PerlRegex {
     src: String,
     ci: bool,
+    /// The translated pattern.
+    translated: String,
     re: Regex,
     /// The same pattern, but a match may not end at the start offset
-    /// (perl's `minend`/`NOTEMPTY_ATSTART` rule).
-    re_noempty: Regex,
+    /// (perl's `minend`/`NOTEMPTY_ATSTART` rule); compiled on first use.
+    re_noempty: OnceLock<Result<Regex, RegexError>>,
     /// `split /^/` is `split /^/m`.
     re_split: Option<Regex>,
 }
@@ -94,7 +99,6 @@ impl PerlRegex {
     pub fn new(pattern: &str, ci: bool) -> Result<PerlRegex, RegexError> {
         let t = translate(pattern, ci)?;
         let re = build(&t, ci, false)?;
-        let re_noempty = build(&format!("(?:{t})(?!\\G)"), ci, false)?;
         let re_split = if pattern == "^" {
             Some(build("(?:^)(?!\\G)", ci, true)?)
         } else {
@@ -103,10 +107,44 @@ impl PerlRegex {
         Ok(PerlRegex {
             src: pattern.to_string(),
             ci,
+            translated: t,
             re,
-            re_noempty,
+            re_noempty: OnceLock::new(),
             re_split,
         })
+    }
+
+    /// A shared compiled copy of `qr/$pattern/` from a process-wide cache
+    /// (biber recompiles user regexes for every entry; compiling PCRE2
+    /// patterns with perl's large `\w` class is comparatively expensive).
+    pub fn cached(pattern: &str, ci: bool) -> Result<Arc<PerlRegex>, RegexError> {
+        type Cache = Mutex<HashMap<(String, bool), Arc<PerlRegex>>>;
+        static CACHE: OnceLock<Cache> = OnceLock::new();
+        let cache = CACHE.get_or_init(Default::default);
+        let key = (pattern.to_string(), ci);
+        if let Some(r) = cache
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .get(&key)
+        {
+            return Ok(Arc::clone(r));
+        }
+        let re = Arc::new(PerlRegex::new(pattern, ci)?);
+        let mut g = cache
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        if g.len() > 4096 {
+            g.clear();
+        }
+        g.insert(key, Arc::clone(&re));
+        Ok(re)
+    }
+
+    fn noempty(&self) -> Result<&Regex, RegexError> {
+        self.re_noempty
+            .get_or_init(|| build(&format!("(?:{})(?!\\G)", self.translated), self.ci, false))
+            .as_ref()
+            .map_err(Clone::clone)
     }
 
     /// The pattern as given.
@@ -148,7 +186,7 @@ impl PerlRegex {
         let mut prev_empty = false;
         while pos <= s.len() {
             let re = if prev_empty {
-                &self.re_noempty
+                self.noempty()?
             } else {
                 &self.re
             };
@@ -221,7 +259,10 @@ impl PerlRegex {
     /// `split(/$re/, $s)` (limit 0): fields and captured groups (`None` =
     /// `undef`), trailing empty/undef fields removed.
     pub fn split(&self, s: &str) -> Result<Vec<Option<String>>, RegexError> {
-        let re = self.re_split.as_ref().unwrap_or(&self.re_noempty);
+        let re = match &self.re_split {
+            Some(r) => r,
+            None => self.noempty()?,
+        };
         let mut out: Vec<Option<String>> = Vec::new();
         let mut pos = 0;
         while pos < s.len() {
@@ -273,7 +314,7 @@ pub fn ireplace(
             code_warning: None,
         });
     }
-    let re = PerlRegex::new(pattern, ci)?;
+    let re = PerlRegex::cached(pattern, ci)?;
     let tpl = Template::parse(replace);
     let code_warning = match &tpl {
         Err(InterpError::Code(m)) => Some(m.clone()),
@@ -310,7 +351,7 @@ pub fn imatch(
     if !crate::truth::perl_truthy(pattern) {
         return Ok(vec![Some("0".to_string())]);
     }
-    let re = PerlRegex::new(pattern, ci)?;
+    let re = PerlRegex::cached(pattern, ci)?;
     if negmatch {
         return Ok(if re.is_match(value)? {
             vec![]

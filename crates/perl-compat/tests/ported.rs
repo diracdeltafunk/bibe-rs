@@ -22,7 +22,11 @@ fn utils_reduce_array() {
         }
         let args = t["call"]["args"].as_array().unwrap();
         let strs = |a: &serde_json::Value| -> Vec<String> {
-            a.as_array().unwrap().iter().map(|x| x.as_str().unwrap().to_string()).collect()
+            a.as_array()
+                .unwrap()
+                .iter()
+                .map(|x| x.as_str().unwrap().to_string())
+                .collect()
         };
         let want = strs(&t["expected"]);
         assert_eq!(reduce_array(&strs(&args[0]), &strs(&args[1])), want);
@@ -48,5 +52,8 @@ fn utils_rangelen_roman_parts() {
 #[test]
 fn pcre2_version() {
     let (major, minor) = pcre2::version();
-    assert!((major, minor) >= (10, 45), "PCRE2 {major}.{minor} predates Unicode 16; set PCRE2_SYS_STATIC=1");
+    assert!(
+        (major, minor) >= (10, 45),
+        "PCRE2 {major}.{minor} predates Unicode 16; set PCRE2_SYS_STATIC=1"
+    );
 }
