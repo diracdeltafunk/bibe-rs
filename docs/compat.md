@@ -58,6 +58,15 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 |---|---|---|---|---|
 | DC-019 | `\char` with a surrogate (U+D800–DFFF) or a value above U+10FFFF yields that raw code point (invalid as UTF-8 text) | U+FFFD. Rust strings can't hold these, and biber's output in these cases isn't valid UTF-8 anyway. | — | implemented (latex-recode) |
 
+### 1e. CLI and file-handling fixes
+
+| Id | biber behaviour | bibers behaviour | Bug | Status |
+|---|---|---|---|---|
+| DC-025 | Non-tool `--output-format=bibtex` names its output by stripping from the first `.` in the *whole path* (`./t1` → `_biber.bib`; `sub.dir/t1` → `sub_biber.bib`) | `<bcf-stem>_biber.bib` next to the `.bcf` (or in `--output-directory`) | BB-068 | implemented (output itself deferred, DC-030) |
+| DC-026 | `-O -` leaves an empty file named `-` (and with `--output-directory` writes `<dir>/-` instead of stdout) | Writes to stdout; no stray file | BB-069 | implemented |
+| DC-027 | With `--nodieonerror`, a missing control file cascades into a libxml crash | Stops after the "Cannot find control file" error, exit 2 | BB-071 | implemented |
+| DC-028 | `--fix-quirks` doesn't exist | Accepted only when spelt in full, so it never makes biber's abbreviations of other options ambiguous | — | implemented |
+
 ## 2. Reproduced biber bugs (Quirk switches)
 
 These are **not** differences by default: bibers reproduces biber's output. Each can be switched off with `--fix-quirks=<name>[,<name>…]` (or `--fix-quirks=all`), and the fixed behaviour is then a documented difference. Switch names are provisional until implemented.
@@ -70,7 +79,7 @@ These are **not** differences by default: bibers reproduces biber's output. Each
 | `filter-readds-sets` | A filtered list re-adds every set and set member if any set passes | Only members of passing sets are added | BB-018 | planned |
 | `per-name-option-leak` | Per-name/per-namelist overrides leak to following names | Overrides apply only to their own name/namelist | BB-019 | planned |
 | `uniquename-false-skips-entry` | A per-name `uniquename=false` drops the whole entry from uniquename | Only that name is excluded | BB-020 | planned |
-| `entry-scoped-options-ignored` | Per-entry `labelalpha`, `labeldateparts`, `singletitle`, … are ignored | Honoured | BB-021 | planned |
+| `entry-scoped-options-ignored` | Per-entry `labelalpha`, `labeldateparts`, `singletitle`, … are ignored | Honoured | BB-021 | implemented (lookup; call sites in M2) |
 | `crossref-date-meta` | Parent's circa/uncertain/era flags are inherited even when the child has its own date; date parts of different date fields are mixed | Date metadata inherited only together with the date | BB-022, BB-023 | planned |
 | `xdata-name-index` | Granular-XDATA names get 0-based indices / last name skipped | Consistent 1-based indices | BB-024 | planned |
 | `xdata-rerefs` | Re-resolving XDATA refs duplicates names | Resolved once | BB-025 | planned |
@@ -79,6 +88,11 @@ These are **not** differences by default: bibers reproduces biber's output. Each
 | `datefield-helper-mutation` | Custom date fields whose stem ends in `date` lose flags after the first entry | Flags on every entry | BB-028 | planned |
 | `sort-column-type` | `labelyear`/`labelmonth`/`labelday` columns sort as strings; mixed columns typed by first item | Typed per item | BB-042 | planned |
 | `zero-is-empty` | Values equal to `0` treated as missing (year 0, `volume={0}`, …) | `0` is a value | BB-055…059 | planned |
+| `blx-defaults-override-conf` | Hard-coded biblatex defaults overwrite biber.conf values (maxbibnames, useprefix, …) | biber.conf values win | BB-053 | implemented |
+| `conf-labelalphanametemplate-last` | Only the last biber.conf `labelalphanametemplate` survives | All are kept | BB-083 | implemented |
+| `conf-sourcemaps-dropped` | biber.conf sourcemaps are dropped when the `.bcf` has no driver/style maps | They are merged | BB-052 | implemented |
+| `uniquename-base-check-global` | The "uniquenametemplate needs a base part" check is global across templates | Checked per template | BB-082 | implemented |
+| `duplicate-datalists` | Repeated identical `<datalist>`s are emitted twice | De-duplicated | BB-054 | implemented |
 | *(more to be added as porting proceeds: every reproduced bug gets a row)* | | | | |
 
 Some silent biber behaviours are judged to be design decisions rather than bugs and are reproduced with no switch. Examples: `\textdollar` decoding to a raw `$` (BB-029, pinned by biber's own tests), and the btparse name-splitting rules. They are listed in biber-bugs.md but not here.
@@ -110,7 +124,7 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 
 | Id | biber | bibers | Status |
 |---|---|---|---|
-| DC-040 | `This is Biber 2.22` banner | `This is bibers <version> (biber 2.22 compatible)`. *Check latexmk/arara don't parse the banner.* | planned |
+| DC-040 | `This is Biber 2.22` banner; `--version` prints `biber version: 2.22` | `This is bibers <version> (biber 2.22 compatible)`; `--version` prints `bibers version: <version> (biber 2.22 compatible)`. *Check latexmk/arara don't parse these.* | implemented |
 | DC-041 | Location tag `Biber.pm:4487>` (Perl file:line) | A Rust module/location tag. The format is kept and the contents are not meaningful across implementations. | planned |
 | DC-042 | btparse diagnostics name a temp file (`<md5>_<pid>.utf8`) and pass-2 line numbers | Name the user's `.bib` file and its real line numbers | BB-076 | planned |
 | DC-043 | `INFO` lines specific to biber internals (PAR cache, Perl modules, …) | Omitted or replaced | planned |

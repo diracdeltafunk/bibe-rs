@@ -168,6 +168,8 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-106 | R | bibtex.pm:1413 | Legacy field typo `endseaason`. | 01-S3 |
 | BB-107 | R | Utils.pm:112-118 | `globU` concatenates raw/NFC/NFD glob results without dedup, so a file may be read twice on APFS. | 01-S7 |
 | BB-108 | R | bibtex.pm:1887 | The extended-name part regex is greedy and splits at the *last* `=`. | 01-S8 |
+| BB-121 | C | Config.pm `setblxoption` | Setting an undeclared biblatex option autovivifies it into the option-scope table (`%CONFIG_SCOPEOPT_BIBLATEX`), so a later biber.conf can set an option the `.bcf` never declared. Harmless today, but it contradicts the "undeclared options are dropped" rule. | M1 config |
+| BB-122 | C | Biber.pm (datalist setup) | A datalist naming a non-existent sorting template silently gets an empty `{}` template (and undef sort-pass options become `{}` at run time) instead of a warning. | M1 config |
 
 ## 7. Performance bugs (output-neutral; worth reporting with numbers)
 
