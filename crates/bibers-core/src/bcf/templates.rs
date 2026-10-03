@@ -319,6 +319,20 @@ pub struct SortingTemplate {
     pub locale: Option<String>,
     /// The passes (passes without items are dropped).
     pub spec: Vec<SortPass>,
+    /// An empty template created by Perl autovivification (a data list
+    /// named a template that does not exist).
+    pub vivified: bool,
+}
+
+impl SortingTemplate {
+    /// The empty template Perl autovivifies.
+    pub fn vivified() -> Self {
+        SortingTemplate {
+            locale: None,
+            spec: Vec::new(),
+            vivified: true,
+        }
+    }
 }
 
 /// `_parse_sort` (Biber.pm:4995): `global_sortlocale` is the biblatex
@@ -362,6 +376,7 @@ pub fn parse_sort(root: &XHash, global_sortlocale: Option<&str>) -> SortingTempl
     SortingTemplate {
         locale: locale2bcp47(loc).map(str::to_string),
         spec,
+        vivified: false,
     }
 }
 
@@ -369,6 +384,9 @@ impl SortingTemplate {
     /// The shape `_parse_sort` returns.
     pub fn to_json(&self) -> Value {
         let mut m = Map::new();
+        if self.vivified {
+            return Value::Object(m);
+        }
         m.insert("locale".into(), opt(&self.locale));
         let spec = if self.spec.is_empty() {
             Value::Null
@@ -390,7 +408,12 @@ impl SortingTemplate {
                                 o.insert(k.into(), x.clone().into());
                             }
                         }
-                        v.push(Value::Object(o));
+                        // `my $sopts;` stays undef when no attribute is set.
+                        v.push(if o.is_empty() {
+                            Value::Null
+                        } else {
+                            Value::Object(o)
+                        });
                         for it in &p.items {
                             let mut a = Map::new();
                             for (k, x) in [

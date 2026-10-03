@@ -584,6 +584,20 @@ fn is_datasource_line(line: &str) -> bool {
         .any(|(i, c)| c == '>' && rest[i + 1..].chars().next().is_some_and(|n| n != '<'))
 }
 
+/// The locale for a list's sortinit collator:
+/// `getblxoption(undef, 'sortingtemplate')->{$name}->{locale}`. Like Perl,
+/// looking up a missing template name autovivifies an empty template.
+fn sortinit_locale(cfg: &mut Config, stn: Option<&str>) -> Option<String> {
+    match cfg.blx.global_mut("sortingtemplate") {
+        Some(OptValue::SortingTemplates(m)) => m
+            .entry(stn.unwrap_or("").to_string())
+            .or_insert_with(templates::SortingTemplate::vivified)
+            .locale
+            .clone(),
+        _ => None,
+    }
+}
+
 /// `parse_ctrlfile`: read the `.bcf` into `cfg` and return the sections and
 /// data lists.
 pub fn parse_ctrlfile(
@@ -1164,14 +1178,6 @@ pub fn apply_bcf(
     }
 
     // Data lists
-    let sortinit_locale = |cfg: &Config, stn: Option<&str>| -> Option<String> {
-        match cfg.blx.global("sortingtemplate") {
-            Some(OptValue::SortingTemplates(m)) => {
-                m.get(stn.unwrap_or("")).and_then(|t| t.locale.clone())
-            }
-            _ => None,
-        }
-    };
     for list in bcf.list("datalist").hashes() {
         let s = |k: &str| list.str(k).map(str::to_string);
         let stn = s("sortingtemplatename");
@@ -1329,12 +1335,7 @@ pub fn process_setup(cfg: &mut Config, log: &mut Logger, doc: &mut Document) -> 
         });
         if !has {
             let mut dl = DataList::default_entry(&secnum, &globalss);
-            dl.sortinit_locale = Some(match cfg.blx.global("sortingtemplate") {
-                Some(OptValue::SortingTemplates(m)) => {
-                    m.get(&globalss).and_then(|t| t.locale.clone())
-                }
-                _ => None,
-            });
+            dl.sortinit_locale = Some(sortinit_locale(cfg, Some(&globalss)));
             doc.datalists.push(dl);
         }
     }

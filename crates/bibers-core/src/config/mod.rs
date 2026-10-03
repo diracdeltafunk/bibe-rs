@@ -255,8 +255,42 @@ pub struct Init {
     pub configfile: Option<String>,
     /// The `.blg` path, unless logging to a file is off.
     pub logfile: Option<String>,
+    /// The `.blg` name biber computed (even with `--nolog`).
+    pub biberlog: Option<String>,
     /// Notes from config-file parsing (printed to STDERR by biber's `carp`).
     pub conf_notes: Vec<String>,
+}
+
+impl Init {
+    /// The messages `_initopts` logs right after setting up logging
+    /// (Config.pm:300-313). `banner` is the "This is …" line (DC-040).
+    pub fn log_startup(&self, log: &mut crate::log::Logger, banner: &str) {
+        let nolog = self.config.biber.is_true("nolog");
+        if !nolog {
+            let tool = if self.config.biber.tool() {
+                " running in TOOL mode"
+            } else {
+                ""
+            };
+            crate::info!(log, "{banner}{tool}");
+        }
+        if let Some(cf) = &self.configfile {
+            crate::info!(log, "Config file is '{}'", crate::perlish::nfc(cf));
+        }
+        if !nolog {
+            crate::info!(
+                log,
+                "Logfile is '{}'",
+                self.biberlog.as_deref().unwrap_or("")
+            );
+        }
+        if self.config.biber.debug() {
+            log.screen_info(&format!(
+                "DEBUG mode: all messages are logged to '{}'",
+                self.biberlog.as_deref().unwrap_or("")
+            ));
+        }
+    }
 }
 
 /// The hard-coded biblatex defaults (`%CONFIG_DEFAULT_BIBLATEX`).
@@ -413,6 +447,7 @@ pub fn initopts(
         }
     }
 
+    let biberlog_all = biberlog.clone();
     let logfile = if cfg.biber.is_true("nolog") {
         None
     } else {
@@ -422,6 +457,7 @@ pub fn initopts(
         config: cfg,
         configfile,
         logfile,
+        biberlog: biberlog_all,
         conf_notes: notes,
     })
 }

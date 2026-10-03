@@ -120,6 +120,10 @@ pub struct Registry {
     scope_order: [Vec<String>; 5],
     /// `%CONFIG_OPTTYPE_BIBLATEX` (lowercased datatype).
     types: HashMap<String, String>,
+    /// Options that `setblxoption`/`addtoblxoption` looked up without being
+    /// declared: Perl autovivifies `$CONFIG_OPTSCOPE_BIBLATEX{$opt}` to `{}`,
+    /// which makes them "known" to `setconfigfileoption`.
+    vivified: std::collections::BTreeSet<String>,
 }
 
 impl Registry {
@@ -175,9 +179,17 @@ impl Registry {
             .is_some_and(|d| d[scope.idx()].is_some())
     }
 
-    /// `$CONFIG_OPTSCOPE_BIBLATEX{$opt}` (declared at any scope).
+    /// `$CONFIG_OPTSCOPE_BIBLATEX{$opt}` is true: declared at any scope, or
+    /// autovivified by an earlier lookup.
     pub fn is_declared(&self, opt: &str) -> bool {
-        self.decls.contains_key(opt)
+        self.decls.contains_key(opt) || self.vivified.contains(opt)
+    }
+
+    /// Record the autovivification of `$CONFIG_OPTSCOPE_BIBLATEX{$opt}`.
+    pub fn touch(&mut self, opt: &str) {
+        if !self.decls.contains_key(opt) && !self.vivified.contains(opt) {
+            self.vivified.insert(opt.to_string());
+        }
     }
 
     /// `%CONFIG_BIBLATEX_OPTIONS{scope}{opt}`.
@@ -248,6 +260,11 @@ impl Registry {
                 }
             }
             optscope.insert(opt.clone(), Value::Object(sc));
+        }
+        for v in &self.vivified {
+            if !self.decls.contains_key(v) {
+                optscope.insert(v.clone(), Value::Object(Map::new()));
+            }
         }
         let mut types = Map::new();
         let mut tn: Vec<(&String, &String)> = self.types.iter().collect();
@@ -415,6 +432,7 @@ impl BlxOptions {
     /// `setblxoption($secnum, $opt, $val)` at GLOBAL scope. Undeclared
     /// options are silently dropped.
     pub fn set_global(&mut self, opt: &str, val: OptValue) {
+        self.registry.touch(opt);
         let val = self.map_boolean(opt, val);
         if self.registry.has_scope(opt, Scope::Global) {
             self.global.insert(opt.to_string(), val);
@@ -423,6 +441,7 @@ impl BlxOptions {
 
     /// `setblxoption(…, 'ENTRYTYPE', $type)`.
     pub fn set_entrytype(&mut self, entrytype: &str, opt: &str, val: OptValue) {
+        self.registry.touch(opt);
         let val = self.map_boolean(opt, val);
         if self.registry.has_scope(opt, Scope::EntryType) {
             self.entrytype
@@ -434,6 +453,7 @@ impl BlxOptions {
 
     /// `setblxoption($secnum, …, 'ENTRY', $citekey)`.
     pub fn set_entry(&mut self, secnum: &str, citekey: &str, opt: &str, val: OptValue) {
+        self.registry.touch(opt);
         let val = self.map_boolean(opt, val);
         if self.registry.has_scope(opt, Scope::Entry) {
             self.entry
@@ -451,6 +471,7 @@ impl BlxOptions {
 
     /// `addtoblxoption` (only for the `datamodel` list).
     pub fn add_datamodel(&mut self, dm: XVal) {
+        self.registry.touch("datamodel");
         if !self.registry.has_scope("datamodel", Scope::Global) {
             return;
         }
@@ -512,6 +533,11 @@ impl BlxOptions {
         } else {
             self.get(Some(current_secnum), opt, entrytype, citekey)
         }
+    }
+
+    /// Mutable access to a stored GLOBAL value.
+    pub fn global_mut(&mut self, opt: &str) -> Option<&mut OptValue> {
+        self.global.get_mut(opt)
     }
 
     /// The GLOBAL value of `opt` (`getblxoption(undef, $opt)`).
