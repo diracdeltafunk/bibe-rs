@@ -1,0 +1,5 @@
+description = "biber t/sort-case.t, configuration 1 (prepare() at line 48): sortcase=1; sortupper=1; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/sort-case.t + t/tdata/sort-case.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortcase=true", "--sortupper=true", "--sortlocale=en_GB.UTF-8", "sort-case.bcf"]
+outputs = ["sort-case.bbl"]
+tags = ["suite:ported", "t:sort-case"]

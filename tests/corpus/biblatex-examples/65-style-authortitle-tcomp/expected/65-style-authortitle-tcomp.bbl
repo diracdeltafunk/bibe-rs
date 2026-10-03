@@ -1,0 +1,235 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{aristotle:physics}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{translator}{2}{}{%
+        {{hash=4777ba269fde4ea0526ff057345e4085}{%
+           family={Wicksteed},
+           familyi={W\bibinitperiod},
+           given={P.\bibnamedelimi H.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=6db3a2434d88f6db3cef04fc0807932e}{%
+           family={Cornford},
+           familyi={C\bibinitperiod},
+           given={F.\bibnamedelimi M.},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {G. P. Putnam}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{translatorbibnamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatornamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhashraw}{9742ebd8d43330728a2d306f1a721baf}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with a \texttt{translator} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Physics}
+      \field{title}{Physics}
+      \field{year}{1929}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{aristotle:poetics}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=53824987df70318e888b1c12dee379f2}{%
+           family={Lucas},
+           familyi={L\bibinitperiod},
+           given={D.\bibnamedelimi W.},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \list{publisher}{1}{%
+        {Clarendon Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{editorbibnamehash}{53824987df70318e888b1c12dee379f2}
+      \strng{editornamehash}{53824987df70318e888b1c12dee379f2}
+      \strng{editorfullhash}{53824987df70318e888b1c12dee379f2}
+      \strng{editorfullhashraw}{53824987df70318e888b1c12dee379f2}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with an \texttt{author} and an \texttt{editor} as well as a \texttt{series} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{series}{Clarendon {Aristotle}}
+      \field{shorttitle}{Poetics}
+      \field{title}{Poetics}
+      \field{year}{1968}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{aristotle:rhetoric}{mvbook}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{commentator}{1}{}{%
+        {{hash=6d55011fda23ed5c05ae088f9f26766a}{%
+           family={Cope},
+           familyi={C\bibinitperiod},
+           given={Edward\bibnamedelima Meredith},
+           giveni={E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=6d55011fda23ed5c05ae088f9f26766a}{%
+           family={Cope},
+           familyi={C\bibinitperiod},
+           given={Edward\bibnamedelima Meredith},
+           giveni={E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{commentatorbibnamehash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{commentatornamehash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{commentatorfullhash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{commentatorfullhashraw}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{editorbibnamehash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{editornamehash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{editorfullhash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{editorfullhashraw}{6d55011fda23ed5c05ae088f9f26766a}
+      \field{extraname}{3}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A commented edition. Note the concatenation of the \texttt{editor} and \texttt{commentator} fields as well as the \texttt{volumes}, \texttt{sorttitle}, and \texttt{indextitle} fields}
+      \field{indextitle}{Rhetoric of {Aristotle}, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{shorttitle}{Rhetoric}
+      \field{title}{The Rhetoric of {Aristotle} with a commentary by the late {Edward Meredith Cope}}
+      \field{volumes}{3}
+      \field{year}{1877}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{averroes/bland}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=b86dc8dbce5064d05b055e8f6f28be6b}{%
+           family={Averroes},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4a2bf9a697755b6f9a1686180659e1fa}{%
+           family={Bland},
+           familyi={B\bibinitperiod},
+           given={Kalman\bibnamedelima P.},
+           giveni={K\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=4a2bf9a697755b6f9a1686180659e1fa}{%
+           family={Bland},
+           familyi={B\bibinitperiod},
+           given={Kalman\bibnamedelima P.},
+           giveni={K\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Jewish Theological Seminary of America}%
+      }
+      \strng{namehash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{fullhash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{fullhashraw}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{bibnamehash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{authorbibnamehash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{authornamehash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{authorfullhash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{authorfullhashraw}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{editorbibnamehash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{editornamehash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{editorfullhash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{editorfullhashraw}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{translatorbibnamehash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{translatornamehash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{translatorfullhash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{translatorfullhashraw}{4a2bf9a697755b6f9a1686180659e1fa}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with a \texttt{series} and a \texttt{number}. Note the concatenation of the \texttt{editor} and \texttt{translator} fields as well as the \texttt{indextitle} field}
+      \field{indextitle}{Epistle on the Possibility of Conjunction, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{7}
+      \field{series}{Moreshet: Studies in {Jewish} History, Literature and Thought}
+      \field{shorttitle}{Possibility of Conjunction}
+      \field{title}{The Epistle on the Possibility of Conjunction with the Active Intellect by {Ibn Rushd} with the Commentary of {Moses Narboni}}
+      \field{year}{1982}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

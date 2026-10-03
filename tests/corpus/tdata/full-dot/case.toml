@@ -1,0 +1,5 @@
+description = "biber t/tdata/full-dot.bcf (used by t/full-dot.t)"
+source = "vendor/biber/t/tdata/full-dot.bcf"
+args = ["--noconf", "full-dot.bcf"]
+outputs = ["full-dot.bbl"]
+tags = ["suite:tdata"]

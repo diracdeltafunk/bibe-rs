@@ -1,0 +1,5 @@
+description = "biber t/tdata/extradate.bcf (used by t/extradate.t)"
+source = "vendor/biber/t/tdata/extradate.bcf"
+args = ["--noconf", "extradate.bcf"]
+outputs = ["extradate.bbl"]
+tags = ["suite:tdata"]

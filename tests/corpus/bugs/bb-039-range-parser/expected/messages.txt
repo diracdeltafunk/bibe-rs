@@ -1,0 +1,3 @@
+WARN - Range field 'pages' in entry 'r1' is malformed, falling back to literal
+WARN - Range field 'pages' in entry 'r3' is malformed, falling back to literal
+WARN - Range field 'pages' in entry 'r9' is malformed, falling back to literal

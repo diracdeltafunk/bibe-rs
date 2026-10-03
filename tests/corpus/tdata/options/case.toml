@@ -1,0 +1,5 @@
+description = "biber t/tdata/options.bcf (used by t/options.t)"
+source = "vendor/biber/t/tdata/options.bcf"
+args = ["--noconf", "options.bcf"]
+outputs = ["options.bbl"]
+tags = ["suite:tdata"]

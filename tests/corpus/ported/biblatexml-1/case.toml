@@ -1,0 +1,5 @@
+description = "biber t/biblatexml.t, configuration 1 (prepare() at line 47): sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/biblatexml.t + t/tdata/biblatexml.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--sortdebug", "biblatexml.bcf"]
+outputs = ["biblatexml.bbl"]
+tags = ["suite:ported", "t:biblatexml"]

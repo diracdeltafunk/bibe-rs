@@ -1,0 +1,5 @@
+description = "biber t/uniqueness.t, configuration 18 (prepare() at line 654): uniquelist=\"true\"; uniquename=\"false\"; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/uniqueness.t + t/tdata/uniqueness6.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "uniqueness6.bcf"]
+outputs = ["uniqueness6.bbl"]
+tags = ["suite:ported", "t:uniqueness"]

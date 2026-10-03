@@ -1,0 +1,6 @@
+description = "biber t/bibtex-output.t, configuration 1 (prepare at line 50): output_resolve_xdata=1; output_resolve_crossrefs=1; output_format=bibtex; output_align=1; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/bibtex-output.t + t/tdata (traced by tools/port-tests)"
+args = ["--noconf", "--output-resolve-xdata", "--output-resolve-crossrefs", "--output-format=bibtex", "--output-align", "--sortlocale=en_GB.UTF-8", "bibtex-output.bcf"]
+outputs = ["bibtex-output_biber.bib"]
+log = "bibtex-output.blg"
+tags = ["suite:ported", "t:bibtex-output", "deferred:m4"]

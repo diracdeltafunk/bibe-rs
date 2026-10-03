@@ -1,0 +1,5 @@
+description = "biber t/tdata/encoding6.bcf (used by t/encoding.t)"
+source = "vendor/biber/t/tdata/encoding6.bcf"
+args = ["--noconf", "encoding6.bcf"]
+outputs = ["encoding6.bbl"]
+tags = ["suite:tdata"]

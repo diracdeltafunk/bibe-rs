@@ -1,0 +1,5 @@
+description = "biber t/encoding.t, configuration 10 (prepare() at line 552): sortlocale=en_GB.UTF-8; output_encoding=applemacce; output_safechars=0; input_encoding=latin1; recode sets full/full"
+source = "vendor/biber/t/encoding.t + t/tdata/encoding3.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--output-encoding=applemacce", "--input-encoding=latin1", "--decodecharsset=full", "--output-safecharsset=full", "encoding3.bcf"]
+outputs = ["encoding3.bbl"]
+tags = ["suite:ported", "t:encoding"]

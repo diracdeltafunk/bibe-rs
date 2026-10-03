@@ -1,0 +1,88 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{a2}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5fc810cf62601df84b7923b9964c53e6}{%
+           family={B},
+           familyi={B\bibinitperiod},
+           given={A},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5fc810cf62601df84b7923b9964c53e6}
+      \strng{fullhash}{5fc810cf62601df84b7923b9964c53e6}
+      \strng{fullhashraw}{5fc810cf62601df84b7923b9964c53e6}
+      \strng{bibnamehash}{5fc810cf62601df84b7923b9964c53e6}
+      \strng{authorbibnamehash}{5fc810cf62601df84b7923b9964c53e6}
+      \strng{authornamehash}{5fc810cf62601df84b7923b9964c53e6}
+      \strng{authorfullhash}{5fc810cf62601df84b7923b9964c53e6}
+      \strng{authorfullhashraw}{5fc810cf62601df84b7923b9964c53e6}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labeldatesource}{nodate}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T2}
+      \true{nocite}
+      \annotation{field}{pages}{default}{}{}{0}{nofield}
+      \annotation{part}{author}{default}{}{family}{0}{noitem}
+    \endentry
+    \entry{a1}{misc}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=be7119af9acc1f59af73547344e82831}{%
+           family={Roe},
+           familyi={R\bibinitperiod},
+           given={Jane},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{fe3b4a479a26b92fbc38cac57cafc211}
+      \strng{fullhash}{fe3b4a479a26b92fbc38cac57cafc211}
+      \strng{fullhashraw}{fe3b4a479a26b92fbc38cac57cafc211}
+      \strng{bibnamehash}{fe3b4a479a26b92fbc38cac57cafc211}
+      \strng{authorbibnamehash}{fe3b4a479a26b92fbc38cac57cafc211}
+      \strng{authornamehash}{fe3b4a479a26b92fbc38cac57cafc211}
+      \strng{authorfullhash}{fe3b4a479a26b92fbc38cac57cafc211}
+      \strng{authorfullhashraw}{fe3b4a479a26b92fbc38cac57cafc211}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labeldatesource}{nodate}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T}
+      \true{nocite}
+      \keyw{xdata=xd-keywords}
+      \annotation{field}{author}{default}{}{}{0}{whole}
+      \annotation{field}{title}{alt}{}{}{0}{}
+      \annotation{item}{author}{default}{2}{}{0}{corresponding}
+      \annotation{part}{author}{default}{1}{family}{0}{highlight}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

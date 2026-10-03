@@ -1,0 +1,5 @@
+description = "biber t/tdata/dateformats.bcf (used by t/dateformats.t)"
+source = "vendor/biber/t/tdata/dateformats.bcf"
+args = ["--noconf", "dateformats.bcf"]
+outputs = ["dateformats.bbl"]
+tags = ["suite:tdata"]

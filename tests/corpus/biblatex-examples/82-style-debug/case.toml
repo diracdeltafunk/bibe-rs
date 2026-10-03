@@ -1,0 +1,6 @@
+description = "biblatex example 82-style-debug.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/82-style-debug.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "82-style-debug.bcf"]
+outputs = ["82-style-debug.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:debug"]

@@ -1,0 +1,5 @@
+description = "UTF-8 .bib -> UTF-8 .bbl with --output-safechars (t/encoding.t)"
+source = "vendor/biber/t/tdata/encoding6.bcf"
+args = ["--noconf", "--output-safechars", "encoding6.bcf"]
+outputs = ["encoding6.bbl"]
+tags = ["suite:tdata", "feature:encoding", "deferred:DC-034"]

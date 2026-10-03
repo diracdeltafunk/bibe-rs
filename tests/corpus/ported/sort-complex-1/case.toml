@@ -1,0 +1,5 @@
+description = "biber t/sort-complex.t, configuration 1 (prepare() at line 53): labeldateparts=\"0\"; sortlocale=en_GB.UTF-8; conf:sourcemap"
+source = "vendor/biber/t/sort-complex.t + t/tdata/sort-complex.bcf (traced by tools/port-tests)"
+args = ["--configfile=ported.conf", "--sortlocale=en_GB.UTF-8", "sort-complex.bcf"]
+outputs = ["sort-complex.bbl"]
+tags = ["suite:ported", "t:sort-complex"]

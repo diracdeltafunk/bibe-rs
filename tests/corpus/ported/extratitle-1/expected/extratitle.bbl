@@ -1,0 +1,431 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{custom/global//global/global/global}
+    \entry{L12}{book}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{year}{1943}
+    \endentry
+    \entry{L9}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=2f3c6ddd1d8e4ed85eba7513f2e3ea74}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Billy},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{fullhash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{fullhashraw}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{bibnamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorbibnamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authornamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorfullhash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorfullhashraw}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \field{extraname}{1}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title B}
+      \field{year}{1932}
+    \endentry
+    \entry{L8}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=2f3c6ddd1d8e4ed85eba7513f2e3ea74}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Billy},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{fullhash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{fullhashraw}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{bibnamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorbibnamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authornamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorfullhash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorfullhashraw}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \field{extraname}{2}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title A}
+      \field{year}{1934}
+    \endentry
+    \entry{L10}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=06b6c52f8d6433de712c8f77e439f60f}{%
+           family={Cautious},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{fullhash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{fullhashraw}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{bibnamehash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{authorbibnamehash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{authornamehash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{authorfullhash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{authorfullhashraw}{06b6c52f8d6433de712c8f77e439f60f}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title A}
+      \field{year}{1946}
+    \endentry
+    \entry{L1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{extraname}{1}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L2}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{extraname}{2}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1996}
+    \endentry
+    \entry{L5}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L3}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 2}
+      \field{year}{1995}
+    \endentry
+    \entry{L4}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 2}
+      \field{year}{1995}
+    \endentry
+    \entry{L6}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{labeltitlesource}{shorttitle}
+      \field{shorttitle}{Title A}
+      \field{title}{Title 3}
+      \field{year}{1995}
+    \endentry
+    \entry{L7}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{labeltitlesource}{title}
+      \field{title}{Title A}
+      \field{year}{1995}
+    \endentry
+    \entry{L11}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Titular Titilation}
+      \field{year}{1946}
+    \endentry
+  \enddatalist
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{L12}{book}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{year}{1943}
+    \endentry
+    \entry{L8}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=2f3c6ddd1d8e4ed85eba7513f2e3ea74}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Billy},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{fullhash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{fullhashraw}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{bibnamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorbibnamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authornamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorfullhash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorfullhashraw}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \field{extraname}{1}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title A}
+      \field{year}{1934}
+    \endentry
+    \entry{L9}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=2f3c6ddd1d8e4ed85eba7513f2e3ea74}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Billy},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{fullhash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{fullhashraw}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{bibnamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorbibnamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authornamehash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorfullhash}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \strng{authorfullhashraw}{2f3c6ddd1d8e4ed85eba7513f2e3ea74}
+      \field{extraname}{2}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title B}
+      \field{year}{1932}
+    \endentry
+    \entry{L10}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=06b6c52f8d6433de712c8f77e439f60f}{%
+           family={Cautious},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{fullhash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{fullhashraw}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{bibnamehash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{authorbibnamehash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{authornamehash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{authorfullhash}{06b6c52f8d6433de712c8f77e439f60f}
+      \strng{authorfullhashraw}{06b6c52f8d6433de712c8f77e439f60f}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title A}
+      \field{year}{1946}
+    \endentry
+    \entry{L1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{extraname}{1}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L2}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{extraname}{2}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1996}
+    \endentry
+    \entry{L5}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L3}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 2}
+      \field{year}{1995}
+    \endentry
+    \entry{L4}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 2}
+      \field{year}{1995}
+    \endentry
+    \entry{L6}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{labeltitlesource}{shorttitle}
+      \field{shorttitle}{Title A}
+      \field{title}{Title 3}
+      \field{year}{1995}
+    \endentry
+    \entry{L7}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{labeltitlesource}{title}
+      \field{title}{Title A}
+      \field{year}{1995}
+    \endentry
+    \entry{L11}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Titular Titilation}
+      \field{year}{1946}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,844 @@
+{
+ "source": "vendor/biber/t/basic-misc.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "basic-misc.t",
+   "line": 597,
+   "tests": [
+    7
+   ],
+   "name": "Keywords test - 1",
+   "target": "bibers-core::model",
+   "area": "has_keyword",
+   "source": "ok( $bibentries->entry('t1')->has_keyword('primary'), 'Keywords test - 1');",
+   "call": {
+    "sub": "Biber::Entry::has_keyword",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "t1"
+     },
+     "primary"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "t1"
+     ]
+    }
+   ],
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "case": "tests/corpus/ported/basic-misc-2",
+   "entry": "t1",
+   "field": "primary"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 598,
+   "tests": [
+    8
+   ],
+   "name": "Keywords test - 2",
+   "target": "bibers-core::model",
+   "area": "has_keyword",
+   "source": "ok( $bibentries->entry('t1')->has_keyword('something'), 'Keywords test - 2');",
+   "call": {
+    "sub": "Biber::Entry::has_keyword",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "t1"
+     },
+     "something"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "t1"
+     ]
+    }
+   ],
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "case": "tests/corpus/ported/basic-misc-2",
+   "entry": "t1",
+   "field": "something"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 599,
+   "tests": [
+    9
+   ],
+   "name": "Keywords test - 3",
+   "target": "bibers-core::model",
+   "area": "has_keyword",
+   "source": "ok( $bibentries->entry('t1')->has_keyword('somethingelse'), 'Keywords test - 3');",
+   "call": {
+    "sub": "Biber::Entry::has_keyword",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "t1"
+     },
+     "somethingelse"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "t1"
+     ]
+    }
+   ],
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "case": "tests/corpus/ported/basic-misc-2",
+   "entry": "t1",
+   "field": "somethingelse"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 601,
+   "tests": [
+    11
+   ],
+   "name": "uniquename count 1",
+   "target": "bibers-core::process::uniqueness",
+   "area": "uniquename_counts",
+   "source": "is_deeply( $main->_get_uniquename('WormanN', 'global'), $Worman_N, 'uniquename count 1');",
+   "call": {
+    "sub": "Biber::DataList::_get_uniquename",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "WormanN",
+     "global"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Worman􏿽WormanN"
+   ],
+   "ret": [
+    "Worman􏿽WormanN"
+   ],
+   "case": "tests/corpus/ported/basic-misc-2"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 602,
+   "tests": [
+    12
+   ],
+   "name": "uniquename count 2",
+   "target": "bibers-core::process::uniqueness",
+   "area": "uniquename_counts",
+   "source": "is_deeply( $main->_get_uniquename('vanGennep', 'global'), $Gennep, 'uniquename count 2');",
+   "call": {
+    "sub": "Biber::DataList::_get_uniquename",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "vanGennep",
+     "global"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "vanGennep􏿽vanGennepA",
+    "vanGennep􏿽vanGennepJ"
+   ],
+   "ret": [
+    "vanGennep􏿽vanGennepA",
+    "vanGennep􏿽vanGennepJ"
+   ],
+   "case": "tests/corpus/ported/basic-misc-2"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 634,
+   "tests": [
+    23
+   ],
+   "name": "map 5",
+   "target": "bibers-core::process::hashes (list strings)",
+   "area": "liststring",
+   "source": "eq_or_diff($biber->_liststring('i1', 'listd'), 'abc', 'map 5' );",
+   "call": {
+    "sub": "Biber::Internals::_liststring",
+    "args": [
+     {
+      "__obj": "Biber"
+     },
+     "i1",
+     "listd"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "abc",
+   "ret": "abc",
+   "case": "tests/corpus/ported/basic-misc-3"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 636,
+   "tests": [
+    24
+   ],
+   "name": "map 6",
+   "target": "bibers-core::process::hashes (list strings)",
+   "area": "liststring",
+   "source": "eq_or_diff($biber->_liststring('i1', 'listb'), 'REPlacedte!early', 'map 6');",
+   "call": {
+    "sub": "Biber::Internals::_liststring",
+    "args": [
+     {
+      "__obj": "Biber"
+     },
+     "i1",
+     "listb"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "REPlacedte!early",
+   "ret": "REPlacedte!early",
+   "case": "tests/corpus/ported/basic-misc-3"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 637,
+   "tests": [
+    25
+   ],
+   "name": "map 7",
+   "target": "bibers-core::process::hashes (list strings)",
+   "area": "liststring",
+   "source": "eq_or_diff($biber->_liststring('i1', 'institution'), 'REPlaCEDte!early', 'map 7');",
+   "call": {
+    "sub": "Biber::Internals::_liststring",
+    "args": [
+     {
+      "__obj": "Biber"
+     },
+     "i1",
+     "institution"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "REPlaCEDte!early",
+   "ret": "REPlaCEDte!early",
+   "case": "tests/corpus/ported/basic-misc-3"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 646,
+   "tests": [
+    29
+   ],
+   "name": "bib visibility - 1",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_bib",
+   "source": "eq_or_diff($main->get_visible_bib($bibentries->entry('i2')->get_field($bibentries->entry('i2')->get_labelname_info)->get_id), '3', 'bib visibility - 1');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_bib",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "Pul9uVeWd"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "i2"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "i2"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "i2"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "i2"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "3",
+   "ret": "3",
+   "case": "tests/corpus/ported/basic-misc-3"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 676,
+   "tests": [
+    30
+   ],
+   "name": "per_type maxcitenames - 1",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_cite",
+   "source": "eq_or_diff($main->get_visible_cite($bibentries->entry('tmn1')->get_field($bibentries->entry('tmn1')->get_labelname_info)->get_id), '1', 'per_type maxcitenames - 1');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_cite",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "5zrx0YZaQN"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Section::del_citekeys",
+     "args": [
+      {
+       "__obj": "Biber::Section",
+       "number": "0"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entries::del_entries",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Section::del_everykeys",
+     "args": [
+      {
+       "__obj": "Biber::Section",
+       "number": "0"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Input::file::bibtex::init_cache",
+     "args": [
+      "Biber::Input::file::bibtex"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn1"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn1"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn1"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn1"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "1",
+   "ret": "1",
+   "case": "tests/corpus/ported/basic-misc-4"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 677,
+   "tests": [
+    31
+   ],
+   "name": "per_type maxcitenames - 2",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_cite",
+   "source": "eq_or_diff($main->get_visible_cite($bibentries->entry('tmn2')->get_field($bibentries->entry('tmn2')->get_labelname_info)->get_id), '3', 'per_type maxcitenames - 2');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_cite",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "6rCZ7FURiF"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn2"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn2"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn2"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn2"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "3",
+   "ret": "3",
+   "case": "tests/corpus/ported/basic-misc-4"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 678,
+   "tests": [
+    32
+   ],
+   "name": "per_type bibnames - 3",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_bib",
+   "source": "eq_or_diff($main->get_visible_bib($bibentries->entry('tmn3')->get_field($bibentries->entry('tmn3')->get_labelname_info)->get_id), '2', 'per_type bibnames - 3');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_bib",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "5aSNca5p3P"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn3"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn3"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn3"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn3"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "2",
+   "ret": "2",
+   "case": "tests/corpus/ported/basic-misc-4"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 679,
+   "tests": [
+    33
+   ],
+   "name": "per_type bibnames - 4",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_bib",
+   "source": "eq_or_diff($main->get_visible_bib($bibentries->entry('tmn4')->get_field($bibentries->entry('tmn4')->get_labelname_info)->get_id), '3', 'per_type bibnames - 4');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_bib",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "6kScrrZGD7"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn4"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn4"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn4"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn4"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "3",
+   "ret": "3",
+   "case": "tests/corpus/ported/basic-misc-4"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 680,
+   "tests": [
+    34
+   ],
+   "name": "per_type/entry alphanames - 1",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_alpha",
+   "source": "eq_or_diff($main->get_visible_alpha($bibentries->entry('tmn1')->get_field($bibentries->entry('tmn1')->get_labelname_info)->get_id), '3', 'per_type/entry alphanames - 1');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_alpha",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "5zrx0YZaQN"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn1"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn1"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn1"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn1"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "3",
+   "ret": "3",
+   "case": "tests/corpus/ported/basic-misc-4"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 681,
+   "tests": [
+    35
+   ],
+   "name": "per_type/entry alphanames - 2",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_alpha",
+   "source": "eq_or_diff($main->get_visible_alpha($bibentries->entry('tmn2')->get_field($bibentries->entry('tmn2')->get_labelname_info)->get_id), '2', 'per_type/entry alphanames - 2');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_alpha",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "6rCZ7FURiF"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn2"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "tmn2"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn2"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "tmn2"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "2",
+   "ret": "2",
+   "case": "tests/corpus/ported/basic-misc-4"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 682,
+   "tests": [
+    36
+   ],
+   "name": "per_type/entry items - 1",
+   "target": "bibers-core::process::hashes (list strings)",
+   "area": "liststring",
+   "source": "eq_or_diff($biber->_liststring('tmn1', 'institution'), 'A!B!C', 'per_type/entry items - 1');",
+   "call": {
+    "sub": "Biber::Internals::_liststring",
+    "args": [
+     {
+      "__obj": "Biber"
+     },
+     "tmn1",
+     "institution"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "A!B!C",
+   "ret": "A!B!C",
+   "case": "tests/corpus/ported/basic-misc-4"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 683,
+   "tests": [
+    37
+   ],
+   "name": "per_type/entry items - 2",
+   "target": "bibers-core::process::hashes (list strings)",
+   "area": "liststring",
+   "source": "eq_or_diff($biber->_liststring('tmn3', 'institution'), \"A!B\\x{10FFFD}\", 'per_type/entry items - 2');",
+   "call": {
+    "sub": "Biber::Internals::_liststring",
+    "args": [
+     {
+      "__obj": "Biber"
+     },
+     "tmn3",
+     "institution"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "A!B􏿽",
+   "ret": "A!B􏿽",
+   "case": "tests/corpus/ported/basic-misc-4"
+  },
+  {
+   "test": "basic-misc.t",
+   "line": 695,
+   "tests": [
+    43
+   ],
+   "name": "URL encoding - 1",
+   "target": "bibers-core::input::handlers / resolve (entry field values)",
+   "area": "entry_field",
+   "source": "eq_or_diff(NFC($bibentries->entry('url1')->get_field('url')), 'http://www.something.com/q=áŠ', 'URL encoding - 1');",
+   "call": {
+    "sub": "Biber::Entry::get_field",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "url1"
+     },
+     "url"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "url1"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "http://www.something.com/q=áŠ",
+   "ret": "http://www.something.com/q=áŠ",
+   "case": "tests/corpus/ported/basic-misc-4",
+   "entry": "url1",
+   "field": "url",
+   "note": "value not directly visible in .bbl"
+  }
+ ]
+}

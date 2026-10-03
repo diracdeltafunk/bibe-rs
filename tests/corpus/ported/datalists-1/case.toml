@@ -1,0 +1,5 @@
+description = "biber t/datalists.t, configuration 1 (prepare() at line 47)"
+source = "vendor/biber/t/datalists.t + t/tdata/datalists.bcf (traced by tools/port-tests)"
+args = ["--noconf", "datalists.bcf"]
+outputs = ["datalists.bbl"]
+tags = ["suite:ported", "t:datalists"]

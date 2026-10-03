@@ -1,0 +1,5 @@
+description = "biber t/basic-misc.t, configuration 1 (prepare() at line 55): uniquelist=\"true\"; maxcitenames=\"3\"; mincitenames=\"1\"; maxalphanames=\"3\"; minalphanames=\"1\"; maxbibnames=\"10\"; minbibnames=\"7\"; uniquework=\"1\"; sortlocale=en_GB.UTF-8; isbn_normalise=1; isbn13=1; configfile=biber-test.conf"
+source = "vendor/biber/t/basic-misc.t + t/tdata/basic-misc.bcf (traced by tools/port-tests)"
+args = ["--configfile=biber-test.conf", "--sortlocale=en_GB.UTF-8", "--isbn-normalise", "--isbn13", "basic-misc.bcf"]
+outputs = ["basic-misc.bbl"]
+tags = ["suite:ported", "t:basic-misc"]

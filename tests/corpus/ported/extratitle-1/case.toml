@@ -1,0 +1,5 @@
+description = "biber t/extratitle.t, configuration 1 (prepare() at line 45): maxcitenames=\"1\"; maxbibnames=\"1\"; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/extratitle.t + t/tdata/extratitle.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "extratitle.bcf"]
+outputs = ["extratitle.bbl"]
+tags = ["suite:ported", "t:extratitle"]

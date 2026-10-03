@@ -1,0 +1,2 @@
+WARN - I didn't find a database entry for 'sect3' (section 2)
+WARN - I didn't find a database entry for 'sectx' (section 2)

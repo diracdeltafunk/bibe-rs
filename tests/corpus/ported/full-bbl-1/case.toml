@@ -1,0 +1,6 @@
+description = "t/full-bbl.t: bin/biber --noconf --nolog --output-file=<tmp> t/tdata/full-bbl.bcf (--nolog/--output-file dropped so that the .blg is kept)"
+source = "vendor/biber/t/full-bbl.t + t/tdata (traced by tools/port-tests)"
+args = ["--noconf", "full-bbl.bcf"]
+outputs = ["full-bbl.bbl"]
+log = "full-bbl.blg"
+tags = ["suite:ported", "t:full-bbl"]

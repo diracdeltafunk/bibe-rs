@@ -1,0 +1,834 @@
+{
+ "source": "vendor/biber/t/tool-config.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "tool-config.t",
+   "line": 53,
+   "tests": [
+    1
+   ],
+   "name": "Options 1",
+   "target": "bibers-core::config (options, conf_file, precedence)",
+   "area": "getoption",
+   "source": "eq_or_diff(Biber::Config->getoption('mincrossrefs'), 5, 'Options 1');",
+   "call": {
+    "sub": "Biber::Config::getoption",
+    "args": [
+     "Biber::Config",
+     "mincrossrefs"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::tool_mode_setup",
+     "args": [
+      {
+       "__obj": "Biber"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::prepare_tool",
+     "args": [
+      {
+       "__obj": "Biber"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Config::get_dm",
+     "args": [
+      "Biber::Config"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "5",
+   "ret": "5",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 54,
+   "tests": [
+    2
+   ],
+   "name": "Options 2",
+   "target": "bibers-core::config (options, conf_file, precedence)",
+   "area": "getoption",
+   "source": "eq_or_diff(Biber::Config->getoption('listsep'), 'and', 'Options 2');",
+   "call": {
+    "sub": "Biber::Config::getoption",
+    "args": [
+     "Biber::Config",
+     "listsep"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "and",
+   "ret": "and",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 55,
+   "tests": [
+    3
+   ],
+   "name": "Options 3",
+   "target": "bibers-core::config::blx_options",
+   "area": "getblxoption",
+   "source": "is_deeply (Biber::Config->getblxoption(0, 'sortingtemplate'), {tool => { locale => undef, spec => [[{}, { citeorderX => {} }]] }}, 'Options 3');",
+   "call": {
+    "sub": "Biber::Config::getblxoption",
+    "args": [
+     "Biber::Config",
+     "0",
+     "sortingtemplate"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "tool": {
+     "locale": null,
+     "spec": [
+      [
+       {},
+       {
+        "citeorderX": {}
+       }
+      ]
+     ]
+    }
+   },
+   "ret": {
+    "tool": {
+     "locale": null,
+     "spec": [
+      [
+       {},
+       {
+        "citeorderX": {}
+       }
+      ]
+     ]
+    }
+   },
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 57,
+   "tests": [
+    4
+   ],
+   "name": "Options 4",
+   "target": "bibers-core::datamodel",
+   "area": "fields_of_type",
+   "source": "ok((first {$_ eq 'newliteralfield'} $dm->get_fields_of_type('field', 'literal')->@*), 'Options 4');",
+   "call": {
+    "sub": "Biber::DataModel::get_fields_of_type",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "field",
+     "literal"
+    ]
+   },
+   "assert": "ok",
+   "expected": [
+    "abstract",
+    "addendum",
+    "annotation",
+    "booksubtitle",
+    "booktitle",
+    "booktitleaddon",
+    "chapter",
+    "edition",
+    "eid",
+    "entrysubtype",
+    "eprintclass",
+    "eprinttype",
+    "eventtitle",
+    "eventtitleaddon",
+    "gender",
+    "howpublished",
+    "indexsorttitle",
+    "indextitle",
+    "isan",
+    "isbn",
+    "ismn",
+    "isrn",
+    "issn",
+    "issue",
+    "issuesubtitle",
+    "issuetitle",
+    "issuetitleaddon",
+    "iswc",
+    "journalsubtitle",
+    "journaltitle",
+    "journaltitleaddon",
+    "label",
+    "langid",
+    "langidopts",
+    "library",
+    "mainsubtitle",
+    "maintitle",
+    "maintitleaddon",
+    "month",
+    "nameaddon",
+    "newliteralfield",
+    "note",
+    "number",
+    "origtitle",
+    "pagetotal",
+    "part",
+    "presort",
+    "relatedstring",
+    "relatedtype",
+    "reprinttitle",
+    "series",
+    "shorthand",
+    "shorthandintro",
+    "shortjournal",
+    "shortseries",
+    "shorttitle",
+    "sortkey",
+    "sortshorthand",
+    "sorttitle",
+    "subtitle",
+    "title",
+    "titleaddon",
+    "usera",
+    "userb",
+    "userc",
+    "userd",
+    "usere",
+    "userf",
+    "venue",
+    "version"
+   ],
+   "ret": [
+    "abstract",
+    "addendum",
+    "annotation",
+    "booksubtitle",
+    "booktitle",
+    "booktitleaddon",
+    "chapter",
+    "edition",
+    "eid",
+    "entrysubtype",
+    "eprintclass",
+    "eprinttype",
+    "eventtitle",
+    "eventtitleaddon",
+    "gender",
+    "howpublished",
+    "indexsorttitle",
+    "indextitle",
+    "isan",
+    "isbn",
+    "ismn",
+    "isrn",
+    "issn",
+    "issue",
+    "issuesubtitle",
+    "issuetitle",
+    "issuetitleaddon",
+    "iswc",
+    "journalsubtitle",
+    "journaltitle",
+    "journaltitleaddon",
+    "label",
+    "langid",
+    "langidopts",
+    "library",
+    "mainsubtitle",
+    "maintitle",
+    "maintitleaddon",
+    "month",
+    "nameaddon",
+    "newliteralfield",
+    "note",
+    "number",
+    "origtitle",
+    "pagetotal",
+    "part",
+    "presort",
+    "relatedstring",
+    "relatedtype",
+    "reprinttitle",
+    "series",
+    "shorthand",
+    "shorthandintro",
+    "shortjournal",
+    "shortseries",
+    "shorttitle",
+    "sortkey",
+    "sortshorthand",
+    "sorttitle",
+    "subtitle",
+    "title",
+    "titleaddon",
+    "usera",
+    "userb",
+    "userc",
+    "userd",
+    "usere",
+    "userf",
+    "venue",
+    "version"
+   ],
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 58,
+   "tests": [
+    5
+   ],
+   "name": "Options 5",
+   "target": "bibers-core::datamodel",
+   "area": "is_field_for_entrytype",
+   "source": "ok($dm->is_field_for_entrytype('article', 'newliteralfield'), 'Options 5');",
+   "call": {
+    "sub": "Biber::DataModel::is_field_for_entrytype",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "article",
+     "newliteralfield"
+    ]
+   },
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 59,
+   "tests": [
+    6
+   ],
+   "name": "Options 6",
+   "target": "bibers-core::datamodel",
+   "area": "is_field_for_entrytype",
+   "source": "ok($dm->is_field_for_entrytype('xyz', 'author'), 'Options 6');",
+   "call": {
+    "sub": "Biber::DataModel::is_field_for_entrytype",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "xyz",
+     "author"
+    ]
+   },
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 60,
+   "tests": [
+    7
+   ],
+   "name": "Options 7",
+   "target": "bibers-core::datamodel",
+   "area": "is_field_for_entrytype",
+   "source": "ok($dm->is_field_for_entrytype('xyz', 'file'), 'Options 7');",
+   "call": {
+    "sub": "Biber::DataModel::is_field_for_entrytype",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "xyz",
+     "file"
+    ]
+   },
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 61,
+   "tests": [
+    8
+   ],
+   "name": "Options 8",
+   "target": "bibers-core::datamodel",
+   "area": "is_field_for_entrytype",
+   "source": "ok($dm->is_field_for_entrytype('xyz', 'abc'), 'Options 8');",
+   "call": {
+    "sub": "Biber::DataModel::is_field_for_entrytype",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "xyz",
+     "abc"
+    ]
+   },
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 62,
+   "tests": [
+    9
+   ],
+   "name": "Options 9",
+   "target": "bibers-core::datamodel",
+   "area": "is_field_for_entrytype",
+   "source": "ok($dm->is_field_for_entrytype('article', 'abc'), 'Options 9');",
+   "call": {
+    "sub": "Biber::DataModel::is_field_for_entrytype",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "article",
+     "abc"
+    ]
+   },
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 63,
+   "tests": [
+    10
+   ],
+   "name": "Options 10",
+   "target": "bibers-core::datamodel",
+   "area": "is_field_for_entrytype",
+   "source": "ok($dm->is_field_for_entrytype('book', 'bookzzz'), 'Options 10');",
+   "call": {
+    "sub": "Biber::DataModel::is_field_for_entrytype",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "book",
+     "bookzzz"
+    ]
+   },
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 64,
+   "tests": [
+    11
+   ],
+   "name": "Options 11",
+   "target": "bibers-core::datamodel",
+   "area": "is_field_for_entrytype",
+   "source": "ok($dm->is_field_for_entrytype('article', 'bookzzz')==0, 'Options 11');",
+   "call": {
+    "sub": "Biber::DataModel::is_field_for_entrytype",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "article",
+     "bookzzz"
+    ]
+   },
+   "assert": "ok",
+   "expected": "0",
+   "ret": "0",
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  },
+  {
+   "test": "tool-config.t",
+   "line": 65,
+   "tests": [
+    12
+   ],
+   "name": "Options 12",
+   "target": "bibers-core::datamodel",
+   "area": "fields_of_type",
+   "source": "ok((first {$_ eq 'month'} $dm->get_fields_of_type('field', 'literal')->@*), 'Options 12');",
+   "call": {
+    "sub": "Biber::DataModel::get_fields_of_type",
+    "args": [
+     {
+      "__obj": "Biber::DataModel"
+     },
+     "field",
+     "literal"
+    ]
+   },
+   "assert": "ok",
+   "expected": [
+    "abstract",
+    "addendum",
+    "annotation",
+    "booksubtitle",
+    "booktitle",
+    "booktitleaddon",
+    "chapter",
+    "edition",
+    "eid",
+    "entrysubtype",
+    "eprintclass",
+    "eprinttype",
+    "eventtitle",
+    "eventtitleaddon",
+    "gender",
+    "howpublished",
+    "indexsorttitle",
+    "indextitle",
+    "isan",
+    "isbn",
+    "ismn",
+    "isrn",
+    "issn",
+    "issue",
+    "issuesubtitle",
+    "issuetitle",
+    "issuetitleaddon",
+    "iswc",
+    "journalsubtitle",
+    "journaltitle",
+    "journaltitleaddon",
+    "label",
+    "langid",
+    "langidopts",
+    "library",
+    "mainsubtitle",
+    "maintitle",
+    "maintitleaddon",
+    "month",
+    "nameaddon",
+    "newliteralfield",
+    "note",
+    "number",
+    "origtitle",
+    "pagetotal",
+    "part",
+    "presort",
+    "relatedstring",
+    "relatedtype",
+    "reprinttitle",
+    "series",
+    "shorthand",
+    "shorthandintro",
+    "shortjournal",
+    "shortseries",
+    "shorttitle",
+    "sortkey",
+    "sortshorthand",
+    "sorttitle",
+    "subtitle",
+    "title",
+    "titleaddon",
+    "usera",
+    "userb",
+    "userc",
+    "userd",
+    "usere",
+    "userf",
+    "venue",
+    "version"
+   ],
+   "ret": [
+    "abstract",
+    "addendum",
+    "annotation",
+    "booksubtitle",
+    "booktitle",
+    "booktitleaddon",
+    "chapter",
+    "edition",
+    "eid",
+    "entrysubtype",
+    "eprintclass",
+    "eprinttype",
+    "eventtitle",
+    "eventtitleaddon",
+    "gender",
+    "howpublished",
+    "indexsorttitle",
+    "indextitle",
+    "isan",
+    "isbn",
+    "ismn",
+    "isrn",
+    "issn",
+    "issue",
+    "issuesubtitle",
+    "issuetitle",
+    "issuetitleaddon",
+    "iswc",
+    "journalsubtitle",
+    "journaltitle",
+    "journaltitleaddon",
+    "label",
+    "langid",
+    "langidopts",
+    "library",
+    "mainsubtitle",
+    "maintitle",
+    "maintitleaddon",
+    "month",
+    "nameaddon",
+    "newliteralfield",
+    "note",
+    "number",
+    "origtitle",
+    "pagetotal",
+    "part",
+    "presort",
+    "relatedstring",
+    "relatedtype",
+    "reprinttitle",
+    "series",
+    "shorthand",
+    "shorthandintro",
+    "shortjournal",
+    "shortseries",
+    "shorttitle",
+    "sortkey",
+    "sortshorthand",
+    "sorttitle",
+    "subtitle",
+    "title",
+    "titleaddon",
+    "usera",
+    "userb",
+    "userc",
+    "userd",
+    "usere",
+    "userf",
+    "venue",
+    "version"
+   ],
+   "config": {
+    "new_args": {
+     "tool": "1",
+     "configtool": "<BIBER_SRC>/data/biber-tool.conf",
+     "configfile": "tool-testconfig.conf"
+    },
+    "bcf": null,
+    "opts_pre": {},
+    "opts": {
+     "tool": "1"
+    },
+    "blx": [],
+    "tmplname": {},
+    "tmpl": {},
+    "output": "Biber::Output::bibtex",
+    "tool": true,
+    "mods": []
+   }
+  }
+ ]
+}

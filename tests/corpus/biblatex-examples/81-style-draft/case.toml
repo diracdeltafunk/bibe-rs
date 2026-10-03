@@ -1,0 +1,6 @@
+description = "biblatex example 81-style-draft.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/81-style-draft.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "81-style-draft.bcf"]
+outputs = ["81-style-draft.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:draft"]

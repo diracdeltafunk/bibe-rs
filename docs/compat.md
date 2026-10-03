@@ -49,6 +49,7 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-015 | Order of dynamic sets under `\nocite{*}` | `.bcf` declaration order | BB-062 | planned |
 | DC-016 | Order of deferred WARN messages in `.blg`/stdout | Emission order (deterministic) | BB-065 | planned |
 | DC-017 | Which cycle is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | planned |
+| DC-018 | `$MAPUNIQ` values in sourcemaps (time-based in biber, so the `.bbl` differs on every run) | Deterministic values: a per-run counter rendered in `suniqid`'s alphabet, so keys are unique within a run and identical across runs. *Exact format TBD when implemented.* | BB-113 | planned |
 
 ## 2. Reproduced biber bugs (Quirk switches)
 

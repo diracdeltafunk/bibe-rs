@@ -1,0 +1,6 @@
+description = "biber t/tool-bltxml-inout.t, configuration 1 (prepare at line 64): configfile=tool-test.conf; output_resolve_xdata=1; output_resolve_crossrefs=1; output_format=biblatexml; input_format=biblatexml; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/tool-bltxml-inout.t + t/tdata (traced by tools/port-tests)"
+args = ["--tool", "--configfile=tool-test.conf", "--output-resolve-xdata", "--output-resolve-crossrefs", "--output-format=biblatexml", "--input-format=biblatexml", "--sortlocale=en_GB.UTF-8", "biblatexml.bltxml"]
+outputs = ["biblatexml_bibertool.bltxml"]
+log = "biblatexml.bltxml.blg"
+tags = ["suite:ported", "t:tool-bltxml-inout", "deferred:m4"]

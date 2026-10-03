@@ -1,0 +1,1 @@
+WARN - misc entry 'd19' (test.bib): Invalid format '2000/1999X' of end date field 'date' - ignoring

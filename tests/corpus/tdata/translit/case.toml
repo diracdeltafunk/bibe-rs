@@ -1,0 +1,5 @@
+description = "biber t/tdata/translit.bcf (used by t/translit.t)"
+source = "vendor/biber/t/tdata/translit.bcf"
+args = ["--noconf", "translit.bcf"]
+outputs = ["translit.bbl"]
+tags = ["suite:tdata"]

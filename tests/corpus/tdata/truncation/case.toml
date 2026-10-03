@@ -1,0 +1,5 @@
+description = "biber t/tdata/truncation.bcf (used by t/truncation.t)"
+source = "vendor/biber/t/tdata/truncation.bcf"
+args = ["--noconf", "truncation.bcf"]
+outputs = ["truncation.bbl"]
+tags = ["suite:tdata"]

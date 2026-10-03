@@ -17,6 +17,19 @@ tests/corpus/
 
 \* Except for cases whose expectations deliberately differ from biber (see "Deviations" below).
 
+## Suites
+
+| Suite | Cases | Generator (`tools/corpus/`) |
+|---|---|---|
+| `tdata/` | biber's own `t/tdata/*.bcf` fixtures, plus command-line variants | `gen_tdata.py` |
+| `biblatex-examples/` | biblatex's example documents | `gen_examples.py` |
+| `styles/` | standard and contributed styles, plus an option matrix, over `biblatex-examples.bib` | `gen_styles.py` |
+| `bugs/` | one reproducer per biber bug (`docs/biber-bugs.md`), recording biber's actual behaviour | `gen_bugs.py` |
+| `scale/` | one 1000-entry synthetic case (bigger inputs: `gen_scale.py bench`) | `gen_scale.py` |
+| `ported/` | biber's `t/*.t` assertions | (separate) |
+
+See `tools/corpus/README.md` for tags and regeneration.
+
 ## case.toml
 
 ```toml
@@ -32,15 +45,21 @@ compare = "exact"                       # or "unordered-lines" (only for oracle 
 tags = ["suite:styles", "style:apa"]    # free-form; filter with `cargo xtask corpus tag:style:apa`
 allow = []                              # DC-NNN ids from docs/compat.md whose documented differences apply
 timeout_secs = 300
+
+[[normalize]]                           # optional, repeatable: case-specific regex substitution applied to
+pattern = 'loopkey:([a-z]+):[0-9A-Za-z]+'  # both sides (outputs and messages). Only for oracle nondeterminism
+replace = "loopkey:$1:<MAPUNIQ>"         # that can't be avoided (e.g. $MAPUNIQ, BB-113); explain why in a comment.
 ```
 
 Cases may not contain subdirectories other than `expected/`.
+
+Exit codes: biber exits 0 on success and 2 on reported errors. Any other code means Perl died, and its value depends on `errno` (25 from the PAR binary, 255 from the source build). The harness therefore treats all codes other than 0 and 2 as one "crash" class.
 
 ## Normalisation
 
 The same normalisation is applied to both sides before comparing (`crates/testkit/src/normalize.rs`):
 - in `.bbl` files, per-name option lists are sorted (biber emits them in hash order, BB-060);
-- for `.blg` files, only WARN/ERROR lines are compared, as a sorted multiset, with the work directory replaced by `<WORK>` and btparse temp-file paths replaced by `<TMPBIB>`.
+- for `.blg` files, only WARN/ERROR lines are compared, as a sorted multiset, with the work directory replaced by `<WORK>`, btparse temp-file paths replaced by `<TMPBIB>`, and Perl source locations in die messages (`at …/File/Slurper.pm line 59`, which differ between the PAR binary, the source build and machines) replaced by `at <PERLSRC> line <N>`.
 
 ## Commands
 

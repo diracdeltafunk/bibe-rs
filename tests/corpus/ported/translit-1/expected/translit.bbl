@@ -1,0 +1,136 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{aachen}{misc}{}{}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{title}{Aachen}
+    \endentry
+    \entry{aix-en-provence}{misc}{}{}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{title}{Aix-en-Provence}
+    \endentry
+    \entry{arnhem}{misc}{}{}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{title}{Arnhem}
+    \endentry
+    \entry{augsburg}{misc}{}{}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{title}{Augsburg}
+    \endentry
+    \entry{avignon}{misc}{}{}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{title}{Avignon}
+    \endentry
+    \entry{berlin}{misc}{}{}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labeltitlesource}{title}
+      \field{title}{Berlin}
+    \endentry
+    \entry{utrecht}{misc}{}{}
+      \field{sortinit}{U}
+      \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
+      \field{labeltitlesource}{title}
+      \field{title}{Utrecht}
+    \endentry
+    \entry{zeven}{misc}{}{}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labeltitlesource}{title}
+      \field{title}{Zeven}
+    \endentry
+    \entry{kumāra}{misc}{}{}
+      \field{sortinit}{कु}
+      \field{sortinithash}{f2c2f40490ae050da63583f5efff260d}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{kumāra}
+    \endentry
+    \entry{kha}{misc}{}{}
+      \field{sortinit}{ख}
+      \field{sortinithash}{5ab793476fc9d4ef4ecefc3950e224a9}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{kha}
+    \endentry
+    \entry{jīvita}{misc}{}{}
+      \field{sortinit}{जी}
+      \field{sortinithash}{9d0ce338afa8d2da5a0c39a29eef34b6}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{jīvita}
+    \endentry
+    \entry{jvara}{misc}{}{}
+      \field{sortinit}{ज्}
+      \field{sortinithash}{ac4e3d30cd368b4081d9d48645d742a5}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{jvara}
+    \endentry
+    \entry{tyāga}{misc}{}{}
+      \field{sortinit}{त्}
+      \field{sortinithash}{960b8f731535a9eeb14d7eb4b075533d}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{tyāga}
+    \endentry
+    \entry{tridaśa}{misc}{}{}
+      \field{sortinit}{त्}
+      \field{sortinithash}{960b8f731535a9eeb14d7eb4b075533d}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{tridaśa}
+    \endentry
+    \entry{tvid}{misc}{}{}
+      \field{sortinit}{त्}
+      \field{sortinithash}{960b8f731535a9eeb14d7eb4b075533d}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{tvid}
+    \endentry
+    \entry{kṣetra}{misc}{}{}
+      \field{sortinit}{क्}
+      \field{sortinithash}{01c8bb39397f097bc1d77bb37137e5ba}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{kṣetra}
+    \endentry
+    \entry{jñāna}{misc}{}{}
+      \field{sortinit}{ज्}
+      \field{sortinithash}{ac4e3d30cd368b4081d9d48645d742a5}
+      \field{labeltitlesource}{title}
+      \field{langid}{sanskrit}
+      \field{title}{jñāna}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

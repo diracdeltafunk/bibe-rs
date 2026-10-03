@@ -1,0 +1,5 @@
+description = "biber t/extratitleyear.t, configuration 1 (prepare() at line 41): sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/extratitleyear.t + t/tdata/extratitleyear.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "extratitleyear.bcf"]
+outputs = ["extratitleyear.bbl"]
+tags = ["suite:ported", "t:extratitleyear"]

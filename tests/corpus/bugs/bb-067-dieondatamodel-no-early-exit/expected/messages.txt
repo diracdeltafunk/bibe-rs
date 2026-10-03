@@ -1,0 +1,6 @@
+ERROR - Datamodel: article entry 'a3' (dm.bib): Invalid ISSN in value of field 'issn'
+ERROR - Datamodel: book entry 'nb' (dm.bib): Invalid value (pattern match fails) for field 'gender'
+ERROR - Datamodel: book entry 'nb' (dm.bib): Missing mandatory field 'author'
+ERROR - Datamodel: weirdtype entry 'w1' (dm.bib): Invalid entry type 'weirdtype' - defaulting to 'misc'
+WARN - Datamodel: article entry 'a2' (dm.bib): Field 'foo' invalid in data model - ignoring
+WARN - ISBN '0-201-13447-1' in entry 'nb' is invalid - run biber with '--validate_datamodel' for details.

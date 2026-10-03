@@ -1,0 +1,5 @@
+description = "biber t/uniqueness.t, configuration 4 (prepare() at line 144): maxcitenames=\"2\"; mincitenames=\"1\"; uniquename=\"init\"; uniquelist=\"false\"; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/uniqueness.t + t/tdata/uniqueness1.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "uniqueness1.bcf"]
+outputs = ["uniqueness1.bbl"]
+tags = ["suite:ported", "t:uniqueness"]

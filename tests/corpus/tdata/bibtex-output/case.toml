@@ -1,0 +1,5 @@
+description = "biber t/tdata/bibtex-output.bcf (used by t/bibtex-output.t)"
+source = "vendor/biber/t/tdata/bibtex-output.bcf"
+args = ["--noconf", "bibtex-output.bcf"]
+outputs = ["bibtex-output.bbl"]
+tags = ["suite:tdata"]

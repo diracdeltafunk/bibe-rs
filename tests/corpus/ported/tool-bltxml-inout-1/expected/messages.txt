@@ -1,0 +1,2 @@
+WARN - I didn't find a database entry for related entry 'rel1' in entry 'bltx1' - ignoring (section 99999)
+WARN - I didn't find a database entry for related entry 'rel2' in entry 'bltx1' - ignoring (section 99999)

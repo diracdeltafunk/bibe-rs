@@ -1,0 +1,15 @@
+WARN - The entry 'L21' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L21' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L21' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L22' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L22' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L22' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L23' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L23' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L23' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L24' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L24' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L24' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L31' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L31' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'L31' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.

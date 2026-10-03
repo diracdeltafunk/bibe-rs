@@ -1,0 +1,2 @@
+ERROR - BibTeX subsystem: <TMPBIB>, line 13, syntax error: found "@misc", expected end of entry ("}" or ")") (skipping to next "@")
+WARN - Entry cb1 does not parse correctly

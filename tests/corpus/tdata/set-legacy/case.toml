@@ -1,0 +1,5 @@
+description = "biber t/tdata/set-legacy.bcf (used by t/set-legacy.t)"
+source = "vendor/biber/t/tdata/set-legacy.bcf"
+args = ["--noconf", "set-legacy.bcf"]
+outputs = ["set-legacy.bbl"]
+tags = ["suite:tdata"]

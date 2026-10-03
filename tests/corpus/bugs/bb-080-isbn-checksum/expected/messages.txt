@@ -1,0 +1,3 @@
+WARN - Datamodel: book entry 'bad' (refs.bib): Invalid ISSN in value of field 'issn'
+WARN - Datamodel: book entry 'bad' (refs.bib): Invalid field 'issn' for entrytype 'book'
+WARN - ISBN '0-201-13447-1' in entry 'bad' is invalid - run biber with '--validate_datamodel' for details.

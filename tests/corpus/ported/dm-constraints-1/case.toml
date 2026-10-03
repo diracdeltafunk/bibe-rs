@@ -1,0 +1,5 @@
+description = "biber t/dm-constraints.t, configuration 1 (prepare() at line 57): sortlocale=en_GB.UTF-8; validate_datamodel=1"
+source = "vendor/biber/t/dm-constraints.t + t/tdata/dm-constraints.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--validate-datamodel", "dm-constraints.bcf"]
+outputs = ["dm-constraints.bbl"]
+tags = ["suite:ported", "t:dm-constraints"]

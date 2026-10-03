@@ -1,0 +1,5 @@
+description = "biber t/tdata/labelalpha.bcf (used by t/labelalpha.t)"
+source = "vendor/biber/t/tdata/labelalpha.bcf"
+args = ["--noconf", "labelalpha.bcf"]
+outputs = ["labelalpha.bbl"]
+tags = ["suite:tdata"]

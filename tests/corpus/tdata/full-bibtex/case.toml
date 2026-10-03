@@ -1,0 +1,5 @@
+description = "biber t/tdata/full-bibtex.bcf (used by t/full-bibtex.t)"
+source = "vendor/biber/t/tdata/full-bibtex.bcf"
+args = ["--noconf", "full-bibtex.bcf"]
+outputs = ["full-bibtex.bbl"]
+tags = ["suite:tdata"]

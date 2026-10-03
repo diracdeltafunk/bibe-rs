@@ -1,0 +1,647 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{aksin}{article}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \inset{set}
+      \name{author}{7}{}{%
+        {{hash=e410078ecf298d6b83792df6633b2b08}{%
+           family={Aks{ı}n},
+           familyi={A\bibinitperiod},
+           given={Özge},
+           giveni={Ö\bibinitperiod}}}%
+        {{hash=e881ffc293766c81018c24d97971f9c3}{%
+           family={Türkmen},
+           familyi={T\bibinitperiod},
+           given={Hayati},
+           giveni={H\bibinitperiod}}}%
+        {{hash=f9be8f5362c3f1a8c57254f421602a77}{%
+           family={Artok},
+           familyi={A\bibinitperiod},
+           given={Levent},
+           giveni={L\bibinitperiod}}}%
+        {{hash=ec020af214a005621e2bee07a4c233b2}{%
+           family={Çetinkaya},
+           familyi={Ç\bibinitperiod},
+           given={Bekir},
+           giveni={B\bibinitperiod}}}%
+        {{hash=3aaac037c43bc853e732168da667cd40}{%
+           family={Ni},
+           familyi={N\bibinitperiod},
+           given={Chaoying},
+           giveni={C\bibinitperiod}}}%
+        {{hash=7936aa08c0b52f024d7a3402b03bf380}{%
+           family={Büyükgüngör},
+           familyi={B\bibinitperiod},
+           given={Orhan},
+           giveni={O\bibinitperiod}}}%
+        {{hash=f37529ce7811acc4b7ecb0d352a007ec}{%
+           family={Özkal},
+           familyi={Ö\bibinitperiod},
+           given={Erhan},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{860705eb8ffac6e40507746c7ede79ca}
+      \strng{fullhash}{f565e365b13f55b7eb75966908d10961}
+      \strng{fullhashraw}{f565e365b13f55b7eb75966908d10961}
+      \strng{bibnamehash}{860705eb8ffac6e40507746c7ede79ca}
+      \strng{authorbibnamehash}{860705eb8ffac6e40507746c7ede79ca}
+      \strng{authornamehash}{860705eb8ffac6e40507746c7ede79ca}
+      \strng{authorfullhash}{f565e365b13f55b7eb75966908d10961}
+      \strng{authorfullhashraw}{f565e365b13f55b7eb75966908d10961}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{indextitle}{Effect of immobilization on catalytic characteristics}
+      \field{journaltitle}{J.~Organomet. Chem.}
+      \field{number}{13}
+      \field{title}{Effect of immobilization on catalytic characteristics of saturated {Pd-N}-heterocyclic carbenes in {Mizoroki-Heck} reactions}
+      \field{volume}{691}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{3027\bibrangedash 3036}
+      \range{pages}{10}
+    \endentry
+    \entry{augustine}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=b179e25cc4a68cfa0a2008476627dd7d}{%
+           family={Augustine},
+           familyi={A\bibinitperiod},
+           given={Robert\bibnamedelima L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Marcel Dekker}%
+      }
+      \strng{namehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{fullhash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{fullhashraw}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{bibnamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorbibnamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authornamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorfullhash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorfullhashraw}{b179e25cc4a68cfa0a2008476627dd7d}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A plain \texttt{book} entry}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Heterogeneous catalysis}
+      \field{title}{Heterogeneous catalysis for the synthetic chemist}
+      \field{year}{1995}
+      \field{dateera}{ce}
+    \endentry
+    \entry{bertram}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=8a5b475249c01d8aa99f2275128c1037}{%
+           family={Bertram},
+           familyi={B\bibinitperiod},
+           given={Aaron},
+           giveni={A\bibinitperiod}}}%
+        {{hash=60f0568f0258e96055aef41b438ecbd2}{%
+           family={Wentworth},
+           familyi={W\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{fullhash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{fullhashraw}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{bibnamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorbibnamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authornamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorfullhash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorfullhashraw}{4be7c21774d86b9e1f65ca280181467e}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{An \texttt{article} entry with a \texttt{volume} and a \texttt{number} field}
+      \field{journaltitle}{J.~Amer. Math. Soc.}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{2}
+      \field{shorttitle}{Gromov invariants}
+      \field{title}{Gromov invariants for holomorphic maps on {Riemann} surfaces}
+      \field{volume}{9}
+      \field{year}{1996}
+      \field{dateera}{ce}
+      \field{pages}{529\bibrangedash 571}
+      \range{pages}{43}
+    \endentry
+    \entry{cotton}{book}{}{}
+      \name{author}{4}{}{%
+        {{hash=6c06e7f89e6bfa82676362a7f651ded7}{%
+           family={Cotton},
+           familyi={C\bibinitperiod},
+           given={Frank\bibnamedelima Albert},
+           giveni={F\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=e1942252e9752c9cc6eaf1e3e38cfa81}{%
+           family={Wilkinson},
+           familyi={W\bibinitperiod},
+           given={Geoffrey},
+           giveni={G\bibinitperiod}}}%
+        {{hash=bf131285a192527f917d40647ba43806}{%
+           family={Murillio},
+           familyi={M\bibinitperiod},
+           given={Carlos\bibnamedelima A.},
+           giveni={C\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=6a2d357cec9902154443ce225a3a71cc}{%
+           family={Bochmann},
+           familyi={B\bibinitperiod},
+           given={Manfred},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Chichester}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{88f7260467a5939a073135c23f4adbb8}
+      \strng{fullhash}{12d39542267fe789a700de8a077801d8}
+      \strng{fullhashraw}{12d39542267fe789a700de8a077801d8}
+      \strng{bibnamehash}{88f7260467a5939a073135c23f4adbb8}
+      \strng{authorbibnamehash}{88f7260467a5939a073135c23f4adbb8}
+      \strng{authornamehash}{88f7260467a5939a073135c23f4adbb8}
+      \strng{authorfullhash}{12d39542267fe789a700de8a077801d8}
+      \strng{authorfullhashraw}{12d39542267fe789a700de8a077801d8}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with \arabic{author} authors and an \texttt{edition} field. By default, long \texttt{author} and \texttt{editor} lists are automatically truncated. This is configurable}
+      \field{edition}{6}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{Advanced inorganic chemistry}
+      \field{year}{1999}
+      \field{dateera}{ce}
+    \endentry
+    \entry{glashow}{article}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \inset{stdmodel}
+      \name{author}{1}{}{%
+        {{hash=eb3f242602109f5bdbeb41fdd990fcc0}{%
+           family={Glashow},
+           familyi={G\bibinitperiod},
+           given={Sheldon},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{eb3f242602109f5bdbeb41fdd990fcc0}
+      \strng{fullhash}{eb3f242602109f5bdbeb41fdd990fcc0}
+      \strng{fullhashraw}{eb3f242602109f5bdbeb41fdd990fcc0}
+      \strng{bibnamehash}{eb3f242602109f5bdbeb41fdd990fcc0}
+      \strng{authorbibnamehash}{eb3f242602109f5bdbeb41fdd990fcc0}
+      \strng{authornamehash}{eb3f242602109f5bdbeb41fdd990fcc0}
+      \strng{authorfullhash}{eb3f242602109f5bdbeb41fdd990fcc0}
+      \strng{authorfullhashraw}{eb3f242602109f5bdbeb41fdd990fcc0}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Nucl.~Phys.}
+      \field{title}{Partial Symmetries of Weak Interactions}
+      \field{volume}{22}
+      \field{year}{1961}
+      \field{dateera}{ce}
+      \field{pages}{579\bibrangedash 588}
+      \range{pages}{10}
+    \endentry
+    \entry{stdmodel}{set}{}{}
+      \set{glashow,weinberg,salam}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{annotation}{A \texttt{set} with three members discussing the standard model of particle physics.}
+    \endentry
+    \entry{companion}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=0743efb276e9219ee664a9b3dbd60619}{%
+           family={Goossens},
+           familyi={G\bibinitperiod},
+           given={Michel},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9355edd511e3f6fdd880ee98722a53fb}{%
+           family={Mittelbach},
+           familyi={M\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+        {{hash=e341c89f7bb5be4f5a050618c0b63942}{%
+           family={Samarin},
+           familyi={S\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{bibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorbibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authornamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A book with three authors. Note the formatting of the author list. By default, only the first name is reversed in the bibliography}
+      \field{edition}{1}
+      \field{indextitle}{LaTeX Companion, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{pagetotal}{528}
+      \field{shorttitle}{LaTeX Companion}
+      \field{title}{The {LaTeX} Companion}
+      \field{year}{1994}
+      \field{dateera}{ce}
+    \endentry
+    \entry{hammond}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=2c8830d09f180019fbb3c09acbfbd13a}{%
+           family={Hammond},
+           familyi={H\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \list{publisher}{2}{%
+        {International Union of Crystallography}%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{fullhash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{fullhashraw}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{bibnamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorbibnamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authornamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorfullhash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorfullhashraw}{2c8830d09f180019fbb3c09acbfbd13a}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields as well as the format of the \texttt{publisher} field}
+      \field{indextitle}{Basics of crystallography and diffraction, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{shorttitle}{Crystallography and diffraction}
+      \field{title}{The basics of crystallography and diffraction}
+      \field{year}{1997}
+      \field{dateera}{ce}
+    \endentry
+    \entry{set}{set}{}{}
+      \set{herrmann,aksin,yoon}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{annotation}{A \texttt{set} with three members.}
+    \endentry
+    \entry{herrmann}{article}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \inset{set}
+      \name{author}{5}{}{%
+        {{hash=e4b901c464e5049991ec18c423314033}{%
+           family={Herrmann},
+           familyi={H\bibinitperiod},
+           given={Wolfgang\bibnamedelima A.},
+           giveni={W\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=ff89e935abaeef442ce3fd58bb7866c6}{%
+           family={Öfele},
+           familyi={Ö\bibinitperiod},
+           given={Karl},
+           giveni={K\bibinitperiod}}}%
+        {{hash=03791bebbea7e2751a0c1178205efc3c}{%
+           family={Schneider},
+           familyi={S\bibinitperiod},
+           given={Sabine\bibnamedelima K.},
+           giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=c915dc113fe7da08baa2f6657521d6f3}{%
+           family={Herdtweck},
+           familyi={H\bibinitperiod},
+           given={Eberhardt},
+           giveni={E\bibinitperiod}}}%
+        {{hash=b2359609cdce4a9f2f57e894e41aa7e4}{%
+           family={Hoffmann},
+           familyi={H\bibinitperiod},
+           given={Stephan\bibnamedelima D.},
+           giveni={S\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{474cd267a4fa62096bf9d633ccf386c7}
+      \strng{fullhash}{4842cb27dac66fd190804d5cf5c297c4}
+      \strng{fullhashraw}{4842cb27dac66fd190804d5cf5c297c4}
+      \strng{bibnamehash}{474cd267a4fa62096bf9d633ccf386c7}
+      \strng{authorbibnamehash}{474cd267a4fa62096bf9d633ccf386c7}
+      \strng{authornamehash}{474cd267a4fa62096bf9d633ccf386c7}
+      \strng{authorfullhash}{4842cb27dac66fd190804d5cf5c297c4}
+      \strng{authorfullhashraw}{4842cb27dac66fd190804d5cf5c297c4}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{indextitle}{Carbocyclic carbene as an efficient catalyst, A}
+      \field{journaltitle}{Angew.~Chem. Int.~Ed.}
+      \field{number}{23}
+      \field{title}{A carbocyclic carbene as an efficient catalyst ligand for {C--C} coupling reactions}
+      \field{volume}{45}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{3859\bibrangedash 3862}
+      \range{pages}{4}
+    \endentry
+    \entry{murray}{article}{}{}
+      \name{author}{14}{}{%
+        {{hash=1c180cd8a2042c60a0f1dda22e34794a}{%
+           family={Hostetler},
+           familyi={H\bibinitperiod},
+           given={Michael\bibnamedelima J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=2030d395cebb15e0da06bd52f115049e}{%
+           family={Wingate},
+           familyi={W\bibinitperiod},
+           given={Julia\bibnamedelima E.},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=76100791c221471771c6bf1dbbc0975d}{%
+           family={Zhong},
+           familyi={Z\bibinitperiod},
+           given={Chuan-Jian},
+           giveni={C\bibinithyphendelim J\bibinitperiod}}}%
+        {{hash=06d5aa45c5c29069024ba0cdd1d32ead}{%
+           family={Harris},
+           familyi={H\bibinitperiod},
+           given={Jay\bibnamedelima E.},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=e9020055de8cefbc4a22aa3232d3fbab}{%
+           family={Vachet},
+           familyi={V\bibinitperiod},
+           given={Richard\bibnamedelima W.},
+           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=7e4f8edb775a146bcbbeeafed50a0360}{%
+           family={Clark},
+           familyi={C\bibinitperiod},
+           given={Michael\bibnamedelima R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=835e54469f856c3fcb684033251ee209}{%
+           family={Londono},
+           familyi={L\bibinitperiod},
+           given={J.\bibnamedelimi David},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=c36de3411f9881a05ab58a3db9a5b945}{%
+           family={Green},
+           familyi={G\bibinitperiod},
+           given={Stephen\bibnamedelima J.},
+           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=aed4e73d98e6c7b39ce8dd8daeec0702}{%
+           family={Stokes},
+           familyi={S\bibinitperiod},
+           given={Jennifer\bibnamedelima J.},
+           giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=13e766e053b44242f97acf0b776df72b}{%
+           family={Wignall},
+           familyi={W\bibinitperiod},
+           given={George\bibnamedelima D.},
+           giveni={G\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=9a1aea8c8c5706554440d568ccbc0850}{%
+           family={Glish},
+           familyi={G\bibinitperiod},
+           given={Gary\bibnamedelima L.},
+           giveni={G\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=ab2f6cef185e0b8cc0360f2fd84bcb3f}{%
+           family={Porter},
+           familyi={P\bibinitperiod},
+           given={Marc\bibnamedelima D.},
+           giveni={M\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=84f346653233f1532a42873769dd6553}{%
+           family={Evans},
+           familyi={E\bibinitperiod},
+           given={Neal\bibnamedelima D.},
+           giveni={N\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=ea266d9882f073db41b2567f03c3da5c}{%
+           family={Murray},
+           familyi={M\bibinitperiod},
+           given={Royce\bibnamedelima W.},
+           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{0c2086c92b65b24b0fb04b9462cf6c00}
+      \strng{fullhash}{1572cc3fd324f560e5e71d041a6bd764}
+      \strng{fullhashraw}{1572cc3fd324f560e5e71d041a6bd764}
+      \strng{bibnamehash}{0c2086c92b65b24b0fb04b9462cf6c00}
+      \strng{authorbibnamehash}{0c2086c92b65b24b0fb04b9462cf6c00}
+      \strng{authornamehash}{0c2086c92b65b24b0fb04b9462cf6c00}
+      \strng{authorfullhash}{1572cc3fd324f560e5e71d041a6bd764}
+      \strng{authorfullhashraw}{1572cc3fd324f560e5e71d041a6bd764}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{An \texttt{article} entry with \arabic{author} authors. By default, long author and editor lists are automatically truncated. This is configurable}
+      \field{indextitle}{Alkanethiolate gold cluster molecules}
+      \field{journaltitle}{Langmuir}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{1}
+      \field{shorttitle}{Alkanethiolate gold cluster molecules}
+      \field{subtitle}{Core and monolayer properties as a function of core size}
+      \field{title}{Alkanethiolate gold cluster molecules with core diameters from 1.5 to 5.2~{nm}}
+      \field{volume}{14}
+      \field{year}{1998}
+      \field{dateera}{ce}
+      \field{pages}{17\bibrangedash 30}
+      \range{pages}{14}
+    \endentry
+    \entry{massa}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=3f8dabe11903d955a0ab19ff5b2c7e7f}{%
+           family={Massa},
+           familyi={M\bibinitperiod},
+           given={Werner},
+           giveni={W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin}%
+      }
+      \list{publisher}{1}{%
+        {Spinger}%
+      }
+      \strng{namehash}{3f8dabe11903d955a0ab19ff5b2c7e7f}
+      \strng{fullhash}{3f8dabe11903d955a0ab19ff5b2c7e7f}
+      \strng{fullhashraw}{3f8dabe11903d955a0ab19ff5b2c7e7f}
+      \strng{bibnamehash}{3f8dabe11903d955a0ab19ff5b2c7e7f}
+      \strng{authorbibnamehash}{3f8dabe11903d955a0ab19ff5b2c7e7f}
+      \strng{authornamehash}{3f8dabe11903d955a0ab19ff5b2c7e7f}
+      \strng{authorfullhash}{3f8dabe11903d955a0ab19ff5b2c7e7f}
+      \strng{authorfullhashraw}{3f8dabe11903d955a0ab19ff5b2c7e7f}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with an \texttt{edition} field}
+      \field{edition}{2}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{Crystal structure determination}
+      \field{year}{2004}
+      \field{dateera}{ce}
+    \endentry
+    \entry{salam}{inproceedings}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \inset{stdmodel}
+      \name{author}{1}{}{%
+        {{hash=5196fd7e08485dbc6a7dd05adc133fdf}{%
+           family={Salam},
+           familyi={S\bibinitperiod},
+           given={Abdus},
+           giveni={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=d0ec890e59163c24c111a08d2a4be982}{%
+           family={Svartholm},
+           familyi={S\bibinitperiod},
+           given={Nils},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Stockholm}%
+      }
+      \list{publisher}{1}{%
+        {Almquist \& Wiksell}%
+      }
+      \strng{namehash}{5196fd7e08485dbc6a7dd05adc133fdf}
+      \strng{fullhash}{5196fd7e08485dbc6a7dd05adc133fdf}
+      \strng{fullhashraw}{5196fd7e08485dbc6a7dd05adc133fdf}
+      \strng{bibnamehash}{5196fd7e08485dbc6a7dd05adc133fdf}
+      \strng{authorbibnamehash}{5196fd7e08485dbc6a7dd05adc133fdf}
+      \strng{authornamehash}{5196fd7e08485dbc6a7dd05adc133fdf}
+      \strng{authorfullhash}{5196fd7e08485dbc6a7dd05adc133fdf}
+      \strng{authorfullhashraw}{5196fd7e08485dbc6a7dd05adc133fdf}
+      \strng{editorbibnamehash}{d0ec890e59163c24c111a08d2a4be982}
+      \strng{editornamehash}{d0ec890e59163c24c111a08d2a4be982}
+      \strng{editorfullhash}{d0ec890e59163c24c111a08d2a4be982}
+      \strng{editorfullhashraw}{d0ec890e59163c24c111a08d2a4be982}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booksubtitle}{Relativistic groups and analyticity}
+      \field{booktitle}{Elementary particle theory}
+      \field{booktitleaddon}{Proceedings of the {Eighth Nobel Symposium}}
+      \field{eventday}{19}
+      \field{eventendday}{25}
+      \field{eventendmonth}{5}
+      \field{eventendyear}{1968}
+      \field{eventmonth}{5}
+      \field{eventyear}{1968}
+      \field{title}{Weak and Electromagnetic Interactions}
+      \field{venue}{Aspenäsgarden, Lerum}
+      \field{year}{1968}
+      \field{dateera}{ce}
+      \field{eventenddateera}{ce}
+      \field{eventdateera}{ce}
+      \field{pages}{367\bibrangedash 377}
+      \range{pages}{11}
+    \endentry
+    \entry{weinberg}{article}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \inset{stdmodel}
+      \name{author}{1}{}{%
+        {{hash=15e144c72b0b9d10db00ddc6d37a19e6}{%
+           family={Weinberg},
+           familyi={W\bibinitperiod},
+           given={Steven},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{15e144c72b0b9d10db00ddc6d37a19e6}
+      \strng{fullhash}{15e144c72b0b9d10db00ddc6d37a19e6}
+      \strng{fullhashraw}{15e144c72b0b9d10db00ddc6d37a19e6}
+      \strng{bibnamehash}{15e144c72b0b9d10db00ddc6d37a19e6}
+      \strng{authorbibnamehash}{15e144c72b0b9d10db00ddc6d37a19e6}
+      \strng{authornamehash}{15e144c72b0b9d10db00ddc6d37a19e6}
+      \strng{authorfullhash}{15e144c72b0b9d10db00ddc6d37a19e6}
+      \strng{authorfullhashraw}{15e144c72b0b9d10db00ddc6d37a19e6}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Phys.~Rev.~Lett.}
+      \field{title}{A Model of Leptons}
+      \field{volume}{19}
+      \field{year}{1967}
+      \field{dateera}{ce}
+      \field{pages}{1264\bibrangedash 1266}
+      \range{pages}{3}
+    \endentry
+    \entry{yoon}{article}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \inset{set}
+      \name{author}{4}{}{%
+        {{hash=5b435c689a82f9af59acc66f38af7dc4}{%
+           family={Yoon},
+           familyi={Y\bibinitperiod},
+           given={Myeong\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=950fd963e3bfbd49bd0d9f642eff35e2}{%
+           family={Ryu},
+           familyi={R\bibinitperiod},
+           given={Dowook},
+           giveni={D\bibinitperiod}}}%
+        {{hash=71fd64c0a1c4671289f011f4348fa0fa}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Jeongryul},
+           giveni={J\bibinitperiod}}}%
+        {{hash=92e7e5698643ff80ba8fa8c3c72770b6}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Kyo\bibnamedelima Han},
+           giveni={K\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{fullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{fullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{bibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorbibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authornamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorfullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{authorfullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \field{sortinit}{Y}
+      \field{sortinithash}{fd67ad5a9ef0f7456bdd9aab10fe1495}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{indextitle}{Palladium pincer complexes}
+      \field{journaltitle}{Organometallics}
+      \field{number}{10}
+      \field{title}{Palladium pincer complexes with reduced bond angle strain: efficient catalysts for the {Heck} reaction}
+      \field{volume}{25}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{2409\bibrangedash 2411}
+      \range{pages}{3}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,378 @@
+{
+ "source": "vendor/biber/t/dateformats.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "dateformats.t",
+   "line": 442,
+   "tests": [
+    23
+   ],
+   "name": "Date values test 16 - labelyear = EVENTYEAR when YEAR is (mistakenly) missing",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('L16')->get_labeldate_info->{field}{year}, 'eventyear', 'Date values test 16 - labelyear = EVENTYEAR when YEAR is (mistakenly) missing' ) ;",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "L16"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::del_entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::del_entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L16"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L16"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "eventyear",
+   "ret": {
+    "field": {
+     "day": "eventday",
+     "hour": "eventhour",
+     "minute": "eventminute",
+     "month": "eventmonth",
+     "pseudodate": null,
+     "second": "eventsecond",
+     "source": "event",
+     "timezone": "eventtimezone",
+     "year": "eventyear"
+    }
+   },
+   "case": "tests/corpus/ported/dateformats-2",
+   "entry": "L16"
+  },
+  {
+   "test": "dateformats.t",
+   "line": 444,
+   "tests": [
+    25
+   ],
+   "name": "Date values test 17 - labelyear = YEAR",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('L17')->get_labeldate_info->{field}{year}, 'year', 'Date values test 17 - labelyear = YEAR' ) ;",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "L17"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "year",
+   "ret": {
+    "field": {
+     "day": "day",
+     "hour": "hour",
+     "minute": "minute",
+     "month": "month",
+     "pseudodate": null,
+     "second": "second",
+     "source": "",
+     "timezone": "timezone",
+     "year": "year"
+    }
+   },
+   "case": "tests/corpus/ported/dateformats-2",
+   "entry": "L17"
+  },
+  {
+   "test": "dateformats.t",
+   "line": 455,
+   "tests": [
+    27
+   ],
+   "name": "Date values test 17b - labelyear = ORIGYEAR",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('L17')->get_labeldate_info->{field}{year}, 'origyear', 'Date values test 17b - labelyear = ORIGYEAR' ) ;",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "L17"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::del_entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "origyear",
+   "ret": {
+    "field": {
+     "day": "origday",
+     "hour": "orighour",
+     "minute": "origminute",
+     "month": "origmonth",
+     "pseudodate": null,
+     "second": "origsecond",
+     "source": "orig",
+     "timezone": "origtimezone",
+     "year": "origyear"
+    }
+   },
+   "case": "tests/corpus/ported/dateformats-3",
+   "entry": "L17"
+  },
+  {
+   "test": "dateformats.t",
+   "line": 466,
+   "tests": [
+    29
+   ],
+   "name": "Date values test 17d - labelyear = EVENTYEAR",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('L17')->get_labeldate_info->{field}{year}, 'eventyear', 'Date values test 17d - labelyear = EVENTYEAR' ) ;",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "L17"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::del_entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "eventyear",
+   "ret": {
+    "field": {
+     "day": "eventday",
+     "hour": "eventhour",
+     "minute": "eventminute",
+     "month": "eventmonth",
+     "pseudodate": null,
+     "second": "eventsecond",
+     "source": "event",
+     "timezone": "eventtimezone",
+     "year": "eventyear"
+    }
+   },
+   "case": "tests/corpus/ported/dateformats-4",
+   "entry": "L17"
+  },
+  {
+   "test": "dateformats.t",
+   "line": 467,
+   "tests": [
+    30
+   ],
+   "name": "Date values test 17d - source = event",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('L17')->get_labeldate_info->{field}{source}, 'event', 'Date values test 17d - source = event' ) ;",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "L17"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "event",
+   "ret": {
+    "field": {
+     "day": "eventday",
+     "hour": "eventhour",
+     "minute": "eventminute",
+     "month": "eventmonth",
+     "pseudodate": null,
+     "second": "eventsecond",
+     "source": "event",
+     "timezone": "eventtimezone",
+     "year": "eventyear"
+    }
+   },
+   "case": "tests/corpus/ported/dateformats-4",
+   "entry": "L17"
+  },
+  {
+   "test": "dateformats.t",
+   "line": 476,
+   "tests": [
+    32
+   ],
+   "name": "Source is non-date field",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('L17')->get_labeldate_info->{field}{source}, 'pubstate', 'Source is non-date field');",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "L17"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::del_entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L17"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "pubstate",
+   "ret": {
+    "field": {
+     "day": null,
+     "hour": null,
+     "minute": null,
+     "month": null,
+     "pseudodate": "1",
+     "second": null,
+     "source": "pubstate",
+     "timezone": null,
+     "year": "pubstate"
+    }
+   },
+   "case": "tests/corpus/ported/dateformats-5",
+   "entry": "L17"
+  },
+  {
+   "test": "dateformats.t",
+   "line": 942,
+   "tests": [
+    46
+   ],
+   "name": "Extended years - 2",
+   "target": "bibers-core::input::handlers / resolve (entry field values)",
+   "area": "entry_field",
+   "source": "eq_or_diff($bibentries->entry('y2')->get_field('year'), '-17000002', 'Extended years - 2');",
+   "call": {
+    "sub": "Biber::Entry::get_field",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "y2"
+     },
+     "year"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "y2"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "-17000002",
+   "ret": "-17000002",
+   "case": "tests/corpus/ported/dateformats-6",
+   "entry": "y2",
+   "field": "year",
+   "note": "value not directly visible in .bbl"
+  }
+ ]
+}

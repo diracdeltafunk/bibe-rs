@@ -1,0 +1,5 @@
+description = "biblatex example 96-dates.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/96-dates.tex (lualatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "96-dates.bcf"]
+outputs = ["96-dates.bbl"]
+tags = ["suite:biblatex-examples", "engine:lualatex", "style:authoryear"]

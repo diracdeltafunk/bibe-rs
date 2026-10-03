@@ -1,0 +1,5 @@
+description = "biber t/tdata/maps.bcf (used by t/maps.t)"
+source = "vendor/biber/t/tdata/maps.bcf"
+args = ["--noconf", "maps.bcf"]
+outputs = ["maps.bbl"]
+tags = ["suite:tdata"]

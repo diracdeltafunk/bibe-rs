@@ -1,0 +1,5 @@
+description = "biber t/sort-uc.t, configuration 3 (prepare() at line 57): sorting=global; sorting=dswe; sortlocale=sv_SE.UTF-8"
+source = "vendor/biber/t/sort-uc.t + t/tdata/sort-uc.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=sv_SE.UTF-8", "sort-uc.bcf"]
+outputs = ["sort-uc.bbl"]
+tags = ["suite:ported", "t:sort-uc"]

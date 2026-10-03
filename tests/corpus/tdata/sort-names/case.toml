@@ -1,0 +1,5 @@
+description = "biber t/tdata/sort-names.bcf (used by t/sort-names.t)"
+source = "vendor/biber/t/tdata/sort-names.bcf"
+args = ["--noconf", "sort-names.bcf"]
+outputs = ["sort-names.bbl"]
+tags = ["suite:tdata"]

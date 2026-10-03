@@ -1,0 +1,5 @@
+description = "biber t/uniqueness.t, configuration 21 (prepare() at line 767): uniquelist=\"true\"; uniquename=\"minyearinit\"; pluralothers=\"false\"; maxcitenames=\"3\"; mincitenames=\"1\""
+source = "vendor/biber/t/uniqueness.t + t/tdata/uniqueness7.bcf (traced by tools/port-tests)"
+args = ["--noconf", "uniqueness7.bcf"]
+outputs = ["uniqueness7.bbl"]
+tags = ["suite:ported", "t:uniqueness"]

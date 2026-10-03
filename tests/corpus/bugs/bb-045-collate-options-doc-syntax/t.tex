@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,sorting=tl]{biblatex}
+\DeclareSortingTemplate{tl}{
+  \sort[locale=swedish,direction=descending]{\field{title}}
+}
+\addbibresource{t.bib}
+\begin{document}
+\nocite{*}
+\printbibliography
+\end{document}

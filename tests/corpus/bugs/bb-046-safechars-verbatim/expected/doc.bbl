@@ -1,0 +1,59 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{url1}{online}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=be8d69b62fcc9b1e8d75f43aa370e744}{%
+           family={Ux},
+           familyi={U\bibinitperiod},
+           given={Ann},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{be8d69b62fcc9b1e8d75f43aa370e744}
+      \strng{fullhash}{be8d69b62fcc9b1e8d75f43aa370e744}
+      \strng{fullhashraw}{be8d69b62fcc9b1e8d75f43aa370e744}
+      \strng{bibnamehash}{be8d69b62fcc9b1e8d75f43aa370e744}
+      \strng{authorbibnamehash}{be8d69b62fcc9b1e8d75f43aa370e744}
+      \strng{authornamehash}{be8d69b62fcc9b1e8d75f43aa370e744}
+      \strng{authorfullhash}{be8d69b62fcc9b1e8d75f43aa370e744}
+      \strng{authorfullhashraw}{be8d69b62fcc9b1e8d75f43aa370e744}
+      \field{sortinit}{U}
+      \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Url}
+      \field{year}{2003}
+      \field{dateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://example.org/caf\'{e}?a=1
+      \endverb
+      \verb{url}
+      \verb http://example.org/caf%C3%A9?a=1
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,11 @@
+# biber-test.conf creates entries keyed with $MAPUNIQ, which is time-based in biber (BB-113),
+# so the loopkey:<x>:<uniq> keys differ between runs; normalise them away.
+description = "biber t/basic-misc.t, configuration 2 (prepare() at line 134): uniquelist=\"true\"; maxcitenames=\"3\"; mincitenames=\"1\"; maxalphanames=\"3\"; minalphanames=\"1\"; maxbibnames=\"10\"; minbibnames=\"7\"; uniquework=\"1\"; nocite{*}; sortlocale=en_GB.UTF-8; isbn_normalise=1; isbn13=1; configfile=biber-test.conf"
+source = "vendor/biber/t/basic-misc.t + t/tdata/basic-misc.bcf (traced by tools/port-tests)"
+args = ["--configfile=biber-test.conf", "--sortlocale=en_GB.UTF-8", "--isbn-normalise", "--isbn13", "basic-misc.bcf"]
+outputs = ["basic-misc.bbl"]
+tags = ["suite:ported", "t:basic-misc"]
+
+[[normalize]]
+pattern = 'loopkey:([a-z]+):[0-9A-Za-z]+'
+replace = "loopkey:$1:<MAPUNIQ>"

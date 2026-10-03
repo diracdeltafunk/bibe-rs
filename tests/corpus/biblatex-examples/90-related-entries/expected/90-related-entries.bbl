@@ -1,0 +1,681 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{doody}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=936cee5fdd47aac6238f650db8b23a07}{%
+           family={Doody},
+           familyi={D\bibinitperiod},
+           given={Terrence},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{936cee5fdd47aac6238f650db8b23a07}
+      \strng{fullhash}{936cee5fdd47aac6238f650db8b23a07}
+      \strng{fullhashraw}{936cee5fdd47aac6238f650db8b23a07}
+      \strng{bibnamehash}{936cee5fdd47aac6238f650db8b23a07}
+      \strng{authorbibnamehash}{936cee5fdd47aac6238f650db8b23a07}
+      \strng{authornamehash}{936cee5fdd47aac6238f650db8b23a07}
+      \strng{authorfullhash}{936cee5fdd47aac6238f650db8b23a07}
+      \strng{authorfullhashraw}{936cee5fdd47aac6238f650db8b23a07}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{An \texttt{article} entry cited as an excerpt from a \texttt{collection} entry. Note the format of the \texttt{related} and \texttt{relatedstring} fields}
+      \field{journaltitle}{The Journal of Narrative Technique}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{3}
+      \field{relatedstring}{\autocap{e}xcerpt in}
+      \field{title}{Hemingway's Style and {Jake's} Narration}
+      \field{volume}{4}
+      \field{year}{1974}
+      \field{related}{1e63d4bbc14872275675171be2dfa906}
+      \true{nocite}
+      \field{pages}{212\bibrangedash 225}
+      \range{pages}{14}
+    \endentry
+    \entry{knuth:ct:related}{mvbook}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=ec08e6f01da5f3814f28a70c89c64656}{%
+           family={Knuth},
+           familyi={K\bibinitperiod},
+           given={Donald\bibnamedelima E.},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{bibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorbibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authornamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A five-volume book cited as a whole and related to its individual volumes. Note the \texttt{related} and \texttt{relatedtype} fields}
+      \field{endyear}{1986}
+      \field{indexsorttitle}{Computers & Typesetting}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{relatedtype}{multivolume}
+      \field{title}{Computers \& Typesetting}
+      \field{volumes}{5}
+      \field{year}{1984}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \field{related}{f55f8e1cbdd4a615ff07edab779847d8,c7fd5f8937a975807671a061c3ca6e9c,ef844e35021ba2eda1303628da99cef4,b2708b1f875c953fbe40f5f39c88a6b4,e68389c3254254814dc01b935466a5ab}
+      \true{nocite}
+    \endentry
+    \entry{f55f8e1cbdd4a615ff07edab779847d8}{book}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{author}{1}{}{%
+        {{hash=ec08e6f01da5f3814f28a70c89c64656}{%
+           family={Knuth},
+           familyi={K\bibinitperiod},
+           given={Donald\bibnamedelima E.},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{bibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorbibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authornamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{clonesourcekey}{knuth:ct:a}
+      \field{annotation}{The first volume of a five-volume book. Note the \texttt{sorttitle} field. We want this volume to be listed after the entry referring to the entire five-volume set. Also note the \texttt{indextitle} and \texttt{indexsorttitle} fields. Indexing packages that don't generate robust index entries require some control sequences to be protected from expansion}
+      \field{indexsorttitle}{The TeXbook}
+      \field{indextitle}{\protect\TeX book, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{maintitle}{Computers \& Typesetting}
+      \field{shorttitle}{\TeX book}
+      \field{title}{The {\TeX book}}
+      \field{volume}{A}
+      \field{year}{1984}
+      \field{dateera}{ce}
+    \endentry
+    \entry{c7fd5f8937a975807671a061c3ca6e9c}{book}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{author}{1}{}{%
+        {{hash=ec08e6f01da5f3814f28a70c89c64656}{%
+           family={Knuth},
+           familyi={K\bibinitperiod},
+           given={Donald\bibnamedelima E.},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{bibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorbibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authornamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{clonesourcekey}{knuth:ct:b}
+      \field{annotation}{The second volume of a five-volume book. Note the \texttt{sorttitle} field. Also note the \texttt{indexsorttitle} field}
+      \field{indexsorttitle}{TeX: The Program}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{maintitle}{Computers \& Typesetting}
+      \field{shorttitle}{\TeX}
+      \field{title}{{\TeX}: The Program}
+      \field{volume}{B}
+      \field{year}{1986}
+      \field{dateera}{ce}
+    \endentry
+    \entry{ef844e35021ba2eda1303628da99cef4}{book}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{author}{1}{}{%
+        {{hash=ec08e6f01da5f3814f28a70c89c64656}{%
+           family={Knuth},
+           familyi={K\bibinitperiod},
+           given={Donald\bibnamedelima E.},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{bibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorbibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authornamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{clonesourcekey}{knuth:ct:c}
+      \field{annotation}{The third volume of a five-volume book. Note the \texttt{sorttitle} field as well as the \texttt{indextitle} field}
+      \field{indextitle}{METAFONTbook, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{maintitle}{Computers \& Typesetting}
+      \field{shorttitle}{METAFONTbook}
+      \field{title}{The {METAFONTbook}}
+      \field{volume}{C}
+      \field{year}{1986}
+      \field{dateera}{ce}
+    \endentry
+    \entry{b2708b1f875c953fbe40f5f39c88a6b4}{book}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{author}{1}{}{%
+        {{hash=ec08e6f01da5f3814f28a70c89c64656}{%
+           family={Knuth},
+           familyi={K\bibinitperiod},
+           given={Donald\bibnamedelima E.},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{bibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorbibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authornamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{clonesourcekey}{knuth:ct:d}
+      \field{annotation}{The fourth volume of a five-volume book. Note the \texttt{sorttitle} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{maintitle}{Computers \& Typesetting}
+      \field{shorttitle}{METAFONT}
+      \field{title}{{METAFONT}: The Program}
+      \field{volume}{D}
+      \field{year}{1986}
+      \field{dateera}{ce}
+    \endentry
+    \entry{e68389c3254254814dc01b935466a5ab}{book}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{author}{1}{}{%
+        {{hash=ec08e6f01da5f3814f28a70c89c64656}{%
+           family={Knuth},
+           familyi={K\bibinitperiod},
+           given={Donald\bibnamedelima E.},
+           giveni={D\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{bibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorbibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authornamehash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{clonesourcekey}{knuth:ct:e}
+      \field{annotation}{The fifth volume of a five-volume book. Note the \texttt{sorttitle} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{maintitle}{Computers \& Typesetting}
+      \field{title}{{Computer Modern} Typefaces}
+      \field{volume}{E}
+      \field{year}{1986}
+      \field{dateera}{ce}
+    \endentry
+    \entry{7963607e635f427aafeffbf28942c3bb}{book}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{author}{1}{}{%
+        {{hash=34c5bbf9876c37127c3abe4e7d7a7198}{%
+           family={Kullback},
+           familyi={K\bibinitperiod},
+           given={Solomon},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons}%
+      }
+      \strng{namehash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{fullhash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{fullhashraw}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{bibnamehash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{authorbibnamehash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{authornamehash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{authorfullhash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{authorfullhashraw}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{clonesourcekey}{kullback}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{title}{Information Theory and Statistics}
+      \field{year}{1959}
+    \endentry
+    \entry{kullback:related}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=34c5bbf9876c37127c3abe4e7d7a7198}{%
+           family={Kullback},
+           familyi={K\bibinitperiod},
+           given={Solomon},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Dover Publications}%
+      }
+      \strng{namehash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{fullhash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{fullhashraw}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{bibnamehash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{authorbibnamehash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{authornamehash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{authorfullhash}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \strng{authorfullhashraw}{34c5bbf9876c37127c3abe4e7d7a7198}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A reprint of the \texttt{kullback} entry. Note the format of the \texttt{related} and \texttt{relatedtype} fields}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{relatedtype}{origpubin}
+      \field{title}{Information Theory and Statistics}
+      \field{year}{1997}
+      \field{related}{7963607e635f427aafeffbf28942c3bb}
+      \true{nocite}
+    \endentry
+    \entry{1e63d4bbc14872275675171be2dfa906}{collection}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{editor}{1}{}{%
+        {{hash=cf369effe2b1de0066543cc38f7f8369}{%
+           family={Matuz},
+           familyi={M\bibinitperiod},
+           given={Roger},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Detroit}%
+      }
+      \list{publisher}{1}{%
+        {Gale}%
+      }
+      \strng{namehash}{cf369effe2b1de0066543cc38f7f8369}
+      \strng{fullhash}{cf369effe2b1de0066543cc38f7f8369}
+      \strng{fullhashraw}{cf369effe2b1de0066543cc38f7f8369}
+      \strng{bibnamehash}{cf369effe2b1de0066543cc38f7f8369}
+      \strng{editorbibnamehash}{cf369effe2b1de0066543cc38f7f8369}
+      \strng{editornamehash}{cf369effe2b1de0066543cc38f7f8369}
+      \strng{editorfullhash}{cf369effe2b1de0066543cc38f7f8369}
+      \strng{editorfullhashraw}{cf369effe2b1de0066543cc38f7f8369}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{clonesourcekey}{matuz:doody}
+      \field{annotation}{A \texttt{collection} entry providing the excerpt information for the \texttt{doody} entry. Note the format of the \texttt{pages} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{title}{Contemporary Literary Criticism}
+      \field{volume}{61}
+      \field{year}{1990}
+      \field{pages}{204\bibrangedash 208}
+      \range{pages}{5}
+    \endentry
+    \entry{a595aab986c3206e1a637f4f18d41f62}{article}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{author}{1}{}{%
+        {{hash=a255a2fb9a29fa4fcefff49cef9b78bd}{%
+           family={Moore},
+           familyi={M\bibinitperiod},
+           given={Gordon\bibnamedelima E.},
+           giveni={G\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{fullhash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{fullhashraw}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{bibnamehash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{authorbibnamehash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{authornamehash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{authorfullhash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{authorfullhashraw}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{clonesourcekey}{moore}
+      \field{journaltitle}{Electronics}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{8}
+      \field{title}{Cramming more components onto integrated circuits}
+      \field{volume}{38}
+      \field{year}{1965}
+      \field{pages}{114\bibrangedash 117}
+      \range{pages}{4}
+    \endentry
+    \entry{moore:related}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=a255a2fb9a29fa4fcefff49cef9b78bd}{%
+           family={Moore},
+           familyi={M\bibinitperiod},
+           given={Gordon\bibnamedelima E.},
+           giveni={G\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{fullhash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{fullhashraw}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{bibnamehash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{authorbibnamehash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{authornamehash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{authorfullhash}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \strng{authorfullhashraw}{a255a2fb9a29fa4fcefff49cef9b78bd}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A reprint of Moore's law. Note the \texttt{related} and \texttt{relatedtype} fields}
+      \field{journaltitle}{Proceedings of the {IEEE}}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{1}
+      \field{relatedtype}{reprintfrom}
+      \field{title}{Cramming more components onto integrated circuits}
+      \field{volume}{86}
+      \field{year}{1998}
+      \field{related}{a595aab986c3206e1a637f4f18d41f62}
+      \true{nocite}
+      \field{pages}{82\bibrangedash 85}
+      \range{pages}{4}
+    \endentry
+    \entry{vangennep:related}{book}{useprefix=true}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=92bfdb890ac8eabd445fae54447b19dc}{%
+           family={Gennep},
+           familyi={G\bibinitperiod},
+           given={Arnold},
+           giveni={A\bibinitperiod},
+           givenun=0,
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Nourry}%
+      }
+      \strng{namehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{fullhash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{fullhashraw}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{bibnamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorbibnamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authornamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorfullhash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorfullhashraw}{92bfdb890ac8eabd445fae54447b19dc}
+      \field{extraname}{1}
+      \field{sortinit}{v}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A variant of the \texttt{vangennep} entry related to its translation. Note the format of the \texttt{related} and \texttt{relatedtype} fields}
+      \field{indextitle}{Rites de passage, Les}
+      \field{langid}{french}
+      \field{relatedtype}{bytranslator}
+      \field{shorttitle}{Rites de passage}
+      \field{title}{Les rites de passage}
+      \field{year}{1909}
+      \field{dateera}{ce}
+      \field{related}{be4997a317b29ab58b939e0004088d04}
+      \true{nocite}
+    \endentry
+    \entry{fe9c98794cc735d4f8147ad6e9af7e7f}{book}{skipbib=true,skipbiblist=true,skiplab=true,useprefix=true}{}
+      \name{author}{1}{}{%
+        {{hash=92bfdb890ac8eabd445fae54447b19dc}{%
+           family={Gennep},
+           familyi={G\bibinitperiod},
+           given={Arnold},
+           giveni={A\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Nourry}%
+      }
+      \strng{namehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{fullhash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{fullhashraw}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{bibnamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorbibnamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authornamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorfullhash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorfullhashraw}{92bfdb890ac8eabd445fae54447b19dc}
+      \field{sortinit}{v}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{clonesourcekey}{vangennep}
+      \field{annotation}{A \texttt{book} entry. Note the format of the printed name and compare the \texttt{useprefix} option in the \texttt{options} field as well as \texttt{brandt} and \texttt{geer}}
+      \field{indextitle}{Rites de passage, Les}
+      \field{langid}{french}
+      \field{shorttitle}{Rites de passage}
+      \field{title}{Les rites de passage}
+      \field{year}{1909}
+      \field{dateera}{ce}
+    \endentry
+    \entry{vangennep:trans}{book}{useprefix=true}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=92bfdb890ac8eabd445fae54447b19dc}{%
+           family={Gennep},
+           familyi={G\bibinitperiod},
+           given={Arnold},
+           giveni={A\bibinitperiod},
+           givenun=0,
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \name{translator}{2}{}{%
+        {{hash=f7baa68f5e52b8e2c367b24e36f45140}{%
+           family={Vizedom},
+           familyi={V\bibinitperiod},
+           given={Monika\bibnamedelima B.},
+           giveni={M\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=a109176940182571ed0113660fcc98be}{%
+           family={Caffee},
+           familyi={C\bibinitperiod},
+           given={Gabrielle\bibnamedelima L.},
+           giveni={G\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{origlanguage}{1}{%
+        {french}%
+      }
+      \list{publisher}{1}{%
+        {University of Chicago Press}%
+      }
+      \strng{namehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{fullhash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{fullhashraw}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{bibnamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorbibnamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authornamehash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorfullhash}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{authorfullhashraw}{92bfdb890ac8eabd445fae54447b19dc}
+      \strng{translatorbibnamehash}{32cba59d606091354fd3393154acd311}
+      \strng{translatornamehash}{32cba59d606091354fd3393154acd311}
+      \strng{translatorfullhash}{32cba59d606091354fd3393154acd311}
+      \strng{translatorfullhashraw}{32cba59d606091354fd3393154acd311}
+      \field{extraname}{2}
+      \field{sortinit}{v}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A translation of the \texttt{vangennep} entry. Note the \texttt{translator} and \texttt{origlanguage} fields. Compare with the \texttt{vangennep:related} entry.}
+      \field{indextitle}{Rites of Passage, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Rites of Passage}
+      \field{title}{The Rites of Passage}
+      \field{year}{1960}
+      \true{nocite}
+    \endentry
+    \entry{vizedom:related}{book}{usetranslator=true}{}
+      \name{translator}{2}{}{%
+        {{un=0,uniquepart=base,hash=f7baa68f5e52b8e2c367b24e36f45140}{%
+           family={Vizedom},
+           familyi={V\bibinitperiod},
+           given={Monika\bibnamedelima B.},
+           giveni={M\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a109176940182571ed0113660fcc98be}{%
+           family={Caffee},
+           familyi={C\bibinitperiod},
+           given={Gabrielle\bibnamedelima L.},
+           giveni={G\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {University of Chicago Press}%
+      }
+      \strng{namehash}{32cba59d606091354fd3393154acd311}
+      \strng{fullhash}{32cba59d606091354fd3393154acd311}
+      \strng{fullhashraw}{32cba59d606091354fd3393154acd311}
+      \strng{bibnamehash}{32cba59d606091354fd3393154acd311}
+      \strng{translatorbibnamehash}{32cba59d606091354fd3393154acd311}
+      \strng{translatornamehash}{32cba59d606091354fd3393154acd311}
+      \strng{translatorfullhash}{32cba59d606091354fd3393154acd311}
+      \strng{translatorfullhashraw}{32cba59d606091354fd3393154acd311}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{translator}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A translated work from \texttt{vangennep}. Note the format of the \texttt{related} and \texttt{relatedtype} fields}
+      \field{indextitle}{Rites of Passage, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{relatedtype}{translationof}
+      \field{shorttitle}{Rites of Passage}
+      \field{title}{The Rites of Passage}
+      \field{year}{1960}
+      \field{related}{fe9c98794cc735d4f8147ad6e9af7e7f}
+      \true{nocite}
+    \endentry
+    \entry{be4997a317b29ab58b939e0004088d04}{book}{skipbib=true,skipbiblist=true,skiplab=true,usetranslator=true}{}
+      \name{translator}{2}{}{%
+        {{hash=f7baa68f5e52b8e2c367b24e36f45140}{%
+           family={Vizedom},
+           familyi={V\bibinitperiod},
+           given={Monika\bibnamedelima B.},
+           giveni={M\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=a109176940182571ed0113660fcc98be}{%
+           family={Caffee},
+           familyi={C\bibinitperiod},
+           given={Gabrielle\bibnamedelima L.},
+           giveni={G\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {University of Chicago Press}%
+      }
+      \strng{namehash}{32cba59d606091354fd3393154acd311}
+      \strng{fullhash}{32cba59d606091354fd3393154acd311}
+      \strng{fullhashraw}{32cba59d606091354fd3393154acd311}
+      \strng{bibnamehash}{32cba59d606091354fd3393154acd311}
+      \strng{translatorbibnamehash}{32cba59d606091354fd3393154acd311}
+      \strng{translatornamehash}{32cba59d606091354fd3393154acd311}
+      \strng{translatorfullhash}{32cba59d606091354fd3393154acd311}
+      \strng{translatorfullhashraw}{32cba59d606091354fd3393154acd311}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{translator}
+      \field{labeltitlesource}{shorttitle}
+      \field{clonesourcekey}{vizedom:related}
+      \field{annotation}{A translated work from \texttt{vangennep}. Note the format of the \texttt{related} and \texttt{relatedtype} fields}
+      \field{indextitle}{Rites of Passage, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{relatedtype}{translationof}
+      \field{shorttitle}{Rites of Passage}
+      \field{title}{The Rites of Passage}
+      \field{year}{1960}
+      \field{related}{fe9c98794cc735d4f8147ad6e9af7e7f}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

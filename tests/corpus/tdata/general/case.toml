@@ -1,0 +1,5 @@
+description = "biber t/tdata/general.bcf (used by t/configfile.t, t/labelname.t, t/sorting.t, t/utils.t)"
+source = "vendor/biber/t/tdata/general.bcf"
+args = ["--noconf", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:tdata"]

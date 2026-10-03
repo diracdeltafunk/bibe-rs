@@ -1,0 +1,225 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{augustine}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=b179e25cc4a68cfa0a2008476627dd7d}{%
+           family={Augustine},
+           familyi={A\bibinitperiod},
+           given={Robert\bibnamedelima L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Marcel Dekker}%
+      }
+      \strng{namehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{fullhash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{fullhashraw}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{bibnamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorbibnamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authornamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorfullhash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorfullhashraw}{b179e25cc4a68cfa0a2008476627dd7d}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A plain \texttt{book} entry}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Heterogeneous catalysis}
+      \field{title}{Heterogeneous catalysis for the synthetic chemist}
+      \field{year}{1995}
+      \field{dateera}{ce}
+    \endentry
+    \entry{bertram}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=8a5b475249c01d8aa99f2275128c1037}{%
+           family={Bertram},
+           familyi={B\bibinitperiod},
+           given={Aaron},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=60f0568f0258e96055aef41b438ecbd2}{%
+           family={Wentworth},
+           familyi={W\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{fullhash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{fullhashraw}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{bibnamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorbibnamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authornamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorfullhash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorfullhashraw}{4be7c21774d86b9e1f65ca280181467e}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{An \texttt{article} entry with a \texttt{volume} and a \texttt{number} field}
+      \field{journaltitle}{J.~Amer. Math. Soc.}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{2}
+      \field{shorttitle}{Gromov invariants}
+      \field{title}{Gromov invariants for holomorphic maps on {Riemann} surfaces}
+      \field{volume}{9}
+      \field{year}{1996}
+      \field{dateera}{ce}
+      \field{pages}{529\bibrangedash 571}
+      \range{pages}{43}
+    \endentry
+    \entry{ctan}{online}{}{}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{annotation}{This is an \texttt{online} entry. The \textsc{url}, which is given in the \texttt{url} field, is transformed into a clickable link if \texttt{hyperref} support has been enabled. Note the format of the \texttt{urldate} field (\texttt{yyyy-mm-dd}) in the database file. Also note the \texttt{label} field which may be used as a fallback by citation styles which need an \texttt{author} and\slash or a \texttt{year}}
+      \field{label}{CTAN}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{subtitle}{The {Comprehensive TeX Archive Network}}
+      \field{title}{CTAN}
+      \field{urlday}{1}
+      \field{urlmonth}{10}
+      \field{urlyear}{2006}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb http://www.ctan.org
+      \endverb
+      \verb{url}
+      \verb http://www.ctan.org
+      \endverb
+    \endentry
+    \entry{companion}{book}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=0743efb276e9219ee664a9b3dbd60619}{%
+           family={Goossens},
+           familyi={G\bibinitperiod},
+           given={Michel},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9355edd511e3f6fdd880ee98722a53fb}{%
+           family={Mittelbach},
+           familyi={M\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e341c89f7bb5be4f5a050618c0b63942}{%
+           family={Samarin},
+           familyi={S\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{bibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorbibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authornamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A book with three authors. Note the formatting of the author list. By default, only the first name is reversed in the bibliography}
+      \field{edition}{1}
+      \field{indextitle}{LaTeX Companion, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{pagetotal}{528}
+      \field{shorttitle}{LaTeX Companion}
+      \field{title}{The {LaTeX} Companion}
+      \field{year}{1994}
+      \field{dateera}{ce}
+    \endentry
+    \entry{markey}{online}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9b9d49a73a3e877cd87f4aa91604d8d6}{%
+           family={Markey},
+           familyi={M\bibinitperiod},
+           given={Nicolas},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{9b9d49a73a3e877cd87f4aa91604d8d6}
+      \strng{fullhash}{9b9d49a73a3e877cd87f4aa91604d8d6}
+      \strng{fullhashraw}{9b9d49a73a3e877cd87f4aa91604d8d6}
+      \strng{bibnamehash}{9b9d49a73a3e877cd87f4aa91604d8d6}
+      \strng{authorbibnamehash}{9b9d49a73a3e877cd87f4aa91604d8d6}
+      \strng{authornamehash}{9b9d49a73a3e877cd87f4aa91604d8d6}
+      \strng{authorfullhash}{9b9d49a73a3e877cd87f4aa91604d8d6}
+      \strng{authorfullhashraw}{9b9d49a73a3e877cd87f4aa91604d8d6}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{An \texttt{online} entry for a tutorial. Note the format of the \texttt{date} field (\texttt{yyyy-mm-dd}) in the database file.}
+      \field{day}{16}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{month}{10}
+      \field{subtitle}{The {B} to {X} of {BibTeX}}
+      \field{title}{Tame the {BeaST}}
+      \field{urlday}{1}
+      \field{urlmonth}{10}
+      \field{urlyear}{2006}
+      \field{version}{1.3}
+      \field{year}{2005}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb http://mirror.ctan.org/info/bibtex/tamethebeast/ttb_en.pdf
+      \endverb
+      \verb{url}
+      \verb http://mirror.ctan.org/info/bibtex/tamethebeast/ttb_en.pdf
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

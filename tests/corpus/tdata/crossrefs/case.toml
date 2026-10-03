@@ -1,0 +1,5 @@
+description = "biber t/tdata/crossrefs.bcf (used by t/crossrefs.t)"
+source = "vendor/biber/t/tdata/crossrefs.bcf"
+args = ["--noconf", "crossrefs.bcf"]
+outputs = ["crossrefs.bbl"]
+tags = ["suite:tdata"]

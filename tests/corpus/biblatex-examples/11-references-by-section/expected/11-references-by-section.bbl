@@ -1,0 +1,367 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{1}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{nietzsche:ksa}{mvbook}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5d199ea59b68f8edfff8c5ae07d60d68}{%
+           family={Nietzsche},
+           familyi={N\bibinitperiod},
+           given={Friedrich},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=edd7ffac9b0b1c753c82c92ba425fc8e}{%
+           family={Colli},
+           familyi={C\bibinitperiod},
+           given={Giorgio},
+           giveni={G\bibinitperiod}}}%
+        {{hash=b9cccca44025ad690e24b910101b53d2}{%
+           family={Montinari},
+           familyi={M\bibinitperiod},
+           given={Mazzino},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{3}{%
+        {München}%
+        {Berlin}%
+        {New York}%
+      }
+      \list{publisher}{2}{%
+        {Deutscher Taschenbuch-Verlag}%
+        {Walter de Gruyter}%
+      }
+      \strng{namehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{fullhash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{fullhashraw}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{bibnamehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{authorbibnamehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{authornamehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{authorfullhash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{authorfullhashraw}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{editorbibnamehash}{a32507205efc528fb606ad70adbee0d7}
+      \strng{editornamehash}{a32507205efc528fb606ad70adbee0d7}
+      \strng{editorfullhash}{a32507205efc528fb606ad70adbee0d7}
+      \strng{editorfullhashraw}{a32507205efc528fb606ad70adbee0d7}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{The critical edition of Nietzsche's works. This is a \texttt{mvbook} entry referring to a 15-volume work as a whole. Note the \texttt{volumes} field and the format of the \texttt{publisher} and \texttt{location} fields in the database file. Also note the \texttt{sorttitle} and field which is used to fine-tune the sorting order of the bibliography. We want this item listed first in the bibliography}
+      \field{edition}{2}
+      \field{indexsorttitle}{Samtliche Werke}
+      \field{langid}{german}
+      \field{subtitle}{Kritische Studienausgabe}
+      \field{title}{Sämtliche Werke}
+      \field{volumes}{15}
+      \field{year}{1988}
+      \field{dateera}{ce}
+    \endentry
+    \entry{westfahl:space}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=dd4c0e40628e106b641ac3b9ce2e8b18}{%
+           family={Westfahl},
+           familyi={W\bibinitperiod},
+           given={Gary},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=dd4c0e40628e106b641ac3b9ce2e8b18}{%
+           family={Westfahl},
+           familyi={W\bibinitperiod},
+           given={Gary},
+           giveni={G\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Westport, Conn.}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Greenwood}%
+      }
+      \strng{namehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{fullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{fullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{bibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorbibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authornamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorfullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorfullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorbibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editornamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorfullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorfullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A cross-referenced article from a \texttt{collection}. This is an \texttt{incollection} entry with a \texttt{crossref} field. Note the \texttt{subtitle} and \texttt{indextitle} fields}
+      \field{booksubtitle}{The Frontier Theme in Science Fiction}
+      \field{booktitle}{Space and Beyond}
+      \field{indextitle}{True Frontier, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{subtitle}{Confronting and Avoiding the Realities of Space in {American} Science Fiction Films}
+      \field{title}{The True Frontier}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \field{pages}{55\bibrangedash 65}
+      \range{pages}{11}
+    \endentry
+  \enddatalist
+\endrefsection
+
+\refsection{2}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{nietzsche:historie}{inbook}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5d199ea59b68f8edfff8c5ae07d60d68}{%
+           family={Nietzsche},
+           familyi={N\bibinitperiod},
+           given={Friedrich},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{bookauthor}{1}{}{%
+        {{hash=5d199ea59b68f8edfff8c5ae07d60d68}{%
+           family={Nietzsche},
+           familyi={N\bibinitperiod},
+           given={Friedrich},
+           giveni={F\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=edd7ffac9b0b1c753c82c92ba425fc8e}{%
+           family={Colli},
+           familyi={C\bibinitperiod},
+           given={Giorgio},
+           giveni={G\bibinitperiod}}}%
+        {{hash=b9cccca44025ad690e24b910101b53d2}{%
+           family={Montinari},
+           familyi={M\bibinitperiod},
+           given={Mazzino},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{3}{%
+        {München}%
+        {Berlin}%
+        {New York}%
+      }
+      \list{publisher}{2}{%
+        {Deutscher Taschenbuch-Verlag}%
+        {Walter de Gruyter}%
+      }
+      \strng{namehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{fullhash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{fullhashraw}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{bibnamehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{authorbibnamehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{authornamehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{authorfullhash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{authorfullhashraw}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{bookauthorbibnamehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{bookauthornamehash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{bookauthorfullhash}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{bookauthorfullhashraw}{5d199ea59b68f8edfff8c5ae07d60d68}
+      \strng{editorbibnamehash}{a32507205efc528fb606ad70adbee0d7}
+      \strng{editornamehash}{a32507205efc528fb606ad70adbee0d7}
+      \strng{editorfullhash}{a32507205efc528fb606ad70adbee0d7}
+      \strng{editorfullhashraw}{a32507205efc528fb606ad70adbee0d7}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A single essay from the critical edition of Nietzsche's works. This \texttt{inbook} entry explicitly refers to an essay found in the first volume. Note the \texttt{title}, \texttt{booktitle}, and \texttt{maintitle} fields. Also note the \texttt{sorttitle} field. We want this entry to be listed after the entry referring to the entire first volume}
+      \field{booktitle}{Die Geburt der Tragödie. Unzeitgemä{ß}e Betrachtungen I--IV. Nachgelassene Schriften 1870--1973}
+      \field{indexsorttitle}{Vom Nutzen und Nachtheil der Historie fur das Leben}
+      \field{indextitle}{Vom Nutzen und Nachtheil der Historie für das Leben}
+      \field{langid}{german}
+      \field{mainsubtitle}{Kritische Studienausgabe}
+      \field{maintitle}{Sämtliche Werke}
+      \field{shorttitle}{Vom Nutzen und Nachtheil der Historie}
+      \field{subtitle}{Vom Nutzen und Nachtheil der Historie für das Leben}
+      \field{title}{Unzeitgemässe Betrachtungen. Zweites Stück}
+      \field{volume}{1}
+      \field{year}{1988}
+      \field{dateera}{ce}
+      \field{pages}{243\bibrangedash 334}
+      \range{pages}{92}
+    \endentry
+    \entry{westfahl:frontier}{collection}{}{}
+      \name{editor}{1}{}{%
+        {{un=0,uniquepart=base,hash=dd4c0e40628e106b641ac3b9ce2e8b18}{%
+           family={Westfahl},
+           familyi={W\bibinitperiod},
+           given={Gary},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{2}{%
+        {Westport, Conn.}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Greenwood}%
+      }
+      \strng{namehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{fullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{fullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{bibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorbibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editornamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorfullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorfullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{annotation}{This is a \texttt{collection} entry. Note the format of the \texttt{location} field as well as the \texttt{subtitle} field}
+      \field{booksubtitle}{The Frontier Theme in Science Fiction}
+      \field{booktitle}{Space and Beyond}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{subtitle}{The Frontier Theme in Science Fiction}
+      \field{title}{Space and Beyond}
+      \field{year}{2000}
+      \field{dateera}{ce}
+    \endentry
+  \enddatalist
+\endrefsection
+
+\refsection{3}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{aristotle:anima}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4565bd0323a849b06d4ea9bd97b4c483}{%
+           family={Hicks},
+           familyi={H\bibinitperiod},
+           given={Robert\bibnamedelima Drew},
+           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{editorbibnamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editornamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhashraw}{4565bd0323a849b06d4ea9bd97b4c483}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with an \texttt{author} and an \texttt{editor}}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{De Anima}
+      \field{year}{1907}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{averroes/bland}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=b86dc8dbce5064d05b055e8f6f28be6b}{%
+           family={Averroes},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4a2bf9a697755b6f9a1686180659e1fa}{%
+           family={Bland},
+           familyi={B\bibinitperiod},
+           given={Kalman\bibnamedelima P.},
+           giveni={K\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=4a2bf9a697755b6f9a1686180659e1fa}{%
+           family={Bland},
+           familyi={B\bibinitperiod},
+           given={Kalman\bibnamedelima P.},
+           giveni={K\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Jewish Theological Seminary of America}%
+      }
+      \strng{namehash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{fullhash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{fullhashraw}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{bibnamehash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{authorbibnamehash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{authornamehash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{authorfullhash}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{authorfullhashraw}{b86dc8dbce5064d05b055e8f6f28be6b}
+      \strng{editorbibnamehash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{editornamehash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{editorfullhash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{editorfullhashraw}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{translatorbibnamehash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{translatornamehash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{translatorfullhash}{4a2bf9a697755b6f9a1686180659e1fa}
+      \strng{translatorfullhashraw}{4a2bf9a697755b6f9a1686180659e1fa}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with a \texttt{series} and a \texttt{number}. Note the concatenation of the \texttt{editor} and \texttt{translator} fields as well as the \texttt{indextitle} field}
+      \field{indextitle}{Epistle on the Possibility of Conjunction, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{7}
+      \field{series}{Moreshet: Studies in {Jewish} History, Literature and Thought}
+      \field{shorttitle}{Possibility of Conjunction}
+      \field{title}{The Epistle on the Possibility of Conjunction with the Active Intellect by {Ibn Rushd} with the Commentary of {Moses Narboni}}
+      \field{year}{1982}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

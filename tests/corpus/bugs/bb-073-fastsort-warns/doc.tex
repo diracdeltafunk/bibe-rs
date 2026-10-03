@@ -1,0 +1,10 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{refs.bib}
+\begin{document}
+\cite{knuth}
+\printbibliography
+\newrefcontext[sorting=ynt]
+\printbibliography
+\end{document}

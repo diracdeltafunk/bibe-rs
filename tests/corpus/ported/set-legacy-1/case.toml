@@ -1,0 +1,5 @@
+description = "biber t/set-legacy.t, configuration 1 (prepare() at line 40): sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/set-legacy.t + t/tdata/set-legacy.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "set-legacy.bcf"]
+outputs = ["set-legacy.bbl"]
+tags = ["suite:ported", "t:set-legacy"]

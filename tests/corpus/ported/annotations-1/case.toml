@@ -1,0 +1,5 @@
+description = "biber t/annotations.t, configuration 1 (prepare() at line 41): annotation_marker=-an"
+source = "vendor/biber/t/annotations.t + t/tdata/annotations.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--annotation-marker=-an", "annotations.bcf"]
+outputs = ["annotations.bbl"]
+tags = ["suite:ported", "t:annotations"]

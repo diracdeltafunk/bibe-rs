@@ -1,0 +1,5 @@
+description = "biber t/sort-case.t, configuration 2 (prepare() at line 59)"
+source = "vendor/biber/t/sort-case.t + t/tdata/sort-case.bcf (traced by tools/port-tests)"
+args = ["--noconf", "sort-case.bcf"]
+outputs = ["sort-case.bbl"]
+tags = ["suite:ported", "t:sort-case"]

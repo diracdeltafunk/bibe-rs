@@ -1,0 +1,5 @@
+description = "biber t/tdata/sort-complex.bcf (used by t/sort-complex.t)"
+source = "vendor/biber/t/tdata/sort-complex.bcf"
+args = ["--noconf", "sort-complex.bcf"]
+outputs = ["sort-complex.bbl"]
+tags = ["suite:tdata"]

@@ -1,0 +1,5 @@
+description = "latin2 .bib -> latin3 .bbl (t/encoding.t)"
+source = "vendor/biber/t/tdata/encoding4.bcf"
+args = ["--noconf", "--input-encoding=latin2", "--output-encoding=latin3", "encoding4.bcf"]
+outputs = ["encoding4.bbl"]
+tags = ["suite:tdata", "feature:encoding", "deferred:DC-034"]

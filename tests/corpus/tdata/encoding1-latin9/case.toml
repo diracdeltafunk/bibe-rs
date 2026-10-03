@@ -1,0 +1,5 @@
+description = "latin9 .bib -> UTF-8 .bbl (t/encoding.t)"
+source = "vendor/biber/t/tdata/encoding1.bcf"
+args = ["--noconf", "--input-encoding=latin9", "encoding1.bcf"]
+outputs = ["encoding1.bbl"]
+tags = ["suite:tdata", "feature:encoding"]

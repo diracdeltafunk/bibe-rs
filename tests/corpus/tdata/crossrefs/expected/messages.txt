@@ -1,0 +1,5 @@
+ERROR - Circular inheritance between 'circ1'<->'circ2'
+WARN - I didn't find a database entry for 'ccr4' (section 0)
+WARN - I didn't find a database entry for crossref 'missing1' in entry 'mcr' - ignoring (section 0)
+WARN - I didn't find a database entry for xref 'missing1' in entry 'mxr' - ignoring (section 0)
+WARN - legacy month field 'jan' in entry 'cr1' is not an integer - this will probably not sort properly.

@@ -1,0 +1,29 @@
+{
+ "source": "vendor/biber/t/tool.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "tool.t",
+   "line": 262,
+   "tests": [
+    14
+   ],
+   "name": "Validation of tool-testsort.conf",
+   "target": "bibers-core::bcf / config (RNG schema validation, M4)",
+   "area": "validate_config",
+   "source": "is($@, '', \"Validation of $conf\");",
+   "call": {
+    "sub": "XML::LibXML::RelaxNG::validate",
+    "args": [
+     "data/schemata/config.rnc",
+     "vendor/biber/t/tdata/tool-testsort.conf"
+    ]
+   },
+   "assert": "is: validation error message is empty (file is valid)",
+   "expected": "",
+   "ret": "",
+   "case": "tests/corpus/ported/tool-2",
+   "note": "RNG schema validation (--validate-control/--validate-config, M4)"
+  }
+ ]
+}

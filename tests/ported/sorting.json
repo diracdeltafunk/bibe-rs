@@ -1,0 +1,316 @@
+{
+ "source": "vendor/biber/t/sorting.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "sorting.t",
+   "line": 147,
+   "tests": [
+    4
+   ],
+   "name": "Sorting data schemata - 1",
+   "target": "bibers-core::sort",
+   "area": "sortdataschema",
+   "source": "is_deeply($main->get_sortdataschema, $ssd1, 'Sorting data schemata - 1' );",
+   "call": {
+    "sub": "Biber::DataList::get_sortdataschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nyt/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nyt"
+     }
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    {
+     "spec": "str",
+     "str": "1"
+    },
+    {
+     "spec": "str",
+     "str": "1"
+    },
+    {
+     "spec": "str",
+     "str": "1"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "spec": "str",
+     "str": "1"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    }
+   ],
+   "ret": [
+    {
+     "spec": "str",
+     "str": "1"
+    },
+    {
+     "spec": "str",
+     "str": "1"
+    },
+    {
+     "spec": "str",
+     "str": "1"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "spec": "str",
+     "str": "1"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    }
+   ],
+   "case": "tests/corpus/ported/sorting-1"
+  },
+  {
+   "test": "sorting.t",
+   "line": 226,
+   "tests": [
+    14
+   ],
+   "name": "Sorting data schemata - 2",
+   "target": "bibers-core::sort",
+   "area": "sortdataschema",
+   "source": "is_deeply($main->get_sortdataschema, $ssd2, 'Sorting data schemata - 2' );",
+   "call": {
+    "sub": "Biber::DataList::get_sortdataschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nyt/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "dates1"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::DataList::set_sortingtemplatename",
+     "args": [
+      {
+       "__obj": "Biber::DataList",
+       "name": "nyt/global//global/global/global",
+       "section": "0",
+       "sortingtemplatename": "er"
+      },
+      "dates1"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": [
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "-int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "-int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    }
+   ],
+   "ret": [
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "-int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "-int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    },
+    {
+     "int": "1",
+     "spec": "int"
+    }
+   ],
+   "case": "tests/corpus/ported/sorting-6"
+  }
+ ]
+}

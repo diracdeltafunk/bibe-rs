@@ -1,0 +1,5 @@
+description = "biber t/tdata/skipsg.bcf (used by t/skipsg.t)"
+source = "vendor/biber/t/tdata/skipsg.bcf"
+args = ["--noconf", "skipsg.bcf"]
+outputs = ["skipsg.bbl"]
+tags = ["suite:tdata"]

@@ -1,0 +1,5 @@
+description = "biber t/truncation.t, configuration 1 (prepare() at line 44): uniquelist=\"false\"; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/truncation.t + t/tdata/truncation.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "truncation.bcf"]
+outputs = ["truncation.bbl"]
+tags = ["suite:ported", "t:truncation"]

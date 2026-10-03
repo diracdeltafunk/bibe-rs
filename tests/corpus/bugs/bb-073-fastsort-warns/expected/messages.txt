@@ -1,0 +1,2 @@
+WARN - fastsort option no longer required/supported, defaulting to UCA
+WARN - fastsort option no longer required/supported, defaulting to UCA

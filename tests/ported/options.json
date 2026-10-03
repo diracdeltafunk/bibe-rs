@@ -1,0 +1,192 @@
+{
+ "source": "vendor/biber/t/options.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "options.t",
+   "line": 191,
+   "tests": [
+    1
+   ],
+   "name": "Single-valued option",
+   "target": "bibers-core::config::blx_options",
+   "area": "getblxoption",
+   "source": "ok(Biber::Config->getblxoption(undef,'uniquename') eq 'init', \"Single-valued option\") ;",
+   "call": {
+    "sub": "Biber::Config::getblxoption",
+    "args": [
+     "Biber::Config",
+     null,
+     "uniquename"
+    ]
+   },
+   "assert": "ok",
+   "expected": "init",
+   "ret": "init",
+   "case": "tests/corpus/ported/options-1"
+  },
+  {
+   "test": "options.t",
+   "line": 192,
+   "tests": [
+    2
+   ],
+   "name": "Multi-valued options",
+   "target": "bibers-core::config::blx_options",
+   "area": "getblxoption",
+   "source": "is_deeply(Biber::Config->getblxoption(undef,'labelnamespec'), [ {content => 'author'} ], \"Multi-valued options\");",
+   "call": {
+    "sub": "Biber::Config::getblxoption",
+    "args": [
+     "Biber::Config",
+     null,
+     "labelnamespec"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    {
+     "content": "author"
+    }
+   ],
+   "ret": [
+    {
+     "content": "author"
+    }
+   ],
+   "case": "tests/corpus/ported/options-1"
+  },
+  {
+   "test": "options.t",
+   "line": 193,
+   "tests": [
+    3
+   ],
+   "name": "Setting Biber options via control file",
+   "target": "bibers-core::config (options, conf_file, precedence)",
+   "area": "getoption",
+   "source": "ok(Biber::Config->getoption('mincrossrefs') == 88, \"Setting Biber options via control file\");",
+   "call": {
+    "sub": "Biber::Config::getoption",
+    "args": [
+     "Biber::Config",
+     "mincrossrefs"
+    ]
+   },
+   "assert": "ok",
+   "expected": "88",
+   "ret": "88",
+   "case": "tests/corpus/ported/options-1"
+  },
+  {
+   "test": "options.t",
+   "line": 194,
+   "tests": [
+    4
+   ],
+   "name": "Per-type single-valued options",
+   "target": "bibers-core::config::blx_options",
+   "area": "getblxoption",
+   "source": "ok(Biber::Config->getblxoption(undef,'useprefix', 'book') == 1 , \"Per-type single-valued options\");",
+   "call": {
+    "sub": "Biber::Config::getblxoption",
+    "args": [
+     "Biber::Config",
+     null,
+     "useprefix",
+     "book"
+    ]
+   },
+   "assert": "ok",
+   "expected": "1",
+   "ret": "1",
+   "case": "tests/corpus/ported/options-1"
+  },
+  {
+   "test": "options.t",
+   "line": 195,
+   "tests": [
+    5
+   ],
+   "name": "Per-type multi-valued options",
+   "target": "bibers-core::config::blx_options",
+   "area": "getblxoption",
+   "source": "is_deeply(Biber::Config->getblxoption(undef,'labelnamespec', 'book'), $bln, \"Per-type multi-valued options\");",
+   "call": {
+    "sub": "Biber::Config::getblxoption",
+    "args": [
+     "Biber::Config",
+     null,
+     "labelnamespec",
+     "book"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    {
+     "content": "author"
+    },
+    {
+     "content": "editor"
+    }
+   ],
+   "ret": [
+    {
+     "content": "author"
+    },
+    {
+     "content": "editor"
+    }
+   ],
+   "case": "tests/corpus/ported/options-1"
+  },
+  {
+   "test": "options.t",
+   "line": 196,
+   "tests": [
+    6
+   ],
+   "name": "Global labelyear setting",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('L1')->get_labeldate_info->{field}{year}, 'year', 'Global labelyear setting' ) ;",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "L1"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "L1"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "year",
+   "ret": {
+    "field": {
+     "day": "day",
+     "hour": "hour",
+     "minute": "minute",
+     "month": "month",
+     "pseudodate": null,
+     "second": "second",
+     "source": "",
+     "timezone": "timezone",
+     "year": "year"
+    }
+   },
+   "case": "tests/corpus/ported/options-1",
+   "entry": "L1"
+  }
+ ]
+}

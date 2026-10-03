@@ -1,0 +1,138 @@
+{
+ "source": "vendor/biber/t/uniqueness.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "uniqueness.t",
+   "line": 678,
+   "tests": [
+    218
+   ],
+   "name": "Pluralothers test - 1",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_cite",
+   "source": "eq_or_diff($main->get_visible_cite($bibentries->entry('po1')->get_field($bibentries->entry('po1')->get_labelname_info)->get_id), '4', 'Pluralothers test - 1');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_cite",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4qb1cXvAr5"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "po1"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "po1"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "po1"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "po1"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "4",
+   "ret": "4",
+   "case": "tests/corpus/ported/uniqueness-19"
+  },
+  {
+   "test": "uniqueness.t",
+   "line": 750,
+   "tests": [
+    220
+   ],
+   "name": "Pluralothers test - 3",
+   "target": "bibers-core::process::visibility",
+   "area": "visible_cite",
+   "source": "eq_or_diff($main->get_visible_cite($bibentries->entry('po3')->get_field($bibentries->entry('po3')->get_labelname_info)->get_id), '4', 'Pluralothers test - 3');",
+   "call": {
+    "sub": "Biber::DataList::get_visible_cite",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "5pucwH27m7"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "po3"
+     ]
+    },
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "po3"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_labelname_info",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "po3"
+      }
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "po3"
+      },
+      "author"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "4",
+   "ret": "4",
+   "case": "tests/corpus/ported/uniqueness-20"
+  }
+ ]
+}

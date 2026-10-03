@@ -41,6 +41,20 @@ pub struct CaseSpec {
     /// Timeout in seconds for one run.
     #[serde(default = "default_timeout")]
     pub timeout_secs: u64,
+    /// Case-specific regex substitutions applied to both sides of every
+    /// comparison (outputs and messages), after the standard normalisation.
+    /// Only for oracle nondeterminism that can't be fixed otherwise (e.g.
+    /// `$MAPUNIQ` values, BB-113); say why in a comment in `case.toml`.
+    #[serde(default)]
+    pub normalize: Vec<Substitution>,
+}
+
+/// A regex substitution (`regex` crate syntax; `$1` etc. in `replace`).
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Substitution {
+    pub pattern: String,
+    pub replace: String,
 }
 
 fn default_timeout() -> u64 {
@@ -94,6 +108,10 @@ impl Case {
             .with_context(|| format!("reading {}", path.display()))?;
         let spec: CaseSpec =
             toml::from_str(&text).with_context(|| format!("parsing {}", path.display()))?;
+        for sub in &spec.normalize {
+            regex::Regex::new(&sub.pattern)
+                .with_context(|| format!("{}: bad normalize pattern", path.display()))?;
+        }
         if spec.outputs.is_empty() {
             bail!("{}: `outputs` must not be empty", path.display());
         }
@@ -164,6 +182,16 @@ impl Case {
         Ok(Some(
             toml::from_str(&text).with_context(|| format!("parsing {}", p.display()))?,
         ))
+    }
+
+    /// Apply the case's [`CaseSpec::normalize`] substitutions.
+    pub fn apply_substitutions(&self, text: &str) -> String {
+        let mut text = text.to_string();
+        for sub in &self.spec.normalize {
+            let re = regex::Regex::new(&sub.pattern).expect("validated in Case::load");
+            text = re.replace_all(&text, sub.replace.as_str()).into_owned();
+        }
+        text
     }
 
     pub fn has_tag(&self, tag: &str) -> bool {

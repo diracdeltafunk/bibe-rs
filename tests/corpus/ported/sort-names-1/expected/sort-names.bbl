@@ -1,0 +1,205 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{N4}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=a2c39fd61347c3096db1bfc749b5d83c}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+      }
+      \strng{namehash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{fullhash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{fullhashraw}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{bibnamehash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{authorbibnamehash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{authornamehash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{authorfullhash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{authorfullhashraw}{a2c39fd61347c3096db1bfc749b5d83c}
+      \field{labelalpha}{dSmi}
+      \field{sortinit}{d}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+    \endentry
+    \entry{N1}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=b46dd3b13dac4d9c2bd48ae7afd51854}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{fullhash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{fullhashraw}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{bibnamehash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{authorbibnamehash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{authornamehash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{authorfullhash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{authorfullhashraw}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \field{labelalpha}{Smi}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extraalpha}{1}
+      \field{labelnamesource}{author}
+    \endentry
+    \entry{N2}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=aee84b896e905c5fc79c5075306f9cc0}{%
+           family={Smith\bibnamedelimb de\bibnamedelima Jones},
+           familyi={S\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim J\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{fullhash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{fullhashraw}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{bibnamehash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{authorbibnamehash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{authornamehash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{authorfullhash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{authorfullhashraw}{aee84b896e905c5fc79c5075306f9cc0}
+      \field{labelalpha}{Smi}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+    \endentry
+    \entry{N3}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=ef07afb93a37d840aa69f08025e816a8}{%
+           family={Smith-Jones},
+           familyi={S\bibinithyphendelim J\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{fullhash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{fullhashraw}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{bibnamehash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{authorbibnamehash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{authornamehash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{authorfullhash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{authorfullhashraw}{ef07afb93a37d840aa69f08025e816a8}
+      \field{labelalpha}{Smi}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extraalpha}{3}
+      \field{labelnamesource}{author}
+    \endentry
+  \enddatalist
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{N4}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=a2c39fd61347c3096db1bfc749b5d83c}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+      }
+      \strng{namehash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{fullhash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{fullhashraw}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{bibnamehash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{authorbibnamehash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{authornamehash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{authorfullhash}{a2c39fd61347c3096db1bfc749b5d83c}
+      \strng{authorfullhashraw}{a2c39fd61347c3096db1bfc749b5d83c}
+      \field{labelalpha}{dSmi}
+      \field{sortinit}{d}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+    \endentry
+    \entry{N1}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=b46dd3b13dac4d9c2bd48ae7afd51854}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{fullhash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{fullhashraw}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{bibnamehash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{authorbibnamehash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{authornamehash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{authorfullhash}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \strng{authorfullhashraw}{b46dd3b13dac4d9c2bd48ae7afd51854}
+      \field{labelalpha}{Smi}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extraalpha}{1}
+      \field{labelnamesource}{author}
+    \endentry
+    \entry{N2}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=aee84b896e905c5fc79c5075306f9cc0}{%
+           family={Smith\bibnamedelimb de\bibnamedelima Jones},
+           familyi={S\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim J\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{fullhash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{fullhashraw}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{bibnamehash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{authorbibnamehash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{authornamehash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{authorfullhash}{aee84b896e905c5fc79c5075306f9cc0}
+      \strng{authorfullhashraw}{aee84b896e905c5fc79c5075306f9cc0}
+      \field{labelalpha}{Smi}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+    \endentry
+    \entry{N3}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=ef07afb93a37d840aa69f08025e816a8}{%
+           family={Smith-Jones},
+           familyi={S\bibinithyphendelim J\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \strng{namehash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{fullhash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{fullhashraw}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{bibnamehash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{authorbibnamehash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{authornamehash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{authorfullhash}{ef07afb93a37d840aa69f08025e816a8}
+      \strng{authorfullhashraw}{ef07afb93a37d840aa69f08025e816a8}
+      \field{labelalpha}{Smi}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extraalpha}{3}
+      \field{labelnamesource}{author}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

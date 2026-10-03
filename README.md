@@ -2,7 +2,7 @@
 
 A fast, behaviour-compatible Rust port of [biber](https://github.com/plk/biber), the biblatex backend. The binary is called **`bibers`**. It aims to produce byte-identical `.bbl` output to biber 2.22, at least 50× faster.
 
-Status: planning / infrastructure (M0). No code yet.
+Status: M0 (infrastructure) done: harness, differential corpus of 475 cases with biber 2.22 goldens, and biber's own test suite ported. Porting has not started.
 
 - [docs/PLAN.md](docs/PLAN.md): goals, feature inventory, architecture, correctness strategy, milestones, decisions.
 - [docs/compat.md](docs/compat.md): every behavioural difference between bibers and biber.

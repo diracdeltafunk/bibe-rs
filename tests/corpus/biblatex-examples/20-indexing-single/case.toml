@@ -1,0 +1,6 @@
+description = "biblatex example 20-indexing-single.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/20-indexing-single.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "20-indexing-single.bcf"]
+outputs = ["20-indexing-single.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:authortitle"]

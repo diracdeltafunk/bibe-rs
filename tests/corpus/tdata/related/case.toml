@@ -1,0 +1,5 @@
+description = "biber t/tdata/related.bcf (used by t/related-entries.t)"
+source = "vendor/biber/t/tdata/related.bcf"
+args = ["--noconf", "related.bcf"]
+outputs = ["related.bbl"]
+tags = ["suite:tdata"]

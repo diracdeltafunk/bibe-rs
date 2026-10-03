@@ -1,0 +1,5 @@
+description = "biber t/tdata/set-dynamic.bcf (used by t/set-dynamic.t)"
+source = "vendor/biber/t/tdata/set-dynamic.bcf"
+args = ["--noconf", "set-dynamic.bcf"]
+outputs = ["set-dynamic.bbl"]
+tags = ["suite:tdata"]

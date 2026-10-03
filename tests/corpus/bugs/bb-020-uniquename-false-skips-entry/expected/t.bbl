@@ -1,0 +1,89 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{b}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=4590260fce0b509a97d2255e408a6c93}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod}}}%
+        {{hash=4fc372704cb671bff7ed9e1ca8d34615}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={Jim},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{c1494addd962074b3406f8ec3d86f2b1}
+      \strng{fullhash}{c1494addd962074b3406f8ec3d86f2b1}
+      \strng{fullhashraw}{c1494addd962074b3406f8ec3d86f2b1}
+      \strng{bibnamehash}{c1494addd962074b3406f8ec3d86f2b1}
+      \strng{authorbibnamehash}{c1494addd962074b3406f8ec3d86f2b1}
+      \strng{authornamehash}{c1494addd962074b3406f8ec3d86f2b1}
+      \strng{authorfullhash}{c1494addd962074b3406f8ec3d86f2b1}
+      \strng{authorfullhashraw}{c1494addd962074b3406f8ec3d86f2b1}
+      \field{extraname}{1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T2}
+      \field{year}{2001}
+    \endentry
+    \entry{a}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=5d0ddda3a367ceb26fbaeca02e391c22}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d6cfb2b8c4b3f9440ec4642438129367}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={Jane},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{45c88cccd97ad3c93e9dfc2a1eefc27c}
+      \strng{fullhash}{45c88cccd97ad3c93e9dfc2a1eefc27c}
+      \strng{fullhashraw}{45c88cccd97ad3c93e9dfc2a1eefc27c}
+      \strng{bibnamehash}{45c88cccd97ad3c93e9dfc2a1eefc27c}
+      \strng{authorbibnamehash}{45c88cccd97ad3c93e9dfc2a1eefc27c}
+      \strng{authornamehash}{45c88cccd97ad3c93e9dfc2a1eefc27c}
+      \strng{authorfullhash}{45c88cccd97ad3c93e9dfc2a1eefc27c}
+      \strng{authorfullhashraw}{45c88cccd97ad3c93e9dfc2a1eefc27c}
+      \field{extraname}{2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T1}
+      \field{year}{2000}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

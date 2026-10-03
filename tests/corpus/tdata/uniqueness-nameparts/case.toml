@@ -1,0 +1,5 @@
+description = "biber t/tdata/uniqueness-nameparts.bcf (used by t/uniqueness-nameparts.t)"
+source = "vendor/biber/t/tdata/uniqueness-nameparts.bcf"
+args = ["--noconf", "uniqueness-nameparts.bcf"]
+outputs = ["uniqueness-nameparts.bbl"]
+tags = ["suite:tdata"]

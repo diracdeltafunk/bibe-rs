@@ -1,0 +1,68 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{D}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=688555523b86450dc708009bd34bf27f}{%
+           family={Bu},
+           familyi={B\bibinitperiod},
+           given={Bu},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=f709feeefe034d8ad3c33c7beb640623}{%
+           family={Ed},
+           familyi={E\bibinitperiod},
+           given={Ed},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{688555523b86450dc708009bd34bf27f}
+      \strng{fullhash}{688555523b86450dc708009bd34bf27f}
+      \strng{fullhashraw}{688555523b86450dc708009bd34bf27f}
+      \strng{bibnamehash}{688555523b86450dc708009bd34bf27f}
+      \strng{authorbibnamehash}{688555523b86450dc708009bd34bf27f}
+      \strng{authornamehash}{688555523b86450dc708009bd34bf27f}
+      \strng{authorfullhash}{688555523b86450dc708009bd34bf27f}
+      \strng{authorfullhashraw}{688555523b86450dc708009bd34bf27f}
+      \strng{editorbibnamehash}{f709feeefe034d8ad3c33c7beb640623}
+      \strng{editornamehash}{f709feeefe034d8ad3c33c7beb640623}
+      \strng{editorfullhash}{f709feeefe034d8ad3c33c7beb640623}
+      \strng{editorfullhashraw}{f709feeefe034d8ad3c33c7beb640623}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{maintitle}{Parent}
+      \field{origmonth}{5}
+      \field{origyear}{2005}
+      \field{title}{Child2}
+      \field{year}{1999}
+      \true{datecirca}
+      \field{dateera}{ce}
+      \field{origdateera}{ce}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

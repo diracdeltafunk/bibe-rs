@@ -1,0 +1,6 @@
+description = "biblatex example 63-style-authortitle-icomp.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/63-style-authortitle-icomp.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "63-style-authortitle-icomp.bcf"]
+outputs = ["63-style-authortitle-icomp.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:authortitle-icomp"]

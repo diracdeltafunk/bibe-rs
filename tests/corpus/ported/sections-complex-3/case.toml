@@ -1,0 +1,5 @@
+description = "biber t/sections-complex.t, configuration 3 (prepare() at line 130): maxcitenames=\"2\"; maxalphanames=\"2\"; labeldateparts=\"0\"; mincitenames=\"2\"; minalphanames=\"2\"; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/sections-complex.t + t/tdata/sections-complex.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--sortdebug", "sections-complex.bcf"]
+outputs = ["sections-complex.bbl"]
+tags = ["suite:ported", "t:sections-complex"]

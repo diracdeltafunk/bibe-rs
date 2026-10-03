@@ -1,0 +1,1361 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{aristotle:anima}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4565bd0323a849b06d4ea9bd97b4c483}{%
+           family={Hicks},
+           familyi={H\bibinitperiod},
+           given={Robert\bibnamedelima Drew},
+           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{editorbibnamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editornamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhashraw}{4565bd0323a849b06d4ea9bd97b4c483}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with an \texttt{author} and an \texttt{editor}}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{De Anima}
+      \field{year}{1907}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{aristotle:physics}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{translator}{2}{}{%
+        {{hash=4777ba269fde4ea0526ff057345e4085}{%
+           family={Wicksteed},
+           familyi={W\bibinitperiod},
+           given={P.\bibnamedelimi H.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=6db3a2434d88f6db3cef04fc0807932e}{%
+           family={Cornford},
+           familyi={C\bibinitperiod},
+           given={F.\bibnamedelimi M.},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {G. P. Putnam}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{translatorbibnamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatornamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhashraw}{9742ebd8d43330728a2d306f1a721baf}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with a \texttt{translator} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Physics}
+      \field{title}{Physics}
+      \field{year}{1929}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{nussbaum}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5fde8324968f94bc9b0e59c04b53b613}{%
+           family={Nussbaum},
+           familyi={N\bibinitperiod},
+           given={Martha},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Princeton}%
+      }
+      \list{publisher}{1}{%
+        {Princeton University Press}%
+      }
+      \strng{namehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{bibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorbibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authornamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indexsorttitle} fields and the markup of the quotes in the database file}
+      \field{indexsorttitle}{Aristotle's De Motu Animalium}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{title}{Aristotle's \mkbibquote{De Motu Animalium}}
+      \field{year}{1978}
+      \field{dateera}{ce}
+      \keyw{secondary}
+    \endentry
+    \entry{piccato}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5496cedfe867015e425d54207088ebff}{%
+           family={Piccato},
+           familyi={P\bibinitperiod},
+           given={Pablo},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Durham}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Duke University Press}%
+      }
+      \strng{namehash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhashraw}{5496cedfe867015e425d54207088ebff}
+      \strng{bibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorbibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authornamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhashraw}{5496cedfe867015e425d54207088ebff}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{This is a \texttt{book} entry. Note the format of the \texttt{location} field in the database file}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{City of Suspects}
+      \field{subtitle}{Crime in {Mexico City}, 1900--1931}
+      \field{title}{City of Suspects}
+      \field{year}{2001}
+      \field{dateera}{ce}
+    \endentry
+    \entry{worman}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=045c9cb614b0ed4bfdd1e37d400e2a7b}{%
+           family={Worman},
+           familyi={W\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Austin}%
+      }
+      \list{publisher}{1}{%
+        {University of Texas Press}%
+      }
+      \strng{namehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{bibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorbibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authornamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields}
+      \field{indextitle}{Cast of Character, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Cast of Character}
+      \field{subtitle}{Style in {Greek} Literature}
+      \field{title}{The Cast of Character}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+    \entry{yoon}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=5b435c689a82f9af59acc66f38af7dc4}{%
+           family={Yoon},
+           familyi={Y\bibinitperiod},
+           given={Myeong\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=950fd963e3bfbd49bd0d9f642eff35e2}{%
+           family={Ryu},
+           familyi={R\bibinitperiod},
+           given={Dowook},
+           giveni={D\bibinitperiod}}}%
+        {{hash=71fd64c0a1c4671289f011f4348fa0fa}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Jeongryul},
+           giveni={J\bibinitperiod}}}%
+        {{hash=92e7e5698643ff80ba8fa8c3c72770b6}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Kyo\bibnamedelima Han},
+           giveni={K\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{fullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{fullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{bibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorbibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authornamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorfullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{authorfullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \field{sortinit}{Y}
+      \field{sortinithash}{fd67ad5a9ef0f7456bdd9aab10fe1495}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{indextitle}{Palladium pincer complexes}
+      \field{journaltitle}{Organometallics}
+      \field{number}{10}
+      \field{title}{Palladium pincer complexes with reduced bond angle strain: efficient catalysts for the {Heck} reaction}
+      \field{volume}{25}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{2409\bibrangedash 2411}
+      \range{pages}{3}
+    \endentry
+  \enddatalist
+  \datalist[entry]{none/global/E1E1D3D40573127E9EE0480CAF1283D6/global/global/global}
+    \entry{aristotle:anima}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4565bd0323a849b06d4ea9bd97b4c483}{%
+           family={Hicks},
+           familyi={H\bibinitperiod},
+           given={Robert\bibnamedelima Drew},
+           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{editorbibnamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editornamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhashraw}{4565bd0323a849b06d4ea9bd97b4c483}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelprefix}{R}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with an \texttt{author} and an \texttt{editor}}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{De Anima}
+      \field{year}{1907}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{yoon}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=5b435c689a82f9af59acc66f38af7dc4}{%
+           family={Yoon},
+           familyi={Y\bibinitperiod},
+           given={Myeong\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=950fd963e3bfbd49bd0d9f642eff35e2}{%
+           family={Ryu},
+           familyi={R\bibinitperiod},
+           given={Dowook},
+           giveni={D\bibinitperiod}}}%
+        {{hash=71fd64c0a1c4671289f011f4348fa0fa}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Jeongryul},
+           giveni={J\bibinitperiod}}}%
+        {{hash=92e7e5698643ff80ba8fa8c3c72770b6}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Kyo\bibnamedelima Han},
+           giveni={K\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{fullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{fullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{bibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorbibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authornamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorfullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{authorfullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelprefix}{R}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{indextitle}{Palladium pincer complexes}
+      \field{journaltitle}{Organometallics}
+      \field{number}{10}
+      \field{title}{Palladium pincer complexes with reduced bond angle strain: efficient catalysts for the {Heck} reaction}
+      \field{volume}{25}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{2409\bibrangedash 2411}
+      \range{pages}{3}
+    \endentry
+    \entry{worman}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=045c9cb614b0ed4bfdd1e37d400e2a7b}{%
+           family={Worman},
+           familyi={W\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Austin}%
+      }
+      \list{publisher}{1}{%
+        {University of Texas Press}%
+      }
+      \strng{namehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{bibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorbibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authornamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelprefix}{R}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields}
+      \field{indextitle}{Cast of Character, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Cast of Character}
+      \field{subtitle}{Style in {Greek} Literature}
+      \field{title}{The Cast of Character}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+    \entry{piccato}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5496cedfe867015e425d54207088ebff}{%
+           family={Piccato},
+           familyi={P\bibinitperiod},
+           given={Pablo},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Durham}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Duke University Press}%
+      }
+      \strng{namehash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhashraw}{5496cedfe867015e425d54207088ebff}
+      \strng{bibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorbibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authornamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhashraw}{5496cedfe867015e425d54207088ebff}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelprefix}{R}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{This is a \texttt{book} entry. Note the format of the \texttt{location} field in the database file}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{City of Suspects}
+      \field{subtitle}{Crime in {Mexico City}, 1900--1931}
+      \field{title}{City of Suspects}
+      \field{year}{2001}
+      \field{dateera}{ce}
+    \endentry
+    \entry{nussbaum}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5fde8324968f94bc9b0e59c04b53b613}{%
+           family={Nussbaum},
+           familyi={N\bibinitperiod},
+           given={Martha},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Princeton}%
+      }
+      \list{publisher}{1}{%
+        {Princeton University Press}%
+      }
+      \strng{namehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{bibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorbibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authornamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelprefix}{R}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indexsorttitle} fields and the markup of the quotes in the database file}
+      \field{indexsorttitle}{Aristotle's De Motu Animalium}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{title}{Aristotle's \mkbibquote{De Motu Animalium}}
+      \field{year}{1978}
+      \field{dateera}{ce}
+      \keyw{secondary}
+    \endentry
+    \entry{aristotle:physics}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{translator}{2}{}{%
+        {{hash=4777ba269fde4ea0526ff057345e4085}{%
+           family={Wicksteed},
+           familyi={W\bibinitperiod},
+           given={P.\bibnamedelimi H.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=6db3a2434d88f6db3cef04fc0807932e}{%
+           family={Cornford},
+           familyi={C\bibinitperiod},
+           given={F.\bibnamedelimi M.},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {G. P. Putnam}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{translatorbibnamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatornamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhashraw}{9742ebd8d43330728a2d306f1a721baf}
+      \field{extraname}{2}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelprefix}{R}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with a \texttt{translator} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Physics}
+      \field{title}{Physics}
+      \field{year}{1929}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+  \enddatalist
+  \datalist[entry]{none/global/5DBC98DCC983A70728BD082D1A47546E/global/global/global}
+    \entry{aristotle:anima}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4565bd0323a849b06d4ea9bd97b4c483}{%
+           family={Hicks},
+           familyi={H\bibinitperiod},
+           given={Robert\bibnamedelima Drew},
+           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{editorbibnamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editornamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhashraw}{4565bd0323a849b06d4ea9bd97b4c483}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelprefix}{S}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with an \texttt{author} and an \texttt{editor}}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{De Anima}
+      \field{year}{1907}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{yoon}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=5b435c689a82f9af59acc66f38af7dc4}{%
+           family={Yoon},
+           familyi={Y\bibinitperiod},
+           given={Myeong\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=950fd963e3bfbd49bd0d9f642eff35e2}{%
+           family={Ryu},
+           familyi={R\bibinitperiod},
+           given={Dowook},
+           giveni={D\bibinitperiod}}}%
+        {{hash=71fd64c0a1c4671289f011f4348fa0fa}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Jeongryul},
+           giveni={J\bibinitperiod}}}%
+        {{hash=92e7e5698643ff80ba8fa8c3c72770b6}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Kyo\bibnamedelima Han},
+           giveni={K\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{fullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{fullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{bibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorbibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authornamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorfullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{authorfullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelprefix}{S}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{indextitle}{Palladium pincer complexes}
+      \field{journaltitle}{Organometallics}
+      \field{number}{10}
+      \field{title}{Palladium pincer complexes with reduced bond angle strain: efficient catalysts for the {Heck} reaction}
+      \field{volume}{25}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{2409\bibrangedash 2411}
+      \range{pages}{3}
+    \endentry
+    \entry{worman}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=045c9cb614b0ed4bfdd1e37d400e2a7b}{%
+           family={Worman},
+           familyi={W\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Austin}%
+      }
+      \list{publisher}{1}{%
+        {University of Texas Press}%
+      }
+      \strng{namehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{bibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorbibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authornamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelprefix}{S}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields}
+      \field{indextitle}{Cast of Character, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Cast of Character}
+      \field{subtitle}{Style in {Greek} Literature}
+      \field{title}{The Cast of Character}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+    \entry{piccato}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5496cedfe867015e425d54207088ebff}{%
+           family={Piccato},
+           familyi={P\bibinitperiod},
+           given={Pablo},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Durham}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Duke University Press}%
+      }
+      \strng{namehash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhashraw}{5496cedfe867015e425d54207088ebff}
+      \strng{bibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorbibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authornamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhashraw}{5496cedfe867015e425d54207088ebff}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelprefix}{S}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{This is a \texttt{book} entry. Note the format of the \texttt{location} field in the database file}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{City of Suspects}
+      \field{subtitle}{Crime in {Mexico City}, 1900--1931}
+      \field{title}{City of Suspects}
+      \field{year}{2001}
+      \field{dateera}{ce}
+    \endentry
+    \entry{nussbaum}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5fde8324968f94bc9b0e59c04b53b613}{%
+           family={Nussbaum},
+           familyi={N\bibinitperiod},
+           given={Martha},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Princeton}%
+      }
+      \list{publisher}{1}{%
+        {Princeton University Press}%
+      }
+      \strng{namehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{bibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorbibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authornamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelprefix}{S}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indexsorttitle} fields and the markup of the quotes in the database file}
+      \field{indexsorttitle}{Aristotle's De Motu Animalium}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{title}{Aristotle's \mkbibquote{De Motu Animalium}}
+      \field{year}{1978}
+      \field{dateera}{ce}
+      \keyw{secondary}
+    \endentry
+    \entry{aristotle:physics}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{translator}{2}{}{%
+        {{hash=4777ba269fde4ea0526ff057345e4085}{%
+           family={Wicksteed},
+           familyi={W\bibinitperiod},
+           given={P.\bibnamedelimi H.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=6db3a2434d88f6db3cef04fc0807932e}{%
+           family={Cornford},
+           familyi={C\bibinitperiod},
+           given={F.\bibnamedelimi M.},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {G. P. Putnam}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{translatorbibnamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatornamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhashraw}{9742ebd8d43330728a2d306f1a721baf}
+      \field{extraname}{2}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelprefix}{S}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with a \texttt{translator} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Physics}
+      \field{title}{Physics}
+      \field{year}{1929}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+  \enddatalist
+  \datalist[entry]{none/global/F09564C9CA56850D4CD6B3319E541AEE/global/global/global}
+    \entry{aristotle:anima}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4565bd0323a849b06d4ea9bd97b4c483}{%
+           family={Hicks},
+           familyi={H\bibinitperiod},
+           given={Robert\bibnamedelima Drew},
+           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{editorbibnamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editornamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhashraw}{4565bd0323a849b06d4ea9bd97b4c483}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelprefix}{Q}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with an \texttt{author} and an \texttt{editor}}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{De Anima}
+      \field{year}{1907}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{yoon}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=5b435c689a82f9af59acc66f38af7dc4}{%
+           family={Yoon},
+           familyi={Y\bibinitperiod},
+           given={Myeong\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=950fd963e3bfbd49bd0d9f642eff35e2}{%
+           family={Ryu},
+           familyi={R\bibinitperiod},
+           given={Dowook},
+           giveni={D\bibinitperiod}}}%
+        {{hash=71fd64c0a1c4671289f011f4348fa0fa}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Jeongryul},
+           giveni={J\bibinitperiod}}}%
+        {{hash=92e7e5698643ff80ba8fa8c3c72770b6}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Kyo\bibnamedelima Han},
+           giveni={K\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{fullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{fullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{bibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorbibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authornamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorfullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{authorfullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelprefix}{Q}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{indextitle}{Palladium pincer complexes}
+      \field{journaltitle}{Organometallics}
+      \field{number}{10}
+      \field{title}{Palladium pincer complexes with reduced bond angle strain: efficient catalysts for the {Heck} reaction}
+      \field{volume}{25}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{2409\bibrangedash 2411}
+      \range{pages}{3}
+    \endentry
+    \entry{worman}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=045c9cb614b0ed4bfdd1e37d400e2a7b}{%
+           family={Worman},
+           familyi={W\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Austin}%
+      }
+      \list{publisher}{1}{%
+        {University of Texas Press}%
+      }
+      \strng{namehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{bibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorbibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authornamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelprefix}{Q}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields}
+      \field{indextitle}{Cast of Character, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Cast of Character}
+      \field{subtitle}{Style in {Greek} Literature}
+      \field{title}{The Cast of Character}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+    \entry{piccato}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5496cedfe867015e425d54207088ebff}{%
+           family={Piccato},
+           familyi={P\bibinitperiod},
+           given={Pablo},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Durham}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Duke University Press}%
+      }
+      \strng{namehash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhashraw}{5496cedfe867015e425d54207088ebff}
+      \strng{bibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorbibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authornamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhashraw}{5496cedfe867015e425d54207088ebff}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelprefix}{Q}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{This is a \texttt{book} entry. Note the format of the \texttt{location} field in the database file}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{City of Suspects}
+      \field{subtitle}{Crime in {Mexico City}, 1900--1931}
+      \field{title}{City of Suspects}
+      \field{year}{2001}
+      \field{dateera}{ce}
+    \endentry
+    \entry{nussbaum}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5fde8324968f94bc9b0e59c04b53b613}{%
+           family={Nussbaum},
+           familyi={N\bibinitperiod},
+           given={Martha},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Princeton}%
+      }
+      \list{publisher}{1}{%
+        {Princeton University Press}%
+      }
+      \strng{namehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{bibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorbibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authornamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelprefix}{Q}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indexsorttitle} fields and the markup of the quotes in the database file}
+      \field{indexsorttitle}{Aristotle's De Motu Animalium}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{title}{Aristotle's \mkbibquote{De Motu Animalium}}
+      \field{year}{1978}
+      \field{dateera}{ce}
+      \keyw{secondary}
+    \endentry
+    \entry{aristotle:physics}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{translator}{2}{}{%
+        {{hash=4777ba269fde4ea0526ff057345e4085}{%
+           family={Wicksteed},
+           familyi={W\bibinitperiod},
+           given={P.\bibnamedelimi H.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=6db3a2434d88f6db3cef04fc0807932e}{%
+           family={Cornford},
+           familyi={C\bibinitperiod},
+           given={F.\bibnamedelimi M.},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {G. P. Putnam}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{translatorbibnamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatornamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhashraw}{9742ebd8d43330728a2d306f1a721baf}
+      \field{extraname}{2}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelprefix}{Q}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with a \texttt{translator} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Physics}
+      \field{title}{Physics}
+      \field{year}{1929}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+  \enddatalist
+  \datalist[entry]{none/global//global/global/global}
+    \entry{aristotle:anima}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4565bd0323a849b06d4ea9bd97b4c483}{%
+           family={Hicks},
+           familyi={H\bibinitperiod},
+           given={Robert\bibnamedelima Drew},
+           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{editorbibnamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editornamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhashraw}{4565bd0323a849b06d4ea9bd97b4c483}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with an \texttt{author} and an \texttt{editor}}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{De Anima}
+      \field{year}{1907}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{yoon}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=5b435c689a82f9af59acc66f38af7dc4}{%
+           family={Yoon},
+           familyi={Y\bibinitperiod},
+           given={Myeong\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=950fd963e3bfbd49bd0d9f642eff35e2}{%
+           family={Ryu},
+           familyi={R\bibinitperiod},
+           given={Dowook},
+           giveni={D\bibinitperiod}}}%
+        {{hash=71fd64c0a1c4671289f011f4348fa0fa}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Jeongryul},
+           giveni={J\bibinitperiod}}}%
+        {{hash=92e7e5698643ff80ba8fa8c3c72770b6}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Kyo\bibnamedelima Han},
+           giveni={K\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{fullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{fullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{bibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorbibnamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authornamehash}{c37fb761b5ab81c4adaf0db71f310293}
+      \strng{authorfullhash}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \strng{authorfullhashraw}{f9668fcf870fd5f3c26efcb46dc2d3bb}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{indextitle}{Palladium pincer complexes}
+      \field{journaltitle}{Organometallics}
+      \field{number}{10}
+      \field{title}{Palladium pincer complexes with reduced bond angle strain: efficient catalysts for the {Heck} reaction}
+      \field{volume}{25}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{2409\bibrangedash 2411}
+      \range{pages}{3}
+    \endentry
+    \entry{worman}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=045c9cb614b0ed4bfdd1e37d400e2a7b}{%
+           family={Worman},
+           familyi={W\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Austin}%
+      }
+      \list{publisher}{1}{%
+        {University of Texas Press}%
+      }
+      \strng{namehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{bibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorbibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authornamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields}
+      \field{indextitle}{Cast of Character, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Cast of Character}
+      \field{subtitle}{Style in {Greek} Literature}
+      \field{title}{The Cast of Character}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+    \entry{piccato}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5496cedfe867015e425d54207088ebff}{%
+           family={Piccato},
+           familyi={P\bibinitperiod},
+           given={Pablo},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Durham}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Duke University Press}%
+      }
+      \strng{namehash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{fullhashraw}{5496cedfe867015e425d54207088ebff}
+      \strng{bibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorbibnamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authornamehash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhash}{5496cedfe867015e425d54207088ebff}
+      \strng{authorfullhashraw}{5496cedfe867015e425d54207088ebff}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{This is a \texttt{book} entry. Note the format of the \texttt{location} field in the database file}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{City of Suspects}
+      \field{subtitle}{Crime in {Mexico City}, 1900--1931}
+      \field{title}{City of Suspects}
+      \field{year}{2001}
+      \field{dateera}{ce}
+    \endentry
+    \entry{nussbaum}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5fde8324968f94bc9b0e59c04b53b613}{%
+           family={Nussbaum},
+           familyi={N\bibinitperiod},
+           given={Martha},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Princeton}%
+      }
+      \list{publisher}{1}{%
+        {Princeton University Press}%
+      }
+      \strng{namehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{fullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{bibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorbibnamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authornamehash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhash}{5fde8324968f94bc9b0e59c04b53b613}
+      \strng{authorfullhashraw}{5fde8324968f94bc9b0e59c04b53b613}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indexsorttitle} fields and the markup of the quotes in the database file}
+      \field{indexsorttitle}{Aristotle's De Motu Animalium}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{title}{Aristotle's \mkbibquote{De Motu Animalium}}
+      \field{year}{1978}
+      \field{dateera}{ce}
+      \keyw{secondary}
+    \endentry
+    \entry{aristotle:physics}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{translator}{2}{}{%
+        {{hash=4777ba269fde4ea0526ff057345e4085}{%
+           family={Wicksteed},
+           familyi={W\bibinitperiod},
+           given={P.\bibnamedelimi H.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=6db3a2434d88f6db3cef04fc0807932e}{%
+           family={Cornford},
+           familyi={C\bibinitperiod},
+           given={F.\bibnamedelimi M.},
+           giveni={F\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {G. P. Putnam}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{translatorbibnamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatornamehash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhash}{9742ebd8d43330728a2d306f1a721baf}
+      \strng{translatorfullhashraw}{9742ebd8d43330728a2d306f1a721baf}
+      \field{extraname}{2}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry with a \texttt{translator} field}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Physics}
+      \field{title}{Physics}
+      \field{year}{1929}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+  \enddatalist
+\endrefsection
+
+\refsection{1}
+  \datalist[entry]{none/global/B9ECE18C950AFBFA6B0FDBFA4FF731D3/global/global/global}
+    \entry{worman}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=045c9cb614b0ed4bfdd1e37d400e2a7b}{%
+           family={Worman},
+           familyi={W\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Austin}%
+      }
+      \list{publisher}{1}{%
+        {University of Texas Press}%
+      }
+      \strng{namehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{bibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorbibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authornamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelprefix}{T}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields}
+      \field{indextitle}{Cast of Character, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Cast of Character}
+      \field{subtitle}{Style in {Greek} Literature}
+      \field{title}{The Cast of Character}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+  \enddatalist
+  \datalist[entry]{none/global//global/global/global}
+    \entry{worman}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=045c9cb614b0ed4bfdd1e37d400e2a7b}{%
+           family={Worman},
+           familyi={W\bibinitperiod},
+           given={Nancy},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Austin}%
+      }
+      \list{publisher}{1}{%
+        {University of Texas Press}%
+      }
+      \strng{namehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{fullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{bibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorbibnamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authornamehash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhash}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \strng{authorfullhashraw}{045c9cb614b0ed4bfdd1e37d400e2a7b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields}
+      \field{indextitle}{Cast of Character, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{shorttitle}{Cast of Character}
+      \field{subtitle}{Style in {Greek} Literature}
+      \field{title}{The Cast of Character}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

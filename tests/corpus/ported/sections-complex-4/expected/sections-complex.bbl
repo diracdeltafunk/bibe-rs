@@ -1,0 +1,714 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{custom/global//global/global/global}
+    % sorting key for 'L2':
+    % mm,,DA95,Doe     John  AbrahamsAlbert,1995,0,Title 2
+    \entry{L2}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=df9bf04cd41245e6d23ad7543e7fd90d}{%
+           family={Abrahams},
+           familyi={A\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{fullhash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{fullhashraw}{8c77336299b25bdada7bf8038f46722f}
+      \strng{bibnamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorbibnamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authornamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorfullhash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorfullhashraw}{8c77336299b25bdada7bf8038f46722f}
+      \field{extraname}{1}
+      \field{labelalpha}{DA95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extraalpha}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 2}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L3':
+    % mm,,DA95,Doe     John  AbrahamsAlbert,1995,0,Title 3
+    \entry{L3}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=df9bf04cd41245e6d23ad7543e7fd90d}{%
+           family={Abrahams},
+           familyi={A\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{fullhash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{fullhashraw}{8c77336299b25bdada7bf8038f46722f}
+      \strng{bibnamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorbibnamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authornamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorfullhash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorfullhashraw}{8c77336299b25bdada7bf8038f46722f}
+      \field{extraname}{2}
+      \field{labelalpha}{DA95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 3}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L4':
+    % mm,,DAE95,Doe     John  AbrahamsAlbertEdwards Ernie ,1995,0,Title 4
+    \entry{L4}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=df9bf04cd41245e6d23ad7543e7fd90d}{%
+           family={Abrahams},
+           familyi={A\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1f359c8f98bbbbf842e0461c77c27cfa}{%
+           family={Edwards},
+           familyi={E\bibinitperiod},
+           given={Ernie},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{fullhash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{fullhashraw}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{bibnamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorbibnamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authornamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorfullhash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorfullhashraw}{f281da2263a528cdf0c4ca55472942c9}
+      \field{labelalpha}{DAE95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 4}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L1':
+    % mm,,Doe95,Doe     John  ,1995,0,Title 1
+    \entry{L1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{labelalpha}{Doe95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'm1':
+    % mm,,Fak,Fake    Frank ,,0,Film title 1
+    \entry{m1}{movie}{}{}
+      \name{author}{1}{}{%
+        {{hash=5594de2c315a620773c03e12ce856e47}{%
+           family={Fake},
+           familyi={F\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{fullhash}{5594de2c315a620773c03e12ce856e47}
+      \strng{fullhashraw}{5594de2c315a620773c03e12ce856e47}
+      \strng{bibnamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorbibnamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authornamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorfullhash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorfullhashraw}{5594de2c315a620773c03e12ce856e47}
+      \field{labelalpha}{Fak}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Film title 1}
+    \endentry
+  \enddatalist
+  \datalist[entry]{nty/global//global/global/global}
+    % sorting key for 'L1':
+    % mm,,Doe     John  ,Title 1,1995,0
+    \entry{L1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{labelalpha}{Doe95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L2':
+    % mm,,Doe     John  AbrahamsAlbert,Title 2,1995,0
+    \entry{L2}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=df9bf04cd41245e6d23ad7543e7fd90d}{%
+           family={Abrahams},
+           familyi={A\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{fullhash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{fullhashraw}{8c77336299b25bdada7bf8038f46722f}
+      \strng{bibnamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorbibnamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authornamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorfullhash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorfullhashraw}{8c77336299b25bdada7bf8038f46722f}
+      \field{extraname}{1}
+      \field{labelalpha}{DA95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extraalpha}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 2}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L3':
+    % mm,,Doe     John  AbrahamsAlbert,Title 3,1995,0
+    \entry{L3}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=df9bf04cd41245e6d23ad7543e7fd90d}{%
+           family={Abrahams},
+           familyi={A\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{fullhash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{fullhashraw}{8c77336299b25bdada7bf8038f46722f}
+      \strng{bibnamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorbibnamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authornamehash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorfullhash}{8c77336299b25bdada7bf8038f46722f}
+      \strng{authorfullhashraw}{8c77336299b25bdada7bf8038f46722f}
+      \field{extraname}{2}
+      \field{labelalpha}{DA95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 3}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L4':
+    % mm,,Doe     John  AbrahamsAlbertEdwards Ernie ,Title 4,1995,0
+    \entry{L4}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=df9bf04cd41245e6d23ad7543e7fd90d}{%
+           family={Abrahams},
+           familyi={A\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1f359c8f98bbbbf842e0461c77c27cfa}{%
+           family={Edwards},
+           familyi={E\bibinitperiod},
+           given={Ernie},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{fullhash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{fullhashraw}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{bibnamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorbibnamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authornamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorfullhash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorfullhashraw}{f281da2263a528cdf0c4ca55472942c9}
+      \field{labelalpha}{DAE95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 4}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'm1':
+    % mm,,Fake    Frank ,Film title 1,,0
+    \entry{m1}{movie}{}{}
+      \name{author}{1}{}{%
+        {{hash=5594de2c315a620773c03e12ce856e47}{%
+           family={Fake},
+           familyi={F\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{fullhash}{5594de2c315a620773c03e12ce856e47}
+      \strng{fullhashraw}{5594de2c315a620773c03e12ce856e47}
+      \strng{bibnamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorbibnamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authornamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorfullhash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorfullhashraw}{5594de2c315a620773c03e12ce856e47}
+      \field{labelalpha}{Fak}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Film title 1}
+    \endentry
+  \enddatalist
+\endrefsection
+
+\refsection{1}
+  \datalist[entry]{custom/global//global/global/global}
+    % sorting key for 'L5':
+    % mm,,DAE95,Doe        John  Abrahams   AlbertEdwards    Ernie ,1995,0,Title 5
+    \entry{L5}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=df9bf04cd41245e6d23ad7543e7fd90d}{%
+           family={Abrahams},
+           familyi={A\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1f359c8f98bbbbf842e0461c77c27cfa}{%
+           family={Edwards},
+           familyi={E\bibinitperiod},
+           given={Ernie},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{fullhash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{fullhashraw}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{bibnamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorbibnamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authornamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorfullhash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorfullhashraw}{f281da2263a528cdf0c4ca55472942c9}
+      \field{labelalpha}{DAE95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 5}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L6':
+    % mm,,DSE95,Doe        John  Smith      Simon Edwards    Ernie ,1995,0,Title 6
+    \entry{L6}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6b3653417f9aa97391c37cff5dfda7fa}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=1f359c8f98bbbbf842e0461c77c27cfa}{%
+           family={Edwards},
+           familyi={E\bibinitperiod},
+           given={Ernie},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{fullhash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{fullhashraw}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{bibnamehash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{authorbibnamehash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{authornamehash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{authorfullhash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{authorfullhashraw}{2a2221970868010ac75b0338cc73a9f8}
+      \field{labelalpha}{DSE95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 6}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L7':
+    % mm,,DSJ95,Doe        John  Smith      Simon Jones      James ,1995,0,Title 7
+    \entry{L7}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6b3653417f9aa97391c37cff5dfda7fa}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=9226bfd57cc11a29f17bdf8c4b1a0de9}{%
+           family={Jones},
+           familyi={J\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{fb1cdc18042ace66975edd15db219858}
+      \strng{fullhash}{fb1cdc18042ace66975edd15db219858}
+      \strng{fullhashraw}{fb1cdc18042ace66975edd15db219858}
+      \strng{bibnamehash}{fb1cdc18042ace66975edd15db219858}
+      \strng{authorbibnamehash}{fb1cdc18042ace66975edd15db219858}
+      \strng{authornamehash}{fb1cdc18042ace66975edd15db219858}
+      \strng{authorfullhash}{fb1cdc18042ace66975edd15db219858}
+      \strng{authorfullhashraw}{fb1cdc18042ace66975edd15db219858}
+      \field{labelalpha}{DSJ95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 7}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'm1':
+    % mm,,Fak,Fake       Frank ,,0,Film title 11
+    \entry{m1}{movie}{}{}
+      \name{author}{1}{}{%
+        {{hash=5594de2c315a620773c03e12ce856e47}{%
+           family={Fake},
+           familyi={F\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{fullhash}{5594de2c315a620773c03e12ce856e47}
+      \strng{fullhashraw}{5594de2c315a620773c03e12ce856e47}
+      \strng{bibnamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorbibnamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authornamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorfullhash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorfullhashraw}{5594de2c315a620773c03e12ce856e47}
+      \field{labelalpha}{Fak}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Film title 11}
+      \keyw{thing}
+    \endentry
+    % sorting key for 'L8':
+    % mm,,Sha85,ShakespeareBill  ,1985,0,Works
+    \entry{L8}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=24c45276d372ac75f81dee14f6dec845}{%
+           family={Shakespeare},
+           familyi={S\bibinitperiod},
+           given={Bill},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{fullhash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{fullhashraw}{24c45276d372ac75f81dee14f6dec845}
+      \strng{bibnamehash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{authorbibnamehash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{authornamehash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{authorfullhash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{authorfullhashraw}{24c45276d372ac75f81dee14f6dec845}
+      \field{labelalpha}{Sha85}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{endyear}{1992}
+      \field{title}{Works}
+      \field{year}{1985}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+    \endentry
+  \enddatalist
+  \datalist[entry]{nty/global//global/global/global}
+    % sorting key for 'L5':
+    % mm,,Doe        John  Abrahams   AlbertEdwards    Ernie ,Title 5,1995,0
+    \entry{L5}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=df9bf04cd41245e6d23ad7543e7fd90d}{%
+           family={Abrahams},
+           familyi={A\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1f359c8f98bbbbf842e0461c77c27cfa}{%
+           family={Edwards},
+           familyi={E\bibinitperiod},
+           given={Ernie},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{fullhash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{fullhashraw}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{bibnamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorbibnamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authornamehash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorfullhash}{f281da2263a528cdf0c4ca55472942c9}
+      \strng{authorfullhashraw}{f281da2263a528cdf0c4ca55472942c9}
+      \field{labelalpha}{DAE95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 5}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L6':
+    % mm,,Doe        John  Smith      Simon Edwards    Ernie ,Title 6,1995,0
+    \entry{L6}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6b3653417f9aa97391c37cff5dfda7fa}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=1f359c8f98bbbbf842e0461c77c27cfa}{%
+           family={Edwards},
+           familyi={E\bibinitperiod},
+           given={Ernie},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{fullhash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{fullhashraw}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{bibnamehash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{authorbibnamehash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{authornamehash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{authorfullhash}{2a2221970868010ac75b0338cc73a9f8}
+      \strng{authorfullhashraw}{2a2221970868010ac75b0338cc73a9f8}
+      \field{labelalpha}{DSE95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 6}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'L7':
+    % mm,,Doe        John  Smith      Simon Jones      James ,Title 7,1995,0
+    \entry{L7}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6b3653417f9aa97391c37cff5dfda7fa}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=9226bfd57cc11a29f17bdf8c4b1a0de9}{%
+           family={Jones},
+           familyi={J\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{fb1cdc18042ace66975edd15db219858}
+      \strng{fullhash}{fb1cdc18042ace66975edd15db219858}
+      \strng{fullhashraw}{fb1cdc18042ace66975edd15db219858}
+      \strng{bibnamehash}{fb1cdc18042ace66975edd15db219858}
+      \strng{authorbibnamehash}{fb1cdc18042ace66975edd15db219858}
+      \strng{authornamehash}{fb1cdc18042ace66975edd15db219858}
+      \strng{authorfullhash}{fb1cdc18042ace66975edd15db219858}
+      \strng{authorfullhashraw}{fb1cdc18042ace66975edd15db219858}
+      \field{labelalpha}{DSJ95}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 7}
+      \field{year}{1995}
+    \endentry
+    % sorting key for 'm1':
+    % mm,,Fake       Frank ,Film title 11,,0
+    \entry{m1}{movie}{}{}
+      \name{author}{1}{}{%
+        {{hash=5594de2c315a620773c03e12ce856e47}{%
+           family={Fake},
+           familyi={F\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{fullhash}{5594de2c315a620773c03e12ce856e47}
+      \strng{fullhashraw}{5594de2c315a620773c03e12ce856e47}
+      \strng{bibnamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorbibnamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authornamehash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorfullhash}{5594de2c315a620773c03e12ce856e47}
+      \strng{authorfullhashraw}{5594de2c315a620773c03e12ce856e47}
+      \field{labelalpha}{Fak}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Film title 11}
+      \keyw{thing}
+    \endentry
+    % sorting key for 'L8':
+    % mm,,ShakespeareBill  ,Works,1985,0
+    \entry{L8}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=24c45276d372ac75f81dee14f6dec845}{%
+           family={Shakespeare},
+           familyi={S\bibinitperiod},
+           given={Bill},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford}%
+      }
+      \strng{namehash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{fullhash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{fullhashraw}{24c45276d372ac75f81dee14f6dec845}
+      \strng{bibnamehash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{authorbibnamehash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{authornamehash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{authorfullhash}{24c45276d372ac75f81dee14f6dec845}
+      \strng{authorfullhashraw}{24c45276d372ac75f81dee14f6dec845}
+      \field{labelalpha}{Sha85}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{endyear}{1992}
+      \field{title}{Works}
+      \field{year}{1985}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,187 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{A1}{book}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=fb9c00cf1f22ab9c0dcc175263540466}{%
+           family={Alpha},
+           familyi={A\bibinitperiod},
+           given={Ann},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4fc372704cb671bff7ed9e1ca8d34615}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={Jim},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Pub}%
+      }
+      \strng{namehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{fullhash}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{fullhashraw}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{bibnamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authorbibnamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authornamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authorfullhash}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{authorfullhashraw}{5feb24973c7884b80d25515ad53e2e4c}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T1}
+      \field{year}{2000}
+    \endentry
+    \entry{A2}{book}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=fb9c00cf1f22ab9c0dcc175263540466}{%
+           family={Alpha},
+           familyi={A\bibinitperiod},
+           given={Ann},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4fc372704cb671bff7ed9e1ca8d34615}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={Jim},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Pub}%
+      }
+      \strng{namehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{fullhash}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{fullhashraw}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{bibnamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authorbibnamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authornamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authorfullhash}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{authorfullhashraw}{5feb24973c7884b80d25515ad53e2e4c}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T2}
+      \field{year}{2001}
+    \endentry
+    \entry{A3}{book}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=fb9c00cf1f22ab9c0dcc175263540466}{%
+           family={Alpha},
+           familyi={A\bibinitperiod},
+           given={Ann},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1592c7f3f2b4412ae4a8f3a304e20158}{%
+           family={Beta},
+           familyi={B\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4fc372704cb671bff7ed9e1ca8d34615}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={Jim},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Pub}%
+      }
+      \strng{namehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{fullhash}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{fullhashraw}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{bibnamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authorbibnamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authornamehash}{0244e570e25a2017bd7fc34a19e40527}
+      \strng{authorfullhash}{5feb24973c7884b80d25515ad53e2e4c}
+      \strng{authorfullhashraw}{5feb24973c7884b80d25515ad53e2e4c}
+      \field{extraname}{3}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T3}
+      \field{year}{2002}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

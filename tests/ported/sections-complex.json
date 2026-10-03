@@ -1,0 +1,88 @@
+{
+ "source": "vendor/biber/t/sections-complex.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "sections-complex.t",
+   "line": 198,
+   "tests": [
+    67
+   ],
+   "name": "map refsection- 3",
+   "target": "bibers-core::input::handlers / resolve (entry field values)",
+   "area": "entry_field",
+   "source": "eq_or_diff($bibentries1->entry('m1')->get_field('keywords'), ['thing'], 'map refsection- 3');",
+   "call": {
+    "sub": "Biber::Entry::get_field",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "m1"
+     },
+     "keywords"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "m1"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": [
+    "thing"
+   ],
+   "ret": [
+    "thing"
+   ],
+   "case": "tests/corpus/ported/sections-complex-4",
+   "entry": "m1",
+   "field": "keywords",
+   "note": "value not directly visible in .bbl"
+  },
+  {
+   "test": "sections-complex.t",
+   "line": 199,
+   "tests": [
+    68
+   ],
+   "name": "map refsection - 4",
+   "target": "bibers-core::input::handlers / resolve (entry field values)",
+   "area": "entry_field",
+   "source": "eq_or_diff($bibentries1->entry('m1')->get_field('title'), 'Film title 11', 'map refsection - 4');",
+   "call": {
+    "sub": "Biber::Entry::get_field",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "m1"
+     },
+     "title"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "m1"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "Film title 11",
+   "ret": "Film title 11",
+   "case": "tests/corpus/ported/sections-complex-4",
+   "entry": "m1",
+   "field": "title",
+   "note": "value not directly visible in .bbl"
+  }
+ ]
+}

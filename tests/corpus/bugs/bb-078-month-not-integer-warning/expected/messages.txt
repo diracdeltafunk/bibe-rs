@@ -1,0 +1,4 @@
+WARN - Overwriting field 'month' with month value from field 'date' for entry 'd18'
+WARN - Overwriting field 'year' with year value from field 'date' for entry 'd18'
+WARN - legacy month field 'February' in entry 'd18' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'February' in entry 'd21' is not an integer - this will probably not sort properly.

@@ -1,0 +1,5 @@
+description = "biber t/sorting.t, configuration 14 (prepare() at line 300): useprefix=\"0\"; sortingnamekeytemplate={\"global\": {\"template\": [[{\"type\": \"name; minitems=\"3\"; maxitems=\"4\"; sorting=nty2; sortlocale=en_GB.UTF-8; nosort (in .bcf); sortcase=1"
+source = "vendor/biber/t/sorting.t + t/tdata/general.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--sortcase=true", "--sortdebug", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:ported", "t:sorting"]

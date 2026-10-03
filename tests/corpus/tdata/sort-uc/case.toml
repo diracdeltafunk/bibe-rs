@@ -1,0 +1,5 @@
+description = "biber t/tdata/sort-uc.bcf (used by t/sort-uc.t)"
+source = "vendor/biber/t/tdata/sort-uc.bcf"
+args = ["--noconf", "sort-uc.bcf"]
+outputs = ["sort-uc.bbl"]
+tags = ["suite:tdata"]

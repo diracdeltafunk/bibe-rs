@@ -1,0 +1,326 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{debug/global//global/global/global}
+    \entry{aristotle:anima}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=4565bd0323a849b06d4ea9bd97b4c483}{%
+           family={Hicks},
+           familyi={H\bibinitperiod},
+           given={Robert\bibnamedelima Drew},
+           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{editorbibnamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editornamehash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhash}{4565bd0323a849b06d4ea9bd97b4c483}
+      \strng{editorfullhashraw}{4565bd0323a849b06d4ea9bd97b4c483}
+      \field{sortinit}{a}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A \texttt{book} entry with an \texttt{author} and an \texttt{editor}}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{title}{De Anima}
+      \field{year}{1907}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+    \entry{baez/article}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=77c130b1ed4688a565b29481eee08ae3}{%
+           family={Baez},
+           familyi={B\bibinitperiod},
+           given={John\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=cf08a1cfb18c92c20809e9a488fd8eb2}{%
+           family={Lauda},
+           familyi={L\bibinitperiod},
+           given={Aaron\bibnamedelima D.},
+           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{ae47b4de9cd8e7649e97a4a497ef2d13}
+      \strng{fullhash}{ae47b4de9cd8e7649e97a4a497ef2d13}
+      \strng{fullhashraw}{ae47b4de9cd8e7649e97a4a497ef2d13}
+      \strng{bibnamehash}{ae47b4de9cd8e7649e97a4a497ef2d13}
+      \strng{authorbibnamehash}{ae47b4de9cd8e7649e97a4a497ef2d13}
+      \strng{authornamehash}{ae47b4de9cd8e7649e97a4a497ef2d13}
+      \strng{authorfullhash}{ae47b4de9cd8e7649e97a4a497ef2d13}
+      \strng{authorfullhashraw}{ae47b4de9cd8e7649e97a4a497ef2d13}
+      \field{sortinit}{b}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{An \texttt{article} with \texttt{eprint} and \texttt{eprinttype} fields. Note that the arXiv reference is transformed into a clickable link if \texttt{hyperref} support has been enabled. Compare \texttt{baez\slash online}, which is the same item given as an \texttt{online} entry}
+      \field{eprinttype}{arxiv}
+      \field{journaltitle}{Theory and Applications of Categories}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{title}{Higher-Dimensional Algebra {V}: 2-Groups}
+      \field{version}{3}
+      \field{volume}{12}
+      \field{year}{2004}
+      \field{dateera}{ce}
+      \field{pages}{423\bibrangedash 491}
+      \range{pages}{69}
+      \verb{eprint}
+      \verb math/0307200v3
+      \endverb
+    \endentry
+    \entry{bertram}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=8a5b475249c01d8aa99f2275128c1037}{%
+           family={Bertram},
+           familyi={B\bibinitperiod},
+           given={Aaron},
+           giveni={A\bibinitperiod}}}%
+        {{hash=60f0568f0258e96055aef41b438ecbd2}{%
+           family={Wentworth},
+           familyi={W\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{fullhash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{fullhashraw}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{bibnamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorbibnamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authornamehash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorfullhash}{4be7c21774d86b9e1f65ca280181467e}
+      \strng{authorfullhashraw}{4be7c21774d86b9e1f65ca280181467e}
+      \field{sortinit}{b}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{An \texttt{article} entry with a \texttt{volume} and a \texttt{number} field}
+      \field{journaltitle}{J.~Amer. Math. Soc.}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{number}{2}
+      \field{shorttitle}{Gromov invariants}
+      \field{title}{Gromov invariants for holomorphic maps on {Riemann} surfaces}
+      \field{volume}{9}
+      \field{year}{1996}
+      \field{dateera}{ce}
+      \field{pages}{529\bibrangedash 571}
+      \range{pages}{43}
+    \endentry
+    \entry{companion}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=0743efb276e9219ee664a9b3dbd60619}{%
+           family={Goossens},
+           familyi={G\bibinitperiod},
+           given={Michel},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9355edd511e3f6fdd880ee98722a53fb}{%
+           family={Mittelbach},
+           familyi={M\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+        {{hash=e341c89f7bb5be4f5a050618c0b63942}{%
+           family={Samarin},
+           familyi={S\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{bibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorbibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authornamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \field{sortinit}{c}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A book with three authors. Note the formatting of the author list. By default, only the first name is reversed in the bibliography}
+      \field{edition}{1}
+      \field{indextitle}{LaTeX Companion, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{pagetotal}{528}
+      \field{shorttitle}{LaTeX Companion}
+      \field{title}{The {LaTeX} Companion}
+      \field{year}{1994}
+      \field{dateera}{ce}
+    \endentry
+    \entry{gillies}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=91b9a33167764dedd5c39c951a4e8715}{%
+           family={Gillies},
+           familyi={G\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{91b9a33167764dedd5c39c951a4e8715}
+      \strng{fullhash}{91b9a33167764dedd5c39c951a4e8715}
+      \strng{fullhashraw}{91b9a33167764dedd5c39c951a4e8715}
+      \strng{bibnamehash}{91b9a33167764dedd5c39c951a4e8715}
+      \strng{authorbibnamehash}{91b9a33167764dedd5c39c951a4e8715}
+      \strng{authornamehash}{91b9a33167764dedd5c39c951a4e8715}
+      \strng{authorfullhash}{91b9a33167764dedd5c39c951a4e8715}
+      \strng{authorfullhashraw}{91b9a33167764dedd5c39c951a4e8715}
+      \field{sortinit}{g}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{An \texttt{article} entry with a \texttt{series} and a \texttt{volume} field. Note that format of the \texttt{series} field in the database file}
+      \field{journaltitle}{Publications of the English Goethe Society}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{series}{newseries}
+      \field{title}{Herder and the Preparation of {Goethe's} Idea of World Literature}
+      \field{volume}{9}
+      \field{year}{1933}
+      \field{dateera}{ce}
+      \field{pages}{46\bibrangedash 67}
+      \range{pages}{22}
+    \endentry
+    \entry{hammond}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=2c8830d09f180019fbb3c09acbfbd13a}{%
+           family={Hammond},
+           familyi={H\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \list{publisher}{2}{%
+        {International Union of Crystallography}%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{fullhash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{fullhashraw}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{bibnamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorbibnamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authornamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorfullhash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorfullhashraw}{2c8830d09f180019fbb3c09acbfbd13a}
+      \field{sortinit}{h}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A \texttt{book} entry. Note the \texttt{sorttitle} and \texttt{indextitle} fields as well as the format of the \texttt{publisher} field}
+      \field{indextitle}{Basics of crystallography and diffraction, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{shorttitle}{Crystallography and diffraction}
+      \field{title}{The basics of crystallography and diffraction}
+      \field{year}{1997}
+      \field{dateera}{ce}
+    \endentry
+    \entry{reese}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=d52f05e0199eae563725b4165f4b2520}{%
+           family={Reese},
+           familyi={R\bibinitperiod},
+           given={Trevor\bibnamedelima R.},
+           giveni={T\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \strng{namehash}{d52f05e0199eae563725b4165f4b2520}
+      \strng{fullhash}{d52f05e0199eae563725b4165f4b2520}
+      \strng{fullhashraw}{d52f05e0199eae563725b4165f4b2520}
+      \strng{bibnamehash}{d52f05e0199eae563725b4165f4b2520}
+      \strng{authorbibnamehash}{d52f05e0199eae563725b4165f4b2520}
+      \strng{authornamehash}{d52f05e0199eae563725b4165f4b2520}
+      \strng{authorfullhash}{d52f05e0199eae563725b4165f4b2520}
+      \strng{authorfullhashraw}{d52f05e0199eae563725b4165f4b2520}
+      \field{sortinit}{r}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{An \texttt{article} entry with a \texttt{series} and a \texttt{volume} field. Note the format of the series. If the value of the \texttt{series} field is an integer, this number is printed as an ordinal and the string \enquote*{series} is appended automatically}
+      \field{journaltitle}{William and Mary Quarterly}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{series}{3}
+      \field{title}{Georgia in {Anglo-Spanish} Diplomacy, 1736--1739}
+      \field{volume}{15}
+      \field{year}{1958}
+      \field{dateera}{ce}
+      \field{pages}{168\bibrangedash 190}
+      \range{pages}{23}
+    \endentry
+    \entry{spiegelberg}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=67164e704021f81da210f2639633677a}{%
+           family={Spiegelberg},
+           familyi={S\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{67164e704021f81da210f2639633677a}
+      \strng{fullhash}{67164e704021f81da210f2639633677a}
+      \strng{fullhashraw}{67164e704021f81da210f2639633677a}
+      \strng{bibnamehash}{67164e704021f81da210f2639633677a}
+      \strng{authorbibnamehash}{67164e704021f81da210f2639633677a}
+      \strng{authornamehash}{67164e704021f81da210f2639633677a}
+      \strng{authorfullhash}{67164e704021f81da210f2639633677a}
+      \strng{authorfullhashraw}{67164e704021f81da210f2639633677a}
+      \field{sortinit}{s}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{An \texttt{article} entry. Note the \texttt{sorttitle} and \texttt{indexsorttitle} fields and the markup of the quotes in the database file}
+      \field{indexsorttitle}{Intention und Intentionalitat in der Scholastik, bei Brentano und Husserl}
+      \field{journaltitle}{Studia Philosophica}
+      \field{langid}{german}
+      \field{shorttitle}{Intention und Intentionalität}
+      \field{title}{\mkbibquote{Intention} und \mkbibquote{Intentionalität} in der Scholastik, bei Brentano und Husserl}
+      \field{volume}{29}
+      \field{year}{1969}
+      \field{dateera}{ce}
+      \field{pages}{189\bibrangedash 216}
+      \range{pages}{28}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,102 @@
+{
+ "source": "vendor/biber/t/crossrefs.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "crossrefs.t",
+   "line": 920,
+   "tests": [
+    27
+   ],
+   "name": "Recursive crossref test 4",
+   "target": "bibers-core::resolve (entries pulled in by crossref)",
+   "area": "section_entry_exists",
+   "source": "ok(defined($section0->bibentry('r2')),'Recursive crossref test 4');",
+   "call": {
+    "sub": "Biber::Section::bibentry",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "r2"
+    ]
+   },
+   "assert": "ok",
+   "expected": {
+    "__obj": "Biber::Entry",
+    "key": "r2"
+   },
+   "ret": {
+    "__obj": "Biber::Entry",
+    "key": "r2"
+   },
+   "case": "tests/corpus/ported/crossrefs-1",
+   "note": "entry object exists internally but is not output"
+  },
+  {
+   "test": "crossrefs.t",
+   "line": 922,
+   "tests": [
+    29
+   ],
+   "name": "Recursive crossref test 6",
+   "target": "bibers-core::resolve (entries pulled in by crossref)",
+   "area": "section_entry_exists",
+   "source": "ok(defined($section0->bibentry('r3')),'Recursive crossref test 6');",
+   "call": {
+    "sub": "Biber::Section::bibentry",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "r3"
+    ]
+   },
+   "assert": "ok",
+   "expected": {
+    "__obj": "Biber::Entry",
+    "key": "r3"
+   },
+   "ret": {
+    "__obj": "Biber::Entry",
+    "key": "r3"
+   },
+   "case": "tests/corpus/ported/crossrefs-1",
+   "note": "entry object exists internally but is not output"
+  },
+  {
+   "test": "crossrefs.t",
+   "line": 924,
+   "tests": [
+    31
+   ],
+   "name": "Recursive crossref test 8",
+   "target": "bibers-core::resolve (entries pulled in by crossref)",
+   "area": "section_entry_exists",
+   "source": "ok(defined($section0->bibentry('r4')),'Recursive crossref test 8');",
+   "call": {
+    "sub": "Biber::Section::bibentry",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "r4"
+    ]
+   },
+   "assert": "ok",
+   "expected": {
+    "__obj": "Biber::Entry",
+    "key": "r4"
+   },
+   "ret": {
+    "__obj": "Biber::Entry",
+    "key": "r4"
+   },
+   "case": "tests/corpus/ported/crossrefs-1",
+   "note": "entry object exists internally but is not output"
+  }
+ ]
+}

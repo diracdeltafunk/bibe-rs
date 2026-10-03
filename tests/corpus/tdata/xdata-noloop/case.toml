@@ -1,0 +1,5 @@
+description = "xdata.bcf with the circular-XDATA entries removed from xdata.bib/.bltxml (the full fixture dies with a nondeterministic error, BB-112)"
+source = "vendor/biber/t/tdata/xdata.bcf"
+args = ["--noconf", "xdata.bcf"]
+outputs = ["xdata.bbl"]
+tags = ["suite:tdata", "feature:xdata", "feature:biblatexml", "deferred:DC-031"]

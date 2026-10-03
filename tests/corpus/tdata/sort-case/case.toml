@@ -1,0 +1,5 @@
+description = "biber t/tdata/sort-case.bcf (used by t/sort-case.t)"
+source = "vendor/biber/t/tdata/sort-case.bcf"
+args = ["--noconf", "sort-case.bcf"]
+outputs = ["sort-case.bbl"]
+tags = ["suite:tdata"]

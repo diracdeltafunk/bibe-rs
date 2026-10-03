@@ -1,0 +1,5 @@
+description = "biber t/dateformats.t, configuration 6 (prepare() at line 913): labeldatespec=[{\"content\": \"date\", \"type\": \"field\"}, {; julian=\"1\"; julianstart=\"0001-01-01\"; labeldatespec=[{\"content\": \"pubstate\", \"type\": \"field\"@proceedings; sortlocale=en_GB.UTF-8; validate_datamodel=1"
+source = "vendor/biber/t/dateformats.t + t/tdata/dateformats.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--validate-datamodel", "dateformats.bcf"]
+outputs = ["dateformats.bbl"]
+tags = ["suite:ported", "t:dateformats"]

@@ -1,0 +1,12 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,sorting=ly,style=authoryear]{biblatex}
+\DeclareSortingTemplate{ly}{\sort{\field{labelyear}}}
+\DeclareSortingTemplate{yr}{\sort{\field{year}}}
+\addbibresource{t.bib}
+\begin{document}
+\nocite{*}
+\printbibliography
+\newrefcontext[sorting=yr]
+\printbibliography
+\end{document}

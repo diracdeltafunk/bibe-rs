@@ -1,0 +1,5 @@
+description = "biber t/tdata/uniqueness4.bcf (used by t/uniqueness.t)"
+source = "vendor/biber/t/tdata/uniqueness4.bcf"
+args = ["--noconf", "uniqueness4.bcf"]
+outputs = ["uniqueness4.bbl"]
+tags = ["suite:tdata"]

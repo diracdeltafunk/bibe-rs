@@ -1,0 +1,5 @@
+description = "biber t/skipsg.t, configuration 1 (prepare() at line 156): skiplab=\"true\"; skibib=\"true\"; skipbiblist=\"true\"; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/skipsg.t + t/tdata/skipsg.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "skipsg.bcf"]
+outputs = ["skipsg.bbl"]
+tags = ["suite:ported", "t:skipsg"]

@@ -1,0 +1,5 @@
+description = "biber t/tdata/annotations.bcf (used by t/annotations.t)"
+source = "vendor/biber/t/tdata/annotations.bcf"
+args = ["--noconf", "annotations.bcf"]
+outputs = ["annotations.bbl"]
+tags = ["suite:tdata"]

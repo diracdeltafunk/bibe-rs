@@ -1,0 +1,653 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{c1}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{1}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{gender}{sm}
+      \field{month}{10}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \field{dateera}{ce}
+      \warn{\item Datamodel: badtype entry 'c1' (dm-constraints.bib): Invalid entry type 'badtype' - defaulting to 'misc'}
+    \endentry
+    \entry{c3}{etb}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{2}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{field1}{7}
+      \field{gender}{zz}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etb entry 'c3' (dm-constraints.bib): Invalid value of field 'month' must be datatype 'datepart' - ignoring field}
+      \warn{\item Datamodel: etb entry 'c3' (dm-constraints.bib): Invalid value (pattern match fails) for field 'gender'}
+    \endentry
+    \entry{c4}{etb}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{3}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etb entry 'c4' (dm-constraints.bib): Invalid value of field 'month' must be '<=12' - ignoring field}
+      \warn{\item Datamodel: etb entry 'c4' (dm-constraints.bib): Invalid value of field 'field1' must be '>=5' - ignoring field}
+    \endentry
+    \entry{c6}{etb}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{4}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{field1}{8}
+      \field{field2}{a}
+      \field{field3}{a}
+      \field{field5}{a}
+      \field{field6}{a}
+      \field{field9}{a}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etb entry 'c6' (dm-constraints.bib): Constraint violation - one of fields (field7, field8) must exist when all of fields (field1, field2) exist}
+      \warn{\item Datamodel: etb entry 'c6' (dm-constraints.bib): Constraint violation - all of fields (field9, field10) must exist when all of fields (field5, field6) exist}
+    \endentry
+    \entry{c7}{etc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{5}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{field11}{a}
+      \field{field2}{a}
+      \field{field3}{a}
+      \field{field5}{a}
+      \field{field8}{a}
+      \field{field9}{a}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etc entry 'c7' (dm-constraints.bib): Missing mandatory field - one of 'fielda, fieldb' must be defined}
+      \warn{\item Datamodel: etc entry 'c7' (dm-constraints.bib): Constraint violation - none of fields (field7) must exist when one of fields (field5, field6) exist. Ignoring them.}
+    \endentry
+    \entry{c8}{etd}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{6}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{6}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{field12}{a}
+      \field{field5}{a}
+      \field{field7}{a}
+      \field{fielda}{a}
+      \field{fieldb}{a}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - none of fields (field4) must exist when none of fields (field2, field3) exist. Ignoring them.}
+      \warn{\item Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - one of fields (field10, field11) must exist when none of fields (field8, field9) exist}
+      \warn{\item Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - all of fields (field12, field13) must exist when none of fields (field6) exist}
+    \endentry
+    \entry{c5}{etb}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{7}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{2}
+      \field{field2}{a}
+      \field{field3}{a}
+      \field{field4}{a}
+      \field{journaltitle}{Some journal}
+      \field{month}{1}
+      \field{title}{Limits of Things}
+      \field{year}{2004}
+      \field{dateera}{ce}
+      \warn{\item Overwriting field 'year' with year value from field 'date' for entry 'c5'}
+      \warn{\item Datamodel: etb entry 'c5' (dm-constraints.bib): Constraint violation - none of fields (field5, field6) must exist when all of fields (field2, field3, field4) exist. Ignoring them.}
+    \endentry
+    \entry{c9}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=f6595ccb9db5f634e7bb242a3f78e5f9}{%
+           family={Flummox},
+           familyi={F\bibinitperiod},
+           given={Fred},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{fullhash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{fullhashraw}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{bibnamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorbibnamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authornamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorfullhash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorfullhashraw}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \field{extraname}{1}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradate}{1}
+      \field{labelnamesource}{author}
+      \field{isbn}{90-70002-34-5}
+      \field{issn}{0317-8471}
+    \endentry
+    \entry{c10}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=f6595ccb9db5f634e7bb242a3f78e5f9}{%
+           family={Flummox},
+           familyi={F\bibinitperiod},
+           given={Fred},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{fullhash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{fullhashraw}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{bibnamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorbibnamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authornamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorfullhash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorfullhashraw}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \field{extraname}{2}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradate}{2}
+      \field{labelnamesource}{author}
+      \field{isbn}{90-7002-34-5}
+      \field{issn}{0317-8470}
+      \warn{\item Datamodel: misc entry 'c10' (dm-constraints.bib): Invalid ISBN in value of field 'isbn'}
+      \warn{\item Datamodel: misc entry 'c10' (dm-constraints.bib): Invalid ISSN in value of field 'issn'}
+    \endentry
+    \entry{c2}{eta}{}{}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Some text}
+      \field{day}{1}
+      \field{journaltitle}{Some journal}
+      \field{month}{10}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \field{dateera}{ce}
+      \warn{\item Datamodel: eta entry 'c2' (dm-constraints.bib): Field 'badfield' invalid in data model - ignoring}
+      \warn{\item Datamodel: eta entry 'c2' (dm-constraints.bib): Invalid field 'journaltitle' for entrytype 'eta'}
+      \warn{\item Datamodel: eta entry 'c2' (dm-constraints.bib): Missing mandatory field 'author'}
+    \endentry
+  \enddatalist
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{c1}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{1}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{gender}{sm}
+      \field{month}{10}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \field{dateera}{ce}
+      \warn{\item Datamodel: badtype entry 'c1' (dm-constraints.bib): Invalid entry type 'badtype' - defaulting to 'misc'}
+    \endentry
+    \entry{c3}{etb}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{2}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{field1}{7}
+      \field{gender}{zz}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etb entry 'c3' (dm-constraints.bib): Invalid value of field 'month' must be datatype 'datepart' - ignoring field}
+      \warn{\item Datamodel: etb entry 'c3' (dm-constraints.bib): Invalid value (pattern match fails) for field 'gender'}
+    \endentry
+    \entry{c4}{etb}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{3}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etb entry 'c4' (dm-constraints.bib): Invalid value of field 'month' must be '<=12' - ignoring field}
+      \warn{\item Datamodel: etb entry 'c4' (dm-constraints.bib): Invalid value of field 'field1' must be '>=5' - ignoring field}
+    \endentry
+    \entry{c6}{etb}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{4}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{field1}{8}
+      \field{field2}{a}
+      \field{field3}{a}
+      \field{field5}{a}
+      \field{field6}{a}
+      \field{field9}{a}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etb entry 'c6' (dm-constraints.bib): Constraint violation - one of fields (field7, field8) must exist when all of fields (field1, field2) exist}
+      \warn{\item Datamodel: etb entry 'c6' (dm-constraints.bib): Constraint violation - all of fields (field9, field10) must exist when all of fields (field5, field6) exist}
+    \endentry
+    \entry{c7}{etc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{5}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{field11}{a}
+      \field{field2}{a}
+      \field{field3}{a}
+      \field{field5}{a}
+      \field{field8}{a}
+      \field{field9}{a}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etc entry 'c7' (dm-constraints.bib): Missing mandatory field - one of 'fielda, fieldb' must be defined}
+      \warn{\item Datamodel: etc entry 'c7' (dm-constraints.bib): Constraint violation - none of fields (field7) must exist when one of fields (field5, field6) exist. Ignoring them.}
+    \endentry
+    \entry{c8}{etd}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{6}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradate}{6}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{field12}{a}
+      \field{field5}{a}
+      \field{field7}{a}
+      \field{fielda}{a}
+      \field{fieldb}{a}
+      \field{journaltitle}{Some journal}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \warn{\item Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - none of fields (field4) must exist when none of fields (field2, field3) exist. Ignoring them.}
+      \warn{\item Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - one of fields (field10, field11) must exist when none of fields (field8, field9) exist}
+      \warn{\item Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - all of fields (field12, field13) must exist when none of fields (field6) exist}
+    \endentry
+    \entry{c5}{etb}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3e7be5d30fe211aa193699f4015743b9}{%
+           family={Constraint},
+           familyi={C\bibinitperiod},
+           given={Clive},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{fullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{bibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorbibnamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authornamehash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhash}{3e7be5d30fe211aa193699f4015743b9}
+      \strng{authorfullhashraw}{3e7be5d30fe211aa193699f4015743b9}
+      \field{extraname}{7}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{2}
+      \field{field2}{a}
+      \field{field3}{a}
+      \field{field4}{a}
+      \field{journaltitle}{Some journal}
+      \field{month}{1}
+      \field{title}{Limits of Things}
+      \field{year}{2004}
+      \field{dateera}{ce}
+      \warn{\item Overwriting field 'year' with year value from field 'date' for entry 'c5'}
+      \warn{\item Datamodel: etb entry 'c5' (dm-constraints.bib): Constraint violation - none of fields (field5, field6) must exist when all of fields (field2, field3, field4) exist. Ignoring them.}
+    \endentry
+    \entry{c9}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=f6595ccb9db5f634e7bb242a3f78e5f9}{%
+           family={Flummox},
+           familyi={F\bibinitperiod},
+           given={Fred},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{fullhash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{fullhashraw}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{bibnamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorbibnamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authornamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorfullhash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorfullhashraw}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \field{extraname}{1}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradate}{1}
+      \field{labelnamesource}{author}
+      \field{isbn}{90-70002-34-5}
+      \field{issn}{0317-8471}
+    \endentry
+    \entry{c10}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=f6595ccb9db5f634e7bb242a3f78e5f9}{%
+           family={Flummox},
+           familyi={F\bibinitperiod},
+           given={Fred},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{fullhash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{fullhashraw}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{bibnamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorbibnamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authornamehash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorfullhash}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \strng{authorfullhashraw}{f6595ccb9db5f634e7bb242a3f78e5f9}
+      \field{extraname}{2}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradate}{2}
+      \field{labelnamesource}{author}
+      \field{isbn}{90-7002-34-5}
+      \field{issn}{0317-8470}
+      \warn{\item Datamodel: misc entry 'c10' (dm-constraints.bib): Invalid ISBN in value of field 'isbn'}
+      \warn{\item Datamodel: misc entry 'c10' (dm-constraints.bib): Invalid ISSN in value of field 'issn'}
+    \endentry
+    \entry{c2}{eta}{}{}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Some text}
+      \field{day}{1}
+      \field{journaltitle}{Some journal}
+      \field{month}{10}
+      \field{title}{Limits of Things}
+      \field{year}{2003}
+      \field{dateera}{ce}
+      \warn{\item Datamodel: eta entry 'c2' (dm-constraints.bib): Field 'badfield' invalid in data model - ignoring}
+      \warn{\item Datamodel: eta entry 'c2' (dm-constraints.bib): Invalid field 'journaltitle' for entrytype 'eta'}
+      \warn{\item Datamodel: eta entry 'c2' (dm-constraints.bib): Missing mandatory field 'author'}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

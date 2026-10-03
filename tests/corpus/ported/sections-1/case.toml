@@ -1,0 +1,5 @@
+description = "biber t/sections.t, configuration 1 (prepare() at line 43): sortlocale=en_GB.UTF-8; output_safechars=1"
+source = "vendor/biber/t/sections.t + t/tdata/sections.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--output-safechars", "sections.bcf"]
+outputs = ["sections.bbl"]
+tags = ["suite:ported", "t:sections"]

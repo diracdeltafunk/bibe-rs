@@ -1,0 +1,5 @@
+description = "biblatex example 97-annotations.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/97-annotations.tex (lualatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "97-annotations.bcf"]
+outputs = ["97-annotations.bbl"]
+tags = ["suite:biblatex-examples", "engine:lualatex"]

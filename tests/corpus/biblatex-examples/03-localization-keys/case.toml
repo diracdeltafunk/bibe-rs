@@ -1,0 +1,6 @@
+description = "biblatex example 03-localization-keys.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/03-localization-keys.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "03-localization-keys.bcf"]
+outputs = ["03-localization-keys.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex"]

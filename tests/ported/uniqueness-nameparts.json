@@ -1,0 +1,820 @@
+{
+ "source": "vendor/biber/t/uniqueness-nameparts.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 504,
+   "tests": [
+    9
+   ],
+   "name": "Uniquename metadata - 1",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestring",
+   "source": "eq_or_diff($main2->get_namestring($un1nlid, $un1nid), 'SmithSimon', 'Uniquename metadata - 1');",
+   "call": {
+    "sub": "Biber::DataList::get_namestring",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4CWQjxCQnJ",
+     "4Dis669uKr"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "SmithSimon",
+   "ret": "SmithSimon",
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 505,
+   "tests": [
+    10
+   ],
+   "name": "Uniquename metadata - 2",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestrings",
+   "source": "is_deeply($main2->get_namestrings($un1nlid, $un1nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namestrings",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4CWQjxCQnJ",
+     "4Dis669uKr"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Smith",
+    "SmithS",
+    "SmithSimon"
+   ],
+   "ret": [
+    "Smith",
+    "SmithS",
+    "SmithSimon"
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 507,
+   "tests": [
+    11
+   ],
+   "name": "Uniquename metadata - 3",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namedisschema",
+   "source": "is_deeply($main2->get_namedisschema($un1nlid, $un1nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namedisschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4CWQjxCQnJ",
+     "4Dis669uKr"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ],
+    [
+     "middle",
+     "full"
+    ]
+   ],
+   "ret": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ],
+    [
+     "middle",
+     "full"
+    ]
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 509,
+   "tests": [
+    12
+   ],
+   "name": "Uniquename metadata - 4",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestring",
+   "source": "eq_or_diff($main2->get_namestring($un2nlid, $un2nid), 'SmithAlan', 'Uniquename metadata - 4');",
+   "call": {
+    "sub": "Biber::DataList::get_namestring",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4DBCtn0zvN",
+     "4DRWNc6Ksv"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "SmithAlan",
+   "ret": "SmithAlan",
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 510,
+   "tests": [
+    13
+   ],
+   "name": "Uniquename metadata - 5",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestrings",
+   "source": "is_deeply($main2->get_namestrings($un2nlid, $un2nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namestrings",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4DBCtn0zvN",
+     "4DRWNc6Ksv"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Smith",
+    "SmithA",
+    "SmithAlan"
+   ],
+   "ret": [
+    "Smith",
+    "SmithA",
+    "SmithAlan"
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 512,
+   "tests": [
+    14
+   ],
+   "name": "Uniquename metadata - 6",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namedisschema",
+   "source": "is_deeply($main2->get_namedisschema($un2nlid, $un2nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namedisschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4DBCtn0zvN",
+     "4DRWNc6Ksv"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ],
+    [
+     "middle",
+     "full"
+    ]
+   ],
+   "ret": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ],
+    [
+     "middle",
+     "full"
+    ]
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 514,
+   "tests": [
+    15
+   ],
+   "name": "Uniquename metadata - 7",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestring",
+   "source": "eq_or_diff($main2->get_namestring($un3nlid, $un3nid), 'SmithArthur', 'Uniquename metadata - 7');",
+   "call": {
+    "sub": "Biber::DataList::get_namestring",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4E9YKhRsTB",
+     "4EpZHpBK6r"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "SmithArthur",
+   "ret": "SmithArthur",
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 515,
+   "tests": [
+    16
+   ],
+   "name": "Uniquename metadata - 8",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestrings",
+   "source": "is_deeply($main2->get_namestrings($un3nlid, $un3nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namestrings",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4E9YKhRsTB",
+     "4EpZHpBK6r"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Smith",
+    "SmithA",
+    "SmithArthur"
+   ],
+   "ret": [
+    "Smith",
+    "SmithA",
+    "SmithArthur"
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 517,
+   "tests": [
+    17
+   ],
+   "name": "Uniquename metadata - 9",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namedisschema",
+   "source": "is_deeply($main2->get_namedisschema($un3nlid, $un3nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namedisschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4E9YKhRsTB",
+     "4EpZHpBK6r"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ],
+    [
+     "middle",
+     "full"
+    ]
+   ],
+   "ret": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ],
+    [
+     "middle",
+     "full"
+    ]
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 519,
+   "tests": [
+    18
+   ],
+   "name": "Uniquename metadata - 10",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestring",
+   "source": "eq_or_diff($main2->get_namestring($un4nlid, $un4nid), 'SmithSimon', 'Uniquename metadata - 10');",
+   "call": {
+    "sub": "Biber::DataList::get_namestring",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4EM088dIGr",
+     "4F3KtGclxt"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "SmithSimon",
+   "ret": "SmithSimon",
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 520,
+   "tests": [
+    19
+   ],
+   "name": "Uniquename metadata - 11",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestrings",
+   "source": "is_deeply($main2->get_namestrings($un4nlid, $un4nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namestrings",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4EM088dIGr",
+     "4F3KtGclxt"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Smith",
+    "SmithS",
+    "SmithSimon"
+   ],
+   "ret": [
+    "Smith",
+    "SmithS",
+    "SmithSimon"
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 522,
+   "tests": [
+    20
+   ],
+   "name": "Uniquename metadata - 12",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namedisschema",
+   "source": "is_deeply($main2->get_namedisschema($un4nlid, $un4nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namedisschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4EM088dIGr",
+     "4F3KtGclxt"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ],
+    [
+     "middle",
+     "full"
+    ]
+   ],
+   "ret": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ],
+    [
+     "middle",
+     "full"
+    ]
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 524,
+   "tests": [
+    21
+   ],
+   "name": "Uniquename metadata - 13",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestring",
+   "source": "eq_or_diff($main2->get_namestring($un5nlid, $un5nid), 'SmithSimon', 'Uniquename metadata - 13');",
+   "call": {
+    "sub": "Biber::DataList::get_namestring",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4FnWevQxZR",
+     "4FE2t6kfG7"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "SmithSimon",
+   "ret": "SmithSimon",
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 525,
+   "tests": [
+    22
+   ],
+   "name": "Uniquename metadata - 14",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestrings",
+   "source": "is_deeply($main2->get_namestrings($un5nlid, $un5nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namestrings",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4FnWevQxZR",
+     "4FE2t6kfG7"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Smith",
+    "SmithSimon"
+   ],
+   "ret": [
+    "Smith",
+    "SmithSimon"
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 527,
+   "tests": [
+    23
+   ],
+   "name": "Uniquename metadata - 15",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namedisschema",
+   "source": "is_deeply($main2->get_namedisschema($un5nlid, $un5nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namedisschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4FnWevQxZR",
+     "4FE2t6kfG7"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "fullonly"
+    ]
+   ],
+   "ret": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "fullonly"
+    ]
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 529,
+   "tests": [
+    24
+   ],
+   "name": "Uniquename metadata - 16",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestring",
+   "source": "eq_or_diff($main2->get_namestring($un6nlid, $un6nid), 'SmithSmythe', 'Uniquename metadata - 16');",
+   "call": {
+    "sub": "Biber::DataList::get_namestring",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4FW7WveAqP",
+     "4GcoK1b93V"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "SmithSmythe",
+   "ret": "SmithSmythe",
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 530,
+   "tests": [
+    25
+   ],
+   "name": "Uniquename metadata - 17",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestrings",
+   "source": "is_deeply($main2->get_namestrings($un6nlid, $un6nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namestrings",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4FW7WveAqP",
+     "4GcoK1b93V"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Smith",
+    "SmithS"
+   ],
+   "ret": [
+    "Smith",
+    "SmithS"
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 532,
+   "tests": [
+    26
+   ],
+   "name": "Uniquename metadata - 18",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namedisschema",
+   "source": "is_deeply($main2->get_namedisschema($un6nlid, $un6nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namedisschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4FW7WveAqP",
+     "4GcoK1b93V"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ]
+   ],
+   "ret": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ],
+    [
+     "middle",
+     "init"
+    ]
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 534,
+   "tests": [
+    27
+   ],
+   "name": "Uniquename metadata - 19",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestring",
+   "source": "eq_or_diff($main2->get_namestring($un7nlid, $un7nid), 'Smith', 'Uniquename metadata - 19');",
+   "call": {
+    "sub": "Biber::DataList::get_namestring",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4GuoVXm3ld",
+     "4GKwVHpzbh"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Smith",
+   "ret": "Smith",
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 535,
+   "tests": [
+    28
+   ],
+   "name": "Uniquename metadata - 20",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namestrings",
+   "source": "is_deeply($main2->get_namestrings($un7nlid, $un7nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namestrings",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4GuoVXm3ld",
+     "4GKwVHpzbh"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Smith"
+   ],
+   "ret": [
+    "Smith"
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  },
+  {
+   "test": "uniqueness-nameparts.t",
+   "line": 537,
+   "tests": [
+    29
+   ],
+   "name": "Uniquename metadata - 21",
+   "target": "bibers-core::process::uniqueness",
+   "area": "namedisschema",
+   "source": "is_deeply($main2->get_namedisschema($un7nlid, $un7nid),",
+   "call": {
+    "sub": "Biber::DataList::get_namedisschema",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nty/global//test2/global",
+      "section": "0",
+      "sortingtemplatename": "nty"
+     },
+     "4GuoVXm3ld",
+     "4GKwVHpzbh"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ]
+   ],
+   "ret": [
+    [
+     "base",
+     [
+      "family"
+     ]
+    ]
+   ],
+   "case": "tests/corpus/ported/uniqueness-nameparts-1"
+  }
+ ]
+}

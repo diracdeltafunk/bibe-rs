@@ -1,0 +1,3 @@
+WARN - I didn't find a database entry for related entry 'missing1' in entry 'key1' - ignoring (section 0)
+WARN - I didn't find a database entry for related entry 'missing2' in entry 'c2' - ignoring (section 0)
+WARN - I didn't find a database entry for related entry 'missing3' in entry 'c3' - ignoring (section 0)

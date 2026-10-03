@@ -1,0 +1,5 @@
+description = "general.bcf with t/tdata/biber-test.conf (as in t/configfile.t)"
+source = "vendor/biber/t/tdata/general.bcf"
+args = ["--configfile=biber-test.conf", "--mincrossrefs=7", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:tdata", "feature:configfile"]

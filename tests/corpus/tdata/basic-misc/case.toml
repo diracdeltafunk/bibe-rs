@@ -1,0 +1,5 @@
+description = "biber t/tdata/basic-misc.bcf (used by t/basic-misc.t)"
+source = "vendor/biber/t/tdata/basic-misc.bcf"
+args = ["--noconf", "basic-misc.bcf"]
+outputs = ["basic-misc.bbl"]
+tags = ["suite:tdata"]

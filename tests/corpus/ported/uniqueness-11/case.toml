@@ -1,0 +1,5 @@
+description = "biber t/uniqueness.t, configuration 11 (prepare() at line 450): maxcitenames=\"3\"; mincitenames=\"2\"; uniquename=\"full\"; uniquelist=\"minyear\"; singletitle=\"0\"; labeldatespec=[{\"content\": \"date\", \"type\": \"field\"}, {; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/uniqueness.t + t/tdata/uniqueness5.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "uniqueness5.bcf"]
+outputs = ["uniqueness5.bbl"]
+tags = ["suite:ported", "t:uniqueness"]

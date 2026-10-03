@@ -1,0 +1,91 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{anyt/global//global/global/global}
+    \entry{b}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=dea4acea2a1e790627a57aca197d3399}{%
+           family={Jones},
+           familyi={J\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{useprefix=true,hash=4d169b45444bcc1174278f53ea171e5b}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           prefix={von},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \strng{namehash}{fcc56c4b306481734fe018476f77e40f}
+      \strng{fullhash}{fcc56c4b306481734fe018476f77e40f}
+      \strng{fullhashraw}{fcc56c4b306481734fe018476f77e40f}
+      \strng{bibnamehash}{fcc56c4b306481734fe018476f77e40f}
+      \strng{authorbibnamehash}{fcc56c4b306481734fe018476f77e40f}
+      \strng{authornamehash}{fcc56c4b306481734fe018476f77e40f}
+      \strng{authorfullhash}{fcc56c4b306481734fe018476f77e40f}
+      \strng{authorfullhashraw}{fcc56c4b306481734fe018476f77e40f}
+      \field{labelalpha}{JvS00}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T}
+      \field{year}{2000}
+    \endentry
+    \entry{a}{book}{}{}
+      \name{author}{2}{}{%
+        {{useprefix=true,hash=4d169b45444bcc1174278f53ea171e5b}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           prefix={von},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=dea4acea2a1e790627a57aca197d3399}{%
+           family={Jones},
+           familyi={J\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \strng{namehash}{943b7fca5eb6276a074a07456adc2751}
+      \strng{fullhash}{943b7fca5eb6276a074a07456adc2751}
+      \strng{fullhashraw}{943b7fca5eb6276a074a07456adc2751}
+      \strng{bibnamehash}{943b7fca5eb6276a074a07456adc2751}
+      \strng{authorbibnamehash}{943b7fca5eb6276a074a07456adc2751}
+      \strng{authornamehash}{943b7fca5eb6276a074a07456adc2751}
+      \strng{authorfullhash}{943b7fca5eb6276a074a07456adc2751}
+      \strng{authorfullhashraw}{943b7fca5eb6276a074a07456adc2751}
+      \field{labelalpha}{vSvJ00}
+      \field{sortinit}{v}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T}
+      \field{year}{2000}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

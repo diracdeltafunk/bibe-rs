@@ -1,0 +1,221 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{kastenholz}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=96123eb8cd99ad0efc1991ed77185c47}{%
+           family={Kastenholz},
+           familyi={K\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=96e2e3d04ba287dbd118b54dda8b0f00}{%
+           family={Hünenberger},
+           familyi={H\bibinitperiod},
+           given={Philippe\bibnamedelima H.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{fullhash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{fullhashraw}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{bibnamehash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{authorbibnamehash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{authornamehash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{authorfullhash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{authorfullhashraw}{5e2ee92ca164b2cda223006e47a16bd9}
+      \field{labelalpha}{KH06}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The computation of ionic solvation free energies from atomistic simulations is a surprisingly difficult problem that has found no satisfactory solution for more than 15 years. The reason is that the charging free energies evaluated from such simulations are affected by very large errors. One of these is related to the choice of a specific convention for summing up the contributions of solvent charges to the electrostatic potential in the ionic cavity, namely, on the basis of point charges within entire solvent molecules (M scheme) or on the basis of individual point charges (P scheme). The use of an inappropriate convention may lead to a charge-independent offset in the calculated potential, which depends on the details of the summation scheme, on the quadrupole-moment trace of the solvent molecule, and on the approximate form used to represent electrostatic interactions in the system. However, whether the M or P scheme (if any) represents the appropriate convention is still a matter of on-going debate. The goal of the present article is to settle this long-standing controversy by carefully analyzing (both analytically and numerically) the properties of the electrostatic potential in molecular liquids (and inside cavities within them).}
+      \field{annotation}{An \texttt{article} entry with an \texttt{eid} and a \texttt{doi} field. Note that the \textsc{doi} is transformed into a clickable link if \texttt{hyperref} support has been enabled}
+      \field{eid}{124106}
+      \field{indextitle}{Computation of ionic solvation free energies}
+      \field{journaltitle}{J.~Chem. Phys.}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{subtitle}{I. The electrostatic potential in molecular liquids}
+      \field{title}{Computation of methodology\hyphen independent ionic solvation free energies from molecular simulations}
+      \field{volume}{124}
+      \field{year}{2006}
+      \verb{doi}
+      \verb 10.1063/1.2172593
+      \endverb
+    \endentry
+    \entry{westfahl:space}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=dd4c0e40628e106b641ac3b9ce2e8b18}{%
+           family={Westfahl},
+           familyi={W\bibinitperiod},
+           given={Gary},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=dd4c0e40628e106b641ac3b9ce2e8b18}{%
+           family={Westfahl},
+           familyi={W\bibinitperiod},
+           given={Gary},
+           giveni={G\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Westport, Conn.}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Greenwood}%
+      }
+      \strng{namehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{fullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{fullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{bibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorbibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authornamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorfullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorfullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorbibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editornamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorfullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorfullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \field{labelalpha}{Wes00}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A cross-referenced article from a \texttt{collection}. This is an \texttt{incollection} entry with a \texttt{crossref} field. Note the \texttt{subtitle} and \texttt{indextitle} fields}
+      \field{booksubtitle}{The Frontier Theme in Science Fiction}
+      \field{booktitle}{Space and Beyond}
+      \field{indextitle}{True Frontier, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{subtitle}{Confronting and Avoiding the Realities of Space in American Science Fiction Films}
+      \field{title}{The True Frontier}
+      \field{year}{2000}
+      \field{pages}{55\bibrangedash 65}
+      \range{pages}{11}
+    \endentry
+  \enddatalist
+  \datalist[entry]{none/global//global/global/global}
+    \entry{westfahl:space}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=dd4c0e40628e106b641ac3b9ce2e8b18}{%
+           family={Westfahl},
+           familyi={W\bibinitperiod},
+           given={Gary},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=dd4c0e40628e106b641ac3b9ce2e8b18}{%
+           family={Westfahl},
+           familyi={W\bibinitperiod},
+           given={Gary},
+           giveni={G\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Westport, Conn.}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Greenwood}%
+      }
+      \strng{namehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{fullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{fullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{bibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorbibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authornamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorfullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{authorfullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorbibnamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editornamehash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorfullhash}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \strng{editorfullhashraw}{dd4c0e40628e106b641ac3b9ce2e8b18}
+      \field{labelalpha}{Wes00}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{A cross-referenced article from a \texttt{collection}. This is an \texttt{incollection} entry with a \texttt{crossref} field. Note the \texttt{subtitle} and \texttt{indextitle} fields}
+      \field{booksubtitle}{The Frontier Theme in Science Fiction}
+      \field{booktitle}{Space and Beyond}
+      \field{indextitle}{True Frontier, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{subtitle}{Confronting and Avoiding the Realities of Space in American Science Fiction Films}
+      \field{title}{The True Frontier}
+      \field{year}{2000}
+      \field{pages}{55\bibrangedash 65}
+      \range{pages}{11}
+    \endentry
+    \entry{kastenholz}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=96123eb8cd99ad0efc1991ed77185c47}{%
+           family={Kastenholz},
+           familyi={K\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=96e2e3d04ba287dbd118b54dda8b0f00}{%
+           family={Hünenberger},
+           familyi={H\bibinitperiod},
+           given={Philippe\bibnamedelima H.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{fullhash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{fullhashraw}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{bibnamehash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{authorbibnamehash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{authornamehash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{authorfullhash}{5e2ee92ca164b2cda223006e47a16bd9}
+      \strng{authorfullhashraw}{5e2ee92ca164b2cda223006e47a16bd9}
+      \field{labelalpha}{KH06}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The computation of ionic solvation free energies from atomistic simulations is a surprisingly difficult problem that has found no satisfactory solution for more than 15 years. The reason is that the charging free energies evaluated from such simulations are affected by very large errors. One of these is related to the choice of a specific convention for summing up the contributions of solvent charges to the electrostatic potential in the ionic cavity, namely, on the basis of point charges within entire solvent molecules (M scheme) or on the basis of individual point charges (P scheme). The use of an inappropriate convention may lead to a charge-independent offset in the calculated potential, which depends on the details of the summation scheme, on the quadrupole-moment trace of the solvent molecule, and on the approximate form used to represent electrostatic interactions in the system. However, whether the M or P scheme (if any) represents the appropriate convention is still a matter of on-going debate. The goal of the present article is to settle this long-standing controversy by carefully analyzing (both analytically and numerically) the properties of the electrostatic potential in molecular liquids (and inside cavities within them).}
+      \field{annotation}{An \texttt{article} entry with an \texttt{eid} and a \texttt{doi} field. Note that the \textsc{doi} is transformed into a clickable link if \texttt{hyperref} support has been enabled}
+      \field{eid}{124106}
+      \field{indextitle}{Computation of ionic solvation free energies}
+      \field{journaltitle}{J.~Chem. Phys.}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{subtitle}{I. The electrostatic potential in molecular liquids}
+      \field{title}{Computation of methodology\hyphen independent ionic solvation free energies from molecular simulations}
+      \field{volume}{124}
+      \field{year}{2006}
+      \verb{doi}
+      \verb 10.1063/1.2172593
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

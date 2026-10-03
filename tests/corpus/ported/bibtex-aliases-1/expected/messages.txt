@@ -1,0 +1,20 @@
+WARN - Datamodel:  entry 'alias6' (bibtex-aliases.bib): Invalid entry type '' - defaulting to 'misc'
+WARN - Datamodel: customa entry 'alias4' (bibtex-aliases.bib): Invalid field 'author' for entrytype 'customa'
+WARN - Datamodel: customa entry 'alias4' (bibtex-aliases.bib): Invalid field 'title' for entrytype 'customa'
+WARN - Datamodel: customb entry 'alias3' (bibtex-aliases.bib): Invalid field 'author' for entrytype 'customb'
+WARN - Datamodel: customb entry 'alias3' (bibtex-aliases.bib): Invalid field 'title' for entrytype 'customb'
+WARN - Datamodel: misc entry 'alias6' (bibtex-aliases.bib): Missing mandatory field - one of 'date, year' must be defined
+WARN - Datamodel: report entry 'alias7' (bibtex-aliases.bib): Missing mandatory field 'author'
+WARN - Datamodel: report entry 'alias7' (bibtex-aliases.bib): Missing mandatory field 'institution'
+WARN - Datamodel: report entry 'alias7' (bibtex-aliases.bib): Missing mandatory field 'title'
+WARN - Datamodel: report entry 'alias7' (bibtex-aliases.bib): Missing mandatory field 'type'
+WARN - Datamodel: report entry 'alias7' (bibtex-aliases.bib): Missing mandatory field - one of 'date, year' must be defined
+WARN - Datamodel: report entry 'alias8' (bibtex-aliases.bib): Missing mandatory field 'author'
+WARN - Datamodel: report entry 'alias8' (bibtex-aliases.bib): Missing mandatory field 'institution'
+WARN - Datamodel: report entry 'alias8' (bibtex-aliases.bib): Missing mandatory field 'title'
+WARN - Datamodel: report entry 'alias8' (bibtex-aliases.bib): Missing mandatory field 'type'
+WARN - Datamodel: report entry 'alias8' (bibtex-aliases.bib): Missing mandatory field - one of 'date, year' must be defined
+WARN - Datamodel: thing entry 'alias2' (bibtex-aliases.bib): Field 'school' invalid in data model - ignoring
+WARN - Datamodel: thing entry 'alias2' (bibtex-aliases.bib): Invalid entry type 'thing' - defaulting to 'misc'
+WARN - Datamodel: thing entry 'alias2' (bibtex-aliases.bib): Invalid field 'institution' for entrytype 'misc'
+WARN - Datamodel: unpublished entry 'alias5' (bibtex-aliases.bib): Invalid field 'institution' for entrytype 'unpublished'

@@ -1,0 +1,5 @@
+description = "biber t/names.t, configuration 1 (prepare() at line 46): mincitenames=\"3\"; namesep=und; others_string=andere; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/names.t + t/tdata/names.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--namesep=und", "--others-string=andere", "--sortlocale=en_GB.UTF-8", "names.bcf"]
+outputs = ["names.bbl"]
+tags = ["suite:ported", "t:names"]

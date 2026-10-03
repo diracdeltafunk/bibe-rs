@@ -1,0 +1,5 @@
+description = "biber t/xdata.t, configuration 1 (prepare() at line 52): sortlocale=en_GB.UTF-8; nodieonerror=1; no_bltxml_schema=1"
+source = "vendor/biber/t/xdata.t + t/tdata/xdata.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--nodieonerror", "--no-bltxml-schema", "xdata.bcf"]
+outputs = ["xdata.bbl"]
+tags = ["suite:ported", "t:xdata"]

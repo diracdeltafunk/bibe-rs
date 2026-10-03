@@ -1,0 +1,5 @@
+description = "biber t/set-dynamic.t, configuration 1 (prepare() at line 40): sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/set-dynamic.t + t/tdata/set-dynamic.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "set-dynamic.bcf"]
+outputs = ["set-dynamic.bbl"]
+tags = ["suite:ported", "t:set-dynamic"]

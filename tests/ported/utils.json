@@ -1,0 +1,2008 @@
+{
+ "source": "vendor/biber/t/utils.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "utils.t",
+   "line": 45,
+   "tests": [
+    1
+   ],
+   "name": "File location - 1",
+   "target": "bibers (CLI file lookup, kpsewhich)",
+   "area": "locate_data_file",
+   "source": "eq_or_diff(File::Spec->canonpath(locate_data_file(\"$cwd/t/tdata/general.bcf\")), File::Spec->canonpath(\"$cwd/t/tdata/general.bcf\"), 'File location - 1');",
+   "call": {
+    "sub": "Biber::Utils::locate_data_file",
+    "args": [
+     "<BIBER_SRC>/t/tdata/general.bcf"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "<BIBER_SRC>/t/tdata/general.bcf",
+   "ret": "<BIBER_SRC>/t/tdata/general.bcf"
+  },
+  {
+   "test": "utils.t",
+   "line": 47,
+   "tests": [
+    2
+   ],
+   "name": "File location - 2",
+   "target": "bibers (CLI file lookup, kpsewhich)",
+   "area": "locate_data_file",
+   "source": "eq_or_diff(File::Spec->canonpath(locate_data_file('t/tdata/general.bcf')), File::Spec->canonpath('t/tdata/general.bcf'), 'File location - 2');",
+   "call": {
+    "sub": "Biber::Utils::locate_data_file",
+    "args": [
+     "t/tdata/general.bcf"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "t/tdata/general.bcf",
+   "ret": "t/tdata/general.bcf"
+  },
+  {
+   "test": "utils.t",
+   "line": 50,
+   "tests": [
+    3
+   ],
+   "name": "File location - 3",
+   "target": "bibers (CLI file lookup, kpsewhich)",
+   "area": "locate_data_file",
+   "source": "eq_or_diff(File::Spec->canonpath(locate_data_file('t/tdata/examples.bib')), File::Spec->canonpath('t/tdata/examples.bib'), 'File location - 3');",
+   "call": {
+    "sub": "Biber::Utils::locate_data_file",
+    "args": [
+     "t/tdata/examples.bib"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Config::set_ctrlfile_path",
+     "args": [
+      "Biber::Config",
+      "t/tdata/general.bcf"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "t/tdata/examples.bib",
+   "ret": "t/tdata/examples.bib"
+  },
+  {
+   "test": "utils.t",
+   "line": 58,
+   "tests": [
+    4
+   ],
+   "name": "File location - 4",
+   "target": "bibers (CLI file lookup, kpsewhich)",
+   "area": "locate_data_file",
+   "source": "like(File::Spec->canonpath(locate_data_file('plain.tex')), qr|plain.tex\\cM*\\z|, 'File location - 4');",
+   "call": {
+    "sub": "Biber::Utils::locate_data_file",
+    "args": [
+     "plain.tex"
+    ]
+   },
+   "assert": "like",
+   "expected": null,
+   "ret": "/usr/local/texlive/2026/texmf-dist/tex/plain/base/plain.tex"
+  },
+  {
+   "test": "utils.t",
+   "line": 63,
+   "tests": [
+    5
+   ],
+   "name": "File location - 5",
+   "target": "bibers (CLI file lookup, kpsewhich)",
+   "area": "locate_data_file",
+   "source": "eq_or_diff(File::Spec->canonpath(locate_data_file('general.bcf')), File::Spec->canonpath(\"t/tdata/general.bcf\"), 'File location - 5');",
+   "call": {
+    "sub": "Biber::Utils::locate_data_file",
+    "args": [
+     "general.bcf"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "t/tdata/general.bcf",
+   "ret": "t/tdata/general.bcf"
+  },
+  {
+   "test": "utils.t",
+   "line": 66,
+   "tests": [
+    6
+   ],
+   "name": "normalise_string",
+   "target": "bibers-core::process (normalise)",
+   "area": "normalise_string",
+   "source": "eq_or_diff(normalise_string('\"a, b–c: d\" ', 1),  'a bc d', 'normalise_string' );",
+   "call": {
+    "sub": "Biber::Utils::normalise_string",
+    "args": [
+     "\"a, b–c: d\" ",
+     "1"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "a bc d",
+   "ret": "a bc d"
+  },
+  {
+   "test": "utils.t",
+   "line": 69,
+   "tests": [
+    7
+   ],
+   "name": "normalise_string_underscore 1",
+   "target": "bibers-core::process (normalise)",
+   "area": "normalise_string_underscore",
+   "source": "eq_or_diff(NFC(normalise_string_underscore(latex_decode('\\c Se\\x{c}\\\"ok-\\foo{a},  N\\`i\\~no",
+   "call": {
+    "sub": "Biber::Utils::normalise_string_underscore",
+    "args": [
+     "Şe\\x{c}ök-\\foo{a},  Nìño\n    $§+ :-)   ",
+     "0"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LaTeX::Recode::latex_decode",
+     "args": [
+      "\\c Se\\x{c}\\\"ok-\\foo{a},  N\\`i\\~no\n    $§+ :-)   "
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "Şecöka_Nìño",
+   "ret": "Şecöka_Nìño"
+  },
+  {
+   "test": "utils.t",
+   "line": 72,
+   "tests": [
+    8
+   ],
+   "name": "normalise_string_underscore 3",
+   "target": "bibers-core::process (normalise)",
+   "area": "normalise_string_underscore",
+   "source": "eq_or_diff(normalise_string_underscore('{Foo de Bar, Graf Ludwig}', 1), 'Foo_de_Bar_Graf_Ludwig', 'normalise_string_underscore 3');",
+   "call": {
+    "sub": "Biber::Utils::normalise_string_underscore",
+    "args": [
+     "{Foo de Bar, Graf Ludwig}",
+     "1"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Foo_de_Bar_Graf_Ludwig",
+   "ret": "Foo_de_Bar_Graf_Ludwig"
+  },
+  {
+   "test": "utils.t",
+   "line": 76,
+   "tests": [
+    9
+   ],
+   "name": "latex decode 1",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode('Mu\\d{h}ammad ibn M\\=us\\=a al-Khw\\=arizm\\={\\i} \\r{a}')), 'Muḥammad ibn Mūsā al-Khwārizmı̄ å', 'latex decode 1');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "Mu\\d{h}ammad ibn M\\=us\\=a al-Khw\\=arizm\\={\\i} \\r{a}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Muḥammad ibn Mūsā al-Khwārizmı̄ å",
+   "ret": "Muḥammad ibn Mūsā al-Khwārizmı̄ å"
+  },
+  {
+   "test": "utils.t",
+   "line": 77,
+   "tests": [
+    10
+   ],
+   "name": "latex decode 2",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\alpha'), '\\alpha', 'latex decode 2'); # no greek decoding by default",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\alpha"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\alpha",
+   "ret": "\\alpha"
+  },
+  {
+   "test": "utils.t",
+   "line": 78,
+   "tests": [
+    11
+   ],
+   "name": "latex decode 3",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\textless\\textampersand'), '<&', 'latex decode 3'); # checking XML encoding bits",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\textless\\textampersand"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "<&",
+   "ret": "<&"
+  },
+  {
+   "test": "utils.t",
+   "line": 79,
+   "tests": [
+    12
+   ],
+   "name": "latex encode 1",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('Muḥammad ibn Mūsā al-Khwārizmī')), 'Mu\\d{h}ammad ibn M\\={u}s\\={a} al-Khw\\={a}rizm\\={\\i}', 'latex encode 1');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "Muḥammad ibn Mūsā al-Khwārizmī"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Mu\\d{h}ammad ibn M\\={u}s\\={a} al-Khw\\={a}rizm\\={\\i}",
+   "ret": "Mu\\d{h}ammad ibn M\\={u}s\\={a} al-Khw\\={a}rizm\\={\\i}"
+  },
+  {
+   "test": "utils.t",
+   "line": 80,
+   "tests": [
+    13
+   ],
+   "name": "latex encode 2",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('α')), 'α', 'latex encode 2'); # no greek encoding by default",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "α"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "α",
+   "ret": "α"
+  },
+  {
+   "test": "utils.t",
+   "line": 81,
+   "tests": [
+    14
+   ],
+   "name": "latex decode accent 1 (with redundant explicit brace protection)",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"{M{\\\\'a}t{\\\\'e}}\")), '{Máté}', 'latex decode accent 1 (with redundant explicit brace protection)');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{M{\\'a}t{\\'e}}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{Máté}",
+   "ret": "{Máté}"
+  },
+  {
+   "test": "utils.t",
+   "line": 82,
+   "tests": [
+    15
+   ],
+   "name": "latex decode accent 2",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"{M\\\\'{a}t\\\\'{e}}\")), '{Máté}', 'latex decode accent 2');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{M\\'{a}t\\'{e}}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{Máté}",
+   "ret": "{Máté}"
+  },
+  {
+   "test": "utils.t",
+   "line": 83,
+   "tests": [
+    16
+   ],
+   "name": "latex decode accent 3",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"{M\\\\'at\\\\'e}\")), '{Máté}', 'latex decode accent 3');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{M\\'at\\'e}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{Máté}",
+   "ret": "{Máté}"
+  },
+  {
+   "test": "utils.t",
+   "line": 84,
+   "tests": [
+    17
+   ],
+   "name": "latex decode accent 4",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"R{\\\\'egis}\")), 'R{égis}', 'latex decode accent 4');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "R{\\'egis}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "R{égis}",
+   "ret": "R{égis}"
+  },
+  {
+   "test": "utils.t",
+   "line": 85,
+   "tests": [
+    18
+   ],
+   "name": "latex decode accent 5",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"\\\\frac{a}{b}\")), '\\frac{a}{b}', 'latex decode accent 5');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\frac{a}{b}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\frac{a}{b}",
+   "ret": "\\frac{a}{b}"
+  },
+  {
+   "test": "utils.t",
+   "line": 86,
+   "tests": [
+    19
+   ],
+   "name": "latex decode accent 6",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"\\\\textuppercase{\\\\'e}\")), '\\textuppercase{é}', 'latex decode accent 6');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\textuppercase{\\'e}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\textuppercase{é}",
+   "ret": "\\textuppercase{é}"
+  },
+  {
+   "test": "utils.t",
+   "line": 87,
+   "tests": [
+    20
+   ],
+   "name": "latex reversing recoding test 1",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"\\\\DH{}and\\\\dj{}and\\\\'{c}, H.\")), 'Ðandđandć, H.', 'latex reversing recoding test 1');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\DH{}and\\dj{}and\\'{c}, H."
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Ðandđandć, H.",
+   "ret": "Ðandđandć, H."
+  },
+  {
+   "test": "utils.t",
+   "line": 88,
+   "tests": [
+    21
+   ],
+   "name": "latex reversing recoding test 2",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"{\\\\DH{}and\\\\dj{}and\\\\'{c}, H.}\")), '{Ðandđandć, H.}', 'latex reversing recoding test 2');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{\\DH{}and\\dj{}and\\'{c}, H.}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{Ðandđandć, H.}",
+   "ret": "{Ðandđandć, H.}"
+  },
+  {
+   "test": "utils.t",
+   "line": 89,
+   "tests": [
+    22
+   ],
+   "name": "latex reversing recoding test 3",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('Ðandđandć, H.')), '\\\\DH{}and\\\\dj{}and\\\\\\'{c}, H.', 'latex reversing recoding test 3');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "Ðandđandć, H."
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\DH{}and\\dj{}and\\'{c}, H.",
+   "ret": "\\DH{}and\\dj{}and\\'{c}, H."
+  },
+  {
+   "test": "utils.t",
+   "line": 90,
+   "tests": [
+    23
+   ],
+   "name": "latex reversing recoding test 4",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('{Ðandđandć, H.}')), '{\\\\DH{}and\\\\dj{}and\\\\\\'{c}, H.}', 'latex reversing recoding test 4');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "{Ðandđandć, H.}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{\\DH{}and\\dj{}and\\'{c}, H.}",
+   "ret": "{\\DH{}and\\dj{}and\\'{c}, H.}"
+  },
+  {
+   "test": "utils.t",
+   "line": 93,
+   "tests": [
+    24
+   ],
+   "name": "latex decode 4 (with 2 explicit brace protections)",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode('{\\\"{U}}ber {\\\"{U}}berlegungen zur \\\"{U}berwindung des \\\"{U}bels')), 'Über Überlegungen zur Überwindung des Übels', 'latex decode 4 (with 2 explicit brace protections)');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{\\\"{U}}ber {\\\"{U}}berlegungen zur \\\"{U}berwindung des \\\"{U}bels"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LaTeX::Recode::init_sets",
+     "args": [
+      "Biber::LaTeX::Recode",
+      "full",
+      "full"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "Über Überlegungen zur Überwindung des Übels",
+   "ret": "Über Überlegungen zur Überwindung des Übels"
+  },
+  {
+   "test": "utils.t",
+   "line": 94,
+   "tests": [
+    25
+   ],
+   "name": "latex decode 4a",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\alpha'), 'α', 'latex decode 4a'); # greek decoding with \"full\"",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\alpha"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "α",
+   "ret": "α"
+  },
+  {
+   "test": "utils.t",
+   "line": 95,
+   "tests": [
+    26
+   ],
+   "name": "latex decode 5",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"\\\\'\\\\i\")), 'í', 'latex decode 5'); # checking i/j with accents",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\'\\i"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "í",
+   "ret": "í"
+  },
+  {
+   "test": "utils.t",
+   "line": 96,
+   "tests": [
+    27
+   ],
+   "name": "latex decode 5a (with redundant explicit brace protection)",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"{\\\\'\\\\i}\")), 'í', 'latex decode 5a (with redundant explicit brace protection)'); # checking i/j with accents",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{\\'\\i}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "í",
+   "ret": "í"
+  },
+  {
+   "test": "utils.t",
+   "line": 97,
+   "tests": [
+    28
+   ],
+   "name": "latex decode 6",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"\\\\^{\\\\j}\")), 'ȷ̂', 'latex decode 6'); # checking i/j with accents",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\^{\\j}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "ȷ̂",
+   "ret": "ȷ̂"
+  },
+  {
+   "test": "utils.t",
+   "line": 98,
+   "tests": [
+    29
+   ],
+   "name": "latex decode 7",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"\\\\u{\\\\i}\")), 'ı̆', 'latex decode 7'); # checking i/j with accents",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\u{\\i}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "ı̆",
+   "ret": "ı̆"
+  },
+  {
+   "test": "utils.t",
+   "line": 99,
+   "tests": [
+    30
+   ],
+   "name": "latex decode 8",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"\\\\u\\\\i\")), 'ı̆', 'latex decode 8'); # checking i/j with accents",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\u\\i"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "ı̆",
+   "ret": "ı̆"
+  },
+  {
+   "test": "utils.t",
+   "line": 100,
+   "tests": [
+    31
+   ],
+   "name": "latex decode 9",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"{{\\\\'A}lvarez}, J.~D.\")), '{Álvarez}, J.~D.', 'latex decode 9'); # checking multi-braces",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{{\\'A}lvarez}, J.~D."
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{Álvarez}, J.~D.",
+   "ret": "{Álvarez}, J.~D."
+  },
+  {
+   "test": "utils.t",
+   "line": 101,
+   "tests": [
+    32
+   ],
+   "name": "latex decode 9",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\i'), 'ı', 'latex decode 9'); # checking dotless i",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\i"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "ı",
+   "ret": "ı"
+  },
+  {
+   "test": "utils.t",
+   "line": 102,
+   "tests": [
+    33
+   ],
+   "name": "latex decode 10",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\j'), 'ȷ', 'latex decode 10'); # checking dotless j",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\j"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "ȷ",
+   "ret": "ȷ"
+  },
+  {
+   "test": "utils.t",
+   "line": 103,
+   "tests": [
+    34
+   ],
+   "name": "latex decode 11",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\textdiv'), '÷', 'latex decode 11'); # checking multiple set for types",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\textdiv"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "÷",
+   "ret": "÷"
+  },
+  {
+   "test": "utils.t",
+   "line": 104,
+   "tests": [
+    35
+   ],
+   "name": "latex decode 13",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('--'), '--', 'latex decode 13'); # Testing raw",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "--"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "--",
+   "ret": "--"
+  },
+  {
+   "test": "utils.t",
+   "line": 105,
+   "tests": [
+    36
+   ],
+   "name": "latex decode 14",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\textdegree C'), '°C', 'latex decode 14');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\textdegree C"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "°C",
+   "ret": "°C"
+  },
+  {
+   "test": "utils.t",
+   "line": 106,
+   "tests": [
+    37
+   ],
+   "name": "latex decode 15",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode(\"{\\\\'{I}}\")), 'Í', 'latex decode 15'); # single glyph braces",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{\\'{I}}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Í",
+   "ret": "Í"
+  },
+  {
+   "test": "utils.t",
+   "line": 107,
+   "tests": [
+    38
+   ],
+   "name": "latex decode 16",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode('{\\v{C}}')), 'Č', 'latex decode 16'); # single glyph braces",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{\\v{C}}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Č",
+   "ret": "Č"
+  },
+  {
+   "test": "utils.t",
+   "line": 108,
+   "tests": [
+    39
+   ],
+   "name": "latex decode 17",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode('{I}')), '{I}', 'latex decode 17'); # non-accents",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{I}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{I}",
+   "ret": "{I}"
+  },
+  {
+   "test": "utils.t",
+   "line": 109,
+   "tests": [
+    40
+   ],
+   "name": "latex decode 18",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode('\\&{A}')), '\\&{A}', 'latex decode 18'); # non-accents",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\&{A}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\&{A}",
+   "ret": "\\&{A}"
+  },
+  {
+   "test": "utils.t",
+   "line": 110,
+   "tests": [
+    41
+   ],
+   "name": "latex decode 19",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(NFC(latex_decode('\\&\\;{A}')), '\\&\\;{A}', 'latex decode 19'); # non-accents",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\&\\;{A}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\&\\;{A}",
+   "ret": "\\&\\;{A}"
+  },
+  {
+   "test": "utils.t",
+   "line": 112,
+   "tests": [
+    42
+   ],
+   "name": "latex encode 3",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('α')), '{$\\alpha$}', 'latex encode 3'); # greek encoding with \"full\"",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "α"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{$\\alpha$}",
+   "ret": "{$\\alpha$}"
+  },
+  {
+   "test": "utils.t",
+   "line": 113,
+   "tests": [
+    43
+   ],
+   "name": "latex encode 4",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('µ')), '{$\\mu$}', 'latex encode 4'); # Testing symbols",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "µ"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{$\\mu$}",
+   "ret": "{$\\mu$}"
+  },
+  {
+   "test": "utils.t",
+   "line": 114,
+   "tests": [
+    44
+   ],
+   "name": "latex encode 5",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('≄')), '{$\\not\\simeq$}', 'latex encode 5'); # Testing negated symbols",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "≄"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{$\\not\\simeq$}",
+   "ret": "{$\\not\\simeq$}"
+  },
+  {
+   "test": "utils.t",
+   "line": 115,
+   "tests": [
+    45
+   ],
+   "name": "latex encode 6",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('Þ')), '\\TH{}', 'latex encode 6'); # Testing preferred",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "Þ"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\TH{}",
+   "ret": "\\TH{}"
+  },
+  {
+   "test": "utils.t",
+   "line": 116,
+   "tests": [
+    46
+   ],
+   "name": "latex encode 7",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode('$'), '$', 'latex encode 7'); # Testing exclude",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "$"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "$",
+   "ret": "$"
+  },
+  {
+   "test": "utils.t",
+   "line": 117,
+   "tests": [
+    47
+   ],
+   "name": "latex encode 8",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('–')), '--', 'latex encode 8'); # Testing raw",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "–"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "--",
+   "ret": "--"
+  },
+  {
+   "test": "utils.t",
+   "line": 118,
+   "tests": [
+    48
+   ],
+   "name": "discretionary hyphens",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('a\\-a'), 'a\\-a', 'discretionary hyphens');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "a\\-a"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "a\\-a",
+   "ret": "a\\-a"
+  },
+  {
+   "test": "utils.t",
+   "line": 119,
+   "tests": [
+    49
+   ],
+   "name": "latex encode 9",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('Åå')), '\\r{A}\\r{a}', 'latex encode 9');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "Åå"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\r{A}\\r{a}",
+   "ret": "\\r{A}\\r{a}"
+  },
+  {
+   "test": "utils.t",
+   "line": 120,
+   "tests": [
+    50
+   ],
+   "name": "latex encode 10",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('a̍')), '\\|{a}', 'latex encode 10');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "a̍"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\|{a}",
+   "ret": "\\|{a}"
+  },
+  {
+   "test": "utils.t",
+   "line": 121,
+   "tests": [
+    51
+   ],
+   "name": "latex encode 11",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('ı̆')), '\\u{\\i{}}', 'latex encode 11');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "ı̆"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\u{\\i{}}",
+   "ret": "\\u{\\i{}}"
+  },
+  {
+   "test": "utils.t",
+   "line": 122,
+   "tests": [
+    52
+   ],
+   "name": "latex encode 12",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('®')), '\\textregistered{}', 'latex encode 12');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "®"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\textregistered{}",
+   "ret": "\\textregistered{}"
+  },
+  {
+   "test": "utils.t",
+   "line": 123,
+   "tests": [
+    53
+   ],
+   "name": "latex encode 13",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('©')), '{$\\copyright$}', 'latex encode 13');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "©"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{$\\copyright$}",
+   "ret": "{$\\copyright$}"
+  },
+  {
+   "test": "utils.t",
+   "line": 124,
+   "tests": [
+    54
+   ],
+   "name": "latex encode 13",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('°C')), '\\textdegree{}C', 'latex encode 13');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "°C"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\textdegree{}C",
+   "ret": "\\textdegree{}C"
+  },
+  {
+   "test": "utils.t",
+   "line": 131,
+   "tests": [
+    55
+   ],
+   "name": "reduce_array",
+   "target": "perl-compat",
+   "area": "reduce_array",
+   "source": "is_deeply(\\@AminusB, \\@AminusBexpected, 'reduce_array') ;",
+   "call": {
+    "sub": "Biber::Utils::reduce_array",
+    "args": [
+     [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "c"
+     ],
+     [
+      "c",
+      "e"
+     ]
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "a",
+    "b",
+    "d",
+    "f"
+   ],
+   "ret": [
+    "a",
+    "b",
+    "d",
+    "f"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 133,
+   "tests": [
+    56
+   ],
+   "name": "remove_outer - 1",
+   "target": "btparse / bibers-core::input (brace stripping)",
+   "area": "remove_outer",
+   "source": "eq_or_diff((remove_outer('{Some string}'))[0], 1, 'remove_outer - 1') ;",
+   "call": {
+    "sub": "Biber::Utils::remove_outer",
+    "args": [
+     "{Some string}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "1",
+   "ret": [
+    "1",
+    "Some string"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 134,
+   "tests": [
+    57
+   ],
+   "name": "remove_outer - 2",
+   "target": "btparse / bibers-core::input (brace stripping)",
+   "area": "remove_outer",
+   "source": "eq_or_diff((remove_outer('{Some string}'))[1], 'Some string', 'remove_outer - 2') ;",
+   "call": {
+    "sub": "Biber::Utils::remove_outer",
+    "args": [
+     "{Some string}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Some string",
+   "ret": [
+    "1",
+    "Some string"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 136,
+   "tests": [
+    58
+   ],
+   "name": "normalise_string_lite",
+   "target": "bibers-core::process::hashes",
+   "area": "normalise_string_hash",
+   "source": "eq_or_diff(normalise_string_hash('Ä.~{\\c{C}}.~{\\c S}.'), 'Äc:Cc:S', 'normalise_string_lite' ) ;",
+   "call": {
+    "sub": "Biber::Utils::normalise_string_hash",
+    "args": [
+     "Ä.~{\\c{C}}.~{\\c S}."
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "Äc:Cc:S",
+   "ret": "Äc:Cc:S"
+  },
+  {
+   "test": "utils.t",
+   "line": 139,
+   "tests": [
+    59
+   ],
+   "name": "latex different encode/decode sets 1",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\textdiv'), '\\textdiv', 'latex different encode/decode sets 1');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\textdiv"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LaTeX::Recode::init_sets",
+     "args": [
+      "Biber::LaTeX::Recode",
+      "base",
+      "full"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "\\textdiv",
+   "ret": "\\textdiv"
+  },
+  {
+   "test": "utils.t",
+   "line": 140,
+   "tests": [
+    60
+   ],
+   "name": "latex different encode/decode sets 2",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('÷')), '{$\\\\div$}', 'latex different encode/decode sets 2');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "÷"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{$\\div$}",
+   "ret": "{$\\div$}"
+  },
+  {
+   "test": "utils.t",
+   "line": 143,
+   "tests": [
+    61
+   ],
+   "name": "latex null decode 1",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('\\i'), '\\i', 'latex null decode 1');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "\\i"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LaTeX::Recode::init_sets",
+     "args": [
+      "Biber::LaTeX::Recode",
+      "null",
+      "full"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "\\i",
+   "ret": "\\i"
+  },
+  {
+   "test": "utils.t",
+   "line": 144,
+   "tests": [
+    62
+   ],
+   "name": "latex null encode 2",
+   "target": "latex-recode",
+   "area": "latex_encode",
+   "source": "eq_or_diff(latex_encode(NFD('ı')), '\\i{}', 'latex null encode 2');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_encode",
+    "args": [
+     "ı"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "\\i{}",
+   "ret": "\\i{}"
+  },
+  {
+   "test": "utils.t",
+   "line": 146,
+   "tests": [
+    63
+   ],
+   "name": "latex null decode 2",
+   "target": "latex-recode",
+   "area": "latex_decode",
+   "source": "eq_or_diff(latex_decode('{$\\hbox {N}^3$}'), '{$\\hbox{N}^3$}', 'latex null decode 2');",
+   "call": {
+    "sub": "Biber::LaTeX::Recode::latex_decode",
+    "args": [
+     "{$\\hbox {N}^3$}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{$\\hbox{N}^3$}",
+   "ret": "{$\\hbox{N}^3$}"
+  },
+  {
+   "test": "utils.t",
+   "line": 148,
+   "tests": [
+    64
+   ],
+   "name": "Rangelen test 1",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[10,15]]), 6, 'Rangelen test 1');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "10",
+       "15"
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "6",
+   "ret": "6"
+  },
+  {
+   "test": "utils.t",
+   "line": 149,
+   "tests": [
+    65
+   ],
+   "name": "Rangelen test 2",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[10,15],[47, 53]]), 13, 'Rangelen test 2');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "47",
+       "53"
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "13",
+   "ret": "13"
+  },
+  {
+   "test": "utils.t",
+   "line": 150,
+   "tests": [
+    66
+   ],
+   "name": "Rangelen test 3",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[10,15],[47, undef]]), 7, 'Rangelen test 3');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "47",
+       null
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "7",
+   "ret": "7"
+  },
+  {
+   "test": "utils.t",
+   "line": 151,
+   "tests": [
+    67
+   ],
+   "name": "Rangelen test 4",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[10,15],[47, '']]), -1, 'Rangelen test 4');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "47",
+       ""
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "-1",
+   "ret": "-1"
+  },
+  {
+   "test": "utils.t",
+   "line": 152,
+   "tests": [
+    68
+   ],
+   "name": "Rangelen test 5",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[10,15],['', 35]]), -1, 'Rangelen test 5');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "",
+       "35"
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "-1",
+   "ret": "-1"
+  },
+  {
+   "test": "utils.t",
+   "line": 153,
+   "tests": [
+    69
+   ],
+   "name": "Rangelen test 6",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[10,15],['', undef]]), -1, 'Rangelen test 6');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "",
+       null
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "-1",
+   "ret": "-1"
+  },
+  {
+   "test": "utils.t",
+   "line": 154,
+   "tests": [
+    70
+   ],
+   "name": "Rangelen test 7",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[10,15],['XX', 'XXiv'],['i',10]]), 21, 'Rangelen test 7');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "XX",
+       "XXiv"
+      ],
+      [
+       "i",
+       "10"
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "21",
+   "ret": "21"
+  },
+  {
+   "test": "utils.t",
+   "line": 156,
+   "tests": [
+    71
+   ],
+   "name": "Rangelen test 8",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[10,15],['ⅥⅠ', 'ⅻ']]), 12, 'Rangelen test 8');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "10",
+       "15"
+      ],
+      [
+       "ⅥⅠ",
+       "ⅻ"
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "12",
+   "ret": "12"
+  },
+  {
+   "test": "utils.t",
+   "line": 157,
+   "tests": [
+    72
+   ],
+   "name": "Rangelen test 9",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([['I-II', 'III-IV']]), -1, 'Rangelen test 9');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "I-II",
+       "III-IV"
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "-1",
+   "ret": "-1"
+  },
+  {
+   "test": "utils.t",
+   "line": 158,
+   "tests": [
+    73
+   ],
+   "name": "Rangelen test 10",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "rangelen",
+   "source": "eq_or_diff(rangelen([[22,4],[123,7],[113,15]]), 11, 'Rangelen test 10');",
+   "call": {
+    "sub": "Biber::Utils::rangelen",
+    "args": [
+     [
+      [
+       "22",
+       "4"
+      ],
+      [
+       "123",
+       "7"
+      ],
+      [
+       "113",
+       "15"
+      ]
+     ]
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "11",
+   "ret": "11"
+  },
+  {
+   "test": "utils.t",
+   "line": 162,
+   "tests": [
+    74
+   ],
+   "name": "Boolean conversion - 1",
+   "target": "bibers-core::config::blx_options",
+   "area": "map_boolean",
+   "source": "eq_or_diff(map_boolean('test', 'true', 'tonum'), 1, 'Boolean conversion - 1');",
+   "call": {
+    "sub": "Biber::Utils::map_boolean",
+    "args": [
+     "test",
+     "true",
+     "tonum"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "1",
+   "ret": "1"
+  },
+  {
+   "test": "utils.t",
+   "line": 163,
+   "tests": [
+    75
+   ],
+   "name": "Boolean conversion - 2",
+   "target": "bibers-core::config::blx_options",
+   "area": "map_boolean",
+   "source": "eq_or_diff(map_boolean('test', 'False', 'tonum'), 0, 'Boolean conversion - 2');",
+   "call": {
+    "sub": "Biber::Utils::map_boolean",
+    "args": [
+     "test",
+     "False",
+     "tonum"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "0",
+   "ret": "0"
+  },
+  {
+   "test": "utils.t",
+   "line": 164,
+   "tests": [
+    76
+   ],
+   "name": "Boolean conversion - 3",
+   "target": "bibers-core::config::blx_options",
+   "area": "map_boolean",
+   "source": "eq_or_diff(map_boolean('test', 1, 'tostring'), 'true', 'Boolean conversion - 3');",
+   "call": {
+    "sub": "Biber::Utils::map_boolean",
+    "args": [
+     "test",
+     "1",
+     "tostring"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "true",
+   "ret": "true"
+  },
+  {
+   "test": "utils.t",
+   "line": 165,
+   "tests": [
+    77
+   ],
+   "name": "Boolean conversion - 4",
+   "target": "bibers-core::config::blx_options",
+   "area": "map_boolean",
+   "source": "eq_or_diff(map_boolean('test', 0, 'tostring'), 'false', 'Boolean conversion - 4');",
+   "call": {
+    "sub": "Biber::Utils::map_boolean",
+    "args": [
+     "test",
+     "0",
+     "tostring"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "false",
+   "ret": "false"
+  },
+  {
+   "test": "utils.t",
+   "line": 166,
+   "tests": [
+    78
+   ],
+   "name": "Boolean conversion - 5",
+   "target": "bibers-core::config::blx_options",
+   "area": "map_boolean",
+   "source": "eq_or_diff(map_boolean('test', 0, 'tonum'), 0, 'Boolean conversion - 5');",
+   "call": {
+    "sub": "Biber::Utils::map_boolean",
+    "args": [
+     "test",
+     "0",
+     "tonum"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "0",
+   "ret": "0"
+  },
+  {
+   "test": "utils.t",
+   "line": 169,
+   "tests": [
+    79
+   ],
+   "name": "Range parsing - 1",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "parse_range",
+   "source": "eq_or_diff(parse_range('1--2'), [1,2], 'Range parsing - 1');",
+   "call": {
+    "sub": "Biber::Utils::parse_range",
+    "args": [
+     "1--2"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": [
+    "1",
+    "2"
+   ],
+   "ret": [
+    "1",
+    "2"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 170,
+   "tests": [
+    80
+   ],
+   "name": "Range parsing - 2",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "parse_range",
+   "source": "eq_or_diff(parse_range('-2'), [1,2], 'Range parsing - 2');",
+   "call": {
+    "sub": "Biber::Utils::parse_range",
+    "args": [
+     "-2"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": [
+    "1",
+    "2"
+   ],
+   "ret": [
+    "1",
+    "2"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 171,
+   "tests": [
+    81
+   ],
+   "name": "Range parsing - 3",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "parse_range",
+   "source": "eq_or_diff(parse_range('3-'), [3,undef], 'Range parsing - 3');",
+   "call": {
+    "sub": "Biber::Utils::parse_range",
+    "args": [
+     "3-"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": [
+    "3",
+    null
+   ],
+   "ret": [
+    "3",
+    null
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 172,
+   "tests": [
+    82
+   ],
+   "name": "Range parsing - 4",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "parse_range",
+   "source": "eq_or_diff(parse_range('5'), [1,5], 'Range parsing - 4');",
+   "call": {
+    "sub": "Biber::Utils::parse_range",
+    "args": [
+     "5"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": [
+    "1",
+    "5"
+   ],
+   "ret": [
+    "1",
+    "5"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 173,
+   "tests": [
+    83
+   ],
+   "name": "Range parsing - 5",
+   "target": "bibers-core::input::handlers (ranges)",
+   "area": "parse_range",
+   "source": "eq_or_diff(parse_range('3--+'), [3,'+'], 'Range parsing - 5');",
+   "call": {
+    "sub": "Biber::Utils::parse_range",
+    "args": [
+     "3--+"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": [
+    "3",
+    "+"
+   ],
+   "ret": [
+    "3",
+    "+"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 176,
+   "tests": [
+    84
+   ],
+   "name": "split_xsv - 1",
+   "target": "bibers-core::input::handlers (xsv lists)",
+   "area": "split_xsv",
+   "source": "eq_or_diff([split_xsv('family=a, given=a b, given-i=a b c')], ['family=a', 'given=a b', 'given-i=a b c'], 'split_xsv - 1');",
+   "call": {
+    "sub": "Biber::Utils::split_xsv",
+    "args": [
+     "family=a, given=a b, given-i=a b c"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": [
+    "family=a",
+    "given=a b",
+    "given-i=a b c"
+   ],
+   "ret": [
+    "family=a",
+    "given=a b",
+    "given-i=a b c"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 177,
+   "tests": [
+    85
+   ],
+   "name": "split_xsv - 2",
+   "target": "bibers-core::input::handlers (xsv lists)",
+   "area": "split_xsv",
+   "source": "eq_or_diff([split_xsv('\"family={Something, here}\", given=b')], ['family={Something, here}', 'given=b'], 'split_xsv - 2');",
+   "call": {
+    "sub": "Biber::Utils::split_xsv",
+    "args": [
+     "\"family={Something, here}\", given=b"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": [
+    "family={Something, here}",
+    "given=b"
+   ],
+   "ret": [
+    "family={Something, here}",
+    "given=b"
+   ]
+  },
+  {
+   "test": "utils.t",
+   "line": 179,
+   "tests": [
+    86
+   ],
+   "name": "Name strip - 1",
+   "target": "bibers-core::process (initials)",
+   "area": "strip_noinit",
+   "source": "eq_or_diff(strip_noinit('\\texttt{freedesktop.org}'), 'freedesktop.org', 'Name strip - 1');",
+   "call": {
+    "sub": "Biber::Utils::strip_noinit",
+    "args": [
+     "\\texttt{freedesktop.org}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "freedesktop.org",
+   "ret": "freedesktop.org"
+  },
+  {
+   "test": "utils.t",
+   "line": 180,
+   "tests": [
+    87
+   ],
+   "name": "Name strip - 2",
+   "target": "bibers-core::process (initials)",
+   "area": "strip_noinit",
+   "source": "eq_or_diff(strip_noinit('\\texttt freedesktop.org'), 'freedesktop.org', 'Name strip - 2');",
+   "call": {
+    "sub": "Biber::Utils::strip_noinit",
+    "args": [
+     "\\texttt freedesktop.org"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "freedesktop.org",
+   "ret": "freedesktop.org"
+  },
+  {
+   "test": "utils.t",
+   "line": 181,
+   "tests": [
+    88
+   ],
+   "name": "Name strip - 3",
+   "target": "bibers-core::process (initials)",
+   "area": "strip_noinit",
+   "source": "eq_or_diff(strip_noinit('{\\texttt freedesktop.org}'), '{freedesktop.org}', 'Name strip - 3');",
+   "call": {
+    "sub": "Biber::Utils::strip_noinit",
+    "args": [
+     "{\\texttt freedesktop.org}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{freedesktop.org}",
+   "ret": "{freedesktop.org}"
+  },
+  {
+   "test": "utils.t",
+   "line": 182,
+   "tests": [
+    89
+   ],
+   "name": "Name strip - 4",
+   "target": "bibers-core::process (initials)",
+   "area": "strip_noinit",
+   "source": "eq_or_diff(strip_noinit('{C.\\bibtexspatium A.}'), '{C.A.}', 'Name strip - 4');",
+   "call": {
+    "sub": "Biber::Utils::strip_noinit",
+    "args": [
+     "{C.\\bibtexspatium A.}"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "{C.A.}",
+   "ret": "{C.A.}"
+  }
+ ]
+}

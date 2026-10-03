@@ -1,0 +1,5 @@
+description = "biber t/translit.t, configuration 1 (prepare() at line 33)"
+source = "vendor/biber/t/translit.t + t/tdata/translit.bcf (traced by tools/port-tests)"
+args = ["--noconf", "translit.bcf"]
+outputs = ["translit.bbl"]
+tags = ["suite:ported", "t:translit"]

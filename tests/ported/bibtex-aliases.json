@@ -1,0 +1,229 @@
+{
+ "source": "vendor/biber/t/bibtex-aliases.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "bibtex-aliases.t",
+   "line": 75,
+   "tests": [
+    16
+   ],
+   "name": "Alias - 16",
+   "target": "bibers-core::input::handlers::names",
+   "area": "namepart",
+   "source": "eq_or_diff($bibentries->entry('alias4')->get_field('namea')->nth_name(1)->get_namepart('given'), 'Sam', 'Alias - 16' );",
+   "call": {
+    "sub": "Biber::Entry::Name::get_namepart",
+    "args": [
+     {
+      "__obj": "Biber::Entry::Name",
+      "value": {
+       "hash": "2b69b88c50148c5abfa1411a277e0455",
+       "id": "2Wv5JUytFL",
+       "index": "1",
+       "nameparts": {
+        "family": {
+         "initial": [
+          "S"
+         ],
+         "string": "Smith"
+        },
+        "given": {
+         "initial": [
+          "S"
+         ],
+         "string": "Sam"
+        },
+        "prefix": {
+         "initial": null,
+         "string": null
+        },
+        "suffix": {
+         "initial": null,
+         "string": null
+        }
+       },
+       "rawstring": "SamSmith",
+       "strip": {
+        "family": "0",
+        "given": "0",
+        "prefix": null,
+        "suffix": null
+       }
+      }
+     },
+     "given"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "alias4"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::get_field",
+     "args": [
+      {
+       "__obj": "Biber::Entry",
+       "key": "alias4"
+      },
+      "namea"
+     ]
+    },
+    {
+     "sub": "Biber::Entry::Names::nth_name",
+     "args": [
+      {
+       "__obj": "Biber::Entry::Names",
+       "id": "2Wf8j5XOMx",
+       "names": [
+        {
+         "__obj": "Biber::Entry::Name",
+         "value": {
+          "hash": "2b69b88c50148c5abfa1411a277e0455",
+          "id": "2Wv5JUytFL",
+          "index": "1",
+          "nameparts": {
+           "family": {
+            "initial": [
+             "S"
+            ],
+            "string": "Smith"
+           },
+           "given": {
+            "initial": [
+             "S"
+            ],
+            "string": "Sam"
+           },
+           "prefix": {
+            "initial": null,
+            "string": null
+           },
+           "suffix": {
+            "initial": null,
+            "string": null
+           }
+          },
+          "rawstring": "SamSmith",
+          "strip": {
+           "family": "0",
+           "given": "0",
+           "prefix": null,
+           "suffix": null
+          }
+         }
+        }
+       ]
+      },
+      "1"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "Sam",
+   "ret": "Sam",
+   "case": "tests/corpus/ported/bibtex-aliases-1"
+  },
+  {
+   "test": "bibtex-aliases.t",
+   "line": 80,
+   "tests": [
+    19
+   ],
+   "name": "Alias - 19",
+   "target": "bibers-core::process::hashes (list strings)",
+   "area": "liststring",
+   "source": "eq_or_diff($biber->_liststring('alias5', 'listb'), 'REPlaCEDte!early', 'Alias - 19');",
+   "call": {
+    "sub": "Biber::Internals::_liststring",
+    "args": [
+     {
+      "__obj": "Biber"
+     },
+     "alias5",
+     "listb"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "REPlaCEDte!early",
+   "ret": "REPlaCEDte!early",
+   "case": "tests/corpus/ported/bibtex-aliases-1"
+  },
+  {
+   "test": "bibtex-aliases.t",
+   "line": 81,
+   "tests": [
+    20
+   ],
+   "name": "Alias - 20",
+   "target": "bibers-core::process::hashes (list strings)",
+   "area": "liststring",
+   "source": "eq_or_diff($biber->_liststring('alias5', 'institution'), 'REPlaCEDte!early', 'Alias - 20');",
+   "call": {
+    "sub": "Biber::Internals::_liststring",
+    "args": [
+     {
+      "__obj": "Biber"
+     },
+     "alias5",
+     "institution"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "REPlaCEDte!early",
+   "ret": "REPlaCEDte!early",
+   "case": "tests/corpus/ported/bibtex-aliases-1"
+  },
+  {
+   "test": "bibtex-aliases.t",
+   "line": 84,
+   "tests": [
+    21
+   ],
+   "name": "Alias - 21",
+   "target": "bibers-core::input::handlers / resolve (entry field values)",
+   "area": "entry_field",
+   "source": "is_deeply($bibentries->entry('alias6')->get_field('keywords'), ['keyw1', 'keyw2'], 'Alias - 21' );",
+   "call": {
+    "sub": "Biber::Entry::get_field",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "alias6"
+     },
+     "keywords"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "alias6"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": [
+    "keyw1",
+    "keyw2"
+   ],
+   "ret": [
+    "keyw1",
+    "keyw2"
+   ],
+   "case": "tests/corpus/ported/bibtex-aliases-1",
+   "entry": "alias6",
+   "field": "keywords",
+   "note": "value not directly visible in .bbl"
+  }
+ ]
+}

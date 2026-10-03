@@ -1,0 +1,5 @@
+description = "biber t/labelname.t, configuration 1 (prepare() at line 49): labelnamespec=[{\"content\": \"shortauthor\"}, {\"content\":; labelnamespec=[{\"content\": \"editor\"}, {\"content\": \"tra@book; labelnamespec=[{\"content\": \"namea\"}, {\"content\": \"auth@misc; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/labelname.t + t/tdata/general.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:ported", "t:labelname"]

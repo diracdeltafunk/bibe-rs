@@ -1,0 +1,21 @@
+WARN - Datamodel: badtype entry 'c1' (dm-constraints.bib): Invalid entry type 'badtype' - defaulting to 'misc'
+WARN - Datamodel: eta entry 'c2' (dm-constraints.bib): Field 'badfield' invalid in data model - ignoring
+WARN - Datamodel: eta entry 'c2' (dm-constraints.bib): Invalid field 'journaltitle' for entrytype 'eta'
+WARN - Datamodel: eta entry 'c2' (dm-constraints.bib): Missing mandatory field 'author'
+WARN - Datamodel: etb entry 'c3' (dm-constraints.bib): Invalid value (pattern match fails) for field 'gender'
+WARN - Datamodel: etb entry 'c3' (dm-constraints.bib): Invalid value of field 'month' must be datatype 'datepart' - ignoring field
+WARN - Datamodel: etb entry 'c4' (dm-constraints.bib): Invalid value of field 'field1' must be '>=5' - ignoring field
+WARN - Datamodel: etb entry 'c4' (dm-constraints.bib): Invalid value of field 'month' must be '<=12' - ignoring field
+WARN - Datamodel: etb entry 'c5' (dm-constraints.bib): Constraint violation - none of fields (field5, field6) must exist when all of fields (field2, field3, field4) exist. Ignoring them.
+WARN - Datamodel: etb entry 'c6' (dm-constraints.bib): Constraint violation - all of fields (field9, field10) must exist when all of fields (field5, field6) exist
+WARN - Datamodel: etb entry 'c6' (dm-constraints.bib): Constraint violation - one of fields (field7, field8) must exist when all of fields (field1, field2) exist
+WARN - Datamodel: etc entry 'c7' (dm-constraints.bib): Constraint violation - none of fields (field7) must exist when one of fields (field5, field6) exist. Ignoring them.
+WARN - Datamodel: etc entry 'c7' (dm-constraints.bib): Missing mandatory field - one of 'fielda, fieldb' must be defined
+WARN - Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - all of fields (field12, field13) must exist when none of fields (field6) exist
+WARN - Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - none of fields (field4) must exist when none of fields (field2, field3) exist. Ignoring them.
+WARN - Datamodel: etd entry 'c8' (dm-constraints.bib): Constraint violation - one of fields (field10, field11) must exist when none of fields (field8, field9) exist
+WARN - Datamodel: misc entry 'c10' (dm-constraints.bib): Invalid ISBN in value of field 'isbn'
+WARN - Datamodel: misc entry 'c10' (dm-constraints.bib): Invalid ISSN in value of field 'issn'
+WARN - ISBN '90-7002-34-5' in entry 'c10' is invalid - run biber with '--validate_datamodel' for details.
+WARN - Overwriting field 'year' with year value from field 'date' for entry 'c5'
+WARN - legacy month field 'WRONG FORMAT' in entry 'c3' is not an integer - this will probably not sort properly.

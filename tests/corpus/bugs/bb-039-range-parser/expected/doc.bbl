@@ -1,0 +1,118 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{r1}{misc}{}{}
+      \field{sortinit}{a}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{a}
+      \true{nocite}
+      \field{pages}{-5}
+      \range{pages}{-1}
+      \warn{\item Range field 'pages' in entry 'r1' is malformed, falling back to literal}
+    \endentry
+    \entry{r2}{misc}{}{}
+      \field{sortinit}{b}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{b}
+      \true{nocite}
+      \field{pages}{5\bibrangedash}
+      \range{pages}{-1}
+    \endentry
+    \entry{r3}{misc}{}{}
+      \field{sortinit}{c}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{c}
+      \true{nocite}
+      \field{pages}{-}
+      \range{pages}{-1}
+      \warn{\item Range field 'pages' in entry 'r3' is malformed, falling back to literal}
+    \endentry
+    \entry{r4}{misc}{}{}
+      \field{sortinit}{d}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{d}
+      \true{nocite}
+      \field{pages}{12\bibrangedash 15\bibrangessep 17\bibrangessep 20\bibrangedash 22}
+      \range{pages}{8}
+    \endentry
+    \entry{r5}{misc}{}{}
+      \field{sortinit}{e}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{e}
+      \true{nocite}
+      \field{pages}{M-1\bibrangedash M-4}
+      \range{pages}{-1}
+    \endentry
+    \entry{r6}{misc}{}{}
+      \field{sortinit}{f}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{f}
+      \true{nocite}
+      \field{pages}{{12\bibrangedash 15}}
+      \range{pages}{-1}
+    \endentry
+    \entry{r7}{misc}{}{}
+      \field{sortinit}{g}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{g}
+      \true{nocite}
+      \field{pages}{xii\bibrangedash xv}
+      \range{pages}{4}
+    \endentry
+    \entry{r8}{misc}{}{}
+      \field{sortinit}{h}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{h}
+      \true{nocite}
+      \field{pages}{12 }
+      \range{pages}{-1}
+    \endentry
+    \entry{r9}{misc}{}{}
+      \field{sortinit}{i}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{i}
+      \true{nocite}
+      \field{pages}{--}
+      \range{pages}{-1}
+      \warn{\item Range field 'pages' in entry 'r9' is malformed, falling back to literal}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

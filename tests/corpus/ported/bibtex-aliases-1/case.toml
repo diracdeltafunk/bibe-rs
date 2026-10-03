@@ -1,0 +1,5 @@
+description = "biber t/bibtex-aliases.t, configuration 1 (prepare() at line 46): sortlocale=en_GB.UTF-8; validate_datamodel=1"
+source = "vendor/biber/t/bibtex-aliases.t + t/tdata/bibtex-aliases.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--validate-datamodel", "bibtex-aliases.bcf"]
+outputs = ["bibtex-aliases.bbl"]
+tags = ["suite:ported", "t:bibtex-aliases"]

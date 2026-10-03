@@ -1,0 +1,5 @@
+description = "biber t/sort-order.t, configuration 1 (prepare() at line 38): labeldateparts=\"0\"; labelalpha=\"0\"; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/sort-order.t + t/tdata/sort-order.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "sort-order.bcf"]
+outputs = ["sort-order.bbl"]
+tags = ["suite:ported", "t:sort-order"]

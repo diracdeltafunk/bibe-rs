@@ -1,0 +1,6 @@
+description = "biblatex example 51-style-authoryear-ibid.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/51-style-authoryear-ibid.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "51-style-authoryear-ibid.bcf"]
+outputs = ["51-style-authoryear-ibid.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:authoryear-ibid"]

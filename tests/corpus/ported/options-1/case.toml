@@ -1,0 +1,5 @@
+description = "biber t/options.t, configuration 1 (prepare() at line 46): labeldatespec=[{\"content\": \"date\", \"type\": \"field\"}]; sortlocale=en_GB.UTF-8; xsvsep=\\s*\\|\\s*"
+source = "vendor/biber/t/options.t + t/tdata/options.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--xsvsep=\\s*\\|\\s*", "options.bcf"]
+outputs = ["options.bbl"]
+tags = ["suite:ported", "t:options"]

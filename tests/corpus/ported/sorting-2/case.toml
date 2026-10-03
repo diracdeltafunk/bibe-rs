@@ -1,0 +1,5 @@
+description = "biber t/sorting.t, configuration 2 (prepare() at line 168): useprefix=\"1\"; sortingnamekeytemplate={\"global\": {\"template\": [[{\"type\": \"name; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/sorting.t + t/tdata/general.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--sortdebug", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:ported", "t:sorting"]

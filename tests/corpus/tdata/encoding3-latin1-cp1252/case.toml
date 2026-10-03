@@ -1,0 +1,5 @@
+description = "latin1 .bib -> CP1252 .bbl (t/encoding.t)"
+source = "vendor/biber/t/tdata/encoding3.bcf"
+args = ["--noconf", "--input-encoding=latin1", "--output-encoding=cp1252", "encoding3.bcf"]
+outputs = ["encoding3.bbl"]
+tags = ["suite:tdata", "feature:encoding", "deferred:DC-034"]

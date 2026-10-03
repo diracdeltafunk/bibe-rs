@@ -1,0 +1,5 @@
+description = "biber t/tdata/extratitle.bcf (used by t/extratitle.t)"
+source = "vendor/biber/t/tdata/extratitle.bcf"
+args = ["--noconf", "extratitle.bcf"]
+outputs = ["extratitle.bbl"]
+tags = ["suite:tdata"]

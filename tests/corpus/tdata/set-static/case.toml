@@ -1,0 +1,5 @@
+description = "biber t/tdata/set-static.bcf (used by t/set-static.t)"
+source = "vendor/biber/t/tdata/set-static.bcf"
+args = ["--noconf", "set-static.bcf"]
+outputs = ["set-static.bbl"]
+tags = ["suite:tdata"]

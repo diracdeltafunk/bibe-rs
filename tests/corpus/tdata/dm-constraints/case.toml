@@ -1,0 +1,5 @@
+description = "biber t/tdata/dm-constraints.bcf (used by t/dm-constraints.t)"
+source = "vendor/biber/t/tdata/dm-constraints.bcf"
+args = ["--noconf", "dm-constraints.bcf"]
+outputs = ["dm-constraints.bbl"]
+tags = ["suite:tdata"]

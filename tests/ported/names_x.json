@@ -1,0 +1,1642 @@
+{
+ "source": "vendor/biber/t/names_x.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "names_x.t",
+   "line": 192,
+   "tests": [
+    1
+   ],
+   "name": "parsename_x 1",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=John,family=Doe', 'author'), $name1, 'parsename_x 1');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=John,family=Doe",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "D"
+     ],
+     "string": "Doe"
+    },
+    "given": {
+     "initial": [
+      "J"
+     ],
+     "string": "John"
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5aFVFcoFwe",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "D"
+       ],
+       "string": "Doe"
+      },
+      "given": {
+       "initial": [
+        "J"
+       ],
+       "string": "John"
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "JohnDoe"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 193,
+   "tests": [
+    2
+   ],
+   "name": "parsename_x 2",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'family=Doe, suffix=Jr, given=John, given-i=J', 'author'), $name2, 'parsename_x 2');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "family=Doe, suffix=Jr, given=John, given-i=J",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "D"
+     ],
+     "string": "Doe"
+    },
+    "given": {
+     "initial": [
+      "J"
+     ],
+     "string": "John"
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": [
+      "J"
+     ],
+     "string": "Jr"
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5b7FJ7G438",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "D"
+       ],
+       "string": "Doe"
+      },
+      "given": {
+       "initial": [
+        "J"
+       ],
+       "string": "John"
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": [
+        "J"
+       ],
+       "string": "Jr"
+      }
+     },
+     "rawstring": "JohnDoeJr"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 194,
+   "tests": [
+    3
+   ],
+   "name": "parsename_x 3",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'prefix=von, family=Berlichingen zu Hornberg, given=Johann Gottfried', 'author'), $name3, 'parsename_x 3') ;",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "prefix=von, family=Berlichingen zu Hornberg, given=Johann Gottfried",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "B",
+      "z",
+      "H"
+     ],
+     "string": "Berlichingen zu~Hornberg"
+    },
+    "given": {
+     "initial": [
+      "J",
+      "G"
+     ],
+     "string": "Johann~Gottfried"
+    },
+    "prefix": {
+     "initial": [
+      "v"
+     ],
+     "string": "von"
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5bvDDv8RxM",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "B",
+        "z",
+        "H"
+       ],
+       "string": "Berlichingen zu~Hornberg"
+      },
+      "given": {
+       "initial": [
+        "J",
+        "G"
+       ],
+       "string": "Johann~Gottfried"
+      },
+      "prefix": {
+       "initial": [
+        "v"
+       ],
+       "string": "von"
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "vonJohann~GottfriedBerlichingen zu~Hornberg"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 195,
+   "tests": [
+    4
+   ],
+   "name": "parsename_x 4",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'prefix=von, family=Berlichingen zu Hornberg, given=Johann Gottfried', 'author'), $name4, 'parsename_x 4') ;",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "prefix=von, family=Berlichingen zu Hornberg, given=Johann Gottfried",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "B",
+      "z",
+      "H"
+     ],
+     "string": "Berlichingen zu~Hornberg"
+    },
+    "given": {
+     "initial": [
+      "J",
+      "G"
+     ],
+     "string": "Johann~Gottfried"
+    },
+    "prefix": {
+     "initial": [
+      "v"
+     ],
+     "string": "von"
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5bY3X8hFS2",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "B",
+        "z",
+        "H"
+       ],
+       "string": "Berlichingen zu~Hornberg"
+      },
+      "given": {
+       "initial": [
+        "J",
+        "G"
+       ],
+       "string": "Johann~Gottfried"
+      },
+      "prefix": {
+       "initial": [
+        "v"
+       ],
+       "string": "von"
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Berlichingen zu~HornbergvonJohann~Gottfried"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 196,
+   "tests": [
+    5
+   ],
+   "name": "parsename_x 5",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'\"family={Robert and Sons, Inc.}\"', 'author'), $name5, 'parsename_x 5') ;",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "\"family={Robert and Sons, Inc.}\"",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "R"
+     ],
+     "string": "Robert and Sons, Inc."
+    },
+    "given": {
+     "initial": null,
+     "string": null
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5cmjt3wyWK",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "R"
+       ],
+       "string": "Robert and Sons, Inc."
+      },
+      "given": {
+       "initial": null,
+       "string": null
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Robert and Sons, Inc."
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 197,
+   "tests": [
+    6
+   ],
+   "name": "parsename_x 6",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'family=al-Ṣāliḥ, given=ʿAbdallāh', 'author'), $name6, 'parsename_x 6') ;",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "family=al-Ṣāliḥ, given=ʿAbdallāh",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "Ṣ"
+     ],
+     "string": "al-Ṣāliḥ"
+    },
+    "given": {
+     "initial": [
+      "A"
+     ],
+     "string": "ʿAbdallāh"
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5cIwdRbcDo",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "Ṣ"
+       ],
+       "string": "al-Ṣāliḥ"
+      },
+      "given": {
+       "initial": [
+        "A"
+       ],
+       "string": "ʿAbdallāh"
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "al-ṢāliḥʿAbdallāh"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 198,
+   "tests": [
+    7
+   ],
+   "name": "parsename_x 7",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=Jean Charles Gabriel, prefix=de la, family=Vallée Poussin', 'author'), $name7, 'parsename_x 7');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=Jean Charles Gabriel, prefix=de la, family=Vallée Poussin",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "V",
+      "P"
+     ],
+     "string": "Vallée~Poussin"
+    },
+    "given": {
+     "initial": [
+      "J",
+      "C",
+      "G"
+     ],
+     "string": "Jean Charles~Gabriel"
+    },
+    "prefix": {
+     "initial": [
+      "d",
+      "l"
+     ],
+     "string": "de~la"
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5d6n5CkLuO",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "V",
+        "P"
+       ],
+       "string": "Vallée~Poussin"
+      },
+      "given": {
+       "initial": [
+        "J",
+        "C",
+        "G"
+       ],
+       "string": "Jean Charles~Gabriel"
+      },
+      "prefix": {
+       "initial": [
+        "d",
+        "l"
+       ],
+       "string": "de~la"
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Vallée~Poussinde~laJean Charles~Gabriel"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 199,
+   "tests": [
+    8
+   ],
+   "name": "parsename_x 8",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given={Jean Charles Gabriel}, prefix=de la, family=Vallée Poussin', 'author'), $name8, 'parsename_x 8');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given={Jean Charles Gabriel}, prefix=de la, family=Vallée Poussin",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "V",
+      "P"
+     ],
+     "string": "Vallée~Poussin"
+    },
+    "given": {
+     "initial": [
+      "J"
+     ],
+     "string": "Jean Charles Gabriel"
+    },
+    "prefix": {
+     "initial": [
+      "d",
+      "l"
+     ],
+     "string": "de~la"
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5duHT0j52W",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "V",
+        "P"
+       ],
+       "string": "Vallée~Poussin"
+      },
+      "given": {
+       "initial": [
+        "J"
+       ],
+       "string": "Jean Charles Gabriel"
+      },
+      "prefix": {
+       "initial": [
+        "d",
+        "l"
+       ],
+       "string": "de~la"
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Vallée~Poussinde~laJean Charles Gabriel"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 200,
+   "tests": [
+    9
+   ],
+   "name": "parsename_x 9",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=Jean Charles Gabriel de la Vallée, given-i=JCGdV, family=Poussin', 'author'), $name9, 'parsename_x 9');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=Jean Charles Gabriel de la Vallée, given-i=JCGdV, family=Poussin",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "P"
+     ],
+     "string": "Poussin"
+    },
+    "given": {
+     "initial": [
+      "J",
+      "C",
+      "G",
+      "d",
+      "V"
+     ],
+     "string": "Jean Charles Gabriel de la~Vallée"
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5dROYKrBNo",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "P"
+       ],
+       "string": "Poussin"
+      },
+      "given": {
+       "initial": [
+        "J",
+        "C",
+        "G",
+        "d",
+        "V"
+       ],
+       "string": "Jean Charles Gabriel de la~Vallée"
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Jean Charles Gabriel de la~ValléePoussin"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 201,
+   "tests": [
+    10
+   ],
+   "name": "parsename_x 10",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=Jean Charles Gabriel, prefix=de la, family={Vallée Poussin}', 'author'), $name10, 'parsename_x 10');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=Jean Charles Gabriel, prefix=de la, family={Vallée Poussin}",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "V"
+     ],
+     "string": "Vallée Poussin"
+    },
+    "given": {
+     "initial": [
+      "J",
+      "C",
+      "G"
+     ],
+     "string": "Jean Charles~Gabriel"
+    },
+    "prefix": {
+     "initial": [
+      "d",
+      "l"
+     ],
+     "string": "de~la"
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5efoeXP54K",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "V"
+       ],
+       "string": "Vallée Poussin"
+      },
+      "given": {
+       "initial": [
+        "J",
+        "C",
+        "G"
+       ],
+       "string": "Jean Charles~Gabriel"
+      },
+      "prefix": {
+       "initial": [
+        "d",
+        "l"
+       ],
+       "string": "de~la"
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Vallée Poussinde~laJean Charles~Gabriel"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 202,
+   "tests": [
+    11
+   ],
+   "name": "parsename_x 11",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given={Jean Charles Gabriel}, prefix=de la, family={Vallée Poussin}', 'author'), $name11, 'parsename_x 11');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given={Jean Charles Gabriel}, prefix=de la, family={Vallée Poussin}",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "V"
+     ],
+     "string": "Vallée Poussin"
+    },
+    "given": {
+     "initial": [
+      "J"
+     ],
+     "string": "Jean Charles Gabriel"
+    },
+    "prefix": {
+     "initial": [
+      "d",
+      "l"
+     ],
+     "string": "de~la"
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5eDkobI4pA",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "V"
+       ],
+       "string": "Vallée Poussin"
+      },
+      "given": {
+       "initial": [
+        "J"
+       ],
+       "string": "Jean Charles Gabriel"
+      },
+      "prefix": {
+       "initial": [
+        "d",
+        "l"
+       ],
+       "string": "de~la"
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Vallée PoussinJean Charles Gabrielde~la"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 203,
+   "tests": [
+    12
+   ],
+   "name": "parsename_x 12",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=Jean Charles Gabriel, family=Poussin', 'author'), $name12, 'parsename_x 12');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=Jean Charles Gabriel, family=Poussin",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "P"
+     ],
+     "string": "Poussin"
+    },
+    "given": {
+     "initial": [
+      "J",
+      "C",
+      "G"
+     ],
+     "string": "Jean Charles~Gabriel"
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5f5buJiHzI",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "P"
+       ],
+       "string": "Poussin"
+      },
+      "given": {
+       "initial": [
+        "J",
+        "C",
+        "G"
+       ],
+       "string": "Jean Charles~Gabriel"
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "PoussinJean Charles~Gabriel"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 204,
+   "tests": [
+    13
+   ],
+   "name": "parsename_x 13",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=Jean Charles, family={Poussin Lecoq}', 'author'), $name13, 'parsename_x 13');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=Jean Charles, family={Poussin Lecoq}",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "P"
+     ],
+     "string": "Poussin Lecoq"
+    },
+    "given": {
+     "initial": [
+      "J",
+      "C"
+     ],
+     "string": "Jean~Charles"
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5ftlJbOab0",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "P"
+       ],
+       "string": "Poussin Lecoq"
+      },
+      "given": {
+       "initial": [
+        "J",
+        "C"
+       ],
+       "string": "Jean~Charles"
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Poussin LecoqJean~Charles"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 205,
+   "tests": [
+    14
+   ],
+   "name": "parsename_x 14",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=J. C. G., prefix=de la, family=Vallée Poussin', 'author'), $name14, 'parsename_x 14');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=J. C. G., prefix=de la, family=Vallée Poussin",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "V",
+      "P"
+     ],
+     "string": "Vallée~Poussin"
+    },
+    "given": {
+     "initial": [
+      "J",
+      "C",
+      "G"
+     ],
+     "string": "J.~C.~G."
+    },
+    "prefix": {
+     "initial": [
+      "d",
+      "l"
+     ],
+     "string": "de~la"
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5fR7jueiz0",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "V",
+        "P"
+       ],
+       "string": "Vallée~Poussin"
+      },
+      "given": {
+       "initial": [
+        "J",
+        "C",
+        "G"
+       ],
+       "string": "J.~C.~G."
+      },
+      "prefix": {
+       "initial": [
+        "d",
+        "l"
+       ],
+       "string": "de~la"
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "J.~C.~G.de~laVallée~Poussin"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 206,
+   "tests": [
+    15
+   ],
+   "name": "parsename_x 15",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=E. S., family=El-Mallah', 'author'), $name15, 'parsename_x 15');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=E. S., family=El-Mallah",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "E-M"
+     ],
+     "string": "El-Mallah"
+    },
+    "given": {
+     "initial": [
+      "E",
+      "S"
+     ],
+     "string": "E.~S."
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5gfcgu0kGS",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "E-M"
+       ],
+       "string": "El-Mallah"
+      },
+      "given": {
+       "initial": [
+        "E",
+        "S"
+       ],
+       "string": "E.~S."
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "E.~S.El-Mallah"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 207,
+   "tests": [
+    16
+   ],
+   "name": "parsename_x 16",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'given=E. S., family=Kent-Boswell', 'author'), $name16, 'parsename_x 16');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "given=E. S., family=Kent-Boswell",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "K-B"
+     ],
+     "string": "Kent-Boswell"
+    },
+    "given": {
+     "initial": [
+      "E",
+      "S"
+     ],
+     "string": "E.~S."
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5gC8NiG0uu",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "K-B"
+       ],
+       "string": "Kent-Boswell"
+      },
+      "given": {
+       "initial": [
+        "E",
+        "S"
+       ],
+       "string": "E.~S."
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Kent-BoswellE.~S."
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 208,
+   "tests": [
+    17
+   ],
+   "name": "parsename_x 17",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'family=Other, given=A.~N.', 'author'), $name17, 'parsename_x 17');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "family=Other, given=A.~N.",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "O"
+     ],
+     "string": "Other"
+    },
+    "given": {
+     "initial": [
+      "A",
+      "N"
+     ],
+     "string": "A.~N."
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5gZhEcoloK",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "O"
+       ],
+       "string": "Other"
+      },
+      "given": {
+       "initial": [
+        "A",
+        "N"
+       ],
+       "string": "A.~N."
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "OtherA.~N."
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 209,
+   "tests": [
+    18
+   ],
+   "name": "parsename_x 18",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'family={British National Corpus}', 'author'), $name18, 'parsename_x 18');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "family={British National Corpus}",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "B"
+     ],
+     "string": "British National Corpus"
+    },
+    "given": {
+     "initial": null,
+     "string": null
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5hmfWaDPma",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "B"
+       ],
+       "string": "British National Corpus"
+      },
+      "given": {
+       "initial": null,
+       "string": null
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "British National Corpus"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 210,
+   "tests": [
+    19
+   ],
+   "name": "parsename_x 19",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'sortingnamekeytemplatename=test, family=Smith, given=Bill', 'author'), $name19, 'parsename_x 19');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "sortingnamekeytemplatename=test, family=Smith, given=Bill",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "S"
+     ],
+     "string": "Smith"
+    },
+    "given": {
+     "initial": [
+      "B"
+     ],
+     "string": "Bill"
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5hNge4UbM6",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "S"
+       ],
+       "string": "Smith"
+      },
+      "given": {
+       "initial": [
+        "B"
+       ],
+       "string": "Bill"
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "BillSmith",
+     "sortingnamekeytemplatename": "test"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 211,
+   "tests": [
+    20
+   ],
+   "name": "parsename_x 19a",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "eq_or_diff(Biber::Input::file::bibtex::parsename_x($section, 'sortingnamekeytemplatename=test, family=Smith, given=Bill', 'author')->{sortingnamekeytemplatename}, $name19snks, 'parsename_x 19a');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "sortingnamekeytemplatename=test, family=Smith, given=Bill",
+     "author"
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "test",
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5ib3zwU8jU",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "S"
+       ],
+       "string": "Smith"
+      },
+      "given": {
+       "initial": [
+        "B"
+       ],
+       "string": "Bill"
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "SmithBill",
+     "sortingnamekeytemplatename": "test"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  },
+  {
+   "test": "names_x.t",
+   "line": 212,
+   "tests": [
+    21
+   ],
+   "name": "parsename_x 20",
+   "target": "bibers-core::input::handlers::names (extended name format)",
+   "area": "parsename_x",
+   "source": "is_deeply(tparsename_x($section,'family=Doe, family-i={Do}', 'author'), $name20, 'parsename_x 20');",
+   "call": {
+    "sub": "Biber::Input::file::bibtex::parsename_x",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "0"
+     },
+     "family=Doe, family-i={Do}",
+     "author"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "family": {
+     "initial": [
+      "Do"
+     ],
+     "string": "Doe"
+    },
+    "given": {
+     "initial": null,
+     "string": null
+    },
+    "prefix": {
+     "initial": null,
+     "string": null
+    },
+    "suffix": {
+     "initial": null,
+     "string": null
+    }
+   },
+   "ret": {
+    "__obj": "Biber::Entry::Name",
+    "value": {
+     "id": "5ixUOSQnE6",
+     "nameparts": {
+      "family": {
+       "initial": [
+        "Do"
+       ],
+       "string": "Doe"
+      },
+      "given": {
+       "initial": null,
+       "string": null
+      },
+      "prefix": {
+       "initial": null,
+       "string": null
+      },
+      "suffix": {
+       "initial": null,
+       "string": null
+      }
+     },
+     "rawstring": "Doe"
+    }
+   },
+   "case": "tests/corpus/ported/names_x-1"
+  }
+ ]
+}

@@ -1,0 +1,184 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{e}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=8bc9bee9310eac3eeb1092b6c167833f}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Al},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{fullhash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{fullhashraw}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{bibnamehash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{authorbibnamehash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{authornamehash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{authorfullhash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{authorfullhashraw}{8bc9bee9310eac3eeb1092b6c167833f}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T5}
+      \field{year}{2000}
+    \endentry
+    \entry{f}{book}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \name{author}{1}{}{%
+        {{hash=8bc9bee9310eac3eeb1092b6c167833f}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Al},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{fullhash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{fullhashraw}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{bibnamehash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{authorbibnamehash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{authornamehash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{authorfullhash}{8bc9bee9310eac3eeb1092b6c167833f}
+      \strng{authorfullhashraw}{8bc9bee9310eac3eeb1092b6c167833f}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T6}
+      \field{year}{2001}
+    \endentry
+    \entry{c}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=961c4f67d58fd7905840dc42756cac23}{%
+           family={Jones},
+           familyi={J\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{fullhash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{fullhashraw}{961c4f67d58fd7905840dc42756cac23}
+      \strng{bibnamehash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{authorbibnamehash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{authornamehash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{authorfullhash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{authorfullhashraw}{961c4f67d58fd7905840dc42756cac23}
+      \field{extraname}{1}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T3}
+      \field{year}{2000}
+    \endentry
+    \entry{d}{book}{skipbib=true}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=961c4f67d58fd7905840dc42756cac23}{%
+           family={Jones},
+           familyi={J\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{fullhash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{fullhashraw}{961c4f67d58fd7905840dc42756cac23}
+      \strng{bibnamehash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{authorbibnamehash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{authornamehash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{authorfullhash}{961c4f67d58fd7905840dc42756cac23}
+      \strng{authorfullhashraw}{961c4f67d58fd7905840dc42756cac23}
+      \field{extraname}{2}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T4}
+      \field{year}{2001}
+    \endentry
+    \entry{a}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5d0ddda3a367ceb26fbaeca02e391c22}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{bibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorbibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authornamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \field{extraname}{1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T1}
+      \field{year}{2000}
+    \endentry
+    \entry{b}{book}{skipbib=true}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5d0ddda3a367ceb26fbaeca02e391c22}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{bibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorbibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authornamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \field{extraname}{2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T2}
+      \field{year}{2001}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

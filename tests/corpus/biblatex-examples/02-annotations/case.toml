@@ -1,0 +1,6 @@
+description = "biblatex example 02-annotations.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/02-annotations.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "02-annotations.bcf"]
+outputs = ["02-annotations.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:reading"]

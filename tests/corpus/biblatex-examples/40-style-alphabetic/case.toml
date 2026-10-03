@@ -1,0 +1,6 @@
+description = "biblatex example 40-style-alphabetic.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/40-style-alphabetic.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "40-style-alphabetic.bcf"]
+outputs = ["40-style-alphabetic.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:alphabetic"]

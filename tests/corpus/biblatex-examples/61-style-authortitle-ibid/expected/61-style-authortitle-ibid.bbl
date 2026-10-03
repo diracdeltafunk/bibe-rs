@@ -1,0 +1,79 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{aristotle:rhetoric}{mvbook}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=798a01f212a8e620a6940400717a56d9}{%
+           family={Aristotle},
+           familyi={A\bibinitperiod}}}%
+      }
+      \name{commentator}{1}{}{%
+        {{hash=6d55011fda23ed5c05ae088f9f26766a}{%
+           family={Cope},
+           familyi={C\bibinitperiod},
+           given={Edward\bibnamedelima Meredith},
+           giveni={E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=6d55011fda23ed5c05ae088f9f26766a}{%
+           family={Cope},
+           familyi={C\bibinitperiod},
+           given={Edward\bibnamedelima Meredith},
+           giveni={E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{fullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{bibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorbibnamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authornamehash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhash}{798a01f212a8e620a6940400717a56d9}
+      \strng{authorfullhashraw}{798a01f212a8e620a6940400717a56d9}
+      \strng{commentatorbibnamehash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{commentatornamehash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{commentatorfullhash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{commentatorfullhashraw}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{editorbibnamehash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{editornamehash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{editorfullhash}{6d55011fda23ed5c05ae088f9f26766a}
+      \strng{editorfullhashraw}{6d55011fda23ed5c05ae088f9f26766a}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A commented edition. Note the concatenation of the \texttt{editor} and \texttt{commentator} fields as well as the \texttt{volumes}, \texttt{sorttitle}, and \texttt{indextitle} fields}
+      \field{indextitle}{Rhetoric of {Aristotle}, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=british}
+      \field{shorttitle}{Rhetoric}
+      \field{title}{The Rhetoric of {Aristotle} with a commentary by the late {Edward Meredith Cope}}
+      \field{volumes}{3}
+      \field{year}{1877}
+      \field{dateera}{ce}
+      \keyw{primary}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

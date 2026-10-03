@@ -1,0 +1,72 @@
+{
+ "source": "vendor/biber/t/maps.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "maps.t",
+   "line": 44,
+   "tests": [
+    2
+   ],
+   "name": "Maps test - 2",
+   "target": "bibers-core::input::sourcemap",
+   "area": "entry_exists",
+   "source": "ok(is_undef($bibentries->entry('maps2')), 'Maps test - 2' );",
+   "call": {
+    "sub": "Biber::Entries::entry",
+    "args": [
+     {
+      "__obj": "Biber::Entries"
+     },
+     "maps2"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Utils::is_undef",
+     "args": [
+      null
+     ]
+    }
+   ],
+   "assert": "ok+is_undef",
+   "expected": null,
+   "ret": null,
+   "case": "tests/corpus/ported/maps-1",
+   "note": "entry object exists internally but is not output"
+  },
+  {
+   "test": "maps.t",
+   "line": 48,
+   "tests": [
+    4
+   ],
+   "name": "Maps test - 4",
+   "target": "bibers-core::input::sourcemap",
+   "area": "entry_exists",
+   "source": "ok(is_undef($bibentries->entry('maps4')), 'Maps test - 4' );",
+   "call": {
+    "sub": "Biber::Entries::entry",
+    "args": [
+     {
+      "__obj": "Biber::Entries"
+     },
+     "maps4"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Utils::is_undef",
+     "args": [
+      null
+     ]
+    }
+   ],
+   "assert": "ok+is_undef",
+   "expected": null,
+   "ret": null,
+   "case": "tests/corpus/ported/maps-1",
+   "note": "entry object exists internally but is not output"
+  }
+ ]
+}

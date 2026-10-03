@@ -1,0 +1,5 @@
+description = "biber t/sort-names.t, configuration 1 (prepare() at line 36): sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/sort-names.t + t/tdata/sort-names.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "sort-names.bcf"]
+outputs = ["sort-names.bbl"]
+tags = ["suite:ported", "t:sort-names"]

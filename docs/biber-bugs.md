@@ -81,6 +81,7 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-052 | C | Biber.pm:613-640 | If biber.conf has user sourcemaps and the `.bcf` `<sourcemap>` has no driver/style maps, the biber.conf maps are silently dropped. | 02-B13 |
 | BB-053 | C | Config.pm:153-158 | `%CONFIG_DEFAULT_BIBLATEX` is applied *after* the user config file, overwriting biber.conf values (maxbibnames, maxsortnames, useprefix, …). Visible in tool mode. | 02-B17 |
 | BB-054 | C | Biber.pm:1032-1044 vs DataLists.pm `get_list` | Datalist de-duplication calls a positional sub with named args, so it never matches and duplicate `<bcf:datalist>`s are emitted twice. Latent: biblatex de-dups first. | 02-B12 |
+| BB-114 | C | Output/biblatexml.pm:622 (`output` iterates `$section->get_citekeys`) vs Output/bibtex.pm:460-468 | In tool mode the biblatexml writer emits entries in citekey (input) order and ignores the `tool` sorting template, which the bibtex writer applies (the manual says tool-mode output is sorted by the `tool` scheme). t/tool-bltxml.t asserts the sorted list order (`get_keys`), which never reaches the file. Repro: in a copy of `t/tdata`, `biber --tool --configfile=tool-testsort.conf --output-format=biblatexml tool.bib` writes `i3Š, xd1, macmillan, …` (file order) while `--output-format=bibtex` writes `b1, macmillan, dt1, …` (sorted). Corpus: `tests/corpus/ported/tool-bltxml-1` vs `tool-1`. | port-tests |
 
 ### 3a. The truthiness of `"0"` (one family, several sites)
 
@@ -105,6 +106,7 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-064 | R | dot.pm:266 | `sort values %$v` sorts hashrefs by memory address, so `.dot` edge order can vary. | 05-B17 |
 | BB-065 | C | (logging) | Warning order in `.blg`/stdout differs between identical runs (observed with `-V`). Minor, but it defeats log diffing. | 02 §6 |
 | BB-112 | V | Biber.pm:1450 (`resolve_xdata` over `values %$self`, Entries.pm:68); Entry.pm:913 | With circular XDATA references, the fatal error names a random cycle, and the number of warnings before the exit varies. Repro: in a copy of `t/tdata`, run `biber --noconf xdata.bcf` repeatedly. The ERROR alternates between `'loop'<->'loop:3'` and `'lxd1:loop'<->'lxd2:loop'` (2 vs 6 times in 8 runs). | O3 build |
+| BB-113 | C | Utils.pm:1781-1784 (`maploopreplace`: `suniqid`) | `$MAPUNIQ` is generated with `Data::Uniqid::suniqid`, i.e. from the wall-clock time, so a sourcemap that keys new entries with it (`\step[entrynew=\regexp{$MAPUNIQ}]`, as biblatex's own example `95-customlists.tex` does) gives a different `.bbl` on **every** run: the entry keys change, and so does the order of entries whose sort keys tie. Documented as "random", but it defeats reproducible builds and latexmk's "did the .bbl change" check (each run looks like a change). Repro: run `biber --noconf 95-customlists.bcf` twice on the example's `.bcf` (6 runs gave 6 md5s). | corpus generation |
 
 ## 5. CLI, config and logging issues
 

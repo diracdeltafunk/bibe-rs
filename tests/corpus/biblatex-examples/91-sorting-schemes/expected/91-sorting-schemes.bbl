@@ -1,0 +1,439 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{angenendt}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9717d2d959a4b18727868ca7928c34b4}{%
+           family={Angenendt},
+           familyi={A\bibinitperiod},
+           given={Arnold},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{fullhash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{fullhashraw}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{bibnamehash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{authorbibnamehash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{authornamehash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{authorfullhash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{authorfullhashraw}{9717d2d959a4b18727868ca7928c34b4}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A German article in a French journal. Apart from that, a typical \texttt{article} entry. Note the \texttt{indextitle} field}
+      \field{indextitle}{In Honore Salvatoris}
+      \field{journaltitle}{Revue d'Histoire Ecclésiastique}
+      \field{langid}{german}
+      \field{shorttitle}{In Honore Salvatoris}
+      \field{title}{In Honore Salvatoris~-- Vom Sinn und Unsinn der Patrozinienkunde}
+      \field{volume}{97}
+      \field{year}{2002}
+      \field{dateera}{ce}
+      \field{pages}{431\bibrangedash 456\bibrangessep 791\bibrangedash 823}
+      \range{pages}{59}
+    \endentry
+    \entry{cicero}{book}{}{}
+      \name{afterword}{1}{}{%
+        {{hash=cae8b8542e653c49edf36eb27467d953}{%
+           family={Thraede},
+           familyi={T\bibinitperiod},
+           given={Klaus},
+           giveni={K\bibinitperiod}}}%
+      }
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5300f28847a596397d754d714b49c0de}{%
+           family={Cicero},
+           familyi={C\bibinitperiod},
+           given={Marcus\bibnamedelima Tullius},
+           giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=9f06c8d5931eb50eba66c87ef1600402}{%
+           family={Blank-Sangmeister},
+           familyi={B\bibinithyphendelim S\bibinitperiod},
+           given={Ursula},
+           giveni={U\bibinitperiod}}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=9f06c8d5931eb50eba66c87ef1600402}{%
+           family={Blank-Sangmeister},
+           familyi={B\bibinithyphendelim S\bibinitperiod},
+           given={Ursula},
+           giveni={U\bibinitperiod}}}%
+      }
+      \list{language}{2}{%
+        {langlatin}%
+        {langgerman}%
+      }
+      \list{location}{1}{%
+        {Stuttgart}%
+      }
+      \list{publisher}{1}{%
+        {Reclam}%
+      }
+      \strng{namehash}{5300f28847a596397d754d714b49c0de}
+      \strng{fullhash}{5300f28847a596397d754d714b49c0de}
+      \strng{fullhashraw}{5300f28847a596397d754d714b49c0de}
+      \strng{bibnamehash}{5300f28847a596397d754d714b49c0de}
+      \strng{afterwordbibnamehash}{cae8b8542e653c49edf36eb27467d953}
+      \strng{afterwordnamehash}{cae8b8542e653c49edf36eb27467d953}
+      \strng{afterwordfullhash}{cae8b8542e653c49edf36eb27467d953}
+      \strng{afterwordfullhashraw}{cae8b8542e653c49edf36eb27467d953}
+      \strng{authorbibnamehash}{5300f28847a596397d754d714b49c0de}
+      \strng{authornamehash}{5300f28847a596397d754d714b49c0de}
+      \strng{authorfullhash}{5300f28847a596397d754d714b49c0de}
+      \strng{authorfullhashraw}{5300f28847a596397d754d714b49c0de}
+      \strng{editorbibnamehash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{editornamehash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{editorfullhash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{editorfullhashraw}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{translatorbibnamehash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{translatornamehash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{translatorfullhash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{translatorfullhashraw}{9f06c8d5931eb50eba66c87ef1600402}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A bilingual edition of Cicero's \emph{De natura deorum}, with a German translation. Note the format of the \texttt{language} field in the database file, the concatenation of the \texttt{editor} and \texttt{translator} fields, and the \texttt{afterword} field}
+      \field{indextitle}{De natura deorum}
+      \field{langid}{german}
+      \field{shorttitle}{De natura deorum}
+      \field{title}{De natura deorum. Über das Wesen der Götter}
+      \field{year}{1995}
+      \field{dateera}{ce}
+    \endentry
+    \entry{companion}{book}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=0743efb276e9219ee664a9b3dbd60619}{%
+           family={Goossens},
+           familyi={G\bibinitperiod},
+           given={Michel},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9355edd511e3f6fdd880ee98722a53fb}{%
+           family={Mittelbach},
+           familyi={M\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e341c89f7bb5be4f5a050618c0b63942}{%
+           family={Samarin},
+           familyi={S\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{bibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorbibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authornamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A book with three authors. Note the formatting of the author list. By default, only the first name is reversed in the bibliography}
+      \field{edition}{1}
+      \field{indextitle}{LaTeX Companion, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{pagetotal}{528}
+      \field{shorttitle}{LaTeX Companion}
+      \field{title}{The {LaTeX} Companion}
+      \field{year}{1994}
+      \field{dateera}{ce}
+    \endentry
+    \entry{wassenberg}{online}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=00ec2d6f96e977422cec21a17ee67242}{%
+           family={Wassenberg},
+           familyi={W\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=be6c7f12620ef1a8d1d85d96d476a158}{%
+           family={Sanders},
+           familyi={S\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{fullhash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{fullhashraw}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{bibnamehash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{authorbibnamehash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{authornamehash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{authorfullhash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{authorfullhashraw}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Sorting algorithms are the deciding factor for the performance of common operations such as removal of duplicates or database sort-merge joins. This work focuses on 32-bit integer keys, optionally paired with a 32-bit value. We present a fast radix sorting algorithm that builds upon a microarchitecture-aware variant of counting sort}
+      \field{annotation}{A recent \texttt{online} reference from arXiv using the new (April 2007 onward) identifier format. Note the \texttt{eprint}, \texttt{eprinttype}, and \texttt{eprintclass} fields. Also note that the arXiv reference is transformed into a clickable link if \texttt{hyperref} support has been enabled}
+      \field{day}{17}
+      \field{eprintclass}{cs.DS}
+      \field{eprinttype}{arxiv}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{month}{8}
+      \field{title}{Faster Radix Sort via Virtual Memory and Write-Combining}
+      \field{version}{1}
+      \field{year}{2010}
+      \field{dateera}{ce}
+      \verb{eprint}
+      \verb 1008.2849v1
+      \endverb
+    \endentry
+  \enddatalist
+  \datalist[entry]{ynt/global//global/global/global}
+    \entry{companion}{book}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=0743efb276e9219ee664a9b3dbd60619}{%
+           family={Goossens},
+           familyi={G\bibinitperiod},
+           given={Michel},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9355edd511e3f6fdd880ee98722a53fb}{%
+           family={Mittelbach},
+           familyi={M\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e341c89f7bb5be4f5a050618c0b63942}{%
+           family={Samarin},
+           familyi={S\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{fullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{bibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorbibnamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authornamehash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhash}{369a4e878eb8157d94588ee72e0b486b}
+      \strng{authorfullhashraw}{369a4e878eb8157d94588ee72e0b486b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A book with three authors. Note the formatting of the author list. By default, only the first name is reversed in the bibliography}
+      \field{edition}{1}
+      \field{indextitle}{LaTeX Companion, The}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{pagetotal}{528}
+      \field{shorttitle}{LaTeX Companion}
+      \field{title}{The {LaTeX} Companion}
+      \field{year}{1994}
+      \field{dateera}{ce}
+    \endentry
+    \entry{cicero}{book}{}{}
+      \name{afterword}{1}{}{%
+        {{hash=cae8b8542e653c49edf36eb27467d953}{%
+           family={Thraede},
+           familyi={T\bibinitperiod},
+           given={Klaus},
+           giveni={K\bibinitperiod}}}%
+      }
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5300f28847a596397d754d714b49c0de}{%
+           family={Cicero},
+           familyi={C\bibinitperiod},
+           given={Marcus\bibnamedelima Tullius},
+           giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=9f06c8d5931eb50eba66c87ef1600402}{%
+           family={Blank-Sangmeister},
+           familyi={B\bibinithyphendelim S\bibinitperiod},
+           given={Ursula},
+           giveni={U\bibinitperiod}}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=9f06c8d5931eb50eba66c87ef1600402}{%
+           family={Blank-Sangmeister},
+           familyi={B\bibinithyphendelim S\bibinitperiod},
+           given={Ursula},
+           giveni={U\bibinitperiod}}}%
+      }
+      \list{language}{2}{%
+        {langlatin}%
+        {langgerman}%
+      }
+      \list{location}{1}{%
+        {Stuttgart}%
+      }
+      \list{publisher}{1}{%
+        {Reclam}%
+      }
+      \strng{namehash}{5300f28847a596397d754d714b49c0de}
+      \strng{fullhash}{5300f28847a596397d754d714b49c0de}
+      \strng{fullhashraw}{5300f28847a596397d754d714b49c0de}
+      \strng{bibnamehash}{5300f28847a596397d754d714b49c0de}
+      \strng{afterwordbibnamehash}{cae8b8542e653c49edf36eb27467d953}
+      \strng{afterwordnamehash}{cae8b8542e653c49edf36eb27467d953}
+      \strng{afterwordfullhash}{cae8b8542e653c49edf36eb27467d953}
+      \strng{afterwordfullhashraw}{cae8b8542e653c49edf36eb27467d953}
+      \strng{authorbibnamehash}{5300f28847a596397d754d714b49c0de}
+      \strng{authornamehash}{5300f28847a596397d754d714b49c0de}
+      \strng{authorfullhash}{5300f28847a596397d754d714b49c0de}
+      \strng{authorfullhashraw}{5300f28847a596397d754d714b49c0de}
+      \strng{editorbibnamehash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{editornamehash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{editorfullhash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{editorfullhashraw}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{translatorbibnamehash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{translatornamehash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{translatorfullhash}{9f06c8d5931eb50eba66c87ef1600402}
+      \strng{translatorfullhashraw}{9f06c8d5931eb50eba66c87ef1600402}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A bilingual edition of Cicero's \emph{De natura deorum}, with a German translation. Note the format of the \texttt{language} field in the database file, the concatenation of the \texttt{editor} and \texttt{translator} fields, and the \texttt{afterword} field}
+      \field{indextitle}{De natura deorum}
+      \field{langid}{german}
+      \field{shorttitle}{De natura deorum}
+      \field{title}{De natura deorum. Über das Wesen der Götter}
+      \field{year}{1995}
+      \field{dateera}{ce}
+    \endentry
+    \entry{angenendt}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9717d2d959a4b18727868ca7928c34b4}{%
+           family={Angenendt},
+           familyi={A\bibinitperiod},
+           given={Arnold},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{fullhash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{fullhashraw}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{bibnamehash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{authorbibnamehash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{authornamehash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{authorfullhash}{9717d2d959a4b18727868ca7928c34b4}
+      \strng{authorfullhashraw}{9717d2d959a4b18727868ca7928c34b4}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{annotation}{A German article in a French journal. Apart from that, a typical \texttt{article} entry. Note the \texttt{indextitle} field}
+      \field{indextitle}{In Honore Salvatoris}
+      \field{journaltitle}{Revue d'Histoire Ecclésiastique}
+      \field{langid}{german}
+      \field{shorttitle}{In Honore Salvatoris}
+      \field{title}{In Honore Salvatoris~-- Vom Sinn und Unsinn der Patrozinienkunde}
+      \field{volume}{97}
+      \field{year}{2002}
+      \field{dateera}{ce}
+      \field{pages}{431\bibrangedash 456\bibrangessep 791\bibrangedash 823}
+      \range{pages}{59}
+    \endentry
+    \entry{wassenberg}{online}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=00ec2d6f96e977422cec21a17ee67242}{%
+           family={Wassenberg},
+           familyi={W\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=be6c7f12620ef1a8d1d85d96d476a158}{%
+           family={Sanders},
+           familyi={S\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{fullhash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{fullhashraw}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{bibnamehash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{authorbibnamehash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{authornamehash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{authorfullhash}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \strng{authorfullhashraw}{b8e9b50053ae4672e9d4ff841341a8b7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Sorting algorithms are the deciding factor for the performance of common operations such as removal of duplicates or database sort-merge joins. This work focuses on 32-bit integer keys, optionally paired with a 32-bit value. We present a fast radix sorting algorithm that builds upon a microarchitecture-aware variant of counting sort}
+      \field{annotation}{A recent \texttt{online} reference from arXiv using the new (April 2007 onward) identifier format. Note the \texttt{eprint}, \texttt{eprinttype}, and \texttt{eprintclass} fields. Also note that the arXiv reference is transformed into a clickable link if \texttt{hyperref} support has been enabled}
+      \field{day}{17}
+      \field{eprintclass}{cs.DS}
+      \field{eprinttype}{arxiv}
+      \field{langid}{english}
+      \field{langidopts}{variant=american}
+      \field{month}{8}
+      \field{title}{Faster Radix Sort via Virtual Memory and Write-Combining}
+      \field{version}{1}
+      \field{year}{2010}
+      \field{dateera}{ce}
+      \verb{eprint}
+      \verb 1008.2849v1
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

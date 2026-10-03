@@ -1,0 +1,5 @@
+description = "biber t/labelalpha.t, configuration 1 (prepare() at line 48): maxalphanames=\"1\"; maxcitenames=\"1\"; labeldateparts=\"0\"; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/labelalpha.t + t/tdata/labelalpha.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--sortdebug", "labelalpha.bcf"]
+outputs = ["labelalpha.bbl"]
+tags = ["suite:ported", "t:labelalpha"]

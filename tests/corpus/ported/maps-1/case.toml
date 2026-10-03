@@ -1,0 +1,5 @@
+description = "biber t/maps.t, configuration 1 (prepare() at line 36)"
+source = "vendor/biber/t/maps.t + t/tdata/maps.bcf (traced by tools/port-tests)"
+args = ["--noconf", "maps.bcf"]
+outputs = ["maps.bbl"]
+tags = ["suite:ported", "t:maps"]

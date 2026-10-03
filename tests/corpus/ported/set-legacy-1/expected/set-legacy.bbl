@@ -1,0 +1,178 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Elias1955}{set}{}{}
+      \set{Elias1955a,Elias1955b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+    \endentry
+    \entry{Elias1955a}{article}{skipbib=true,skipbiblist=true,skiplab=true,uniquelist=false,uniquename=false}{}
+      \inset{Elias1955}
+      \name{author}{1}{}{%
+        {{hash=68f587f427e068e26043d54745351d58}{%
+           family={Elias},
+           familyi={E\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{68f587f427e068e26043d54745351d58}
+      \strng{fullhash}{68f587f427e068e26043d54745351d58}
+      \strng{fullhashraw}{68f587f427e068e26043d54745351d58}
+      \strng{bibnamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authorbibnamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authornamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authorfullhash}{68f587f427e068e26043d54745351d58}
+      \strng{authorfullhashraw}{68f587f427e068e26043d54745351d58}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0096-1000}
+      \field{journaltitle}{IRE Transactions on Information Theory}
+      \field{month}{3}
+      \field{number}{1}
+      \field{title}{Predictive coding--I}
+      \field{volume}{1}
+      \field{year}{1955}
+      \field{pages}{16\bibrangedash 24}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1109/TIT.1955.1055126
+      \endverb
+      \warn{\item Field 'entryset' is no longer needed in set member entries in Biber - ignoring in entry 'Elias1955a'}
+    \endentry
+    \entry{Elias1955b}{article}{skipbib=true,skipbiblist=true,skiplab=true,uniquelist=false,uniquename=false}{}
+      \inset{Elias1955}
+      \name{author}{1}{}{%
+        {{hash=68f587f427e068e26043d54745351d58}{%
+           family={Elias},
+           familyi={E\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{68f587f427e068e26043d54745351d58}
+      \strng{fullhash}{68f587f427e068e26043d54745351d58}
+      \strng{fullhashraw}{68f587f427e068e26043d54745351d58}
+      \strng{bibnamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authorbibnamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authornamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authorfullhash}{68f587f427e068e26043d54745351d58}
+      \strng{authorfullhashraw}{68f587f427e068e26043d54745351d58}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0096-1000}
+      \field{journaltitle}{IRE Transactions on Information Theory}
+      \field{month}{3}
+      \field{number}{1}
+      \field{title}{Predictive coding--II}
+      \field{volume}{1}
+      \field{year}{1955}
+      \field{pages}{24\bibrangedash 33}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/TIT.1955.1055116
+      \endverb
+      \warn{\item Field 'entryset' is no longer needed in set member entries in Biber - ignoring in entry 'Elias1955b'}
+    \endentry
+  \enddatalist
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{Elias1955}{set}{}{}
+      \set{Elias1955a,Elias1955b}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+    \endentry
+    \entry{Elias1955a}{article}{skipbib=true,skipbiblist=true,skiplab=true,uniquelist=false,uniquename=false}{}
+      \inset{Elias1955}
+      \name{author}{1}{}{%
+        {{hash=68f587f427e068e26043d54745351d58}{%
+           family={Elias},
+           familyi={E\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{68f587f427e068e26043d54745351d58}
+      \strng{fullhash}{68f587f427e068e26043d54745351d58}
+      \strng{fullhashraw}{68f587f427e068e26043d54745351d58}
+      \strng{bibnamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authorbibnamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authornamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authorfullhash}{68f587f427e068e26043d54745351d58}
+      \strng{authorfullhashraw}{68f587f427e068e26043d54745351d58}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0096-1000}
+      \field{journaltitle}{IRE Transactions on Information Theory}
+      \field{month}{3}
+      \field{number}{1}
+      \field{title}{Predictive coding--I}
+      \field{volume}{1}
+      \field{year}{1955}
+      \field{pages}{16\bibrangedash 24}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1109/TIT.1955.1055126
+      \endverb
+      \warn{\item Field 'entryset' is no longer needed in set member entries in Biber - ignoring in entry 'Elias1955a'}
+    \endentry
+    \entry{Elias1955b}{article}{skipbib=true,skipbiblist=true,skiplab=true,uniquelist=false,uniquename=false}{}
+      \inset{Elias1955}
+      \name{author}{1}{}{%
+        {{hash=68f587f427e068e26043d54745351d58}{%
+           family={Elias},
+           familyi={E\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{68f587f427e068e26043d54745351d58}
+      \strng{fullhash}{68f587f427e068e26043d54745351d58}
+      \strng{fullhashraw}{68f587f427e068e26043d54745351d58}
+      \strng{bibnamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authorbibnamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authornamehash}{68f587f427e068e26043d54745351d58}
+      \strng{authorfullhash}{68f587f427e068e26043d54745351d58}
+      \strng{authorfullhashraw}{68f587f427e068e26043d54745351d58}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0096-1000}
+      \field{journaltitle}{IRE Transactions on Information Theory}
+      \field{month}{3}
+      \field{number}{1}
+      \field{title}{Predictive coding--II}
+      \field{volume}{1}
+      \field{year}{1955}
+      \field{pages}{24\bibrangedash 33}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/TIT.1955.1055116
+      \endverb
+      \warn{\item Field 'entryset' is no longer needed in set member entries in Biber - ignoring in entry 'Elias1955b'}
+    \endentry
+  \enddatalist
+  \keyalias{Elias1955aALIAS}{Elias1955a}
+\endrefsection
+\endinput
+

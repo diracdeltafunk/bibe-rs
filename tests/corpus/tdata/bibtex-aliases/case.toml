@@ -1,0 +1,5 @@
+description = "biber t/tdata/bibtex-aliases.bcf (used by t/bibtex-aliases.t)"
+source = "vendor/biber/t/tdata/bibtex-aliases.bcf"
+args = ["--noconf", "bibtex-aliases.bcf"]
+outputs = ["bibtex-aliases.bbl"]
+tags = ["suite:tdata"]

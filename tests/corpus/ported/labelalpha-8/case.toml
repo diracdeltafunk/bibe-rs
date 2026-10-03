@@ -1,0 +1,5 @@
+description = "biber t/labelalpha.t, configuration 8 (prepare() at line 295): maxalphanames=\"4\"; maxcitenames=\"4\"; labeldateparts=\"1\"; useprefix=\"1\"; minalphanames=\"4\"; mincitenames=\"4\"; labelalpha=\"1\"; labelalphatemplate={\"labelelement\": [{\"labelpart\": [{\"conte@unpublished; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/labelalpha.t + t/tdata/labelalpha.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--sortdebug", "labelalpha.bcf"]
+outputs = ["labelalpha.bbl"]
+tags = ["suite:ported", "t:labelalpha"]

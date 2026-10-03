@@ -1,0 +1,5 @@
+description = "biber t/crossrefs.t, configuration 1 (prepare() at line 50): sortlocale=en_GB.UTF-8; nodieonerror=1; datafieldset nobtitle (crossrefs.t:43)"
+source = "vendor/biber/t/crossrefs.t + t/tdata/crossrefs.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--nodieonerror", "crossrefs.bcf"]
+outputs = ["crossrefs.bbl"]
+tags = ["suite:ported", "t:crossrefs"]

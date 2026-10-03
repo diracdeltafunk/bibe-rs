@@ -1,0 +1,1 @@
+ERROR - Data file 'encoding4.bib' cannot be read in encoding 'utf8': Can't decode ill-formed UTF-8 octet sequence <AF> at <PERLSRC> line <N>.

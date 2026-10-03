@@ -11,3 +11,8 @@
 
 # macOS
 .DS_Store
+
+# Regenerable trace/replay output of tools/port-tests
+/tools/port-tests/out/
+# On-demand benchmark corpora (tools/corpus)
+/target/

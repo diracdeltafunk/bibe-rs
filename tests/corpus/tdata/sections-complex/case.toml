@@ -1,0 +1,5 @@
+description = "biber t/tdata/sections-complex.bcf (used by t/sections-complex.t)"
+source = "vendor/biber/t/tdata/sections-complex.bcf"
+args = ["--noconf", "sections-complex.bcf"]
+outputs = ["sections-complex.bbl"]
+tags = ["suite:tdata"]

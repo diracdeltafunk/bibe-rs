@@ -1,0 +1,5 @@
+description = "biber t/set-static.t, configuration 1 (prepare() at line 40): sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/set-static.t + t/tdata/set-static.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "set-static.bcf"]
+outputs = ["set-static.bbl"]
+tags = ["suite:ported", "t:set-static"]

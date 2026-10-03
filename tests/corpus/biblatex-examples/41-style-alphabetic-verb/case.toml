@@ -1,0 +1,6 @@
+description = "biblatex example 41-style-alphabetic-verb.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/41-style-alphabetic-verb.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "41-style-alphabetic-verb.bcf"]
+outputs = ["41-style-alphabetic-verb.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:alphabetic-verb"]

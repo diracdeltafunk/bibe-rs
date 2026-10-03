@@ -1,0 +1,5 @@
+description = "biber t/tdata/encoding3.bcf (used by t/encoding.t)"
+source = "vendor/biber/t/tdata/encoding3.bcf"
+args = ["--noconf", "encoding3.bcf"]
+outputs = ["encoding3.bbl"]
+tags = ["suite:tdata"]

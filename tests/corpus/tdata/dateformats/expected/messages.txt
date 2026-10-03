@@ -1,0 +1,14 @@
+WARN - Overwriting field 'month' with month value from field 'date' for entry 'L12'
+WARN - Overwriting field 'year' with year value from field 'date' for entry 'L11'
+WARN - article entry 'L1' (dateformats.bib): Invalid format '1.5.1998' of date field 'urldate' - ignoring
+WARN - article entry 'L1' (dateformats.bib): Invalid format '1985-1030' of date field 'origdate' - ignoring
+WARN - article entry 'y3' (dateformats.bib): Invalid format 'Y1700' of date field 'date' - ignoring
+WARN - book entry 'L2' (dateformats.bib): Invalid format '1995-1230' of date field 'origdate' - ignoring
+WARN - book entry 'L3' (dateformats.bib): Invalid format '1.5.1988' of date field 'urldate' - ignoring
+WARN - book entry 'L4' (dateformats.bib): Invalid format '1995-1-04' of date field 'date' - ignoring
+WARN - book entry 'L5' (dateformats.bib): Invalid format '1995-10-4' of date field 'date' - ignoring
+WARN - book entry 'L6' (dateformats.bib): Invalid format '1996-13-03' of date field 'date' - ignoring
+WARN - legacy month field 'january' in entry 'L8' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1985a' in entry 'L8' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1995--1996' in entry 'L1' is not an integer - this will probably not sort properly.
+WARN - proceedings entry 'L7' (dateformats.bib): Invalid format '1996-10-35' of date field 'eventdate' - ignoring

@@ -1,0 +1,1 @@
+ERROR - Data file 'test.bib' cannot be read in encoding 'ascii': ascii "\xC3" does not map to Unicode at <PERLSRC> line <N>.

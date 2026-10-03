@@ -1,0 +1,5 @@
+description = "biber t/labelalphaname.t, configuration 1 (prepare() at line 42): sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/labelalphaname.t + t/tdata/labelalphaname.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "labelalphaname.bcf"]
+outputs = ["labelalphaname.bbl"]
+tags = ["suite:ported", "t:labelalphaname"]

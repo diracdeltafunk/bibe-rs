@@ -1,0 +1,43 @@
+{
+ "source": "vendor/biber/t/labelname.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "labelname.t",
+   "line": 53,
+   "tests": [
+    2
+   ],
+   "name": "global author",
+   "target": "bibers-core::process::labels",
+   "area": "labelname_info",
+   "source": "eq_or_diff($bibentries->entry('stdmodel')->get_labelname_info, 'author', 'global author' );",
+   "call": {
+    "sub": "Biber::Entry::get_labelname_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "stdmodel"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "stdmodel"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "author",
+   "ret": "author",
+   "case": "tests/corpus/ported/labelname-1",
+   "entry": "stdmodel",
+   "note": "no labelnamesource in output"
+  }
+ ]
+}

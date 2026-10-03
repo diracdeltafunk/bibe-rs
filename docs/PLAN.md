@@ -249,7 +249,12 @@ Any bug found while porting (including in the harness, fuzzing and minimisation)
 
 Each milestone ends with a corpus subset that passes byte-for-byte. Work inside a milestone is split into small PRs, each gated by the golden tests it turns green.
 
-**M0: Infrastructure** (first)
+**M0: Infrastructure**: *done (2026-10-02).*
+- Harness: `crates/testkit`, `cargo xtask`. Corpus: 475 cases in 6 suites (`tdata` 60, `biblatex-examples` 51, `styles` 129, `bugs` 66, `scale` 1, `ported` 168). All 475 pass on O1. O3 reproduces all but the 2 CJK cases (BB-011).
+- biber's 1,275 tests: 948 covered by corpus cases (fidelity-checked), 322 extracted as unit vectors in `tests/ported/`, and 5 not portable.
+- Open harness items: hand-maintained expectations for DC cases (always-fixed bugs, nondeterminism BB-112/113); comparing normalised stderr for crash cases; suite-level shared inputs to shrink `ported/` (33 MB on disk, under 1 MB packed).
+
+Original M0 scope:
 - Cargo workspace, CI (fmt, clippy, test, fuzz smoke), `vendor/biber` as a pinned submodule.
 - O1 harness: run biber on a case and normalise outputs. `xtask golden` builds the corpus (`.bcf` generation via pdflatex, then O1 runs, twice for determinism).
 - O2 harness for collation keys. O3 environment, if approved.

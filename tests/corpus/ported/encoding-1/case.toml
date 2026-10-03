@@ -1,0 +1,5 @@
+description = "biber t/encoding.t, configuration 1 (prepare() at line 408): sortlocale=en_GB.UTF-8; output_encoding=UTF-8; input_encoding=latin9"
+source = "vendor/biber/t/encoding.t + t/tdata/encoding1.bcf (traced by tools/port-tests)"
+args = ["--noconf", "--sortlocale=en_GB.UTF-8", "--output-encoding=UTF-8", "--input-encoding=latin9", "encoding1.bcf"]
+outputs = ["encoding1.bbl"]
+tags = ["suite:ported", "t:encoding"]

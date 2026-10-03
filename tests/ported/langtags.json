@@ -1,0 +1,885 @@
+{
+ "source": "vendor/biber/t/langtags.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "langtags.t",
+   "line": 31,
+   "tests": [
+    1
+   ],
+   "name": "BCP47 - 1",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('de')->dump, {language => 'de'}, 'BCP47 - 1');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "de"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "de"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "de"
+   },
+   "ret": {
+    "language": "de"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 32,
+   "tests": [
+    2
+   ],
+   "name": "BCP47 - 2",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('i-enochian')->dump, { grandfathered => \"i-enochian\" }, 'BCP47 - 2');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "grandfathered": "i-enochian"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "i-enochian"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "grandfathered": "i-enochian"
+   },
+   "ret": {
+    "grandfathered": "i-enochian"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 33,
+   "tests": [
+    3
+   ],
+   "name": "BCP47 - 3",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('zh-Hant')->dump, { language => 'zh', script => 'Hant' }, 'BCP47 - 3');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "zh",
+       "script": "Hant"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "zh-Hant"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "zh",
+    "script": "Hant"
+   },
+   "ret": {
+    "language": "zh",
+    "script": "Hant"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 34,
+   "tests": [
+    4
+   ],
+   "name": "BCP47 - 4",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('zh-cmn-Hans-CN')->dump, { language => 'zh', extlang => ['cmn'], script => 'Hans', region => 'CN' }, 'BCP47 - 4');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "extlang": [
+        "cmn"
+       ],
+       "language": "zh",
+       "region": "CN",
+       "script": "Hans"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "zh-cmn-Hans-CN"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "extlang": [
+     "cmn"
+    ],
+    "language": "zh",
+    "region": "CN",
+    "script": "Hans"
+   },
+   "ret": {
+    "extlang": [
+     "cmn"
+    ],
+    "language": "zh",
+    "region": "CN",
+    "script": "Hans"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 35,
+   "tests": [
+    5
+   ],
+   "name": "BCP47 - 5",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('cmn-Hans-CN')->dump, { language => 'cmn', script => 'Hans', region => 'CN' }, 'BCP47 - 5');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "cmn",
+       "region": "CN",
+       "script": "Hans"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "cmn-Hans-CN"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "cmn",
+    "region": "CN",
+    "script": "Hans"
+   },
+   "ret": {
+    "language": "cmn",
+    "region": "CN",
+    "script": "Hans"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 36,
+   "tests": [
+    6
+   ],
+   "name": "BCP47 - 6",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('yue-HK')->dump, { language => 'yue', region => 'HK' }, 'BCP47 - 6');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "yue",
+       "region": "HK"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "yue-HK"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "yue",
+    "region": "HK"
+   },
+   "ret": {
+    "language": "yue",
+    "region": "HK"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 37,
+   "tests": [
+    7
+   ],
+   "name": "BCP47 - 7",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('sl-rozaj')->dump, { language => 'sl', variant => ['rozaj'] }, 'BCP47 - 7');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "sl",
+       "variant": [
+        "rozaj"
+       ]
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "sl-rozaj"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "sl",
+    "variant": [
+     "rozaj"
+    ]
+   },
+   "ret": {
+    "language": "sl",
+    "variant": [
+     "rozaj"
+    ]
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 38,
+   "tests": [
+    8
+   ],
+   "name": "BCP47 - 8",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('sl-rozaj-biske')->dump, { language => 'sl', variant => ['rozaj', 'biske'] }, 'BCP47 - 8');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "sl",
+       "variant": [
+        "rozaj",
+        "biske"
+       ]
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "sl-rozaj-biske"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "sl",
+    "variant": [
+     "rozaj",
+     "biske"
+    ]
+   },
+   "ret": {
+    "language": "sl",
+    "variant": [
+     "rozaj",
+     "biske"
+    ]
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 39,
+   "tests": [
+    9
+   ],
+   "name": "BCP47 - 9",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('de-CH-1901')->dump, { language => 'de', region => 'CH', variant => ['1901'] }, 'BCP47 - 9');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "de",
+       "region": "CH",
+       "variant": [
+        "1901"
+       ]
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "de-CH-1901"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "de",
+    "region": "CH",
+    "variant": [
+     "1901"
+    ]
+   },
+   "ret": {
+    "language": "de",
+    "region": "CH",
+    "variant": [
+     "1901"
+    ]
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 40,
+   "tests": [
+    10
+   ],
+   "name": "BCP47 - 10",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('hy-Latn-IT-arevela')->dump, { language => 'hy', region => 'IT', script => 'Latn', variant => ['arevela'] }, 'BCP47 - 10');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "hy",
+       "region": "IT",
+       "script": "Latn",
+       "variant": [
+        "arevela"
+       ]
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "hy-Latn-IT-arevela"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "hy",
+    "region": "IT",
+    "script": "Latn",
+    "variant": [
+     "arevela"
+    ]
+   },
+   "ret": {
+    "language": "hy",
+    "region": "IT",
+    "script": "Latn",
+    "variant": [
+     "arevela"
+    ]
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 41,
+   "tests": [
+    11
+   ],
+   "name": "BCP47 - 11",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('de-DE')->dump, { language => 'de', region => 'DE' }, 'BCP47 - 11');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "de",
+       "region": "DE"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "de-DE"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "de",
+    "region": "DE"
+   },
+   "ret": {
+    "language": "de",
+    "region": "DE"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 42,
+   "tests": [
+    12
+   ],
+   "name": "BCP47 - 12",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('es-419')->dump, { language => 'es', region => '419' }, 'BCP47 - 12');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "es",
+       "region": "419"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "es-419"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "es",
+    "region": "419"
+   },
+   "ret": {
+    "language": "es",
+    "region": "419"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 43,
+   "tests": [
+    13
+   ],
+   "name": "BCP47 - 13",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('de-CH-x-phonebk')->dump, { language => 'de', region => 'CH', privateuse => ['phonebk'] }, 'BCP47 - 13');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "de",
+       "privateuse": [
+        "phonebk"
+       ],
+       "region": "CH"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "de-CH-x-phonebk"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "de",
+    "privateuse": [
+     "phonebk"
+    ],
+    "region": "CH"
+   },
+   "ret": {
+    "language": "de",
+    "privateuse": [
+     "phonebk"
+    ],
+    "region": "CH"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 44,
+   "tests": [
+    14
+   ],
+   "name": "BCP47 - 14",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('az-Arab-x-AZE-derbend')->dump, { language => 'az', script => 'Arab', privateuse => ['AZE', 'derbend'] }, 'BCP47 - 14');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "language": "az",
+       "privateuse": [
+        "AZE",
+        "derbend"
+       ],
+       "script": "Arab"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "az-Arab-x-AZE-derbend"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "language": "az",
+    "privateuse": [
+     "AZE",
+     "derbend"
+    ],
+    "script": "Arab"
+   },
+   "ret": {
+    "language": "az",
+    "privateuse": [
+     "AZE",
+     "derbend"
+    ],
+    "script": "Arab"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 45,
+   "tests": [
+    15
+   ],
+   "name": "BCP47 - 15",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('en-US-u-islamcal')->dump, { language => 'en', region => 'US', extension => ['islamcal'] }, 'BCP47 - 15');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "extension": [
+        "islamcal"
+       ],
+       "language": "en",
+       "region": "US"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "en-US-u-islamcal"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "extension": [
+     "islamcal"
+    ],
+    "language": "en",
+    "region": "US"
+   },
+   "ret": {
+    "extension": [
+     "islamcal"
+    ],
+    "language": "en",
+    "region": "US"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 46,
+   "tests": [
+    16
+   ],
+   "name": "BCP47 - 16",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('en-a-myext-b-another')->dump, { language => 'en', extension => ['myext', 'another'] }, 'BCP47 - 16');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "extension": [
+        "myext",
+        "another"
+       ],
+       "language": "en"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "en-a-myext-b-another"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "extension": [
+     "myext",
+     "another"
+    ],
+    "language": "en"
+   },
+   "ret": {
+    "extension": [
+     "myext",
+     "another"
+    ],
+    "language": "en"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 47,
+   "tests": [
+    17
+   ],
+   "name": "BCP47 - 17",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('zh-CN-a-myext-x-private')->dump, { language => 'zh', region => 'CN', extension => ['myext'], privateuse => ['private'] }, 'BCP47 - 17');",
+   "call": {
+    "sub": "Biber::LangTag::dump",
+    "args": [
+     {
+      "__obj": "Biber::LangTag",
+      "value": {
+       "extension": [
+        "myext"
+       ],
+       "language": "zh",
+       "privateuse": [
+        "private"
+       ],
+       "region": "CN"
+      }
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::LangTags::parse",
+     "args": [
+      {
+       "__obj": "Biber::LangTags"
+      },
+      "zh-CN-a-myext-x-private"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": {
+    "extension": [
+     "myext"
+    ],
+    "language": "zh",
+    "privateuse": [
+     "private"
+    ],
+    "region": "CN"
+   },
+   "ret": {
+    "extension": [
+     "myext"
+    ],
+    "language": "zh",
+    "privateuse": [
+     "private"
+    ],
+    "region": "CN"
+   }
+  },
+  {
+   "test": "langtags.t",
+   "line": 48,
+   "tests": [
+    18
+   ],
+   "name": "BCP47 - 18",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('de-419-DE'), undef, 'BCP47 - 18');",
+   "call": {
+    "sub": "Biber::LangTags::parse",
+    "args": [
+     {
+      "__obj": "Biber::LangTags"
+     },
+     "de-419-DE"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": null,
+   "ret": null
+  },
+  {
+   "test": "langtags.t",
+   "line": 49,
+   "tests": [
+    19
+   ],
+   "name": "BCP47 - 19",
+   "target": "bibers-core::langtag (BCP47)",
+   "area": "langtag_parse",
+   "source": "is_deeply($biber->langtags->parse('a-DE'), undef, 'BCP47 - 19');",
+   "call": {
+    "sub": "Biber::LangTags::parse",
+    "args": [
+     {
+      "__obj": "Biber::LangTags"
+     },
+     "a-DE"
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": null,
+   "ret": null
+  }
+ ]
+}

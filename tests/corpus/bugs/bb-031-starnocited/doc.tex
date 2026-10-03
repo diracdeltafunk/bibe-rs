@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber]{biblatex}
+\DeclareSourcemap{\maps[datatype=bibtex]{
+  \map{\step[starnocited=true, fieldset=usera, fieldvalue={STAR}]}
+}}
+\addbibresource{test.bib}
+\begin{document}
+\cite{a}
+\printbibliography
+\end{document}

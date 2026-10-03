@@ -1,0 +1,5 @@
+description = "biber t/tdata/sort-order.bcf (used by t/sort-order.t)"
+source = "vendor/biber/t/tdata/sort-order.bcf"
+args = ["--noconf", "sort-order.bcf"]
+outputs = ["sort-order.bbl"]
+tags = ["suite:tdata"]

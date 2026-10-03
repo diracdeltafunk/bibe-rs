@@ -1,0 +1,180 @@
+{
+ "source": "vendor/biber/t/sort-complex.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "sort-complex.t",
+   "line": 276,
+   "tests": [
+    1
+   ],
+   "name": "sort template",
+   "target": "bibers-core::bcf::templates",
+   "area": "sortingtemplate",
+   "source": "is_deeply( $main->get_sortingtemplate, $ss, 'sort template');",
+   "call": {
+    "sub": "Biber::DataList::get_sortingtemplate",
+    "args": [
+     {
+      "__obj": "Biber::DataList",
+      "name": "nyt/global//global/global/global",
+      "section": "0",
+      "sortingtemplatename": "nyt"
+     }
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": {
+    "locale": "en-US",
+    "spec": [
+     [
+      {},
+      {
+       "presort": {}
+      }
+     ],
+     [
+      {
+       "final": "1"
+      },
+      {
+       "sortkey": {}
+      }
+     ],
+     [
+      {},
+      {
+       "labelalpha": {}
+      }
+     ],
+     [
+      {},
+      {
+       "sortname": {}
+      },
+      {
+       "author": {}
+      },
+      {
+       "editor": {}
+      },
+      {
+       "translator": {}
+      },
+      {
+       "sorttitle": {}
+      },
+      {
+       "title": {}
+      }
+     ],
+     [
+      {},
+      {
+       "sortyear": {}
+      },
+      {
+       "year": {}
+      }
+     ],
+     [
+      {},
+      {
+       "sorttitle": {}
+      },
+      {
+       "title": {}
+      }
+     ],
+     [
+      {},
+      {
+       "volume": {}
+      },
+      {
+       "0": {
+        "literal": "1"
+       }
+      }
+     ]
+    ]
+   },
+   "ret": {
+    "locale": "en-US",
+    "spec": [
+     [
+      {},
+      {
+       "presort": {}
+      }
+     ],
+     [
+      {
+       "final": "1"
+      },
+      {
+       "sortkey": {}
+      }
+     ],
+     [
+      {},
+      {
+       "labelalpha": {}
+      }
+     ],
+     [
+      {},
+      {
+       "sortname": {}
+      },
+      {
+       "author": {}
+      },
+      {
+       "editor": {}
+      },
+      {
+       "translator": {}
+      },
+      {
+       "sorttitle": {}
+      },
+      {
+       "title": {}
+      }
+     ],
+     [
+      {},
+      {
+       "sortyear": {}
+      },
+      {
+       "year": {}
+      }
+     ],
+     [
+      {},
+      {
+       "sorttitle": {}
+      },
+      {
+       "title": {}
+      }
+     ],
+     [
+      {},
+      {
+       "volume": {}
+      },
+      {
+       "0": {
+        "literal": "1"
+       }
+      }
+     ]
+    ]
+   },
+   "case": "tests/corpus/ported/sort-complex-1"
+  }
+ ]
+}

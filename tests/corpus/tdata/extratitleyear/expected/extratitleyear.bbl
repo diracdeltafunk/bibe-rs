@@ -1,0 +1,349 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{custom/global//global/global/global}
+    \entry{LY1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=7a0cc88a63e45a5d6d414c280f65d925}{%
+           family={Example},
+           familyi={E\bibinitperiod},
+           given={Arthur},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{bibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorbibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authornamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \field{extraname}{1}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{endyear}{2009}
+      \field{title}{Some title}
+      \field{year}{2006}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+    \endentry
+    \entry{LY2}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=7a0cc88a63e45a5d6d414c280f65d925}{%
+           family={Example},
+           familyi={E\bibinitperiod},
+           given={Arthur},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{bibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorbibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authornamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \field{extraname}{2}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Some title}
+      \field{year}{2006}
+      \field{dateera}{ce}
+    \endentry
+    \entry{LY3}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=7a0cc88a63e45a5d6d414c280f65d925}{%
+           family={Example},
+           familyi={E\bibinitperiod},
+           given={Arthur},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{bibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorbibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authornamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \field{extraname}{3}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{endyear}{}
+      \field{title}{Some title}
+      \field{year}{2006}
+      \true{enddateunknown}
+      \field{dateera}{ce}
+    \endentry
+    \entry{L3}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=24b7be5b577041e83bf3c4fe658111a5}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Jim},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{fullhash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{fullhashraw}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{bibnamehash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{authorbibnamehash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{authornamehash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{authorfullhash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{authorfullhashraw}{24b7be5b577041e83bf3c4fe658111a5}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{year}{1995}
+    \endentry
+    \entry{L1}{book}{}{}
+      \list{publisher}{1}{%
+        {puba}%
+      }
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{extratitleyear}{1}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L2}{book}{}{}
+      \list{publisher}{1}{%
+        {pubb}%
+      }
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{extratitleyear}{2}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L5}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{shorttitle}
+      \field{shorttitle}{Title A}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L4}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{3}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1996}
+    \endentry
+  \enddatalist
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{LY1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=7a0cc88a63e45a5d6d414c280f65d925}{%
+           family={Example},
+           familyi={E\bibinitperiod},
+           given={Arthur},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{bibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorbibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authornamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \field{extraname}{1}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{endyear}{2009}
+      \field{title}{Some title}
+      \field{year}{2006}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+    \endentry
+    \entry{LY2}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=7a0cc88a63e45a5d6d414c280f65d925}{%
+           family={Example},
+           familyi={E\bibinitperiod},
+           given={Arthur},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{bibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorbibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authornamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \field{extraname}{2}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Some title}
+      \field{year}{2006}
+      \field{dateera}{ce}
+    \endentry
+    \entry{LY3}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=7a0cc88a63e45a5d6d414c280f65d925}{%
+           family={Example},
+           familyi={E\bibinitperiod},
+           given={Arthur},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{fullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{bibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorbibnamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authornamehash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhash}{7a0cc88a63e45a5d6d414c280f65d925}
+      \strng{authorfullhashraw}{7a0cc88a63e45a5d6d414c280f65d925}
+      \field{extraname}{3}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{endyear}{}
+      \field{title}{Some title}
+      \field{year}{2006}
+      \true{enddateunknown}
+      \field{dateera}{ce}
+    \endentry
+    \entry{L3}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=24b7be5b577041e83bf3c4fe658111a5}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Jim},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{fullhash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{fullhashraw}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{bibnamehash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{authorbibnamehash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{authornamehash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{authorfullhash}{24b7be5b577041e83bf3c4fe658111a5}
+      \strng{authorfullhashraw}{24b7be5b577041e83bf3c4fe658111a5}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{year}{1995}
+    \endentry
+    \entry{L1}{book}{}{}
+      \list{publisher}{1}{%
+        {puba}%
+      }
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{1}
+      \field{extratitleyear}{1}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L2}{book}{}{}
+      \list{publisher}{1}{%
+        {pubb}%
+      }
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{2}
+      \field{extratitleyear}{2}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L5}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{shorttitle}
+      \field{shorttitle}{Title A}
+      \field{title}{Title 1}
+      \field{year}{1995}
+    \endentry
+    \entry{L4}{book}{}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{extratitle}{3}
+      \field{labeltitlesource}{title}
+      \field{title}{Title 1}
+      \field{year}{1996}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

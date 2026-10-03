@@ -1,0 +1,6 @@
+description = "biblatex example 14-references-by-category.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/14-references-by-category.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "14-references-by-category.bcf"]
+outputs = ["14-references-by-category.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:authortitle"]

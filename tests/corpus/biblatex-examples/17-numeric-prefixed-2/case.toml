@@ -1,0 +1,6 @@
+description = "biblatex example 17-numeric-prefixed-2.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/17-numeric-prefixed-2.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "17-numeric-prefixed-2.bcf"]
+outputs = ["17-numeric-prefixed-2.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:numeric"]

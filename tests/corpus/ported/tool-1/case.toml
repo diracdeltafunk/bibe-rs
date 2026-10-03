@@ -1,0 +1,6 @@
+description = "biber t/tool.t, configuration 1 (prepare at line 59): configfile=tool-testsort.conf; output_align=1; output_resolve_xdata=1; output_resolve_crossrefs=1; output_format=bibtex; sortlocale=en_GB.UTF-8"
+source = "vendor/biber/t/tool.t + t/tdata (traced by tools/port-tests)"
+args = ["--tool", "--configfile=tool-testsort.conf", "--output-align", "--output-resolve-xdata", "--output-resolve-crossrefs", "--output-format=bibtex", "--sortlocale=en_GB.UTF-8", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:ported", "t:tool", "deferred:m4"]

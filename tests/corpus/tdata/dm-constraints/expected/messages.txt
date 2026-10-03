@@ -1,0 +1,3 @@
+WARN - ISBN '90-7002-34-5' in entry 'c10' is invalid - run biber with '--validate_datamodel' for details.
+WARN - Overwriting field 'year' with year value from field 'date' for entry 'c5'
+WARN - legacy month field 'WRONG FORMAT' in entry 'c3' is not an integer - this will probably not sort properly.

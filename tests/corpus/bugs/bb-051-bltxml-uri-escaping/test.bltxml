@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="b1" entrytype="misc">
+    <bltx:title>Title</bltx:title>
+    <bltx:eprint type="arxiv" class="cs.DL">1234.5678</bltx:eprint>
+    <bltx:url>http://x.org/é ü</bltx:url>
+  </bltx:entry>
+</bltx:entries>

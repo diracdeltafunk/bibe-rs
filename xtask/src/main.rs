@@ -219,7 +219,12 @@ fn fingerprint(case: &Case, run: &RunOutput) -> (Option<i32>, Vec<Option<String>
         .iter()
         .map(|(n, b)| b.as_ref().map(|b| normalize_output(case, n, b)))
         .collect();
-    (run.exit_code, outs, run.messages.clone())
+    let msgs = run
+        .messages
+        .iter()
+        .map(|m| case.apply_substitutions(m))
+        .collect();
+    (run.exit_code, outs, msgs)
 }
 
 fn golden(opts: &Opts) -> Result<ExitCode> {

@@ -1,0 +1,208 @@
+{
+ "source": "vendor/biber/t/sections.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "sections.t",
+   "line": 103,
+   "tests": [
+    1
+   ],
+   "name": "Preamble for all sections",
+   "target": "bibers-core::output::bbl",
+   "area": "preamble",
+   "source": "is_deeply($biber->get_preamble, $preamble, 'Preamble for all sections');",
+   "call": {
+    "sub": "Biber::get_preamble",
+    "args": [
+     {
+      "__obj": "Biber"
+     }
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "Štring for Preamble 1",
+    "String for Preamble 2",
+    "String for Preamble 3",
+    "String for Preamble 4"
+   ],
+   "ret": [
+    "Štring for Preamble 1",
+    "String for Preamble 2",
+    "String for Preamble 3",
+    "String for Preamble 4"
+   ],
+   "case": "tests/corpus/ported/sections-1"
+  },
+  {
+   "test": "sections.t",
+   "line": 113,
+   "tests": [
+    10
+   ],
+   "name": "Section 3 citekeys",
+   "target": "bibers-core::model (sections)",
+   "area": "orig_order_citekeys",
+   "source": "is_deeply([$section3->get_orig_order_citekeys], ['sect1', 'sect2', 'sectall1'], 'Section 3 citekeys');",
+   "call": {
+    "sub": "Biber::Section::get_orig_order_citekeys",
+    "args": [
+     {
+      "__obj": "Biber::Section",
+      "number": "3"
+     }
+    ]
+   },
+   "assert": "is_deeply",
+   "expected": [
+    "sect1",
+    "sect2",
+    "sectall1"
+   ],
+   "ret": [
+    "sect1",
+    "sect2",
+    "sectall1"
+   ],
+   "case": "tests/corpus/ported/sections-1"
+  },
+  {
+   "test": "sections.t",
+   "line": 114,
+   "tests": [
+    11
+   ],
+   "name": "Checking output sections - 1",
+   "target": "bibers-core::output::bbl",
+   "area": "output_section",
+   "source": "eq_or_diff($out->get_output_section(0)->number, '0', 'Checking output sections - 1');",
+   "call": {
+    "sub": "Biber::Output::base::get_output_section",
+    "args": [
+     {
+      "__obj": "Biber::Output::bbl"
+     },
+     "0"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Section::number",
+     "args": [
+      {
+       "__obj": "Biber::Section",
+       "number": "0"
+      }
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "0",
+   "ret": {
+    "__obj": "Biber::Section",
+    "number": "0"
+   },
+   "case": "tests/corpus/ported/sections-1"
+  },
+  {
+   "test": "sections.t",
+   "line": 115,
+   "tests": [
+    12
+   ],
+   "name": "Checking output sections - 2",
+   "target": "bibers-core::output::bbl",
+   "area": "output_section",
+   "source": "eq_or_diff($out->get_output_section(1)->number, '1', 'Checking output sections - 2');",
+   "call": {
+    "sub": "Biber::Output::base::get_output_section",
+    "args": [
+     {
+      "__obj": "Biber::Output::bbl"
+     },
+     "1"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Section::number",
+     "args": [
+      {
+       "__obj": "Biber::Section",
+       "number": "1"
+      }
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "1",
+   "ret": {
+    "__obj": "Biber::Section",
+    "number": "1"
+   },
+   "case": "tests/corpus/ported/sections-1"
+  },
+  {
+   "test": "sections.t",
+   "line": 116,
+   "tests": [
+    13
+   ],
+   "name": "Checking output sections - 3",
+   "target": "bibers-core::output::bbl",
+   "area": "output_section",
+   "source": "eq_or_diff($out->get_output_section(2)->number, '2', 'Checking output sections - 3');",
+   "call": {
+    "sub": "Biber::Output::base::get_output_section",
+    "args": [
+     {
+      "__obj": "Biber::Output::bbl"
+     },
+     "2"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Section::number",
+     "args": [
+      {
+       "__obj": "Biber::Section",
+       "number": "2"
+      }
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "2",
+   "ret": {
+    "__obj": "Biber::Section",
+    "number": "2"
+   },
+   "case": "tests/corpus/ported/sections-1"
+  },
+  {
+   "test": "sections.t",
+   "line": 117,
+   "tests": [
+    14
+   ],
+   "name": "Preamble output check with output_safechars",
+   "target": "bibers-core::output::bbl",
+   "area": "bbl_header",
+   "source": "eq_or_diff($out->get_output_head, $head, 'Preamble output check with output_safechars');",
+   "call": {
+    "sub": "Biber::Output::base::get_output_head",
+    "args": [
+     {
+      "__obj": "Biber::Output::bbl"
+     }
+    ]
+   },
+   "assert": "eq_or_diff",
+   "expected": "% $ biblatex auxiliary file $\n% $ biblatex bbl format version 3.3 $\n% Do not modify the above lines!\n%\n% This is an auxiliary file used by the 'biblatex' package.\n% This file may safely be deleted. It will be recreated by\n% biber as required.\n%\n\\begingroup\n\\makeatletter\n\\@ifundefined{ver@biblatex.sty}\n  {\\@latex@error\n     {Missing 'biblatex' package}\n     {The bibliography requires the 'biblatex' package.}\n      \\aftergroup\\endinput}\n  {}\n\\endgroup\n\n\\preamble{%\n\\v{S}tring for Preamble 1%\nString for Preamble 2%\nString for Preamble 3%\nString for Preamble 4%\n}\n\n",
+   "ret": "% $ biblatex auxiliary file $\n% $ biblatex bbl format version 3.3 $\n% Do not modify the above lines!\n%\n% This is an auxiliary file used by the 'biblatex' package.\n% This file may safely be deleted. It will be recreated by\n% biber as required.\n%\n\\begingroup\n\\makeatletter\n\\@ifundefined{ver@biblatex.sty}\n  {\\@latex@error\n     {Missing 'biblatex' package}\n     {The bibliography requires the 'biblatex' package.}\n      \\aftergroup\\endinput}\n  {}\n\\endgroup\n\n\\preamble{%\n\\v{S}tring for Preamble 1%\nString for Preamble 2%\nString for Preamble 3%\nString for Preamble 4%\n}\n\n",
+   "case": "tests/corpus/ported/sections-1"
+  }
+ ]
+}

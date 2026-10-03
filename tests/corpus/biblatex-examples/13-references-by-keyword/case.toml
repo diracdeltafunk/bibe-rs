@@ -1,0 +1,6 @@
+description = "biblatex example 13-references-by-keyword.tex"
+source = "$TEXMFDIST/doc/latex/biblatex/examples/13-references-by-keyword.tex (pdflatex -draftmode, tools/corpus/gen_examples.py)"
+args = ["--noconf", "13-references-by-keyword.bcf"]
+outputs = ["13-references-by-keyword.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:biblatex-examples", "engine:pdflatex", "style:authortitle"]

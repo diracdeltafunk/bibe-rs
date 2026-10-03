@@ -44,6 +44,20 @@ impl std::fmt::Display for Mismatch {
     }
 }
 
+/// Whether an actual exit code matches the expected one.
+///
+/// biber exits 0 on success and 2 (`EXIT_ERROR`) on reported errors. Any other
+/// code means Perl died, and its value comes from `errno` (e.g. 25 from the
+/// PAR binary, 255 from the source build). All such codes therefore count as
+/// one "crash" class. A killed process (`None`) never matches.
+pub fn exit_codes_match(expected: i32, actual: Option<i32>) -> bool {
+    let is_crash = |c: i32| c != 0 && c != 2;
+    match actual {
+        Some(a) => a == expected || (is_crash(expected) && is_crash(a)),
+        None => false,
+    }
+}
+
 /// Maximum number of diff lines kept per mismatch.
 const MAX_DIFF_LINES: usize = 40;
 
@@ -56,6 +70,7 @@ pub fn normalize_output(case: &Case, name: &str, bytes: &[u8]) -> String {
     } else {
         text.into_owned()
     };
+    let text = case.apply_substitutions(&text);
     match case.spec.compare {
         CompareMode::Exact => text,
         CompareMode::UnorderedLines => normalize::sorted_lines(&text),
@@ -75,7 +90,7 @@ pub fn compare(case: &Case, run: &RunOutput) -> Result<Outcome> {
 
     if run.timed_out {
         mismatches.push(Mismatch::TimedOut);
-    } else if run.exit_code != Some(meta.exit_code) {
+    } else if !exit_codes_match(meta.exit_code, run.exit_code) {
         mismatches.push(Mismatch::ExitCode {
             expected: meta.exit_code,
             actual: run.exit_code,
@@ -102,8 +117,10 @@ pub fn compare(case: &Case, run: &RunOutput) -> Result<Outcome> {
         }
     }
 
-    let expected_msgs = std::fs::read_to_string(exp_dir.join(MESSAGES_FILE)).unwrap_or_default();
-    let actual_msgs = messages_text(&run.messages);
+    let expected_msgs = case.apply_substitutions(
+        &std::fs::read_to_string(exp_dir.join(MESSAGES_FILE)).unwrap_or_default(),
+    );
+    let actual_msgs = case.apply_substitutions(&messages_text(&run.messages));
     if expected_msgs != actual_msgs {
         mismatches.push(Mismatch::Messages {
             diff: diff(&expected_msgs, &actual_msgs),
@@ -144,4 +161,19 @@ pub fn diff(expected: &str, actual: &str) -> String {
         let _ = writeln!(out, "    … ({} more diff lines)", total - MAX_DIFF_LINES);
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::exit_codes_match;
+
+    #[test]
+    fn crash_exit_codes_form_one_class() {
+        assert!(exit_codes_match(0, Some(0)));
+        assert!(exit_codes_match(2, Some(2)));
+        assert!(exit_codes_match(25, Some(255)));
+        assert!(!exit_codes_match(25, Some(2)));
+        assert!(!exit_codes_match(0, Some(2)));
+        assert!(!exit_codes_match(2, None));
+    }
 }

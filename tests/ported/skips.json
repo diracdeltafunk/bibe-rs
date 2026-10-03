@@ -1,0 +1,145 @@
+{
+ "source": "vendor/biber/t/skips.t",
+ "generated_by": "tools/port-tests/vectors.py (from a BiberTrace run under oracle O3)",
+ "vectors": [
+  {
+   "test": "skips.t",
+   "line": 272,
+   "tests": [
+    1
+   ],
+   "name": "Passing skipbib through",
+   "target": "bibers-core::input::handlers / resolve (entry field values)",
+   "area": "entry_field",
+   "source": "is_deeply($bibentries->entry('skip1')->get_field('options'), ['skipbib'], 'Passing skipbib through');",
+   "call": {
+    "sub": "Biber::Entry::get_field",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "skip1"
+     },
+     "options"
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "skip1"
+     ]
+    }
+   ],
+   "assert": "is_deeply",
+   "expected": [
+    "skipbib"
+   ],
+   "ret": [
+    "skipbib"
+   ],
+   "case": "tests/corpus/ported/skips-1",
+   "entry": "skip1",
+   "field": "options",
+   "note": "value not directly visible in .bbl"
+  },
+  {
+   "test": "skips.t",
+   "line": 277,
+   "tests": [
+    5
+   ],
+   "name": "skiplab - no labelyear",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('skip3')->get_labeldate_info->{field}{source}, '', 'skiplab - no labelyear');",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "skip3"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "skip3"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "",
+   "ret": {
+    "field": {
+     "day": "day",
+     "hour": "hour",
+     "minute": "minute",
+     "month": "month",
+     "pseudodate": null,
+     "second": "second",
+     "source": "",
+     "timezone": "timezone",
+     "year": "year"
+    }
+   },
+   "case": "tests/corpus/ported/skips-1",
+   "entry": "skip3"
+  },
+  {
+   "test": "skips.t",
+   "line": 280,
+   "tests": [
+    8
+   ],
+   "name": "dataonly - no labelyear",
+   "target": "bibers-core::process::labels",
+   "area": "labeldate_info",
+   "source": "eq_or_diff($bibentries->entry('skip4')->get_labeldate_info->{field}{source}, '', 'dataonly - no labelyear');",
+   "call": {
+    "sub": "Biber::Entry::get_labeldate_info",
+    "args": [
+     {
+      "__obj": "Biber::Entry",
+      "key": "skip4"
+     }
+    ]
+   },
+   "chain": [
+    {
+     "sub": "Biber::Entries::entry",
+     "args": [
+      {
+       "__obj": "Biber::Entries"
+      },
+      "skip4"
+     ]
+    }
+   ],
+   "assert": "eq_or_diff",
+   "expected": "",
+   "ret": {
+    "field": {
+     "day": "day",
+     "hour": "hour",
+     "minute": "minute",
+     "month": "month",
+     "pseudodate": null,
+     "second": "second",
+     "source": "",
+     "timezone": "timezone",
+     "year": "year"
+    }
+   },
+   "case": "tests/corpus/ported/skips-1",
+   "entry": "skip4"
+  }
+ ]
+}
