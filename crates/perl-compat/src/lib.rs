@@ -23,6 +23,7 @@
 pub mod case;
 pub mod grapheme;
 pub mod isbn;
+mod isbn_ranges;
 pub mod regex;
 pub mod roman;
 pub mod sort;
