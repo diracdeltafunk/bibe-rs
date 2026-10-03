@@ -1,3 +1,6 @@
 # Check out text with LF everywhere: embedded data (usage text, tables) and
 # corpus goldens must be byte-identical on every platform, including Windows.
 * text=auto eol=lf
+
+# Vendored verbatim (byte-identical to biber 2.22's copy, mixed line endings): never convert.
+data/isbn/RangeMessage.xml -text
