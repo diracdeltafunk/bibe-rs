@@ -1,0 +1,17 @@
+### MS-001 self reference in the middle
+@string{m = "a" # m # "b"}
+### MS-002 self reference at the end
+@string{m = "a" # "b" # m}
+### MS-003 self reference to an earlier definition
+@string{m = "x"}
+@string{m = "a" # m}
+### MS-004 forward and backward references in one entry
+@string{m = n # "a", n = m # "b"}
+### MS-005 only self
+@string{m = m}
+@misc{k, t = m}
+### MS-006 failed definition defines nothing
+@string{m = , n = m}
+### MS-007 tab and backslash pieces
+@string{m = {a\\	}, n = {a(	}, o = {
+c\\d	e}}

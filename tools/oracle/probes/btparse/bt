@@ -1,0 +1,8 @@
+#!/bin/sh
+# Wrapper: run bt.pl with the O3 perl (see bt.pl for usage).
+D="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$D/../../../.." && pwd)"
+PERL="${O3_PERL:-$ROOT/vendor/perl/bin/perl}"
+[ -x "$PERL" ] || PERL=/Users/ben/bibe-rs/vendor/perl/bin/perl
+unset PERL5LIB PERL_LOCAL_LIB_ROOT PERL5OPT
+exec "$PERL" -I"$D" "$D/bt.pl" "$@"

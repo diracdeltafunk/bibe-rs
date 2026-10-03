@@ -1,0 +1,4 @@
+### U-1 case folding non-ascii
+@MÄ°SC{K, ÃTITLE = {x}, Ãnote = Ã©x # ÃX}
+@string{Ãx = "a"}
+@misc{k2, t = Ã©x, u = ÃX}

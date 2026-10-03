@@ -85,6 +85,10 @@ dependencies = [
 [[package]]
 name = "btparse"
 version = "0.0.0"
+dependencies = [
+ "serde_json",
+ "unicode-normalization",
+]
 
 [[package]]
 name = "bumpalo"

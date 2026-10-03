@@ -1,0 +1,45 @@
+### T-001 junk only
+junk
+### T-002 whitespace only
+
+
+### T-003 comment only
+% c @x
+
+### T-004 junk then comment no entries
+junk
+% c
+### T-005 percent inside junk run
+abc % x @misc{k, title = {x}}
+### T-006 percent after space at line start
+  % x @misc{k, title = {x}}
+@misc{k2, title = {y}}
+### T-007 junk percent no space
+2020% x @misc{k, title = {x}}
+### T-008 tabs counted as junk
+	a	@misc{k, title = {x}}
+### T-009 junk with percent at EOF no newline
+@misc{k, title = {x}}
+junk % c
+### T-010 percent at line start at EOF after junk lines
+@misc{k, title = {x}}
+junk
+%c
+### T-011 only junk and at-free comment then entry in comment
+x
+% @misc{k, title = {x}}
+### T-012 runaway with non-ascii name
+@misc{k, title = {a
+ é = c}}
+### T-013 runaway with underscore and digits
+@misc{k, title = {a
+ b_2 = c}}
+### T-014 runaway with punctuation name
+@misc{k, title = {a
+ b.c-d:e = c}}
+### T-015 runaway with leading punctuation
+@misc{k, title = {a
+ .b = c}}
+### T-016 runaway uppercase
+@misc{k, title = {a
+ B = c}}
