@@ -42,3 +42,10 @@ todo = "warn"
 [profile.release]
 lto = "thin"
 codegen-units = 1
+
+# perl-compat's exhaustive per-code-point tests are slow unoptimised.
+[profile.dev.package.perl-compat]
+opt-level = 2
+
+[profile.dev.package.sha2]
+opt-level = 3

@@ -49,8 +49,41 @@ pub fn lc(s: &str) -> String {
 }
 
 /// Perl `uc`.
+///
+/// Like perl's `pp_uc`, U+0345 COMBINING GREEK YPOGEGRAMMENI (whose
+/// uppercase is U+0399) is moved after any following combining marks
+/// (`\p{M}`); a second U+0345 inside such a run replaces the pending one.
 pub fn uc(s: &str) -> String {
-    map_str(s, UPPER, |b| b.to_ascii_uppercase())
+    if s.is_ascii() {
+        return s.to_ascii_uppercase();
+    }
+    if !s.contains('\u{345}') {
+        return map_str(s, UPPER, |b| b.to_ascii_uppercase());
+    }
+    let mut out = String::with_capacity(s.len());
+    let mut in_iota = false;
+    for c in s.chars() {
+        if in_iota && !crate::unicode::Prop::M.contains(c) {
+            out.push('\u{399}');
+            in_iota = false;
+        }
+        if c == '\u{345}' {
+            in_iota = true;
+            continue;
+        }
+        if c.is_ascii() {
+            out.push(c.to_ascii_uppercase());
+        } else {
+            match lookup(UPPER, c) {
+                Some(m) => out.push_str(m),
+                None => out.push(c),
+            }
+        }
+    }
+    if in_iota {
+        out.push('\u{399}');
+    }
+    out
 }
 
 /// Perl `fc` (full case folding, `CaseFolding.txt` status C+F).
@@ -137,6 +170,8 @@ mod tests {
         assert_eq!(fc("ẞ"), "ss");
         assert_eq!(lcfirst("ABC"), "aBC");
         assert!(fc_eq("STRASSE", "straße"));
+        assert_eq!(uc("a\u{345}\u{301}\u{300}b"), "A\u{301}\u{300}\u{399}B");
+        assert_eq!(uc("\u{345}\u{345}\u{301}"), "\u{301}\u{399}");
         assert_eq!(uc_char('ß'), Some("SS"));
         assert_eq!(lc_char('A'), Some("a"));
         assert_eq!(lc_char('a'), None);
