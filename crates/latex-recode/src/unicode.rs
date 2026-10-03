@@ -233,9 +233,18 @@ mod tests {
             clusters("\u{1F1FA}\u{1F1F8}\u{1F1EB}"),
             vec!["\u{1F1FA}\u{1F1F8}", "\u{1F1EB}"]
         );
-        assert_eq!(clusters("\u{1F468}\u{200D}\u{1F469}"), vec!["\u{1F468}\u{200D}\u{1F469}"]);
-        assert_eq!(clusters("\u{915}\u{94D}\u{937}"), vec!["\u{915}\u{94D}\u{937}"]);
-        assert_eq!(clusters("\u{1100}\u{1161}\u{11A8}"), vec!["\u{1100}\u{1161}\u{11A8}"]);
+        assert_eq!(
+            clusters("\u{1F468}\u{200D}\u{1F469}"),
+            vec!["\u{1F468}\u{200D}\u{1F469}"]
+        );
+        assert_eq!(
+            clusters("\u{915}\u{94D}\u{937}"),
+            vec!["\u{915}\u{94D}\u{937}"]
+        );
+        assert_eq!(
+            clusters("\u{1100}\u{1161}\u{11A8}"),
+            vec!["\u{1100}\u{1161}\u{11A8}"]
+        );
     }
 
     #[test]

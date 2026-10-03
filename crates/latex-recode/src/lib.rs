@@ -100,12 +100,26 @@ impl Normalization {
 
 fn nfd_fast(s: &str) -> String {
     if s.is_ascii()
-        || unicode_normalization::is_nfd_quick(s.chars()) == unicode_normalization::IsNormalized::Yes
+        || unicode_normalization::is_nfd_quick(s.chars())
+            == unicode_normalization::IsNormalized::Yes
     {
         s.to_owned()
     } else {
         s.nfd().collect()
     }
+}
+
+/// Split `s` into Perl 5.42 `\X` clusters (exposed for differential tests).
+#[doc(hidden)]
+pub fn grapheme_clusters(s: &str) -> Vec<&str> {
+    let mut v = Vec::new();
+    let mut i = 0;
+    while i < s.len() {
+        let e = unicode::grapheme_end(s, i);
+        v.push(&s[i..e]);
+        i = e;
+    }
+    v
 }
 
 /// Switches for biber bugs that `latex_decode` reproduces by default.
@@ -225,7 +239,12 @@ pub struct Recoder {
 
 impl Recoder {
     /// `init_sets($decode_set, $encode_set)` over `data`.
-    pub fn new(data: &RecodeData, decode_set: &str, encode_set: &str, opts: RecodeOptions) -> Recoder {
+    pub fn new(
+        data: &RecodeData,
+        decode_set: &str,
+        encode_set: &str,
+        opts: RecodeOptions,
+    ) -> Recoder {
         Recoder {
             decode: tables::build_decode(&data.raw, decode_set, &opts),
             encode: tables::build_encode(&data.raw, encode_set),
@@ -245,8 +264,16 @@ impl Recoder {
         {
             return Arc::clone(r);
         }
-        let r = Arc::new(Recoder::new(RecodeData::builtin(), decode_set, encode_set, opts));
-        c.push(((decode_set.to_owned(), encode_set.to_owned(), opts), Arc::clone(&r)));
+        let r = Arc::new(Recoder::new(
+            RecodeData::builtin(),
+            decode_set,
+            encode_set,
+            opts,
+        ));
+        c.push((
+            (decode_set.to_owned(), encode_set.to_owned(), opts),
+            Arc::clone(&r),
+        ));
         r
     }
 

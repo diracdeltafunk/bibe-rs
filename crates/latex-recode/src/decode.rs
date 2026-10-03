@@ -225,19 +225,17 @@ fn char_macro(src: &str, out: &mut String, form: CharForm) -> bool {
             continue;
         }
         let j = i + 1 + prefix.len();
-        let (end, val) = match form {
-            CharForm::Hex => {
-                let e = j + b[j..].iter().take_while(|c| c.is_ascii_hexdigit()).count();
-                (e, parse_radix(&b[j..e], 16))
-            }
-            CharForm::Octal | CharForm::Decimal => {
-                let e = skip_digits(src, j);
-                (e, eval_chr(&src[j..e], form == CharForm::Octal))
-            }
+        let end = match form {
+            CharForm::Hex => j + b[j..].iter().take_while(|c| c.is_ascii_hexdigit()).count(),
+            CharForm::Octal | CharForm::Decimal => skip_digits(src, j),
         };
         if end == j {
             continue;
         }
+        let val = match form {
+            CharForm::Hex => parse_radix(&b[j..end], 16),
+            _ => eval_chr(&src[j..end], form == CharForm::Octal),
+        };
         let o = rw.replace(i, end);
         if let Some(v) = val {
             push_chr(o, v);
@@ -257,7 +255,10 @@ fn control_space(src: &str, out: &mut String) -> bool {
     while let Some(k) = memchr(b'\\', &b[pos..]) {
         let i = pos + k;
         pos = i + 1;
-        let l = b[i + 1..].iter().take_while(|c| c.is_ascii_alphabetic()).count();
+        let l = b[i + 1..]
+            .iter()
+            .take_while(|c| c.is_ascii_alphabetic())
+            .count();
         let bs = i + 1 + l;
         if l == 0 || b.get(bs) != Some(&b'\\') {
             continue;
@@ -335,7 +336,13 @@ enum Trail {
 /// that is a prefix of the text in that order until the trailing group
 /// matches. The trailing group ends the regex, so its first matching
 /// alternative is taken (with `\s+` maximal).
-fn macros(src: &str, out: &mut String, km: &KeyMap, trail: Trail, cands: &mut Vec<(usize, u32)>) -> bool {
+fn macros(
+    src: &str,
+    out: &mut String,
+    km: &KeyMap,
+    trail: Trail,
+    cands: &mut Vec<(usize, u32)>,
+) -> bool {
     let b = src.as_bytes();
     let mut rw = Rw::new(src, out);
     let mut pos = 0;
@@ -373,15 +380,32 @@ fn macros(src: &str, out: &mut String, km: &KeyMap, trail: Trail, cands: &mut Ve
 }
 
 /// Longest key that is a prefix at `j` and is followed by `close`.
-fn longest_key_then(b: &[u8], j: usize, km: &KeyMap, close: &[u8], cands: &mut Vec<(usize, u32)>) -> Option<(usize, u32)> {
+fn longest_key_then(
+    b: &[u8],
+    j: usize,
+    km: &KeyMap,
+    close: &[u8],
+    cands: &mut Vec<(usize, u32)>,
+) -> Option<(usize, u32)> {
     km.trie.prefixes(b, j, cands);
-    cands.iter().rev().find(|&&(e, _)| b[e..].starts_with(close)).copied()
+    cands
+        .iter()
+        .rev()
+        .find(|&&(e, _)| b[e..].starts_with(close))
+        .copied()
 }
 
 /// `s/\\not\\($re)/$map->{$1}/ge`,
 /// `s/\\textsuperscript\{($re)\}/$map->{$1}/ge`,
 /// `s/\\textsuperscript\{\\($re)\}/$map->{$1}/ge`.
-fn prefixed(src: &str, out: &mut String, km: &KeyMap, prefix: &[u8], close: &[u8], cands: &mut Vec<(usize, u32)>) -> bool {
+fn prefixed(
+    src: &str,
+    out: &mut String,
+    km: &KeyMap,
+    prefix: &[u8],
+    close: &[u8],
+    cands: &mut Vec<(usize, u32)>,
+) -> bool {
     let b = src.as_bytes();
     let mut rw = Rw::new(src, out);
     let mut pos = 0;
@@ -430,9 +454,9 @@ fn dings(src: &str, out: &mut String, km: &KeyMap) -> bool {
 /// (Emulated look-behind `(?<!\\$re)` of the first diacritics substitution.)
 #[inline]
 fn ends_with_diacritic_macro(b: &[u8], p: usize, km: &KeyMap) -> bool {
-    km.key_lens.iter().any(|&l| {
-        p > l && b[p - l - 1] == b'\\' && km.trie.get(&b[p - l..p]).is_some()
-    })
+    km.key_lens
+        .iter()
+        .any(|&l| p > l && b[p - l - 1] == b'\\' && km.trie.get(&b[p - l..p]).is_some())
 }
 
 /// D1: `s/(?<!\\$re)\{(\X)\}/\x{f}$1\x{e}/g` (written with a variable-length
