@@ -362,6 +362,36 @@ pub fn imatch(
     re.match_all(value)
 }
 
+/// `split(/\s*,\s*/, $s)`: biber's default `xsvsep`, hand-coded (no regex
+/// engine) with perl's `\s` and `split` rules: fields keep leading/trailing
+/// whitespace not adjacent to a comma, a leading empty field is kept,
+/// trailing empty fields are removed. Equal to
+/// `PerlRegex::new(r"\s*,\s*", false)?.split(s)` (tested).
+pub fn split_default_xsvsep(s: &str) -> Vec<String> {
+    use crate::unicode::is_perl_space;
+    let mut out: Vec<String> = Vec::new();
+    let mut field_start = 0;
+    let mut pos = 0;
+    while let Some(off) = s[pos..].find(',') {
+        let comma = pos + off;
+        // the match starts at the beginning of the whitespace run before the comma
+        let ws_start = s[field_start..comma].trim_end_matches(is_perl_space).len() + field_start;
+        let after = comma + 1;
+        let ws_end =
+            after + (s[after..].len() - s[after..].trim_start_matches(is_perl_space).len());
+        out.push(s[field_start..ws_start].to_string());
+        field_start = ws_end;
+        pos = ws_end;
+    }
+    if field_start < s.len() {
+        out.push(s[field_start..].to_string());
+    }
+    while out.last().is_some_and(String::is_empty) {
+        out.pop();
+    }
+    out
+}
+
 /// Whether `$N` digits are a single digit (`(?<!\\)\$(\d)`, used for new
 /// entry keys, clone keys, entry targets and field values) or a run
 /// (`(?<!\\)\$(\d+)`, used for later match patterns).
@@ -486,6 +516,32 @@ mod tests {
             [Some("a\n".into()), Some("b".into())]
         );
         assert_eq!(PerlRegex::new("x", true).unwrap().stringify(), "(?^ui:x)");
+    }
+
+    #[test]
+    fn default_xsvsep_matches_regex_split() {
+        let re = PerlRegex::new(r"\s*,\s*", false).unwrap();
+        let atoms = [
+            "a", " ", ",", "\u{A0}", "\u{2003}", "b c", "\n", "\u{200B}", "",
+        ];
+        let mut seed: u64 = 12345;
+        for _ in 0..20_000 {
+            let mut s = String::new();
+            for _ in 0..(seed % 9) {
+                seed = seed
+                    .wrapping_mul(6_364_136_223_846_793_005)
+                    .wrapping_add(1_442_695_040_888_963_407);
+                s.push_str(atoms[(seed >> 33) as usize % atoms.len()]);
+            }
+            seed = seed.wrapping_mul(6_364_136_223_846_793_005).wrapping_add(1);
+            let want: Vec<String> = re
+                .split(&s)
+                .unwrap()
+                .into_iter()
+                .map(Option::unwrap_or_default)
+                .collect();
+            assert_eq!(split_default_xsvsep(&s), want, "{s:?}");
+        }
     }
 
     #[test]

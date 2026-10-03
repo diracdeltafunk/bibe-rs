@@ -23,6 +23,12 @@ pub fn perl_sort<S: AsRef<str>>(v: &mut [S]) {
     v.sort_by(|a, b| perl_cmp(a.as_ref(), b.as_ref()));
 }
 
+/// Perl's stable `sort { $a->{k} <=> $b->{k} } @items` (numeric key,
+/// `undef` = 0, see [`crate::truth::num_cmp_opt`]).
+pub fn sort_by_num_key<T>(items: &mut [T], key: impl Fn(&T) -> Option<&str>) {
+    items.sort_by(|a, b| crate::truth::num_cmp_opt(key(a), key(b)));
+}
+
 /// `Biber::Utils::reduce_array`: the elements of `a` not in `b`, keeping
 /// `a`'s order and duplicates.
 pub fn reduce_array<S: AsRef<str> + Clone>(a: &[S], b: &[S]) -> Vec<S> {

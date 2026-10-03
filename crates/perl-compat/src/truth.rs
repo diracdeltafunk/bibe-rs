@@ -694,6 +694,20 @@ pub fn num_cmp_str(a: &str, b: &str) -> Option<Ordering> {
     PerlNum::parse(a).num_cmp(PerlNum::parse(b))
 }
 
+/// `$a <=> $b` on possibly-undefined strings (`undef` numifies to 0), with
+/// NaN comparisons (perl: `undef`, which `sort` treats as 0) mapped to
+/// `Equal` — what `sort { $a->{order} <=> $b->{order} }` sees.
+pub fn num_cmp_opt(a: Option<&str>, b: Option<&str>) -> Ordering {
+    let x = a.map_or(PerlNum::Int(0), PerlNum::parse);
+    let y = b.map_or(PerlNum::Int(0), PerlNum::parse);
+    x.num_cmp(y).unwrap_or(Ordering::Equal)
+}
+
+/// Perl numification of a string as a double (`$s + 0.0`).
+pub fn numify(s: &str) -> f64 {
+    PerlNum::parse(s).as_f64()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
