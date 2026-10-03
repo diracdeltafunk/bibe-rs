@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A custom recode data file for differential tests (sets "mine" and "other"). -->
+<texmap>
+  <maps type="letters" set="mine, other">
+    <map><from>foo</from>          <to>Ƒ</to></map>
+    <map><from>foobar</from>       <to>ƒ</to></map>
+    <map><from preferred="1">fo</from> <to>ƒ</to></map>
+    <map><from>i</from>            <to>ı</to></map>
+    <map><from>ae</from>           <to>æ</to></map>
+    <map><from raw="1">AE</from>   <to>Æ</to></map>
+  </maps>
+  <maps type="diacritics" set="mine">
+    <map><from>'</from>  <to>&#x301;</to></map>
+    <map><from>~</from>  <to>&#x303;</to></map>
+    <map><from>zz</from> <to>&#x330;</to></map>
+    <map><from>"</from>  <to>&#x308;</to></map>
+    <map><from>v</from>  <to>&#x30C;</to></map>
+    <map><from>c</from>  <to>&#x327;</to></map>
+  </maps>
+  <maps type="symbols" set="mine,other">
+    <map><from>textq</from>        <to>q</to></map>
+    <map><from>eur</from>          <to>€</to></map>
+    <map><from preferred="1" raw="1">EUR</from> <to>€</to></map>
+    <map><from>guilsinglleft</from> <to>‹</to></map>
+    <map><from>textdollar</from>   <to>$</to></map>
+  </maps>
+  <maps type="symbols" set="other">
+    <map><from>eur</from>          <to>€</to></map>
+  </maps>
+  <maps type="superscripts" set="mine">
+    <map><from>q</from>  <to>ꝗ</to></map>
+    <map><from>qq</from> <to>ᵠ</to></map>
+  </maps>
+  <maps type="negatedsymbols" set="mine">
+    <map><from>eq</from> <to>≠</to></map>
+  </maps>
+  <maps type="greek" set="other">
+    <map><from>alpha</from> <to>α</to></map>
+    <map><from>al</from>    <to>ɑ</to></map>
+  </maps>
+  <decode_exclude>
+    <char>textq</char>
+  </decode_exclude>
+  <encode_exclude>
+    <char>$</char>
+    <char>q</char>
+  </encode_exclude>
+</texmap>
