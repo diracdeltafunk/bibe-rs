@@ -298,6 +298,10 @@ pub(crate) fn encode(t: &EncodeTables, input: &str) -> String {
         Ty::Symbols,
     ] {
         let Some(km) = t.get(ty) else { continue };
+        // Every pass of every type needs a key match somewhere.
+        if !a.bytes().any(|c| km.trie.starts_with_byte(c)) {
+            continue;
+        }
         let fmt = match ty {
             Ty::NegatedSymbols => Fmt::Not,
             Ty::Superscripts => Fmt::Sup,

@@ -190,9 +190,7 @@ pub(crate) fn grapheme_end(s: &str, start: usize) -> usize {
         } else {
             0
         };
-        ep = if is_ext_pict(c) {
-            1
-        } else if ep == 1 && cur == Gcb::Extend {
+        ep = if is_ext_pict(c) || (ep == 1 && cur == Gcb::Extend) {
             1
         } else if ep == 1 && cur == Gcb::ZWJ {
             2

@@ -628,20 +628,29 @@ fn accent_bare(src: &str, out: &mut String, km: &KeyMap, cands: &mut Vec<(usize,
 /// whose `{` is the last `{` before it (groups contain no `{`) and whose
 /// interior is non-empty; otherwise the suffix must be a maximal run of
 /// letters preceded by `\`.
-fn ends_with_macro_args(src: &str, p: usize) -> bool {
+///
+/// Every position visited along the backward chain has the same answer;
+/// they are memoised in `memo` (0 = unknown, 1 = no, 2 = yes; allocated on
+/// first use) so long runs of groups stay linear.
+fn ends_with_macro_args(src: &str, p: usize, memo: &mut Vec<u8>) -> bool {
     let b = src.as_bytes();
     let mut pos = p;
-    loop {
+    let mut chain: Vec<usize> = Vec::new();
+    let result = loop {
+        if let Some(&m) = memo.get(pos).filter(|&&m| m != 0) {
+            break m == 2;
+        }
         if pos == 0 {
-            return false;
+            break false;
         }
         if b[pos - 1] == b'}' {
             let Some(s) = memrchr(b'{', &b[..pos - 1]) else {
-                return false;
+                break false;
             };
             if s + 2 >= pos {
-                return false;
+                break false;
             }
+            chain.push(pos);
             pos = s;
             continue;
         }
@@ -653,8 +662,18 @@ fn ends_with_macro_args(src: &str, p: usize) -> bool {
                 break;
             }
         }
-        return k < pos && k > 0 && b[k - 1] == b'\\';
+        break k < pos && k > 0 && b[k - 1] == b'\\';
+    };
+    if !chain.is_empty() {
+        if memo.is_empty() {
+            memo.resize(b.len() + 1, 0);
+        }
+        chain.push(pos);
+        for c in chain {
+            memo[c] = if result { 2 } else { 1 };
+        }
     }
+    result
 }
 
 /// Brace elimination (`Recode.pm:321`):
@@ -665,6 +684,7 @@ fn eliminate_braces(src: &str, out: &mut String) -> bool {
     let b = src.as_bytes();
     let mut rw = Rw::new(src, out);
     let mut pos = 0;
+    let mut memo = Vec::new();
     while let Some(k) = memchr2(b'{', 0x1f, &b[pos..]) {
         let p = pos + k;
         pos = p + 1;
@@ -672,7 +692,7 @@ fn eliminate_braces(src: &str, out: &mut String) -> bool {
             break;
         }
         let ce = grapheme_end(src, p + 1);
-        if !matches!(b.get(ce), Some(b'}' | 0x1e)) || ends_with_macro_args(src, p) {
+        if !matches!(b.get(ce), Some(b'}' | 0x1e)) || ends_with_macro_args(src, p, &mut memo) {
             continue;
         }
         rw.replace(p, ce + 1).push_str(&src[p + 1..ce]);
