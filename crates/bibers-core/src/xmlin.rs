@@ -205,10 +205,11 @@ impl std::error::Error for XmlError {}
 
 /// Parsing options for roxmltree matching XML::LibXML's (entities expanded,
 /// no external DTD).
-fn parse_opts() -> roxmltree::ParsingOptions {
+fn parse_opts<'a>() -> roxmltree::ParsingOptions<'a> {
     roxmltree::ParsingOptions {
         allow_dtd: true,
         nodes_limit: u32::MAX,
+        ..roxmltree::ParsingOptions::default()
     }
 }
 
