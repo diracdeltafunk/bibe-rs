@@ -174,7 +174,7 @@ token printed with empty text (Z-001) or, at the top level, ignored (Z-002).
   VT and FF all become spaces (WS-4..WS-6, WS3-1, WS3-7, `enum_tabs`). A piece
   consisting of exactly one tab becomes a space (`enum_tabs`: `{\t}`, `NOTC`,
   `OCTN`; but `{\t\t}`, `{\t\r}`, `x\t` stay). After a backslash the rest of
-  the piece is ordinary (no conversion; `{\n c\\\td}` keeps the tab).
+  the piece is ordinary (no conversion; MS-007).
 - Tabs elsewhere are kept (WS-1, WS-3, WS-7).
 
 **Runaway warning.** When a string (or comment body) contains a newline after
@@ -345,7 +345,7 @@ drops these). A definition whose value failed to parse defines nothing (`fuzz`
 g2-1925, g2-1962). After all definitions of the entry, the field values handed
 back are **expanded again** with the updated table (with warnings again for
 still-undefined macros): `@string{m = "a" # m # "b"}` defines `m="ab"` but
-reports `"aabb"` (`fuzz` g1-17, g1-55, g2-1962; macro probes in §11).
+reports `"aabb"` (MS-001..MS-006, `fuzz` g1-17, g1-55, g2-1962).
 
 The table is global: definitions persist across entries, files and refsections
 until `delete_all_macros` (`fuzz` op `files`).
@@ -536,6 +536,6 @@ Results (2026-10-03): 100,000 random requests (seed 7: 42,837 single files,
 mismatches**; 455 oracle crashes reproduced as crashes; 254 vectors excluded
 as printf garbage (§8.3) or irregular/unbalanced-brace names (§6.5). All
 1,182 UTF-8 `.bib` files of TeX Live 2026 plus the corpus (`files2req.pl`):
-1,181 identical, 1 crash reproduced (NUL bytes). Committed sets: 758 spec
+1,181 identical, 1 crash reproduced (NUL bytes). Committed sets: 765 spec
 vectors (`tests/data/spec_cases.jsonl`), 6,000 random vectors (seed 11,
 `tests/data/fuzz_vectors.jsonl`).
