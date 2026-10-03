@@ -228,7 +228,7 @@ impl Token {
                 v.push(self.delim);
                 v.extend_from_slice(&self.text);
                 v.push(close);
-                String::from_utf8_lossy(&v).into_owned()
+                printf_mangle(&String::from_utf8_lossy(&v))
             }
             Tk::At => "@".into(),
             Tk::Equals => "=".into(),
@@ -239,6 +239,39 @@ impl Token {
             Tk::Eof => String::new(),
         }
     }
+}
+
+/// btparse passes the offending token text to `printf` as part of the
+/// format string (spec §8.3), so `%` sequences in it are interpreted.
+fn printf_mangle(s: &str) -> String {
+    if !s.contains('%') {
+        return s.to_string();
+    }
+    let mut out = String::with_capacity(s.len());
+    let mut it = s.chars().peekable();
+    while let Some(c) = it.next() {
+        if c != '%' {
+            out.push(c);
+            continue;
+        }
+        // flags, width, precision, length modifiers
+        while let Some(&n) = it.peek() {
+            if matches!(n, '-' | '+' | ' ' | '#' | '0'..='9' | '.' | '\'' | 'h' | 'l' | 'L' | 'q' | 'j' | 'z' | 't') {
+                it.next();
+            } else {
+                break;
+            }
+        }
+        match it.next() {
+            None => {}
+            Some('%') => out.push('%'),
+            Some('d' | 'i' | 'o' | 'u' | 'x' | 'X') => out.push('0'),
+            Some('s') => out.push_str("(null)"),
+            Some('c') => {}
+            Some(other) => out.push(other),
+        }
+    }
+    out
 }
 
 fn describe(t: Tk) -> &'static str {
@@ -288,6 +321,28 @@ fn metatype_of(name: &[u8]) -> Metatype {
         Metatype::MacroDef
     } else {
         Metatype::Regular
+    }
+}
+
+/// Piece state while reading string text (spec §2.6).
+struct Pieces {
+    /// inside a newline piece: whitespace becomes spaces
+    in_w: bool,
+    /// at the first character of a piece
+    at_start: bool,
+}
+
+impl Pieces {
+    fn new() -> Self {
+        Pieces {
+            in_w: false,
+            at_start: true,
+        }
+    }
+
+    fn boundary(&mut self) {
+        self.in_w = false;
+        self.at_start = true;
     }
 }
 
@@ -341,18 +396,28 @@ impl<'s> Lexer<'s> {
         self.pos += 1;
         let mut text = Vec::new();
         let mut depth: usize = if delim == b'{' { 1 } else { 0 };
-        let mut after_nl = false;
+        let mut ps = Pieces::new();
+        let start_line = self.line;
+        let mut runaway_warned = false;
         while self.pos < self.src.len() {
             let b = self.src[self.pos];
             self.pos += 1;
+            if b == b'\n' && !runaway_warned && self.looks_like_field(self.pos) {
+                runaway_warned = true;
+                out.push(Diag::new(
+                    DiagKind::Warning,
+                    self.line + 1,
+                    format!("possible runaway string started at line {start_line}"),
+                ));
+            }
             match b {
                 b'{' => {
                     depth += 1;
-                    after_nl = false;
+                    ps.boundary();
                     text.push(b);
                 }
                 b'}' => {
-                    after_nl = false;
+                    ps.boundary();
                     if depth == 0 {
                         out.push(Diag::new(
                             DiagKind::Error,
@@ -383,17 +448,70 @@ impl<'s> Lexer<'s> {
                         line: self.line,
                     });
                 }
-                b'\n' => {
-                    self.line += 1;
-                    after_nl = true;
-                    text.push(b' ');
-                }
-                b'\r' => {}
-                b'\t' | 0x0b | 0x0c if after_nl => text.push(b' '),
-                _ => text.push(b),
+                _ => self.piece_char(b, &mut text, &mut ps),
             }
         }
         None
+    }
+
+    /// Does the line starting at `i` look like `name =` (spec §2.6)?
+    fn looks_like_field(&self, mut i: usize) -> bool {
+        let s = self.src;
+        while i < s.len() && matches!(s[i], b' ' | b'\t') {
+            i += 1;
+        }
+        if i >= s.len() || !is_name_byte(s[i]) || s[i].is_ascii_digit() {
+            return false;
+        }
+        while i < s.len() && is_name_byte(s[i]) {
+            i += 1;
+        }
+        while i < s.len() && matches!(s[i], b' ' | b'\t') {
+            i += 1;
+        }
+        i < s.len() && s[i] == b'='
+    }
+
+    /// One character of string text other than a brace or the closing
+    /// delimiter (spec §2.6: newline/tab conversion by "pieces").
+    fn piece_char(&mut self, b: u8, text: &mut Vec<u8>, ps: &mut Pieces) {
+        match b {
+            b'\n' => {
+                self.line += 1;
+                text.push(b' ');
+                ps.in_w = true;
+                ps.at_start = false;
+            }
+            b'"' => {
+                text.push(b);
+                ps.boundary();
+            }
+            b'\r' => ps.at_start = false,
+            b'(' | b')' => {
+                text.push(b);
+                ps.boundary();
+            }
+            b'\\' => {
+                text.push(b);
+                ps.in_w = false;
+                ps.at_start = false;
+            }
+            b'\t' | 0x0b | 0x0c if ps.in_w => text.push(b' '),
+            b'\t'
+                if ps.at_start
+                    && matches!(
+                        self.src.get(self.pos),
+                        None | Some(b'{' | b'}' | b'"' | b'\n' | b'(' | b')')
+                    ) =>
+            {
+                text.push(b' ');
+                ps.at_start = false;
+            }
+            _ => {
+                text.push(b);
+                ps.at_start = false;
+            }
+        }
     }
 
     /// Read the body of `@comment{...}` / `@comment(...)`.
@@ -406,7 +524,7 @@ impl<'s> Lexer<'s> {
         let mut text = Vec::new();
         let mut pdepth = 0usize;
         let mut bdepth = 0usize;
-        let mut after_nl = false;
+        let mut ps = Pieces::new();
         while self.pos < self.src.len() {
             let b = self.src[self.pos];
             self.pos += 1;
@@ -437,11 +555,11 @@ impl<'s> Lexer<'s> {
                 }
                 b'{' => {
                     bdepth += 1;
-                    after_nl = false;
+                    ps.boundary();
                     text.push(b);
                 }
                 b'}' => {
-                    after_nl = false;
+                    ps.boundary();
                     if bdepth == 0 {
                         out.push(Diag::new(
                             DiagKind::Error,
@@ -453,14 +571,7 @@ impl<'s> Lexer<'s> {
                     }
                     text.push(b);
                 }
-                b'\n' => {
-                    self.line += 1;
-                    after_nl = true;
-                    text.push(b' ');
-                }
-                b'\r' => {}
-                b'\t' | 0x0b | 0x0c if after_nl => text.push(b' '),
-                _ => text.push(b),
+                _ => self.piece_char(b, &mut text, &mut ps),
             }
         }
         None
@@ -911,6 +1022,15 @@ impl<'s, 'st> Parser<'s, 'st> {
                 if metatype == Metatype::Comment {
                     let t = self.consume();
                     comment = Some(t.text);
+                } else if metatype == Metatype::Preamble {
+                    // the predicate fails but the string is kept as the value
+                    self.pending.push(Diag::new(
+                        DiagKind::Bare,
+                        0,
+                        "semantic error; failed predicate: '   metatype == BTE_COMMENT '",
+                    ));
+                    let t = self.consume();
+                    value_pieces = Some(vec![Piece::Str(t.text)]);
                 } else {
                     diags_before.append(&mut self.pending);
                     diags_before.push(Diag::new(
@@ -983,12 +1103,14 @@ impl<'s, 'st> Parser<'s, 'st> {
         diags.append(&mut self.pending);
         let parse_ok = self.ok;
         let mut out_fields = Vec::with_capacity(fields.len());
+        let mut raw_pieces: Vec<Option<Vec<Piece>>> = Vec::with_capacity(fields.len());
         for f in fields {
             let name = String::from_utf8_lossy(&f.name).to_ascii_lowercase();
             let value = match &f.pieces {
                 Some(p) => self.expand(p, metatype != Metatype::MacroDef, &mut diags),
                 None => None,
             };
+            let pieces = f.pieces;
             if metatype == Metatype::MacroDef
                 && self.st.macros.define(&name, value.as_deref().unwrap_or(""))
             {
@@ -1003,6 +1125,16 @@ impl<'s, 'st> Parser<'s, 'st> {
                 value,
                 line: f.line,
             });
+            raw_pieces.push(pieces);
+        }
+        if metatype == Metatype::MacroDef {
+            // The values handed back are expanded again once all definitions
+            // of the entry are in place (spec §3.5).
+            for (f, p) in out_fields.iter_mut().zip(&raw_pieces) {
+                if let Some(p) = p {
+                    f.value = self.expand(p, false, &mut diags);
+                }
+            }
         }
         let value = match metatype {
             Metatype::Preamble => match &value_pieces {

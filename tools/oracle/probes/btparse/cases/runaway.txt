@@ -1,0 +1,58 @@
+### R-001 field-like line inside a string
+@misc{k, title = {a
+ b = c}}
+### R-002 field-like line at depth 2
+@misc{k, title = {a
+{x
+ b = c}}}
+### R-003 two field-like lines
+@misc{k, title = {a
+ b = c
+ d = e}}
+### R-004 quoted string
+@misc{k, title = "a
+ b = c"}
+### R-005 no space before value
+@misc{k, title = {a
+b=}}
+### R-006 digit name
+@misc{k, title = {a
+ 7 = c}}
+### R-007 two words before equals
+@misc{k, title = {a
+ b c = d}}
+### R-008 tabs
+@misc{k, title = {a
+	b	= c}}
+### R-009 braced name
+@misc{k, title = {a
+ {b} = c}}
+### R-010 equals on next line
+@misc{k, title = {a
+ b
+= c}}
+### R-011 equals later in line
+@misc{k, title = {a
+ b = c d = e}}
+### R-012 at sign line
+@misc{k, title = {a
+@misc{x, y = z}}}
+### R-013 two strings each runaway
+@misc{k, title = {a
+ b = c}, note = {d
+ e = f}}
+### P-001 percent before close brace in found text
+@misc{k, title {a%}}
+### P-002 percent space
+@misc{k, title {a% b}}
+### P-003 double percent
+@misc{k, title {a%%b}}
+### P-004 percent brace mid
+@misc{k, title {a%}b}}
+### P-005 percent d
+@misc{k, title {a %d}}
+### P-006 percent s
+@misc{k, title {a %s b}}
+### P-007 percent at end
+@misc{k, title {a%}
+}
