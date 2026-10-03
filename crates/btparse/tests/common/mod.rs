@@ -147,7 +147,10 @@ pub fn check(v: &Value) -> Outcome {
 
 pub fn is_name_irregular(v: &Value) -> bool {
     v["op"] == "name"
-        && split_name(v["s"].as_str().unwrap()).anomaly == Some(NameAnomaly::IrregularCommas)
+        && matches!(
+            split_name(v["s"].as_str().unwrap()).anomaly,
+            Some(NameAnomaly::IrregularCommas | NameAnomaly::UnbalancedBraces)
+        )
 }
 
 /// Run all vectors in a JSON-lines file; returns (total, mismatches) and

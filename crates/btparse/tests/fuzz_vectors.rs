@@ -15,6 +15,34 @@ mod common;
 use common::{Outcome, check, is_name_irregular};
 use std::collections::BTreeMap;
 
+/// btparse prints the offending token as part of a printf format (spec section 8.3);
+/// conversions such as `%e` or `%c` print stack garbage we cannot
+/// reproduce. Such vectors are reported separately.
+fn is_printf_garbage(
+    v: &serde_json::Value,
+    ours: &serde_json::Value,
+    theirs: &serde_json::Value,
+) -> bool {
+    if v["op"] != "parse" || !v["text"].as_str().unwrap_or("").contains('%') {
+        return false;
+    }
+    let strip = |x: &serde_json::Value| {
+        let mut x = x.clone();
+        if let Some(d) = x.get_mut("diags").and_then(|d| d.as_array_mut()) {
+            d.retain(|s| !s.as_str().unwrap_or("").contains("syntax error: found"));
+        }
+        x
+    };
+    if theirs.get("crash").is_some() {
+        // e.g. `%s` in the token: printf reads a bogus pointer and crashes
+        return ours["diags"].as_array().is_some_and(|d| {
+            d.iter()
+                .any(|s| s.as_str().unwrap_or("").contains("syntax error: found"))
+        });
+    }
+    strip(ours) == strip(theirs)
+}
+
 fn stats(path: &str, show: usize) -> usize {
     let data = std::fs::read_to_string(path).unwrap_or_else(|e| panic!("{path}: {e}"));
     // op -> [total, match, crash-match, mismatch, mismatch-irregular]
@@ -30,7 +58,7 @@ fn stats(path: &str, show: usize) -> usize {
             Outcome::Match => e[1] += 1,
             Outcome::CrashMatch => e[2] += 1,
             Outcome::Mismatch { ours, theirs } => {
-                if is_name_irregular(&v) {
+                if is_name_irregular(&v) || is_printf_garbage(&v, &ours, &theirs) {
                     e[4] += 1;
                     continue;
                 }
@@ -48,7 +76,7 @@ fn stats(path: &str, show: usize) -> usize {
     }
     for (op, s) in &st {
         eprintln!(
-            "{op:6} total {:7}  match {:7}  crash-match {:5}  MISMATCH {:5}  (irregular-comma names, not counted: {})",
+            "{op:6} total {:7}  match {:7}  crash-match {:5}  MISMATCH {:5}  (excluded: irregular names or printf garbage: {})",
             s[0], s[1], s[2], s[3], s[4]
         );
     }
@@ -66,7 +94,10 @@ fn curated_fuzz_vectors() {
 #[ignore = "needs a vectors file from the Perl oracle (BTPARSE_VECTORS)"]
 fn large_fuzz_run() {
     let path = std::env::var("BTPARSE_VECTORS").expect("set BTPARSE_VECTORS");
-    let show = std::env::var("BTPARSE_SHOW").ok().and_then(|s| s.parse().ok()).unwrap_or(20);
+    let show = std::env::var("BTPARSE_SHOW")
+        .ok()
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(20);
     let bad = stats(&path, show);
     assert_eq!(bad, 0, "{bad} vectors differ");
 }

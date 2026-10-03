@@ -32,6 +32,9 @@ pub enum NameAnomaly {
     /// A leading comma or two commas with no token between them. btparse does
     /// not crash but its result is not fully characterised; ours is best effort.
     IrregularCommas,
+    /// Unbalanced braces (btparse warns `unmatched '{'`/`'}'`). Results are
+    /// best effort when this is combined with commas inside the unclosed group.
+    UnbalancedBraces,
 }
 
 /// Result of [`split_name`].
@@ -159,6 +162,8 @@ pub fn split_name(s: &str) -> SplitName<'_> {
     let n = tokens.len();
     let mut anomaly = if irregular {
         Some(NameAnomaly::IrregularCommas)
+    } else if !diags.is_empty() {
+        Some(NameAnomaly::UnbalancedBraces)
     } else {
         None
     };

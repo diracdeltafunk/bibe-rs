@@ -255,16 +255,35 @@ fn printf_mangle(s: &str) -> String {
             continue;
         }
         // flags, width, precision, length modifiers
+        let mut width = 0usize;
+        let mut left = false;
+        let mut in_prec = false;
         while let Some(&n) = it.peek() {
-            if matches!(n, '-' | '+' | ' ' | '#' | '0'..='9' | '.' | '\'' | 'h' | 'l' | 'L' | 'q' | 'j' | 'z' | 't') {
-                it.next();
-            } else {
-                break;
+            match n {
+                '-' => left = true,
+                '.' => in_prec = true,
+                '0'..='9' if !in_prec => {
+                    width = width
+                        .saturating_mul(10)
+                        .saturating_add(n as usize - '0' as usize);
+                }
+                '+' | ' ' | '#' | '0'..='9' | '\'' | 'h' | 'l' | 'L' | 'q' | 'j' | 'z' | 't' => {}
+                _ => break,
             }
+            it.next();
         }
         match it.next() {
             None => {}
-            Some('%') => out.push('%'),
+            Some('%') => {
+                let pad = " ".repeat(width.saturating_sub(1).min(4096));
+                if left {
+                    out.push('%');
+                    out.push_str(&pad);
+                } else {
+                    out.push_str(&pad);
+                    out.push('%');
+                }
+            }
             Some('d' | 'i' | 'o' | 'u' | 'x' | 'X') => out.push('0'),
             Some('s') => out.push_str("(null)"),
             Some('c') => {}
@@ -354,6 +373,9 @@ struct Lexer<'s> {
     metatype: Metatype,
     opener: u8,
     junk: usize,
+    /// the previous top-level character was junk (a `%` then does not start
+    /// a comment)
+    junk_run: bool,
 }
 
 impl<'s> Lexer<'s> {
@@ -372,8 +394,11 @@ impl<'s> Lexer<'s> {
                 true
             }
             None => {
-                let text = String::from_utf8_lossy(&self.src[start..]).into_owned();
-                out.push(Diag::new(DiagKind::InvalidToken, self.line, text));
+                // a lone `%` at the very end is silently dropped
+                if self.src.len() - start > 1 {
+                    let text = String::from_utf8_lossy(&self.src[start..]).into_owned();
+                    out.push(Diag::new(DiagKind::InvalidToken, self.line, text));
+                }
                 self.pos = self.src.len();
                 false
             }
@@ -460,10 +485,13 @@ impl<'s> Lexer<'s> {
         while i < s.len() && matches!(s[i], b' ' | b'\t') {
             i += 1;
         }
-        if i >= s.len() || !is_name_byte(s[i]) || s[i].is_ascii_digit() {
+        if i >= s.len() || !s[i].is_ascii_alphabetic() {
             return false;
         }
-        while i < s.len() && is_name_byte(s[i]) {
+        while i < s.len()
+            && (s[i].is_ascii_alphanumeric()
+                || matches!(s[i], b':' | b'+' | b'/' | b'\'' | b'.' | b'-'))
+        {
             i += 1;
         }
         while i < s.len() && matches!(s[i], b' ' | b'\t') {
@@ -585,7 +613,12 @@ impl<'s> Lexer<'s> {
             let b = self.src[self.pos];
             if self.mode == Mode::Top {
                 match b {
+                    b'@' if self.pos + 1 == self.src.len() => {
+                        // an `@` as the very last byte is not a token
+                        self.pos += 1;
+                    }
                     b'@' => {
+                        self.junk_run = false;
                         if self.junk > 0 {
                             self.warn(
                                 out,
@@ -597,15 +630,20 @@ impl<'s> Lexer<'s> {
                         self.mode = Mode::AfterAt;
                         return Token::simple(Tk::At, b'@', self.line);
                     }
-                    b'%' => {
+                    b'%' if !self.junk_run => {
                         self.skip_comment(out);
                     }
                     b'\n' => {
+                        self.junk_run = false;
                         self.line += 1;
                         self.pos += 1;
                     }
-                    _ if is_ws(b) => self.pos += 1,
+                    _ if is_ws(b) => {
+                        self.junk_run = false;
+                        self.pos += 1;
+                    }
                     _ => {
+                        self.junk_run = true;
                         self.junk += 1;
                         self.pos += 1;
                     }
@@ -788,6 +826,7 @@ impl<'s, 'st> Parser<'s, 'st> {
                 metatype: Metatype::Regular,
                 opener: b'{',
                 junk: 0,
+                junk_run: false,
             },
             st,
             la: None,
@@ -1111,7 +1150,9 @@ impl<'s, 'st> Parser<'s, 'st> {
                 None => None,
             };
             let pieces = f.pieces;
+            // a definition whose value failed to parse defines nothing
             if metatype == Metatype::MacroDef
+                && pieces.as_ref().is_some_and(|p| !p.is_empty())
                 && self.st.macros.define(&name, value.as_deref().unwrap_or(""))
             {
                 diags.push(Diag::new(
@@ -1177,6 +1218,15 @@ impl Iterator for Parser<'_, '_> {
         }
         if self.la.is_none() {
             let t = self.lx.next(&mut self.pending);
+            if t.kind == Tk::Eof {
+                // no entry at all: btparse reports the missing "@"
+                let line = t.line;
+                self.pending.push(Diag::new(
+                    DiagKind::SyntaxError,
+                    line,
+                    "at end of input, expected \"@\"",
+                ));
+            }
             self.la = Some(t);
         }
         if self.lk() == Tk::Eof {
