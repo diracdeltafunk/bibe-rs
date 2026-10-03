@@ -158,6 +158,14 @@ Quoted string: starts at `"`, depth 0; `{`/`}` change the depth; a `"` at depth
 At end of input inside a string, the string is discarded and the token is EOF
 (L-033, L-034, V-003). No diagnostic for the unterminated string itself.
 
+**NUL bytes.** A NUL byte inside a string or comment body makes libbtparse
+abort (SIGABRT) after printing `Assertion failed: ((txt[0] == '{' &&
+txt[len-1] == '}') || (txt[0] == '\"' && txt[len-1] == '\"')), function
+zzcr_attr, file lex_auxiliary.c, line 158.` (Z-003..Z-005, WS-18). biber 2.22
+then exits 134 without a message (confirmed with O1); the TeX Live file
+`doc/latex/umthesis/felty.bib` triggers it. Elsewhere a NUL is an invalid
+token printed with empty text (Z-001) or, at the top level, ignored (Z-002).
+
 **Whitespace inside strings.** The token text keeps all characters except:
 - `\r` is deleted (WS-11, WS2-8 in `c1`/`enum_tabs`-style probes).
 - The text is divided into *pieces* at `{`, `}`, `"`, `(`, `)` and `\n`
@@ -513,8 +521,8 @@ reproduce all artefacts exactly.
   reproduced; irregular-comma names and unbalanced-brace names are best effort.
 - Lexer state leaking between files after lexical errors (seen once as an
   abort in an un-forked probe run) is not modelled.
-- Not characterised: `@string`/regular entries whose body is a STRING (fatal
-  anyway), very long tokens, NUL bytes (btparse asserts: WS-18).
+- Not characterised: `@string` entries whose body is a STRING (regular ones
+  are fatal), very long tokens.
 
 ## 11. Differential testing
 
@@ -522,3 +530,12 @@ reproduce all artefacts exactly.
 character mutations, multi-file sequences, names, name lists); `vectors.pl`
 runs them through Text::BibTeX exactly as biber does (forked per request,
 crashes recorded); `cargo test -p btparse --test fuzz_vectors` compares.
+
+Results (2026-10-03): 100,000 random requests (seed 7: 42,837 single files,
+14,321 multi-file sequences, 28,369 names, 14,473 name lists): **0
+mismatches**; 455 oracle crashes reproduced as crashes; 254 vectors excluded
+as printf garbage (§8.3) or irregular/unbalanced-brace names (§6.5). All
+1,182 UTF-8 `.bib` files of TeX Live 2026 plus the corpus (`files2req.pl`):
+1,181 identical, 1 crash reproduced (NUL bytes). Committed sets: 758 spec
+vectors (`tests/data/spec_cases.jsonl`), 6,000 random vectors (seed 11,
+`tests/data/fuzz_vectors.jsonl`).

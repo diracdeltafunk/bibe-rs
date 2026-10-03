@@ -343,6 +343,10 @@ fn metatype_of(name: &[u8]) -> Metatype {
     }
 }
 
+/// What libbtparse prints when a string token contains a NUL byte, just
+/// before it aborts (spec §2.6).
+const NUL_ASSERT: &str = r#"Assertion failed: ((txt[0] == '{' && txt[len-1] == '}') || (txt[0] == '\"' && txt[len-1] == '\"')), function zzcr_attr, file lex_auxiliary.c, line 158."#;
+
 /// Piece state while reading string text (spec §2.6).
 struct Pieces {
     /// inside a newline piece: whitespace becomes spaces
@@ -376,6 +380,8 @@ struct Lexer<'s> {
     /// the previous top-level character was junk (a `%` then does not start
     /// a comment)
     junk_run: bool,
+    /// a NUL byte inside a string made libbtparse abort (spec §2.6)
+    fatal: bool,
 }
 
 impl<'s> Lexer<'s> {
@@ -410,7 +416,12 @@ impl<'s> Lexer<'s> {
 
     fn invalid(&mut self, out: &mut Vec<Diag>) {
         let b = self.src[self.pos];
-        let text = (b as char).to_string();
+        // printed with %s: a NUL byte shows as nothing
+        let text = if b == 0 {
+            String::new()
+        } else {
+            (b as char).to_string()
+        };
         out.push(Diag::new(DiagKind::InvalidToken, self.line, text));
         // the offending byte and the one after it are dropped (a dropped
         // newline is not counted)
@@ -475,6 +486,13 @@ impl<'s> Lexer<'s> {
                         ch: 0,
                         line: self.line,
                     });
+                }
+                0 => {
+                    if !self.fatal {
+                        self.fatal = true;
+                        out.push(Diag::new(DiagKind::Bare, 0, NUL_ASSERT));
+                    }
+                    text.push(0);
                 }
                 _ => self.piece_char(b, &mut text, &mut ps),
             }
@@ -612,6 +630,13 @@ impl<'s> Lexer<'s> {
                     }
                     text.push(b);
                 }
+                0 => {
+                    if !self.fatal {
+                        self.fatal = true;
+                        out.push(Diag::new(DiagKind::Bare, 0, NUL_ASSERT));
+                    }
+                    text.push(0);
+                }
                 _ => self.piece_char(b, &mut text, &mut ps),
             }
         }
@@ -651,6 +676,7 @@ impl<'s> Lexer<'s> {
                         self.junk_run = false;
                         self.pos += 1;
                     }
+                    0 => self.pos += 1,
                     _ => {
                         self.junk_run = true;
                         self.junk += 1;
@@ -836,6 +862,7 @@ impl<'s, 'st> Parser<'s, 'st> {
                 opener: b'{',
                 junk: 0,
                 junk_run: false,
+                fatal: false,
             },
             st,
             la: None,
@@ -1245,6 +1272,19 @@ impl Iterator for Parser<'_, '_> {
             return None;
         }
         let item = self.parse_entry();
+        if self.lx.fatal {
+            // the process aborted while reading this entry
+            self.done = true;
+            let mut diags = match item {
+                Item::Entry(e) => e.diags,
+                Item::Stop { diags, .. } => diags,
+            };
+            if let Some(i) = diags.iter().position(|d| d.message == NUL_ASSERT) {
+                diags.truncate(i + 1);
+            }
+            self.pending.clear();
+            return Some(Item::Stop { diags, fatal: true });
+        }
         if matches!(item, Item::Stop { .. }) {
             self.done = true;
         }
