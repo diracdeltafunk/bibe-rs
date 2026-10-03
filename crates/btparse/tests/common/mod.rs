@@ -19,8 +19,25 @@ fn mt(m: Metatype) -> &'static str {
 
 /// Our result for a parse request, in the oracle's canonical shape.
 pub fn ours_parse(text: &str) -> Value {
+    ours_parse_in(&mut BtState::biber(), text)
+}
+
+/// Several files parsed in sequence with shared state.
+pub fn ours_files(texts: &[Value]) -> Value {
     let mut st = BtState::biber();
-    let mut p = btparse::Parser::new(text, &mut st);
+    let mut out = Vec::new();
+    for t in texts {
+        let r = ours_parse_in(&mut st, t.as_str().unwrap());
+        if r.get("crash").is_some() {
+            return r;
+        }
+        out.push(r);
+    }
+    json!({ "files": out })
+}
+
+fn ours_parse_in(st: &mut BtState, text: &str) -> Value {
+    let mut p = btparse::Parser::new(text, st);
     let mut entries = Vec::new();
     let mut diags = Vec::new();
     let mut fatal = false;
@@ -126,6 +143,7 @@ pub fn check(v: &Value) -> Outcome {
     let theirs = &v["out"];
     let ours = match op {
         "parse" => ours_parse(v["text"].as_str().unwrap()),
+        "files" => ours_files(v["texts"].as_array().unwrap()),
         "list" => ours_list(v["s"].as_str().unwrap(), v["d"].as_str().unwrap()),
         "name" => ours_name(v["s"].as_str().unwrap()),
         _ => panic!("bad op {op}"),
@@ -172,7 +190,10 @@ pub fn run_file(path: &str, show: usize, allow: &[&str]) -> (usize, Vec<String>)
             }
             if bad.len() < show {
                 eprintln!("--- mismatch {id}");
-                eprintln!("input: {}", v.get("text").or(v.get("s")).unwrap());
+                eprintln!(
+                    "input: {}",
+                    v.get("text").or(v.get("s")).or(v.get("texts")).unwrap()
+                );
                 eprintln!("ours:   {ours}");
                 eprintln!("theirs: {theirs}");
             }

@@ -268,6 +268,12 @@ pub fn split_name(s: &str) -> SplitName<'_> {
         }
     }
 
+    // with unbalanced braces our comma model is not reliable (spec §6.5)
+    if anomaly == Some(NameAnomaly::Crash) && diags.iter().any(|d| d.message.contains("unmatched"))
+    {
+        anomaly = Some(NameAnomaly::UnbalancedBraces);
+    }
+
     SplitName {
         parts,
         diags,

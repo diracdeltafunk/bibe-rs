@@ -28,24 +28,31 @@ while (my $line = <STDIN>) {
   my $op = $req->{op};
   my %v = (op => $op);
   my $out;
-  if ($op eq 'parse') {
-    my $text = NFD($req->{text});
-    $v{text} = $text;
+  if ($op eq 'parse' or $op eq 'files') {
+    # 'files': several files parsed in sequence in one process, so that the
+    # macro table and the parser's recovery state carry over (as in biber)
+    my @texts = $op eq 'parse' ? ($req->{text}) : $req->{texts}->@*;
+    @texts = map { NFD($_) } @texts;
+    if ($op eq 'parse') { $v{text} = $texts[0] } else { $v{texts} = \@texts }
     $out = BtProbe::isolated(sub {
       BtProbe::reset_macros('biber');
-      my $r = BtProbe::parse_text($text);
-      my @diags;
-      my @ents;
-      for my $e ($r->{entries}->@*) {
-        push @diags, $e->{diags}->@*;
-        my %c = (mt => $e->{metatype}, type => dec($e->{type}), ok => $e->{ok});
-        $c{key} = dec($e->{key}) if exists $e->{key};
-        $c{fields} = [ map { [dec($_->[0]), $_->[1]] } $e->{fields}->@* ] if $e->{fields};
-        $c{value} = $e->{value} if exists $e->{value};
-        push @ents, \%c;
+      my @res;
+      for my $text (@texts) {
+        my $r = BtProbe::parse_text($text);
+        my @diags;
+        my @ents;
+        for my $e ($r->{entries}->@*) {
+          push @diags, $e->{diags}->@*;
+          my %c = (mt => $e->{metatype}, type => dec($e->{type}), ok => $e->{ok});
+          $c{key} = dec($e->{key}) if exists $e->{key};
+          $c{fields} = [ map { [dec($_->[0]), $_->[1]] } $e->{fields}->@* ] if $e->{fields};
+          $c{value} = $e->{value} if exists $e->{value};
+          push @ents, \%c;
+        }
+        push @diags, $r->{tail}->@*;
+        push @res, { entries => \@ents, diags => \@diags };
       }
-      push @diags, $r->{tail}->@*;
-      return { entries => \@ents, diags => \@diags };
+      return $op eq 'parse' ? $res[0] : { files => \@res };
     });
   }
   elsif ($op eq 'list') {

@@ -159,9 +159,10 @@ sub namelist {
 }
 
 for my $i (1 .. $count) {
-  my $kind = $what eq 'all' ? pick('parse', 'parse', 'name', 'list') : $what;
+  my $kind = $what eq 'all' ? pick('parse', 'parse', 'parse', 'files', 'name', 'name', 'list') : $what;
   my %r = (id => "g$seed-$i", op => $kind);
   if ($kind eq 'parse') { $r{text} = bibfile() }
+  elsif ($kind eq 'files') { $r{texts} = [ map { bibfile() } 1 .. 2 + int rand 2 ] }
   elsif ($kind eq 'name') { $r{s} = name(); $r{sanitise} = JSON::PP::true }
   else { ($r{s}, $r{d}) = namelist() }
   print $J->encode(\%r), "\n";

@@ -23,22 +23,31 @@ fn is_printf_garbage(
     ours: &serde_json::Value,
     theirs: &serde_json::Value,
 ) -> bool {
-    if v["op"] != "parse" || !v["text"].as_str().unwrap_or("").contains('%') {
+    let input = v.to_string();
+    if !(v["op"] == "parse" || v["op"] == "files") || !input.contains('%') {
         return false;
     }
-    let strip = |x: &serde_json::Value| {
-        let mut x = x.clone();
-        if let Some(d) = x.get_mut("diags").and_then(|d| d.as_array_mut()) {
-            d.retain(|s| !s.as_str().unwrap_or("").contains("syntax error: found"));
+    fn strip(x: &serde_json::Value) -> serde_json::Value {
+        match x {
+            serde_json::Value::Array(a) => serde_json::Value::Array(
+                a.iter()
+                    .filter(|s| {
+                        !s.as_str().is_some_and(|s| {
+                            s.contains("syntax error: found") || s.ends_with("syntax error: ")
+                        })
+                    })
+                    .map(strip)
+                    .collect(),
+            ),
+            serde_json::Value::Object(o) => {
+                serde_json::Value::Object(o.iter().map(|(k, v)| (k.clone(), strip(v))).collect())
+            }
+            x => x.clone(),
         }
-        x
-    };
+    }
     if theirs.get("crash").is_some() {
         // e.g. `%s` in the token: printf reads a bogus pointer and crashes
-        return ours["diags"].as_array().is_some_and(|d| {
-            d.iter()
-                .any(|s| s.as_str().unwrap_or("").contains("syntax error: found"))
-        });
+        return ours.to_string().contains("syntax error: found");
     }
     strip(ours) == strip(theirs)
 }
@@ -67,7 +76,10 @@ fn stats(path: &str, show: usize) -> usize {
                 if shown < show {
                     shown += 1;
                     eprintln!("--- mismatch {}", v["id"]);
-                    eprintln!("input: {}", v.get("text").or(v.get("s")).unwrap());
+                    eprintln!(
+                        "input: {}",
+                        v.get("text").or(v.get("s")).or(v.get("texts")).unwrap()
+                    );
                     eprintln!("ours:   {ours}");
                     eprintln!("theirs: {theirs}");
                 }

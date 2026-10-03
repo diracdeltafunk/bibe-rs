@@ -553,9 +553,19 @@ impl<'s> Lexer<'s> {
         let mut pdepth = 0usize;
         let mut bdepth = 0usize;
         let mut ps = Pieces::new();
+        let start_line = self.line;
+        let mut runaway_warned = false;
         while self.pos < self.src.len() {
             let b = self.src[self.pos];
             self.pos += 1;
+            if b == b'\n' && !runaway_warned && self.looks_like_field(self.pos) {
+                runaway_warned = true;
+                out.push(Diag::new(
+                    DiagKind::Warning,
+                    self.line + 1,
+                    format!("possible runaway string started at line {start_line}"),
+                ));
+            }
             match b {
                 b'(' => {
                     pdepth += 1;
@@ -613,10 +623,6 @@ impl<'s> Lexer<'s> {
             let b = self.src[self.pos];
             if self.mode == Mode::Top {
                 match b {
-                    b'@' if self.pos + 1 == self.src.len() => {
-                        // an `@` as the very last byte is not a token
-                        self.pos += 1;
-                    }
                     b'@' => {
                         self.junk_run = false;
                         if self.junk > 0 {
@@ -936,16 +942,18 @@ impl<'s, 'st> Parser<'s, 'st> {
     }
 
     fn field(&mut self, fields: &mut Vec<RawField>) {
-        let t = self.consume(); // NAME
-        if t.text.first().is_some_and(u8::is_ascii_digit) {
+        // the name is checked before the next token is read (spec section 3.2)
+        if self.la().text.first().is_some_and(u8::is_ascii_digit) {
             let msg = format!(
                 "invalid field name \"{}\": cannot start with digit",
-                String::from_utf8_lossy(&t.text)
+                String::from_utf8_lossy(&self.la().text)
             );
+            let line = self.la().line;
             self.pending
-                .push(Diag::new(DiagKind::SyntaxError, t.line, msg));
+                .push(Diag::new(DiagKind::SyntaxError, line, msg));
             self.ok = false;
         }
+        let t = self.consume(); // NAME
         let idx = fields.len();
         fields.push(RawField {
             name: t.text,
@@ -1218,18 +1226,18 @@ impl Iterator for Parser<'_, '_> {
         }
         if self.la.is_none() {
             let t = self.lx.next(&mut self.pending);
-            if t.kind == Tk::Eof {
-                // no entry at all: btparse reports the missing "@"
-                let line = t.line;
-                self.pending.push(Diag::new(
-                    DiagKind::SyntaxError,
-                    line,
-                    "at end of input, expected \"@\"",
-                ));
-            }
+            let eof = t.kind == Tk::Eof;
             self.la = Some(t);
+            if eof {
+                // no entry at all: btparse reports the missing "@" and
+                // resynchronises (which matters for the next file, §3.4)
+                self.error_expected(&[Tk::At], "");
+                self.resync(FOLLOW_ENTRY);
+            }
         }
-        if self.lk() == Tk::Eof {
+        // Text::BibTeX does not parse again once the input stream is
+        // exhausted, even if the lookahead was an `@` (spec §3.1)
+        if self.lk() == Tk::Eof || (self.lk() == Tk::At && self.lx.pos >= self.lx.src.len()) {
             self.done = true;
             return None;
         }
