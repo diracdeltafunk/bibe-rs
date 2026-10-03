@@ -99,6 +99,22 @@ sub is_surrogate { my $c = shift; return $c >= 0xD800 && $c <= 0xDFFF }
     $body .= "];\n\n";
     say STDERR "  $name: " . scalar(@ranges) . " ranges";
   }
+  {
+    # quotemeta (on character strings): which code points get a backslash
+    my @ranges;
+    my $start;
+    for my $cp (0 .. $MAX + 1) {
+      my $in = 0;
+      if ($cp <= $MAX) { my $c = chr $cp; utf8::upgrade($c); $in = quotemeta($c) ne $c }
+      if ($in && !defined $start) { $start = $cp }
+      elsif (!$in && defined $start) { push @ranges, [$start, $cp - 1]; undef $start }
+    }
+    $body .= "/// Characters perl's `quotemeta` backslashes (character strings)\n";
+    $body .= "pub(crate) static QUOTEMETA: &[(u32, u32)] = &[\n";
+    my @items = map { sprintf("(0x%x, 0x%x)", @$_) } @ranges;
+    while (my @line = splice(@items, 0, 6)) { $body .= '    ' . join(', ', @line) . ",\n" }
+    $body .= "];\n\n";
+  }
   write_file('props.rs', $body);
 }
 
