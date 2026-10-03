@@ -1,0 +1,145 @@
+//! babel/polyglossia language names → BCP47 (`%LOCALE_MAP`, Constants.pm:372-470).
+
+/// `%LOCALE_MAP`, sorted by key for binary search.
+pub const LOCALE_MAP: &[(&str, &str)] = &[
+    ("UKenglish", "en-UK"),
+    ("USenglish", "en-US"),
+    ("acadian", "fr-CA"),
+    ("afrikaans", "af-ZA"),
+    ("albanian", "sq-AL"),
+    ("american", "en-US"),
+    ("amharic", "am-ET"),
+    ("arabic", "ar-001"),
+    ("armenian", "hy-AM"),
+    ("asturian", "ast-ES"),
+    ("australian", "en-AU"),
+    ("austrian", "de-AT"),
+    ("bahasa", "id-ID"),
+    ("bahasai", "id-ID"),
+    ("bahasam", "id-ID"),
+    ("basque", "eu-ES"),
+    ("bengali", "bn-BD"),
+    ("bgreek", "el-GR"),
+    ("brazil", "pt-BR"),
+    ("brazilian", "pt-BR"),
+    ("breton", "br-FR"),
+    ("british", "en-GB"),
+    ("bulgarian", "bg-BG"),
+    ("canadian", "en-CA"),
+    ("canadien", "fr-CA"),
+    ("catalan", "ca-AD"),
+    ("coptic", "cop"),
+    ("croatian", "hr-HR"),
+    ("czech", "cs-CZ"),
+    ("danish", "da-DK"),
+    ("divehi", "dv-MV"),
+    ("dutch", "nl-NL"),
+    ("english", "en-US"),
+    ("esperanto", "eo-001"),
+    ("estonian", "et-EE"),
+    ("ethiopia", "am-ET"),
+    ("farsi", "fa-IR"),
+    ("finnish", "fi-FI"),
+    ("francais", "fr-FR"),
+    ("french", "fr-FR"),
+    ("frenchle", "fr-FR"),
+    ("friulan", "fur-IT"),
+    ("galician", "gl-ES"),
+    ("german", "de-DE"),
+    ("germanb", "de-DE"),
+    ("greek", "el-GR"),
+    ("hebrew", "he-IL"),
+    ("hindi", "hi-IN"),
+    ("ibygreek", "el-CY"),
+    ("icelandic", "is-IS"),
+    ("indon", "id-ID"),
+    ("indonesia", "id-ID"),
+    ("interlingua", "ia-FR"),
+    ("irish", "ga-IE"),
+    ("italian", "it-IT"),
+    ("japanese", "ja-JP"),
+    ("kannada", "kn-IN"),
+    ("lao", "lo-LA"),
+    ("latin", "la-Latn"),
+    ("latvian", "lv-LV"),
+    ("lithuanian", "lt-LT"),
+    ("lowersorbian", "dsb-DE"),
+    ("lsorbian", "dsb-DE"),
+    ("magyar", "hu-HU"),
+    ("malay", "id-ID"),
+    ("malayalam", "ml-IN"),
+    ("marathi", "mr-IN"),
+    ("meyalu", "id-ID"),
+    ("mongolian", "mn-Cyrl"),
+    ("naustrian", "de-AT"),
+    ("newzealand", "en-NZ"),
+    ("ngerman", "de-DE"),
+    ("nko", "ha-NG"),
+    ("norsk", "nb-NO"),
+    ("norwegian", "nn-NO"),
+    ("nswissgerman", "de-CH"),
+    ("nynorsk", "nn-NO"),
+    ("occitan", "oc-FR"),
+    ("piedmontese", "pms-IT"),
+    ("pinyin", "pny"),
+    ("polish", "pl-PL"),
+    ("polutonikogreek", "el-GR"),
+    ("portuges", "pt-PT"),
+    ("portuguese", "pt-PT"),
+    ("romanian", "ro-RO"),
+    ("romansh", "rm-CH"),
+    ("russian", "ru-RU"),
+    ("samin", "se-NO"),
+    ("sanskrit", "sa-IN"),
+    ("scottish", "gd-GB"),
+    ("serbian", "sr-Latn"),
+    ("serbianc", "sr-Cyrl"),
+    ("slovak", "sk-SK"),
+    ("slovene", "sl-SI"),
+    ("slovenian", "sl-SI"),
+    ("spanish", "es-ES"),
+    ("swedish", "sv-SE"),
+    ("swiss", "de-CH"),
+    ("swissgerman", "de-CH"),
+    ("syriac", "syc"),
+    ("tamil", "ta-IN"),
+    ("telugu", "te-IN"),
+    ("thai", "th-TH"),
+    ("thaicjk", "th-TH"),
+    ("tibetan", "bo-CN"),
+    ("turkish", "tr-TR"),
+    ("turkmen", "tk-TM"),
+    ("ukrainian", "uk-UA"),
+    ("uppersorbian", "hsb-DE"),
+    ("urdu", "ur-IN"),
+    ("usorbian", "hsb-DE"),
+    ("vietnamese", "vi-VN"),
+    ("welsh", "cy-GB"),
+];
+
+/// `locale2bcp47`: map a babel/polyglossia language name to BCP47; other
+/// strings (and false values) pass through.
+pub fn locale2bcp47(s: Option<&str>) -> Option<&str> {
+    let v = s?;
+    if !crate::perlish::truthy(Some(v)) {
+        return Some(v);
+    }
+    match LOCALE_MAP.binary_search_by(|(k, _)| (*k).cmp(v)) {
+        Ok(i) => Some(LOCALE_MAP[i].1),
+        Err(_) => Some(v),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn map() {
+        assert_eq!(super::locale2bcp47(Some("ngerman")), Some("de-DE"));
+        assert_eq!(
+            super::locale2bcp47(Some("en_GB.UTF-8")),
+            Some("en_GB.UTF-8")
+        );
+        assert_eq!(super::locale2bcp47(None), None);
+        assert!(super::LOCALE_MAP.windows(2).all(|w| w[0].0 < w[1].0));
+    }
+}

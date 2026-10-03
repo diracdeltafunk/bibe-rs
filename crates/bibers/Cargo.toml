@@ -9,15 +9,21 @@ repository.workspace = true
 authors.workspace = true
 publish = false
 
+[lib]
+path = "src/lib.rs"
+
 [[bin]]
 name = "bibers"
 path = "src/main.rs"
 
 [dependencies]
 bibers-core.workspace = true
+chrono.workspace = true
 
 [dev-dependencies]
 bibers-testkit.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
 
 [lints]
 workspace = true
