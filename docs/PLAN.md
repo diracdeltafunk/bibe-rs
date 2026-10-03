@@ -261,7 +261,14 @@ Original M0 scope:
 - `xtask port-tests`: extract expected strings from `t/*.t`.
 - Initial corpus: t/tdata, biblatex examples, a 5-style matrix over biblatex-examples.bib.
 
-**M1: Foundations** (parallelisable; each crate is independently testable against its oracle)
+**M1: Foundations**: *done (2026-10-03).* Each crate was differentially tested against the Perl oracle, and compact vectors are committed so CI needs no Perl.
+- `ucollate`: ~5.6M sort keys identical to Unicode::Collate 1.31 (every code point × biber's collators, 87 tailorings, option matrix); ~120 ns per short key.
+- `btparse` (clean-room; spec in `docs/spec/btparse.md`): 100k random differential cases with no unexplained mismatches; 1,181/1,182 TeX Live `.bib` files identical (the remaining one hits a NUL-byte crash in biber); 133 MB/s.
+- `latex-recode`: ~2.2M random cases, 0 mismatches; ~300× faster than biber's decoding.
+- `perl-compat`: case mapping, normalisation, 44 regex classes and both grapheme segmenters exhaustive over all code points; 17,933 regex cases via PCRE2 (gaps documented as DC-036); ISBN/ISSN/ISMN, URI, roman numerals.
+- `bibers-core` config front end and the `bibers` CLI: post-parse state identical to biber on all 463 runnable corpus `.bcf` files; 126 CLI argv cases identical to Getopt::Long. The binary reaches the data model in about 8 ms.
+
+Original M1 scope:
 - `ucollate` (DUCET root first, then tailorings, then CJK), with exhaustive key diff vs O2.
 - `btparse` (parser, macros, split_name/format_name, diagnostics).
 - `latex-recode` (decode first).

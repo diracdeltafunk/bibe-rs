@@ -10,6 +10,7 @@ publish = false
 
 
 [dependencies]
+perl-compat.workspace = true
 roxmltree.workspace = true
 unicode-normalization.workspace = true
 serde_json.workspace = true

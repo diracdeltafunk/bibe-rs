@@ -1,189 +1,50 @@
-//! Minimal Perl-semantics helpers used by the configuration front end.
+//! Perl-semantics helpers used by the configuration front end.
 //!
-//! TODO(perl-compat): switch to the `perl-compat` crate's helpers once its
-//! API is available (truthiness, `looks_like_number`, `lc`/`fc`, numeric
-//! conversion). These private versions cover what the config layer needs.
+//! Thin wrappers over the `perl-compat` crate (verified exhaustively against
+//! perl 5.42), kept so call sites read like the Perl they port. Helpers that
+//! encode biber-specific logic (`split_comma`, `sort_by_order`) live here.
 
 use std::cmp::Ordering;
 
-use unicode_normalization::UnicodeNormalization;
-use unicode_normalization::{IsNormalized, is_nfc_quick, is_nfd_quick};
-
 /// Perl truthiness of a scalar: `undef`, `""` and `"0"` are false.
 pub fn truthy(s: Option<&str>) -> bool {
-    matches!(s, Some(v) if !v.is_empty() && v != "0")
+    perl_compat::truth::perl_truthy_opt(s)
 }
 
-/// Perl's `looks_like_number` (as implemented by `grok_number`): optional
-/// leading whitespace, optional sign, decimal digits with an optional
-/// fraction, or a fraction alone, an optional exponent, optional trailing
-/// whitespace; or `Inf`/`Infinity`/`NaN` in any case.
+/// Perl's `looks_like_number` (Scalar::Util, perl 5.42 `grok_number`).
 pub fn looks_like_number(s: &str) -> bool {
-    let t = s.trim_start_matches(is_perl_space);
-    let t = t.trim_end_matches(is_perl_space);
-    let t = t.strip_prefix(['+', '-']).unwrap_or(t);
-    if t.is_empty() {
-        return false;
-    }
-    let lower = t.to_ascii_lowercase();
-    if lower == "inf" || lower == "infinity" || lower == "nan" {
-        return true;
-    }
-    let b = t.as_bytes();
-    let mut i = 0;
-    let int_start = i;
-    while i < b.len() && b[i].is_ascii_digit() {
-        i += 1;
-    }
-    let int_digits = i - int_start;
-    let mut frac_digits = 0;
-    if i < b.len() && b[i] == b'.' {
-        i += 1;
-        let fs = i;
-        while i < b.len() && b[i].is_ascii_digit() {
-            i += 1;
-        }
-        frac_digits = i - fs;
-    }
-    if int_digits == 0 && frac_digits == 0 {
-        return false;
-    }
-    if i < b.len() && (b[i] == b'e' || b[i] == b'E') {
-        let mut j = i + 1;
-        if j < b.len() && (b[j] == b'+' || b[j] == b'-') {
-            j += 1;
-        }
-        let es = j;
-        while j < b.len() && b[j].is_ascii_digit() {
-            j += 1;
-        }
-        if j == es {
-            return false;
-        }
-        i = j;
-    }
-    i == b.len()
+    perl_compat::truth::looks_like_number(s)
 }
 
-fn is_perl_space(c: char) -> bool {
-    matches!(c, ' ' | '\t' | '\n' | '\r' | '\x0b' | '\x0c')
-}
-
-/// Perl's numification of a string (the value `0 + $s` would give): the
-/// longest numeric prefix after leading whitespace, `0` if there is none.
+/// Perl's numification of a string (the value `0 + $s` would give).
 pub fn numify(s: &str) -> f64 {
-    let t = s.trim_start_matches(is_perl_space);
-    let b = t.as_bytes();
-    let mut i = 0;
-    if i < b.len() && (b[i] == b'+' || b[i] == b'-') {
-        i += 1;
-    }
-    let rest = &t[i..];
-    let lower: String = rest
-        .chars()
-        .take(8)
-        .collect::<String>()
-        .to_ascii_lowercase();
-    if lower.starts_with("inf") || lower.starts_with("nan") {
-        let neg = t.starts_with('-');
-        if lower.starts_with("nan") {
-            return f64::NAN;
-        }
-        return if neg {
-            f64::NEG_INFINITY
-        } else {
-            f64::INFINITY
-        };
-    }
-    let ds = i;
-    while i < b.len() && b[i].is_ascii_digit() {
-        i += 1;
-    }
-    let mut digits = i - ds;
-    if i < b.len() && b[i] == b'.' {
-        let save = i;
-        i += 1;
-        let fs = i;
-        while i < b.len() && b[i].is_ascii_digit() {
-            i += 1;
-        }
-        if digits == 0 && i == fs {
-            i = save;
-        }
-        digits += i - fs;
-    }
-    if digits == 0 {
-        return 0.0;
-    }
-    if i < b.len() && (b[i] == b'e' || b[i] == b'E') {
-        let mut j = i + 1;
-        if j < b.len() && (b[j] == b'+' || b[j] == b'-') {
-            j += 1;
-        }
-        let es = j;
-        while j < b.len() && b[j].is_ascii_digit() {
-            j += 1;
-        }
-        if j > es {
-            i = j;
-        }
-    }
-    t[..i].parse::<f64>().unwrap_or(0.0)
+    perl_compat::truth::numify(s)
 }
 
 /// Perl's `<=>` on two (possibly undef) strings, as used by
 /// `sort {$a->{order} <=> $b->{order}}`. `NaN` compares as equal.
 pub fn num_cmp(a: Option<&str>, b: Option<&str>) -> Ordering {
-    let x = a.map(numify).unwrap_or(0.0);
-    let y = b.map(numify).unwrap_or(0.0);
-    x.partial_cmp(&y).unwrap_or(Ordering::Equal)
+    perl_compat::truth::num_cmp_opt(a, b)
 }
 
-/// Perl's `lc`.
+/// Perl's `lc` (full case mapping, no final-sigma rule).
 pub fn lc(s: &str) -> String {
-    if s.is_ascii() {
-        s.to_ascii_lowercase()
-    } else {
-        // Perl's lc has no final-sigma rule; Rust's to_lowercase does.
-        s.chars().flat_map(char::to_lowercase).collect()
-    }
+    perl_compat::case::lc(s)
 }
 
 /// Perl's `fc` (full case folding).
-///
-/// TODO(perl-compat): use the full Unicode CaseFolding table; this treats
-/// non-ASCII text with simple lowercasing, which is exact for the ASCII names
-/// data models use.
 pub fn fc(s: &str) -> String {
-    if s.is_ascii() {
-        s.to_ascii_lowercase()
-    } else {
-        s.chars()
-            .flat_map(|c| match c {
-                'ß' => "ss".chars().collect::<Vec<_>>(),
-                'ς' => vec!['σ'],
-                c => c.to_lowercase().collect(),
-            })
-            .collect()
-    }
+    perl_compat::case::fc(s)
 }
 
-/// Unicode NFD (Unicode 16.0.0 tables), with an ASCII fast path.
+/// Unicode NFD (Unicode 16.0.0, as perl 5.42).
 pub fn nfd(s: &str) -> String {
-    if s.is_ascii() || is_nfd_quick(s.chars()) == IsNormalized::Yes {
-        s.to_string()
-    } else {
-        s.nfd().collect()
-    }
+    perl_compat::unicode::nfd(s).into_owned()
 }
 
-/// Unicode NFC (Unicode 16.0.0 tables), with an ASCII fast path.
+/// Unicode NFC (Unicode 16.0.0, as perl 5.42).
 pub fn nfc(s: &str) -> String {
-    if s.is_ascii() || is_nfc_quick(s.chars()) == IsNormalized::Yes {
-        s.to_string()
-    } else {
-        s.nfc().collect()
-    }
+    perl_compat::unicode::nfc(s).into_owned()
 }
 
 /// Split on Perl's `/\s*,\s*/`, dropping trailing empty fields (Perl `split`
