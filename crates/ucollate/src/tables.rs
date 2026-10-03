@@ -116,9 +116,13 @@ pub(crate) fn cjk_unified(cp: u32) -> Option<bool> {
 #[inline]
 pub(crate) fn push_implicit(cp: u32, out: &mut Vec<Ce>) {
     let (aaaa, bbbb) = match cp {
-        0x17000..=0x18AFF | 0x18D00..=0x18D8F => (0xFB00, (cp - 0x17000) | 0x8000),
-        0x1B170..=0x1B2FF => (0xFB01, (cp - 0x1B170) | 0x8000),
-        0x18B00..=0x18CFF => (0xFB02, (cp - 0x18B00) | 0x8000),
+        // Assigned code points (Unicode 13.0) of the Tangut, Nushu and Khitan blocks;
+        // unassigned ones in those blocks get the generic FBC0-family weights.
+        0x17000..=0x187F7 | 0x18800..=0x18AFF | 0x18D00..=0x18D08 => {
+            (0xFB00, (cp - 0x17000) | 0x8000)
+        }
+        0x1B170..=0x1B2FB => (0xFB01, (cp - 0x1B170) | 0x8000),
+        0x18B00..=0x18CD5 => (0xFB02, (cp - 0x18B00) | 0x8000),
         _ => {
             let base = match cjk_unified(cp) {
                 Some(true) => 0xFB40,

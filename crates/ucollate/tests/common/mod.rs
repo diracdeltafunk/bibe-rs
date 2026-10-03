@@ -2,6 +2,9 @@
 //! the Perl oracle driver and digests.
 #![allow(dead_code)]
 
+mod suites;
+pub use suites::*;
+
 use std::fmt::Write as _;
 use std::path::PathBuf;
 
@@ -87,6 +90,7 @@ impl Spec {
         let mut o = CollateOptions::default();
         for (k, v) in self.new.iter().chain(self.change.iter()) {
             match v {
+                Val::Str(s) if *k == "entry" => o.entry = Some(s.to_string()),
                 Val::Str(s) => o.set_perl(k, Some(s)).unwrap(),
                 Val::Undef => o.set_perl(k, None).unwrap(),
                 Val::List(l) => {
@@ -478,7 +482,9 @@ pub fn oracle_script() -> PathBuf {
 pub fn run_oracle(requests: &str) -> Vec<String> {
     let perl = oracle_perl().expect("no oracle perl (set UCOLLATE_PERL)");
     let dir = PathBuf::from(env!("CARGO_TARGET_TMPDIR"));
-    let req = dir.join(format!("ucollate-req-{}.txt", std::process::id()));
+    static SEQ: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    let seq = SEQ.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    let req = dir.join(format!("ucollate-req-{}-{seq}.txt", std::process::id()));
     std::fs::write(&req, requests).unwrap();
     let out = std::process::Command::new(perl)
         .arg(oracle_script())

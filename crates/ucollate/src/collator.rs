@@ -511,6 +511,7 @@ impl Collator {
     fn ends_syllable(&self, cur: u32, next: Option<u32>) -> bool {
         let next = next.map_or(Hst::None, hst);
         match hst(cur) {
+            Hst::L => !matches!(next, Hst::L | Hst::V | Hst::Lv | Hst::Lvt),
             Hst::V | Hst::Lv => !matches!(next, Hst::V | Hst::T),
             Hst::T | Hst::Lvt => next != Hst::T,
             _ => false,
@@ -560,7 +561,15 @@ impl Collator {
                         if ce.p != 0 {
                             after_variable = false;
                         }
-                        ce.q = if ce.s != 0 || ce.t != 0 { ffff } else { 0 };
+                        ce.q = if ce.p == 0x0001 {
+                            // minimalFFFE's [.0001.0020.0005]: under `shifted` level 4
+                            // gets the minimal weight too (trimmed by shift-trimmed)
+                            ffff & 0x0001
+                        } else if ce.s != 0 || ce.t != 0 {
+                            ffff
+                        } else {
+                            0
+                        };
                     }
                 }
             }
