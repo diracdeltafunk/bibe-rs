@@ -16,3 +16,6 @@
 /tools/port-tests/out/
 # On-demand benchmark corpora (tools/corpus)
 /target/
+
+# Agent worktrees
+/.claude/worktrees/
