@@ -83,6 +83,12 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-054 | C | Biber.pm:1032-1044 vs DataLists.pm `get_list` | Datalist de-duplication calls a positional sub with named args, so it never matches and duplicate `<bcf:datalist>`s are emitted twice. Latent: biblatex de-dups first. | 02-B12 |
 | BB-114 | C | Output/biblatexml.pm:622 (`output` iterates `$section->get_citekeys`) vs Output/bibtex.pm:460-468 | In tool mode the biblatexml writer emits entries in citekey (input) order and ignores the `tool` sorting template, which the bibtex writer applies (the manual says tool-mode output is sorted by the `tool` scheme). t/tool-bltxml.t asserts the sorted list order (`get_keys`), which never reaches the file. Repro: in a copy of `t/tdata`, `biber --tool --configfile=tool-testsort.conf --output-format=biblatexml tool.bib` writes `i3Š, xd1, macmillan, …` (file order) while `--output-format=bibtex` writes `b1, macmillan, dt1, …` (sorted). Corpus: `tests/corpus/ported/tool-bltxml-1` vs `tool-1`. | port-tests |
 
+| BB-115 | V | Recode.pm (`latex_decode`) | With `--decodecharsset=null`, decoding still strips braces (`{I} x` → `I x`) and still interprets `\char`/`\hbox`, so "null" is not a no-op. | M1 latex-recode |
+| BB-116 | V | Recode.pm:~218 (`\char` handled with `s///ee`) | `\char` values are string-eval'd: `\char012` is read as **octal** (→ newline), and `\char09`, `\char'89`, non-ASCII digits and values above IV_MAX **silently vanish**, with "Use of uninitialized value" on stderr. Related: BB-003. | M1 latex-recode |
+| BB-117 | C | recode_data.xml / Recode.pm | In the `full` decode set, `\ding{99}` silently disappears. | M1 latex-recode |
+| BB-118 | C | Recode.pm accent handling | `\' {a}` (space before the braced argument) is not decoded; `\c  ,` puts the cedilla on a space; `\t{oo}` gives `{̑oo}` (tie accent misplaced, braces kept). | M1 latex-recode |
+| BB-119 | V | Recode.pm dash handling | `\--`/`\---` are decoded only when followed by a word character: `\--x` → `–x`, but a trailing `y\---` stays literal. | M1 latex-recode |
+
 ### 3a. The truthiness of `"0"` (one family, several sites)
 
 Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return '' unless $s` tests therefore treat a legitimate value `0` as missing. Fixing these as one sweep is probably easiest upstream.

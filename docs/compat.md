@@ -51,6 +51,12 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-017 | Which cycle is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | planned |
 | DC-018 | `$MAPUNIQ` values in sourcemaps (time-based in biber, so the `.bbl` differs on every run) | Deterministic values: a per-run counter rendered in `suniqid`'s alphabet, so keys are unique within a run and identical across runs. *Exact format TBD when implemented.* | BB-113 | planned |
 
+### 1d. Unavoidable representation differences
+
+| Id | biber behaviour | bibers behaviour | Bug | Status |
+|---|---|---|---|---|
+| DC-019 | `\char` with a surrogate (U+D800–DFFF) or a value above U+10FFFF yields that raw code point (invalid as UTF-8 text) | U+FFFD. Rust strings can't hold these, and biber's output in these cases isn't valid UTF-8 anyway. | — | implemented (latex-recode) |
+
 ## 2. Reproduced biber bugs (Quirk switches)
 
 These are **not** differences by default: bibers reproduces biber's output. Each can be switched off with `--fix-quirks=<name>[,<name>…]` (or `--fix-quirks=all`), and the fixed behaviour is then a documented difference. Switch names are provisional until implemented.
