@@ -30,6 +30,8 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | DC-008 | `-c ignoreChar=…` and other construction-only collation options → crash | Applied when the collator is constructed | BB-010 | planned |
 | DC-009 | Packaged binary dies for ja/ko/zh sort locales | Supported | BB-011 | planned |
 | DC-024 | `-c level=5` (out-of-range collation level) crashes with out-of-memory, leaving an empty `.bbl` | ERROR naming the invalid option value, exit 2 | BB-120 | implemented (ucollate returns an error) |
+| DC-029 | btparse-level crashes and process exits on malformed input (BB-123, 125, 126, 127, 128): SEGV, abort, exit, mangled error text | An ERROR naming the user's file and line (with the literal offending text), then biber's normal error handling. *Whether parsing continues with the next entry is decided in M2.* | BB-123, 125–128 | planned (btparse reports these as `Item::Stop{fatal}` / anomalies) |
+| DC-035 | `--isbn10` on a 979-prefix ISBN crashes | ISBN left in its ISBN-13 form, with a WARN | BB-130 | planned |
 
 ### 1b. Data loss
 
@@ -105,6 +107,7 @@ Some silent biber behaviours are judged to be design decisions rather than bugs 
 | DC-021 | `--output-format=dot`, `--dot-include` (deprecated upstream) | Error: unsupported output format, exit 2 | planned |
 | DC-022 | `--output-format=bibjson` (accepted but unimplemented upstream) | Error: unsupported output format, exit 2 | planned |
 | DC-023 | Perl code in sourcemap replacement strings (`@{[ … ]}`, `${\ … }`). biber evaluates these in a Safe compartment. | Not executed. bibers warns, and inserts the stringified regex `(?^u:…)` exactly as biber does when evaluation fails. Plain interpolation (`$1`, `\u`, `\L…\E`, escapes) is fully supported. | planned |
+| DC-036 | User regexes (sourcemaps, `noinit`/`nosort`/`nolabel`/`nonamestring`, `xsvsep`) are Perl regexes | Run on PCRE2 behind a Perl-syntax translation layer. A few Perl-only constructs are unsupported and give an ERROR naming the construct: `\N{NAME}` (named characters; `\N{U+…}` works), `\b{gcb}`/`\b{wb}`-style boundaries, `/i` multi-character case folds (ß ↔ ss), `$<`/`$(` in replacements. Verified on 17,933 Perl-vs-PCRE2 differential cases. | implemented (perl-compat) |
 
 ## 4. Temporarily unsupported (deferred to milestone M4)
 

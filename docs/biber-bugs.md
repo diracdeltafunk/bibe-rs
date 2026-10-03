@@ -30,6 +30,13 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-011 | C | PAR packaging | The binary dies for `sortlocale` ja/ko/zh/zh_*: the `Unicode::Collate::CJK::*` modules are packed under a bogus path (`Unicode/Collate/CJK;lib/...`). Report against the binary build scripts, not the Perl source. | 04-B7 |
 
 | BB-120 | V | UCollate.pm / Unicode::Collate 1.31 `change()` | `--collate-options level=5` (any level outside 1–4, probably also non-numeric) is passed to Unicode::Collate unchecked, which dies with "Out of memory in perl:util:safesysmalloc": exit 25, empty `.bbl`, no ERROR in the log. Also, after `change(level=>0)` croaks the collator is left half-changed (empty keys). Report to both biber (validate `-c` values) and Unicode::Collate (CPAN). | M1 ucollate |
+| BB-123 | V | btparse (Text::BibTeX 0.91) name splitting | `author = {, John}` (leading comma) kills biber with `FATAL - Caught signal: SEGV`, empty `.bbl`. `Doe,,` and `Doe, ,` also segfault in Text::BibTeX. Report to Text::BibTeX; biber could pre-check. | M1 btparse |
+| BB-124 | V | btparse name splitting | `author = {Doe, , John}` silently puts `John` in **suffix** (`suffix={John}`) instead of given. | M1 btparse |
+| BB-125 | V | btparse error reporting | **Uncontrolled format string:** btparse passes the offending input token to printf as part of the format string. `title {50%s}` gives the mangled error text `found "{50u}"`, and the agent saw SEGVs with other inputs. User `.bib` data controls a printf format: this is security-relevant, so report it privately to the Text::BibTeX maintainer. | M1 btparse |
+| BB-126 | V | btparse / biber input | A NUL byte in a field value aborts biber (exit 134, no message, empty `.bbl`). Real-world trigger: TeX Live's `doc/latex/umthesis/felty.bib`. | M1 btparse |
+| BB-127 | C | btparse | `@misc"x"` makes libbtparse exit the whole process. | M1 btparse |
+| BB-128 | C | Text::BibTeX `split_list` | Aborts when a piece would be empty (`" and B"`, `"A and "`, two delimiters two spaces apart). Unreachable from normal fields but reachable through sourcemaps. | M1 btparse |
+| BB-130 | V | Output/bbl.pm / Business::ISBN | `--isbn10` with any 978-incompatible ISBN (979 prefix) crashes biber (exit 102/25, empty `.bbl`): `as_isbn10` returns undef and biber calls `->isbn` on it. | M1 perl-compat |
 
 ## 2. Data loss / destructive behaviour
 
@@ -170,6 +177,9 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-108 | R | bibtex.pm:1887 | The extended-name part regex is greedy and splits at the *last* `=`. | 01-S8 |
 | BB-121 | C | Config.pm `setblxoption` | Setting an undeclared biblatex option autovivifies it into the option-scope table (`%CONFIG_SCOPEOPT_BIBLATEX`), so a later biber.conf can set an option the `.bcf` never declared. Harmless today, but it contradicts the "undeclared options are dropped" rule. | M1 config |
 | BB-122 | C | Biber.pm (datalist setup) | A datalist naming a non-existent sorting template silently gets an empty `{}` template (and undef sort-pass options become `{}` at run time) instead of a warning. | M1 config |
+| BB-129 | C | Text::BibTeX quirks passed through by biber | (a) In "First von Last" splitting the run of lowercase words ignores commas (`a, b` → von `a b`, given `b`); (b) a `@string` whose value refers to itself expands twice (`m = "a" # m # "b"` → `aabb`); (c) the lowercase test for von detection uses Unicode 6.1 tables; (d) any `@` followed by no type name (`@{`, `@,`, `@123`) silently ends reading of that file. | M1 btparse |
+| BB-131 | C | Constants.pm ISMN constraint / Business::ISMN | The ISMN data-model check never fails: `is_valid` returns -1/-3 for invalid input, both Perl-true. Also, Business::ISMN ranges with an undef upper bound never match. | M1 perl-compat |
+| BB-132 | C (library) | Text::Roman `isroman` (used by `rangelen`) | `isroman(" ")` and `isroman("X I")` are true (its class `[@RSN]` accepts spaces), but `roman2int` returns undef for them, so a range like `X I-XV` likely yields an undef length. Effect on biber output suspected, not yet shown. | M1 perl-compat |
 
 ## 7. Performance bugs (output-neutral; worth reporting with numbers)
 
