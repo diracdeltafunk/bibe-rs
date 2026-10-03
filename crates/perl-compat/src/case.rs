@@ -22,7 +22,10 @@ use crate::tables::case::{FOLD, LOWER, TITLE, UPPER};
 
 #[inline]
 fn lookup(table: &'static [(u32, &'static str)], c: char) -> Option<&'static str> {
-    table.binary_search_by_key(&(c as u32), |e| e.0).ok().map(|i| table[i].1)
+    table
+        .binary_search_by_key(&(c as u32), |e| e.0)
+        .ok()
+        .map(|i| table[i].1)
 }
 
 fn map_str(s: &str, table: &'static [(u32, &'static str)], ascii: fn(u8) -> u8) -> String {

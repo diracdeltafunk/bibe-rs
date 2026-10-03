@@ -5,6 +5,8 @@
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::Prop;
 
+type Pred = Box<dyn Fn(char) -> bool>;
+
 #[test]
 fn pcre2_classes_match_perl() {
     let mut bad = Vec::new();
@@ -39,15 +41,25 @@ fn pcre2_classes_match_perl() {
 #[test]
 fn negated_and_bracketed_forms() {
     let mut bad = Vec::new();
-    for (p, e, ne) in [(Prop::PerlWord, 'w', 'W'), (Prop::PerlSpace, 's', 'S'), (Prop::PerlHSpace, 'h', 'H')] {
-        let cases: Vec<(String, Box<dyn Fn(char) -> bool>)> = vec![
+    for (p, e, ne) in [
+        (Prop::PerlWord, 'w', 'W'),
+        (Prop::PerlSpace, 's', 'S'),
+        (Prop::PerlHSpace, 'h', 'H'),
+    ] {
+        let cases: Vec<(String, Pred)> = vec![
             (format!("\\{ne}"), Box::new(move |c| !p.contains(c))),
             (format!("[\\{e}]"), Box::new(move |c| p.contains(c))),
             (format!("[\\{ne}]"), Box::new(move |c| !p.contains(c))),
             (format!("[^\\{e}]"), Box::new(move |c| !p.contains(c))),
             (format!("[^\\{ne}]"), Box::new(move |c| p.contains(c))),
-            (format!("[a\\{ne}]"), Box::new(move |c| c == 'a' || !p.contains(c))),
-            (format!("[^a\\{ne}]"), Box::new(move |c| c != 'a' && p.contains(c))),
+            (
+                format!("[a\\{ne}]"),
+                Box::new(move |c| c == 'a' || !p.contains(c)),
+            ),
+            (
+                format!("[^a\\{ne}]"),
+                Box::new(move |c| c != 'a' && p.contains(c)),
+            ),
         ];
         for (pat, want) in cases {
             let re = PerlRegex::new(&format!("\\A{pat}\\z"), false).unwrap();

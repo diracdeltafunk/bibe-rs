@@ -64,8 +64,16 @@ pub fn escape_char(c: char, out: &mut String) {
     let mut buf = [0u8; 4];
     for b in c.encode_utf8(&mut buf).bytes() {
         out.push('%');
-        out.push(char::from_digit(u32::from(b >> 4), 16).unwrap_or('0').to_ascii_uppercase());
-        out.push(char::from_digit(u32::from(b & 15), 16).unwrap_or('0').to_ascii_uppercase());
+        out.push(
+            char::from_digit(u32::from(b >> 4), 16)
+                .unwrap_or('0')
+                .to_ascii_uppercase(),
+        );
+        out.push(
+            char::from_digit(u32::from(b & 15), 16)
+                .unwrap_or('0')
+                .to_ascii_uppercase(),
+        );
     }
 }
 
@@ -83,19 +91,26 @@ fn scheme_len(s: &str) -> Option<usize> {
     if b.is_empty() || !b[0].is_ascii_alphabetic() {
         return None;
     }
-    let n = 1 + b[1..].iter().take_while(|c| c.is_ascii_alphanumeric() || matches!(c, b'.' | b'+' | b'-')).count();
+    let n = 1 + b[1..]
+        .iter()
+        .take_while(|c| c.is_ascii_alphanumeric() || matches!(c, b'.' | b'+' | b'-'))
+        .count();
     (b.get(n) == Some(&b':')).then_some(n)
 }
 
 /// Strip `^<(?:URL:)?(.*)>$` / `^"(.*)"$` (perl `$` = end or before a final
 /// newline; `.` excludes newline).
-fn strip_wrapper<'a>(s: &'a str, open: char, close: char, url_prefix: bool) -> Option<String> {
+fn strip_wrapper(s: &str, open: char, close: char, url_prefix: bool) -> Option<String> {
     let (body, nl) = match s.strip_suffix('\n') {
         Some(b) => (b, "\n"),
         None => (s, ""),
     };
     let inner = body.strip_prefix(open)?.strip_suffix(close)?;
-    let inner = if url_prefix { inner.strip_prefix("URL:").unwrap_or(inner) } else { inner };
+    let inner = if url_prefix {
+        inner.strip_prefix("URL:").unwrap_or(inner)
+    } else {
+        inner
+    };
     let _ = url_prefix;
     if inner.contains('\n') {
         return None;
@@ -115,11 +130,20 @@ pub fn uri_as_string(s: &str) -> Result<String, UriError> {
     if let Some(x) = strip_wrapper(&u, '"', '"', false) {
         u = x;
     }
-    let u = u.trim_start_matches(is_perl_space).trim_end_matches(is_perl_space).to_string();
+    let u = u
+        .trim_start_matches(is_perl_space)
+        .trim_end_matches(is_perl_space)
+        .to_string();
 
     let scheme = scheme_len(&u).map(|n| u[..n].to_ascii_lowercase());
-    let server = scheme.as_deref().is_some_and(|sc| SERVER_SCHEMES.contains(&sc));
-    let mut out = if server { server_uric_escape(&u) } else { uric_escape(&u) };
+    let server = scheme
+        .as_deref()
+        .is_some_and(|sc| SERVER_SCHEMES.contains(&sc));
+    let mut out = if server {
+        server_uric_escape(&u)
+    } else {
+        uric_escape(&u)
+    };
     match scheme.as_deref() {
         Some("irc" | "ircs") => irc_fix(&mut out),
         Some("geo") => out = geo_init(out)?,
@@ -148,7 +172,7 @@ fn replace_brackets(s: &str) -> String {
     let mut i = 0;
     let b = s.as_bytes();
     while i < b.len() {
-        if b[i] == b'%' && i + 2 < b.len() + 0 && i + 2 <= b.len() - 1 && b[i + 1] == b'5' {
+        if b[i] == b'%' && i + 2 < b.len() && b[i + 1] == b'5' {
             match b[i + 2] {
                 b'B' | b'b' => {
                     out.push('[');
@@ -185,7 +209,9 @@ fn fix_host_part(s: &mut String) {
     }
     // m{^((?:$scheme_re:)?)//([^/?\#]+)(.*)$}s
     let start = scheme_len(s).map_or(0, |n| n + 1);
-    let Some(rest) = s[start..].strip_prefix("//") else { return };
+    let Some(rest) = s[start..].strip_prefix("//") else {
+        return;
+    };
     let alen = rest.find(['/', '?', '#']).unwrap_or(rest.len());
     if alen == 0 {
         return;
@@ -321,7 +347,11 @@ pub fn encode_punycode(input: &str) -> String {
         k + ((BASE - TMIN + 1) * delta) / (delta + SKEW)
     };
     let digit = |d: u64| -> char {
-        if d <= 25 { char::from(b'a' + d as u8) } else { char::from(b'0' + (d - 26) as u8) }
+        if d <= 25 {
+            char::from(b'a' + d as u8)
+        } else {
+            char::from(b'0' + (d - 26) as u8)
+        }
     };
     let mut n: u64 = 128;
     let mut delta: u64 = 0;
@@ -427,7 +457,11 @@ fn take_num(s: &str, signed: bool) -> Option<(&str, &str)> {
         i = 1;
     }
     let digits = |from: usize| -> usize {
-        s[from..].chars().take_while(|c| is_perl_digit(*c)).map(char::len_utf8).sum::<usize>()
+        s[from..]
+            .chars()
+            .take_while(|c| is_perl_digit(*c))
+            .map(char::len_utf8)
+            .sum::<usize>()
     };
     let d = digits(i);
     if d == 0 {
@@ -460,7 +494,11 @@ fn parse_geo(path: &str) -> Option<Geo<'_>> {
     }
     let mut crs = None;
     if let Some(x) = r.strip_prefix(";crs=") {
-        let n: usize = x.chars().take_while(|c| crate::unicode::is_perl_word(*c)).map(char::len_utf8).sum();
+        let n: usize = x
+            .chars()
+            .take_while(|c| crate::unicode::is_perl_word(*c))
+            .map(char::len_utf8)
+            .sum();
         if n > 0 && (at_end(&x[n..]) || x[n..].starts_with(';')) {
             crs = Some(&x[..n]);
             r = &x[n..];
@@ -482,7 +520,11 @@ fn parse_geo(path: &str) -> Option<Geo<'_>> {
         let mut x = whole;
         while !x.is_empty() {
             let y = x.strip_prefix(';')?;
-            let n: usize = y.chars().take_while(|c| crate::unicode::is_perl_word(*c)).map(char::len_utf8).sum();
+            let n: usize = y
+                .chars()
+                .take_while(|c| crate::unicode::is_perl_word(*c))
+                .map(char::len_utf8)
+                .sum();
             if n == 0 || !y[n..].starts_with('=') {
                 return None;
             }
@@ -491,12 +533,18 @@ fn parse_geo(path: &str) -> Option<Geo<'_>> {
         }
         parm = Some(&whole[1..]);
     }
-    Some(Geo { lat, alt, crs, unc, parm })
+    Some(Geo {
+        lat,
+        alt,
+        crs,
+        unc,
+        parm,
+    })
 }
 
 /// `URI::geo::_num`: `sprintf '%f'`, then drop an all-zero fraction.
 fn geo_num(n: &str) -> String {
-    let v = crate::truth::PerlNum::from_str(n).as_f64();
+    let v = crate::truth::PerlNum::parse(n).as_f64();
     let s = format!("{v:.6}");
     match s.find('.') {
         Some(i) if s[i + 1..].bytes().all(|b| b == b'0') => s[..i].to_string(),
@@ -507,7 +555,7 @@ fn geo_num(n: &str) -> String {
 fn geo_init(s: String) -> Result<String, UriError> {
     let (scheme, auth, path, query, frag) = uri_split(&s);
     let g = parse_geo(path).ok_or(UriError::BadGeo)?;
-    let lat = crate::truth::PerlNum::from_str(g.lat).as_f64();
+    let lat = crate::truth::PerlNum::parse(g.lat).as_f64();
     if lat != 90.0 && lat != -90.0 {
         return Ok(s);
     }
@@ -531,7 +579,11 @@ fn geo_init(s: String) -> Result<String, UriError> {
     if let Some(a) = auth {
         let mut ea = String::new();
         for c in a.chars() {
-            if matches!(c, '/' | '?' | '#') { escape_char(c, &mut ea) } else { ea.push(c) }
+            if matches!(c, '/' | '?' | '#') {
+                escape_char(c, &mut ea)
+            } else {
+                ea.push(c)
+            }
         }
         out.push_str("//");
         out.push_str(&ea);
@@ -543,7 +595,11 @@ fn geo_init(s: String) -> Result<String, UriError> {
     }
     let mut ep = String::new();
     for c in path.chars() {
-        if matches!(c, '?' | '#') { escape_char(c, &mut ep) } else { ep.push(c) }
+        if matches!(c, '?' | '#') {
+            escape_char(c, &mut ep)
+        } else {
+            ep.push(c)
+        }
     }
     out.push_str(&ep);
     if let Some(q) = query {
@@ -563,10 +619,22 @@ mod tests {
 
     #[test]
     fn basics() {
-        assert_eq!(uri_as_string("http://example.com/a b").unwrap(), "http://example.com/a%20b");
-        assert_eq!(uri_as_string("<URL:http://x.org/é>").unwrap(), "http://x.org/%C3%A9");
-        assert_eq!(uri_as_string("http://bücher.de/x").unwrap(), "http://xn--bcher-kva.de/x");
-        assert_eq!(uri_as_string("http://x.org/100%").unwrap(), "http://x.org/100%");
+        assert_eq!(
+            uri_as_string("http://example.com/a b").unwrap(),
+            "http://example.com/a%20b"
+        );
+        assert_eq!(
+            uri_as_string("<URL:http://x.org/é>").unwrap(),
+            "http://x.org/%C3%A9"
+        );
+        assert_eq!(
+            uri_as_string("http://bücher.de/x").unwrap(),
+            "http://xn--bcher-kva.de/x"
+        );
+        assert_eq!(
+            uri_as_string("http://x.org/100%").unwrap(),
+            "http://x.org/100%"
+        );
         assert_eq!(uri_as_string("foo bar").unwrap(), "foo%20bar");
         assert_eq!(uri_as_string("http://[::1]/").unwrap(), "http://[::1]/");
         assert_eq!(uri_as_string("geo:foo"), Err(UriError::BadGeo));

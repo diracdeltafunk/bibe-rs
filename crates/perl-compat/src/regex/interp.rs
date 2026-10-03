@@ -99,7 +99,10 @@ impl MatchCtx<'_> {
     }
 
     fn last_paren(&self) -> usize {
-        (1..self.groups.len()).rev().find(|&i| self.groups[i].is_some()).unwrap_or(0)
+        (1..self.groups.len())
+            .rev()
+            .find(|&i| self.groups[i].is_some())
+            .unwrap_or(0)
     }
 
     fn last_closed(&self) -> usize {
@@ -118,18 +121,34 @@ impl MatchCtx<'_> {
         match v {
             Var::Group(n) => self.group(*n).to_string(),
             Var::Match => self.group(0).to_string(),
-            Var::Pre => self.groups[0].map_or("", |(s, _)| &self.subject[..s]).to_string(),
-            Var::Post => self.groups[0].map_or("", |(_, e)| &self.subject[e..]).to_string(),
+            Var::Pre => self.groups[0]
+                .map_or("", |(s, _)| &self.subject[..s])
+                .to_string(),
+            Var::Post => self.groups[0]
+                .map_or("", |(_, e)| &self.subject[e..])
+                .to_string(),
             Var::LastParen => {
                 let n = self.last_paren();
-                if n == 0 { String::new() } else { self.group(n).to_string() }
+                if n == 0 {
+                    String::new()
+                } else {
+                    self.group(n).to_string()
+                }
             }
             Var::LastClosed => {
                 let n = self.last_closed();
-                if n == 0 { String::new() } else { self.group(n).to_string() }
+                if n == 0 {
+                    String::new()
+                } else {
+                    self.group(n).to_string()
+                }
             }
             Var::Offset(start, n) => {
-                let len = if *start { self.last_paren() + 1 } else { self.groups.len() };
+                let len = if *start {
+                    self.last_paren() + 1
+                } else {
+                    self.groups.len()
+                };
                 let idx = if *n < 0 { len as i64 + n } else { *n };
                 if idx < 0 || idx as usize >= len {
                     return String::new();
@@ -140,10 +159,18 @@ impl MatchCtx<'_> {
                 }
             }
             Var::LastIndex(start) => {
-                if *start { self.last_paren().to_string() } else { (self.groups.len() - 1).to_string() }
+                if *start {
+                    self.last_paren().to_string()
+                } else {
+                    (self.groups.len() - 1).to_string()
+                }
             }
             Var::OffsetsJoined(start) => {
-                let len = if *start { self.last_paren() + 1 } else { self.groups.len() };
+                let len = if *start {
+                    self.last_paren() + 1
+                } else {
+                    self.groups.len()
+                };
                 let mut out = String::new();
                 for i in 0..len {
                     if let Some((s, e)) = self.groups[i] {
@@ -207,7 +234,10 @@ fn skip_subscripts(chars: &[char], mut i: usize) -> Result<(usize, bool), Interp
                 i = skip_balanced(chars, i)?;
                 any = true;
             }
-            Some('-') if chars.get(i + 1) == Some(&'>') && matches!(chars.get(i + 2), Some('[' | '{')) => {
+            Some('-')
+                if chars.get(i + 1) == Some(&'>')
+                    && matches!(chars.get(i + 2), Some('[' | '{')) =>
+            {
                 i = skip_balanced(chars, i + 2)?;
                 any = true;
             }
@@ -276,7 +306,9 @@ impl Template {
             match c {
                 '"' => return syntax("unescaped double quote"),
                 '\\' => {
-                    let Some(&n) = chars.get(i + 1) else { return syntax("trailing backslash") };
+                    let Some(&n) = chars.get(i + 1) else {
+                        return syntax("trailing backslash");
+                    };
                     i += 2;
                     match n {
                         'u' | 'l' => {
@@ -292,11 +324,16 @@ impl Template {
                                 _ => Mode::Q,
                             };
                             if m != Mode::Q {
-                                if matches!(toks.last(), Some(Tok::Start(Mode::L | Mode::U | Mode::F))) {
+                                if matches!(
+                                    toks.last(),
+                                    Some(Tok::Start(Mode::L | Mode::U | Mode::F))
+                                ) {
                                     return syntax("adjacent case modifiers");
                                 }
                                 // \L\u → \u\L
-                                if chars.get(i) == Some(&'\\') && matches!(chars.get(i + 1), Some('u' | 'l')) {
+                                if chars.get(i) == Some(&'\\')
+                                    && matches!(chars.get(i + 1), Some('u' | 'l'))
+                                {
                                     toks.push(Tok::First(chars[i + 1] == 'u'));
                                     i += 2;
                                 }
@@ -325,22 +362,49 @@ impl Template {
                             lit.push(char::from_u32(v).unwrap_or('\u{FFFD}'));
                         }
                         'o' if chars.get(i) == Some(&'{') => {
-                            let end = chars[i..].iter().position(|&c| c == '}').ok_or(InterpError::Syntax("\\o{".into()))?;
-                            let body: String = chars[i + 1..i + end].iter().filter(|c| !c.is_whitespace()).collect();
+                            let end = chars[i..]
+                                .iter()
+                                .position(|&c| c == '}')
+                                .ok_or(InterpError::Syntax("\\o{".into()))?;
+                            let body: String = chars[i + 1..i + end]
+                                .iter()
+                                .filter(|c| !c.is_whitespace())
+                                .collect();
                             if body.is_empty() {
                                 return syntax("empty \\o{}");
                             }
-                            let digits: String = body.chars().take_while(|c| ('0'..='7').contains(c)).collect();
-                            let v = u32::from_str_radix(if digits.is_empty() { "0" } else { &digits }, 8).unwrap_or(0);
+                            let digits: String = body
+                                .chars()
+                                .take_while(|c| ('0'..='7').contains(c))
+                                .collect();
+                            let v = u32::from_str_radix(
+                                if digits.is_empty() { "0" } else { &digits },
+                                8,
+                            )
+                            .unwrap_or(0);
                             lit.push(char::from_u32(v).unwrap_or('\u{FFFD}'));
                             i += end + 1;
                         }
                         'x' => {
                             if chars.get(i) == Some(&'{') {
-                                let end = chars[i..].iter().position(|&c| c == '}').ok_or(InterpError::Syntax("\\x{".into()))?;
-                                let body: String = chars[i + 1..i + end].iter().filter(|c| !c.is_whitespace()).collect();
-                                let digits: String = body.chars().filter(|&c| c != '_').take_while(char::is_ascii_hexdigit).collect();
-                                let v = u32::from_str_radix(if digits.is_empty() { "0" } else { &digits }, 16).unwrap_or(0);
+                                let end = chars[i..]
+                                    .iter()
+                                    .position(|&c| c == '}')
+                                    .ok_or(InterpError::Syntax("\\x{".into()))?;
+                                let body: String = chars[i + 1..i + end]
+                                    .iter()
+                                    .filter(|c| !c.is_whitespace())
+                                    .collect();
+                                let digits: String = body
+                                    .chars()
+                                    .filter(|&c| c != '_')
+                                    .take_while(char::is_ascii_hexdigit)
+                                    .collect();
+                                let v = u32::from_str_radix(
+                                    if digits.is_empty() { "0" } else { &digits },
+                                    16,
+                                )
+                                .unwrap_or(0);
                                 lit.push(char::from_u32(v).unwrap_or('\u{FFFD}'));
                                 i += end + 1;
                             } else {
@@ -355,7 +419,9 @@ impl Template {
                             }
                         }
                         'c' => {
-                            let Some(&x) = chars.get(i) else { return syntax("\\c at end") };
+                            let Some(&x) = chars.get(i) else {
+                                return syntax("\\c at end");
+                            };
                             i += 1;
                             let u = x.to_ascii_uppercase() as u32;
                             lit.push(char::from_u32(u ^ 64).unwrap_or('\0'));
@@ -364,11 +430,17 @@ impl Template {
                             if chars.get(i) != Some(&'{') {
                                 return syntax("\\N without braces");
                             }
-                            let end = chars[i..].iter().position(|&c| c == '}').ok_or(InterpError::Syntax("\\N{".into()))?;
+                            let end = chars[i..]
+                                .iter()
+                                .position(|&c| c == '}')
+                                .ok_or(InterpError::Syntax("\\N{".into()))?;
                             let body: String = chars[i + 1..i + end].iter().collect();
                             let body = body.trim();
                             match body.strip_prefix("U+") {
-                                Some(h) if !h.is_empty() && h.chars().all(|c| c.is_ascii_hexdigit()) => {
+                                Some(h)
+                                    if !h.is_empty()
+                                        && h.chars().all(|c| c.is_ascii_hexdigit()) =>
+                                {
                                     let v = u32::from_str_radix(h, 16).unwrap_or(0);
                                     lit.push(char::from_u32(v).unwrap_or('\u{FFFD}'));
                                 }
@@ -422,7 +494,10 @@ impl Template {
                         }
                         Some(x) if is_ident_start(x) || x.is_ascii_digit() || x == ':' => {
                             let k = if x.is_ascii_digit() {
-                                chars[i + 1..].iter().take_while(|c| c.is_ascii_digit()).count()
+                                chars[i + 1..]
+                                    .iter()
+                                    .take_while(|c| c.is_ascii_digit())
+                                    .count()
                             } else {
                                 ident_len(&chars, i + 1)
                             };
@@ -452,19 +527,36 @@ impl Template {
     /// Parse after a `$` at `chars[i]`.
     fn parse_scalar(chars: &[char], mut i: usize) -> Result<(Tok, usize), InterpError> {
         // whitespace is allowed between `$` and a name
-        let ws = chars[i.min(chars.len())..].iter().take_while(|c| **c == ' ' || **c == '\t').count();
-        if ws > 0 && chars.get(i + ws).is_some_and(|&c| c.is_ascii_digit() || is_ident_start(c)) {
+        let ws = chars[i.min(chars.len())..]
+            .iter()
+            .take_while(|c| **c == ' ' || **c == '\t')
+            .count();
+        if ws > 0
+            && chars
+                .get(i + ws)
+                .is_some_and(|&c| c.is_ascii_digit() || is_ident_start(c))
+        {
             i += ws;
         }
-        let Some(&c) = chars.get(i) else { return syntax("$ at end of string") };
+        let Some(&c) = chars.get(i) else {
+            return syntax("$ at end of string");
+        };
         if c.is_ascii_digit() {
             let k = chars[i..].iter().take_while(|c| c.is_ascii_digit()).count();
             if c == '0' && k > 1 {
                 return syntax("$0 followed by digits");
             }
-            let n: usize = chars[i..i + k].iter().collect::<String>().parse().unwrap_or(usize::MAX);
+            let n: usize = chars[i..i + k]
+                .iter()
+                .collect::<String>()
+                .parse()
+                .unwrap_or(usize::MAX);
             let (ni, sub) = skip_subscripts(chars, i + k)?;
-            let tok = if sub || n == 0 { Tok::Var(Var::Const("")) } else { Tok::Var(Var::Group(n)) };
+            let tok = if sub || n == 0 {
+                Tok::Var(Var::Const(""))
+            } else {
+                Tok::Var(Var::Group(n))
+            };
             return Ok((tok, ni));
         }
         if is_perl_digit(c) {
@@ -482,13 +574,24 @@ impl Template {
                     e += 1;
                 }
                 if chars.get(e) == Some(&'}') {
-                    let n: usize = chars[j..j + k].iter().collect::<String>().parse().unwrap_or(usize::MAX);
-                    let tok = if n == 0 { Tok::Var(Var::Const("")) } else { Tok::Var(Var::Group(n)) };
+                    let n: usize = chars[j..j + k]
+                        .iter()
+                        .collect::<String>()
+                        .parse()
+                        .unwrap_or(usize::MAX);
+                    let tok = if n == 0 {
+                        Tok::Var(Var::Const(""))
+                    } else {
+                        Tok::Var(Var::Group(n))
+                    };
                     return Ok((tok, e + 1));
                 }
             }
             if chars.get(j) == Some(&'^') {
-                let k = chars[j + 1..].iter().take_while(|c| is_perl_word(**c)).count();
+                let k = chars[j + 1..]
+                    .iter()
+                    .take_while(|c| is_perl_word(**c))
+                    .count();
                 if chars.get(j + 1 + k) == Some(&'}') {
                     let name: String = chars[j + 1..j + 1 + k].iter().collect();
                     let tok = match name.as_str() {
@@ -556,10 +659,17 @@ impl Template {
             let (ni, _) = skip_subscripts(chars, i + k)?;
             return Ok((Tok::Var(Var::Const("")), ni));
         }
-        if c == '$' && chars.get(i + 1).is_some_and(|&x| is_ident_start(x) || x == '{' || x.is_ascii_digit()) {
+        if c == '$'
+            && chars
+                .get(i + 1)
+                .is_some_and(|&x| is_ident_start(x) || x == '{' || x.is_ascii_digit())
+        {
             // $$name / $$1: deref of a non-reference
             let k = if chars[i + 1].is_ascii_digit() {
-                chars[i + 1..].iter().take_while(|c| c.is_ascii_digit()).count()
+                chars[i + 1..]
+                    .iter()
+                    .take_while(|c| c.is_ascii_digit())
+                    .count()
             } else {
                 ident_len(chars, i + 1)
             };
@@ -574,7 +684,10 @@ impl Template {
         }
         if matches!(c, '-' | '+') && chars.get(i + 1) == Some(&'[') {
             // $-[n] / $+[n]
-            let end = chars[i + 1..].iter().position(|&c| c == ']').ok_or(InterpError::Syntax("$-[".into()))?;
+            let end = chars[i + 1..]
+                .iter()
+                .position(|&c| c == ']')
+                .ok_or(InterpError::Syntax("$-[".into()))?;
             let body: String = chars[i + 2..i + 1 + end].iter().collect();
             let body = body.trim();
             return match body.parse::<i64>() {
@@ -612,7 +725,12 @@ impl Template {
             }
         }
         fn close(stack: &mut Vec<Frame>) {
-            let f = stack.pop().unwrap_or(Frame { mode: None, first: None, buf: String::new(), is_first: false });
+            let f = stack.pop().unwrap_or(Frame {
+                mode: None,
+                first: None,
+                buf: String::new(),
+                is_first: false,
+            });
             let mut s = apply(f.mode, f.buf);
             if let Some(up) = f.first {
                 s = if up { ucfirst(&s) } else { lcfirst(&s) };
@@ -626,7 +744,12 @@ impl Template {
                 close(stack);
             }
         }
-        let mut stack = vec![Frame { mode: None, first: None, buf: String::new(), is_first: false }];
+        let mut stack = vec![Frame {
+            mode: None,
+            first: None,
+            buf: String::new(),
+            is_first: false,
+        }];
         let mut pending: Option<bool> = None;
         for t in &self.toks {
             match t {
@@ -639,7 +762,12 @@ impl Template {
                     // `\u` applies ucfirst to everything up to the next case
                     // modifier (`"\u$2x"` is `ucfirst($2 . "x")`).
                     if let Some(up) = pending.take() {
-                        stack.push(Frame { mode: None, first: Some(up), buf: String::new(), is_first: true });
+                        stack.push(Frame {
+                            mode: None,
+                            first: Some(up),
+                            buf: String::new(),
+                            is_first: true,
+                        });
                     }
                     if let Some(top) = stack.last_mut() {
                         top.buf.push_str(&s);
@@ -653,11 +781,19 @@ impl Template {
                     close_first(&mut stack);
                     if *mode != Mode::Q
                         && stack.len() > 1
-                        && matches!(stack.last().and_then(|f| f.mode), Some(Mode::L | Mode::U | Mode::F))
+                        && matches!(
+                            stack.last().and_then(|f| f.mode),
+                            Some(Mode::L | Mode::U | Mode::F)
+                        )
                     {
                         close(&mut stack);
                     }
-                    stack.push(Frame { mode: Some(*mode), first: pending.take(), buf: String::new(), is_first: false });
+                    stack.push(Frame {
+                        mode: Some(*mode),
+                        first: pending.take(),
+                        buf: String::new(),
+                        is_first: false,
+                    });
                 }
                 Tok::End => {
                     close_first(&mut stack);

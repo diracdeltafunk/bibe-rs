@@ -27,7 +27,10 @@ pub fn perl_sort<S: AsRef<str>>(v: &mut [S]) {
 /// `a`'s order and duplicates.
 pub fn reduce_array<S: AsRef<str> + Clone>(a: &[S], b: &[S]) -> Vec<S> {
     let set: std::collections::HashSet<&str> = b.iter().map(AsRef::as_ref).collect();
-    a.iter().filter(|x| !set.contains(x.as_ref())).cloned().collect()
+    a.iter()
+        .filter(|x| !set.contains(x.as_ref()))
+        .cloned()
+        .collect()
 }
 
 #[cfg(test)]

@@ -95,8 +95,18 @@ impl PerlRegex {
         let t = translate(pattern, ci)?;
         let re = build(&t, ci, false)?;
         let re_noempty = build(&format!("(?:{t})(?!\\G)"), ci, false)?;
-        let re_split = if pattern == "^" { Some(build("(?:^)(?!\\G)", ci, true)?) } else { None };
-        Ok(PerlRegex { src: pattern.to_string(), ci, re, re_noempty, re_split })
+        let re_split = if pattern == "^" {
+            Some(build("(?:^)(?!\\G)", ci, true)?)
+        } else {
+            None
+        };
+        Ok(PerlRegex {
+            src: pattern.to_string(),
+            ci,
+            re,
+            re_noempty,
+            re_split,
+        })
     }
 
     /// The pattern as given.
@@ -126,7 +136,9 @@ impl PerlRegex {
 
     /// `$s =~ /$re/`.
     pub fn is_match(&self, s: &str) -> Result<bool, RegexError> {
-        self.re.is_match(s.as_bytes()).map_err(|e| RegexError::Match(e.to_string()))
+        self.re
+            .is_match(s.as_bytes())
+            .map_err(|e| RegexError::Match(e.to_string()))
     }
 
     /// All matches of `m//g` / `s///g`, with perl's empty-match rule.
@@ -135,8 +147,14 @@ impl PerlRegex {
         let mut pos = 0;
         let mut prev_empty = false;
         while pos <= s.len() {
-            let re = if prev_empty { &self.re_noempty } else { &self.re };
-            let Some(g) = self.find_at(re, s, pos)? else { break };
+            let re = if prev_empty {
+                &self.re_noempty
+            } else {
+                &self.re
+            };
+            let Some(g) = self.find_at(re, s, pos)? else {
+                break;
+            };
             let (st, en) = g[0].unwrap_or((pos, pos));
             prev_empty = st == en;
             pos = en;
@@ -179,7 +197,11 @@ impl PerlRegex {
 
     /// `$s =~ s/$re/REPL/g` where the replacement for each match is computed
     /// by `f`.
-    pub fn replace_all_with(&self, s: &str, mut f: impl FnMut(&Groups) -> String) -> Result<String, RegexError> {
+    pub fn replace_all_with(
+        &self,
+        s: &str,
+        mut f: impl FnMut(&Groups) -> String,
+    ) -> Result<String, RegexError> {
         let ms = self.matches(s)?;
         if ms.is_empty() {
             return Ok(s.to_string());
@@ -203,7 +225,9 @@ impl PerlRegex {
         let mut out: Vec<Option<String>> = Vec::new();
         let mut pos = 0;
         while pos < s.len() {
-            let Some(g) = self.find_at(re, s, pos)? else { break };
+            let Some(g) = self.find_at(re, s, pos)? else {
+                break;
+            };
             let (a, b) = g[0].unwrap_or((pos, pos));
             out.push(Some(s[pos..a].to_string()));
             out.extend(g[1..].iter().map(|x| x.map(|(p, q)| s[p..q].to_string())));
@@ -212,7 +236,10 @@ impl PerlRegex {
         if pos < s.len() {
             out.push(Some(s[pos..].to_string()));
         }
-        while out.last().is_some_and(|f| f.as_deref().is_none_or(str::is_empty)) {
+        while out
+            .last()
+            .is_some_and(|f| f.as_deref().is_none_or(str::is_empty))
+        {
             out.pop();
         }
         Ok(out)
@@ -234,9 +261,17 @@ pub struct Replaced {
 /// An empty pattern returns the value unchanged. If the replacement string
 /// fails to evaluate (syntax error, or code — see [`InterpError`]), every
 /// match is replaced by the stringified regex, as biber does.
-pub fn ireplace(value: &str, pattern: &str, replace: &str, ci: bool) -> Result<Replaced, RegexError> {
+pub fn ireplace(
+    value: &str,
+    pattern: &str,
+    replace: &str,
+    ci: bool,
+) -> Result<Replaced, RegexError> {
     if pattern.is_empty() {
-        return Ok(Replaced { value: value.to_string(), code_warning: None });
+        return Ok(Replaced {
+            value: value.to_string(),
+            code_warning: None,
+        });
     }
     let re = PerlRegex::new(pattern, ci)?;
     let tpl = Template::parse(replace);
@@ -246,10 +281,16 @@ pub fn ireplace(value: &str, pattern: &str, replace: &str, ci: bool) -> Result<R
     };
     let fallback = re.stringify();
     let value = re.replace_all_with(value, |g| match &tpl {
-        Ok(t) => t.eval(&MatchCtx { subject: value, groups: g }),
+        Ok(t) => t.eval(&MatchCtx {
+            subject: value,
+            groups: g,
+        }),
         Err(_) => fallback.clone(),
     })?;
-    Ok(Replaced { value, code_warning })
+    Ok(Replaced {
+        value,
+        code_warning,
+    })
 }
 
 /// `Biber::Utils::imatch($value, $val_match, $negmatch, $ci)` in list
@@ -260,13 +301,22 @@ pub fn ireplace(value: &str, pattern: &str, replace: &str, ci: bool) -> Result<R
 /// * `negmatch`: `()` if the pattern matches, else `(1)` (so `$1` is `"1"`
 ///   afterwards, BB-032).
 /// * Otherwise the list of `m//g` (see [`PerlRegex::match_all`]).
-pub fn imatch(value: &str, pattern: &str, negmatch: bool, ci: bool) -> Result<Vec<Option<String>>, RegexError> {
+pub fn imatch(
+    value: &str,
+    pattern: &str,
+    negmatch: bool,
+    ci: bool,
+) -> Result<Vec<Option<String>>, RegexError> {
     if !crate::truth::perl_truthy(pattern) {
         return Ok(vec![Some("0".to_string())]);
     }
     let re = PerlRegex::new(pattern, ci)?;
     if negmatch {
-        return Ok(if re.is_match(value)? { vec![] } else { vec![Some("1".to_string())] });
+        return Ok(if re.is_match(value)? {
+            vec![]
+        } else {
+            vec![Some("1".to_string())]
+        });
     }
     re.match_all(value)
 }
@@ -288,19 +338,29 @@ pub enum CaptureDigits {
 /// out-of-range or `undef` elements give `""`. `\d` is perl's Unicode digit
 /// class; non-ASCII digits numify to 0 (so they also select the last
 /// element).
-pub fn expand_imatches(template: &str, imatches: &[Option<String>], digits: CaptureDigits) -> String {
+pub fn expand_imatches(
+    template: &str,
+    imatches: &[Option<String>],
+    digits: CaptureDigits,
+) -> String {
     let mut out = String::with_capacity(template.len());
     let chars: Vec<char> = template.chars().collect();
     let mut i = 0;
     while i < chars.len() {
         let c = chars[i];
-        if c == '$' && (i == 0 || chars[i - 1] != '\\') && chars.get(i + 1).is_some_and(|&d| is_perl_digit(d)) {
+        if c == '$'
+            && (i == 0 || chars[i - 1] != '\\')
+            && chars.get(i + 1).is_some_and(|&d| is_perl_digit(d))
+        {
             let k = match digits {
                 CaptureDigits::Single => 1,
-                CaptureDigits::Multi => chars[i + 1..].iter().take_while(|&&d| is_perl_digit(d)).count(),
+                CaptureDigits::Multi => chars[i + 1..]
+                    .iter()
+                    .take_while(|&&d| is_perl_digit(d))
+                    .count(),
             };
             let num: String = chars[i + 1..i + 1 + k].iter().collect();
-            let n = crate::truth::PerlNum::from_str(&num).sub(crate::truth::PerlNum::Int(1));
+            let n = crate::truth::PerlNum::parse(&num).minus(crate::truth::PerlNum::Int(1));
             let idx = match n {
                 crate::truth::PerlNum::Int(x) => x,
                 _ => i64::MAX,
@@ -353,24 +413,47 @@ mod tests {
 
     #[test]
     fn matching_and_split() {
-        assert_eq!(imatch("a1b2", "(\\d)", false, false).unwrap(), [Some("1".into()), Some("2".into())]);
-        assert_eq!(imatch("ab", "(a)|(b)", false, false).unwrap(), [Some("a".into()), None, None, Some("b".into())]);
+        assert_eq!(
+            imatch("a1b2", "(\\d)", false, false).unwrap(),
+            [Some("1".into()), Some("2".into())]
+        );
+        assert_eq!(
+            imatch("ab", "(a)|(b)", false, false).unwrap(),
+            [Some("a".into()), None, None, Some("b".into())]
+        );
         assert_eq!(imatch("x", "y", true, false).unwrap(), [Some("1".into())]);
         assert_eq!(imatch("x", "0", false, false).unwrap(), [Some("0".into())]);
         let re = PerlRegex::new(r"\s*,\s*", false).unwrap();
         let v: Vec<_> = re.split(" a , b,,c,,").unwrap();
-        assert_eq!(v, [Some(" a".into()), Some("b".into()), Some("".into()), Some("c".into())]);
+        assert_eq!(
+            v,
+            [
+                Some(" a".into()),
+                Some("b".into()),
+                Some("".into()),
+                Some("c".into())
+            ]
+        );
         let re = PerlRegex::new("x*", false).unwrap();
-        assert_eq!(re.split("axxbc").unwrap(), [Some("a".into()), Some("b".into()), Some("c".into())]);
+        assert_eq!(
+            re.split("axxbc").unwrap(),
+            [Some("a".into()), Some("b".into()), Some("c".into())]
+        );
         let re = PerlRegex::new("^", false).unwrap();
-        assert_eq!(re.split("a\nb").unwrap(), [Some("a\n".into()), Some("b".into())]);
+        assert_eq!(
+            re.split("a\nb").unwrap(),
+            [Some("a\n".into()), Some("b".into())]
+        );
         assert_eq!(PerlRegex::new("x", true).unwrap().stringify(), "(?^ui:x)");
     }
 
     #[test]
     fn imatches_expansion() {
         let m = vec![Some("a".to_string()), None, Some("c".to_string())];
-        assert_eq!(expand_imatches("$1-$2-$3-$0-\\$1-$4", &m, CaptureDigits::Multi), "a--c-c-\\$1-");
+        assert_eq!(
+            expand_imatches("$1-$2-$3-$0-\\$1-$4", &m, CaptureDigits::Multi),
+            "a--c-c-\\$1-"
+        );
         assert_eq!(expand_imatches("$13", &m, CaptureDigits::Single), "a3");
     }
 }

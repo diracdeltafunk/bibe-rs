@@ -55,7 +55,9 @@ fn isroman_uc(s: &str) -> bool {
         while i + run < chars.len() && chars[i + run] == c {
             run += 1;
         }
-        if (matches!(c, 'I' | 'X' | 'C' | 'M') && run >= 4) || (matches!(c, 'V' | 'L' | 'D') && run >= 2) {
+        if (matches!(c, 'I' | 'X' | 'C' | 'M') && run >= 4)
+            || (matches!(c, 'V' | 'L' | 'D') && run >= 2)
+        {
             return false;
         }
         i += run;

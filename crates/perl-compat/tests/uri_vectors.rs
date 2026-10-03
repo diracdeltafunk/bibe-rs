@@ -21,13 +21,23 @@ fn uri() {
             fails.push(format!("{input:?}: got {got:?} want {want:?}"));
         }
     }
-    assert!(fails.is_empty(), "{} failures:\n{}", fails.len(), fails.join("\n"));
+    assert!(
+        fails.is_empty(),
+        "{} failures:\n{}",
+        fails.len(),
+        fails.join("\n")
+    );
 }
 
 #[test]
 #[ignore = "needs oracle O3 perl"]
 fn oracle_live() {
-    let Some(out) = common::run_probe("uri_vectors.pl", &[], b"") else { return };
+    let Some(out) = common::run_probe("uri_vectors.pl", &[], b"") else {
+        return;
+    };
     let live: Value = serde_json::from_slice(&out).unwrap();
-    assert!(live == common::read_json("uri_vectors.json"), "committed uri_vectors.json is stale");
+    assert!(
+        live == common::read_json("uri_vectors.json"),
+        "committed uri_vectors.json is stale"
+    );
 }

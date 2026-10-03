@@ -1278,6 +1278,4 @@ pub(crate) static GCB: &[(u32, u32, Gcb8)] = &[
 ];
 
 /// Code points with line-break class SP.
-pub(crate) static LB_SP: &[(u32, u32)] = &[
-    (0x20, 0x20),
-];
+pub(crate) static LB_SP: &[(u32, u32)] = &[(0x20, 0x20)];

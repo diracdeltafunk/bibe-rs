@@ -25,6 +25,7 @@ use std::sync::OnceLock;
 
 use crate::isbn_ranges::parse_range_message;
 
+#[allow(clippy::type_complexity)]
 mod built {
     include!(concat!(env!("OUT_DIR"), "/isbn_ranges.rs"));
 }
@@ -59,7 +60,10 @@ pub struct RangeData {
 }
 
 impl RangeData {
-    fn from_groups<I: IntoIterator<Item = (String, String, String, Vec<(String, String)>)>>(it: I, source: String) -> RangeData {
+    fn from_groups<I: IntoIterator<Item = (String, String, String, Vec<(String, String)>)>>(
+        it: I,
+        source: String,
+    ) -> RangeData {
         let mut groups = HashMap::new();
         let mut agencies = HashMap::new();
         for (ean, g, agency, ranges) in it {
@@ -75,14 +79,26 @@ impl RangeData {
                 x.total_cmp(&y)
             })
             .map_or(0, |k| k.1.len());
-        RangeData { groups, agencies, max_group_len, source }
+        RangeData {
+            groups,
+            agencies,
+            max_group_len,
+            source,
+        }
     }
 
     /// The compiled-in data.
     pub fn builtin() -> RangeData {
         RangeData::from_groups(
             built::GROUPS.iter().map(|(e, g, a, r)| {
-                (e.to_string(), g.to_string(), a.to_string(), r.iter().map(|(l, h)| (l.to_string(), h.to_string())).collect())
+                (
+                    e.to_string(),
+                    g.to_string(),
+                    a.to_string(),
+                    r.iter()
+                        .map(|(l, h)| (l.to_string(), h.to_string()))
+                        .collect(),
+                )
             }),
             "built-in".to_string(),
         )
@@ -91,7 +107,9 @@ impl RangeData {
     /// Parse a `RangeMessage.xml` document.
     pub fn parse(xml: &str, source: &str) -> RangeData {
         RangeData::from_groups(
-            parse_range_message(xml).into_iter().map(|g| (g.ean_prefix, g.group, g.agency, g.ranges)),
+            parse_range_message(xml)
+                .into_iter()
+                .map(|g| (g.ean_prefix, g.group, g.agency, g.ranges)),
             source.to_string(),
         )
     }
@@ -171,7 +189,10 @@ pub struct Isbn<'d> {
 /// `\A(?:\d{3})?\d{9}[0-9X]\z`.
 fn common_format(input: &str) -> Option<String> {
     let up = crate::case::uc(input);
-    let d: String = up.chars().filter(|c| c.is_ascii_digit() || *c == 'X').collect();
+    let d: String = up
+        .chars()
+        .filter(|c| c.is_ascii_digit() || *c == 'X')
+        .collect();
     let n = d.len();
     if (n == 10 || n == 13) && d[..n - 1].bytes().all(|b| b.is_ascii_digit()) {
         Some(d)
@@ -181,9 +202,18 @@ fn common_format(input: &str) -> Option<String> {
 }
 
 fn checksum10(data: &str) -> String {
-    let sum: u32 = data.bytes().take(9).zip((2..=10).rev()).map(|(b, w)| digit(b) * w).sum();
+    let sum: u32 = data
+        .bytes()
+        .take(9)
+        .zip((2..=10).rev())
+        .map(|(b, w)| digit(b) * w)
+        .sum();
     let c = (11 - (sum % 11)) % 11;
-    if c == 10 { "X".to_string() } else { c.to_string() }
+    if c == 10 {
+        "X".to_string()
+    } else {
+        c.to_string()
+    }
 }
 
 fn checksum13(data: &str) -> String {
@@ -197,7 +227,11 @@ fn checksum13(data: &str) -> String {
 
 /// Perl numifies `"X"` (and anything else non-numeric) to 0.
 fn digit(b: u8) -> u32 {
-    if b.is_ascii_digit() { u32::from(b - b'0') } else { 0 }
+    if b.is_ascii_digit() {
+        u32::from(b - b'0')
+    } else {
+        0
+    }
 }
 
 impl<'d> Isbn<'d> {
@@ -210,7 +244,11 @@ impl<'d> Isbn<'d> {
     /// `Business::ISBN->new` with explicit range data.
     pub fn new_with(data: &'d RangeData, input: &str) -> Option<Isbn<'d>> {
         let common = common_format(input)?;
-        let kind = if common.len() == 10 { IsbnType::Isbn10 } else { IsbnType::Isbn13 };
+        let kind = if common.len() == 10 {
+            IsbnType::Isbn10
+        } else {
+            IsbnType::Isbn13
+        };
         let mut me = Isbn {
             data,
             input: input.to_string(),
@@ -294,7 +332,11 @@ impl<'d> Isbn<'d> {
         let gl = self.group_len();
         let max_pub = self.max_length().saturating_sub(pl + gl + 2);
         let longest = self.substr(pl + gl, max_pub).to_string();
-        let ranges = self.data.group(self.data_prefix(), self.group_code.as_deref().unwrap_or("")).cloned().unwrap_or_default();
+        let ranges = self
+            .data
+            .group(self.data_prefix(), self.group_code.as_deref().unwrap_or(""))
+            .cloned()
+            .unwrap_or_default();
         let mut publisher = None;
         for (lo, hi) in &ranges {
             let trial: String = longest.chars().take(lo.chars().count()).collect();
@@ -325,7 +367,11 @@ impl<'d> Isbn<'d> {
 
     /// `is_valid_checksum`: [`code::GOOD_ISBN`] or [`code::BAD_CHECKSUM`].
     pub fn is_valid_checksum(&self) -> i32 {
-        if self.checksum.as_deref().unwrap_or("") == self.compute_checksum() { GOOD_ISBN } else { BAD_CHECKSUM }
+        if self.checksum.as_deref().unwrap_or("") == self.compute_checksum() {
+            GOOD_ISBN
+        } else {
+            BAD_CHECKSUM
+        }
     }
 
     /// `is_valid`.
@@ -380,7 +426,10 @@ impl<'d> Isbn<'d> {
     /// `group`: the agency name.
     pub fn group(&self) -> Option<&str> {
         let g = self.group_code.as_deref()?;
-        self.data.agencies.get(&(self.data_prefix().to_string(), g.to_string())).map(String::as_str)
+        self.data
+            .agencies
+            .get(&(self.data_prefix().to_string(), g.to_string()))
+            .map(String::as_str)
     }
 
     /// `publisher_code`.
@@ -499,12 +548,20 @@ pub struct Issn {
 
 fn issn_common(input: &str) -> Option<String> {
     let up = crate::case::uc(input);
-    let d: String = up.chars().filter(|c| c.is_ascii_digit() || *c == 'X').collect();
+    let d: String = up
+        .chars()
+        .filter(|c| c.is_ascii_digit() || *c == 'X')
+        .collect();
     (d.len() == 8 && d[..7].bytes().all(|b| b.is_ascii_digit())).then_some(d)
 }
 
 fn issn_checksum(d: &str) -> String {
-    let sum: u32 = d.bytes().take(7).zip((2..=8).rev()).map(|(b, w)| digit(b) * w).sum();
+    let sum: u32 = d
+        .bytes()
+        .take(7)
+        .zip((2..=8).rev())
+        .map(|(b, w)| digit(b) * w)
+        .sum();
     let c = (11 - (sum % 11)) % 11;
     if c == 10 { "X".into() } else { c.to_string() }
 }
@@ -529,7 +586,8 @@ impl Issn {
 
     /// `as_string` (`NNNN-NNNC`), `None` unless valid.
     pub fn as_string(&self) -> Option<String> {
-        self.valid.then(|| format!("{}-{}", &self.issn[..4], &self.issn[4..]))
+        self.valid
+            .then(|| format!("{}-{}", &self.issn[..4], &self.issn[4..]))
     }
 
     /// `fix_checksum`: whether it changed.
@@ -549,46 +607,96 @@ impl Issn {
 /// `Business::ISMN` publisher ranges (`Business/ISMN/Data.pm` 1.205), as
 /// `(country, low, high)`; `None` high is perl's `undef`.
 static ISMN_TUPLES: &[(&str, &str, Option<&str>)] = &[
-    ("AU", "075", None), ("AU", "2700", Some("2701")), ("AU", "67300", Some("67310")),
-    ("AU", "720000", Some("720200")), ("AU", "9009500", Some("9009799")),
-    ("CA", "53001", Some("53010")), ("CA", "706001", Some("706050")), ("CA", "9001301", Some("9001600")),
-    ("CY", "720300", Some("720320")), ("CY", "9009800", Some("9009850")),
-    ("CZ", "2600", Some("2605")), ("CZ", "66050", Some("66100")), ("CZ", "706500", Some("706600")),
+    ("AU", "075", None),
+    ("AU", "2700", Some("2701")),
+    ("AU", "67300", Some("67310")),
+    ("AU", "720000", Some("720200")),
+    ("AU", "9009500", Some("9009799")),
+    ("CA", "53001", Some("53010")),
+    ("CA", "706001", Some("706050")),
+    ("CA", "9001301", Some("9001600")),
+    ("CY", "720300", Some("720320")),
+    ("CY", "9009800", Some("9009850")),
+    ("CZ", "2600", Some("2605")),
+    ("CZ", "66050", Some("66100")),
+    ("CZ", "706500", Some("706600")),
     ("CZ", "9004000", Some("9005000")),
-    ("DE", "000", Some("025")), ("DE", "2000", Some("2150")), ("DE", "50000", Some("52000")),
-    ("DE", "700000", Some("705000")), ("DE", "9000000", Some("9001000")),
-    ("DK", "66130", Some("66140")), ("DK", "706750", Some("706800")), ("DK", "9001801", Some("9001900")),
-    ("ES", "3500", Some("3507")), ("ES", "69200", Some("69224")), ("ES", "801200", Some("801219")),
+    ("DE", "000", Some("025")),
+    ("DE", "2000", Some("2150")),
+    ("DE", "50000", Some("52000")),
+    ("DE", "700000", Some("705000")),
+    ("DE", "9000000", Some("9001000")),
+    ("DK", "66130", Some("66140")),
+    ("DK", "706750", Some("706800")),
+    ("DK", "9001801", Some("9001900")),
+    ("ES", "3500", Some("3507")),
+    ("ES", "69200", Some("69224")),
+    ("ES", "801200", Some("801219")),
     ("ES", "9013100", Some("9013119")),
-    ("FI", "042", None), ("FI", "55001", Some("55020")), ("FI", "706300", Some("706349")),
+    ("FI", "042", None),
+    ("FI", "55001", Some("55020")),
+    ("FI", "706300", Some("706349")),
     ("FI", "9001601", Some("9001700")),
-    ("FR", "043", Some("048")), ("FR", "2301", Some("2400")), ("FR", "56000", Some("56500")),
-    ("GB", "050", Some("060")), ("GB", "2201", Some("2300")), ("GB", "57000", Some("57999")),
-    ("GB", "708001", Some("709000")), ("GB", "9002000", Some("9002999")),
+    ("FR", "043", Some("048")),
+    ("FR", "2301", Some("2400")),
+    ("FR", "56000", Some("56500")),
+    ("GB", "050", Some("060")),
+    ("GB", "2201", Some("2300")),
+    ("GB", "57000", Some("57999")),
+    ("GB", "708001", Some("709000")),
+    ("GB", "9002000", Some("9002999")),
     ("GH", "9008000", Some("9008100")),
-    ("GR", "69150", Some("69159")), ("GR", "801150", Some("801179")), ("GR", "9013030", Some("9013079")),
-    ("HR", "706700", Some("706710")), ("HR", "9005201", Some("9005250")),
-    ("HU", "55030", None), ("HU", "706251", Some("706260")), ("HU", "9005251", Some("9005260")),
+    ("GR", "69150", Some("69159")),
+    ("GR", "801150", Some("801179")),
+    ("GR", "9013030", Some("9013079")),
+    ("HR", "706700", Some("706710")),
+    ("HR", "9005201", Some("9005250")),
+    ("HU", "55030", None),
+    ("HU", "706251", Some("706260")),
+    ("HU", "9005251", Some("9005260")),
     ("HU", "080", None),
-    ("IT", "039", Some("041")), ("IT", "2151", Some("2200")), ("IT", "52001", Some("53000")),
-    ("IT", "705001", Some("706000")), ("IT", "9001001", Some("9001300")),
+    ("IT", "039", Some("041")),
+    ("IT", "2151", Some("2200")),
+    ("IT", "52001", Some("53000")),
+    ("IT", "705001", Some("706000")),
+    ("IT", "9001001", Some("9001300")),
     ("JP", "65001", None),
-    ("LK", "710000", Some("710100")), ("LK", "9006400", Some("9006500")),
-    ("LT", "59995", Some("59999")), ("LT", "706201", Some("706250")),
-    ("LV", "706650", Some("706660")), ("LV", "9005001", Some("9005100")),
-    ("NO", "065", None), ("NO", "2610", Some("2617")), ("NO", "66101", Some("66115")),
-    ("NO", "706680", Some("706690")), ("NO", "9005101", Some("9005200")),
-    ("PT", "3000", None), ("PT", "707700", Some("707750")), ("PT", "9007500", Some("9007600")),
+    ("LK", "710000", Some("710100")),
+    ("LK", "9006400", Some("9006500")),
+    ("LT", "59995", Some("59999")),
+    ("LT", "706201", Some("706250")),
+    ("LV", "706650", Some("706660")),
+    ("LV", "9005001", Some("9005100")),
+    ("NO", "065", None),
+    ("NO", "2610", Some("2617")),
+    ("NO", "66101", Some("66115")),
+    ("NO", "706680", Some("706690")),
+    ("NO", "9005101", Some("9005200")),
+    ("PT", "3000", None),
+    ("PT", "707700", Some("707750")),
+    ("PT", "9007500", Some("9007600")),
     ("RU", "66000", Some("66055")),
-    ("SE", "070", None), ("SE", "66150", Some("66170")), ("SE", "706850", Some("706900")),
+    ("SE", "070", None),
+    ("SE", "66150", Some("66170")),
+    ("SE", "706850", Some("706900")),
     ("SE", "9006000", Some("9006200")),
-    ("SI", "709001", Some("709100")), ("SI", "9009000", Some("9009100")),
-    ("SK", "68500", Some("68520")), ("SK", "9010001", Some("9010050")),
-    ("TR", "036", Some("037")), ("TR", "3440", Some("3445")), ("TR", "69080", Some("69095")),
-    ("TR", "801100", Some("801120")), ("TR", "9013000", Some("9013010")),
-    ("UA", "707500", Some("707600")), ("UA", "9007000", Some("9007200")),
-    ("US", "081", Some("099")), ("US", "3005", Some("3205")), ("US", "58000", Some("58199")),
-    ("US", "60001", Some("60002")), ("US", "800000", Some("800199")), ("US", "9012000", Some("9012099")),
+    ("SI", "709001", Some("709100")),
+    ("SI", "9009000", Some("9009100")),
+    ("SK", "68500", Some("68520")),
+    ("SK", "9010001", Some("9010050")),
+    ("TR", "036", Some("037")),
+    ("TR", "3440", Some("3445")),
+    ("TR", "69080", Some("69095")),
+    ("TR", "801100", Some("801120")),
+    ("TR", "9013000", Some("9013010")),
+    ("UA", "707500", Some("707600")),
+    ("UA", "9007000", Some("9007200")),
+    ("US", "081", Some("099")),
+    ("US", "3005", Some("3205")),
+    ("US", "58000", Some("58199")),
+    ("US", "60001", Some("60002")),
+    ("US", "800000", Some("800199")),
+    ("US", "9012000", Some("9012099")),
 ];
 
 /// `Business::ISMN` validity codes: 1 good, -1 bad checksum, -3 invalid
@@ -614,7 +722,10 @@ pub struct Ismn {
 
 fn ismn_common(input: &str) -> Option<String> {
     let up = crate::case::uc(input);
-    let d: String = up.chars().filter(|c| c.is_ascii_digit() || *c == 'M').collect();
+    let d: String = up
+        .chars()
+        .filter(|c| c.is_ascii_digit() || *c == 'M')
+        .collect();
     (d.len() == 10 && d.starts_with('M') && d[1..].bytes().all(|b| b.is_ascii_digit())).then_some(d)
 }
 
@@ -627,7 +738,11 @@ fn ismn_checksum(d: &str) -> u32 {
 }
 
 fn ismn_valid_checksum(d: &str) -> i32 {
-    if d[9..] == ismn_checksum(d).to_string() { ismn_code::GOOD_ISMN } else { ismn_code::BAD_CHECKSUM }
+    if d[9..] == ismn_checksum(d).to_string() {
+        ismn_code::GOOD_ISMN
+    } else {
+        ismn_code::BAD_CHECKSUM
+    }
 }
 
 impl Ismn {
@@ -662,7 +777,13 @@ impl Ismn {
         let code: u64 = self.publisher_code.parse().unwrap_or(0);
         let mut tuples: Vec<(&str, u64, Option<u64>)> = ISMN_TUPLES
             .iter()
-            .map(|(c, lo, hi)| (*c, lo.parse().unwrap_or(0), hi.map(|h| h.parse().unwrap_or(0))))
+            .map(|(c, lo, hi)| {
+                (
+                    *c,
+                    lo.parse().unwrap_or(0),
+                    hi.map(|h| h.parse().unwrap_or(0)),
+                )
+            })
             .collect();
         tuples.sort_by_key(|t| t.1);
         for (country, lo, hi) in tuples {

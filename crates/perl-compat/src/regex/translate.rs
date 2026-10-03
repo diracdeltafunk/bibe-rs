@@ -43,7 +43,11 @@ fn class_ranges(p: Prop) -> &'static str {
             }
             s
         };
-        [mk(Prop::PerlWord), mk(Prop::PerlSpace), mk(Prop::PerlHSpace)]
+        [
+            mk(Prop::PerlWord),
+            mk(Prop::PerlSpace),
+            mk(Prop::PerlHSpace),
+        ]
     });
     match p {
         Prop::PerlWord => &c[0],
@@ -64,13 +68,25 @@ fn ascii_body(p: Prop) -> &'static str {
 }
 
 fn body_for(p: Prop, ascii: bool) -> &'static str {
-    if ascii { ascii_body(p) } else { class_ranges(p) }
+    if ascii {
+        ascii_body(p)
+    } else {
+        class_ranges(p)
+    }
 }
 
 /// perl-specific property names PCRE2 does not know, as class bodies.
 fn perl_property(name: &str) -> Option<&'static str> {
-    let key: String = name.chars().filter(|c| !matches!(c, ' ' | '_' | '-')).collect::<String>().to_ascii_lowercase();
-    let key = key.strip_prefix("is").filter(|k| !k.is_empty()).unwrap_or(&key).to_string();
+    let key: String = name
+        .chars()
+        .filter(|c| !matches!(c, ' ' | '_' | '-'))
+        .collect::<String>()
+        .to_ascii_lowercase();
+    let key = key
+        .strip_prefix("is")
+        .filter(|k| !k.is_empty())
+        .unwrap_or(&key)
+        .to_string();
     Some(match key.as_str() {
         "xposixalpha" => "\\p{Alphabetic}",
         "alnum" | "xposixalnum" => "\\p{Alphabetic}\\p{Nd}",
@@ -78,11 +94,15 @@ fn perl_property(name: &str) -> Option<&'static str> {
         "xposixlower" => "\\p{Lowercase}",
         "xposixupper" => "\\p{Uppercase}",
         "xposixpunct" => "\\p{P}\\$+<=>^`|~",
-        "space" | "spaceperl" | "xperlspace" | "xposixspace" | "perlspace" => class_ranges(Prop::PerlSpace),
+        "space" | "spaceperl" | "xperlspace" | "xposixspace" | "perlspace" => {
+            class_ranges(Prop::PerlSpace)
+        }
         "word" | "xposixword" | "perlword" => class_ranges(Prop::PerlWord),
         "blank" | "xposixblank" | "horizspace" => class_ranges(Prop::PerlHSpace),
         "cntrl" | "xposixcntrl" => "\\p{Cc}",
-        "xdigit" | "xposixxdigit" => "0-9A-Fa-f\\x{FF10}-\\x{FF19}\\x{FF21}-\\x{FF26}\\x{FF41}-\\x{FF46}",
+        "xdigit" | "xposixxdigit" => {
+            "0-9A-Fa-f\\x{FF10}-\\x{FF19}\\x{FF21}-\\x{FF26}\\x{FF41}-\\x{FF46}"
+        }
         "posixalpha" => "A-Za-z",
         "posixalnum" => "A-Za-z0-9",
         "posixdigit" => "0-9",
@@ -188,11 +208,21 @@ fn posix_class(name: &str, ci: bool) -> Option<&'static str> {
 /// `\p{InName}`, `\p{Block=Name}`, `\p{Blk:Name}`: a Unicode block (perl
 /// 5.42 / Unicode 16 block list), as a class body.
 fn block_body(name: &str) -> Option<String> {
-    let key: String = name.chars().filter(|c| !matches!(c, ' ' | '_' | '-')).collect::<String>().to_ascii_lowercase();
+    let key: String = name
+        .chars()
+        .filter(|c| !matches!(c, ' ' | '_' | '-'))
+        .collect::<String>()
+        .to_ascii_lowercase();
     let rest = key
         .strip_prefix("in")
-        .or_else(|| key.strip_prefix("block=").or_else(|| key.strip_prefix("block:")))
-        .or_else(|| key.strip_prefix("blk=").or_else(|| key.strip_prefix("blk:")))?;
+        .or_else(|| {
+            key.strip_prefix("block=")
+                .or_else(|| key.strip_prefix("block:"))
+        })
+        .or_else(|| {
+            key.strip_prefix("blk=")
+                .or_else(|| key.strip_prefix("blk:"))
+        })?;
     let t = crate::tables::props::BLOCKS;
     let i = t.binary_search_by(|e| e.0.cmp(rest)).ok()?;
     Some(format!("\\x{{{:x}}}-\\x{{{:x}}}", t[i].1, t[i].2))
@@ -227,10 +257,18 @@ pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
                 // \pL, \p{Name}, \p{^Name}
                 let (name, len) = if chars.get(i + 2) == Some(&'{') {
                     let rest: String = chars[i + 3..].iter().collect();
-                    let close = rest.find('}').ok_or_else(|| RegexError::Compile("Missing right brace on \\p{}".into()))?;
-                    (rest[..close].to_string(), 3 + rest[..close].chars().count() + 1)
+                    let close = rest.find('}').ok_or_else(|| {
+                        RegexError::Compile("Missing right brace on \\p{}".into())
+                    })?;
+                    (
+                        rest[..close].to_string(),
+                        3 + rest[..close].chars().count() + 1,
+                    )
                 } else {
-                    (chars.get(i + 2).map(|c| c.to_string()).unwrap_or_default(), 3)
+                    (
+                        chars.get(i + 2).map(|c| c.to_string()).unwrap_or_default(),
+                        3,
+                    )
                 };
                 let mut neg = n == 'P';
                 let mut nm = name.trim();
@@ -251,9 +289,15 @@ pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
                 } else {
                     let lower = nm.to_ascii_lowercase();
                     if lower.starts_with("in") && nm.len() > 2 {
-                        return Err(RegexError::Unsupported(format!("block property \\p{{{nm}}}")));
+                        return Err(RegexError::Unsupported(format!(
+                            "block property \\p{{{nm}}}"
+                        )));
                     }
-                    let nm = if lower.starts_with("is") && nm.len() > 2 { &nm[2..] } else { nm };
+                    let nm = if lower.starts_with("is") && nm.len() > 2 {
+                        &nm[2..]
+                    } else {
+                        nm
+                    };
                     let _ = write!(piece, "\\{}{{{}}}", if neg { 'P' } else { 'p' }, nm);
                 }
                 if let Some(cb) = cls.as_mut() {
@@ -264,10 +308,16 @@ pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
                 continue;
             } else if n.is_ascii_alphabetic() {
                 match n {
-                    'C' => return Err(RegexError::Compile("\\C no longer supported in regex".into())),
+                    'C' => {
+                        return Err(RegexError::Compile(
+                            "\\C no longer supported in regex".into(),
+                        ));
+                    }
                     'N' if chars.get(i + 2) == Some(&'{') => {
                         let rest: String = chars[i + 3..].iter().collect();
-                        let close = rest.find('}').ok_or_else(|| RegexError::Compile("Missing right brace on \\N{}".into()))?;
+                        let close = rest.find('}').ok_or_else(|| {
+                            RegexError::Compile("Missing right brace on \\N{}".into())
+                        })?;
                         let body = rest[..close].trim();
                         let hex = body.strip_prefix("U+").ok_or_else(|| {
                             RegexError::Unsupported(format!("\\N{{{body}}} (named characters)"))
@@ -348,7 +398,12 @@ pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
         match c {
             '[' => {
                 let negated = chars.get(i + 1) == Some(&'^');
-                cls = Some(ClassBuf { negated, first: true, body: String::new(), neg_sets: Vec::new() });
+                cls = Some(ClassBuf {
+                    negated,
+                    first: true,
+                    body: String::new(),
+                    neg_sets: Vec::new(),
+                });
                 i += if negated { 2 } else { 1 };
                 continue;
             }
@@ -389,7 +444,11 @@ pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
                         ascii = true;
                     }
                     out.push_str("(?");
-                    out.extend(flags.chars().filter(|f| !matches!(f, 'a' | 'u' | 'd' | 'l' | 'p')));
+                    out.extend(
+                        flags
+                            .chars()
+                            .filter(|f| !matches!(f, 'a' | 'u' | 'd' | 'l' | 'p')),
+                    );
                     i = j;
                     continue;
                 }

@@ -25,13 +25,13 @@ fn numbers() {
     let mut fails = Vec::new();
     for t in v["numbers"].as_array().unwrap() {
         let x = s(&t["s"]);
-        let n = PerlNum::from_str(x);
+        let n = PerlNum::parse(x);
         let got = (
             looks_like_number(x),
-            n.add(PerlNum::Int(0)).to_string(),
+            n.plus(PerlNum::Int(0)).to_string(),
             n.abs().to_string(),
-            n.sub(PerlNum::Int(1)).to_string(),
-            n.add(PerlNum::Float(0.5)).to_string(),
+            n.minus(PerlNum::Int(1)).to_string(),
+            n.plus(PerlNum::Float(0.5)).to_string(),
         );
         let want = (
             t["lln"].as_bool().unwrap(),
@@ -45,15 +45,23 @@ fn numbers() {
         }
     }
     for t in v["numcmp"].as_array().unwrap() {
-        let (a, b) = (PerlNum::from_str(s(&t["a"])), PerlNum::from_str(s(&t["b"])));
+        let (a, b) = (PerlNum::parse(s(&t["a"])), PerlNum::parse(s(&t["b"])));
         let cmp = a.num_cmp(b).map(|o| o as i64);
         let want = t["cmp"].as_i64();
-        let sub = a.sub(b).to_string();
+        let sub = a.minus(b).to_string();
         if cmp != want || sub != s(&t["sub"]) {
-            fails.push(format!("{:?} <=> {:?}: got {cmp:?}/{sub} want {want:?}/{}", t["a"], t["b"], t["sub"]));
+            fails.push(format!(
+                "{:?} <=> {:?}: got {cmp:?}/{sub} want {want:?}/{}",
+                t["a"], t["b"], t["sub"]
+            ));
         }
     }
-    assert!(fails.is_empty(), "{} failures:\n{}", fails.len(), fails.join("\n"));
+    assert!(
+        fails.is_empty(),
+        "{} failures:\n{}",
+        fails.len(),
+        fails.join("\n")
+    );
 }
 
 #[test]
@@ -92,8 +100,16 @@ fn strings() {
     let mut fails = Vec::new();
     for t in v["strings"].as_array().unwrap() {
         let x = s(&t["s"]);
-        let lens = |it: &mut dyn Iterator<Item = &str>| -> Vec<u64> { it.map(|c| c.chars().count() as u64).collect() };
-        let want_lens = |k: &str| -> Vec<u64> { t[k].as_array().unwrap().iter().map(|n| n.as_u64().unwrap()).collect() };
+        let lens = |it: &mut dyn Iterator<Item = &str>| -> Vec<u64> {
+            it.map(|c| c.chars().count() as u64).collect()
+        };
+        let want_lens = |k: &str| -> Vec<u64> {
+            t[k].as_array()
+                .unwrap()
+                .iter()
+                .map(|n| n.as_u64().unwrap())
+                .collect()
+        };
         if lens(&mut gcstring::clusters(x)) != want_lens("gcstring") {
             fails.push(format!("gcstring {x:?}"));
         }
@@ -101,7 +117,11 @@ fn strings() {
             fails.push(format!("gclength {x:?}"));
         }
         if lens(&mut perl::clusters(x)) != want_lens("perlx") {
-            fails.push(format!("perlx {x:?}: got {:?} want {:?}", lens(&mut perl::clusters(x)), want_lens("perlx")));
+            fails.push(format!(
+                "perlx {x:?}: got {:?} want {:?}",
+                lens(&mut perl::clusters(x)),
+                want_lens("perlx")
+            ));
         }
         let mut subs = Vec::new();
         for o in [-3i64, -1, 0, 1, 2] {
@@ -109,23 +129,41 @@ fn strings() {
                 subs.push(gcstring::substr(x, o, l).to_string());
             }
         }
-        let want_subs: Vec<String> = t["substr"].as_array().unwrap().iter().map(|v| s(v).to_string()).collect();
+        let want_subs: Vec<String> = t["substr"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|v| s(v).to_string())
+            .collect();
         if subs != want_subs {
             fails.push(format!("substr {x:?}: got {subs:?} want {want_subs:?}"));
         }
-        for (k, f) in [("lc", lc as fn(&str) -> String), ("uc", uc), ("fc", fc), ("ucfirst", ucfirst), ("lcfirst", lcfirst)] {
+        for (k, f) in [
+            ("lc", lc as fn(&str) -> String),
+            ("uc", uc),
+            ("fc", fc),
+            ("ucfirst", ucfirst),
+            ("lcfirst", lcfirst),
+        ] {
             if f(x) != s(&t[k]) {
                 fails.push(format!("{k} {x:?}"));
             }
         }
     }
-    assert!(fails.is_empty(), "{} failures:\n{}", fails.len(), fails.join("\n"));
+    assert!(
+        fails.is_empty(),
+        "{} failures:\n{}",
+        fails.len(),
+        fails.join("\n")
+    );
 }
 
 #[test]
 #[ignore = "needs oracle O3 perl"]
 fn oracle_live() {
-    let Some(out) = common::run_probe("scalar_vectors.pl", &[], b"") else { return };
+    let Some(out) = common::run_probe("scalar_vectors.pl", &[], b"") else {
+        return;
+    };
     let live: Value = serde_json::from_slice(&out).unwrap();
     assert!(live == vectors(), "committed scalar_vectors.json is stale");
 }

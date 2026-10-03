@@ -163,9 +163,8 @@ pub mod gcstring {
             } else if (g == Gcb8::L && matches!(ng, Gcb8::L | Gcb8::V | Gcb8::Lv | Gcb8::Lvt))
                 || (matches!(g, Gcb8::Lv | Gcb8::V) && matches!(ng, Gcb8::V | Gcb8::T))
                 || (matches!(g, Gcb8::Lvt | Gcb8::T) && ng == Gcb8::T)
+                || (g == Gcb8::RegionalIndicator && ng == Gcb8::RegionalIndicator)
             {
-                true
-            } else if g == Gcb8::RegionalIndicator && ng == Gcb8::RegionalIndicator {
                 true
             } else {
                 // GB9/9a (+ sombok's Virama); GB9b; the Virama-as-joiner rule
@@ -287,7 +286,11 @@ pub mod gcstring {
     /// `Unicode::GCString->new($s)->substr(0, 1)->as_string`: the first
     /// cluster (`""` for an empty string).
     pub fn first(s: &str) -> &str {
-        if s.is_empty() { s } else { &s[..cluster_len(s)] }
+        if s.is_empty() {
+            s
+        } else {
+            &s[..cluster_len(s)]
+        }
     }
 }
 
@@ -341,8 +344,8 @@ pub mod perl {
     #[derive(Clone, Copy, PartialEq, Eq)]
     enum Pict {
         None,
-        Pict,
-        PictZwj,
+        Seen,
+        SeenZwj,
     }
 
     #[derive(Clone, Copy)]
@@ -357,7 +360,12 @@ pub mod perl {
         fn new(c: char) -> State {
             let mut s = State {
                 prev: Gcb16::Other,
-                incb: Incb { kind: IncbKind::Other, run_cons: false, run_linkers: 0, cons_join: false },
+                incb: Incb {
+                    kind: IncbKind::Other,
+                    run_cons: false,
+                    run_linkers: 0,
+                    cons_join: false,
+                },
                 pict: Pict::None,
                 ri: 0,
             };
@@ -378,7 +386,8 @@ pub mod perl {
             };
             let st = &mut self.incb;
             if cons {
-                st.cons_join = st.kind == IncbKind::LinkerOrExtend && st.run_cons && st.run_linkers > 0;
+                st.cons_join =
+                    st.kind == IncbKind::LinkerOrExtend && st.run_cons && st.run_linkers > 0;
                 st.kind = IncbKind::Consonant;
                 st.run_cons = true;
                 st.run_linkers = 0;
@@ -395,15 +404,19 @@ pub mod perl {
                 st.run_linkers = 0;
             }
             self.pict = if ext_pict(c) {
-                Pict::Pict
+                Pict::Seen
             } else {
                 match (self.pict, g) {
-                    (Pict::Pict, Gcb16::Extend) => Pict::Pict,
-                    (Pict::Pict, Gcb16::Zwj) => Pict::PictZwj,
+                    (Pict::Seen, Gcb16::Extend) => Pict::Seen,
+                    (Pict::Seen, Gcb16::Zwj) => Pict::SeenZwj,
                     _ => Pict::None,
                 }
             };
-            self.ri = if g == Gcb16::RegionalIndicator { self.ri + 1 } else { 0 };
+            self.ri = if g == Gcb16::RegionalIndicator {
+                self.ri + 1
+            } else {
+                0
+            };
             self.prev = g;
         }
 
@@ -434,13 +447,10 @@ pub mod perl {
                 IncbKind::Consonant => self.incb.cons_join,
                 IncbKind::Other => false,
             };
-            if incb_join
-                && !c.is_ascii()
-                && in_ranges(gcb16::INCB_CONSONANT, c as u32)
-            {
+            if incb_join && !c.is_ascii() && in_ranges(gcb16::INCB_CONSONANT, c as u32) {
                 return false;
             }
-            if p == Zwj && self.pict == Pict::PictZwj && ext_pict(c) {
+            if p == Zwj && self.pict == Pict::SeenZwj && ext_pict(c) {
                 return false;
             }
             if p == RegionalIndicator && g == RegionalIndicator && self.ri % 2 == 1 {

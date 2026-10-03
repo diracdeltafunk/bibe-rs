@@ -33,7 +33,10 @@ fn chars() -> impl Iterator<Item = char> {
 }
 
 fn hexes(s: &str) -> String {
-    s.chars().map(|c| format!("{:X}", c as u32)).collect::<Vec<_>>().join(" ")
+    s.chars()
+        .map(|c| format!("{:X}", c as u32))
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 fn digest_map(f: impl Fn(&str) -> String) -> String {
@@ -93,7 +96,9 @@ fn compute(key: &str) -> Option<String> {
         "nfkd" => digest_map(|s| nfkd(s).into_owned()),
         "nfkc" => digest_map(|s| nfkc(s).into_owned()),
         "num" => digest_num(),
-        "gcstring" => digest_clusters(|s| gcstring::clusters(s).map(|x| x.chars().count()).collect()),
+        "gcstring" => {
+            digest_clusters(|s| gcstring::clusters(s).map(|x| x.chars().count()).collect())
+        }
         "perlx" => digest_clusters(|s| perl::clusters(s).map(|x| x.chars().count()).collect()),
         k => {
             let syn = k.strip_prefix("prop:")?;
@@ -106,7 +111,9 @@ fn compute(key: &str) -> Option<String> {
 fn check(expected: &BTreeMap<String, String>, keys: &[&str]) {
     let mut bad = Vec::new();
     for k in keys {
-        let want = expected.get(*k).unwrap_or_else(|| panic!("no digest for {k}"));
+        let want = expected
+            .get(*k)
+            .unwrap_or_else(|| panic!("no digest for {k}"));
         let got = compute(k).unwrap_or_else(|| panic!("unknown key {k}"));
         if &got != want {
             bad.push(k.to_string());
@@ -132,7 +139,10 @@ fn normalization() {
 #[test]
 fn properties_and_num() {
     let exp = committed();
-    let keys: Vec<String> = Prop::ALL.iter().map(|p| format!("prop:{}", p.perl_syntax())).collect();
+    let keys: Vec<String> = Prop::ALL
+        .iter()
+        .map(|p| format!("prop:{}", p.perl_syntax()))
+        .collect();
     let mut keys: Vec<&str> = keys.iter().map(String::as_str).collect();
     keys.push("num");
     check(&exp, &keys);
@@ -153,7 +163,9 @@ fn graphemes_perl_x() {
 #[test]
 #[ignore = "needs oracle O3 perl"]
 fn oracle_live() {
-    let Some(out) = common::run_probe("unicode_digests.pl", &[], b"") else { return };
+    let Some(out) = common::run_probe("unicode_digests.pl", &[], b"") else {
+        return;
+    };
     let live: BTreeMap<String, String> = serde_json::from_slice(&out).unwrap();
     assert_eq!(live, committed(), "committed digests are stale");
 }

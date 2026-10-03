@@ -101,7 +101,12 @@ pub fn parse_range_message(data: &str) -> Vec<ParsedGroup> {
             let cut = |s: &str| s.chars().take(len).collect::<String>();
             ranges.push((cut(lo), cut(hi)));
         }
-        out.push(ParsedGroup { ean_prefix: ean, group: code, agency, ranges });
+        out.push(ParsedGroup {
+            ean_prefix: ean,
+            group: code,
+            agency,
+            ranges,
+        });
     }
     out
 }

@@ -11,7 +11,9 @@ pub fn root() -> PathBuf {
 
 /// A committed test-data file.
 pub fn data(name: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/data").join(name)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/data")
+        .join(name)
 }
 
 /// The O3 oracle perl: `$BIBERS_O3_PERL`, else `<root>/vendor/perl/bin/perl`.
@@ -55,7 +57,11 @@ pub fn run_probe(script: &str, args: &[&str], stdin: &[u8]) -> Option<Vec<u8>> {
         si.write_all(stdin).expect("write stdin");
     }
     let out = child.wait_with_output().expect("oracle perl");
-    assert!(out.status.success(), "probe failed: {}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "probe failed: {}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     Some(out.stdout)
 }
 

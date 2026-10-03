@@ -35,7 +35,7 @@
 
 use std::borrow::Cow;
 
-use unicode_normalization::{UnicodeNormalization, is_nfc_quick, is_nfd_quick, IsNormalized};
+use unicode_normalization::{IsNormalized, UnicodeNormalization, is_nfc_quick, is_nfd_quick};
 
 use crate::tables::props;
 use crate::truth::PerlNum;
@@ -68,12 +68,20 @@ pub fn nfc(s: &str) -> Cow<'_, str> {
 
 /// `Unicode::Normalize::NFKD`.
 pub fn nfkd(s: &str) -> Cow<'_, str> {
-    if s.is_ascii() { Cow::Borrowed(s) } else { Cow::Owned(s.nfkd().collect()) }
+    if s.is_ascii() {
+        Cow::Borrowed(s)
+    } else {
+        Cow::Owned(s.nfkd().collect())
+    }
 }
 
 /// `Unicode::Normalize::NFKC`.
 pub fn nfkc(s: &str) -> Cow<'_, str> {
-    if s.is_ascii() { Cow::Borrowed(s) } else { Cow::Owned(s.nfkc().collect()) }
+    if s.is_ascii() {
+        Cow::Borrowed(s)
+    } else {
+        Cow::Owned(s.nfkc().collect())
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -102,7 +110,9 @@ impl NumVal {
 /// `Numeric_Value` of a single code point, if it has one.
 pub fn numeric_value(c: char) -> Option<NumVal> {
     let t = crate::tables::num::NUMERIC;
-    t.binary_search_by_key(&(c as u32), |e| e.0).ok().map(|i| t[i].1)
+    t.binary_search_by_key(&(c as u32), |e| e.0)
+        .ok()
+        .map(|i| t[i].1)
 }
 
 /// `Unicode::UCD::num($s)`; `None` is perl's `undef`.
@@ -125,7 +135,9 @@ pub fn ucd_num(s: &str) -> Option<PerlNum> {
     if !Prop::PerlDigit.contains(first) {
         return None;
     }
-    let NumVal::Int(first_val) = v else { return None };
+    let NumVal::Int(first_val) = v else {
+        return None;
+    };
     let zero = first as i64 - first_val;
     let mut value = PerlNum::Int(first_val);
     for c in chars {
@@ -138,7 +150,9 @@ pub fn ucd_num(s: &str) -> Option<PerlNum> {
                 Some(y) => PerlNum::Int(y),
                 None => {
                     // perl: IV overflow → UV, then NV
-                    let u = (x as u64).checked_mul(10).and_then(|y| y.checked_add(digit as u64));
+                    let u = (x as u64)
+                        .checked_mul(10)
+                        .and_then(|y| y.checked_add(digit as u64));
                     match u {
                         Some(u) => PerlNum::UInt(u),
                         None => PerlNum::Float(x as f64 * 10.0 + digit as f64),
@@ -255,12 +269,50 @@ pub enum Prop {
 impl Prop {
     /// Every property, for iteration in tests.
     pub const ALL: &'static [Prop] = &[
-        Prop::PerlSpace, Prop::PerlDigit, Prop::PerlWord, Prop::PerlHSpace, Prop::PerlVSpace,
-        Prop::L, Prop::Lu, Prop::Ll, Prop::Lt, Prop::Lm, Prop::Lo, Prop::M, Prop::Mn, Prop::Mc,
-        Prop::Me, Prop::N, Prop::Nd, Prop::Nl, Prop::No, Prop::P, Prop::Pc, Prop::Pd, Prop::Ps,
-        Prop::Pe, Prop::Pi, Prop::Pf, Prop::Po, Prop::S, Prop::Sm, Prop::Sc, Prop::Sk, Prop::So,
-        Prop::Z, Prop::Zs, Prop::C, Prop::Cc, Prop::Cf, Prop::Cn, Prop::Dash, Prop::Dia,
-        Prop::Alpha, Prop::Upper, Prop::Lower, Prop::AsciiHexDigit,
+        Prop::PerlSpace,
+        Prop::PerlDigit,
+        Prop::PerlWord,
+        Prop::PerlHSpace,
+        Prop::PerlVSpace,
+        Prop::L,
+        Prop::Lu,
+        Prop::Ll,
+        Prop::Lt,
+        Prop::Lm,
+        Prop::Lo,
+        Prop::M,
+        Prop::Mn,
+        Prop::Mc,
+        Prop::Me,
+        Prop::N,
+        Prop::Nd,
+        Prop::Nl,
+        Prop::No,
+        Prop::P,
+        Prop::Pc,
+        Prop::Pd,
+        Prop::Ps,
+        Prop::Pe,
+        Prop::Pi,
+        Prop::Pf,
+        Prop::Po,
+        Prop::S,
+        Prop::Sm,
+        Prop::Sc,
+        Prop::Sk,
+        Prop::So,
+        Prop::Z,
+        Prop::Zs,
+        Prop::C,
+        Prop::Cc,
+        Prop::Cf,
+        Prop::Cn,
+        Prop::Dash,
+        Prop::Dia,
+        Prop::Alpha,
+        Prop::Upper,
+        Prop::Lower,
+        Prop::AsciiHexDigit,
     ];
 
     /// The perl regex syntax for this class (e.g. `\p{Dash}`).
@@ -438,7 +490,10 @@ mod tests {
         assert_eq!(ucd_num("Ⅻ").map(|n| n.to_string()), Some("12".into()));
         assert!(ucd_num("ⅫⅫ").is_none());
         assert!(ucd_num("１2").is_none());
-        assert_eq!(ucd_num("２０２４").map(|n| n.to_string()), Some("2024".into()));
+        assert_eq!(
+            ucd_num("２０２４").map(|n| n.to_string()),
+            Some("2024".into())
+        );
     }
 
     #[test]

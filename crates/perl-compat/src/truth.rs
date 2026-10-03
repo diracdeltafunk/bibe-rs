@@ -133,7 +133,7 @@ fn grok_infnan(s: &[u8], sp: &mut usize) -> u32 {
             *sp = i;
             if i < send && fold_eq(at(i), b'I') {
                 let trail = flags | IS_NUMBER_TRAILING;
-                for c in [b'N', b'I', b'T', b'Y'] {
+                for c in *b"NITY" {
                     i += 1;
                     if i == send || !fold_eq(at(i), c) {
                         return trail;
@@ -257,8 +257,13 @@ fn grok_based(s: &[u8], base: u32) -> (usize, bool) {
             i += 1;
             continue;
         }
-        let Some(d) = (c as char).to_digit(base) else { break };
-        match value.checked_mul(u64::from(base)).and_then(|v| v.checked_add(u64::from(d))) {
+        let Some(d) = (c as char).to_digit(base) else {
+            break;
+        };
+        match value
+            .checked_mul(u64::from(base))
+            .and_then(|v| v.checked_add(u64::from(d)))
+        {
             Some(v) => value = v,
             None => overflow = true,
         }
@@ -422,14 +427,17 @@ impl PerlNum {
     /// Numify a string as perl does (`$s + 0`): an integer if the whole string
     /// (modulo surrounding whitespace) is an integer that fits in an IV/UV,
     /// otherwise a double parsed from the longest numeric prefix (0 if none).
-    pub fn from_str(s: &str) -> PerlNum {
+    pub fn parse(s: &str) -> PerlNum {
         let b = s.as_bytes();
         let t = grok_number_flags(b, false);
         if (t & (IS_NUMBER_IN_UV | IS_NUMBER_NOT_INT)) == IS_NUMBER_IN_UV {
             // pure integer: parse digits
             let mut v: u64 = 0;
             if s != "0 but true" {
-                for &c in b.iter().skip_while(|&&c| is_space(c) || c == b'+' || c == b'-') {
+                for &c in b
+                    .iter()
+                    .skip_while(|&&c| is_space(c) || c == b'+' || c == b'-')
+                {
                     if !c.is_ascii_digit() {
                         break;
                     }
@@ -443,11 +451,17 @@ impl PerlNum {
                     v => PerlNum::Float(-(v as f64)),
                 };
             }
-            return if v <= i64::MAX as u64 { PerlNum::Int(v as i64) } else { PerlNum::UInt(v) };
+            return if v <= i64::MAX as u64 {
+                PerlNum::Int(v as i64)
+            } else {
+                PerlNum::UInt(v)
+            };
         }
         let nv = atof(b);
         // sv_2iuv_common: does the NV also get a public integer value (IOK)?
-        if t == 0 || (t & (IS_NUMBER_IN_UV | IS_NUMBER_NOT_INT)) == (IS_NUMBER_IN_UV | IS_NUMBER_NOT_INT) {
+        if t == 0
+            || (t & (IS_NUMBER_IN_UV | IS_NUMBER_NOT_INT)) == (IS_NUMBER_IN_UV | IS_NUMBER_NOT_INT)
+        {
             return PerlNum::Float(nv);
         }
         if nv.is_nan() || nv.fract() != 0.0 {
@@ -457,14 +471,18 @@ impl PerlNum {
             return PerlNum::Int(nv as i64);
         }
         // sv_2iuv_non_preserve
-        if nv < -9.223_372_036_854_775_808e18 || nv > 1.844_674_407_370_955_2e19 {
+        if nv < i64::MIN as f64 || nv > u64::MAX as f64 {
             return PerlNum::Float(nv);
         }
-        if nv < 9.223_372_036_854_775_808e18 {
+        if nv < -(i64::MIN as f64) {
             return PerlNum::Int(nv as i64);
         }
         let u = nv as u64;
-        if u == u64::MAX { PerlNum::Float(nv) } else { PerlNum::UInt(u) }
+        if u == u64::MAX {
+            PerlNum::Float(nv)
+        } else {
+            PerlNum::UInt(u)
+        }
     }
 
     /// The value as a double.
@@ -500,7 +518,7 @@ impl PerlNum {
     }
 
     /// Perl `$a + $b`.
-    pub fn add(self, o: PerlNum) -> PerlNum {
+    pub fn plus(self, o: PerlNum) -> PerlNum {
         if let (Some(a), Some(b)) = (self.as_int(), o.as_int()) {
             if let Some(r) = PerlNum::from_i128(a + b) {
                 return r;
@@ -510,7 +528,7 @@ impl PerlNum {
     }
 
     /// Perl `$a - $b`.
-    pub fn sub(self, o: PerlNum) -> PerlNum {
+    pub fn minus(self, o: PerlNum) -> PerlNum {
         if let (Some(a), Some(b)) = (self.as_int(), o.as_int()) {
             if let Some(r) = PerlNum::from_i128(a - b) {
                 return r;
@@ -564,7 +582,11 @@ pub fn format_nv(x: f64) -> String {
         return "NaN".to_string();
     }
     if x.is_infinite() {
-        return if x > 0.0 { "Inf".to_string() } else { "-Inf".to_string() };
+        return if x > 0.0 {
+            "Inf".to_string()
+        } else {
+            "-Inf".to_string()
+        };
     }
     if x == 0.0 {
         return "0".to_string();
@@ -590,7 +612,11 @@ pub fn format_g(x: f64, prec: usize) -> String {
 }
 
 fn strip_zeros(s: &str) -> &str {
-    if s.contains('.') { s.trim_end_matches('0').trim_end_matches('.') } else { s }
+    if s.contains('.') {
+        s.trim_end_matches('0').trim_end_matches('.')
+    } else {
+        s
+    }
 }
 
 /// Perl's `Atof` (`my_atof3`): parse the longest numeric prefix after
@@ -605,7 +631,11 @@ fn atof(s: &[u8]) -> f64 {
     let fl = grok_infnan(s, &mut p);
     if fl != 0 && p != i {
         if fl & IS_NUMBER_INFINITY != 0 {
-            return if fl & IS_NUMBER_NEG != 0 { f64::NEG_INFINITY } else { f64::INFINITY };
+            return if fl & IS_NUMBER_NEG != 0 {
+                f64::NEG_INFINITY
+            } else {
+                f64::INFINITY
+            };
         }
         if fl & IS_NUMBER_NAN != 0 {
             return f64::NAN;
@@ -661,7 +691,7 @@ fn atof(s: &[u8]) -> f64 {
 
 /// `$a <=> $b` on two strings (numifying both).
 pub fn num_cmp_str(a: &str, b: &str) -> Option<Ordering> {
-    PerlNum::from_str(a).num_cmp(PerlNum::from_str(b))
+    PerlNum::parse(a).num_cmp(PerlNum::parse(b))
 }
 
 #[cfg(test)]
@@ -681,26 +711,54 @@ mod tests {
 
     #[test]
     fn lln_basic() {
-        for t in ["1", "-1", "+1", " 1 ", "1\n", "1.", ".1", "1.5e3", "1E-3", "Inf", "-inf", "nan",
-            "Infinity", "0 but true", "1.#INF", "nan(123)", "nanq", "\x0B5"] {
+        for t in [
+            "1",
+            "-1",
+            "+1",
+            " 1 ",
+            "1\n",
+            "1.",
+            ".1",
+            "1.5e3",
+            "1E-3",
+            "Inf",
+            "-inf",
+            "nan",
+            "Infinity",
+            "0 but true",
+            "1.#INF",
+            "nan(123)",
+            "nanq",
+            "\x0B5",
+        ] {
             assert!(looks_like_number(t), "{t:?}");
         }
-        for t in ["", " ", ".", "-", "+", "1e", "0x10", "1_0", "e5", "1 2", "abc", "infin", "١"] {
+        for t in [
+            "", " ", ".", "-", "+", "1e", "0x10", "1_0", "e5", "1 2", "abc", "infin", "١",
+        ] {
             assert!(!looks_like_number(t), "{t:?}");
         }
     }
 
     #[test]
     fn numify() {
-        assert_eq!(PerlNum::from_str("12abc").to_string(), "12");
-        assert_eq!(PerlNum::from_str("-0500").abs().to_string(), "500");
-        assert_eq!(PerlNum::from_str("1e3").to_string(), "1000");
-        assert_eq!(PerlNum::from_str("1e15").to_string(), "1000000000000000");
+        assert_eq!(PerlNum::parse("12abc").to_string(), "12");
+        assert_eq!(PerlNum::parse("-0500").abs().to_string(), "500");
+        assert_eq!(PerlNum::parse("1e3").to_string(), "1000");
+        assert_eq!(PerlNum::parse("1e15").to_string(), "1000000000000000");
         assert_eq!(format_nv(1e15), "1e+15");
-        assert_eq!(PerlNum::from_str("0.1").add(PerlNum::from_str("0.2")).to_string(), "0.3");
-        assert_eq!(PerlNum::from_str("abc").to_string(), "0");
-        assert_eq!(PerlNum::from_str("1e400").to_string(), "Inf");
-        assert_eq!(PerlNum::from_str("12").sub(PerlNum::from_str("5")).to_string(), "7");
+        assert_eq!(
+            PerlNum::parse("0.1")
+                .plus(PerlNum::parse("0.2"))
+                .to_string(),
+            "0.3"
+        );
+        assert_eq!(PerlNum::parse("abc").to_string(), "0");
+        assert_eq!(PerlNum::parse("1e400").to_string(), "Inf");
+        assert_eq!(
+            PerlNum::parse("12").minus(PerlNum::parse("5")).to_string(),
+            "7"
+        );
         assert_eq!(format_nv(1.0 / 3.0), "0.333333333333333");
         assert_eq!(format_nv(1.215_766_545_905_69e19), "1.21576654590569e+19");
     }
