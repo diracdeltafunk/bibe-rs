@@ -92,7 +92,7 @@ pub type Groups = Vec<Option<(usize, usize)>>;
 impl PerlRegex {
     /// `qr/$pattern/` (`ci = false`) or `qr/$pattern/i`.
     pub fn new(pattern: &str, ci: bool) -> Result<PerlRegex, RegexError> {
-        let t = translate(pattern)?;
+        let t = translate(pattern, ci)?;
         let re = build(&t, ci, false)?;
         let re_noempty = build(&format!("(?:{t})(?!\\G)"), ci, false)?;
         let re_split = if pattern == "^" { Some(build("(?:^)(?!\\G)", ci, true)?) } else { None };

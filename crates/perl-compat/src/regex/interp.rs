@@ -251,10 +251,10 @@ fn punct_var(c: char) -> Option<Var> {
         '~' => Var::Const("STDOUT"),
         '^' => Var::Const("STDOUT_TOP"),
         '=' => Var::Const("60"),
-        '-' | '%' | '|' | '?' => Var::Const("0"),
-        '!' | '/' | '\\' | ',' | ';' | '.' | '0' | '_' | '@' | '<' | '>' | '(' | ')' | '[' | ']' | '*' => {
-            Var::Const("")
-        }
+        '-' | '%' | '|' | '?' | '.' | '[' => Var::Const("0"),
+        ';' => Var::Const("\u{1c}"),
+        ']' => Var::Const("5.042000"),
+        '!' | '/' | ',' | '0' | '_' | '@' | '<' | '>' | '(' | ')' => Var::Const(""),
         _ => return None,
     })
 }
@@ -327,6 +327,9 @@ impl Template {
                         'o' if chars.get(i) == Some(&'{') => {
                             let end = chars[i..].iter().position(|&c| c == '}').ok_or(InterpError::Syntax("\\o{".into()))?;
                             let body: String = chars[i + 1..i + end].iter().filter(|c| !c.is_whitespace()).collect();
+                            if body.is_empty() {
+                                return syntax("empty \\o{}");
+                            }
                             let digits: String = body.chars().take_while(|c| ('0'..='7').contains(c)).collect();
                             let v = u32::from_str_radix(if digits.is_empty() { "0" } else { &digits }, 8).unwrap_or(0);
                             lit.push(char::from_u32(v).unwrap_or('\u{FFFD}'));
@@ -391,10 +394,17 @@ impl Template {
                             i += 2;
                         }
                         Some('{') => {
-                            let j = i + 2;
+                            let mut j = i + 2;
+                            while chars.get(j).is_some_and(|c| c.is_whitespace()) {
+                                j += 1;
+                            }
                             let k = ident_len(&chars, j);
-                            if k > 0 && chars.get(j + k) == Some(&'}') {
-                                i = j + k + 1;
+                            let mut e = j + k;
+                            while chars.get(e).is_some_and(|c| c.is_whitespace()) {
+                                e += 1;
+                            }
+                            if k > 0 && chars.get(e) == Some(&'}') {
+                                i = e + 1;
                             } else if chars[j..].iter().find(|c| !c.is_whitespace()) == Some(&'[') {
                                 return code("@{[ … ]}");
                             } else {
@@ -546,9 +556,13 @@ impl Template {
             let (ni, _) = skip_subscripts(chars, i + k)?;
             return Ok((Tok::Var(Var::Const("")), ni));
         }
-        if c == '$' && chars.get(i + 1).is_some_and(|&x| is_ident_start(x) || x == '{') {
-            // $$name: deref of an empty scalar
-            let k = ident_len(chars, i + 1);
+        if c == '$' && chars.get(i + 1).is_some_and(|&x| is_ident_start(x) || x == '{' || x.is_ascii_digit()) {
+            // $$name / $$1: deref of a non-reference
+            let k = if chars[i + 1].is_ascii_digit() {
+                chars[i + 1..].iter().take_while(|c| c.is_ascii_digit()).count()
+            } else {
+                ident_len(chars, i + 1)
+            };
             if k == 0 {
                 return code("$${ … }");
             }
@@ -586,6 +600,7 @@ impl Template {
             mode: Option<Mode>,
             first: Option<bool>,
             buf: String,
+            is_first: bool,
         }
         fn apply(mode: Option<Mode>, s: String) -> String {
             match mode {
@@ -597,7 +612,7 @@ impl Template {
             }
         }
         fn close(stack: &mut Vec<Frame>) {
-            let f = stack.pop().unwrap_or(Frame { mode: None, first: None, buf: String::new() });
+            let f = stack.pop().unwrap_or(Frame { mode: None, first: None, buf: String::new(), is_first: false });
             let mut s = apply(f.mode, f.buf);
             if let Some(up) = f.first {
                 s = if up { ucfirst(&s) } else { lcfirst(&s) };
@@ -606,7 +621,12 @@ impl Template {
                 top.buf.push_str(&s);
             }
         }
-        let mut stack = vec![Frame { mode: None, first: None, buf: String::new() }];
+        fn close_first(stack: &mut Vec<Frame>) {
+            if stack.len() > 1 && stack.last().is_some_and(|f| f.is_first) {
+                close(stack);
+            }
+        }
+        let mut stack = vec![Frame { mode: None, first: None, buf: String::new(), is_first: false }];
         let mut pending: Option<bool> = None;
         for t in &self.toks {
             match t {
@@ -616,26 +636,31 @@ impl Template {
                         Tok::Var(v) => m.eval(v),
                         _ => String::new(),
                     };
-                    let s = match pending.take() {
-                        Some(true) => ucfirst(&s),
-                        Some(false) => lcfirst(&s),
-                        None => s,
-                    };
+                    // `\u` applies ucfirst to everything up to the next case
+                    // modifier (`"\u$2x"` is `ucfirst($2 . "x")`).
+                    if let Some(up) = pending.take() {
+                        stack.push(Frame { mode: None, first: Some(up), buf: String::new(), is_first: true });
+                    }
                     if let Some(top) = stack.last_mut() {
                         top.buf.push_str(&s);
                     }
                 }
-                Tok::First(up) => pending = Some(*up),
+                Tok::First(up) => {
+                    close_first(&mut stack);
+                    pending = Some(*up);
+                }
                 Tok::Start(mode) => {
+                    close_first(&mut stack);
                     if *mode != Mode::Q
                         && stack.len() > 1
                         && matches!(stack.last().and_then(|f| f.mode), Some(Mode::L | Mode::U | Mode::F))
                     {
                         close(&mut stack);
                     }
-                    stack.push(Frame { mode: Some(*mode), first: pending.take(), buf: String::new() });
+                    stack.push(Frame { mode: Some(*mode), first: pending.take(), buf: String::new(), is_first: false });
                 }
                 Tok::End => {
+                    close_first(&mut stack);
                     if stack.len() > 1 {
                         close(&mut stack);
                     }
