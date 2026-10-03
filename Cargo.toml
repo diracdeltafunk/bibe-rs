@@ -22,6 +22,9 @@ perl-compat = { path = "crates/perl-compat" }
 anyhow = "1"
 regex = "1"
 serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Unicode 16.0 tables, matching perl 5.42 (PLAN §4 risk 2)
+unicode-normalization = "=0.1.24"
 toml = "0.9"
 tempfile = "3"
 similar = "2"

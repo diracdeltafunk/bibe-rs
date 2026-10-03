@@ -128,7 +128,7 @@ sub parse_text {
     if ($mt eq 'regular' or $mt eq 'macrodef') {
       my @f;
       for my $f ($entry->fieldlist) {
-        my $v = $entry->get(encode('UTF-8', NFC($f)));
+        my $v = $entry->get($f);
         push @f, [$f, $v];
       }
       $e{fields} = \@f;
