@@ -35,6 +35,8 @@ serde_json = "1"
 rustc-hash = "2"
 md-5 = "0.10"
 chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+pcre2 = "0.2.11"
+sha2 = "0.10"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
@@ -46,3 +48,10 @@ todo = "warn"
 [profile.release]
 lto = "thin"
 codegen-units = 1
+
+# perl-compat's exhaustive per-code-point tests are slow unoptimised.
+[profile.dev.package.perl-compat]
+opt-level = 2
+
+[profile.dev.package.sha2]
+opt-level = 3

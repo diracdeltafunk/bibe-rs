@@ -1,2 +1,7 @@
 [alias]
 xtask = "run --quiet --package xtask --"
+
+[env]
+# Always build PCRE2 from the vendored source so regex behaviour doesn't
+# depend on the system libpcre2 version (perl-compat's pcre2_version test checks this).
+PCRE2_SYS_STATIC = "1"
