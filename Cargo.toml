@@ -26,6 +26,11 @@ toml = "0.9"
 tempfile = "3"
 similar = "2"
 wait-timeout = "0.2"
+# Pinned: 0.1.24 is the last release on Unicode 16.0.0, the Unicode version of
+# biber's perl 5.42 (docs/PLAN.md §4 risk 2); 0.1.25 moved to Unicode 17.
+unicode-normalization = "=0.1.24"
+roxmltree = "0.21"
+memchr = "2"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
