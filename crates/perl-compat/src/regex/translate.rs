@@ -16,28 +16,127 @@
 //! blocks `(?{…})`/`(??{…})` (perl also refuses them at run time without
 //! `use re 'eval'`), `\N{CHARACTER NAME}`, `\b{…}`/`\B{…}` boundary types.
 
+use std::fmt::Write as _;
+use std::sync::OnceLock;
+
 use super::RegexError;
+use crate::unicode::Prop;
 
 /// Escape letters perl's regex compiler recognises (outside character
 /// classes). Everything else after a backslash is a literal letter.
 const PERL_ESCAPES: &str = "abBcdDefgGhHkKnNoprRsStvVwWxXzZAP";
+
+/// Classes where PCRE2 (UCP) and perl 5.42 disagree, replaced by explicit
+/// ranges generated from perl: `\w` (PCRE2 includes `²` and other `No`, perl
+/// includes `Me`/`Mc` such as U+0488, U+0903), `\s` and `\h` (PCRE2 includes U+180E).
+fn class_ranges(p: Prop) -> &'static str {
+    static CACHE: OnceLock<[String; 3]> = OnceLock::new();
+    let c = CACHE.get_or_init(|| {
+        let mk = |p: Prop| {
+            let mut s = String::new();
+            for &(lo, hi) in p.ranges() {
+                if lo == hi {
+                    let _ = write!(s, "\\x{{{lo:x}}}");
+                } else {
+                    let _ = write!(s, "\\x{{{lo:x}}}-\\x{{{hi:x}}}");
+                }
+            }
+            s
+        };
+        [mk(Prop::PerlWord), mk(Prop::PerlSpace), mk(Prop::PerlHSpace)]
+    });
+    match p {
+        Prop::PerlWord => &c[0],
+        Prop::PerlSpace => &c[1],
+        _ => &c[2],
+    }
+}
+
+fn substituted(n: char) -> Option<(Prop, bool)> {
+    match n {
+        'w' => Some((Prop::PerlWord, false)),
+        'W' => Some((Prop::PerlWord, true)),
+        's' => Some((Prop::PerlSpace, false)),
+        'S' => Some((Prop::PerlSpace, true)),
+        'h' => Some((Prop::PerlHSpace, false)),
+        'H' => Some((Prop::PerlHSpace, true)),
+        _ => None,
+    }
+}
+
+/// A bracketed class being translated.
+struct ClassBuf {
+    negated: bool,
+    first: bool,
+    body: String,
+    /// `\W`, `\S`, `\H` inside the class.
+    neg_sets: Vec<Prop>,
+}
+
+impl ClassBuf {
+    fn finish(self, out: &mut String) {
+        if self.neg_sets.is_empty() {
+            out.push('[');
+            if self.negated {
+                out.push('^');
+            }
+            out.push_str(&self.body);
+            out.push(']');
+        } else if !self.negated {
+            // [A\W] = A | not-W
+            let mut alts = Vec::new();
+            if !self.body.is_empty() {
+                alts.push(format!("[{}]", self.body));
+            }
+            for p in &self.neg_sets {
+                alts.push(format!("[^{}]", class_ranges(*p)));
+            }
+            let _ = write!(out, "(?:{})", alts.join("|"));
+        } else {
+            // [^A\W] = not-A and W
+            out.push_str("(?:");
+            if !self.body.is_empty() {
+                let _ = write!(out, "(?![{}])", self.body);
+            }
+            for p in &self.neg_sets {
+                let _ = write!(out, "(?=[{}])", class_ranges(*p));
+            }
+            out.push_str("(?s:.))");
+        }
+    }
+}
+
+fn push_piece(out: &mut String, cls: &mut Option<ClassBuf>, piece: &str) {
+    match cls.as_mut() {
+        Some(cb) => cb.body.push_str(piece),
+        None => out.push_str(piece),
+    }
+}
 
 /// Translate a perl pattern for PCRE2.
 pub fn translate(pat: &str) -> Result<String, RegexError> {
     let chars: Vec<char> = pat.chars().collect();
     let mut out = String::with_capacity(pat.len() + 8);
     let mut i = 0;
-    let mut in_class = false;
-    let mut class_first = false; // just after `[` or `[^`
+    let mut cls: Option<ClassBuf> = None;
     let mut named = false;
     while i < chars.len() {
         let c = chars[i];
+        let in_class = cls.is_some();
         if c == '\\' {
             let Some(&n) = chars.get(i + 1) else {
                 return Err(RegexError::Compile("Trailing \\ in regex".into()));
             };
-            class_first = false;
-            if n.is_ascii_alphabetic() {
+            let mut piece = String::new();
+            if let Some((p, neg)) = substituted(n) {
+                match cls.as_mut() {
+                    Some(cb) if neg => cb.neg_sets.push(p),
+                    Some(_) => piece.push_str(class_ranges(p)),
+                    None => {
+                        let _ = write!(piece, "[{}{}]", if neg { "^" } else { "" }, class_ranges(p));
+                    }
+                }
+            } else if n.is_ascii_alphabetic() {
                 match n {
                     'C' => return Err(RegexError::Compile("\\C no longer supported in regex".into())),
                     'N' if chars.get(i + 2) == Some(&'{') => {
@@ -51,56 +150,70 @@ pub fn translate(pat: &str) -> Result<String, RegexError> {
                         if hex.is_empty() || !hex.chars().all(|c| c.is_ascii_hexdigit()) {
                             return Err(RegexError::Unsupported(format!("\\N{{{body}}}")));
                         }
-                        out.push_str("\\x{");
-                        out.push_str(&hex);
-                        out.push('}');
+                        let _ = write!(piece, "\\x{{{hex}}}");
+                        if let Some(cb) = cls.as_mut() {
+                            cb.first = false;
+                        }
+                        push_piece(&mut out, &mut cls, &piece);
                         i += 3 + rest[..close].chars().count() + 1;
                         continue;
                     }
                     'b' | 'B' if !in_class && chars.get(i + 2) == Some(&'{') => {
                         return Err(RegexError::Unsupported(format!("\\{n}{{…}} boundaries")));
                     }
-                    _ if PERL_ESCAPES.contains(n) => {
-                        out.push('\\');
-                        out.push(n);
+                    'b' | 'B' if !in_class => {
+                        // word boundary with perl's \w
+                        let w = class_ranges(Prop::PerlWord);
+                        if n == 'b' {
+                            let _ = write!(piece, "(?:(?<=[{w}])(?![{w}])|(?<![{w}])(?=[{w}]))");
+                        } else {
+                            let _ = write!(piece, "(?:(?<=[{w}])(?=[{w}])|(?<![{w}])(?![{w}]))");
+                        }
                     }
-                    _ => out.push(n), // unrecognized escape: literal letter
+                    _ if PERL_ESCAPES.contains(n) => {
+                        piece.push('\\');
+                        piece.push(n);
+                    }
+                    _ => piece.push(n), // unrecognized escape: literal letter
                 }
             } else {
-                out.push('\\');
-                out.push(n);
+                piece.push('\\');
+                piece.push(n);
             }
+            if let Some(cb) = cls.as_mut() {
+                cb.first = false;
+            }
+            push_piece(&mut out, &mut cls, &piece);
             i += 2;
             continue;
         }
-        if in_class {
-            if c == ']' && !class_first {
-                in_class = false;
-            } else if c == '[' && chars.get(i + 1) == Some(&':') {
+        if let Some(cb) = cls.as_mut() {
+            if c == ']' && !cb.first {
+                if let Some(cb) = cls.take() {
+                    cb.finish(&mut out);
+                }
+                i += 1;
+                continue;
+            }
+            cb.first = false;
+            if c == '[' && chars.get(i + 1) == Some(&':') {
                 // POSIX class [:name:] — copy through
                 let rest: String = chars[i..].iter().collect();
                 if let Some(end) = rest.find(":]") {
-                    out.push_str(&rest[..end + 2]);
+                    cb.body.push_str(&rest[..end + 2]);
                     i += rest[..end + 2].chars().count();
-                    class_first = false;
                     continue;
                 }
             }
-            class_first = false;
-            out.push(c);
+            cb.body.push(c);
             i += 1;
             continue;
         }
         match c {
             '[' => {
-                in_class = true;
-                class_first = true;
-                out.push('[');
-                i += 1;
-                if chars.get(i) == Some(&'^') {
-                    out.push('^');
-                    i += 1;
-                }
+                let negated = chars.get(i + 1) == Some(&'^');
+                cls = Some(ClassBuf { negated, first: true, body: String::new(), neg_sets: Vec::new() });
+                i += if negated { 2 } else { 1 };
                 continue;
             }
             '(' if chars.get(i + 1) == Some(&'?') => {
@@ -149,6 +262,11 @@ pub fn translate(pat: &str) -> Result<String, RegexError> {
             }
         }
     }
+    if let Some(cb) = cls {
+        // unterminated class: let PCRE2 report it
+        out.push('[');
+        out.push_str(&cb.body);
+    }
     if named {
         out.insert_str(0, "(?J)");
     }
@@ -166,6 +284,7 @@ mod tests {
         assert_eq!(translate(r"\N{U+263A}").unwrap(), r"\x{263A}");
         assert_eq!(translate(r"(?^ui:x)").unwrap(), r"(?^i:x)");
         assert_eq!(translate(r"[\Q]").unwrap(), r"[Q]");
+        assert_eq!(translate(r"[]a]").unwrap(), r"[]a]");
         assert!(translate(r"(?{ 1 })").is_err());
         assert!(translate(r"\N{LATIN SMALL LETTER A}").is_err());
         assert_eq!(translate(r"(?<n>a)").unwrap(), r"(?J)(?<n>a)");
