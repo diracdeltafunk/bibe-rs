@@ -10,35 +10,30 @@ mod common;
 use perl_compat::regex::{PerlRegex, RegexError, imatch, ireplace};
 use serde_json::Value;
 
-/// Cases where bibers deliberately or knowingly differs from perl.
-fn known_gap(pattern: &str, replace: Option<&str>, ci: bool) -> bool {
-    // \N{NAME} and \b{...} are unsupported in patterns
-    if pattern.contains(r"\N{LATIN") || pattern.contains(r"\b{") {
-        return true;
+/// Cases where bibers deliberately or knowingly differs from perl; returns
+/// the category.
+fn known_gap(pattern: &str, replace: Option<&str>, ci: bool) -> Option<&'static str> {
+    if pattern.contains(r"\N{LATIN") {
+        return Some("\\N{NAME} in pattern");
     }
-    // block properties (\p{InBasicLatin}) are not supported by PCRE2
-    if pattern.contains(r"\p{In") {
-        return true;
+    if pattern.contains(r"\b{") {
+        return Some("\\b{…} boundaries");
     }
-    // branch reset in split: perl reports one more (undef) group
     if pattern.contains("(?|") {
-        return true;
+        return Some("branch reset group count in split");
     }
-    // perl /i uses full case folding (ß ~ ss); PCRE2 simple folding
     if (ci || pattern.contains("(?i)")) && (subject_has_multifold(pattern) || MULTIFOLD_SUBJECT.with(|s| *s.borrow())) {
-        return true;
+        return Some("/i multi-character folds");
     }
-    // DC-023: perl code in replacements is not executed
     if let Some(r) = replace {
         if r.contains("@{[") || r.contains("${\\") || r.contains(r"\N{LATIN") || r.contains("${$") {
-            return true;
+            return Some("DC-023 code in replacement");
         }
-        // process-dependent variables (uid, gid list)
         if r == "$<" || r == "$(" {
-            return true;
+            return Some("process-dependent variable");
         }
     }
-    false
+    None
 }
 
 thread_local! {
@@ -73,7 +68,7 @@ fn normalise_pid(s: &str, r: &str) -> String {
 fn regex_vectors() {
     let v = common::read_json("regex_vectors.json");
     let mut fails = Vec::new();
-    let mut gaps = 0;
+    let mut gaps: std::collections::BTreeMap<&str, usize> = Default::default();
     let mut total = 0;
     for t in v["ireplace"].as_array().unwrap() {
         total += 1;
@@ -87,8 +82,8 @@ fn regex_vectors() {
             _ => false,
         };
         if !ok {
-            if known_gap(p, Some(r), ci) {
-                gaps += 1;
+            if let Some(g) = known_gap(p, Some(r), ci) {
+                *gaps.entry(g).or_default() += 1;
             } else {
                 fails.push(format!("ireplace({val:?}, {p:?}, {r:?}, {ci}): got {got:?} want {want:?}"));
             }
@@ -110,8 +105,8 @@ fn regex_vectors() {
             _ => false,
         };
         if !ok {
-            if known_gap(p, None, ci) {
-                gaps += 1;
+            if let Some(g) = known_gap(p, None, ci) {
+                *gaps.entry(g).or_default() += 1;
             } else {
                 fails.push(format!("imatch({val:?}, {p:?}, {neg}, {ci}): got {got:?} want {want:?}"));
             }
@@ -132,8 +127,8 @@ fn regex_vectors() {
             _ => false,
         };
         if !ok {
-            if known_gap(p, None, false) {
-                gaps += 1;
+            if let Some(g) = known_gap(p, None, false) {
+                *gaps.entry(g).or_default() += 1;
             } else {
                 fails.push(format!("split({p:?}, {val:?}): got {got:?} want {want:?}"));
             }
@@ -145,14 +140,14 @@ fn regex_vectors() {
         let got: Result<String, RegexError> = PerlRegex::new(p, false).and_then(|re| re.remove_all(val));
         let ok = if t["err"].as_bool().unwrap() { got.is_err() } else { got.as_deref().ok() == t["out"].as_str() };
         if !ok {
-            if known_gap(p, None, false) {
-                gaps += 1;
+            if let Some(g) = known_gap(p, None, false) {
+                *gaps.entry(g).or_default() += 1;
             } else {
                 fails.push(format!("remove({p:?}, {val:?}): got {got:?} want {:?}", t["out"]));
             }
         }
     }
-    eprintln!("regex vectors: {total} cases, {} failures, {gaps} known gaps", fails.len());
+    eprintln!("regex vectors: {total} cases, {} failures, known gaps: {gaps:?}", fails.len());
     assert!(fails.is_empty(), "{} failures:\n{}", fails.len(), fails.join("\n"));
 }
 

@@ -115,6 +115,26 @@ sub is_surrogate { my $c = shift; return $c >= 0xD800 && $c <= 0xDFFF }
     while (my @line = splice(@items, 0, 6)) { $body .= '    ' . join(', ', @line) . ",\n" }
     $body .= "];\n\n";
   }
+  {
+    # Unicode blocks for \p{InX}: every alias, loosely normalised
+    # (lower case, no spaces, underscores or hyphens).
+    my $blocks = Unicode::UCD::charblocks();
+    my %seen;
+    my @ent;
+    for my $name (sort keys %$blocks) {
+      my ($lo, $hi) = @{ $blocks->{$name}[0] }[0, 1];
+      my @aliases = ($name, Unicode::UCD::prop_value_aliases('Block', $name));
+      for my $a (@aliases) {
+        next unless defined $a;
+        (my $k = lc $a) =~ s/[\s_-]//g;
+        next if $seen{$k}++;
+        push @ent, sprintf('("%s", 0x%x, 0x%x)', $k, $lo, $hi);
+      }
+    }
+    @ent = sort @ent;
+    $body .= "/// Unicode blocks (`\\p{InName}`), keyed by loosely normalised alias\n";
+    $body .= "pub(crate) static BLOCKS: &[(&str, u32, u32)] = &[\n" . join('', map { "    $_,\n" } @ent) . "];\n\n";
+  }
   write_file('props.rs', $body);
 }
 

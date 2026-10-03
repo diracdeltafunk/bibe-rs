@@ -26,7 +26,7 @@ my @patterns = ('b', '(b)', '(b)(z)?', 'B', '(\w+)', '(\W)', '\s+', '(\S+)', '\d
   '\Q.\E', '\Uc', 'é', '(?i)É', 'ß', '(?i)ss', '\h', '\v', '\R', '\K', 'a\Kb', '(a)(?|(b)|(c))',
   '[[:upper:]]', '\z', '\Z', '\A', '(?x) a b ', '(?s).', '(?m)^.', '\\\\', '\$1', '{', 'x{2}', 'a{,2}',
   '(?^i:B)', '(?a)\w', '(?u)\w', '\bvon\b', 'v(on|an) ', '\p{Latin}', '\p{Greek}', '\p{IsAlpha}',
-  '\p{L&}', '\p{XPosixPunct}', '\p{Han}', '\p{InBasicLatin}', '[α-ω]', '(?i)[α-ω]', '\N{LATIN SMALL LETTER B}',
+  '\p{L&}', '\p{XPosixPunct}', '\p{Han}', '\p{InBasicLatin}', '\p{InGreek}', '\p{Block: Latin-1 Supplement}', '[\p{InCJK_Unified_Ideographs}a]', '[α-ω]', '(?i)[α-ω]', '\N{LATIN SMALL LETTER B}',
   '\b{wb}', '(?{ 1 })', '(', '[', 'a**', '\1', '(?<a>.)(?<a>.)', '\g{-1}', '(.)\g1', '\o{142}', '\142',
   '(?#c)b', '\cA', '[\Q]', '\p{XPosixAlpha}', '\p{PosixPunct}', '\p{^L}', '\P{IsLu}', '[\p{XPosixPunct}x]',
   '\p{Space}+', '\p{Word}+', '\p{Alnum}', '\p{XDigit}', '\p{Blank}', '\p{Cntrl}', '\p{IsL}', '\p{Is_Lu}',

@@ -120,7 +120,7 @@ struct ClassBuf {
     first: bool,
     body: String,
     /// Bodies of `\W`, `\S`, `\H`, … inside the class.
-    neg_sets: Vec<&'static str>,
+    neg_sets: Vec<String>,
 }
 
 impl ClassBuf {
@@ -185,6 +185,19 @@ fn posix_class(name: &str, ci: bool) -> Option<&'static str> {
     })
 }
 
+/// `\p{InName}`, `\p{Block=Name}`, `\p{Blk:Name}`: a Unicode block (perl
+/// 5.42 / Unicode 16 block list), as a class body.
+fn block_body(name: &str) -> Option<String> {
+    let key: String = name.chars().filter(|c| !matches!(c, ' ' | '_' | '-')).collect::<String>().to_ascii_lowercase();
+    let rest = key
+        .strip_prefix("in")
+        .or_else(|| key.strip_prefix("block=").or_else(|| key.strip_prefix("block:")))
+        .or_else(|| key.strip_prefix("blk=").or_else(|| key.strip_prefix("blk:")))?;
+    let t = crate::tables::props::BLOCKS;
+    let i = t.binary_search_by(|e| e.0.cmp(rest)).ok()?;
+    Some(format!("\\x{{{:x}}}-\\x{{{:x}}}", t[i].1, t[i].2))
+}
+
 /// Translate a perl pattern for PCRE2 (`ci`: compiled with `/i`).
 pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
     let chars: Vec<char> = pat.chars().collect();
@@ -204,7 +217,7 @@ pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
             if let Some((p, neg)) = substituted(n) {
                 let body = body_for(p, ascii);
                 match cls.as_mut() {
-                    Some(cb) if neg => cb.neg_sets.push(body),
+                    Some(cb) if neg => cb.neg_sets.push(body.to_string()),
                     Some(_) => piece.push_str(body),
                     None => {
                         let _ = write!(piece, "[{}{}]", if neg { "^" } else { "" }, body);
@@ -225,9 +238,11 @@ pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
                     neg = !neg;
                     nm = x.trim();
                 }
-                if let Some(body) = perl_property(nm) {
+                let block = block_body(nm);
+                if let Some(body) = perl_property(nm).map(str::to_string).or(block) {
+                    let body = body.as_str();
                     match cls.as_mut() {
-                        Some(cb) if neg => cb.neg_sets.push(body),
+                        Some(cb) if neg => cb.neg_sets.push(body.to_string()),
                         Some(_) => piece.push_str(body),
                         None => {
                             let _ = write!(piece, "[{}{}]", if neg { "^" } else { "" }, body);
@@ -314,7 +329,7 @@ pub fn translate(pat: &str, ci: bool) -> Result<String, RegexError> {
                     let name = &rest[2..end];
                     match name.strip_prefix('^') {
                         Some(n) => match posix_class(n, ci) {
-                            Some(body) => cb.neg_sets.push(body),
+                            Some(body) => cb.neg_sets.push(body.to_string()),
                             None => cb.body.push_str(&rest[..end + 2]),
                         },
                         None => match posix_class(name, ci) {
