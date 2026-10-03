@@ -394,8 +394,11 @@ impl<'s> Lexer<'s> {
                 true
             }
             None => {
-                // a lone `%` at the very end is silently dropped
-                if self.src.len() - start > 1 {
+                // At the top level, a run without blanks is lexed as junk
+                // instead (spec §2.3); otherwise it is an invalid token.
+                let rest = &self.src[start..];
+                let junk = self.mode == Mode::Top && !rest.iter().any(|&b| b == b' ' || b == b'\t');
+                if !junk {
                     let text = String::from_utf8_lossy(&self.src[start..]).into_owned();
                     out.push(Diag::new(DiagKind::InvalidToken, self.line, text));
                 }

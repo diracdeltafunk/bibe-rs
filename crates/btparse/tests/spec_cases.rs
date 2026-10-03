@@ -3,7 +3,9 @@
 mod common;
 
 /// Vectors whose behaviour we knowingly do not reproduce (see spec §10).
-const ALLOW: &[&str] = &[];
+/// P-005/P-006: `%d`/`%s` in an offending token print stack garbage or crash
+/// (printf format-string bug, spec §8.3); not reproducible.
+const ALLOW: &[&str] = &["P-005", "P-006"];
 
 #[test]
 fn spec_cases() {
