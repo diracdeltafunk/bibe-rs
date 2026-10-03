@@ -102,8 +102,8 @@ fn parse(name: &str) -> Result<CjkTable, Error> {
             t.complex.insert(cp, ces.into_boxed_slice());
         } else {
             let mut it = line.split_whitespace();
-            let mut w = hex(it.next().unwrap_or(""))?;
-            for cp in it {
+            let w0 = hex(it.next().unwrap_or(""))?;
+            for (w, cp) in (w0..).zip(it) {
                 let cp = hex(cp)?;
                 let slot = match cp {
                     BMP_BASE..=BMP_END => &mut t.bmp[(cp - BMP_BASE) as usize],
@@ -116,7 +116,6 @@ fn parse(name: &str) -> Result<CjkTable, Error> {
                 };
                 debug_assert!(w != 0 && w <= 0xFFFF);
                 *slot = w as u16;
-                w += 1;
             }
         }
     }

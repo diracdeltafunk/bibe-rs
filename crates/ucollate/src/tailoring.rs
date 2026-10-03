@@ -11,13 +11,34 @@ use crate::cjk::CjkTable;
 use crate::options::Variable;
 use crate::tables::Ce;
 
+/// What a tailoring defines for a code point: its own mapping and/or contractions
+/// starting with it.
+#[derive(Clone, Copy, Debug, Default)]
+pub(crate) struct Start {
+    single: Option<(u32, u32)>,
+    /// Length of the longest contraction starting here (0 if none).
+    pub maxlen: usize,
+}
+
 /// Collation elements defined on top of the DUCET (a locale's and/or the user's `entry`).
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub(crate) struct Tailoring {
-    singles: FxHashMap<u32, (u32, u32)>,
+    starts: FxHashMap<u32, Start>,
+    /// Bit `cp & 0xFFFF` is set if `starts` may contain `cp` (cheap pre-filter).
+    filter: Box<[u64]>,
     contractions: FxHashMap<Box<[u32]>, (u32, u32)>,
-    maxlen: FxHashMap<u32, usize>,
     ces: Vec<Ce>,
+}
+
+impl Default for Tailoring {
+    fn default() -> Self {
+        Tailoring {
+            starts: FxHashMap::default(),
+            filter: vec![0; 1024].into_boxed_slice(),
+            contractions: FxHashMap::default(),
+            ces: Vec::new(),
+        }
+    }
 }
 
 impl Tailoring {
@@ -26,9 +47,24 @@ impl Tailoring {
         &self.ces[r.0 as usize..(r.0 + r.1) as usize]
     }
 
+    /// The tailoring's data for `cp`, if any.
+    #[inline]
+    pub(crate) fn start(&self, cp: u32) -> Option<&Start> {
+        let b = (cp & 0xFFFF) as usize;
+        if self.filter[b >> 6] & (1 << (b & 63)) == 0 {
+            return None;
+        }
+        self.starts.get(&cp)
+    }
+
+    #[inline]
+    pub(crate) fn single_of(&self, s: &Start) -> Option<&[Ce]> {
+        s.single.map(|r| self.slice(r))
+    }
+
     #[inline]
     pub(crate) fn single(&self, cp: u32) -> Option<&[Ce]> {
-        self.singles.get(&cp).map(|&r| self.slice(r))
+        self.start(cp).and_then(|s| self.single_of(s))
     }
 
     #[inline]
@@ -36,21 +72,19 @@ impl Tailoring {
         self.contractions.get(cps).map(|&r| self.slice(r))
     }
 
-    #[inline]
+    #[cfg(test)]
     pub(crate) fn maxlen(&self, cp: u32) -> usize {
-        self.maxlen.get(&cp).copied().unwrap_or(0)
+        self.start(cp).map_or(0, |s| s.maxlen)
     }
 
     pub(crate) fn is_empty(&self) -> bool {
-        self.singles.is_empty() && self.contractions.is_empty()
+        self.starts.is_empty()
     }
 
-    /// All keys (single code points and contractions) defined here.
-    pub(crate) fn keys(&self) -> impl Iterator<Item = Vec<u32>> + '_ {
-        self.singles
-            .keys()
-            .map(|&c| vec![c])
-            .chain(self.contractions.keys().map(|k| k.to_vec()))
+    fn start_mut(&mut self, cp: u32) -> &mut Start {
+        let b = (cp & 0xFFFF) as usize;
+        self.filter[b >> 6] |= 1 << (b & 63);
+        self.starts.entry(cp).or_default()
     }
 
     /// Add entries in allkeys syntax (`CP [CP…] ; [.XXXX.XXXX.XXXX(.XXXX)]…`); later
@@ -83,7 +117,9 @@ impl Tailoring {
             if elt.is_empty() {
                 continue;
             }
-            let elt = elt.strip_prefix('[').ok_or("collation element must start with '['")?;
+            let elt = elt
+                .strip_prefix('[')
+                .ok_or("collation element must start with '['")?;
             let var = match elt.as_bytes().first() {
                 Some(b'*') => true,
                 Some(b'.') => false,
@@ -105,10 +141,10 @@ impl Tailoring {
         }
         let r = (start, self.ces.len() as u32 - start);
         if cps.len() == 1 {
-            self.singles.insert(cps[0], r);
+            self.start_mut(cps[0]).single = Some(r);
         } else {
-            let ml = self.maxlen.entry(cps[0]).or_insert(1);
-            *ml = (*ml).max(cps.len());
+            let st = self.start_mut(cps[0]);
+            st.maxlen = st.maxlen.max(cps.len());
             self.contractions.insert(cps.into_boxed_slice(), r);
         }
         Ok(())
@@ -205,8 +241,10 @@ mod tests {
     #[test]
     fn entries() {
         let mut t = Tailoring::default();
-        t.add_entries("0063 0068 ; [.0E6A.0020.0002.0063] # ch\n00E6 ; [.0E33.0020.0002][*0E8B.0020.0002]\n")
-            .unwrap();
+        t.add_entries(
+            "0063 0068 ; [.0E6A.0020.0002.0063] # ch\n00E6 ; [.0E33.0020.0002][*0E8B.0020.0002]\n",
+        )
+        .unwrap();
         assert_eq!(t.maxlen(0x63), 2);
         assert_eq!(
             t.contraction(&[0x63, 0x68]),

@@ -37,10 +37,16 @@ fn slice(v: u32) -> &'static [Ce] {
     &DUCET_CES[start..start + len]
 }
 
-/// The DUCET mapping of a single code point.
+/// The raw DUCET entry of a code point, to be decoded with [`raw_single`] and
+/// [`raw_maxlen`].
 #[inline]
-pub(crate) fn ducet_single(cp: u32) -> Option<&'static [Ce]> {
-    let v = stage(cp);
+pub(crate) fn ducet_raw(cp: u32) -> u32 {
+    stage(cp)
+}
+
+/// The mapping of a raw entry.
+#[inline]
+pub(crate) fn raw_single(v: u32) -> Option<&'static [Ce]> {
     if v & PRESENT != 0 {
         Some(slice(v))
     } else {
@@ -48,11 +54,24 @@ pub(crate) fn ducet_single(cp: u32) -> Option<&'static [Ce]> {
     }
 }
 
+/// Length (in code points) of the longest DUCET contraction starting with the code
+/// point of a raw entry (0 if there is none).
+#[inline]
+pub(crate) fn raw_maxlen(v: u32) -> usize {
+    ((v >> 28) & 0x7) as usize
+}
+
+/// The DUCET mapping of a single code point.
+#[inline]
+pub(crate) fn ducet_single(cp: u32) -> Option<&'static [Ce]> {
+    raw_single(stage(cp))
+}
+
 /// Length (in code points) of the longest DUCET contraction starting with `cp`
 /// (0 if there is none).
-#[inline]
+#[cfg(test)]
 pub(crate) fn ducet_maxlen(cp: u32) -> usize {
-    ((stage(cp) >> 28) & 0x7) as usize
+    raw_maxlen(stage(cp))
 }
 
 /// The DUCET mapping of a contraction (2 or 3 code points).
@@ -75,6 +94,7 @@ pub(crate) fn ducet_contraction(cps: &[u32]) -> Option<&'static [Ce]> {
 }
 
 /// Iterate over all DUCET contractions (for tests and data checks).
+#[cfg(test)]
 pub(crate) fn ducet_contractions() -> impl Iterator<Item = (Vec<u32>, &'static [Ce])> {
     DUCET_CONTR_KEYS
         .iter()
@@ -147,7 +167,7 @@ mod tests {
             ducet_single(0x61),
             Some(&[Ce::new(0x1FA2, 0x20, 0x02, 0, false)][..])
         );
-        assert_eq!(ducet_single(0x2D).unwrap()[0].var, true);
+        assert!(ducet_single(0x2D).unwrap()[0].var);
         assert_eq!(ducet_single(0x4E00), None);
         assert_eq!(ducet_maxlen(0x6C), 2); // l·
         assert_eq!(ducet_maxlen(0x0FB2), 3);

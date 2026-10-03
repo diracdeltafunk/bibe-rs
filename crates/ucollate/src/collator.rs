@@ -106,7 +106,10 @@ impl Collator {
             locale: accepted,
             tailoring: data.as_ref().map(|d| d.tailoring.clone()),
             cjk: data.as_ref().and_then(|d| d.override_cjk),
-            suppress: data.as_ref().map(|d| d.suppress.clone()).unwrap_or_default(),
+            suppress: data
+                .as_ref()
+                .map(|d| d.suppress.clone())
+                .unwrap_or_default(),
             level: 4,
             variable: data
                 .as_ref()
@@ -292,17 +295,30 @@ impl Collator {
         !self.suppress.is_empty() && self.suppress.binary_search(&cp).is_ok()
     }
 
+    /// The mapping of `cp` (if it has one of its own) and the length of the longest
+    /// contraction starting with it, in one lookup.
+    #[inline]
+    fn info(&self, cp: u32) -> (Option<&[Ce]>, usize) {
+        let raw = tables::ducet_raw(cp);
+        let mut single = tables::raw_single(raw);
+        let mut ml = tables::raw_maxlen(raw);
+        if ml > 0 && self.suppressed(cp) {
+            ml = 0;
+        }
+        if let Some(t) = &self.tailoring {
+            if let Some(st) = t.start(cp) {
+                if let Some(s) = t.single_of(st) {
+                    single = Some(s);
+                }
+                ml = ml.max(st.maxlen);
+            }
+        }
+        (single, ml)
+    }
+
     #[inline]
     fn maxlen(&self, cp: u32) -> usize {
-        let d = if self.suppressed(cp) {
-            0
-        } else {
-            tables::ducet_maxlen(cp)
-        };
-        match &self.tailoring {
-            Some(t) => d.max(t.maxlen(cp)),
-            None => d,
-        }
+        self.info(cp).1
     }
 
     #[inline]
@@ -443,7 +459,7 @@ impl Collator {
                 i += 1;
                 continue;
             }
-            let ml = self.maxlen(cp);
+            let (single, ml) = self.info(cp);
             let mut end = i;
             let mut found: Option<&[Ce]> = None;
             if ml > 1 {
@@ -493,9 +509,11 @@ impl Collator {
                     }
                 }
             }
-            match found {
-                Some(c) => out.extend_from_slice(c),
-                None => self.push_single(cp, out),
+            match (found, single) {
+                (Some(c), _) => out.extend_from_slice(c),
+                // U+FFFE/U+FFFF may be overridden by minimalFFFE/highestFFFF
+                (None, Some(c)) if cp != 0xFFFE && cp != 0xFFFF => out.extend_from_slice(c),
+                _ => self.push_single(cp, out),
             }
             if self.hangul_terminator != 0 {
                 let last = if found.is_some() { cps[end] } else { cp };
@@ -598,31 +616,39 @@ impl Collator {
         t
     }
 
+    #[inline]
+    fn write_level(&self, ces: &[Ce], level: u8, w: impl Fn(&Ce) -> u16, out: &mut Vec<u8>) {
+        let push = |out: &mut Vec<u8>, ce: &Ce| {
+            let x = w(ce);
+            if x != 0 {
+                out.extend_from_slice(&x.to_be_bytes());
+            }
+        };
+        if self.backwards & (1 << (level - 1)) != 0 {
+            ces.iter().rev().for_each(|ce| push(out, ce));
+        } else {
+            ces.iter().for_each(|ce| push(out, ce));
+        }
+    }
+
     fn write_key(&self, ces: &[Ce], ident: Option<&[u32]>, out: &mut Vec<u8>) {
         out.reserve(ces.len() * 8 + 8);
-        for level in 1..=4u8 {
-            if level <= self.level {
-                let w = |ce: &Ce| match level {
-                    1 => ce.p,
-                    2 => ce.s,
-                    3 => self.tertiary(ce.t),
-                    _ => ce.q,
-                };
-                let push = |out: &mut Vec<u8>, ce: &Ce| {
-                    let x = w(ce);
-                    if x != 0 {
-                        out.extend_from_slice(&x.to_be_bytes());
-                    }
-                };
-                if self.backwards & (1 << (level - 1)) != 0 {
-                    ces.iter().rev().for_each(|ce| push(out, ce));
-                } else {
-                    ces.iter().for_each(|ce| push(out, ce));
-                }
+        self.write_level(ces, 1, |ce| ce.p, out);
+        out.extend_from_slice(&[0, 0]);
+        if self.level >= 2 {
+            self.write_level(ces, 2, |ce| ce.s, out);
+        }
+        out.extend_from_slice(&[0, 0]);
+        if self.level >= 3 {
+            if self.upper_before_lower == Some(true) || self.katakana_before_hiragana {
+                self.write_level(ces, 3, |ce| self.tertiary(ce.t), out);
+            } else {
+                self.write_level(ces, 3, |ce| ce.t, out);
             }
-            if level < 4 {
-                out.extend_from_slice(&[0, 0]);
-            }
+        }
+        out.extend_from_slice(&[0, 0]);
+        if self.level >= 4 {
+            self.write_level(ces, 4, |ce| ce.q, out);
         }
         if self.level == 4 || self.identical {
             out.extend_from_slice(&[0, 0]);

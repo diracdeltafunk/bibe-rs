@@ -20,7 +20,12 @@ fn run_suites(suites: Vec<Suite>, group: &str) {
         if n > 0 {
             failing.push(s.name.clone());
         }
-        lines.push(format!("{}\t{}\t{}", s.name, s.inputs.len(), digest(&expected)));
+        lines.push(format!(
+            "{}\t{}\t{}",
+            s.name,
+            s.inputs.len(),
+            digest(&expected)
+        ));
     }
     eprintln!(
         "{group}: {} suites, {} keys, {} failing suites, {bad} mismatches",
@@ -55,12 +60,25 @@ pub fn locale_inputs() -> Vec<String> {
         v.push(format!("{l}-Latn-US"));
         v.push(format!("{l}.utf8"));
     }
-    for lang in ["de", "es", "fi", "si", "sv", "zh", "sr", "bs", "ug", "fr", "en", "xx"] {
+    for lang in [
+        "de", "es", "fi", "si", "sv", "zh", "sr", "bs", "ug", "fr", "en", "xx",
+    ] {
         for scr in ["", "Latn", "Cyrl", "Hans"] {
             for reg in ["", "AT", "CA", "DE", "419", "TW"] {
                 for var in [
-                    "", "phone", "phonebk", "phonebook", "dict", "trad", "reform", "big5",
-                    "gb2312", "pinyin", "stroke", "zhuyin", "variant1",
+                    "",
+                    "phone",
+                    "phonebk",
+                    "phonebook",
+                    "dict",
+                    "trad",
+                    "reform",
+                    "big5",
+                    "gb2312",
+                    "pinyin",
+                    "stroke",
+                    "zhuyin",
+                    "variant1",
                 ] {
                     let parts: Vec<&str> = [lang, scr, reg, var]
                         .into_iter()
@@ -73,10 +91,37 @@ pub fn locale_inputs() -> Vec<String> {
         }
     }
     for s in [
-        "", "0", "default", "en-US", "en_US", "de-DE", "sv-SE", "nb-NO", "nn-NO", "pt-BR",
-        "zh-CN", "ja-JP", "ko-KR", "el-GR", "ru-RU", "uk-UA", "_", "__", "_de", "de__",
-        "de__phone_x", "de _AT. phone", "DE-at-PHONEBOOK", "sr_Latn_RS", "es_ES_traditional",
-        "fr_CA_x", "ZH__Big5", "zh-Hant-TW-stroke", "chinese", "korean", "german",
+        "",
+        "0",
+        "default",
+        "en-US",
+        "en_US",
+        "de-DE",
+        "sv-SE",
+        "nb-NO",
+        "nn-NO",
+        "pt-BR",
+        "zh-CN",
+        "ja-JP",
+        "ko-KR",
+        "el-GR",
+        "ru-RU",
+        "uk-UA",
+        "_",
+        "__",
+        "_de",
+        "de__",
+        "de__phone_x",
+        "de _AT. phone",
+        "DE-at-PHONEBOOK",
+        "sr_Latn_RS",
+        "es_ES_traditional",
+        "fr_CA_x",
+        "ZH__Big5",
+        "zh-Hant-TW-stroke",
+        "chinese",
+        "korean",
+        "german",
     ] {
         v.push(s.to_string());
     }

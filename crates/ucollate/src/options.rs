@@ -280,8 +280,8 @@ impl CollateOptions {
             "entry" | "mapping" | "table" | "maxlength" | "contraction" | "ignoreChar"
             | "ignoreName" | "undefChar" | "undefName" | "rewrite" | "versionTable"
             | "alternateTable" | "backwardsTable" | "forwardsTable" | "rearrangeTable"
-            | "variableTable" | "derivCode" | "normCode" | "rearrangeHash"
-            | "backwardsFlag" | "suppress" | "suppressHash" | "__useXS" => {
+            | "variableTable" | "derivCode" | "normCode" | "rearrangeHash" | "backwardsFlag"
+            | "suppress" | "suppressHash" | "__useXS" => {
                 return Err(Error::ChangeNotAllowed(key.to_string()));
             }
             _ => {}

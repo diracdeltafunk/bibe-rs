@@ -3,6 +3,7 @@
 #![allow(dead_code)]
 
 mod suites;
+#[allow(unused_imports)]
 pub use suites::*;
 
 use std::fmt::Write as _;
@@ -52,7 +53,10 @@ fn json_opts(v: &[(&'static str, Val)]) -> String {
                 Val::Undef => "null".into(),
                 Val::List(l) => format!(
                     "[{}]",
-                    l.iter().map(|x| x.to_string()).collect::<Vec<_>>().join(",")
+                    l.iter()
+                        .map(|x| x.to_string())
+                        .collect::<Vec<_>>()
+                        .join(",")
                 ),
             };
             format!("{}:{}", json_str(k), v)
@@ -333,7 +337,9 @@ pub fn targeted() -> Vec<Vec<u32>> {
         s("\u{17000}\u{18AFF}\u{18D00}\u{18D8F}\u{18D90}"),
         s("\u{1B170}\u{1B2FF}\u{18B00}\u{18CFF}"),
         s("\u{4E00}\u{9FFC}\u{9FFD}\u{9FFF}\u{3400}\u{4DBF}\u{4DC0}"),
-        s("\u{20000}\u{2A6DD}\u{2A6DE}\u{2A700}\u{2B734}\u{2B735}\u{2B740}\u{2B81D}\u{2B820}\u{2CEA1}\u{2CEB0}\u{2EBE0}\u{30000}\u{3134A}\u{3134B}"),
+        s(
+            "\u{20000}\u{2A6DD}\u{2A6DE}\u{2A700}\u{2B734}\u{2B735}\u{2B740}\u{2B81D}\u{2B820}\u{2CEA1}\u{2CEB0}\u{2EBE0}\u{30000}\u{3134A}\u{3134B}",
+        ),
         s("\u{F900}\u{FA0E}\u{FA10}\u{FA11}\u{2F800}"),
         s("\u{E000}\u{F8FF}\u{F0000}\u{10FFFF}"),
         s("\u{378}\u{E0001}\u{E0100}"),
@@ -386,7 +392,9 @@ pub fn targeted() -> Vec<Vec<u32>> {
         s("ŉ"),
     ];
     // every combining class boundary near a contraction starter
-    for m in [0x0300u32, 0x0316, 0x0334, 0x0345, 0x05B0, 0x0E38, 0x0F71, 0x1DCE, 0x302A] {
+    for m in [
+        0x0300u32, 0x0316, 0x0334, 0x0345, 0x05B0, 0x0E38, 0x0F71, 0x1DCE, 0x302A,
+    ] {
         v.push(vec![0x6C, m, 0xB7]);
         v.push(vec![0x0FB2, m, 0x0F80]);
         v.push(vec![0x0418, m, 0x0306]);
@@ -423,20 +431,42 @@ impl Rng {
 pub fn base_pool() -> Vec<u32> {
     let mut p: Vec<u32> = Vec::new();
     p.extend(0x20..0x7F);
-    p.extend([0x61, 0x65, 0x6F, 0x63, 0x68, 0x6C, 0x6E, 0x41, 0x45, 0x4C, 0x43]);
+    p.extend([
+        0x61, 0x65, 0x6F, 0x63, 0x68, 0x6C, 0x6E, 0x41, 0x45, 0x4C, 0x43,
+    ]);
     p.extend(0xA0..0x180);
     p.extend((0x300..0x370).step_by(3));
-    p.extend([0x0301, 0x0323, 0x0308, 0x030A, 0x0327, 0x0306, 0x031B, 0x0334, 0x0345]);
-    p.extend([0x1AB0, 0x1DC0, 0x1DCE, 0x20D0, 0x302A, 0x3099, 0x309A, 0x093C, 0x05B0]);
-    p.extend([0x0F71, 0x0F72, 0x0F74, 0x0F80, 0x0F81, 0x0FB2, 0x0FB3, 0x0F40]);
+    p.extend([
+        0x0301, 0x0323, 0x0308, 0x030A, 0x0327, 0x0306, 0x031B, 0x0334, 0x0345,
+    ]);
+    p.extend([
+        0x1AB0, 0x1DC0, 0x1DCE, 0x20D0, 0x302A, 0x3099, 0x309A, 0x093C, 0x05B0,
+    ]);
+    p.extend([
+        0x0F71, 0x0F72, 0x0F74, 0x0F80, 0x0F81, 0x0FB2, 0x0FB3, 0x0F40,
+    ]);
     p.extend((0x400..0x460).step_by(2));
-    p.extend([0x0418, 0x0438, 0x0306, 0x0415, 0x0435, 0x0413, 0x0433, 0x0301]);
-    p.extend([0x0E01, 0x0E40, 0x0E44, 0x0E38, 0x0E48, 0x0627, 0x0644, 0x0915, 0x093F]);
-    p.extend([0x1100, 0x1101, 0x1161, 0x1162, 0x11A8, 0x11AB, 0xAC00, 0xAC01, 0xD7A3]);
-    p.extend([0x3042, 0x30A2, 0x30A1, 0x309D, 0x30FC, 0xFF71, 0xFF21, 0x3131]);
-    p.extend([0x4E00, 0x4E8C, 0x9FA5, 0x9FFC, 0x9FFD, 0x3400, 0x20000, 0x2A6DE, 0xF900]);
-    p.extend([0x17000, 0x18800, 0x18D00, 0x1B170, 0x18B00, 0x1F600, 0x10FFFD, 0x378]);
-    p.extend([0xFFFD, 0xFFFE, 0xFFFF, 0x0, 0xAD, 0x200B, 0x200D, 0x2D, 0x21, 0x20, 0x20]);
+    p.extend([
+        0x0418, 0x0438, 0x0306, 0x0415, 0x0435, 0x0413, 0x0433, 0x0301,
+    ]);
+    p.extend([
+        0x0E01, 0x0E40, 0x0E44, 0x0E38, 0x0E48, 0x0627, 0x0644, 0x0915, 0x093F,
+    ]);
+    p.extend([
+        0x1100, 0x1101, 0x1161, 0x1162, 0x11A8, 0x11AB, 0xAC00, 0xAC01, 0xD7A3,
+    ]);
+    p.extend([
+        0x3042, 0x30A2, 0x30A1, 0x309D, 0x30FC, 0xFF71, 0xFF21, 0x3131,
+    ]);
+    p.extend([
+        0x4E00, 0x4E8C, 0x9FA5, 0x9FFC, 0x9FFD, 0x3400, 0x20000, 0x2A6DE, 0xF900,
+    ]);
+    p.extend([
+        0x17000, 0x18800, 0x18D00, 0x1B170, 0x18B00, 0x1F600, 0x10FFFD, 0x378,
+    ]);
+    p.extend([
+        0xFFFD, 0xFFFE, 0xFFFF, 0x0, 0xAD, 0x200B, 0x200D, 0x2D, 0x21, 0x20, 0x20,
+    ]);
     p
 }
 
@@ -494,7 +524,11 @@ pub fn run_oracle(requests: &str) -> Vec<String> {
         .output()
         .expect("run oracle");
     std::fs::remove_file(&req).ok();
-    assert!(out.status.success(), "{}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "{}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     String::from_utf8(out.stdout)
         .unwrap()
         .lines()

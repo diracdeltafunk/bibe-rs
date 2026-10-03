@@ -33,7 +33,8 @@ pub fn all_code_points() -> Vec<Vec<u32>> {
 /// (one suite per Unicode plane, so that offline digest failures are localised).
 pub fn allcp_suites() -> Vec<Suite> {
     let all = all_code_points();
-    let planes: Vec<Arc<Vec<Vec<u32>>>> = all.chunks(0x10000).map(|c| Arc::new(c.to_vec())).collect();
+    let planes: Vec<Arc<Vec<Vec<u32>>>> =
+        all.chunks(0x10000).map(|c| Arc::new(c.to_vec())).collect();
     let mut out = Vec::new();
     for spec in [
         biber_sort(Some("en-US"), "4", "1"),
@@ -112,7 +113,10 @@ pub fn option_suites() -> Vec<Suite> {
         let nfd: Vec<Vec<u32>> = inputs
             .iter()
             .filter_map(|s| {
-                let s: String = s.iter().map(|&c| char::from_u32(c)).collect::<Option<_>>()?;
+                let s: String = s
+                    .iter()
+                    .map(|&c| char::from_u32(c))
+                    .collect::<Option<_>>()?;
                 use unicode_normalization::UnicodeNormalization;
                 Some(s.nfd().map(u32::from).collect())
             })
