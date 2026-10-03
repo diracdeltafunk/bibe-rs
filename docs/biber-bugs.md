@@ -29,6 +29,8 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-010 | C | UCollate.pm:64 | `-c ignoreChar=…` (and `entry`, `suppress`, `rewrite`, `undefChar`) dies: "change of ignoreChar via change() is not allowed". Options are applied with `change()`, not `new()`. | 04-B8 |
 | BB-011 | C | PAR packaging | The binary dies for `sortlocale` ja/ko/zh/zh_*: the `Unicode::Collate::CJK::*` modules are packed under a bogus path (`Unicode/Collate/CJK;lib/...`). Report against the binary build scripts, not the Perl source. | 04-B7 |
 
+| BB-120 | V | UCollate.pm / Unicode::Collate 1.31 `change()` | `--collate-options level=5` (any level outside 1–4, probably also non-numeric) is passed to Unicode::Collate unchecked, which dies with "Out of memory in perl:util:safesysmalloc": exit 25, empty `.bbl`, no ERROR in the log. Also, after `change(level=>0)` croaks the collator is left half-changed (empty keys). Report to both biber (validate `-c` values) and Unicode::Collate (CPAN). | M1 ucollate |
+
 ## 2. Data loss / destructive behaviour
 
 | Id | St | Location | Summary | Source |

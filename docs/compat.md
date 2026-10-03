@@ -29,6 +29,7 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | DC-007 | `--output-fieldcase=Upper` (non-lowercase value) → crash | Value accepted case-insensitively | BB-008 | planned |
 | DC-008 | `-c ignoreChar=…` and other construction-only collation options → crash | Applied when the collator is constructed | BB-010 | planned |
 | DC-009 | Packaged binary dies for ja/ko/zh sort locales | Supported | BB-011 | planned |
+| DC-024 | `-c level=5` (out-of-range collation level) crashes with out-of-memory, leaving an empty `.bbl` | ERROR naming the invalid option value, exit 2 | BB-120 | implemented (ucollate returns an error) |
 
 ### 1b. Data loss
 
