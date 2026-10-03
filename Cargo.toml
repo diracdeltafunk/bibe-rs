@@ -26,6 +26,10 @@ toml = "0.9"
 tempfile = "3"
 similar = "2"
 wait-timeout = "0.2"
+roxmltree = "0.20"
+# Pinned: 0.1.24 implements Unicode 16.0.0, the version of biber 2.22's perl 5.42 (PLAN.md §4 item 2).
+unicode-normalization = "=0.1.24"
+serde_json = "1"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
