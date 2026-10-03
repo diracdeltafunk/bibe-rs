@@ -1,0 +1,76 @@
+Doe,John
+Doe ,John
+Doe , John
+Doe,John,Jr
+Doe, John,Jr
+Zola, A~ B C
+Zola, ~A B C
+Zola, {{\'E}}x B C
+Zola, {{\'E}} B C
+Zola, {\'{E}x} B C
+Zola, {\'E} B C
+Zola, {\'Ex} B C
+Zola, {\ss}x B C
+Zola, {\ss}xy B C
+Zola, {\relax Ab} B C
+Zola, x{\'E} B C
+Zola, x{\'E}y B C
+Zola, {x\'E} B C
+Zola, {x}{\'E} B C
+Zola, \{x B C
+Zola, {\}} B C
+Zola, a{bc} B C
+Doe {John
+Doe} John
+{Doe John
+Doe John}
+Doe {John} {Smith
+}Doe John
+{}
+{} Doe
+Doe {}
+{a} b
+{a}b c
+a{b} C
+{\'a}b C
+\'ab C
+x, {a}
+x, \'a
+others, x
+a, b c, d e f
+,,
+,
+
+Doe,
+Doe,,
+Doe,,,
+Doe, ,
+Doe, , John
+A, B, C, D, E
+A, B, C D, E F
+A B C,
+von Doe,
+Doe von,
+Doe, von
+de Doe, Jr, John
+de doe, Jr, John
+de, Jr, John
+de doe
+de
+de {D}oe
+de {\'E}cole
+Jean de {\'E}cole
+Jean de \'Ecole
+Jean de école
+Jean de Doe Smith
+Jean De doe Smith
+Jean de Doe smith
+Jean de doe Smith xy
+jean de doe
+Jean-Pierre de~la Fontaine
+Ab~cd Ef
+Ab cd~Ef Gh
+ab~Cd Ef
+Ab {cd} ef
+a b c d e f g
+A b C d E f

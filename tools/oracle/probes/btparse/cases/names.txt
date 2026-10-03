@@ -1,0 +1,153 @@
+John Smith
+Smith, John
+John Q. Smith
+J. R. R. Tolkien
+Ludwig van Beethoven
+van Beethoven, Ludwig
+Charles Louis Xavier Joseph de la Vall{\'e}e Poussin
+R. J. Van de Graaff
+Van de Graaff, R. J.
+Doe, Jr., John
+John Doe, Jr.
+William H. {Gates III}
+{Foo, Bar and Sons}
+a b c D e F
+aa bb
+aa bb cc
+Aa bb
+Aa bb cc
+Aa bb Cc dd
+a
+A
+a, b
+A, B
+a, B
+de la Fontaine, Jean
+de la fontaine, Jean
+Jean de la fontaine
+Jean {de} la Fontaine
+Jean {d}e la Fontaine
+Jean {\relax d}e Fontaine
+Jean {\relax D}e Fontaine
+Jean {\'e}cole Fontaine
+Jean {\'E}cole Fontaine
+Jean \'ecole Fontaine
+Jean {\ae}sop Fontaine
+Jean {\AE}sop Fontaine
+Jean {\i}xx Fontaine
+Jean {\ss}xx Fontaine
+Jean {\l}xx Fontaine
+Jean {\L}xx Fontaine
+Jean {\o}xx Fontaine
+Jean {\oe}xx Fontaine
+Jean {\OE}xx Fontaine
+Jean {\aa}xx Fontaine
+Jean {\AA}xx Fontaine
+Jean {\j}xx Fontaine
+Jean {\foo}xx Fontaine
+Jean {\FOO}xx Fontaine
+Jean {{\'e}}cole Fontaine
+Jean {}cole Fontaine
+Jean {x}cole Fontaine
+Jean 1cole Fontaine
+Jean -cole Fontaine
+Jean .cole Fontaine
+Jean \cole Fontaine
+Jean ébauche Fontaine
+Jean Émile Fontaine
+Jean ąb Fontaine
+Jean ŁUKASZ Fontaine
+Jean łukasz Fontaine
+Jean ǅx Fontaine
+Jean 李 Fontaine
+Jean ßx Fontaine
+Jean ʼx Fontaine
+Jean ǈx Fontaine
+Jean ɐx Fontaine
+Jean ˈx Fontaine
+Jean ﬁx Fontaine
+Jean ΑΒ Fontaine
+Jean αβ Fontaine
+Jean ии Fontaine
+Jean Ии Fontaine
+Jean ⅰx Fontaine
+Jean Ⅰx Fontaine
+Jean ⓐx Fontaine
+Charles~de~Gaulle
+Jean-Pierre Dupont
+jean-Pierre Dupont
+Jean-pierre dupont Durand
+Jean~Pierre de~la Fontaine
+A. B. C. D.
+A B C D E F
+Ab Cd Ef
+Ab Cd Ef Gh
+John {von} Neumann
+John~{von} Neumann
+J. von Neumann
+{van} Beethoven, Ludwig
+Doe, John, Jr.
+Doe, Jr, John, Extra
+Doe,, John
+Doe, John,
+Doe,
+,Doe
+, John
+von Doe, Jr, John
+von, Doe
+others
+{others}
+Doe {and} Smith
+{Doe} Smith
+{Doe Smith}
+{\relax Doe Smith}
+Smith {\relax Doe}
+a {b} c
+a {B} c
+{a} b C
+Dupont, {\'E}mile
+Dupont, \'Emile
+von der Schulenburg, Friedrich Werner
+Friedrich Werner von der Schulenburg
+Jo von Doe
+Joe von Doe
+Jo Von Doe
+X Y Z
+Xy Yz Za
+X {Y} Z
+X {Yz} Za
+{X} Y Z
+Abc de f
+Abc de Fg
+A b
+Ab cd
+A {b}
+Ab c d
+Ab c D
+abc def ghi
+Ab. Cd. Ef.
+A.B. Cd
+J.-P. Sartre
+É. Zola
+Éa Zola Bb
+Éab Zola Bb
+Ééé Zola Bb
+Ée Zola Bb
+Æs Zola Bb
+Aé Zola Bb
+{Éa} Zola Bb
+\'Ea Zola Bb
+{\'E}a Zola Bb
+{\'E}ab Zola Bb
+{\'E} Zola Bb
+Ā Zola Bb
+Āb Zola Bb
+Zola, Ā Āb
+Zola, Ā B C
+Zola, Ab B C
+Zola, A B
+Zola, A Bc
+Zola, Abc B
+Zola, Ab B
+Zola, Ab Bc Cd
+Zola, Āé B

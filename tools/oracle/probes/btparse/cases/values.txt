@@ -1,0 +1,130 @@
+### V-001 braced value, whitespace collapse and trim
+@misc{k, title = {  a   b
+	c  }}
+### V-002 quoted value with braces and embedded quote in braces
+@misc{k, title = "a {b "c" d} e"}
+### V-003 quoted value containing unbalanced brace
+@misc{k, title = "a { b"}
+@misc{k2, title = {x}}
+### V-004 number value
+@misc{k, year = 1999, n = 0012}
+### V-005 number followed by letters is a name (macro)?
+@misc{k, year = 1999a}
+### V-006 concatenation with spaces
+@misc{k, title = "a" # "b" # { c } # "  d  "}
+### V-007 concatenation whitespace collapse across pieces
+@misc{k, title = "a " # " b"}
+### V-008 macro expansion case-insensitive
+@string{Foo = "Bar  baz"}
+@misc{k, title = FOO # foo # Foo}
+### V-009 undefined macro
+@misc{k, title = "x" # undefd # "y"}
+### V-010 month macros as biber sets them
+@misc{k, month = jan, m2 = DEC, m3 = Sep # "-" # oct}
+### V-011 backslash does not escape braces
+@misc{k, title = {a \{ b}}
+@misc{k2, title = {x}}
+### V-012 backslash-quote in quoted string
+@misc{k, title = "a \" b"}
+### V-013 at-sign inside braced value
+@misc{k, title = {a @misc{x} b}, note = "x@y"}
+### V-014 percent inside braced and quoted values
+@misc{k, title = {50% off}, note = "100% sure"}
+### V-015 newline inside quoted value
+@misc{k, title = "a
+b"}
+### V-016 empty values
+@misc{k, title = {}, note = "", x = {  }}
+### V-017 nested braces preserved
+@misc{k, title = {{A} {{B}} \'{e}}}
+### V-018 tab and other whitespace
+@misc{k, title = {a	b}, note = {a\fb}}
+### V-019 macro defined from other macro
+@string{a = "A"}
+@string{b = a # "B"}
+@misc{k, title = b}
+### V-020 string with parens
+@string(foo = "Paren")
+@misc(k, title = foo)
+### V-021 entry with parens containing parens in value
+@misc(k, title = {a (b) c}, note = "x)y")
+### V-022 entry closed by mismatched delimiter
+@misc(k, title = {x}}
+@misc{k2, title = {y})
+### V-023 trailing comma
+@misc{k, title = {x},}
+### V-024 two trailing commas
+@misc{k, title = {x},,}
+### V-025 field names lowercased type lowercased key case kept
+@ARTICLE{KeY, TiTlE = {x}}
+### V-026 duplicate fields
+@misc{k, title = {a}, note = {n}, title = {b}, Title = {c}}
+### V-027 whitespace around equals and hash
+@misc{k,title={a}#{b},note
+=
+"c"}
+### V-028 comment between fields
+@misc{k, % comment here
+  title = {x}, % another
+  note = {y}
+}
+### V-029 percent comment at toplevel and inline after entry
+% top comment @misc{fake, title={z}}
+@misc{k, title = {x}} % trailing @misc{fake2}
+### V-030 percent comment at end of file without newline
+@misc{k, title = {x}}
+% last
+### V-031 number concatenated
+@misc{k, pages = 10 # "--" # 20}
+### V-032 macro name with digits and dashes
+@string{a-1 = "x"}
+@misc{k, title = a-1, pages = 12--15}
+### V-033 nonbreaking and unicode whitespace in values
+@misc{k, title = {a  b}, note = {a b}}
+### V-034 CR handling
+@misc{k, title = {a b}}
+### V-035 preamble forms
+@preamble{"\newcommand{\x}{y}" # " and " # {z}}
+@PREAMBLE("paren")
+### V-036 comment forms
+@comment{a {b} c}
+@COMMENT(x (y) z)
+@comment{  spaced   text  }
+### V-037 comment without delimiters
+@comment free text here
+@misc{k, title = {x}}
+### V-038 entry without fields
+@misc{k}
+@misc{k2, title = {x}}
+### V-039 entry with only key and comma
+@misc{k,}
+### V-040 empty entry
+@misc{}
+### V-041 key with spaces around
+@misc{  k  , title = {x}}
+### V-042 numeric key
+@misc{123, title = {x}}
+### V-043 quoted key
+@misc{"k", title = {x}}
+### V-044 string with multiple definitions
+@string{a = "A", b = {B}, c = 3}
+@misc{k, title = a # b # c}
+### V-045 string with trailing comma
+@string{a = "A",}
+### V-046 macro redefinition
+@string{a = "A"}
+@string{a = "A2"}
+@misc{k, title = a}
+### V-047 redefine month macro
+@string{jan = "January"}
+@misc{k, month = jan}
+### V-048 whitespace between at and type
+@ misc{k, title = {x}}
+@misc {k2, title = {x}}
+### V-049 newline in key position
+@misc{
+k3
+,
+title = {x}}
+### V-050 value of only whitespace and concatenation of empty
+@misc{k, title = {} # " " # {}}

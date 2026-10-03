@@ -1,0 +1,127 @@
+### L-001 skipping after error is character-level to next at-sign
+@misc{k, title = {x} @misc{k2, title={y}} @misc{k3, title={z}}
+@misc{k4, title={w}}
+### L-002 undefined macro twice concatenated
+@misc{k, a = undefd # undefd, b = undefd # {}, c = {} # undefd, d = undefd # "x"}
+### L-003 percent comment at EOF with newline
+@misc{k, title = {x}}
+% last
+
+### L-004 percent comment right after entry close on same line
+@misc{k, title = {x}}% c
+@misc{k2, title = {y}}
+### L-005 percent comment inside key
+@misc{k%c
+, title = {x}}
+### L-006 percent comment between equals and value
+@misc{k, title = % c
+ {x}}
+### L-007 percent comment at EOF inside entry
+@misc{k, title = {x} % c
+}
+### L-008 junk counting
+abc def
+ghi @misc{k, title = {x}}
+### L-009 junk only whitespace
+
+	@misc{k, title = {x}}
+### L-010 junk after last entry
+@misc{k, title = {x}} trailing junk
+### L-011 junk between entries
+@misc{k, title = {x}} xx
+yy @misc{k2, title = {y}}
+### L-012 at sign in junk
+user@example.com
+@misc{k, title = {x}}
+### L-013 invalid char then comma
+@misc{k, title = {x}, note = {y}'
+, z = {w}}
+### L-014 invalid char followed by comma in key
+@misc{a',title={x}}
+### L-015 double invalid chars
+@misc{a''b,title={x}}
+### L-016 invalid char in value position
+@misc{k, title = 'x', note = {y}}
+### L-017 invalid char at toplevel is fine
+'''
+@misc{k, title = {x}}
+### L-018 backslash in value position
+@misc{k, title = \x, note = {y}}
+### L-019 lone at sign
+@
+@misc{k, title = {x}}
+### L-020 at sign then brace
+@{k, title = {x}}
+@misc{k2, title = {y}}
+### L-021 at at
+@@misc{k, title = {x}}
+### L-022 entry type with digits start
+@1misc{k, title = {x}}
+### L-023 entry key containing at
+@misc{k@x, title = {x}}
+### L-024 unknown type is regular
+@foobar{k, title = {x}}
+### L-025 string type case insensitive
+@StRiNg{x = "X"}
+@misc{k, title = x}
+### L-026 preamble with key-like content
+@preamble{k, title = {x}}
+### L-027 string with key
+@string{k, title = {x}}
+### L-028 comment with nested at
+@comment{ @misc{k, title={x}} }
+@misc{k2, title = {y}}
+### L-029 comment with unbalanced paren in braces
+@comment{ a ( b }
+@misc{k2, title = {y}}
+### L-030 comment paren with braces inside
+@comment( a { ) } b )
+@misc{k2, title = {y}}
+### L-031 quoted string value with parens entry
+@misc(k, title = "a ) b")
+### L-032 braced value with close paren in paren entry
+@misc(k, title = {a ) b})
+### L-033 unclosed brace swallows next entry
+@misc{k, title = {abc
+@misc{k2, title = {y}}
+### L-034 unclosed quote
+@misc{k, title = "abc
+@misc{k2, title = {y}}
+### L-035 too many close braces in value
+@misc{k, title = {a}}}, note = {b}}
+@misc{k2, title = {y}}
+### L-036 hash at start of value
+@misc{k, title = # {x}}
+### L-037 hash at end of value
+@misc{k, title = {x} #, note = {y}}
+### L-038 missing comma between fields
+@misc{k, title = {x} note = {y}}
+@misc{k2, title = {z}}
+### L-039 missing value
+@misc{k, title = , note = {y}}
+### L-040 missing equals
+@misc{k, title {x}, note = {y}}
+### L-041 stray close brace at toplevel
+}
+@misc{k, title = {x}}
+### L-042 stray open brace at toplevel
+{
+@misc{k, title = {x}}
+### L-043 entry at EOF unterminated
+@misc{k, title = {x}
+### L-044 entry type at EOF
+@misc
+### L-045 field with number name
+@misc{k, 123 = {x}}
+### L-046 value with number then name
+@misc{k, title = 12 ab}
+### L-047 key followed by equals (looks like field)
+@misc{title = {x}, note = {y}}
+### L-048 comma as first thing
+@misc{, title = {x}}
+### L-049 nested entry open paren in braces entry
+@misc{k, title = (x)}
+### L-050 percent at start of value inside quotes across lines
+@misc{k, title = "a
+% not a comment
+b"}

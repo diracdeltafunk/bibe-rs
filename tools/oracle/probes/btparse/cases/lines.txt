@@ -1,0 +1,64 @@
+### N-001 line of found token spanning lines
+@misc{k, title {a
+b
+c}, note = {y}}
+### N-002 line of undefined macro in multi-line value
+@misc{k, title = {a
+} # undefd
+# {b
+}, note = undefd}
+### N-003 line of junk warning far from at
+junk
+more junk
+
+
+@misc{k, title = {x}}
+### N-004 at end of input line with trailing newlines
+@misc{k, title = {x}
+
+
+### N-005 overriding macro line
+@string{a = "x"}
+
+@string{
+a = "y"}
+### N-006 invalid field name line
+@misc{k,
+7x = {y}}
+### N-007 regular entry quoted string after type
+@misc"abc" @misc{after, title = {ok}}
+### N-008 number after at
+@123{k, title = {x}}
+@misc{after, title = {ok}}
+### N-009 junk counting with utf8
+äöü @misc{k, title = {x}}
+### N-010 control characters in names and toplevel
+@misc{ab, title = {x}}
+### N-011 whitespace chars in entry
+@misc{k,title={x}}
+### N-012 double comma recovery
+@misc{k, title = {x},, note = {y}, year = 1999}
+### N-013 comma then close in string
+@string{a = "x", }
+@misc{k, title = a}
+### N-014 string empty
+@string{}
+@misc{k, title = {x}}
+### N-015 preamble empty
+@preamble{}
+@misc{k, title = {x}}
+### N-016 comment empty
+@comment{}
+@misc{k, title = {x}}
+### N-017 preamble with paren and quotes
+@preamble("a" # "b")
+### N-018 type uppercase comment with paren
+@COMMENT(abc)
+### N-019 lexer error then newline counts
+@misc{k, title = {x}, note = {y}'
+, z = {w}}
+@misc{k2, title = {a}, bad}
+### N-020 two errors consumed flag
+@misc{k, title, = {x}}
+@misc{k2, title, = {x}}
+@misc{k3, title = {z}}
