@@ -47,6 +47,7 @@ dependencies = [
 name = "bibers-core"
 version = "0.0.0"
 dependencies = [
+ "perl-compat",
  "regex",
  "roxmltree",
  "serde_json",
