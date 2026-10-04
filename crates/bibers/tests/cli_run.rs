@@ -93,7 +93,8 @@ fn stdout_output_with_output_directory() {
         "{blg}"
     );
     assert!(
-        blg.contains("ERROR - processing not yet implemented"),
+        // Until the .bbl writer exists (M2), the run stops with this error.
+        blg.contains("not yet implemented"),
         "{blg}"
     );
 }

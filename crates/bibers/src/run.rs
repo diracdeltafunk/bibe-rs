@@ -9,6 +9,7 @@ use bibers_core::bcf::{self, ParseArgs, Parsed};
 use bibers_core::config::{self, CliOptions, CliValue};
 use bibers_core::env::{Env, basename, catfile};
 use bibers_core::log::{Level, LogSettings, Logger};
+use bibers_core::pipeline::{self, Ctx};
 use bibers_core::quirks::Quirks;
 use bibers_core::{biber_error, info};
 
@@ -163,6 +164,33 @@ fn print_flush(s: &str) {
 /// Run bibers with `args` (without the program name). Returns the exit code.
 pub fn main(args: &[String], env: &Env) -> u8 {
     bibers_core::log::mark_program_start();
+    match setup(args, env) {
+        SetupResult::Exit(code) => code,
+        SetupResult::Ready(s) => process(*s, env),
+    }
+}
+
+/// The state after option parsing, the control file and `process_setup`:
+/// ready for the processing pipeline.
+pub struct Setup {
+    pub cfg: config::Config,
+    pub doc: bcf::Document,
+    pub log: Logger,
+    /// The output file (`-` for stdout).
+    pub outfile: String,
+}
+
+/// Result of [`setup`].
+pub enum SetupResult {
+    Ready(Box<Setup>),
+    /// Stop with this exit code (errors already reported).
+    Exit(u8),
+}
+
+/// Everything bin/biber does before `prepare`: command line, options and
+/// config file, logging, output file, control file, `process_setup`.
+pub fn setup(args: &[String], env: &Env) -> SetupResult {
+    use SetupResult::Exit;
     let (mut opts, argv) = match cli::prelude(args, special) {
         Prelude::Exit {
             code,
@@ -171,7 +199,7 @@ pub fn main(args: &[String], env: &Env) -> u8 {
         } => {
             print_flush(&stdout);
             eprint_flush(&stderr);
-            return code;
+            return Exit(code);
         }
         Prelude::Run { opts, argv, stderr } => {
             eprint_flush(&stderr);
@@ -183,11 +211,11 @@ pub fn main(args: &[String], env: &Env) -> u8 {
         && let Err(e) = quirks.apply_fix_list(&list)
     {
         eprint_flush(&format!("bibers: {e}\n"));
-        return 2;
+        return Exit(2);
     }
     if let Some(msg) = unsupported(&opts) {
         eprint_flush(&format!("bibers: ERROR - {msg}\n"));
-        return 2;
+        return Exit(2);
     }
 
     let mut cli_opts = to_cli(opts);
@@ -195,7 +223,7 @@ pub fn main(args: &[String], env: &Env) -> u8 {
         Ok(i) => i,
         Err(e) => {
             eprint_flush(&format!("bibers: ERROR - {}\n", e.0));
-            return 2;
+            return Exit(2);
         }
     };
     for n in &init.conf_notes {
@@ -217,7 +245,7 @@ pub fn main(args: &[String], env: &Env) -> u8 {
                 "bibers: ERROR - cannot write log file '{}': {e}\n",
                 init.logfile.as_deref().unwrap_or("")
             ));
-            return 2;
+            return Exit(2);
         }
     };
     log.set_nodieonerror(b.nodieonerror());
@@ -231,7 +259,7 @@ pub fn main(args: &[String], env: &Env) -> u8 {
         Err(msg) => {
             // biber prints this on STDOUT (BB-074).
             print_flush(&format!("{msg}\n"));
-            return 2;
+            return Exit(2);
         }
     };
     // The output file is opened (truncated) before the .bcf is read, so an
@@ -240,7 +268,7 @@ pub fn main(args: &[String], env: &Env) -> u8 {
         && let Err(e) = std::fs::File::create(env.resolve(&outfile))
     {
         let _ = biber_error!(log, "Cannot open output file '{outfile}': {e}");
-        return log.display_end();
+        return Exit(log.display_end());
     }
 
     let bcf_path = cfg.biber.get_str("bcf").unwrap_or("").to_string();
@@ -254,32 +282,74 @@ pub fn main(args: &[String], env: &Env) -> u8 {
         },
     );
     let mut doc = match parsed {
-        Err(_) => return log.display_end(),
+        Err(_) => return Exit(log.display_end()),
         // BB-070: biber exits 0 here without printing its warning.
         Ok(Parsed::NoDataSources) => {
             log.flush();
-            return 0;
+            return Exit(0);
         }
         Ok(Parsed::Document(d)) => d,
     };
     for e in cfg.postprocess_biber_opts() {
         if biber_error!(log, "{e}").is_err() {
-            return log.display_end();
+            return Exit(log.display_end());
         }
     }
     if cfg.biber.debug() {
         log.set_main_level(Level::Debug);
     }
     if bcf::process_setup(&mut cfg, &mut log, &mut doc).is_err() {
-        return log.display_end();
+        return Exit(log.display_end());
     }
-    info!(
+    SetupResult::Ready(Box::new(Setup {
+        cfg,
+        doc,
         log,
-        "bibers {VERSION} has read the control file and data model; processing is not yet implemented"
-    );
-    let _ = biber_error!(
-        log,
-        "processing not yet implemented (bibers {VERSION} is a development version)"
-    );
+        outfile,
+    }))
+}
+
+/// Run the processing pipeline and write the output (`prepare` and
+/// `output` in bin/biber).
+pub fn process(s: Setup, env: &Env) -> u8 {
+    let Setup {
+        mut cfg,
+        doc,
+        mut log,
+        outfile,
+    } = s;
+    let dm = cfg.dm.take().expect("process_setup builds the data model");
+    let mut ctx = Ctx {
+        cfg: &mut cfg,
+        dm: &dm,
+        doc: &doc,
+        log: &mut log,
+        env,
+    };
+    let processed = match pipeline::prepare(&mut ctx) {
+        Ok(p) => p,
+        Err(_) => return log.display_end(),
+    };
+    let text = match bibers_core::output::bbl::render(&mut ctx, &processed) {
+        Ok(Some(t)) => t,
+        Ok(None) => {
+            let _ = biber_error!(
+                ctx.log,
+                "output not yet implemented (bibers {VERSION} is a development version)"
+            );
+            return log.display_end();
+        }
+        Err(_) => return log.display_end(),
+    };
+    if outfile == "-" {
+        print_flush(&text);
+    } else {
+        info!(ctx.log, "Writing '{outfile}' with encoding 'UTF-8'");
+        if let Err(e) = std::fs::write(env.resolve(&outfile), text.as_bytes()) {
+            let _ = biber_error!(ctx.log, "Cannot write output file '{outfile}': {e}");
+            return log.display_end();
+        }
+        info!(ctx.log, "Output to {outfile}");
+    }
     log.display_end()
 }

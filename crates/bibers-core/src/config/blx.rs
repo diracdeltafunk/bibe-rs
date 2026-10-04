@@ -556,6 +556,38 @@ impl BlxOptions {
         v
     }
 
+    /// All per-entry options of one section: citekey → option → value.
+    pub fn section_entry_options(
+        &self,
+        secnum: &str,
+    ) -> BTreeMap<String, BTreeMap<String, OptValue>> {
+        self.entry
+            .iter()
+            .filter(|((_, s), _)| s == secnum)
+            .map(|((k, _), m)| {
+                (
+                    k.clone(),
+                    m.iter().map(|(o, v)| (o.clone(), v.clone())).collect(),
+                )
+            })
+            .collect()
+    }
+
+    /// Replace all per-entry options of one section with `opts` (stored as
+    /// given: no scope check or boolean mapping). Used to install a section
+    /// state loaded from a biber phase dump.
+    pub fn replace_section_entry_options(
+        &mut self,
+        secnum: &str,
+        opts: BTreeMap<String, BTreeMap<String, OptValue>>,
+    ) {
+        self.entry.retain(|(_, s), _| s != secnum);
+        for (k, m) in opts {
+            self.entry
+                .insert((k, secnum.to_string()), m.into_iter().collect());
+        }
+    }
+
     /// JSON dump (`GLOBAL`, `ENTRYTYPE`, `ENTRY`).
     pub fn to_json(&self) -> Value {
         let sorted = |m: &HashMap<String, OptValue>| {

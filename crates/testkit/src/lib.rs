@@ -17,6 +17,7 @@
 pub mod case;
 pub mod compare;
 pub mod normalize;
+pub mod phase;
 pub mod run;
 
 pub use case::{Case, CaseSpec, CompareMode, ExpectedMeta, discover};

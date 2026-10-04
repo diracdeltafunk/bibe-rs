@@ -12,7 +12,10 @@ pub mod datamodel;
 pub mod env;
 pub mod files;
 pub mod log;
+pub mod model;
+pub mod output;
 pub mod perlish;
+pub mod pipeline;
 pub mod quirks;
 pub mod xmlin;
 

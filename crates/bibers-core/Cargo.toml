@@ -18,6 +18,8 @@ regex.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true
+bibers-testkit.workspace = true
+serde_json.workspace = true
 
 [lints]
 workspace = true
