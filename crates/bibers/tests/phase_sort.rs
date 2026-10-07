@@ -10,7 +10,10 @@ use common::phase::{cases_with_prefix, check_phase};
 /// Cases (id prefixes) excluded from a suite, with the reason.
 const SKIP: &[(&str, &str)] = &[
     ("ported/tool-", "tool mode is deferred (DC-030)"),
-    ("ported/bibtex-output-", "bibtex output is deferred (DC-030)"),
+    (
+        "ported/bibtex-output-",
+        "bibtex output is deferred (DC-030)",
+    ),
     ("ported/full-bibtex-", "bibtex output is deferred (DC-030)"),
 ];
 
@@ -65,3 +68,4 @@ suite!(biblatex_examples, "biblatex-examples/");
 suite!(styles, "styles/");
 suite!(ported, "ported/");
 suite!(bugs, "bugs/");
+suite!(scale, "scale/");

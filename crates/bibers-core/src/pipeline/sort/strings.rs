@@ -231,8 +231,10 @@ mod tests {
         a.pad_side = Some("right".into());
         a.pad_char = Some("x".into());
         assert_eq!(process_sort_attributes("12", &a), "12xxxx");
-        let mut b = SortItemAttrs::default();
-        b.substring_side = Some("right".into());
+        let b = SortItemAttrs {
+            substring_side: Some("right".into()),
+            ..SortItemAttrs::default()
+        };
         assert_eq!(process_sort_attributes("abcdef", &b), "cdef");
         assert_eq!(pad_namepart("A\u{30A}b", 4.0), "A\u{30A}b  ");
     }

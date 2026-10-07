@@ -118,10 +118,16 @@ fn perl_property(name: &str) -> Option<&'static str> {
         "posixprint" => " -~",
         _ => {
             // `\p{General_Category=Punctuation}`, `\p{gc:L}`, `\p{Letter}`…
-            let v = ["generalcategory=", "generalcategory:", "gc=", "gc:", "category="]
-                .iter()
-                .find_map(|p| key.strip_prefix(p))
-                .unwrap_or(&key);
+            let v = [
+                "generalcategory=",
+                "generalcategory:",
+                "gc=",
+                "gc:",
+                "category=",
+            ]
+            .iter()
+            .find_map(|p| key.strip_prefix(p))
+            .unwrap_or(&key);
             return general_category(v);
         }
     })

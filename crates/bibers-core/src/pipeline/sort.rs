@@ -270,11 +270,15 @@ fn apply_viv(st: &mut SectionState, list: usize, viv: Vec<Viv>) {
                 vivify(vivify(&mut st.config_state, which), &secnum);
             }
             Viv::ListField(k) => {
-                let s = st.datalists[list].state.get_or_insert_with(|| J::Object(Map::new()));
+                let s = st.datalists[list]
+                    .state
+                    .get_or_insert_with(|| J::Object(Map::new()));
                 vivify(vivify(s, "fields"), &k);
             }
             Viv::NameListData(k) => {
-                let s = st.datalists[list].state.get_or_insert_with(|| J::Object(Map::new()));
+                let s = st.datalists[list]
+                    .state
+                    .get_or_insert_with(|| J::Object(Map::new()));
                 vivify(vivify(s, "namelistdata"), &k);
             }
         }
@@ -296,7 +300,10 @@ fn value_true(v: Option<&Value>) -> bool {
 }
 
 /// A defined scalar from a slot (`undef` → `None`).
-fn slot_str<'a>(slots: &'a std::collections::BTreeMap<String, PerlData>, k: &str) -> Option<&'a str> {
+fn slot_str<'a>(
+    slots: &'a std::collections::BTreeMap<String, PerlData>,
+    k: &str,
+) -> Option<&'a str> {
     slots.get(k).and_then(J::as_str)
 }
 
@@ -354,7 +361,11 @@ impl<'a> Gen<'a> {
                 s = "0".into();
             }
             if truthy(Some(&final_)) {
-                obj.push(if suppress { String::new() } else { final_.clone() });
+                obj.push(if suppress {
+                    String::new()
+                } else {
+                    final_.clone()
+                });
                 suppress = false;
             } else {
                 obj.push(s);
@@ -412,14 +423,22 @@ impl<'a> Gen<'a> {
 
     /// `_dispatch_sorting` (Internals.pm:1167) with the dispatch table of
     /// `_dispatch_table_sorting` (Internals.pm:1122).
-    fn dispatch(&mut self, field: &str, key: &str, be: &Entry, a: &SortItemAttrs) -> Option<String> {
+    fn dispatch(
+        &mut self,
+        field: &str,
+        key: &str,
+        be: &Entry,
+        a: &SortItemAttrs,
+    ) -> Option<String> {
         let et = be.entrytype();
-        if let Some(OptValue::FieldSet(se)) = self.cfg.blx.get(None, "sortexclusion", Some(et), None)
+        if let Some(OptValue::FieldSet(se)) =
+            self.cfg.blx.get(None, "sortexclusion", Some(et), None)
             && se.contains(field)
         {
             return Some(String::new());
         }
-        if let Some(OptValue::FieldSet(se)) = self.cfg.blx.get(None, "sortexclusion", Some("*"), None)
+        if let Some(OptValue::FieldSet(se)) =
+            self.cfg.blx.get(None, "sortexclusion", Some("*"), None)
             && se.contains(field)
         {
             match self.cfg.blx.get(None, "sortinclusion", Some(et), None) {
@@ -447,7 +466,9 @@ impl<'a> Gen<'a> {
                 return Some(c.to_string());
             }
             "intciteorder" => {
-                self.viv.borrow_mut().push(Viv::ConfigState("internalkeyorder"));
+                self.viv
+                    .borrow_mut()
+                    .push(Viv::ConfigState("internalkeyorder"));
                 return self
                     .config_state
                     .get("internalkeyorder")
@@ -599,7 +620,13 @@ impl<'a> Gen<'a> {
     }
 
     /// `_sort_integer` (Internals.pm:1338).
-    fn sort_integer(&self, field: &str, key: &str, be: &Entry, a: &SortItemAttrs) -> Option<String> {
+    fn sort_integer(
+        &self,
+        field: &str,
+        key: &str,
+        be: &Entry,
+        a: &SortItemAttrs,
+    ) -> Option<String> {
         let v = be.get_field(field);
         if !self.present(v) {
             return Some(String::new());
@@ -663,7 +690,9 @@ impl<'a> Gen<'a> {
     fn sort_name(&mut self, field: &str, key: &str, be: &Entry, a: &SortItemAttrs) -> String {
         let et = be.entrytype();
         let useopt = format!("use{field}");
-        if self.cfg.blx.registry.is_declared(&useopt) && !self.opt_true(&useopt, Some(et), Some(key)) {
+        if self.cfg.blx.registry.is_declared(&useopt)
+            && !self.opt_true(&useopt, Some(et), Some(key))
+        {
             return String::new();
         }
         if !value_true(be.get_field(field)) {
@@ -713,12 +742,19 @@ impl<'a> Gen<'a> {
         let et = be.entrytype();
         let names = self.sec.names.list(*nlid);
         let count = names.names.len();
-        let mut useprefix: Option<String> = self.opt_str("useprefix", Some(et), Some(key)).map(str::to_string);
+        let mut useprefix: Option<String> = self
+            .opt_str("useprefix", Some(et), Some(key))
+            .map(str::to_string);
         let mut snkname = self.dl.sortingnamekeytemplatename.clone();
         if let Some(v) = self
             .cfg
             .blx
-            .get(Some(self.secnum), "sortingnamekeytemplatename", None, Some(key))
+            .get(
+                Some(self.secnum),
+                "sortingnamekeytemplatename",
+                None,
+                Some(key),
+            )
             .and_then(OptValue::as_str)
         {
             snkname = v.to_string();
@@ -839,7 +875,11 @@ impl<'a> Gen<'a> {
         if items.len() as f64 > maxitems {
             truncated = true;
             let min = num(self.opt_str("minitems", Some(et), Some(key)));
-            let n = if min <= 0.0 { 0 } else { (min as usize).min(items.len()) };
+            let n = if min <= 0.0 {
+                0
+            } else {
+                (min as usize).min(items.len())
+            };
             items = &items[..n];
         }
         let parts: Vec<String> = items
@@ -847,7 +887,9 @@ impl<'a> Gen<'a> {
             .map(|i| normalise_string_sort(self.cfg, i, field))
             .collect();
         let mut s = parts.join("!");
-        let trimmed = s.trim_end_matches(perl_compat::unicode::is_perl_space).len();
+        let trimmed = s
+            .trim_end_matches(perl_compat::unicode::is_perl_space)
+            .len();
         s.truncate(trimmed);
         if truncated {
             s.push_str(TRUNC);

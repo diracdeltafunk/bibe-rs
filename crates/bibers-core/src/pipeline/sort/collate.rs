@@ -254,7 +254,11 @@ pub fn sort_list(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<()
             return biber_error!(ctx.log, "Invalid collation option '{k}': {e}");
         }
     }
-    let level0 = opts.get("level").map(String::as_str).unwrap_or("4").to_string();
+    let level0 = opts
+        .get("level")
+        .map(String::as_str)
+        .unwrap_or("4")
+        .to_string();
     let ubl0 = sortupper.clone();
     let mut colls = Collators {
         opts,
@@ -306,7 +310,9 @@ pub fn sort_list(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<()
     let gsortcase = numify(&sortcase);
     let gsortupper = numify(&sortupper);
     let breaks_quote = |s: &str| s.contains('\'') || s.contains('\\');
-    let new_args_broken = collopts.iter().any(|(k, v)| breaks_quote(k) || breaks_quote(v));
+    let new_args_broken = collopts
+        .iter()
+        .any(|(k, v)| breaks_quote(k) || breaks_quote(v));
     let mut cols: Vec<StrCol> = Vec::new();
     if let Some(t) = tmpl {
         for pass in &t.spec {
@@ -417,7 +423,11 @@ pub fn sort_list(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<()
                 (CObj::New(sl), Some(_)) => {
                     let loc = colls.locale_for(Some(sl));
                     infos.extend(colls.override_infos(loc.as_deref()));
-                    let level = col.change.level.as_deref().map_or(perl_level(&level0), perl_level);
+                    let level = col
+                        .change
+                        .level
+                        .as_deref()
+                        .map_or(perl_level(&level0), perl_level);
                     let ubl = truthy(Some(col.change.ubl.as_deref().unwrap_or(&ubl0)));
                     Some(colls.get(loc.as_deref(), level, ubl))
                 }

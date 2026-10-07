@@ -83,7 +83,9 @@ fn call_transliterator(from: &str, to: &str, text: &str, warnings: &mut Vec<Stri
     let valid_from = ["iast", "russian"].contains(&from.as_str());
     let valid_to = ["devanagari", "ala-lc", "bgn/pcgn-standard"].contains(&to.as_str());
     if !(valid_from && valid_to) {
-        warnings.push(format!("Invalid transliteration from/to pair ({from}/{to})"));
+        warnings.push(format!(
+            "Invalid transliteration from/to pair ({from}/{to})"
+        ));
     }
     let table = match (from.as_str(), to.as_str()) {
         ("iast", "devanagari") => "IAST Devanagari",
@@ -119,7 +121,9 @@ pub fn translit(
     };
     for tr in Translit::list_from_xval(x) {
         if let Some(langids) = &tr.langids {
-            let Some(langid) = entry.get_str("langid").filter(|l| crate::perlish::truthy(Some(l)))
+            let Some(langid) = entry
+                .get_str("langid")
+                .filter(|l| crate::perlish::truthy(Some(l)))
             else {
                 continue;
             };
@@ -154,7 +158,10 @@ mod tests {
     fn tables_load() {
         assert_eq!(tables().len(), 3);
         let mut w = Vec::new();
-        assert_eq!(call_transliterator("russian", "ala-lc", "Москва", &mut w), "Moskva");
+        assert_eq!(
+            call_transliterator("russian", "ala-lc", "Москва", &mut w),
+            "Moskva"
+        );
         assert!(w.is_empty());
         assert_eq!(call_transliterator("iast", "devanagari", "", &mut w), "");
     }
