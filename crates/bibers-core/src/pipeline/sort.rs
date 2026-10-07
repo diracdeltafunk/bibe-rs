@@ -168,15 +168,18 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
             config_state: &st.config_state,
             snk: sortingnamekey_templates(ctx.cfg),
             warnings: Vec::new(),
+            viv: Default::default(),
         };
         for k in &keys {
             results.push((k.clone(), g.sortinfo(k, tmpl)));
         }
-        g.warnings
+        (g.warnings, g.viv.into_inner())
     };
+    let (warnings, viv) = warnings;
     for w in warnings {
         ctx.log.biber_warn(w);
     }
+    apply_viv(st, list, viv);
     let dl = &mut st.datalists[list];
     let had_sd = dl.slots.contains_key("sortdata");
     let had_si = dl.slots.contains_key("sortinitdata");
@@ -233,6 +236,49 @@ struct Gen<'a> {
     config_state: &'a PerlData,
     snk: Option<&'a Named<SortingNameKeyTemplate>>,
     warnings: Vec<String>,
+    /// Hash entries Perl autovivifies while reading (applied afterwards).
+    viv: std::cell::RefCell<Vec<Viv>>,
+}
+
+/// A hash entry biber autovivifies by reading through it.
+#[derive(Clone, Debug, PartialEq, Eq)]
+enum Viv {
+    /// `$CONFIG->{state}{keyorder|internalkeyorder}{$secnum}` (`get_keyorder`).
+    ConfigState(&'static str),
+    /// `$dlist->{state}{fields}{$citekey}` (`get_entryfield`).
+    ListField(String),
+    /// `$dlist->{state}{namelistdata}{$nlid}` (`get_visible_sort`).
+    NameListData(String),
+}
+
+/// Create `m[k]` as `{}` if absent (`m` itself becomes a hash if needed).
+fn vivify<'j>(m: &'j mut J, k: &str) -> &'j mut J {
+    if !m.is_object() {
+        *m = J::Object(Map::new());
+    }
+    let J::Object(o) = m else { unreachable!() };
+    o.entry(k.to_string())
+        .or_insert_with(|| J::Object(Map::new()))
+}
+
+/// Apply recorded autovivifications.
+fn apply_viv(st: &mut SectionState, list: usize, viv: Vec<Viv>) {
+    let secnum = st.section.number.clone();
+    for v in viv {
+        match v {
+            Viv::ConfigState(which) => {
+                vivify(vivify(&mut st.config_state, which), &secnum);
+            }
+            Viv::ListField(k) => {
+                let s = st.datalists[list].state.get_or_insert_with(|| J::Object(Map::new()));
+                vivify(vivify(s, "fields"), &k);
+            }
+            Viv::NameListData(k) => {
+                let s = st.datalists[list].state.get_or_insert_with(|| J::Object(Map::new()));
+                vivify(vivify(s, "namelistdata"), &k);
+            }
+        }
+    }
 }
 
 /// Perl truthiness of an optional scalar result.
@@ -401,6 +447,7 @@ impl<'a> Gen<'a> {
                 return Some(c.to_string());
             }
             "intciteorder" => {
+                self.viv.borrow_mut().push(Viv::ConfigState("internalkeyorder"));
                 return self
                     .config_state
                     .get("internalkeyorder")
@@ -410,6 +457,7 @@ impl<'a> Gen<'a> {
                     .map(str::to_string);
             }
             "labelalpha" => {
+                self.viv.borrow_mut().push(Viv::ListField(key.to_string()));
                 let s = self
                     .dl
                     .state
@@ -497,6 +545,7 @@ impl<'a> Gen<'a> {
 
     /// `_sort_citeorder` (Internals.pm:1304).
     fn sort_citeorder(&self, key: &str) -> String {
+        self.viv.borrow_mut().push(Viv::ConfigState("keyorder"));
         let ko_map = self
             .config_state
             .get("keyorder")
@@ -678,6 +727,7 @@ impl<'a> Gen<'a> {
             snkname = v.to_string();
         }
         let tmpsnk = self.snk.and_then(|m| m.get(&snkname));
+        self.viv.borrow_mut().push(Viv::NameListData(nlid.key()));
         let nld = self
             .dl
             .state

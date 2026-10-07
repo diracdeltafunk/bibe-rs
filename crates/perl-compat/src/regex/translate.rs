@@ -116,6 +116,59 @@ fn perl_property(name: &str) -> Option<&'static str> {
         "posixxdigit" => "0-9A-Fa-f",
         "posixgraph" => "!-~",
         "posixprint" => " -~",
+        _ => {
+            // `\p{General_Category=Punctuation}`, `\p{gc:L}`, `\p{Letter}`…
+            let v = ["generalcategory=", "generalcategory:", "gc=", "gc:", "category="]
+                .iter()
+                .find_map(|p| key.strip_prefix(p))
+                .unwrap_or(&key);
+            return general_category(v);
+        }
+    })
+}
+
+/// A General_Category value (short or long name, loosely matched) as a
+/// PCRE2 class body.
+fn general_category(v: &str) -> Option<&'static str> {
+    Some(match v {
+        "l" | "letter" => "\\p{L}",
+        "lc" | "l&" | "casedletter" => "\\p{L&}",
+        "lu" | "uppercaseletter" => "\\p{Lu}",
+        "ll" | "lowercaseletter" => "\\p{Ll}",
+        "lt" | "titlecaseletter" => "\\p{Lt}",
+        "lm" | "modifierletter" => "\\p{Lm}",
+        "lo" | "otherletter" => "\\p{Lo}",
+        "m" | "mark" | "combiningmark" => "\\p{M}",
+        "mn" | "nonspacingmark" => "\\p{Mn}",
+        "mc" | "spacingmark" => "\\p{Mc}",
+        "me" | "enclosingmark" => "\\p{Me}",
+        "n" | "number" => "\\p{N}",
+        "nd" | "decimalnumber" | "digit" => "\\p{Nd}",
+        "nl" | "letternumber" => "\\p{Nl}",
+        "no" | "othernumber" => "\\p{No}",
+        "p" | "punct" | "punctuation" => "\\p{P}",
+        "pc" | "connectorpunctuation" => "\\p{Pc}",
+        "pd" | "dashpunctuation" => "\\p{Pd}",
+        "ps" | "openpunctuation" => "\\p{Ps}",
+        "pe" | "closepunctuation" => "\\p{Pe}",
+        "pi" | "initialpunctuation" => "\\p{Pi}",
+        "pf" | "finalpunctuation" => "\\p{Pf}",
+        "po" | "otherpunctuation" => "\\p{Po}",
+        "s" | "symbol" => "\\p{S}",
+        "sm" | "mathsymbol" => "\\p{Sm}",
+        "sc" | "currencysymbol" => "\\p{Sc}",
+        "sk" | "modifiersymbol" => "\\p{Sk}",
+        "so" | "othersymbol" => "\\p{So}",
+        "z" | "separator" => "\\p{Z}",
+        "zs" | "spaceseparator" => "\\p{Zs}",
+        "zl" | "lineseparator" => "\\p{Zl}",
+        "zp" | "paragraphseparator" => "\\p{Zp}",
+        "c" | "other" => "\\p{C}",
+        "cc" | "control" | "cntrl" => "\\p{Cc}",
+        "cf" | "format" => "\\p{Cf}",
+        "cs" | "surrogate" => "\\p{Cs}",
+        "co" | "privateuse" => "\\p{Co}",
+        "cn" | "unassigned" => "\\p{Cn}",
         _ => return None,
     })
 }
