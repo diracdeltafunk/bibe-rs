@@ -1,0 +1,4 @@
+description = "Source map features the corpus exercises rarely (probe-only fixture for crates/bibers/tests/sourcemap.rs)"
+source = "hand-written; doc.bcf adapted from tests/corpus/bugs/bb-031-starnocited"
+args = ["--configfile=smap.conf", "doc.bcf"]
+outputs = ["doc.bbl"]
