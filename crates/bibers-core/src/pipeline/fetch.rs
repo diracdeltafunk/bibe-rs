@@ -221,7 +221,7 @@ pub trait SecExt {
     fn del_citekey(&mut self, key: &str);
     /// `add_citekeys`.
     fn add_citekeys(&mut self, keys: &[String]);
-    /// `dynamic_set_keys` (sorted: Perl hash order, DC-015).
+    /// `dynamic_set_keys` (sorted; callers needing biber's hash order use .bcf order, DC-015).
     fn dynamic_set_keys(&self) -> Vec<String>;
     /// `get_dynamic_set`.
     fn get_dynamic_set(&self, key: &str) -> Vec<String>;

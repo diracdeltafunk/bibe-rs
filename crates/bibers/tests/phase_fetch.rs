@@ -16,9 +16,17 @@ const EXCLUDED: &[(&str, &str)] = &[
     ("bugs/bb-051-bltxml-uri-escaping", "DC-031"),
     ("ported/biblatexml-1", "DC-031"),
     ("ported/datalists-1", "DC-031"),
+    ("ported/xdata-1", "DC-031"),
+    ("ported/tool-bltxml-1", "DC-031"),
+    ("ported/tool-bltxml-2", "DC-031"),
+    ("ported/tool-bltxml-inout-1", "DC-031"),
     // tool mode / bibtex output (DC-030)
     ("ported/bibtex-output-1", "DC-030"),
     ("ported/full-bibtex-1", "DC-030"),
+    ("ported/tool-1", "DC-030"),
+    ("ported/tool-2", "DC-030"),
+    ("ported/tool-3", "DC-030"),
+    ("ported/tool-4", "DC-030"),
     // $MAPUNIQ keys are random in biber (DC-018)
     ("tdata/general-configfile", "DC-018"),
     ("ported/basic-misc-2", "DC-018"),
