@@ -300,8 +300,17 @@ pub fn extract_entries(
             .clone();
         st.section.add_citekeys(&order);
         // has_dynamic_sets is always true; dynamic_set_keys is in Perl hash
-        // order (DC-015: we use sorted order).
-        let dkeys = st.section.dynamic_set_keys();
+        // order (DC-015: we use .bcf declaration order).
+        let mut dkeys = st.section.dynamic_set_keys();
+        if let Some(bs) = ctx.doc.section(&secnum) {
+            let pos = |k: &String| {
+                bs.citekeys
+                    .iter()
+                    .position(|c| c == k)
+                    .unwrap_or(usize::MAX)
+            };
+            dkeys.sort_by_key(pos);
+        }
         st.section.add_citekeys(&dkeys);
     } else {
         if !keys.is_empty() {

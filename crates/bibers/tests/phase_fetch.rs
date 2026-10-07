@@ -5,6 +5,48 @@ mod common;
 
 use std::path::{Path, PathBuf};
 
+/// Corpus cases whose `fetch_data` deliberately differs from biber, with
+/// the documented reason.
+const EXCLUDED: &[(&str, &str)] = &[
+    // biblatexml data sources are not supported yet (DC-031)
+    ("tdata/biblatexml", "DC-031"),
+    ("tdata/datalists", "DC-031"),
+    ("tdata/xdata-noloop", "DC-031"),
+    ("bugs/bb-050-bltxml-eprint", "DC-031"),
+    ("bugs/bb-051-bltxml-uri-escaping", "DC-031"),
+    ("ported/biblatexml-1", "DC-031"),
+    ("ported/datalists-1", "DC-031"),
+    // tool mode / bibtex output (DC-030)
+    ("ported/bibtex-output-1", "DC-030"),
+    ("ported/full-bibtex-1", "DC-030"),
+    // $MAPUNIQ keys are random in biber (DC-018)
+    ("tdata/general-configfile", "DC-018"),
+    ("ported/basic-misc-2", "DC-018"),
+    ("ported/basic-misc-3", "DC-018"),
+    ("ported/basic-misc-4", "DC-018"),
+    // Perl code in sourcemap replacements is not executed (DC-023)
+    ("bugs/bb-033-smap-replace-perl-eval", "DC-023"),
+    // dynamic set order under \nocite{*} is Perl hash order (DC-015)
+    ("bugs/bb-062-dynamic-sets-nocite-order", "DC-015"),
+];
+
+#[test]
+fn fetch_data_matches_biber() {
+    let cases = common::phase::cases_with_prefix(&[
+        "tdata/",
+        "biblatex-examples/",
+        "bugs/",
+        "ported/",
+        "styles/",
+    ]);
+    let ids: Vec<&str> = cases
+        .iter()
+        .map(String::as_str)
+        .filter(|id| !EXCLUDED.iter().any(|(x, _)| x == id))
+        .collect();
+    common::phase::assert_phase("fetch_data", &ids);
+}
+
 /// Remove every `<open…>…</close>` block from `s`.
 fn strip_blocks(s: &str, open: &str, close: &str) -> String {
     let mut out = String::new();
