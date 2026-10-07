@@ -1015,6 +1015,7 @@ mod tests {
             doc: &doc,
             log: &mut log,
             env: &env,
+            run: Default::default(),
         };
         let mut st = SectionState::default();
         st.section.number = "0".into();

@@ -584,7 +584,7 @@ pub fn parsename_x(cfg: &NameCfg, namestr: &str, fieldname: &str, key: &str) -> 
     }
     let name_opts = cfg.registry.options_in_scope(Scope::Name);
     for (o, v) in pernameopts {
-        if name_opts.iter().any(|x| *x == o) || o == "gender" || o == "useprefix" {
+        if name_opts.contains(&o) || o == "gender" || o == "useprefix" {
             name.slots.insert(o, v.map_or(J::Null, J::from));
         }
     }

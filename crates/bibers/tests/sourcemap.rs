@@ -190,6 +190,7 @@ fn check_case(case: &Case, records: &[J]) -> (usize, Vec<String>) {
             doc: &doc,
             log: &mut log,
             env: &env,
+            run: Default::default(),
         };
         let ds = r["datasource"].as_str().unwrap_or("");
         let out = match apply_maps_in(&mut ctx, &mut st, "bibtex", ds, &mut entry) {

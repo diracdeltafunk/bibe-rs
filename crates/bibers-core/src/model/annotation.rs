@@ -21,6 +21,9 @@ pub type ByName<T> = BTreeMap<String, T>;
 /// field → name → …
 pub type ByField<T> = BTreeMap<String, ByName<T>>;
 
+/// count → part → annotation.
+pub type PartMap = BTreeMap<String, BTreeMap<String, Annotation>>;
+
 /// biber's `$ANN`. Perl `undef` hash keys (a missing item count) are `""`.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Annotations {
@@ -29,7 +32,7 @@ pub struct Annotations {
     /// `{item}{key}{field}{name}{count}`.
     pub item: BTreeMap<String, ByField<BTreeMap<String, Annotation>>>,
     /// `{part}{key}{field}{name}{count}{part}`.
-    pub part: BTreeMap<String, ByField<BTreeMap<String, BTreeMap<String, Annotation>>>>,
+    pub part: BTreeMap<String, ByField<PartMap>>,
     /// `{fields}{key}{field}`: annotated fields.
     pub fields: BTreeMap<String, BTreeMap<String, bool>>,
     /// `{names}{key}{field}`: annotation names in first-seen order.
