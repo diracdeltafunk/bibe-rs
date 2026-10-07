@@ -106,6 +106,7 @@ fn check_one(case: &Case, dumps: &[PhaseDump], target: &PhaseDump, ignore: &[&st
         doc: &doc,
         log: &mut log,
         env: &env,
+        run: Default::default(),
     };
 
     let expected = target.state().expect("load expected dump");

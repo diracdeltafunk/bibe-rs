@@ -18,7 +18,10 @@
 //! by the name-list id, so sharing is observable (BB-026); copying a
 //! `NameListId` reproduces that sharing explicitly.
 
+pub mod annotation;
 pub mod dump;
+
+pub use annotation::{Annotation, AnnotationScope, Annotations};
 
 use std::collections::{BTreeMap, BTreeSet};
 
