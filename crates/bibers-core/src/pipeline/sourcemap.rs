@@ -58,6 +58,7 @@ use crate::config::Config;
 use crate::debug;
 use crate::log::{Fatal, Logger};
 use crate::model::{Section, SectionState};
+use crate::quirks::Quirk;
 use perl_compat::regex::{CaptureDigits, expand_imatches, imatch, ireplace, split_default_xsvsep};
 use perl_compat::truth::{num_cmp_str, perl_truthy};
 use perl_compat::unicode::{nfc, nfd};
@@ -164,12 +165,25 @@ pub fn mapuniq_id(n: u64) -> String {
 /// `Biber::Utils::maploopreplace` (Utils.pm:1773-1786): substitute
 /// `$MAPLOOP`, `$MAPUNIQVAL` and `$MAPUNIQ`, but only inside a `map_foreach`
 /// loop with a (perl-)true loop value (BB-034).
-fn maploopreplace(run: &mut MapRunState, s: Option<&str>, maploop: &str) -> Option<String> {
+///
+/// With the quirk fixed (`bb034_fixed`), `$MAPUNIQ`/`$MAPUNIQVAL` are also
+/// substituted outside loops (`$MAPLOOP` stays literal there).
+fn maploopreplace(
+    run: &mut MapRunState,
+    s: Option<&str>,
+    maploop: &str,
+    bb034_fixed: bool,
+) -> Option<String> {
     let s = s?;
-    if !perl_truthy(maploop) {
+    let in_loop = perl_truthy(maploop);
+    if !in_loop && !bb034_fixed {
         return Some(s.to_string());
     }
-    let mut s = s.replace("$MAPLOOP", maploop);
+    let mut s = if in_loop {
+        s.replace("$MAPLOOP", maploop)
+    } else {
+        s.to_string()
+    };
     s = s.replace("$MAPUNIQVAL", run.mapuniqval.as_deref().unwrap_or(""));
     if s.contains("$MAPUNIQ") {
         run.uniq_counter += 1;
@@ -437,7 +451,8 @@ impl Engine<'_> {
     }
 
     fn mlr(&mut self, step: &MapStep, attr: &str, ml: &str) -> Option<String> {
-        maploopreplace(self.run, step.get(attr), ml)
+        let fixed = !self.cfg.quirks.on(Quirk::SmapMapuniqOutsideForeach);
+        maploopreplace(self.run, step.get(attr), ml, fixed)
     }
 
     /// A failed condition: `map_final` → `next MAP`, else `next` (step),
@@ -632,7 +647,12 @@ impl Engine<'_> {
             ));
         }
         // BB-031: without \nocite{*} this applies to every entry.
-        if truthy("map_entrykey_starnocited") && allnocite && (is_cite || is_nocite) {
+        let not_starnocited = if self.cfg.quirks.on(Quirk::SmapStarnocited) {
+            allnocite && (is_cite || is_nocite)
+        } else {
+            !allnocite || is_cite || is_nocite
+        };
+        if truthy("map_entrykey_starnocited") && not_starnocited {
             let m = "Key is \\nocite{*}'ed but also either \\cite'd or explicitly \\nocited";
             return Ok(self.fail(step, &keyp, m, m));
         }
@@ -786,7 +806,12 @@ impl Engine<'_> {
                 }
                 // BB-030: the value comes from the entry being mapped, not
                 // from the entry target.
-                let v = entry
+                let src: &RawEntry = if self.cfg.quirks.on(Quirk::SmapEntrytargetSource) {
+                    entry
+                } else {
+                    target(entry, news, tgt)
+                };
+                let v = src
                     .get(&nfc(&fieldsource))
                     .map(str::to_string)
                     .unwrap_or_default();
@@ -897,17 +922,17 @@ mod tests {
         assert_eq!(mapuniq_id(1).len(), 9);
         assert_ne!(mapuniq_id(1), mapuniq_id(2));
         let mut r = MapRunState::default();
-        let a = maploopreplace(&mut r, Some("k:$MAPLOOP:$MAPUNIQ"), "x").unwrap();
+        let a = maploopreplace(&mut r, Some("k:$MAPLOOP:$MAPUNIQ"), "x", false).unwrap();
         assert_eq!(a, format!("k:x:{}", mapuniq_id(1)));
-        let b = maploopreplace(&mut r, Some("$MAPUNIQVAL"), "x").unwrap();
+        let b = maploopreplace(&mut r, Some("$MAPUNIQVAL"), "x", false).unwrap();
         assert_eq!(b, mapuniq_id(1));
         // BB-034: not substituted outside a foreach loop
         assert_eq!(
-            maploopreplace(&mut r, Some("$MAPUNIQ"), "").unwrap(),
+            maploopreplace(&mut r, Some("$MAPUNIQ"), "", false).unwrap(),
             "$MAPUNIQ"
         );
         assert_eq!(
-            maploopreplace(&mut r, Some("$MAPLOOP"), "0").unwrap(),
+            maploopreplace(&mut r, Some("$MAPLOOP"), "0", false).unwrap(),
             "$MAPLOOP"
         );
     }
@@ -925,5 +950,188 @@ mod tests {
         e.delete("a");
         e.set("a", "\u{e9}");
         assert_eq!(e.get("a"), Some("e\u{301}"));
+    }
+
+    use crate::bcf::Document;
+    use crate::config::BiberValue;
+    use crate::datamodel::DataModel;
+    use crate::env::Env;
+    use std::collections::BTreeMap;
+
+    fn step(attrs: &[(&str, &str)]) -> MapStep {
+        MapStep {
+            attrs: attrs
+                .iter()
+                .map(|(k, v)| (k.to_string(), v.to_string()))
+                .collect(),
+            extra: BTreeMap::new(),
+        }
+    }
+
+    fn maps(level: &str, maps: Vec<Vec<MapStep>>) -> SourceMaps {
+        SourceMaps {
+            datatype: Some("bibtex".into()),
+            level: Some(level.into()),
+            map_overwrite: None,
+            maps: maps
+                .into_iter()
+                .map(|steps| SourceMap {
+                    map_overwrite: None,
+                    map_foreach: None,
+                    refsection: None,
+                    per_datasource: vec![],
+                    per_type: vec![],
+                    per_nottype: vec![],
+                    steps,
+                    extra: BTreeMap::new(),
+                })
+                .collect(),
+            extra: BTreeMap::new(),
+        }
+    }
+
+    /// Map `entry` with `smaps` in a section citing `a` (no `\nocite{*}`).
+    fn run(smaps: Vec<SourceMaps>, fix: &[Quirk], entry: &mut RawEntry) -> MapOutcome {
+        let mut cfg = Config::default();
+        for q in fix {
+            cfg.quirks.fix(*q);
+        }
+        cfg.biber.set("sourcemap", BiberValue::Sourcemap(smaps));
+        let dm = DataModel::default();
+        let doc = Document::default();
+        let env = Env::isolated(".");
+        let mut log = Logger::silent();
+        let mut ctx = Ctx {
+            cfg: &mut cfg,
+            dm: &dm,
+            doc: &doc,
+            log: &mut log,
+            env: &env,
+        };
+        let mut st = SectionState::default();
+        st.section.number = "0".into();
+        st.section.cite_citekeys.insert("a".into());
+        apply_maps_in(&mut ctx, &mut st, "bibtex", "x.bib", entry).unwrap()
+    }
+
+    fn entry() -> RawEntry {
+        RawEntry {
+            entrytype: "misc".into(),
+            key: "a".into(),
+            fields: vec![("title".into(), "T".into())],
+        }
+    }
+
+    #[test]
+    fn only_first_driver_map() {
+        let mut e = entry();
+        run(
+            vec![
+                maps(
+                    "driver",
+                    vec![vec![step(&[
+                        ("map_field_set", "note"),
+                        ("map_field_value", "1"),
+                    ])]],
+                ),
+                maps(
+                    "driver",
+                    vec![vec![step(&[
+                        ("map_field_set", "usera"),
+                        ("map_field_value", "2"),
+                    ])]],
+                ),
+                maps(
+                    "user",
+                    vec![vec![step(&[
+                        ("map_field_set", "note"),
+                        ("map_field_value", "u"),
+                    ])]],
+                ),
+            ],
+            &[],
+            &mut e,
+        );
+        assert_eq!(
+            e.fields,
+            vec![("title".into(), "T".into()), ("note".into(), "u".into())]
+        );
+    }
+
+    fn bb030(fix: &[Quirk]) -> RawEntry {
+        let mut e = entry();
+        let out = run(
+            vec![maps(
+                "user",
+                vec![vec![
+                    step(&[("map_entry_new", "n"), ("map_entry_newtype", "misc")]),
+                    step(&[
+                        ("map_entrytarget", "n"),
+                        ("map_field_set", "title"),
+                        ("map_field_value", "NEW"),
+                    ]),
+                    step(&[
+                        ("map_entrytarget", "n"),
+                        ("map_field_source", "title"),
+                        ("map_field_target", "note"),
+                    ]),
+                ]],
+            )],
+            fix,
+            &mut e,
+        );
+        assert_eq!(out.created_keys, vec!["n".to_string()]);
+        out.new_entries.into_iter().next().unwrap()
+    }
+
+    #[test]
+    fn bb030_entrytarget_source() {
+        assert_eq!(bb030(&[]).fields, vec![("note".into(), "T".into())]);
+        assert_eq!(
+            bb030(&[Quirk::SmapEntrytargetSource]).fields,
+            vec![("note".into(), "NEW".into())]
+        );
+    }
+
+    #[test]
+    fn bb031_starnocited() {
+        let smaps = || {
+            vec![maps(
+                "user",
+                vec![vec![step(&[
+                    ("map_entrykey_starnocited", "1"),
+                    ("map_field_set", "note"),
+                    ("map_field_value", "STAR"),
+                ])]],
+            )]
+        };
+        let mut e = entry();
+        run(smaps(), &[], &mut e);
+        assert_eq!(e.get("note"), Some("STAR"));
+        let mut e = entry();
+        run(smaps(), &[Quirk::SmapStarnocited], &mut e);
+        assert_eq!(e.get("note"), None);
+    }
+
+    #[test]
+    fn bb034_mapuniq_outside_foreach() {
+        let smaps = || {
+            vec![maps(
+                "user",
+                vec![vec![step(&[
+                    ("map_field_set", "note"),
+                    ("map_field_value", "$MAPLOOP-$MAPUNIQ"),
+                ])]],
+            )]
+        };
+        let mut e = entry();
+        run(smaps(), &[], &mut e);
+        assert_eq!(e.get("note"), Some("$MAPLOOP-$MAPUNIQ"));
+        let mut e = entry();
+        run(smaps(), &[Quirk::SmapMapuniqOutsideForeach], &mut e);
+        assert_eq!(
+            e.get("note"),
+            Some(format!("$MAPLOOP-{}", mapuniq_id(1)).as_str())
+        );
     }
 }

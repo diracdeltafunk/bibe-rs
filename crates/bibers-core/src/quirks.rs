@@ -25,6 +25,16 @@ pub enum Quirk {
     /// BB-054 (`duplicate-datalists`): repeated identical `<datalist>`s are
     /// not de-duplicated.
     DuplicateDatalists,
+    /// BB-030 (`smap-entrytarget-source`): `map_field_source` →
+    /// `map_field_target` on an `map_entrytarget` reads the value from the
+    /// entry being mapped instead of the target.
+    SmapEntrytargetSource,
+    /// BB-031 (`smap-starnocited`): `map_entrykey_starnocited` applies to
+    /// every entry when there is no `\nocite{*}`.
+    SmapStarnocited,
+    /// BB-034 (`smap-mapuniq-outside-foreach`): `$MAPUNIQ`/`$MAPUNIQVAL`
+    /// stay literal outside `map_foreach` maps.
+    SmapMapuniqOutsideForeach,
 }
 
 impl Quirk {
@@ -36,6 +46,9 @@ impl Quirk {
         Quirk::ConfSourcemapsDropped,
         Quirk::UniquenameBaseCheckGlobal,
         Quirk::DuplicateDatalists,
+        Quirk::SmapEntrytargetSource,
+        Quirk::SmapStarnocited,
+        Quirk::SmapMapuniqOutsideForeach,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -47,6 +60,9 @@ impl Quirk {
             Quirk::ConfSourcemapsDropped => "conf-sourcemaps-dropped",
             Quirk::UniquenameBaseCheckGlobal => "uniquename-base-check-global",
             Quirk::DuplicateDatalists => "duplicate-datalists",
+            Quirk::SmapEntrytargetSource => "smap-entrytarget-source",
+            Quirk::SmapStarnocited => "smap-starnocited",
+            Quirk::SmapMapuniqOutsideForeach => "smap-mapuniq-outside-foreach",
         }
     }
 
