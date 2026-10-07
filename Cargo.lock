@@ -53,6 +53,7 @@ dependencies = [
  "roxmltree",
  "serde_json",
  "tempfile",
+ "ucollate",
  "unicode-normalization",
 ]
 

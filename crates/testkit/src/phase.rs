@@ -89,13 +89,21 @@ pub fn phase_dumps(case: &Case, corpus_root: &Path) -> Result<Vec<PhaseDump>> {
         .join("target/phase-dumps")
         .join(case.id.replace('/', "__"));
     let stamp = dir.join("FINGERPRINT");
-    let fresh = std::fs::read_to_string(&stamp).is_ok_and(|s| s == fp);
+    let fresh =
+        dir.join("dumps").is_dir() && std::fs::read_to_string(&stamp).is_ok_and(|s| s == fp);
     if !fresh {
-        if dir.exists() {
-            std::fs::remove_dir_all(&dir)?;
-        }
-        let work = dir.join("work");
-        let dumps = dir.join("dumps");
+        // Generate into a private directory and rename it into place, so
+        // tests running in parallel never see a half-written cache.
+        let tmp = dir.with_extension(format!(
+            "tmp-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_nanos())
+                .unwrap_or(0)
+        ));
+        let work = tmp.join("work");
+        let dumps = tmp.join("dumps");
         std::fs::create_dir_all(&work)?;
         std::fs::create_dir_all(&dumps)?;
         for f in case.input_files(corpus_root)? {
@@ -115,7 +123,21 @@ pub fn phase_dumps(case: &Case, corpus_root: &Path) -> Result<Vec<PhaseDump>> {
         // biber may legitimately exit non-zero (error cases); dumps up to the
         // failure are still useful.
         let _ = status;
-        std::fs::write(&stamp, &fp)?;
+        std::fs::write(tmp.join("FINGERPRINT"), &fp)?;
+        // Replace a stale cache; if another process installed a fresh one
+        // meanwhile, keep theirs.
+        let now_fresh = std::fs::read_to_string(&stamp).is_ok_and(|s| s == fp);
+        if now_fresh {
+            std::fs::remove_dir_all(&tmp).ok();
+        } else {
+            if dir.exists() {
+                std::fs::remove_dir_all(&dir).ok();
+            }
+            if std::fs::rename(&tmp, &dir).is_err() {
+                // Lost a race with another process; use its result.
+                std::fs::remove_dir_all(&tmp).ok();
+            }
+        }
     }
     list_dumps(&dir.join("dumps"))
 }

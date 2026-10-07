@@ -35,6 +35,22 @@ pub enum Quirk {
     /// BB-034 (`smap-mapuniq-outside-foreach`): `$MAPUNIQ`/`$MAPUNIQVAL`
     /// stay literal outside `map_foreach` maps.
     SmapMapuniqOutsideForeach,
+    /// BB-017 (`sortkey-eval`): sort keys are built by string-`eval` of
+    /// `getSortKey(q{$value})`, so unbalanced braces or a trailing backslash
+    /// give an undef key (sorts first) and `\\`, `\{`, `\}` are unescaped.
+    SortkeyEval,
+    /// BB-018 (`filter-readds-sets`): after list filtering, every set and set
+    /// member is re-added if any set passed the filter.
+    FilterReaddsSets,
+    /// BB-019 (`per-name-option-leak`): per-name/per-namelist option
+    /// overrides leak to the following names.
+    PerNameOptionLeak,
+    /// BB-042 (`sort-column-type`): a sort column's type comes from its first
+    /// item only, and `labelyear`/`labelmonth`/`labelday` columns are strings.
+    SortColumnType,
+    /// BB-055 (`zero-is-empty`): field values equal to `0` are treated as
+    /// missing (sorting).
+    ZeroIsEmpty,
 }
 
 impl Quirk {
@@ -49,6 +65,11 @@ impl Quirk {
         Quirk::SmapEntrytargetSource,
         Quirk::SmapStarnocited,
         Quirk::SmapMapuniqOutsideForeach,
+        Quirk::SortkeyEval,
+        Quirk::FilterReaddsSets,
+        Quirk::PerNameOptionLeak,
+        Quirk::SortColumnType,
+        Quirk::ZeroIsEmpty,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -63,6 +84,11 @@ impl Quirk {
             Quirk::SmapEntrytargetSource => "smap-entrytarget-source",
             Quirk::SmapStarnocited => "smap-starnocited",
             Quirk::SmapMapuniqOutsideForeach => "smap-mapuniq-outside-foreach",
+            Quirk::SortkeyEval => "sortkey-eval",
+            Quirk::FilterReaddsSets => "filter-readds-sets",
+            Quirk::PerNameOptionLeak => "per-name-option-leak",
+            Quirk::SortColumnType => "sort-column-type",
+            Quirk::ZeroIsEmpty => "zero-is-empty",
         }
     }
 

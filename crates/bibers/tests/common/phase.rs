@@ -129,7 +129,25 @@ fn check_one(case: &Case, dumps: &[PhaseDump], target: &PhaseDump, ignore: &[&st
             f(&mut ctx, &mut st)
         } else if let Some(f) = pipeline::list_phase(&target.phase) {
             let want = target.list.clone().unwrap_or_default();
-            let Some(i) = st.datalists.iter().position(|d| sanitize(&d.name) == want) else {
+            // Lists can share a name (BB-054): the n-th dump of this phase
+            // for the name belongs to the n-th such list.
+            let nth = dumps
+                .iter()
+                .filter(|d| {
+                    d.section == target.section
+                        && d.phase == target.phase
+                        && d.list == target.list
+                        && d.seq < target.seq
+                })
+                .count();
+            let Some(i) = st
+                .datalists
+                .iter()
+                .enumerate()
+                .filter(|(_, d)| sanitize(&d.name) == want)
+                .map(|(i, _)| i)
+                .nth(nth)
+            else {
                 return vec![format!("no data list {want} in state")];
             };
             // Reproduce what process_lists does around the phase.
@@ -164,7 +182,8 @@ pub fn check_phase(phase: &str, case_ids: &[&str], extra_ignore: &[&str]) -> (us
     let mut failures = Vec::new();
     for id in case_ids {
         let case = find_case(id);
-        let dumps = phase_dumps(&case, &corpus_root()).expect("phase dumps");
+        let dumps = phase_dumps(&case, &corpus_root())
+            .unwrap_or_else(|e| panic!("phase dumps for {id}: {e:#}"));
         for d in dumps.iter().filter(|d| d.phase == phase) {
             checked += 1;
             let diffs = check_one(&case, &dumps, d, &ignore);
