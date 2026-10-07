@@ -23,16 +23,16 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | DC-001 | `uniquelist` crashes when a labelname family name is literally `final` | Processes normally (name keys can't collide with internal bookkeeping) | BB-001 | planned |
 | DC-002 | Several macros in one `@string{a="x", b="y"}` → fatal syntax error | All macros defined, as in BibTeX | BB-002 | planned |
 | DC-003 | `\char"7B`/`\char123` in a field → fatal syntax error, and the next entry is swallowed | Decodes to a literal brace character without breaking parsing. *Exact output TBD when implemented.* | BB-003 | planned |
-| DC-004 | A regex metacharacter in `presort` (e.g. `a(b`) → fatal | `presort` is treated as a literal string | BB-004 | planned |
+| DC-004 | A regex metacharacter in `presort` (e.g. `a(b`) → fatal | `presort` is treated as a literal string | BB-004 | implemented (sort) |
 | DC-005 | biber.conf `<noinit>`/`<nolabel>` in the documented form → crash; `<sortinclusion>` alone → crash | Parsed as documented | BB-005, BB-006 | planned |
 | DC-006 | A section with citations but no data sources (while other sections have some) → crash | Warns that keys were not found, as for any missing key | BB-007 | planned |
 | DC-007 | `--output-fieldcase=Upper` (non-lowercase value) → crash | Value accepted case-insensitively | BB-008 | planned |
-| DC-008 | `-c ignoreChar=…` and other construction-only collation options → crash | Applied when the collator is constructed | BB-010 | planned |
+| DC-008 | `-c ignoreChar=…` and other construction-only collation options → crash | `entry` is applied when the collator is constructed; the other construction-only options (`ignoreChar`, `undefChar`, `suppress`, `rewrite`, …) give an ERROR naming the option, exit 2 | BB-010 | implemented (sort; partial) |
 | DC-009 | Packaged binary dies for ja/ko/zh sort locales | Supported | BB-011 | planned |
 | DC-024 | `-c level=5` (out-of-range collation level) crashes with out-of-memory, leaving an empty `.bbl` | ERROR naming the invalid option value, exit 2 | BB-120 | implemented (ucollate returns an error) |
 | DC-038 | An invalid user regex in a sourcemap makes Perl die ("Unmatched ( in regex", …) | ERROR naming the map step and the regex, exit 2 | — | implemented (sourcemap) |
-| DC-029 | btparse-level crashes and process exits on malformed input (BB-123, 125, 126, 127, 128): SEGV, abort, exit, mangled error text | An ERROR naming the user's file and line (with the literal offending text), then biber's normal error handling. *Whether parsing continues with the next entry is decided in M2.* | BB-123, 125–128 | planned (btparse reports these as `Item::Stop{fatal}` / anomalies) |
-| DC-035 | `--isbn10` on a 979-prefix ISBN crashes | ISBN left in its ISBN-13 form, with a WARN | BB-130 | planned |
+| DC-029 | btparse-level crashes and process exits on malformed input (BB-123, 125, 126, 127, 128): SEGV, abort, exit, mangled error text | An ERROR naming the user's file and line (with the literal offending text), then biber's normal error handling. *Whether parsing continues with the next entry is decided in M2.* | BB-123, 125–128 | implemented (fetch: ERROR naming file and line) |
+| DC-035 | `--isbn10` on a 979-prefix ISBN crashes | ISBN left in its ISBN-13 form, with a WARN | BB-130 | implemented (fetch) |
 
 ### 1b. Data loss
 
@@ -48,12 +48,14 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 
 | Id | Where | bibers order | Bug | Status |
 |---|---|---|---|---|
-| DC-013 | Per-name / per-namelist option lists in `\name{…}{n}{<opts>}` and `{{<opts>}{%` | Option declaration order from the `.bcf` `<optionscope>`. *Confirm against biblatex parsing during M2.* | BB-060 | planned |
+| DC-013 | Per-name / per-namelist option lists in `\name{…}{n}{<opts>}` and `{{<opts>}{%` | Option declaration order from the `.bcf` `<optionscope>`. *Confirm against biblatex parsing during M2.* | BB-060 | implemented (output: `.bcf` optionscope declaration order) |
 | DC-014 | Order in which mincrossrefs/minxrefs-promoted entries are added (visible with `sorting=none` or sort ties) | First-reference order | BB-061 | planned |
-| DC-015 | Order of dynamic sets under `\nocite{*}` | `.bcf` declaration order | BB-062 | planned |
+| DC-015 | Order of dynamic sets under `\nocite{*}` | `.bcf` declaration order | BB-062 | implemented (fetch) |
 | DC-016 | Order of deferred WARN messages in `.blg`/stdout | Emission order (deterministic) | BB-065 | planned |
 | DC-017 | Which cycle is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | planned |
 | DC-037 | Order in which entries created by sourcemap `entry_new`/`entry_clone` steps are instantiated (`%newentries` hash order) | Creation order | — | implemented (sourcemap) |
+| DC-039 | Sort keys of verbatim/URI *list* fields: biber's `_sort_verbatim` stringifies the array reference (`ARRAY(0x…)`, a memory address), so these entries sort arbitrarily | The fixed string `ARRAY` (equal keys, so citation order decides) | BB-135 | implemented (sort) |
+| DC-047 | Order in which entries are created under `\nocite{*}` (hash order in biber) | `.bib` file order | — | implemented (fetch) |
 | DC-018 | `$MAPUNIQ` values in sourcemaps (time-based in biber, so the `.bbl` differs on every run) | Deterministic values: the n-th `$MAPUNIQ` of a run is `base62(10^16 + n)` in `suniqid`'s alphabet (`0-9a-zA-Z`, nine characters), so keys are unique within a run and identical across runs. | BB-113 | implemented (sourcemap) |
 
 ### 1d. Unavoidable representation differences
@@ -121,7 +123,8 @@ Until implemented, bibers exits with a clear "not yet supported" ERROR (exit 2) 
 | DC-031 | biblatexml input and output; bltxml schema generation | deferred |
 | DC-032 | Remote (http/https/ftp) data sources | deferred |
 | DC-033 | RNG validation (`--validate-control`, `--validate-config`, `--validate-bltxml`) | deferred |
-| DC-034 | Non-UTF-8 `--output-encoding` and `--output-safechars` | deferred |
+| DC-034 | Multi-byte `--output-encoding`s other than UTF-8 (single-byte encodings and `--output-safechars` are supported) | deferred |
+| DC-045 | `--recodedata` (a user recode data file for `--output-safechars`/decoding) is not honoured yet: the built-in `recode_data.xml` is used | deferred |
 
 ## 5. Cosmetic differences in logs and messages
 
@@ -131,9 +134,10 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 |---|---|---|---|
 | DC-040 | `This is Biber 2.22` banner; `--version` prints `biber version: 2.22` | `This is bibers <version> (biber 2.22 compatible)`; `--version` prints `bibers version: <version> (biber 2.22 compatible)`. *Check latexmk/arara don't parse these.* | implemented |
 | DC-041 | Location tag `Biber.pm:4487>` (Perl file:line) | A Rust module/location tag. The format is kept and the contents are not meaningful across implementations. | planned |
-| DC-042 | btparse diagnostics name a temp file (`<md5>_<pid>.utf8`) and pass-2 line numbers | Name the user's `.bib` file and its real line numbers | BB-076 | planned |
+| DC-042 | btparse diagnostics name a temp file (`<md5>_<pid>.utf8`) and pass-2 line numbers | Name the user's `.bib` file and its real line numbers | BB-076 | implemented (fetch) |
 | DC-043 | `INFO` lines specific to biber internals (PAR cache, Perl modules, …) | Omitted or replaced | planned |
 | DC-044 | `--debug`/`--trace` output (Perl data dumps) | Different content. Also, `--debug` does **not** stop btparse errors being fatal (BB-075). | planned |
+| DC-046 | Error text for undecodable bytes in a data file (Perl's `Encode` message, e.g. `utf8 "\xA6" does not map to Unicode`) | A similar message naming the file, encoding and byte; not byte-identical | implemented (fetch) |
 
 ## 6. Extensions (things bibers adds)
 

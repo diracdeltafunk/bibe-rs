@@ -1,3 +1,8 @@
 # Corpus cases bibers is required to pass (the ratchet). Checked by
 # `cargo test -p bibers --test corpus`. Regenerate with
 # `cargo xtask corpus --update-passing`; never remove a line to make CI green.
+bugs/bb-014-bbl-truncated-on-error
+bugs/bb-049-empty-section-no-refsection
+bugs/bb-070-no-datasources
+bugs/bb-071-missing-control-file
+bugs/bb-072-input-encoding-short-option

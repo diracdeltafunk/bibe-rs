@@ -99,6 +99,17 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-118 | C | Recode.pm accent handling | `\' {a}` (space before the braced argument) is not decoded; `\c  ,` puts the cedilla on a space; `\t{oo}` gives `{̑oo}` (tie accent misplaced, braces kept). | M1 latex-recode |
 | BB-119 | V | Recode.pm dash handling | `\--`/`\---` are decoded only when followed by a word character: `\--x` → `–x`, but a trailing `y\---` stays literal. | M1 latex-recode |
 
+| BB-135 | C | Internals.pm `_dispatch_sorting` / `_sort_list_verbatim` | `_sort_list_verbatim` is unreachable: verbatim/URI *list* fields dispatch to `_sort_verbatim`, which stringifies the array ref, so such entries sort by memory address (`ARRAY(0x…)`), arbitrarily and differently on every run. | M2 sort |
+| BB-136 | C | Biber.pm `sort_list` (collator reuse) | The main collator is mutated with `change()` per column and keeps that state: a column with only a per-set `sortcase` override inherits `upper_before_lower` from whichever column last computed a key, and cache hits skip `change()` entirely, so collation depends on evaluation order. | M2 sort |
+| BB-138 | C | bbl.pm:335-337, 567-569 (05-B21) | **Observable:** list fields are inherited by reference, so popping `others` while writing one entry removes `\true{more<list>}` from every other entry sharing that list (e.g. crossref children). The URI encoding of URI lists is likewise written back into the shared list. Corpus case `bugs/others-pop-shared-list`. | M2 output |
+| BB-139 | R | Name.pm `name_to_bbl` | Per-name option lists keep a trailing comma when the name hash is missing (`{{un=0,uniquepart=base,}{%`). Reproduced by bibers; not seen in the corpus. | M2 output |
+| BB-140 | C | bibtex.pm `parsename` | Only *leading* whitespace of a name is trimmed (the trim regex lacks `/g`). | M2 fetch |
+| BB-141 | C | bibtex.pm `parsename_x` | `family = Doe` (spaces around `=`) is rejected as an invalid name part: the greedy `(.+)` keeps the trailing space in the part name (cf. BB-108). | M2 fetch |
+| BB-142 | C | Utils.pm date preprocessing | If a date mixes ASCII digit runs with non-ASCII digit runs, the ASCII runs are deleted. | M2 fetch |
+| BB-143 | C | Utils.pm date parsing | A year-division suffix of `-20` silently turns the date into a bare year. | M2 fetch |
+| BB-144 | C | bibtex.pm `cache_data` | The parse cache is per file and per run, so duplicate-key warnings and `everykey` bookkeeping only happen in the first refsection that reads a file. | M2 fetch |
+| BB-145 | R | Biber.pm `fetch_data` globbing | A non-`file` data source is pushed onto the datasource list twice. | M2 fetch |
+
 ### 3a. The truthiness of `"0"` (one family, several sites)
 
 Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return '' unless $s` tests therefore treat a legitimate value `0` as missing. Fixing these as one sweep is probably easiest upstream.
@@ -110,6 +121,7 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-057 | R | Internals.pm:1548 | A sort value of `"0"` skips padding/substring, and `final` can copy the `BIBERZERO` sentinel into later columns. | 04-B11 |
 | BB-058 | R | DataModel.pm:932-950 | Range constraints with `rangemin`/`rangemax` of `0`, and values of `0`, are skipped. | 02-B22 |
 | BB-059 | R | Utils.pm:683 | `normalise_string_bblxml("0")` returns `''`. | 05-B20 |
+| BB-137 | C | Entry.pm `has_keyword`; Biber.pm:3155 | `has_keyword` treats a keyword `0` as not found, and BB-018's `first {…}` is false when the first set key is `0`. | M2 sort |
 
 ## 4. Nondeterministic output (Perl hash order)
 
