@@ -117,7 +117,9 @@ fn fetch_data_report() {
         let (nn, nf) = common::phase::check_phase_at(&root, "fetch_data", &[nid.as_str()], &[]);
         if nn > 0 && nf.is_empty() {
             e.2 += f.len();
-            println!("MAPS {id}");
+            for x in f {
+                println!("MAPS {x}");
+            }
             continue;
         }
         for x in f {

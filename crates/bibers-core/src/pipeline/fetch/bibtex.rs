@@ -197,16 +197,12 @@ fn to_raw(e: &btparse::Entry) -> RawEntry {
 
 /// `$entry->get($field)` on a mapped entry: the last occurrence.
 fn raw_get<'e>(e: &'e RawEntry, f: &str) -> Option<&'e str> {
-    e.fields
-        .iter()
-        .rev()
-        .find(|(n, _)| n == f)
-        .map(|(_, v)| v.as_str())
+    e.get(f)
 }
 
 /// `Text::BibTeX::Entry::print_s` for a regular entry.
-fn print_s(e: &RawEntry) -> String {
-    let mut o = format!("@{}{{{},\n", e.entrytype, e.key);
+fn print_s(e: &RawEntry, key: &str) -> String {
+    let mut o = format!("@{}{{{},\n", e.entrytype, key);
     for (f, _) in &e.fields {
         let v = raw_get(e, f).unwrap_or("");
         o.push_str(&format!("  {f} = {{{v}}},\n"));
@@ -559,23 +555,25 @@ fn create_entry(
     x: &mut Extract,
     key: &str,
     entry: &btparse::Entry,
-    _datasource: &str,
+    datasource: &str,
     rkeys: &mut Vec<String>,
 ) -> Result<bool, Fatal> {
     if entry.metatype != btparse::Metatype::Regular {
         return Ok(true);
     }
     let mut raw = to_raw(entry);
-    let outcome = sourcemap::apply_maps(ctx, st, "bibtex", &mut raw)?;
-    for e in &outcome.new_entries {
-        rkeys.retain(|k| *k != e.key);
+    raw.key = key.to_string();
+    let outcome = sourcemap::apply_maps_in(ctx, st, "bibtex", datasource, &mut raw)?;
+    for k in &outcome.created_keys {
+        rkeys.retain(|r| r != k);
     }
     if outcome.skip {
         return Ok(false);
     }
-    let crret = create_entry_inner(ctx, st, opts, x, key, &raw)?;
-    for e in &outcome.new_entries {
-        create_entry_inner(ctx, st, opts, x, &e.key.clone(), e)?;
+    let crret = create_entry_inner(ctx, st, opts, x, key, &raw, &raw.key)?;
+    for (i, e) in outcome.new_entries.iter().enumerate() {
+        let tbkey = outcome.tb_keys.get(i).unwrap_or(&e.key);
+        create_entry_inner(ctx, st, opts, x, &e.key.clone(), e, tbkey)?;
     }
     Ok(crret)
 }
@@ -609,13 +607,14 @@ fn create_entry_inner(
     x: &mut Extract,
     k: &str,
     e: &RawEntry,
+    tbkey: &str,
 ) -> Result<bool, Fatal> {
     let secnum = st.section.number.clone();
     let ds = st.section.get_keytods(k).unwrap_or_default();
     let mut be = Entry::default();
     be.set_field("citekey", Some(Value::Str(k.to_string())));
     debug!(ctx.log, "Creating biber Entry object with key '{k}'");
-    be.set_field("rawdata", Some(Value::Str(print_s(e))));
+    be.set_field("rawdata", Some(Value::Str(print_s(e, tbkey))));
     be.set_field("entrytype", Some(Value::Str(fc(&e.entrytype))));
     for (f, _) in &e.fields {
         let value = raw_get(e, f).unwrap_or("");
