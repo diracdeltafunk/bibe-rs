@@ -131,7 +131,7 @@ sub install {
       local $IN_MAP = 1;
       # biber redirects STDERR to a temp file here: record dies in the output.
       local $SIG{__DIE__} = sub {
-        return if $^S;
+        return unless defined $^S and !$^S;  # not inside an eval
         open my $fh, '>>:raw', $out or return;
         print $fh $json->encode({die => "$_[0]", key => $key}), "\n";
         close $fh;
