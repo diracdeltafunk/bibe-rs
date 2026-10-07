@@ -39,6 +39,7 @@ dependencies = [
  "bibers-core",
  "bibers-testkit",
  "chrono",
+ "perl-compat",
  "serde_json",
  "tempfile",
 ]
@@ -50,6 +51,7 @@ dependencies = [
  "bibers-testkit",
  "btparse",
  "latex-recode",
+ "md-5",
  "perl-compat",
  "regex",
  "roxmltree",

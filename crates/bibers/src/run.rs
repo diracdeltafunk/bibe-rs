@@ -342,15 +342,24 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         }
         Err(_) => return log.display_end(),
     };
-    if outfile == "-" {
-        print_flush(&text);
-    } else {
-        info!(ctx.log, "Writing '{outfile}' with encoding 'UTF-8'");
-        if let Err(e) = std::fs::write(env.resolve(&outfile), text.as_bytes()) {
-            let _ = biber_error!(ctx.log, "Cannot write output file '{outfile}': {e}");
-            return log.display_end();
-        }
-        info!(ctx.log, "Output to {outfile}");
+    // bbl.pm:676-677, 779 (`-` is stdout; biber logs it by that name too).
+    let enc = bibers_core::output::bbl::output_encoding_name(&ctx);
+    info!(ctx.log, "Writing '{outfile}' with encoding '{enc}'");
+    if ctx.cfg.biber.is_true("output_safechars") {
+        info!(ctx.log, "Converting UTF-8 to TeX macros on output to .bbl");
     }
+    let bytes = match bibers_core::output::bbl::encode_output(&mut ctx, &text) {
+        Ok(b) => b,
+        Err(_) => return log.display_end(),
+    };
+    if outfile == "-" {
+        let mut o = std::io::stdout().lock();
+        let _ = o.write_all(&bytes);
+        let _ = o.flush();
+    } else if let Err(e) = std::fs::write(env.resolve(&outfile), &bytes) {
+        let _ = biber_error!(ctx.log, "Cannot write output file '{outfile}': {e}");
+        return log.display_end();
+    }
+    info!(ctx.log, "Output to {outfile}");
     log.display_end()
 }

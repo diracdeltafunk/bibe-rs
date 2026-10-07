@@ -42,7 +42,38 @@ pub const DEFAULT_IGNORE: &[&str] = &[
 /// Maximum diff lines reported per dump.
 const LIMIT: usize = 25;
 
-fn find_case(root: &std::path::Path, id: &str) -> Case {
+/// A case of the main corpus.
+pub fn find_case(id: &str) -> Case {
+    find_case_at(&corpus_root(), id)
+}
+
+/// Run `bibers::run::setup` for `case` (of the corpus rooted at `root`) in a
+/// fresh temp work dir holding its inputs (quietly). Returns the work dir
+/// (keep it alive), its `Env` and the setup, or the setup's exit code.
+pub fn setup_case_at(
+    root: &std::path::Path,
+    case: &Case,
+) -> Result<(tempfile::TempDir, Env, bibers::run::Setup), u8> {
+    let work = tempfile::tempdir().expect("tempdir");
+    for f in case.input_files(root).expect("inputs") {
+        std::fs::copy(&f, work.path().join(f.file_name().unwrap())).expect("copy input");
+    }
+    let env = Env::isolated(work.path());
+    let mut args = case.spec.args.clone();
+    args.splice(0..0, ["-q".to_string(), "-q".to_string()]);
+    match setup(&args, &env) {
+        SetupResult::Ready(s) => Ok((work, env, *s)),
+        SetupResult::Exit(code) => Err(code),
+    }
+}
+
+/// [`setup_case_at`] on the main corpus.
+pub fn setup_case(case: &Case) -> Result<(tempfile::TempDir, Env, bibers::run::Setup), u8> {
+    setup_case_at(&corpus_root(), case)
+}
+
+/// A case of the corpus rooted at `root`.
+pub fn find_case_at(root: &std::path::Path, id: &str) -> Case {
     let cases = discover(root).expect("corpus loads");
     cases
         .into_iter()
@@ -148,6 +179,7 @@ fn check_one(
         }
         let mut st = load_state(&before.state().expect("load before dump")).expect("load_state");
         pipeline::install_entry_options(ctx.cfg, &st);
+        pipeline::install_annotations(&mut ctx, &st);
         let res = if let Some(f) = pipeline::section_phase(&target.phase) {
             f(&mut ctx, &mut st)
         } else if let Some(f) = pipeline::list_phase(&target.phase) {
@@ -214,7 +246,7 @@ pub fn check_phase_at(
     let mut checked = 0;
     let mut failures = Vec::new();
     for id in case_ids {
-        let case = find_case(root, id);
+        let case = find_case_at(root, id);
         let dumps =
             phase_dumps(&case, root).unwrap_or_else(|e| panic!("phase dumps for {id}: {e:#}"));
         for d in dumps.iter().filter(|d| d.phase == phase) {

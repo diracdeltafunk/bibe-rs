@@ -119,6 +119,9 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         entry_options: Default::default(),
         // Carried over from the previous section by `prepare`.
         preamble: None,
+        // No entries yet, so no annotations.
+        annotations: Some(serde_json::Value::Object(Default::default())),
+        shared_lists: Some(Vec::new()),
     })
 }
 
@@ -693,6 +696,7 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     let keys = st.section.citekeys.clone();
     let mut kwd = Vec::new();
     get_dependents(ctx, st, &opts, &dss, keys, &mut kwd)?;
+    super::sync_annotations(ctx, st);
     Ok(())
 }
 

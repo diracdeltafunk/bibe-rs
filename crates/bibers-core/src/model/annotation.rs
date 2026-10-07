@@ -114,3 +114,152 @@ impl Annotations {
             .is_some_and(|m| m.get(field).copied().unwrap_or(false))
     }
 }
+
+fn ann_json(a: &Annotation) -> serde_json::Value {
+    serde_json::json!({
+        "value": a.value,
+        "literal": if a.literal { "1" } else { "0" },
+    })
+}
+
+fn ann_from_json(v: &serde_json::Value) -> Annotation {
+    Annotation {
+        value: v.get("value").and_then(|x| x.as_str()).map(str::to_string),
+        literal: v
+            .get("literal")
+            .and_then(|x| x.as_str())
+            .is_some_and(perl_compat::truth::perl_truthy),
+    }
+}
+
+impl Annotations {
+    /// The annotations of `keys` in the phase dumps' shape (`state.annotations`
+    /// in `BiberPhaseDump.pm`): `{key: {field: {f: {name: {value, literal}}},
+    /// item: {f: {name: {count: …}}}, part: {f: {name: {count: {part: …}}}}}}`,
+    /// omitting keys without annotations.
+    pub fn to_dump<'a>(&self, keys: impl IntoIterator<Item = &'a str>) -> serde_json::Value {
+        use serde_json::{Map, Value};
+        let mut out = Map::new();
+        for key in keys {
+            let mut k = Map::new();
+            if let Some(fields) = self.field.get(key) {
+                let m: Map<String, Value> = fields
+                    .iter()
+                    .map(|(f, names)| {
+                        (
+                            f.clone(),
+                            Value::Object(
+                                names
+                                    .iter()
+                                    .map(|(n, a)| (n.clone(), ann_json(a)))
+                                    .collect(),
+                            ),
+                        )
+                    })
+                    .collect();
+                if !m.is_empty() {
+                    k.insert("field".into(), Value::Object(m));
+                }
+            }
+            if let Some(fields) = self.item.get(key) {
+                let m: Map<String, Value> = fields
+                    .iter()
+                    .map(|(f, names)| {
+                        let names = names
+                            .iter()
+                            .map(|(n, counts)| {
+                                let c = counts
+                                    .iter()
+                                    .map(|(c, a)| (c.clone(), ann_json(a)))
+                                    .collect();
+                                (n.clone(), Value::Object(c))
+                            })
+                            .collect();
+                        (f.clone(), Value::Object(names))
+                    })
+                    .collect();
+                if !m.is_empty() {
+                    k.insert("item".into(), Value::Object(m));
+                }
+            }
+            if let Some(fields) = self.part.get(key) {
+                let m: Map<String, Value> = fields
+                    .iter()
+                    .map(|(f, names)| {
+                        let names = names
+                            .iter()
+                            .map(|(n, counts)| {
+                                let c = counts
+                                    .iter()
+                                    .map(|(c, parts)| {
+                                        let p = parts
+                                            .iter()
+                                            .map(|(p, a)| (p.clone(), ann_json(a)))
+                                            .collect();
+                                        (c.clone(), Value::Object(p))
+                                    })
+                                    .collect();
+                                (n.clone(), Value::Object(c))
+                            })
+                            .collect();
+                        (f.clone(), Value::Object(names))
+                    })
+                    .collect();
+                if !m.is_empty() {
+                    k.insert("part".into(), Value::Object(m));
+                }
+            }
+            if !k.is_empty() {
+                out.insert(key.to_string(), Value::Object(k));
+            }
+        }
+        Value::Object(out)
+    }
+
+    /// Merge annotations from the phase dumps' shape (see [`Self::to_dump`])
+    /// into this store, replacing the listed keys' annotations. Annotation
+    /// names are recorded in sorted order (the dump does not keep biber's
+    /// first-seen order).
+    pub fn install_dump(&mut self, dump: &serde_json::Value) {
+        let Some(keys) = dump.as_object() else {
+            return;
+        };
+        for (key, k) in keys {
+            self.field.remove(key);
+            self.item.remove(key);
+            self.part.remove(key);
+            self.fields.remove(key);
+            self.names.remove(key);
+            let obj = |v: &serde_json::Value| v.as_object().cloned().unwrap_or_default();
+            for (f, names) in obj(k.get("field").unwrap_or(&serde_json::Value::Null)) {
+                for (n, a) in obj(&names) {
+                    let a = ann_from_json(&a);
+                    self.set_annotation(AnnotationScope::Field, key, &f, &n, a.value, a.literal);
+                }
+            }
+            for (f, names) in obj(k.get("item").unwrap_or(&serde_json::Value::Null)) {
+                for (n, counts) in obj(&names) {
+                    for (c, a) in obj(&counts) {
+                        let a = ann_from_json(&a);
+                        let scope = AnnotationScope::Item { count: c };
+                        self.set_annotation(scope, key, &f, &n, a.value, a.literal);
+                    }
+                }
+            }
+            for (f, names) in obj(k.get("part").unwrap_or(&serde_json::Value::Null)) {
+                for (n, counts) in obj(&names) {
+                    for (c, parts) in obj(&counts) {
+                        for (p, a) in obj(&parts) {
+                            let a = ann_from_json(&a);
+                            let scope = AnnotationScope::Part {
+                                count: c.clone(),
+                                part: p,
+                            };
+                            self.set_annotation(scope, key, &f, &n, a.value, a.literal);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

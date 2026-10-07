@@ -1,0 +1,122 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{child1}{inbook}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=b972f0f95f4c86e75c83bac4087d0c20}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={J},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {A}%
+      }
+      \list{publisher}{2}{%
+        {X}%
+        {Y}%
+      }
+      \strng{namehash}{b972f0f95f4c86e75c83bac4087d0c20}
+      \strng{fullhash}{b972f0f95f4c86e75c83bac4087d0c20}
+      \strng{fullhashraw}{b972f0f95f4c86e75c83bac4087d0c20}
+      \strng{bibnamehash}{b972f0f95f4c86e75c83bac4087d0c20}
+      \strng{authorbibnamehash}{b972f0f95f4c86e75c83bac4087d0c20}
+      \strng{authornamehash}{b972f0f95f4c86e75c83bac4087d0c20}
+      \strng{authorfullhash}{b972f0f95f4c86e75c83bac4087d0c20}
+      \strng{authorfullhashraw}{b972f0f95f4c86e75c83bac4087d0c20}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labeldatesource}{nodate}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{P}
+      \strng{crossref}{parent}
+      \field{title}{C1}
+      \true{nocite}
+    \endentry
+    \entry{parent}{book}{}{}
+      \true{morelocation}
+      \list{location}{1}{%
+        {A}%
+      }
+      \true{morepublisher}
+      \list{publisher}{2}{%
+        {X}%
+        {Y}%
+      }
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{P}
+      \true{nocite}
+    \endentry
+    \entry{child2}{inbook}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=b34c4f4e521753e1360888a5a1d178bf}{%
+           family={Roe},
+           familyi={R\bibinitperiod},
+           given={J},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {A}%
+      }
+      \list{publisher}{2}{%
+        {X}%
+        {Y}%
+      }
+      \strng{namehash}{b34c4f4e521753e1360888a5a1d178bf}
+      \strng{fullhash}{b34c4f4e521753e1360888a5a1d178bf}
+      \strng{fullhashraw}{b34c4f4e521753e1360888a5a1d178bf}
+      \strng{bibnamehash}{b34c4f4e521753e1360888a5a1d178bf}
+      \strng{authorbibnamehash}{b34c4f4e521753e1360888a5a1d178bf}
+      \strng{authornamehash}{b34c4f4e521753e1360888a5a1d178bf}
+      \strng{authorfullhash}{b34c4f4e521753e1360888a5a1d178bf}
+      \strng{authorfullhashraw}{b34c4f4e521753e1360888a5a1d178bf}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labeldatesource}{nodate}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{P}
+      \strng{crossref}{parent}
+      \field{title}{C2}
+      \true{nocite}
+    \endentry
+    \entry{solo}{misc}{}{}
+      \true{morelocation}
+      \list{location}{1}{%
+        {B}%
+      }
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{title}{S}
+      \true{nocite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

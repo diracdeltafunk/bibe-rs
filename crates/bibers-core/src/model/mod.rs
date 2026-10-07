@@ -343,4 +343,16 @@ pub struct SectionState {
     /// `@preamble` string read so far, cumulative across sections (`None`
     /// until the first one). The pipeline carries it from section to section.
     pub preamble: Option<Vec<String>>,
+    /// `Biber::Annotation` data of this section's entries (a global store
+    /// keyed by citekey in biber), in the dump's shape:
+    /// `{citekey: {field: {f: {name: {value, literal}}}, item: {f: {name:
+    /// {count: {value, literal}}}}, part: {f: {name: {count: {part: {value,
+    /// literal}}}}}}}`. `None` when absent from a (older) dump.
+    pub annotations: Option<PerlData>,
+    /// Groups of `(citekey, datafield)` whose list values are one shared
+    /// Perl array (biber copies list fields by reference on inheritance), so
+    /// an in-place change to one shows in all: the `.bbl` writer pops a
+    /// trailing `others` off the live array (05-B21). Groups of two or more,
+    /// sorted. `None` when absent from a (older) dump.
+    pub shared_lists: Option<Vec<Vec<(String, String)>>>,
 }

@@ -199,3 +199,23 @@ pub fn capture_entry_options(cfg: &Config, st: &mut SectionState) {
         .map(|(k, m)| (k, m.iter().map(|(o, v)| (o.clone(), v.to_json())).collect()))
         .collect();
 }
+
+/// Copy the annotations of the section's entries from the run-wide store
+/// (`ctx.run.annotations`, biber's global `$ANN`) into `st.annotations`, the
+/// per-section view the `.bbl` writer reads and the phase dumps contain.
+/// Phases that change annotations call this before returning.
+pub fn sync_annotations(ctx: &Ctx, st: &mut SectionState) {
+    st.annotations = Some(
+        ctx.run
+            .annotations
+            .to_dump(st.section.entries.keys().map(String::as_str)),
+    );
+}
+
+/// Install a section state's annotations (e.g. loaded from a biber phase
+/// dump) into the run-wide store.
+pub fn install_annotations(ctx: &mut Ctx, st: &SectionState) {
+    if let Some(a) = &st.annotations {
+        ctx.run.annotations.install_dump(a);
+    }
+}
