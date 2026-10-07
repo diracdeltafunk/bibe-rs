@@ -99,9 +99,6 @@ fn run_case(case: &Case) -> Outcome {
         mut log,
         ..
     } = s;
-    if cfg.biber.is_true("wraplines") {
-        return Outcome::Skip("--wraplines".into());
-    }
     let dm = cfg.dm.take().expect("data model");
     for st in &states {
         pipeline::install_entry_options(&mut cfg, st);

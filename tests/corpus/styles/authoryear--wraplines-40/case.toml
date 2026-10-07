@@ -1,0 +1,6 @@
+description = "\\nocite{*} over biblatex-examples.bib, standard style authoryear, --wraplines=40"
+source = "styles/authoryear with --wraplines=40 (M2 output package); expectations from O3"
+args = ["--noconf", "--wraplines=40", "authoryear.bcf"]
+outputs = ["authoryear.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:styles", "standard", "style:authoryear", "option:wraplines"]
