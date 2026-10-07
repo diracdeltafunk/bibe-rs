@@ -13,6 +13,7 @@
 //! | [`uri`] | `URI->new($s)->as_string` (URI 5.34), `URI::Escape` | – |
 //! | [`roman`] | `Text::Roman` 3.5 `isroman`/`roman2int` | – |
 //! | [`encoding`] | `Encode` single-byte encodings + aliases (`find_encoding`, `encode`, `decode`) | – |
+//! | [`textwrap`] | `Text::Wrap::wrap` 2024.001, `Text::Tabs` `expand`/`unexpand` | – |
 //! | [`sort`] | perl `cmp`/`sort` (code point order), `reduce_array` | – |
 //!
 //! Every function documents the biber 2.22 call sites it serves. Behaviour is
@@ -30,6 +31,7 @@ pub mod regex;
 pub mod roman;
 pub mod sort;
 mod tables;
+pub mod textwrap;
 pub mod truth;
 pub mod unicode;
 pub mod uri;

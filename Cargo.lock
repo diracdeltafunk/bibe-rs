@@ -39,6 +39,7 @@ dependencies = [
  "bibers-core",
  "bibers-testkit",
  "chrono",
+ "perl-compat",
  "serde_json",
  "tempfile",
 ]

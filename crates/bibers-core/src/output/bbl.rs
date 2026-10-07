@@ -25,6 +25,8 @@ use std::collections::{BTreeMap, HashMap};
 
 use md5::{Digest, Md5};
 use perl_compat::encoding::{Encoding, find_encoding};
+use perl_compat::grapheme::gcstring;
+use perl_compat::textwrap;
 use perl_compat::truth::PerlNum;
 use perl_compat::unicode::{Prop, is_perl_space, nfc, nfkd};
 use perl_compat::{lc, looks_like_number, perl_truthy};
@@ -585,7 +587,30 @@ fn printfield(ctx: &Ctx, dm: &DataModel, e: &Entry, field: &str, s: &str) -> Str
         }
         s = o;
     }
-    let _ = ctx;
+    // --wraplines: Text::Wrap with `$columns` = the option value.
+    let cols = ctx
+        .cfg
+        .biber
+        .get_str("wraplines")
+        .filter(|w| perl_truthy(w))
+        .map(|w| PerlNum::parse(w).as_f64() as i64);
+    if let Some(cols) = cols {
+        // 16 is the length of '      \field{}{}' or '      \strng{}{}'
+        let len = 16 + gcstring::length(outfield) as i64 + gcstring::length(&s) as i64;
+        if len > 2 * cols {
+            return format!(
+                "      \\{field_type}{{{outfield}}}{{%\n{}%\n      }}\n",
+                textwrap::wrap(cols, "      ", "      ", &s)
+            );
+        } else if len > cols {
+            return textwrap::wrap(
+                cols,
+                "      ",
+                "      ",
+                &format!("\\{field_type}{{{outfield}}}{{{s}}}"),
+            ) + "\n";
+        }
+    }
     format!("      \\{field_type}{{{outfield}}}{{{s}}}\n")
 }
 
@@ -1361,7 +1386,7 @@ fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
                 ctx.log,
                 "Output encoding '{name}' is not supported (docs/compat.md DC-034)"
             )?;
-            Ok(Encoding::Utf8)
+            Ok(Encoding::UTF8)
         }
     }
 }

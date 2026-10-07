@@ -22,7 +22,10 @@ use crate::tables::encodings::{ALIASES, ByteEncoding, ENCODINGS};
 
 /// An encoding found by [`find_encoding`].
 #[derive(Clone, Copy)]
-pub enum Encoding {
+pub struct Encoding(Inner);
+
+#[derive(Clone, Copy)]
+enum Inner {
     /// UTF-8 (`utf8`/`UTF-8` in Perl).
     Utf8,
     /// A single-byte encoding.
@@ -40,7 +43,7 @@ impl std::fmt::Debug for Encoding {
 pub fn find_encoding(name: &str) -> Option<Encoding> {
     let l = name.to_ascii_lowercase();
     if matches!(l.as_str(), "utf8" | "utf-8" | "utf-8-strict") {
-        return Some(Encoding::Utf8);
+        return Some(Encoding::UTF8);
     }
     let canon = ALIASES
         .binary_search_by(|(a, _)| (*a).cmp(l.as_str()))
@@ -49,15 +52,18 @@ pub fn find_encoding(name: &str) -> Option<Encoding> {
     ENCODINGS
         .iter()
         .find(|e| e.name == canon)
-        .map(Encoding::Byte)
+        .map(|b| Encoding(Inner::Byte(b)))
 }
 
 impl Encoding {
+    /// UTF-8.
+    pub const UTF8: Encoding = Encoding(Inner::Utf8);
+
     /// The canonical Encode name (`$enc->name`).
     pub fn name(&self) -> &'static str {
-        match self {
-            Encoding::Utf8 => "utf-8-strict",
-            Encoding::Byte(b) => b.name,
+        match self.0 {
+            Inner::Utf8 => "utf-8-strict",
+            Inner::Byte(b) => b.name,
         }
     }
 
@@ -70,9 +76,9 @@ impl Encoding {
 
     /// Can `c` be encoded?
     pub fn can_encode(&self, c: char) -> bool {
-        match self {
-            Encoding::Utf8 => true,
-            Encoding::Byte(b) => Self::byte(b, c).is_some(),
+        match self.0 {
+            Inner::Utf8 => true,
+            Inner::Byte(b) => Self::byte(b, c).is_some(),
         }
     }
 
@@ -85,9 +91,9 @@ impl Encoding {
     /// Encode as a `:encoding(…)` output layer does (`FB_PERLQQ`):
     /// unmappable characters become `\x{XXXX}` text.
     pub fn encode_perlqq(&self, s: &str) -> Vec<u8> {
-        match self {
-            Encoding::Utf8 => s.as_bytes().to_vec(),
-            Encoding::Byte(b) => {
+        match self.0 {
+            Inner::Utf8 => s.as_bytes().to_vec(),
+            Inner::Byte(b) => {
                 let mut out = Vec::with_capacity(s.len());
                 for c in s.chars() {
                     match Self::byte(b, c) {
@@ -103,9 +109,9 @@ impl Encoding {
     /// Decode bytes (`decode($enc, $bytes)`, default check: undefined bytes
     /// and malformed UTF-8 become U+FFFD).
     pub fn decode(&self, bytes: &[u8]) -> String {
-        match self {
-            Encoding::Utf8 => String::from_utf8_lossy(bytes).into_owned(),
-            Encoding::Byte(b) => bytes
+        match self.0 {
+            Inner::Utf8 => String::from_utf8_lossy(bytes).into_owned(),
+            Inner::Byte(b) => bytes
                 .iter()
                 .map(|x| char::from_u32(b.decode[*x as usize]).unwrap_or('\u{FFFD}'))
                 .collect(),
