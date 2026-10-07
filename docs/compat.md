@@ -30,6 +30,7 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | DC-008 | `-c ignoreChar=…` and other construction-only collation options → crash | Applied when the collator is constructed | BB-010 | planned |
 | DC-009 | Packaged binary dies for ja/ko/zh sort locales | Supported | BB-011 | planned |
 | DC-024 | `-c level=5` (out-of-range collation level) crashes with out-of-memory, leaving an empty `.bbl` | ERROR naming the invalid option value, exit 2 | BB-120 | implemented (ucollate returns an error) |
+| DC-038 | An invalid user regex in a sourcemap makes Perl die ("Unmatched ( in regex", …) | ERROR naming the map step and the regex, exit 2 | — | implemented (sourcemap) |
 | DC-029 | btparse-level crashes and process exits on malformed input (BB-123, 125, 126, 127, 128): SEGV, abort, exit, mangled error text | An ERROR naming the user's file and line (with the literal offending text), then biber's normal error handling. *Whether parsing continues with the next entry is decided in M2.* | BB-123, 125–128 | planned (btparse reports these as `Item::Stop{fatal}` / anomalies) |
 | DC-035 | `--isbn10` on a 979-prefix ISBN crashes | ISBN left in its ISBN-13 form, with a WARN | BB-130 | planned |
 
@@ -52,7 +53,8 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-015 | Order of dynamic sets under `\nocite{*}` | `.bcf` declaration order | BB-062 | planned |
 | DC-016 | Order of deferred WARN messages in `.blg`/stdout | Emission order (deterministic) | BB-065 | planned |
 | DC-017 | Which cycle is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | planned |
-| DC-018 | `$MAPUNIQ` values in sourcemaps (time-based in biber, so the `.bbl` differs on every run) | Deterministic values: a per-run counter rendered in `suniqid`'s alphabet, so keys are unique within a run and identical across runs. *Exact format TBD when implemented.* | BB-113 | planned |
+| DC-037 | Order in which entries created by sourcemap `entry_new`/`entry_clone` steps are instantiated (`%newentries` hash order) | Creation order | — | implemented (sourcemap) |
+| DC-018 | `$MAPUNIQ` values in sourcemaps (time-based in biber, so the `.bbl` differs on every run) | Deterministic values: the n-th `$MAPUNIQ` of a run is `base62(10^16 + n)` in `suniqid`'s alphabet (`0-9a-zA-Z`, nine characters), so keys are unique within a run and identical across runs. | BB-113 | implemented (sourcemap) |
 
 ### 1d. Unavoidable representation differences
 
@@ -106,7 +108,7 @@ Some silent biber behaviours are judged to be design decisions rather than bugs 
 | DC-020 | `--output-format=bblxml` (deprecated upstream) | Error: unsupported output format, exit 2 | planned |
 | DC-021 | `--output-format=dot`, `--dot-include` (deprecated upstream) | Error: unsupported output format, exit 2 | planned |
 | DC-022 | `--output-format=bibjson` (accepted but unimplemented upstream) | Error: unsupported output format, exit 2 | planned |
-| DC-023 | Perl code in sourcemap replacement strings (`@{[ … ]}`, `${\ … }`). biber evaluates these in a Safe compartment. | Not executed. bibers warns, and inserts the stringified regex `(?^u:…)` exactly as biber does when evaluation fails. Plain interpolation (`$1`, `\u`, `\L…\E`, escapes) is fully supported. | planned |
+| DC-023 | Perl code in sourcemap replacement strings (`@{[ … ]}`, `${\ … }`). biber evaluates these in a Safe compartment. | Not executed. bibers warns, and inserts the stringified regex `(?^u:…)` exactly as biber does when evaluation fails. Plain interpolation (`$1`, `\u`, `\L…\E`, escapes) is fully supported. | implemented (sourcemap) |
 | DC-036 | User regexes (sourcemaps, `noinit`/`nosort`/`nolabel`/`nonamestring`, `xsvsep`) are Perl regexes | Run on PCRE2 behind a Perl-syntax translation layer. A few Perl-only constructs are unsupported and give an ERROR naming the construct: `\N{NAME}` (named characters; `\N{U+…}` works), `\b{gcb}`/`\b{wb}`-style boundaries, `/i` multi-character case folds (ß ↔ ss), `$<`/`$(` in replacements. Verified on 17,933 Perl-vs-PCRE2 differential cases. | implemented (perl-compat) |
 
 ## 4. Temporarily unsupported (deferred to milestone M4)

@@ -37,6 +37,7 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-127 | C | btparse | `@misc"x"` makes libbtparse exit the whole process. | M1 btparse |
 | BB-128 | C | Text::BibTeX `split_list` | Aborts when a piece would be empty (`" and B"`, `"A and "`, two delimiters two spaces apart). Unreachable from normal fields but reachable through sourcemaps. | M1 btparse |
 | BB-130 | V | Output/bbl.pm / Business::ISBN | `--isbn10` with any 978-incompatible ISBN (979 prefix) crashes biber (exit 102/25, empty `.bbl`): `as_isbn10` returns undef and biber calls `->isbn` on it. | M1 perl-compat |
+| BB-133 | C | Biber.pm:4756 (`get_dependents`) with sourcemap `entry_null` | If a sourcemap creates an entry that ends up in citekeys (via `entry_nocite`, or in any `\nocite{*}` section) and a later step drops that entry with `entry_null`, biber crashes: "Can't call method "get_field" on an undefined value at Biber.pm line 4756". | M2 sourcemap |
 
 ## 2. Data loss / destructive behaviour
 
@@ -180,6 +181,7 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-129 | C | Text::BibTeX quirks passed through by biber | (a) In "First von Last" splitting the run of lowercase words ignores commas (`a, b` → von `a b`, given `b`); (b) a `@string` whose value refers to itself expands twice (`m = "a" # m # "b"` → `aabb`); (c) the lowercase test for von detection uses Unicode 6.1 tables; (d) any `@` followed by no type name (`@{`, `@,`, `@123`) silently ends reading of that file. | M1 btparse |
 | BB-131 | C | Constants.pm ISMN constraint / Business::ISMN | The ISMN data-model check never fails: `is_valid` returns -1/-3 for invalid input, both Perl-true. Also, Business::ISMN ranges with an undef upper bound never match. | M1 perl-compat |
 | BB-132 | C (library) | Text::Roman `isroman` (used by `rangelen`) | `isroman(" ")` and `isroman("X I")` are true (its class `[@RSN]` accepts spaces), but `roman2int` returns undef for them, so a range like `X I-XV` likely yields an undef length. Effect on biber output suspected, not yet shown. | M1 perl-compat |
+| BB-134 | C | bibtex.pm `map_foreach` | `map_foreach="<field>"` on an entry lacking that field loops over the literal field *name* as if it were the value; and a `$MAPLOOP` value of `"0"` is never substituted (Perl truthiness). Both reproduced by bibers. | M2 sourcemap |
 
 ## 7. Performance bugs (output-neutral; worth reporting with numbers)
 
