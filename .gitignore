@@ -6,8 +6,8 @@
 /scratch/
 
 # Source-built Perl oracle (O3), built by tools/oracle/build-perl-oracle.sh
-/vendor/perl/
-/vendor/perl-build/
+/vendor/perl
+/vendor/perl-build
 
 # macOS
 .DS_Store

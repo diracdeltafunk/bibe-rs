@@ -61,6 +61,8 @@ pub struct Config {
     pub quirks: Quirks,
     /// The data model (built in `process_setup`).
     pub dm: Option<DataModel>,
+    /// Run-global source map state (`$MAPUNIQVAL`, the `$MAPUNIQ` counter).
+    pub sourcemap_run: crate::pipeline::sourcemap::MapRunState,
 }
 
 /// A command-line option value after `GetOptions` and bin/biber's
