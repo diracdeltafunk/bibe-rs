@@ -30,6 +30,114 @@ const EXCLUDED: &[(&str, &str)] = &[
     ("bugs/bb-062-dynamic-sets-nocite-order", "DC-015"),
 ];
 
+/// Annotations are global module state in biber (not in the phase dumps):
+/// check the store against the `\annotation` lines of biber's `.bbl`.
+#[test]
+fn annotations_match_bbl() {
+    use bibers::run::{SetupResult, setup};
+    use bibers_core::env::Env;
+    use bibers_core::pipeline::{Ctx, fetch};
+    let root = bibers_testkit::corpus_root();
+    for id in [
+        "biblatex-examples/97-annotations",
+        "bugs/bb-036-annotation-literal-split",
+    ] {
+        let case = bibers_testkit::discover(&root)
+            .unwrap()
+            .into_iter()
+            .find(|c| c.id == id)
+            .unwrap();
+        let work = tempfile::tempdir().unwrap();
+        for f in case.input_files(&root).unwrap() {
+            std::fs::copy(&f, work.path().join(f.file_name().unwrap())).unwrap();
+        }
+        let env = Env::isolated(work.path());
+        let mut args = case.spec.args.clone();
+        args.splice(0..0, ["-q".to_string(), "-q".to_string()]);
+        let SetupResult::Ready(s) = setup(&args, &env) else {
+            panic!("setup failed for {id}")
+        };
+        let bibers::run::Setup {
+            mut cfg,
+            doc,
+            mut log,
+            ..
+        } = *s;
+        let dm = cfg.dm.take().unwrap();
+        let mut ctx = Ctx {
+            cfg: &mut cfg,
+            dm: &dm,
+            doc: &doc,
+            log: &mut log,
+            env: &env,
+            run: Default::default(),
+        };
+        let secs: Vec<String> = doc
+            .sorted_sections()
+            .iter()
+            .map(|s| s.number.clone())
+            .collect();
+        for sec in secs {
+            let mut st = fetch::init_section(&mut ctx, &sec).unwrap();
+            fetch::fetch_data(&mut ctx, &mut st).unwrap();
+        }
+        let a = &ctx.run.annotations;
+        let lit = |l: bool| if l { "1" } else { "0" };
+        let mut got = std::collections::BTreeSet::new();
+        for m in a.field.values() {
+            for (f, names) in m {
+                for (n, x) in names {
+                    let v = x.value.clone().unwrap_or_default();
+                    got.insert(format!(
+                        "\\annotation{{field}}{{{f}}}{{{n}}}{{}}{{}}{{{}}}{{{v}}}",
+                        lit(x.literal)
+                    ));
+                }
+            }
+        }
+        for m in a.item.values() {
+            for (f, names) in m {
+                for (n, counts) in names {
+                    for (c, x) in counts {
+                        let v = x.value.clone().unwrap_or_default();
+                        got.insert(format!(
+                            "\\annotation{{item}}{{{f}}}{{{n}}}{{{c}}}{{}}{{{}}}{{{v}}}",
+                            lit(x.literal)
+                        ));
+                    }
+                }
+            }
+        }
+        for m in a.part.values() {
+            for (f, names) in m {
+                for (n, counts) in names {
+                    for (c, parts) in counts {
+                        for (p, x) in parts {
+                            let v = x.value.clone().unwrap_or_default();
+                            got.insert(format!(
+                                "\\annotation{{part}}{{{f}}}{{{n}}}{{{c}}}{{{p}}}{{{}}}{{{v}}}",
+                                lit(x.literal)
+                            ));
+                        }
+                    }
+                }
+            }
+        }
+        let mut want = std::collections::BTreeSet::new();
+        for e in std::fs::read_dir(case.expected_dir()).unwrap().flatten() {
+            if e.path().extension().is_some_and(|x| x == "bbl") {
+                for l in std::fs::read_to_string(e.path()).unwrap().lines() {
+                    let l = l.trim();
+                    if l.starts_with("\\annotation{") {
+                        want.insert(l.to_string());
+                    }
+                }
+            }
+        }
+        assert_eq!(got, want, "{id}");
+    }
+}
+
 #[test]
 fn fetch_data_matches_biber() {
     let cases = common::phase::cases_with_prefix(&[
