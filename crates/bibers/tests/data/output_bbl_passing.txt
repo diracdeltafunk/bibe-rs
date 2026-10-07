@@ -98,6 +98,7 @@ bugs/bb-073-fastsort-warns
 bugs/bb-075-debug-btparse-not-fatal
 bugs/bb-078-month-not-integer-warning
 bugs/bb-080-isbn-checksum
+bugs/others-pop-shared-list
 ported/annotations-1
 ported/basic-misc-1
 ported/basic-misc-2
@@ -115,9 +116,15 @@ ported/dateformats-5
 ported/dateformats-6
 ported/dm-constraints-1
 ported/encoding-1
+ported/encoding-10
 ported/encoding-2
+ported/encoding-3
 ported/encoding-4
 ported/encoding-5
+ported/encoding-6
+ported/encoding-7
+ported/encoding-8
+ported/encoding-9
 ported/extradate-1
 ported/extradate-2
 ported/extradate-3
@@ -143,6 +150,7 @@ ported/labelalphaname-1
 ported/labelname-1
 ported/maps-1
 ported/names-1
+ported/names-2
 ported/names_x-1
 ported/options-1
 ported/related-entries-1
@@ -328,6 +336,7 @@ styles/authoryear--uniquename-init
 styles/authoryear--uniquename-minfull
 styles/authoryear--uniquename-mininit
 styles/authoryear--useprefix-true
+styles/authoryear--wraplines-40
 styles/authoryear-comp
 styles/authoryear-ibid
 styles/authoryear-icomp
@@ -389,7 +398,11 @@ tdata/dateformats
 tdata/dm-constraints
 tdata/encoding1-latin9
 tdata/encoding2
+tdata/encoding3-latin1-cp1252
+tdata/encoding4-latin2-latin1
+tdata/encoding4-latin2-latin3
 tdata/encoding5
+tdata/encoding5-latin1
 tdata/encoding6
 tdata/encoding6-safechars
 tdata/encoding6-safecharsset-full

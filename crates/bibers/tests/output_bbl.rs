@@ -45,28 +45,13 @@ fn deferred(case: &Case) -> Option<&'static str> {
     None
 }
 
-fn run_case(case: &Case) -> Outcome {
-    if let Some(r) = deferred(case) {
-        return Outcome::Skip(r.into());
-    }
-    let Some(bbl) = case
-        .spec
-        .outputs
-        .iter()
-        .find(|o| o.ends_with(".bbl") || *o == "-")
-    else {
-        return Outcome::Skip("no .bbl output".into());
-    };
-    let Ok(expected) = std::fs::read(case.expected_dir().join(bbl)) else {
-        return Outcome::Skip("no expected .bbl".into());
-    };
-    if expected.is_empty() {
-        // biber stopped before writing any output.
-        return Outcome::Skip("empty expected .bbl".into());
-    }
+/// Render biber's final section states for `case` with bibers' writer
+/// (setup with the case's arguments, `extra_args` first). Returns the
+/// output bytes and the output encoding name.
+fn render_final_states(case: &Case, extra_args: &[&str]) -> Result<(Vec<u8>, String), String> {
     let dumps = match phase_dumps(case, &corpus_root()) {
         Ok(d) => d,
-        Err(e) => return Outcome::Fail(format!("phase dumps: {e}")),
+        Err(e) => return Err(format!("phase dumps: {e}")),
     };
     // The final state of each section, in processing order.
     let mut last: BTreeMap<String, usize> = BTreeMap::new();
@@ -81,17 +66,21 @@ fn run_case(case: &Case) -> Outcome {
     for i in idx {
         let v = match dumps[i].state() {
             Ok(v) => v,
-            Err(e) => return Outcome::Fail(format!("reading dump: {e}")),
+            Err(e) => return Err(format!("reading dump: {e}")),
         };
         match load_state(&v) {
             Ok(st) => states.push(st),
-            Err(e) => return Outcome::Fail(format!("load_state: {e}")),
+            Err(e) => return Err(format!("load_state: {e}")),
         }
     }
 
-    let (_work, env, s) = match common::phase::setup_case(case) {
+    let mut setup_for = case.clone();
+    for (i, a) in extra_args.iter().enumerate() {
+        setup_for.spec.args.insert(i, a.to_string());
+    }
+    let (_work, env, s) = match common::phase::setup_case(&setup_for) {
         Ok(x) => x,
-        Err(code) => return Outcome::Fail(format!("bibers setup exited with {code}")),
+        Err(code) => return Err(format!("bibers setup exited with {code}")),
     };
     let bibers::run::Setup {
         mut cfg,
@@ -113,15 +102,41 @@ fn run_case(case: &Case) -> Outcome {
     let processed = Processed { sections: states };
     let text = match bibers_core::output::bbl::render(&mut ctx, &processed) {
         Ok(Some(t)) => t,
-        Ok(None) => return Outcome::Fail("render returned None".into()),
-        Err(_) => return Outcome::Fail("render: fatal error".into()),
+        Ok(None) => return Err("render returned None".into()),
+        Err(_) => return Err("render: fatal error".into()),
     };
     let bytes = match bibers_core::output::bbl::encode_output(&mut ctx, &text) {
         Ok(b) => b,
-        Err(_) => return Outcome::Fail("encode_output: fatal error".into()),
+        Err(_) => return Err("encode_output: fatal error".into()),
+    };
+    let enc_name = bibers_core::output::bbl::output_encoding_name(&ctx);
+    Ok((bytes, enc_name))
+}
+
+fn run_case(case: &Case) -> Outcome {
+    if let Some(r) = deferred(case) {
+        return Outcome::Skip(r.into());
+    }
+    let Some(bbl) = case
+        .spec
+        .outputs
+        .iter()
+        .find(|o| o.ends_with(".bbl") || *o == "-")
+    else {
+        return Outcome::Skip("no .bbl output".into());
+    };
+    let Ok(expected) = std::fs::read(case.expected_dir().join(bbl)) else {
+        return Outcome::Skip("no expected .bbl".into());
+    };
+    if expected.is_empty() {
+        // biber stopped before writing any output.
+        return Outcome::Skip("empty expected .bbl".into());
+    }
+    let (bytes, enc_name) = match render_final_states(case, &[]) {
+        Ok(x) => x,
+        Err(e) => return Outcome::Fail(e),
     };
     // Compare as text, decoded from the output encoding.
-    let enc_name = bibers_core::output::bbl::output_encoding_name(&ctx);
     let enc = perl_compat::encoding::find_encoding(&enc_name).expect("known encoding");
     let expected = enc.decode(&expected).into_bytes();
     let actual = enc.decode(&bytes).into_bytes();
@@ -231,4 +246,43 @@ fn bbl_writer_matches_biber() {
         regressions.is_empty(),
         "cases in {RATCHET} no longer render identically: {regressions:?}"
     );
+}
+
+/// The output-related quirk switches change what they should
+/// (`--fix-quirks`, docs/compat.md §2).
+#[test]
+fn quirk_switches() {
+    if !o3_available() {
+        eprintln!("skipping: oracle O3 not built");
+        return;
+    }
+    let text = |id: &str, extra: &[&str]| {
+        let (b, _) = render_final_states(&common::phase::find_case(id), extra).expect("renders");
+        String::from_utf8(b).unwrap()
+    };
+    // BB-015
+    let on = text("bugs/bb-015-bbl-comma-cleanup", &[]);
+    let off = text(
+        "bugs/bb-015-bbl-comma-cleanup",
+        &["--fix-quirks=bbl-comma-cleanup"],
+    );
+    assert!(on.contains("\\field{title}{Foo {bar}}"));
+    assert!(off.contains("\\field{title}{Foo {bar,}}"));
+    assert!(!off.contains(",}}%"), "structural commas are still cleaned");
+    // BB-016
+    let on = text("bugs/bb-016-rangelen-zero-digit", &[]);
+    let off = text(
+        "bugs/bb-016-rangelen-zero-digit",
+        &["--fix-quirks=rangelen-zero-digit"],
+    );
+    assert_ne!(on, off);
+    // BB-028: with the quirk fixed every entry gets its updatedate flags.
+    let n = |s: &str| s.matches("\\true{updatedatecirca}").count();
+    let on = text("bugs/bb-028-datefield-helper-mutation", &[]);
+    let off = text(
+        "bugs/bb-028-datefield-helper-mutation",
+        &["--fix-quirks=datefield-helper-mutation"],
+    );
+    assert_eq!(n(&on), 1);
+    assert!(n(&off) > 1);
 }
