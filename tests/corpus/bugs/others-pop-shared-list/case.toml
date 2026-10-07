@@ -1,0 +1,5 @@
+description = "05-B21: the .bbl writer pops a trailing 'others' off the live list array, which crossref children share with their parent, so only the first entry output gets \\true{more<list>}"
+source = "written for the M2 output package (docs/research/05 B21)"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:bugs", "bug:05-B21"]

@@ -112,6 +112,7 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         preamble: None,
         // No entries yet, so no annotations.
         annotations: Some(serde_json::Value::Object(Default::default())),
+        shared_lists: Some(Vec::new()),
     })
 }
 

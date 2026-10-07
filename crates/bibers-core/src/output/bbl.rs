@@ -384,6 +384,59 @@ struct Writer {
     /// `$dmh->{datefields}`, which the date-meta loop mutates in place
     /// (BB-028).
     datefields: Vec<String>,
+    /// The current section's shared list arrays: `(citekey, field)` →
+    /// group, and each group's live value (B21).
+    shared: HashMap<(String, String), usize>,
+    shared_vals: Vec<Option<Vec<String>>>,
+}
+
+impl Writer {
+    fn start_section(&mut self, st: &SectionState) {
+        self.shared.clear();
+        self.shared_vals.clear();
+        for (i, g) in st.shared_lists.iter().flatten().enumerate() {
+            for m in g {
+                self.shared.insert(m.clone(), i);
+            }
+            self.shared_vals.push(None);
+        }
+    }
+
+    /// Replace the live value of a shared list.
+    fn set_live(&mut self, key: &str, field: &str, v: Vec<String>) {
+        if let Some(&g) = self.shared.get(&(key.to_string(), field.to_string())) {
+            self.shared_vals[g] = Some(v);
+        }
+    }
+
+    /// The list to output for `key`'s `field` (value `orig` in the
+    /// state), after biber's `pop` of a trailing `others` (bbl.pm:335,
+    /// 567), which changes the live array, shared with other entries when
+    /// the field was inherited (05-B21). Returns whether it popped.
+    fn pop_others(
+        &mut self,
+        key: &str,
+        field: &str,
+        orig: &[String],
+        others: &str,
+    ) -> (bool, Vec<String>) {
+        let is_others = |l: &[String]| l.last().map(|x| lc(x)).unwrap_or_default() == others;
+        match self.shared.get(&(key.to_string(), field.to_string())) {
+            Some(&g) => {
+                let live = self.shared_vals[g].get_or_insert_with(|| orig.to_vec());
+                let popped = is_others(live);
+                if popped {
+                    live.pop();
+                }
+                (popped, live.clone())
+            }
+            None => {
+                let popped = is_others(orig);
+                let n = orig.len() - usize::from(popped);
+                (popped, orig[..n].to_vec())
+            }
+        }
+    }
 }
 
 fn add_names(
@@ -722,14 +775,12 @@ fn set_output_entry(
         let Some(Value::List(lf)) = be.get_field(listfield) else {
             continue;
         };
-        let mut lf: &[String] = lf;
-        // B21: biber pops `others` off the live list.
-        if lf.last().map(|l| lc(l)).unwrap_or_default() == others {
+        let (popped, lf) = w.pop_others(key, listfield, lf, &others);
+        if popped {
             text.push_str(&format!("      \\true{{more{listfield}}}\n"));
-            lf = &lf[..lf.len() - 1];
         }
         text.push_str(&format!("      \\list{{{listfield}}}{{{}}}{{%\n", lf.len()));
-        for f in lf {
+        for f in &lf {
             text.push_str(&format!("        {{{f}}}%\n"));
         }
         text.push_str("      }\n");
@@ -961,30 +1012,35 @@ fn set_output_entry(
         let Some(Value::List(vlf)) = be.get_field(vlist) else {
             continue;
         };
-        let mut vlf: &[String] = vlf;
-        if vlf.last().map(|l| lc(l)).unwrap_or_default() == others {
+        let (popped, vlf) = w.pop_others(key, vlist, vlf, &others);
+        if popped {
             text.push_str(&format!("      \\true{{more{vlist}}}\n"));
-            vlf = &vlf[..vlf.len() - 1];
         }
         let total = vlf.len();
         let is_uri = dm.get_datatype(vlist) == Some("uri");
         if is_uri {
             text.push_str(&format!("      \\lverb{{{vlist}raw}}{{{total}}}\n"));
-            for f in vlf {
+            for f in &vlf {
                 text.push_str(&format!("      \\lverb {f}\n"));
             }
             text.push_str("      \\endlverb\n");
         }
         text.push_str(&format!("      \\lverb{{{vlist}}}{{{total}}}\n"));
-        for f in vlf {
+        let mut enc = Vec::with_capacity(vlf.len());
+        for f in &vlf {
             let f = if is_uri {
                 uri_string(ctx, f)?
             } else {
                 f.clone()
             };
             text.push_str(&format!("      \\lverb {f}\n"));
+            enc.push(f);
         }
         text.push_str("      \\endlverb\n");
+        // The loop variable aliases the live array: URIs stay encoded.
+        if is_uri {
+            w.set_live(key, vlist, enc);
+        }
     }
 
     if val_truthy(be.get_field("keywords")) {
@@ -1298,10 +1354,13 @@ fn template_locale(ctx: &Ctx, name: &str) -> Option<String> {
 pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fatal> {
     let mut w = Writer {
         datefields: ctx.dm.helpers.datefields.clone(),
+        shared: HashMap::new(),
+        shared_vals: Vec::new(),
     };
     // create_output_section, per section in processing order.
     let mut sections: Vec<SectionOut> = Vec::new();
     for st in &processed.sections {
+        w.start_section(st);
         let mut entries = HashMap::new();
         for k in &st.section.citekeys {
             if let Some(t) = set_output_entry(ctx, &mut w, st, k)? {

@@ -321,6 +321,23 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
     };
     let config_state = l.internalise(st.get("config_state").unwrap_or(&J::Null));
     let annotations = st.get("annotations").cloned();
+    let shared_lists = st.get("shared_lists").and_then(J::as_array).map(|groups| {
+        groups
+            .iter()
+            .map(|g| {
+                g.as_array()
+                    .map(|m| {
+                        m.iter()
+                            .filter_map(|p| {
+                                let p = p.as_array()?;
+                                Some((s(p.first()?)?, s(p.get(1)?)?))
+                            })
+                            .collect()
+                    })
+                    .unwrap_or_default()
+            })
+            .collect()
+    });
     section.names = l.arena;
     Ok(SectionState {
         section,
@@ -329,6 +346,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
         entry_options,
         preamble,
         annotations,
+        shared_lists,
     })
 }
 
@@ -639,6 +657,22 @@ pub fn dump_state(st: &SectionState) -> J {
     );
     if let Some(a) = &st.annotations {
         out.insert("annotations".into(), a.clone());
+    }
+    if let Some(g) = &st.shared_lists {
+        out.insert(
+            "shared_lists".into(),
+            J::Array(
+                g.iter()
+                    .map(|m| {
+                        J::Array(
+                            m.iter()
+                                .map(|(k, f)| J::Array(vec![k.clone().into(), f.clone().into()]))
+                                .collect(),
+                        )
+                    })
+                    .collect(),
+            ),
+        );
     }
     J::Object(out)
 }

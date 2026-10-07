@@ -7,7 +7,7 @@ package BiberPhaseDump;
 # and set BIBERS_DUMP_DIR=<dir>. After every wrapped phase method returns, a
 # file <dir>/<NNN>-s<section>-<phase>[-<list>].json is written (plus an `init`
 # dump of the section as set up from the .bcf, just before fetch_data) containing
-#   { phase, section, list, state: {section, datalists, config_state, entry_options, preamble, annotations} }
+#   { phase, section, list, state: {section, datalists, config_state, entry_options, preamble, annotations, shared_lists} }
 #
 # Biber itself runs completely normally; the dumper only reads.
 #
@@ -139,6 +139,26 @@ sub annotations {
   return \%out;
 }
 
+# Plain array values that several entry data fields share (biber copies
+# list fields by reference on inheritance, so an in-place change to one,
+# like the .bbl writer popping `others`, shows in all): groups of
+# [citekey, field], each sorted, only groups of two or more.
+sub shared_lists {
+  my $section = shift;
+  my %by;
+  my $be = $section->{bibentries} // {};
+  for my $key (sort keys %$be) {
+    my $df = $be->{$key}{datafields} // {};
+    for my $f (sort keys %$df) {
+      my $v = $df->{$f};
+      next unless ref($v) eq 'ARRAY';
+      push @{ $by{refaddr($v)} }, [$key, $f];
+    }
+  }
+  my @groups = grep { @$_ > 1 } values %by;
+  return [ sort { $a->[0][0] cmp $b->[0][0] or $a->[0][1] cmp $b->[0][1] } @groups ];
+}
+
 sub dump_state {
   my ($biber, $phase, $list) = @_;
   return unless $dir;
@@ -158,6 +178,7 @@ sub dump_state {
     # Biber::Annotation data of this section's entries (global in biber,
     # keyed by citekey).
     annotations  => annotations($section),
+    shared_lists => shared_lists($section),
   };
   # Number ids per dump (not per run), so a dump's ids depend only on the
   # state it contains and can be reproduced from that state alone.
