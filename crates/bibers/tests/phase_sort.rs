@@ -7,13 +7,17 @@ mod common;
 
 use common::phase::{cases_with_prefix, check_phase};
 
-/// Cases excluded from a suite, with the reason.
-const SKIP: &[(&str, &str)] = &[];
+/// Cases (id prefixes) excluded from a suite, with the reason.
+const SKIP: &[(&str, &str)] = &[
+    ("ported/tool-", "tool mode is deferred (DC-030)"),
+    ("ported/bibtex-output-", "bibtex output is deferred (DC-030)"),
+    ("ported/full-bibtex-", "bibtex output is deferred (DC-030)"),
+];
 
 fn cases(prefixes: &[&str]) -> Vec<String> {
     cases_with_prefix(prefixes)
         .into_iter()
-        .filter(|c| !SKIP.iter().any(|(s, _)| s == c))
+        .filter(|c| !SKIP.iter().any(|(s, _)| c.starts_with(s)))
         .collect()
 }
 
@@ -59,5 +63,5 @@ macro_rules! suite {
 suite!(tdata, "tdata/");
 suite!(biblatex_examples, "biblatex-examples/");
 suite!(styles, "styles/");
-suite!(ported_sort, "ported/sort");
+suite!(ported, "ported/");
 suite!(bugs, "bugs/");
