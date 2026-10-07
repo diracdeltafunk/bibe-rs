@@ -24,6 +24,7 @@
 use std::collections::{BTreeMap, HashMap};
 
 use md5::{Digest, Md5};
+use perl_compat::encoding::{Encoding, find_encoding};
 use perl_compat::truth::PerlNum;
 use perl_compat::unicode::{Prop, is_perl_space, nfc, nfkd};
 use perl_compat::{lc, looks_like_number, perl_truthy};
@@ -1341,6 +1342,40 @@ fn output_lists<'a>(ctx: &Ctx, st: &'a SectionState) -> Vec<&'a DataList> {
     out
 }
 
+/// The `output_encoding` option as given (`UTF-8` after `normalise_utf8`).
+pub fn output_encoding_name(ctx: &Ctx) -> String {
+    ctx.cfg
+        .biber
+        .get_str("output_encoding")
+        .unwrap_or("UTF-8")
+        .to_string()
+}
+
+/// The output encoding (DC-034: single-byte encodings and UTF-8 only).
+fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
+    let name = output_encoding_name(ctx);
+    match find_encoding(&name) {
+        Some(e) => Ok(e),
+        None => {
+            biber_error!(
+                ctx.log,
+                "Output encoding '{name}' is not supported (docs/compat.md DC-034)"
+            )?;
+            Ok(Encoding::Utf8)
+        }
+    }
+}
+
+/// The bytes to write for the rendered `.bbl` text: encoded as a Perl
+/// `:encoding(<output_encoding>)` layer would (unmappable characters as
+/// `\x{XXXX}`).
+pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
+    if output_encoding_name(ctx) == "UTF-8" {
+        return Ok(text.as_bytes().to_vec());
+    }
+    Ok(find_output_encoding(ctx)?.encode_perlqq(text))
+}
+
 /// The locale of a sorting template (for the sortinit collator).
 fn template_locale(ctx: &Ctx, name: &str) -> Option<String> {
     match ctx.cfg.blx.global("sortingtemplate") {
@@ -1371,7 +1406,13 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     }
 
     let safechars = ctx.cfg.biber.is_true("output_safechars");
-    let recoder = safechars.then(|| {
+    let outenc = output_encoding_name(ctx);
+    let enc = if outenc == "UTF-8" {
+        None
+    } else {
+        Some(find_output_encoding(ctx)?)
+    };
+    let recoder = (safechars || enc.is_some()).then(|| {
         latex_recode::Recoder::builtin(
             ctx.cfg.biber.get_str("decodecharsset").unwrap_or("base"),
             ctx.cfg
@@ -1392,7 +1433,9 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     if let Some(pa) = processed.sections.last().and_then(|s| s.preamble.as_ref()) {
         let mut pa = pa.join("%\n");
         if let Some(r) = &recoder {
-            pa = r.encode(&pa);
+            if safechars || enc.is_some_and(|e| e.has_unencodable(&nfc(&pa))) {
+                pa = r.encode(&pa);
+            }
         }
         headtext.push_str(&format!("\\preamble{{%\n{pa}%\n}}\n\n"));
     }
@@ -1440,7 +1483,16 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
                     es = dangling_comma_cleanup(&es);
                 }
                 if let Some(r) = &recoder {
-                    es = r.encode(&es);
+                    if safechars {
+                        es = r.encode(&es);
+                    } else if let Some(e) = enc
+                        && e.has_unencodable(&nfc(&es))
+                    {
+                        es = r.encode(&es);
+                        ctx.log.biber_warn(format!(
+                            "The entry '{k}' has characters which cannot be encoded in '{outenc}'. Recoding problematic characters into macros."
+                        ));
+                    }
                 }
                 if sortdebug {
                     let sk = pd_path(dl.slots.get("sortdata"), &[k])

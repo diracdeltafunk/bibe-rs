@@ -99,10 +99,6 @@ fn run_case(case: &Case) -> Outcome {
         mut log,
         ..
     } = s;
-    let enc = cfg.biber.get_str("output_encoding").unwrap_or("UTF-8");
-    if enc != "UTF-8" {
-        return Outcome::Skip(format!("output encoding {enc} (DC-034)"));
-    }
     if cfg.biber.is_true("wraplines") {
         return Outcome::Skip("--wraplines".into());
     }
@@ -123,6 +119,15 @@ fn run_case(case: &Case) -> Outcome {
         Ok(None) => return Outcome::Fail("render returned None".into()),
         Err(_) => return Outcome::Fail("render: fatal error".into()),
     };
+    let bytes = match bibers_core::output::bbl::encode_output(&mut ctx, &text) {
+        Ok(b) => b,
+        Err(_) => return Outcome::Fail("encode_output: fatal error".into()),
+    };
+    // Compare as text, decoded from the output encoding.
+    let enc_name = bibers_core::output::bbl::output_encoding_name(&ctx);
+    let enc = perl_compat::encoding::find_encoding(&enc_name).expect("known encoding");
+    let expected = enc.decode(&expected).into_bytes();
+    let actual = enc.decode(&bytes).into_bytes();
     // `-` is the .bbl written to stdout.
     let name = if bbl == "-" {
         "stdout.bbl"
@@ -130,7 +135,7 @@ fn run_case(case: &Case) -> Outcome {
         bbl.as_str()
     };
     let exp = normalize_output(case, name, &expected);
-    let act = normalize_output(case, name, text.as_bytes());
+    let act = normalize_output(case, name, &actual);
     if exp == act {
         Outcome::Pass
     } else {

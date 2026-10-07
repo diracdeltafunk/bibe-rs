@@ -12,6 +12,7 @@
 //! | [`isbn`] | `Business::ISBN` 3.012 (+ RangeMessage.xml), `Business::ISSN` 1.008, `Business::ISMN` 1.205 | – |
 //! | [`uri`] | `URI->new($s)->as_string` (URI 5.34), `URI::Escape` | – |
 //! | [`roman`] | `Text::Roman` 3.5 `isroman`/`roman2int` | – |
+//! | [`encoding`] | `Encode` single-byte encodings + aliases (`find_encoding`, `encode`, `decode`) | – |
 //! | [`sort`] | perl `cmp`/`sort` (code point order), `reduce_array` | – |
 //!
 //! Every function documents the biber 2.22 call sites it serves. Behaviour is
@@ -21,6 +22,7 @@
 //! comparisons against the oracle (`cargo test -p perl-compat -- --ignored`).
 
 pub mod case;
+pub mod encoding;
 pub mod grapheme;
 pub mod isbn;
 mod isbn_ranges;
