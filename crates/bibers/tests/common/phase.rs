@@ -42,7 +42,24 @@ pub const DEFAULT_IGNORE: &[&str] = &[
 /// Maximum diff lines reported per dump.
 const LIMIT: usize = 25;
 
-fn find_case(id: &str) -> Case {
+/// Run `bibers::run::setup` for `case` in a fresh temp work dir holding its
+/// inputs (quietly). Returns the work dir (keep it alive), its `Env` and the
+/// setup, or the setup's exit code.
+pub fn setup_case(case: &Case) -> Result<(tempfile::TempDir, Env, bibers::run::Setup), u8> {
+    let work = tempfile::tempdir().expect("tempdir");
+    for f in case.input_files(&corpus_root()).expect("inputs") {
+        std::fs::copy(&f, work.path().join(f.file_name().unwrap())).expect("copy input");
+    }
+    let env = Env::isolated(work.path());
+    let mut args = case.spec.args.clone();
+    args.splice(0..0, ["-q".to_string(), "-q".to_string()]);
+    match setup(&args, &env) {
+        SetupResult::Ready(s) => Ok((work, env, *s)),
+        SetupResult::Exit(code) => Err(code),
+    }
+}
+
+pub fn find_case(id: &str) -> Case {
     let cases = discover(&corpus_root()).expect("corpus loads");
     cases
         .into_iter()
@@ -82,16 +99,9 @@ fn before_dump<'a>(dumps: &'a [PhaseDump], target: &PhaseDump) -> Option<&'a Pha
 
 /// Run one phase occurrence and diff with biber. Returns diff lines.
 fn check_one(case: &Case, dumps: &[PhaseDump], target: &PhaseDump, ignore: &[&str]) -> Vec<String> {
-    let work = tempfile::tempdir().expect("tempdir");
-    for f in case.input_files(&corpus_root()).expect("inputs") {
-        std::fs::copy(&f, work.path().join(f.file_name().unwrap())).expect("copy input");
-    }
-    let env = Env::isolated(work.path());
-    let mut args = case.spec.args.clone();
-    args.splice(0..0, ["-q".to_string(), "-q".to_string()]);
-    let s = match setup(&args, &env) {
-        SetupResult::Ready(s) => *s,
-        SetupResult::Exit(code) => return vec![format!("bibers setup exited with {code}")],
+    let (_work, env, s) = match setup_case(case) {
+        Ok(x) => x,
+        Err(code) => return vec![format!("bibers setup exited with {code}")],
     };
     let bibers::run::Setup {
         mut cfg,
