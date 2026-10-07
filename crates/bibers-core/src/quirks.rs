@@ -25,6 +25,16 @@ pub enum Quirk {
     /// BB-054 (`duplicate-datalists`): repeated identical `<datalist>`s are
     /// not de-duplicated.
     DuplicateDatalists,
+    /// BB-015 (`bbl-comma-cleanup`): the `.bbl` "dangling comma" cleanup
+    /// `s/,(?:\n\s+)?\}\}/}}/g` also rewrites `,}}` in field data.
+    BblCommaCleanup,
+    /// BB-016 (`rangelen-zero-digit`): `rangelen` treats a `0` digit of an
+    /// abbreviated range end as missing (`105-10` → 11 pages).
+    RangelenZeroDigit,
+    /// BB-028 (`datefield-helper-mutation`): the `.bbl` writer strips `date`
+    /// from the shared data-model date-field list in place, so a custom date
+    /// field whose stem ends in `date` loses its flags after the first entry.
+    DatefieldHelperMutation,
 }
 
 impl Quirk {
@@ -36,6 +46,9 @@ impl Quirk {
         Quirk::ConfSourcemapsDropped,
         Quirk::UniquenameBaseCheckGlobal,
         Quirk::DuplicateDatalists,
+        Quirk::BblCommaCleanup,
+        Quirk::RangelenZeroDigit,
+        Quirk::DatefieldHelperMutation,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -47,6 +60,9 @@ impl Quirk {
             Quirk::ConfSourcemapsDropped => "conf-sourcemaps-dropped",
             Quirk::UniquenameBaseCheckGlobal => "uniquename-base-check-global",
             Quirk::DuplicateDatalists => "duplicate-datalists",
+            Quirk::BblCommaCleanup => "bbl-comma-cleanup",
+            Quirk::RangelenZeroDigit => "rangelen-zero-digit",
+            Quirk::DatefieldHelperMutation => "datefield-helper-mutation",
         }
     }
 

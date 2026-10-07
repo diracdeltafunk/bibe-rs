@@ -15,6 +15,9 @@ roxmltree.workspace = true
 unicode-normalization.workspace = true
 serde_json.workspace = true
 regex.workspace = true
+ucollate.workspace = true
+latex-recode.workspace = true
+md-5.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true

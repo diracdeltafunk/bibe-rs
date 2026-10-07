@@ -7,7 +7,7 @@ package BiberPhaseDump;
 # and set BIBERS_DUMP_DIR=<dir>. After every wrapped phase method returns, a
 # file <dir>/<NNN>-s<section>-<phase>[-<list>].json is written (plus an `init`
 # dump of the section as set up from the .bcf, just before fetch_data) containing
-#   { phase, section, list, state: {section, datalists, config_state, entry_options, preamble} }
+#   { phase, section, list, state: {section, datalists, config_state, entry_options, preamble, annotations} }
 #
 # Biber itself runs completely normally; the dumper only reads.
 #
@@ -99,6 +99,46 @@ sub entry_options {
   return \%out;
 }
 
+# Biber::Annotation's store is a file lexical ($ANN), so rebuild it through
+# the public accessors for this section's entries:
+# {citekey => {field => {f => {name => {value, literal}}},
+#              item  => {f => {name => {count => {value, literal}}}},
+#              part  => {f => {name => {count => {part => {value, literal}}}}}}}
+sub annotations {
+  my $section = shift;
+  my %out;
+  my $A = 'Biber::Annotation';
+  for my $key (keys %{ $section->{bibentries} // {} }) {
+    my %k;
+    for my $f ($A->get_annotated_fields('field', $key)) {
+      for my $n ($A->get_annotations('field', $key, $f)) {
+        $k{field}{$f}{$n} = { value   => $A->get_annotation('field', $key, $f, $n),
+                              literal => $A->is_literal_annotation('field', $key, $f, $n) };
+      }
+    }
+    for my $f ($A->get_annotated_fields('item', $key)) {
+      for my $n ($A->get_annotations('item', $key, $f)) {
+        for my $c ($A->get_annotated_items('item', $key, $f, $n)) {
+          $k{item}{$f}{$n}{$c} = { value   => $A->get_annotation('item', $key, $f, $n, $c),
+                                   literal => $A->is_literal_annotation('item', $key, $f, $n, $c) };
+        }
+      }
+    }
+    for my $f ($A->get_annotated_fields('part', $key)) {
+      for my $n ($A->get_annotations('part', $key, $f)) {
+        for my $c ($A->get_annotated_items('part', $key, $f, $n)) {
+          for my $p ($A->get_annotated_parts('part', $key, $f, $n, $c)) {
+            $k{part}{$f}{$n}{$c}{$p} = { value   => $A->get_annotation('part', $key, $f, $n, $c, $p),
+                                         literal => $A->is_literal_annotation('part', $key, $f, $n, $c, $p) };
+          }
+        }
+      }
+    }
+    $out{$key} = \%k if %k;
+  }
+  return \%out;
+}
+
 sub dump_state {
   my ($biber, $phase, $list) = @_;
   return unless $dir;
@@ -115,6 +155,9 @@ sub dump_state {
     # $biber->{preamble}: all @preamble strings so far (global, cumulative
     # across sections).
     preamble     => $biber->{preamble},
+    # Biber::Annotation data of this section's entries (global in biber,
+    # keyed by citekey).
+    annotations  => annotations($section),
   };
   # Number ids per dump (not per run), so a dump's ids depend only on the
   # state it contains and can be reproduced from that state alone.

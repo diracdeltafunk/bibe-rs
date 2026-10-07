@@ -110,6 +110,8 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         entry_options: Default::default(),
         // Carried over from the previous section by `prepare`.
         preamble: None,
+        // No entries yet, so no annotations.
+        annotations: Some(serde_json::Value::Object(Default::default())),
     })
 }
 

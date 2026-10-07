@@ -320,6 +320,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
         _ => None,
     };
     let config_state = l.internalise(st.get("config_state").unwrap_or(&J::Null));
+    let annotations = st.get("annotations").cloned();
     section.names = l.arena;
     Ok(SectionState {
         section,
@@ -327,6 +328,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
         config_state,
         entry_options,
         preamble,
+        annotations,
     })
 }
 
@@ -635,6 +637,9 @@ pub fn dump_state(st: &SectionState) -> J {
             None => J::Null,
         },
     );
+    if let Some(a) = &st.annotations {
+        out.insert("annotations".into(), a.clone());
+    }
     J::Object(out)
 }
 

@@ -340,4 +340,10 @@ pub struct SectionState {
     /// `@preamble` string read so far, cumulative across sections (`None`
     /// until the first one). The pipeline carries it from section to section.
     pub preamble: Option<Vec<String>>,
+    /// `Biber::Annotation` data of this section's entries (a global store
+    /// keyed by citekey in biber), in the dump's shape:
+    /// `{citekey: {field: {f: {name: {value, literal}}}, item: {f: {name:
+    /// {count: {value, literal}}}}, part: {f: {name: {count: {part: {value,
+    /// literal}}}}}}}`. `None` when absent from a (older) dump.
+    pub annotations: Option<PerlData>,
 }
