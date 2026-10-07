@@ -302,11 +302,20 @@ fn check_case(case: &Case, records: &[J]) -> (usize, Vec<String>) {
 
 /// Probe and check every case whose id starts with one of `prefixes`.
 fn check_suites(prefixes: &[&str]) {
+    check_cases(&corpus_root(), prefixes);
+}
+
+/// Probe-only fixtures (no golden outputs), laid out like corpus cases.
+fn fixture_root() -> std::path::PathBuf {
+    repo_root().join("crates/bibers/tests/data/sourcemap")
+}
+
+fn check_cases(root: &std::path::Path, prefixes: &[&str]) {
     if !o3_available() {
         eprintln!("skipping: oracle O3 not built");
         return;
     }
-    let cases: Vec<Case> = discover(&corpus_root())
+    let cases: Vec<Case> = discover(root)
         .expect("corpus")
         .into_iter()
         .filter(|c| prefixes.iter().any(|p| c.id.starts_with(p)))
@@ -355,6 +364,11 @@ fn check_suites(prefixes: &[&str]) {
         failing.len()
     );
     assert!(failing.is_empty(), "{}", failing.join("\n"));
+}
+
+#[test]
+fn sourcemap_fixtures() {
+    check_cases(&fixture_root(), &[""]);
 }
 
 #[test]
