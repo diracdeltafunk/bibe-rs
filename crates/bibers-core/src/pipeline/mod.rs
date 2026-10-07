@@ -50,6 +50,24 @@ pub struct Ctx<'a> {
     pub doc: &'a Document,
     pub log: &'a mut Logger,
     pub env: &'a Env,
+    /// Run-level state that persists across sections (biber's global and
+    /// module-level state): see [`RunState`].
+    pub run: RunState,
+}
+
+/// State biber keeps across sections for the whole run (globals and
+/// module-level `state` variables), owned by [`Ctx`].
+#[derive(Debug, Default)]
+pub struct RunState {
+    /// libbtparse's process-global state: the macro table (`@string`s
+    /// accumulate across files and sections) and the parser's
+    /// error-recovery flag.
+    pub bt: btparse::BtState,
+    /// `Biber::Input::file::bibtex`'s `$cache`: parsed data files (read once
+    /// per run), citekey aliases, per-file reference counts.
+    pub bibcache: fetch::BibCache,
+    /// `Biber::Annotation`'s global `$ANN`.
+    pub annotations: crate::model::Annotations,
 }
 
 /// The result of processing: one state per processed section, in

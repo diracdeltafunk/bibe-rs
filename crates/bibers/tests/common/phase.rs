@@ -42,8 +42,8 @@ pub const DEFAULT_IGNORE: &[&str] = &[
 /// Maximum diff lines reported per dump.
 const LIMIT: usize = 25;
 
-fn find_case(id: &str) -> Case {
-    let cases = discover(&corpus_root()).expect("corpus loads");
+fn find_case(root: &std::path::Path, id: &str) -> Case {
+    let cases = discover(root).expect("corpus loads");
     cases
         .into_iter()
         .find(|c| c.id == id)
@@ -81,9 +81,15 @@ fn before_dump<'a>(dumps: &'a [PhaseDump], target: &PhaseDump) -> Option<&'a Pha
 }
 
 /// Run one phase occurrence and diff with biber. Returns diff lines.
-fn check_one(case: &Case, dumps: &[PhaseDump], target: &PhaseDump, ignore: &[&str]) -> Vec<String> {
+fn check_one(
+    root: &std::path::Path,
+    case: &Case,
+    dumps: &[PhaseDump],
+    target: &PhaseDump,
+    ignore: &[&str],
+) -> Vec<String> {
     let work = tempfile::tempdir().expect("tempdir");
-    for f in case.input_files(&corpus_root()).expect("inputs") {
+    for f in case.input_files(root).expect("inputs") {
         std::fs::copy(&f, work.path().join(f.file_name().unwrap())).expect("copy input");
     }
     let env = Env::isolated(work.path());
@@ -106,6 +112,7 @@ fn check_one(case: &Case, dumps: &[PhaseDump], target: &PhaseDump, ignore: &[&st
         doc: &doc,
         log: &mut log,
         env: &env,
+        run: Default::default(),
     };
 
     let expected = target.state().expect("load expected dump");
@@ -123,6 +130,22 @@ fn check_one(case: &Case, dumps: &[PhaseDump], target: &PhaseDump, ignore: &[&st
         let Some(before) = before_dump(dumps, target) else {
             return vec![format!("no dump before {}", target.path.display())];
         };
+        // Run-level state (the btparse macro table, the data file cache,
+        // annotations) persists across sections: rebuild it by replaying the
+        // earlier sections' fetch_data.
+        if target.phase == "fetch_data" {
+            for d in dumps
+                .iter()
+                .filter(|d| d.phase == "fetch_data" && d.seq < target.seq)
+            {
+                if let Some(b) = before_dump(dumps, d)
+                    && let Ok(mut s) = load_state(&b.state().expect("load before dump"))
+                {
+                    pipeline::install_entry_options(ctx.cfg, &s);
+                    let _ = pipeline::fetch::fetch_data(&mut ctx, &mut s);
+                }
+            }
+        }
         let mut st = load_state(&before.state().expect("load before dump")).expect("load_state");
         pipeline::install_entry_options(ctx.cfg, &st);
         let res = if let Some(f) = pipeline::section_phase(&target.phase) {
@@ -176,17 +199,27 @@ fn check_one(case: &Case, dumps: &[PhaseDump], target: &PhaseDump, ignore: &[&st
 /// Check `phase` on each case; returns `(occurrences checked, failures)`,
 /// where each failure is a dump file name followed by its diff lines.
 pub fn check_phase(phase: &str, case_ids: &[&str], extra_ignore: &[&str]) -> (usize, Vec<String>) {
+    check_phase_at(&corpus_root(), phase, case_ids, extra_ignore)
+}
+
+/// [`check_phase`] on cases of the corpus rooted at `root`.
+pub fn check_phase_at(
+    root: &std::path::Path,
+    phase: &str,
+    case_ids: &[&str],
+    extra_ignore: &[&str],
+) -> (usize, Vec<String>) {
     let mut ignore: Vec<&str> = DEFAULT_IGNORE.to_vec();
     ignore.extend_from_slice(extra_ignore);
     let mut checked = 0;
     let mut failures = Vec::new();
     for id in case_ids {
-        let case = find_case(id);
-        let dumps = phase_dumps(&case, &corpus_root())
-            .unwrap_or_else(|e| panic!("phase dumps for {id}: {e:#}"));
+        let case = find_case(root, id);
+        let dumps =
+            phase_dumps(&case, root).unwrap_or_else(|e| panic!("phase dumps for {id}: {e:#}"));
         for d in dumps.iter().filter(|d| d.phase == phase) {
             checked += 1;
-            let diffs = check_one(&case, &dumps, d, &ignore);
+            let diffs = check_one(root, &case, &dumps, d, &ignore);
             if !diffs.is_empty() {
                 failures.push(format!(
                     "{} ({}):\n  {}",

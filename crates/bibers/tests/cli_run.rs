@@ -93,8 +93,10 @@ fn stdout_output_with_output_directory() {
         "{blg}"
     );
     assert!(
-        // Until the .bbl writer exists (M2), the run stops with this error.
-        blg.contains("not yet implemented"),
+        // The data file is not copied, so the run stops when fetch_data
+        // looks for it (or, before M2, at the missing .bbl writer).
+        blg.contains("ERROR - Cannot find 'annotations.bib'!")
+            || blg.contains("not yet implemented"),
         "{blg}"
     );
 }

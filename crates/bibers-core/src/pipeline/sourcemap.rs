@@ -134,6 +134,11 @@ pub struct MapOutcome {
     /// repeated), also when `skip`: the caller removes them from its wanted
     /// keys (bibtex.pm:467, 499).
     pub created_keys: Vec<String>,
+    /// For each of [`MapOutcome::new_entries`], the key the Text::BibTeX
+    /// entry itself carries (`$entry->key`): the new key for `entry_new`,
+    /// the *original* entry's key for `entry_clone` (biber's `rawdata`
+    /// field is `print_s` of this entry). Added by the fetch package.
+    pub tb_keys: Vec<String>,
 }
 
 /// Run-global source map state: biber's package global
@@ -429,6 +434,7 @@ impl Engine<'_> {
                                     skip: true,
                                     new_entries: Vec::new(),
                                     created_keys,
+                                    tb_keys: Vec::new(),
                                 });
                             }
                         }
@@ -437,8 +443,10 @@ impl Engine<'_> {
             }
         }
 
+        let tb_keys = news.iter().map(|n| n.entry.key.clone()).collect();
         Ok(MapOutcome {
             skip: false,
+            tb_keys,
             new_entries: news
                 .into_iter()
                 .map(|n| RawEntry {
@@ -1007,6 +1015,7 @@ mod tests {
             doc: &doc,
             log: &mut log,
             env: &env,
+            run: Default::default(),
         };
         let mut st = SectionState::default();
         st.section.number = "0".into();

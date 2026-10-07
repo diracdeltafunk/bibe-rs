@@ -48,6 +48,8 @@ name = "bibers-core"
 version = "0.0.0"
 dependencies = [
  "bibers-testkit",
+ "btparse",
+ "latex-recode",
  "perl-compat",
  "regex",
  "roxmltree",

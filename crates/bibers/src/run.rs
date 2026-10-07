@@ -325,6 +325,7 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         doc: &doc,
         log: &mut log,
         env,
+        run: Default::default(),
     };
     let processed = match pipeline::prepare(&mut ctx) {
         Ok(p) => p,
