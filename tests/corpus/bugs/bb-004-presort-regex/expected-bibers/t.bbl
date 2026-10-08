@@ -1,0 +1,71 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{p1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=312ee623fc4dc4d45fea26a6779ccd9b}{%
+           family={Bee},
+           familyi={B\bibinitperiod},
+           given={A},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{312ee623fc4dc4d45fea26a6779ccd9b}
+      \strng{fullhash}{312ee623fc4dc4d45fea26a6779ccd9b}
+      \strng{fullhashraw}{312ee623fc4dc4d45fea26a6779ccd9b}
+      \strng{bibnamehash}{312ee623fc4dc4d45fea26a6779ccd9b}
+      \strng{authorbibnamehash}{312ee623fc4dc4d45fea26a6779ccd9b}
+      \strng{authornamehash}{312ee623fc4dc4d45fea26a6779ccd9b}
+      \strng{authorfullhash}{312ee623fc4dc4d45fea26a6779ccd9b}
+      \strng{authorfullhashraw}{312ee623fc4dc4d45fea26a6779ccd9b}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{T}
+      \true{nocite}
+    \endentry
+    \entry{p2}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=30e3111e8402e0447d9da9862dc0aa76}{%
+           family={Cee},
+           familyi={C\bibinitperiod},
+           given={A},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{30e3111e8402e0447d9da9862dc0aa76}
+      \strng{fullhash}{30e3111e8402e0447d9da9862dc0aa76}
+      \strng{fullhashraw}{30e3111e8402e0447d9da9862dc0aa76}
+      \strng{bibnamehash}{30e3111e8402e0447d9da9862dc0aa76}
+      \strng{authorbibnamehash}{30e3111e8402e0447d9da9862dc0aa76}
+      \strng{authornamehash}{30e3111e8402e0447d9da9862dc0aa76}
+      \strng{authorfullhash}{30e3111e8402e0447d9da9862dc0aa76}
+      \strng{authorfullhashraw}{30e3111e8402e0447d9da9862dc0aa76}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{U}
+      \true{nocite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

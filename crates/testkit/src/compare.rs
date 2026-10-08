@@ -77,15 +77,31 @@ pub fn normalize_output(case: &Case, name: &str, bytes: &[u8]) -> String {
     }
 }
 
-/// Compare `run` against the expectations stored in `case`'s `expected/`.
+/// Compare `run` against the oracle's expectations (`expected/`).
 pub fn compare(case: &Case, run: &RunOutput) -> Result<Outcome> {
-    let meta = case.load_meta()?.with_context(|| {
+    compare_in(case, run, &case.expected_dir())
+}
+
+/// Compare a bibers run: against `expected-bibers/` where the case has
+/// reviewed bibers-specific expectations (documented deliberate differences,
+/// docs/compat.md), otherwise against the oracle's `expected/`.
+pub fn compare_bibers(case: &Case, run: &RunOutput) -> Result<Outcome> {
+    match case.bibers_expected_dir() {
+        Some(d) => compare_in(case, run, &d),
+        None => compare(case, run),
+    }
+}
+
+/// Compare `run` against the expectations in directory `exp_dir`.
+pub fn compare_in(case: &Case, run: &RunOutput, exp_dir: &std::path::Path) -> Result<Outcome> {
+    let meta = Case::load_meta_in(exp_dir)?.with_context(|| {
         format!(
-            "{}: no expected/meta.toml (run `cargo xtask golden`)",
-            case.id
+            "{}: no {}/meta.toml (run `cargo xtask golden`)",
+            case.id,
+            exp_dir.display()
         )
     })?;
-    let exp_dir = case.expected_dir();
+    let exp_dir = exp_dir.to_path_buf();
     let mut mismatches = Vec::new();
 
     if run.timed_out {

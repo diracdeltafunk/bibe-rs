@@ -81,4 +81,11 @@ cargo test -p bibers --test corpus           # well-formedness + ratchet (no TeX
 
 ## Deviations
 
-If bibers deliberately differs from biber on a case (a `DC-NNN` entry in `docs/compat.md`), list the id in `allow`. Hand-maintained expectations for such a case are a future harness feature; until then these cases are excluded from the ratchet.
+If bibers deliberately differs from biber on a case (a `DC-NNN` entry in `docs/compat.md`), list the id in `allow` and record bibers' reviewed outputs in `expected-bibers/`. The directory has the same layout as `expected/`, and is only accepted when `allow` is non-empty. When testing bibers, `expected-bibers/` replaces `expected/`; oracle runs still use `expected/`.
+
+```
+cargo xtask bless --release <case…>   # write expected-bibers/ from a bibers run and print the diff
+                                      # against biber's expected/ for review
+```
+
+Review every blessed diff against the cited `compat.md` entries: it must contain exactly the documented difference and nothing else. Where biber crashes, check the fixed behaviour another way, for example against the source-built biber (`--impl o3`) or against biber on a minimally altered input. Don't bless planned-but-unimplemented fixes: those cases stay failing until the fix lands.

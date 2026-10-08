@@ -33,7 +33,7 @@ fn ratchet_cases_pass() {
             continue;
         };
         let run = runner.run(case, &root, false).expect("run");
-        match bibers_testkit::compare(case, &run).expect("compare") {
+        match bibers_testkit::compare_bibers(case, &run).expect("compare") {
             Outcome::Pass => {}
             Outcome::Fail(ms) => failures.push(format!(
                 "{id}:\n{}",

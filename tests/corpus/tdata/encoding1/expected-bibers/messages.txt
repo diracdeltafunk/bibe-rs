@@ -1,0 +1,1 @@
+ERROR - Data file 'encoding1.bib' cannot be read in encoding 'utf8': utf8 "\xA6" does not map to Unicode

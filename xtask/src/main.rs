@@ -23,6 +23,9 @@ Commands:
       --keep             Keep work directories of failing cases.
       -v                 Show diffs for failures.
       --update-passing   Rewrite tests/corpus/passing.txt with the passing case ids (bibers only).
+  bless                Write expected-bibers/ for the given cases from a bibers run (only
+                       for cases whose `allow` lists docs/compat.md ids); prints the diff
+                       against the oracle's expected/ for review.
   help                 Show this message.
 
 FILTER: a substring of the case id, or `tag:<tag>`. Several filters are OR-ed.
@@ -95,6 +98,7 @@ fn real_main() -> Result<ExitCode> {
         "list" => list(&opts),
         "golden" => golden(&opts),
         "corpus" => corpus(&opts),
+        "bless" => bless(&opts),
         "help" | "-h" | "--help" => {
             print!("{HELP}");
             Ok(ExitCode::SUCCESS)
@@ -321,7 +325,11 @@ fn corpus(opts: &Opts) -> Result<ExitCode> {
     let start = Instant::now();
     let results = par_map(&cases, opts.jobs, |case| -> Result<(Outcome, RunOutput)> {
         let run = imp.run(case, &root, opts.keep)?;
-        let outcome = bibers_testkit::compare(case, &run)?;
+        let outcome = if imp.name == "bibers" {
+            bibers_testkit::compare_bibers(case, &run)?
+        } else {
+            bibers_testkit::compare(case, &run)?
+        };
         Ok((outcome, run))
     });
 
@@ -403,4 +411,53 @@ const PASSING_HEADER: &str = "\
 
 fn passing_file() -> PathBuf {
     corpus_root().join("passing.txt")
+}
+
+/// `cargo xtask bless`: record bibers' outputs as `expected-bibers/` for
+/// cases with documented deliberate differences, showing what differs from
+/// the oracle so the change can be reviewed against docs/compat.md.
+fn bless(opts: &Opts) -> Result<ExitCode> {
+    use bibers_testkit::case::BIBERS_EXPECTED_DIR;
+    if opts.filters.is_empty() {
+        bail!("bless needs explicit case filters");
+    }
+    let imp = runner("bibers", opts.release)?;
+    let cases = select(opts)?;
+    let root = corpus_root();
+    for case in &cases {
+        if case.spec.allow.is_empty() {
+            println!("skip  {:<50} no `allow` ids in case.toml", case.id);
+            continue;
+        }
+        let run = imp.run(case, &root, false)?;
+        // What differs from the oracle (for review).
+        if let Outcome::Fail(ms) = bibers_testkit::compare(case, &run)? {
+            println!("bless {:<50} differs from biber ({}):", case.id, case.spec.allow.join(", "));
+            for m in ms {
+                println!("      {m}");
+            }
+        } else {
+            println!("bless {:<50} identical to biber (expected-bibers/ not needed)", case.id);
+            continue;
+        }
+        let dir = case.dir.join(BIBERS_EXPECTED_DIR);
+        if dir.exists() {
+            std::fs::remove_dir_all(&dir)?;
+        }
+        std::fs::create_dir_all(&dir)?;
+        for (name, bytes) in &run.outputs {
+            if let Some(bytes) = bytes {
+                std::fs::write(dir.join(name), bytes)?;
+            }
+        }
+        std::fs::write(dir.join(MESSAGES_FILE), messages_text(&run.messages))?;
+        let meta = ExpectedMeta {
+            oracle: "bibers".into(),
+            oracle_version: version_line(&imp),
+            exit_code: run.exit_code.unwrap_or(-1),
+            deterministic: true,
+        };
+        std::fs::write(dir.join(META_FILE), toml::to_string(&meta)?)?;
+    }
+    Ok(ExitCode::SUCCESS)
 }

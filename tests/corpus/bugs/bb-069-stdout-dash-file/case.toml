@@ -4,3 +4,4 @@ args = ["--noconf", "-O", "-", "doc.bcf"]
 outputs = ["-", "doc.bbl"]
 log = "doc.blg"
 tags = ["suite:bugs", "bug:BB-069"]
+allow = ["DC-026"]

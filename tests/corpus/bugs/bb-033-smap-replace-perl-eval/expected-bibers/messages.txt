@@ -1,0 +1,3 @@
+WARN - Source mapping (type=user, key=s1): Replacement '${\ scalar reverse 'olleh'}' contains Perl code (${ … } expression), which is not executed: using the regular expression as the replacement
+WARN - Source mapping (type=user, key=s1): Replacement '@{[ uc $1 ]}' contains Perl code (@{[ … ]}), which is not executed: using the regular expression as the replacement
+WARN - Source mapping (type=user, key=s1): Replacement '[$3]\L$1$2\E+$+{rest}' contains Perl code (%- / %+ (named captures)), which is not executed: using the regular expression as the replacement

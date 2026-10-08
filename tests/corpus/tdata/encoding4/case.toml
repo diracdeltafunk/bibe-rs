@@ -3,3 +3,4 @@ source = "vendor/biber/t/tdata/encoding4.bcf"
 args = ["--noconf", "encoding4.bcf"]
 outputs = ["encoding4.bbl"]
 tags = ["suite:tdata"]
+allow = ["DC-046"]

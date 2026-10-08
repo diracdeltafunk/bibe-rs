@@ -1,0 +1,1 @@
+WARN - Source mapping (type=user, key=s1): Replacement '[$+{rest}]' contains Perl code (%- / %+ (named captures)), which is not executed: using the regular expression as the replacement

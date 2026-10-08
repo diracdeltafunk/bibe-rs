@@ -98,6 +98,9 @@ pub struct Case {
 
 pub const CASE_FILE: &str = "case.toml";
 pub const EXPECTED_DIR: &str = "expected";
+/// Reviewed expectations for bibers where it deliberately differs from biber
+/// (docs/compat.md); only allowed when `allow` lists the `DC-NNN` ids.
+pub const BIBERS_EXPECTED_DIR: &str = "expected-bibers";
 pub const MESSAGES_FILE: &str = "messages.txt";
 pub const META_FILE: &str = "meta.toml";
 
@@ -111,6 +114,12 @@ impl Case {
         for sub in &spec.normalize {
             regex::Regex::new(&sub.pattern)
                 .with_context(|| format!("{}: bad normalize pattern", path.display()))?;
+        }
+        if dir.join(BIBERS_EXPECTED_DIR).is_dir() && spec.allow.is_empty() {
+            bail!(
+                "{}: {BIBERS_EXPECTED_DIR}/ requires `allow` to list the docs/compat.md ids it implements",
+                path.display()
+            );
         }
         if spec.outputs.is_empty() {
             bail!("{}: `outputs` must not be empty", path.display());
@@ -131,6 +140,12 @@ impl Case {
         self.dir.join(EXPECTED_DIR)
     }
 
+    /// `expected-bibers/`: reviewed bibers-specific expectations, if any.
+    pub fn bibers_expected_dir(&self) -> Option<PathBuf> {
+        let d = self.dir.join(BIBERS_EXPECTED_DIR);
+        d.is_dir().then_some(d)
+    }
+
     /// The `.blg` file whose messages are compared.
     pub fn log_file(&self) -> String {
         self.spec.log.clone().unwrap_or_else(|| {
@@ -149,7 +164,7 @@ impl Case {
         for entry in std::fs::read_dir(&self.dir)? {
             let entry = entry?;
             let name = entry.file_name();
-            if name == CASE_FILE || name == EXPECTED_DIR {
+            if name == CASE_FILE || name == EXPECTED_DIR || name == BIBERS_EXPECTED_DIR {
                 continue;
             }
             if entry.file_type()?.is_file() {
@@ -174,7 +189,12 @@ impl Case {
     }
 
     pub fn load_meta(&self) -> Result<Option<ExpectedMeta>> {
-        let p = self.expected_dir().join(META_FILE);
+        Self::load_meta_in(&self.expected_dir())
+    }
+
+    /// `meta.toml` of an expectations directory.
+    pub fn load_meta_in(dir: &Path) -> Result<Option<ExpectedMeta>> {
+        let p = dir.join(META_FILE);
         if !p.exists() {
             return Ok(None);
         }

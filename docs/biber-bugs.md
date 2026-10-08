@@ -110,6 +110,10 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-144 | C | bibtex.pm `cache_data` | The parse cache is per file and per run, so duplicate-key warnings and `everykey` bookkeeping only happen in the first refsection that reads a file. | M2 fetch |
 | BB-145 | R | Biber.pm `fetch_data` globbing | A non-`file` data source is pushed onto the datasource list twice. | M2 fetch |
 
+| BB-146 | C | Biber.pm process_extratitle/extratitleyear, generate_uniquetitle/uniquework | When a name list is the `labeltitle` (chicago-authordate via a per-type labeltitlespec), the tracking keys are built by string interpolation of the `Names` object, i.e. its memory address `Biber::Entry::Names=HASH(0x…)`: the values compare object identity, not names, and the keys differ on every run. Seen in the chicago phase dumps. | M2 entries |
+| BB-147 | C | Biber.pm:1855-1857 (`process_namedis`) | For a name without a base part (e.g. only `given=Plato`) the namestrings are `["", "P"]` but the schema is `[["given","init"]]`: the arrays are misaligned by one, so `un`/`unall` report `given=init` for index 0. Reproduced by bibers. | M2 uniqueness |
+| BB-148 | C | Biber.pm `process_workuniqueness` | Autovivifies empty `uniqignore{key}{uniquetitle|uniquework|…} = []` entries in the global config state. No output effect. | M2 entries |
+
 ### 3a. The truthiness of `"0"` (one family, several sites)
 
 Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return '' unless $s` tests therefore treat a legitimate value `0` as missing. Fixing these as one sweep is probably easiest upstream.

@@ -21,7 +21,7 @@ pub mod phase;
 pub mod run;
 
 pub use case::{Case, CaseSpec, CompareMode, ExpectedMeta, discover};
-pub use compare::{Outcome, compare};
+pub use compare::{Outcome, compare, compare_bibers};
 pub use run::{RunOutput, Runner};
 
 use std::path::{Path, PathBuf};
