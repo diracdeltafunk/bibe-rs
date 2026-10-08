@@ -128,3 +128,27 @@ fn dc001_final_name_does_not_collide() {
     assert_eq!(ulc["final\u{10FFFD}Smith"], "1");
     assert_eq!(out["datalists"][0]["unulchanged"], "0");
 }
+
+/// `uniqueness` on an external corpus of probe cases (e.g. generated
+/// variants): `BIBERS_UNIQ_PROBES=<corpus root> cargo test --release
+/// --test phase_uniqueness -- --ignored probes`.
+#[test]
+#[ignore]
+fn probes() {
+    let Ok(root) = std::env::var("BIBERS_UNIQ_PROBES") else {
+        return;
+    };
+    let root = std::path::PathBuf::from(root);
+    let ids: Vec<String> = bibers_testkit::discover(&root)
+        .expect("corpus")
+        .into_iter()
+        .map(|c| c.id)
+        .collect();
+    let refs: Vec<&str> = ids.iter().map(String::as_str).collect();
+    let (checked, failures) = common::phase::check_phase_at(&root, "uniqueness", &refs, &[]);
+    eprintln!(
+        "uniqueness probes: {}/{checked} occurrences match biber",
+        checked - failures.len()
+    );
+    assert!(failures.is_empty(), "{}", failures.join("\n"));
+}
