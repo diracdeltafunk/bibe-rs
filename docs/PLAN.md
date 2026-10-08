@@ -275,7 +275,13 @@ Original M1 scope:
 - `perl-compat` (truthiness/case helpers, Unicode-8 graphemes, PCRE2 wrapper + replacement interpreter, URI escape, ISBN).
 - `bibers-core::{config, bcf, datamodel}` and `log`.
 
-**M2: Vertical slice.** biblatex-examples.bib under numeric, authoryear, alphabetic and authortitle produces byte-identical `.bbl`. This needs:
+**M2: Vertical slice**: *done (2026-10-08).*
+- The full pipeline is ported phase by phase, each phase verified against biber's internal state dumps (`docs/M2.md`).
+- End to end: **460/479 corpus cases are byte-identical** to biber 2.22, or to the reviewed expectations for documented deliberate differences.
+- Remaining: 17 deferred cases (BibLaTeXML input, tool mode; M4) and 2 planned fixes (DC-002, DC-003).
+- Speed so far: 102 entries in 0.02 s (biber 1.3 s); 4,600 entries in 0.82 s (biber 18.5 s).
+
+Original M2 scope: biblatex-examples.bib under numeric, authoryear, alphabetic and authortitle produces byte-identical `.bbl`. This needs:
 - driver sourcemaps and the field handlers;
 - names and dates;
 - crossref/xdata/sets/related plus inheritance;
