@@ -61,6 +61,10 @@ pub enum Quirk {
     /// from the shared data-model date-field list in place, so a custom date
     /// field whose stem ends in `date` loses its flags after the first entry.
     DatefieldHelperMutation,
+    /// BB-027 (`workuniq-skipbib-token`): work uniqueness is skipped only for
+    /// entries whose `options` field holds the literal token `skipbib`
+    /// (`skipbib=true`, `dataonly` and set members are still counted).
+    WorkuniqSkipbibToken,
 }
 
 impl Quirk {
@@ -83,6 +87,7 @@ impl Quirk {
         Quirk::BblCommaCleanup,
         Quirk::RangelenZeroDigit,
         Quirk::DatefieldHelperMutation,
+        Quirk::WorkuniqSkipbibToken,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -105,6 +110,7 @@ impl Quirk {
             Quirk::BblCommaCleanup => "bbl-comma-cleanup",
             Quirk::RangelenZeroDigit => "rangelen-zero-digit",
             Quirk::DatefieldHelperMutation => "datefield-helper-mutation",
+            Quirk::WorkuniqSkipbibToken => "workuniq-skipbib-token",
         }
     }
 
