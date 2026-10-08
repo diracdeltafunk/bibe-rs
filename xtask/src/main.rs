@@ -9,6 +9,8 @@ use std::process::{Command, ExitCode};
 use std::sync::Mutex;
 use std::time::Instant;
 
+mod fuzz;
+
 const HELP: &str = "\
 cargo xtask <command> [options] [FILTER...]
 
@@ -26,7 +28,7 @@ Commands:
   bless                Write expected-bibers/ for the given cases from a bibers run (only
                        for cases whose `allow` lists docs/compat.md ids); prints the diff
                        against the oracle's expected/ for review.
-  help                 Show this message.
+  help                 Show this message (and the fuzz commands).
 
 FILTER: a substring of the case id, or `tag:<tag>`. Several filters are OR-ed.
 Options common to golden/corpus:
@@ -93,6 +95,11 @@ fn real_main() -> Result<ExitCode> {
         print!("{HELP}");
         return Ok(ExitCode::SUCCESS);
     };
+    match cmd.as_str() {
+        "fuzz" => return fuzz::fuzz(rest),
+        "fuzz-min" => return fuzz::fuzz_min(rest),
+        _ => {}
+    }
     let opts = parse_opts(rest)?;
     match cmd.as_str() {
         "list" => list(&opts),
@@ -100,7 +107,7 @@ fn real_main() -> Result<ExitCode> {
         "corpus" => corpus(&opts),
         "bless" => bless(&opts),
         "help" | "-h" | "--help" => {
-            print!("{HELP}");
+            print!("{HELP}{}", fuzz::HELP);
             Ok(ExitCode::SUCCESS)
         }
         other => bail!("unknown command {other}\n\n{HELP}"),
@@ -432,12 +439,19 @@ fn bless(opts: &Opts) -> Result<ExitCode> {
         let run = imp.run(case, &root, false)?;
         // What differs from the oracle (for review).
         if let Outcome::Fail(ms) = bibers_testkit::compare(case, &run)? {
-            println!("bless {:<50} differs from biber ({}):", case.id, case.spec.allow.join(", "));
+            println!(
+                "bless {:<50} differs from biber ({}):",
+                case.id,
+                case.spec.allow.join(", ")
+            );
             for m in ms {
                 println!("      {m}");
             }
         } else {
-            println!("bless {:<50} identical to biber (expected-bibers/ not needed)", case.id);
+            println!(
+                "bless {:<50} identical to biber (expected-bibers/ not needed)",
+                case.id
+            );
             continue;
         }
         let dir = case.dir.join(BIBERS_EXPECTED_DIR);
