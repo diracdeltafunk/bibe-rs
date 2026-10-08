@@ -1,0 +1,519 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{girou:01:}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=7d4f64ad82b896d73f1600aba0ce573c}{%
+           family={Girou},
+           familyi={G\bibinitperiod},
+           given={Denis},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{7d4f64ad82b896d73f1600aba0ce573c}
+      \strng{fullhash}{7d4f64ad82b896d73f1600aba0ce573c}
+      \strng{fullhashraw}{7d4f64ad82b896d73f1600aba0ce573c}
+      \strng{bibnamehash}{7d4f64ad82b896d73f1600aba0ce573c}
+      \strng{authorbibnamehash}{7d4f64ad82b896d73f1600aba0ce573c}
+      \strng{authornamehash}{7d4f64ad82b896d73f1600aba0ce573c}
+      \strng{authorfullhash}{7d4f64ad82b896d73f1600aba0ce573c}
+      \strng{authorfullhashraw}{7d4f64ad82b896d73f1600aba0ce573c}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Cahier {GUT}enberg}
+      \field{month}{4}
+      \field{title}{Présentation de {PST}ricks}
+      \field{volume}{16}
+      \field{year}{1994}
+      \true{nocite}
+      \field{pages}{21\bibrangedash 70}
+      \range{pages}{50}
+    \endentry
+    \entry{tlgc2}{book}{}{}
+      \name{author}{5}{}{%
+        {{hash=e0a0876ec4cf75a456a1933fe0bff8d4}{%
+           family={Goosens},
+           familyi={G\bibinitperiod},
+           given={Michel},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9355edd511e3f6fdd880ee98722a53fb}{%
+           family={Mittelbach},
+           familyi={M\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+        {{hash=22439d3b66be376e3f27270d8d300c89}{%
+           family={Rahtz},
+           familyi={R\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=dd6a912c24386ffe55705cb8f5b7e2b1}{%
+           family={Roegel},
+           familyi={R\bibinitperiod},
+           given={Denis},
+           giveni={D\bibinitperiod}}}%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, Mass.}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley Publishing Company}%
+      }
+      \strng{namehash}{aaf85e820bd158c34f442564a43243da}
+      \strng{fullhash}{b11550d9277698baed8410a3d0e11cdf}
+      \strng{fullhashraw}{b11550d9277698baed8410a3d0e11cdf}
+      \strng{bibnamehash}{aaf85e820bd158c34f442564a43243da}
+      \strng{authorbibnamehash}{aaf85e820bd158c34f442564a43243da}
+      \strng{authornamehash}{aaf85e820bd158c34f442564a43243da}
+      \strng{authorfullhash}{b11550d9277698baed8410a3d0e11cdf}
+      \strng{authorfullhashraw}{b11550d9277698baed8410a3d0e11cdf}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2}
+      \field{title}{The {\LaTeX} {G}raphics {C}ompanion}
+      \field{year}{2007}
+      \true{nocite}
+    \endentry
+    \entry{dtk02.2:jackson.voss:plot-funktionen}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=d596d26330cfc56e91d125f77139e3b5}{%
+           family={Jackson},
+           familyi={J\bibinitperiod},
+           given={Laura\bibnamedelima E.},
+           giveni={L\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{ab5523be5ddfaead8cee54b4797c3e4a}
+      \strng{fullhash}{ab5523be5ddfaead8cee54b4797c3e4a}
+      \strng{fullhashraw}{ab5523be5ddfaead8cee54b4797c3e4a}
+      \strng{bibnamehash}{ab5523be5ddfaead8cee54b4797c3e4a}
+      \strng{authorbibnamehash}{ab5523be5ddfaead8cee54b4797c3e4a}
+      \strng{authornamehash}{ab5523be5ddfaead8cee54b4797c3e4a}
+      \strng{authorfullhash}{ab5523be5ddfaead8cee54b4797c3e4a}
+      \strng{authorfullhashraw}{ab5523be5ddfaead8cee54b4797c3e4a}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Im letzten Heft wurden die mathematischen Funktionen von \PS~im Zusammenhang mit dem {\LaTeX}-Paket \texttt{pst-plot} zum Zeichnen von Funktionen beschrieben und durch Beispiele erläutert. In diesem Teil werden die bislang nur erwähnten Plot-Funktionen für externe Daten behandelt.}
+      \field{annotation}{Bretter, die die Welt bedeuten}
+      \field{journaltitle}{{D}ie {\TeX}nische {K}omödie}
+      \field{month}{6}
+      \field{title}{Die {P}lot-{F}unktionen von {\texttt{pst-plot}}}
+      \field{volume}{2/02}
+      \field{year}{2002}
+      \true{nocite}
+      \field{pages}{27\bibrangedash 34}
+      \range{pages}{8}
+    \endentry
+    \entry{PostScript}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=9535d2f55737c2bef95f4f3a7c70f908}{%
+           family={Kollock},
+           familyi={K\bibinitperiod},
+           given={Nikolai\bibnamedelima G.},
+           giveni={N\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vaterstetten}%
+      }
+      \list{publisher}{1}{%
+        {IWT}%
+      }
+      \strng{namehash}{9535d2f55737c2bef95f4f3a7c70f908}
+      \strng{fullhash}{9535d2f55737c2bef95f4f3a7c70f908}
+      \strng{fullhashraw}{9535d2f55737c2bef95f4f3a7c70f908}
+      \strng{bibnamehash}{9535d2f55737c2bef95f4f3a7c70f908}
+      \strng{authorbibnamehash}{9535d2f55737c2bef95f4f3a7c70f908}
+      \strng{authornamehash}{9535d2f55737c2bef95f4f3a7c70f908}
+      \strng{authorfullhash}{9535d2f55737c2bef95f4f3a7c70f908}
+      \strng{authorfullhashraw}{9535d2f55737c2bef95f4f3a7c70f908}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Post{S}cript richtig eingesetzt: vom {K}onzept zum praktischen {E}insatz}
+      \field{year}{1989}
+      \true{nocite}
+    \endentry
+    \entry{dtk02.1:voss:mathematischen}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{bibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorbibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authornamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \field{extraname}{1}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{\PS, faktisch genauso alt wie {\TeX}, ist im Verhältnis dazu allgemein noch weniger bekannt, wenn es darum geht zu beurteilen, was es denn nun im eigentlichen Sinne ist. Außerdem wird häufig vergessen, dass sich mit den \PS-Funktionen viele Dinge erledigen lassen, bei denen sonst auf externe Programme zurückgegriffen wird. Dies wird im Folgenden für die mathematischen Funktionen im Zusammenhang mit dem Paket \texttt{pst-plot} gezeigt.}
+      \field{annotation}{Bretter, die die Welt bedeuten}
+      \field{journaltitle}{{D}ie {\TeX}nische {K}omödie}
+      \field{month}{3}
+      \field{title}{Die mathematischen {F}unktionen von {P}ost{S}cript}
+      \field{volume}{1/02}
+      \field{year}{2002}
+      \true{nocite}
+    \endentry
+    \entry{pst-tools}{ctan}{}{}
+      \name{author}{1}{}{%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{bibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorbibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authornamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \field{extraname}{2}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{\texttt{pst-tools} -- Helper functions}
+      \field{year}{2012}
+      \true{nocite}
+      \verb{urlraw}
+      \verb /graphics/pstricks/contrib/pst-tools
+      \endverb
+      \verb{url}
+      \verb /graphics/pstricks/contrib/pst-tools
+      \endverb
+    \endentry
+    \entry{PSTricks2}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{2}{%
+        {Heidelberg}%
+        {Berlin}%
+      }
+      \strng{namehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{bibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorbibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authornamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \field{extraname}{3}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{7}
+      \field{title}{\texttt{PSTricks} -- {G}rafik für \TeX{} und \LaTeX}
+      \field{year}{2016}
+      \true{nocite}
+    \endentry
+    \entry{PSTricks2-UIT}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {UIT}%
+      }
+      \strng{namehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{bibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorbibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authornamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \field{extraname}{4}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{PSTricks -- Graphics for \TeX{} and \LaTeX}
+      \field{year}{2011}
+      \true{nocite}
+    \endentry
+    \entry{LaTeXRef-UIT}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {UIT}%
+      }
+      \strng{namehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{bibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorbibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authornamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \field{extraname}{5}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{\LaTeX} quick reference}
+      \field{year}{2012}
+      \true{nocite}
+    \endentry
+    \entry{voss:math}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {UIT}%
+      }
+      \strng{namehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{fullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{bibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorbibnamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authornamehash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhash}{e081108643ae4b78a904ec3a607d3d71}
+      \strng{authorfullhashraw}{e081108643ae4b78a904ec3a607d3d71}
+      \field{extraname}{6}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Typesetting mathematics with \LaTeX}
+      \field{year}{2010}
+      \true{nocite}
+    \endentry
+    \entry{wolfram}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=17eacc833e74f76c6cac4522224a09e3}{%
+           family={Weisstein},
+           familyi={W\bibinitperiod},
+           given={Eric},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wolfram}%
+      }
+      \strng{namehash}{17eacc833e74f76c6cac4522224a09e3}
+      \strng{fullhash}{17eacc833e74f76c6cac4522224a09e3}
+      \strng{fullhashraw}{17eacc833e74f76c6cac4522224a09e3}
+      \strng{bibnamehash}{17eacc833e74f76c6cac4522224a09e3}
+      \strng{authorbibnamehash}{17eacc833e74f76c6cac4522224a09e3}
+      \strng{authornamehash}{17eacc833e74f76c6cac4522224a09e3}
+      \strng{authorfullhash}{17eacc833e74f76c6cac4522224a09e3}
+      \strng{authorfullhashraw}{17eacc833e74f76c6cac4522224a09e3}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Wolfram MathWorld}
+      \field{year}{2007}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://mathworld.wolfram.com
+      \endverb
+      \verb{url}
+      \verb http://mathworld.wolfram.com
+      \endverb
+    \endentry
+    \entry{multido}{ctan}{}{}
+      \name{author}{1}{}{%
+        {{hash=ec3a37c728f44aa28dae27420c8b433f}{%
+           family={Zandt},
+           familyi={Z\bibinitperiod},
+           given={{Timothy van}},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{fullhash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{fullhashraw}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{bibnamehash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{authorbibnamehash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{authornamehash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{authorfullhash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{authorfullhashraw}{ec3a37c728f44aa28dae27420c8b433f}
+      \field{extraname}{1}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{\texttt{multido.tex} - a loop macro, that supports fixed-point addition}
+      \field{year}{1997}
+      \true{nocite}
+      \verb{urlraw}
+      \verb /graphics/pstricks/generic/multido.tex
+      \endverb
+      \verb{url}
+      \verb /graphics/pstricks/generic/multido.tex
+      \endverb
+    \endentry
+    \entry{pstricks}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=ec3a37c728f44aa28dae27420c8b433f}{%
+           family={Zandt},
+           familyi={Z\bibinitperiod},
+           given={{Timothy van}},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{fullhash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{fullhashraw}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{bibnamehash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{authorbibnamehash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{authornamehash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{authorfullhash}{ec3a37c728f44aa28dae27420c8b433f}
+      \strng{authorfullhashraw}{ec3a37c728f44aa28dae27420c8b433f}
+      \field{extraname}{2}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{PSTricks - {\PS} macros for generic {\TeX}}
+      \field{year}{1993}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://www.tug.org/application/PSTricks
+      \endverb
+      \verb{url}
+      \verb http://www.tug.org/application/PSTricks
+      \endverb
+    \endentry
+    \entry{girou:02:}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=ec3a37c728f44aa28dae27420c8b433f}{%
+           family={Zandt},
+           familyi={Z\bibinitperiod},
+           given={{Timothy van}},
+           giveni={T\bibinitperiod}}}%
+        {{hash=7d4f64ad82b896d73f1600aba0ce573c}{%
+           family={Girou},
+           familyi={G\bibinitperiod},
+           given={Denis},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{2e8e1315265e4062f7a55503e67f8e23}
+      \strng{fullhash}{2e8e1315265e4062f7a55503e67f8e23}
+      \strng{fullhashraw}{2e8e1315265e4062f7a55503e67f8e23}
+      \strng{bibnamehash}{2e8e1315265e4062f7a55503e67f8e23}
+      \strng{authorbibnamehash}{2e8e1315265e4062f7a55503e67f8e23}
+      \strng{authornamehash}{2e8e1315265e4062f7a55503e67f8e23}
+      \strng{authorfullhash}{2e8e1315265e4062f7a55503e67f8e23}
+      \strng{authorfullhashraw}{2e8e1315265e4062f7a55503e67f8e23}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{TUGboat}
+      \field{month}{9}
+      \field{title}{Inside {PST}ricks}
+      \field{volume}{15}
+      \field{year}{1994}
+      \true{nocite}
+      \field{pages}{239\bibrangedash 246}
+      \range{pages}{8}
+    \endentry
+    \entry{pst-plot}{ctan}{}{}
+      \name{author}{2}{}{%
+        {{hash=ec3a37c728f44aa28dae27420c8b433f}{%
+           family={Zandt},
+           familyi={Z\bibinitperiod},
+           given={{Timothy van}},
+           giveni={T\bibinitperiod}}}%
+        {{hash=e081108643ae4b78a904ec3a607d3d71}{%
+           family={Voß},
+           familyi={V\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{496afa2f52bd1462946e3debdd2e322d}
+      \strng{fullhash}{496afa2f52bd1462946e3debdd2e322d}
+      \strng{fullhashraw}{496afa2f52bd1462946e3debdd2e322d}
+      \strng{bibnamehash}{496afa2f52bd1462946e3debdd2e322d}
+      \strng{authorbibnamehash}{496afa2f52bd1462946e3debdd2e322d}
+      \strng{authornamehash}{496afa2f52bd1462946e3debdd2e322d}
+      \strng{authorfullhash}{496afa2f52bd1462946e3debdd2e322d}
+      \strng{authorfullhashraw}{496afa2f52bd1462946e3debdd2e322d}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{\texttt{pst-plot}: Plotting two dimensional functions and data}
+      \field{year}{1999}
+      \true{nocite}
+      \verb{urlraw}
+      \verb /graphics/pstricks/generic/pst-plot.tex
+      \endverb
+      \verb{url}
+      \verb /graphics/pstricks/generic/pst-plot.tex
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

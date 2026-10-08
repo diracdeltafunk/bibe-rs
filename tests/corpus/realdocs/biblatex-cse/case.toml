@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style biblatex-cse"
+source = "texmf-dist/doc/latex/biblatex-cse/biblatex-cse-doc.tex (TeX Live 2026), compiled with pdflatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:biblatex-cse"]

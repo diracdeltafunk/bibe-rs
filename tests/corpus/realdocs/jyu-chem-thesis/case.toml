@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style jyu-chem-thesis"
+source = "texmf-dist/doc/latex/jyu-chem-thesis/jyu-chem-thesis-template.tex (TeX Live 2026), compiled with pdflatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:jyu-chem-thesis"]

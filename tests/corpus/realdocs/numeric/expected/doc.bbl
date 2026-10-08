@@ -1,0 +1,145 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{fontspec}{manual}{}{}
+      \name{author}{2}{}{%
+        {{hash=611950ad1fff863fd8b754338ee6a44f}{%
+           family={Robertson},
+           familyi={R\bibinitperiod},
+           given={Will},
+           giveni={W\bibinitperiod}}}%
+        {{hash=9145a987f6e9c5ed6a325f3965ee47a8}{%
+           family={Hosny},
+           familyi={H\bibinitperiod},
+           given={Khaled},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {The \LaTeX{} Project Team}%
+      }
+      \strng{namehash}{d78e0ceb6dd2b869cbc50bf29e21cb28}
+      \strng{fullhash}{d78e0ceb6dd2b869cbc50bf29e21cb28}
+      \strng{fullhashraw}{d78e0ceb6dd2b869cbc50bf29e21cb28}
+      \strng{bibnamehash}{d78e0ceb6dd2b869cbc50bf29e21cb28}
+      \strng{authorbibnamehash}{d78e0ceb6dd2b869cbc50bf29e21cb28}
+      \strng{authornamehash}{d78e0ceb6dd2b869cbc50bf29e21cb28}
+      \strng{authorfullhash}{d78e0ceb6dd2b869cbc50bf29e21cb28}
+      \strng{authorfullhashraw}{d78e0ceb6dd2b869cbc50bf29e21cb28}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{Advanced font selection in {\XeLaTeX} and {\LuaLaTeX}}
+      \field{title}{The \texttt{\em fontspec} package}
+      \field{urlday}{9}
+      \field{urlmonth}{9}
+      \field{urlyear}{2026}
+      \field{year}{2026}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://ctan.org/pkg/fontspec
+      \endverb
+      \verb{url}
+      \verb https://ctan.org/pkg/fontspec
+      \endverb
+    \endentry
+    \entry{cyreal}{manual}{}{}
+      \name{author}{2}{}{%
+        {{hash=29b64a2ab5e05fe83d119f6d31e3f02b}{%
+           family={Vanyashin},
+           familyi={V\bibinitperiod},
+           given={Alexei},
+           giveni={A\bibinitperiod}}}%
+        {{hash=530077e7119e54be0c8f6eb863a47aa0}{%
+           family={Karpushina},
+           familyi={K\bibinitperiod},
+           given={Olga},
+           giveni={O\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Cyreal}%
+      }
+      \strng{namehash}{5c24c2cd192b30d5e9d71d0b3112a344}
+      \strng{fullhash}{5c24c2cd192b30d5e9d71d0b3112a344}
+      \strng{fullhashraw}{5c24c2cd192b30d5e9d71d0b3112a344}
+      \strng{bibnamehash}{5c24c2cd192b30d5e9d71d0b3112a344}
+      \strng{authorbibnamehash}{5c24c2cd192b30d5e9d71d0b3112a344}
+      \strng{authornamehash}{5c24c2cd192b30d5e9d71d0b3112a344}
+      \strng{authorfullhash}{5c24c2cd192b30d5e9d71d0b3112a344}
+      \strng{authorfullhashraw}{5c24c2cd192b30d5e9d71d0b3112a344}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Lora}
+      \field{urlday}{9}
+      \field{urlmonth}{9}
+      \field{urlyear}{2026}
+      \field{year}{2026}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.cyreal.org/fonts/lora/
+      \endverb
+      \verb{url}
+      \verb https://www.cyreal.org/fonts/lora/
+      \endverb
+    \endentry
+    \entry{arsenal}{manual}{}{}
+      \name{author}{1}{}{%
+        {{hash=c65bf9665530a920b1b1b851b5ae92ea}{%
+           family={Veytsman},
+           familyi={V\bibinitperiod},
+           given={Boris},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{c65bf9665530a920b1b1b851b5ae92ea}
+      \strng{fullhash}{c65bf9665530a920b1b1b851b5ae92ea}
+      \strng{fullhashraw}{c65bf9665530a920b1b1b851b5ae92ea}
+      \strng{bibnamehash}{c65bf9665530a920b1b1b851b5ae92ea}
+      \strng{authorbibnamehash}{c65bf9665530a920b1b1b851b5ae92ea}
+      \strng{authornamehash}{c65bf9665530a920b1b1b851b5ae92ea}
+      \strng{authorfullhash}{c65bf9665530a920b1b1b851b5ae92ea}
+      \strng{authorfullhashraw}{c65bf9665530a920b1b1b851b5ae92ea}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{Github repository}
+      \field{title}{The \texttt{\em arsenal} package}
+      \field{urlday}{4}
+      \field{urlmonth}{9}
+      \field{urlyear}{2026}
+      \field{year}{2023}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://github.com/borisveytsman/arsenal
+      \endverb
+      \verb{url}
+      \verb https://github.com/borisveytsman/arsenal
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

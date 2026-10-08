@@ -1,0 +1,91 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{LeClerc1686}{book}{}{}
+      \name{realauthor}{1}{}{%
+        {{hash=94208126d170ba28915c8ec348c788ca}{%
+           family={Clerc},
+           familyi={C\bibinitperiod},
+           given={Jean},
+           giveni={J\bibinitperiod},
+           prefix={le},
+           prefixi={l\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Henry Desbordes}%
+      }
+      \strng{namehash}{94208126d170ba28915c8ec348c788ca}
+      \strng{fullhash}{94208126d170ba28915c8ec348c788ca}
+      \strng{fullhashraw}{94208126d170ba28915c8ec348c788ca}
+      \strng{bibnamehash}{94208126d170ba28915c8ec348c788ca}
+      \strng{realauthorbibnamehash}{94208126d170ba28915c8ec348c788ca}
+      \strng{realauthornamehash}{94208126d170ba28915c8ec348c788ca}
+      \strng{realauthorfullhash}{94208126d170ba28915c8ec348c788ca}
+      \strng{realauthorfullhashraw}{94208126d170ba28915c8ec348c788ca}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{realauthor}
+      \field{labeltitlesource}{title}
+      \field{title}{Défense des sentimens De quelques Théologiens de Hollande sur l'histoire critique du Vieux Testament contre la réponse du Prieur de Bolleville}
+      \field{year}{1686}
+    \endentry
+    \entry{Simon1686}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=6fed80a72474dce01a988057186c4f91}{%
+           family={{Prieur de Bolleville}},
+           familyi={P\bibinitperiod}}}%
+      }
+      \name{realauthor}{1}{}{%
+        {{hash=6888e07ac8440b3bea794b7843c4229c}{%
+           family={Simon},
+           familyi={S\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Rotterdam}%
+      }
+      \list{publisher}{1}{%
+        {Reinier Leers}%
+      }
+      \strng{namehash}{6fed80a72474dce01a988057186c4f91}
+      \strng{fullhash}{6fed80a72474dce01a988057186c4f91}
+      \strng{fullhashraw}{6fed80a72474dce01a988057186c4f91}
+      \strng{bibnamehash}{6fed80a72474dce01a988057186c4f91}
+      \strng{authorbibnamehash}{6fed80a72474dce01a988057186c4f91}
+      \strng{authornamehash}{6fed80a72474dce01a988057186c4f91}
+      \strng{authorfullhash}{6fed80a72474dce01a988057186c4f91}
+      \strng{authorfullhashraw}{6fed80a72474dce01a988057186c4f91}
+      \strng{realauthorbibnamehash}{6888e07ac8440b3bea794b7843c4229c}
+      \strng{realauthornamehash}{6888e07ac8440b3bea794b7843c4229c}
+      \strng{realauthorfullhash}{6888e07ac8440b3bea794b7843c4229c}
+      \strng{realauthorfullhashraw}{6888e07ac8440b3bea794b7843c4229c}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Réponse au livre intitulé sentimens de quelques Theologiens de Hollande sur l'Histoire Critique du Vieux Testament}
+      \field{year}{1686}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

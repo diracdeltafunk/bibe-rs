@@ -1,0 +1,441 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{Pleiade_Barnabe}{bookinbook}{}{}
+      \name{annotator}{1}{}{%
+        {{hash=57ade66563beac5c67c0adec86531053}{%
+           family={Norelli},
+           familyi={N\bibinitperiod},
+           given={Enrico},
+           giveni={E\bibinitperiod}}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=57ade66563beac5c67c0adec86531053}{%
+           family={Norelli},
+           familyi={N\bibinitperiod},
+           given={Enrico},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Gallimard}%
+      }
+      \strng{annotatorbibnamehash}{57ade66563beac5c67c0adec86531053}
+      \strng{annotatornamehash}{57ade66563beac5c67c0adec86531053}
+      \strng{annotatorfullhash}{57ade66563beac5c67c0adec86531053}
+      \strng{annotatorfullhashraw}{57ade66563beac5c67c0adec86531053}
+      \strng{translatorbibnamehash}{57ade66563beac5c67c0adec86531053}
+      \strng{translatornamehash}{57ade66563beac5c67c0adec86531053}
+      \strng{translatorfullhash}{57ade66563beac5c67c0adec86531053}
+      \strng{translatorfullhashraw}{57ade66563beac5c67c0adec86531053}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Écrits apocryphes chrétiens}
+      \strng{crossref}{Pleiade2}
+      \field{number}{516}
+      \field{series}{Bibliothèque de la Pléiade}
+      \field{title}{Actes de Barnabé}
+      \field{volume}{2}
+      \field{year}{2005}
+      \field{pages}{627\bibrangedash 642}
+      \range{pages}{16}
+    \endentry
+    \entry{Pleiade_Tite}{bookinbook}{}{}
+      \name{annotator}{1}{}{%
+        {{hash=3f90ab3f31c3c7da5d3580fb4107529d}{%
+           family={Rordorf},
+           familyi={R\bibinitperiod},
+           given={Willy},
+           giveni={W\bibinitperiod}}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=3f90ab3f31c3c7da5d3580fb4107529d}{%
+           family={Rordorf},
+           familyi={R\bibinitperiod},
+           given={Willy},
+           giveni={W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Gallimard}%
+      }
+      \strng{annotatorbibnamehash}{3f90ab3f31c3c7da5d3580fb4107529d}
+      \strng{annotatornamehash}{3f90ab3f31c3c7da5d3580fb4107529d}
+      \strng{annotatorfullhash}{3f90ab3f31c3c7da5d3580fb4107529d}
+      \strng{annotatorfullhashraw}{3f90ab3f31c3c7da5d3580fb4107529d}
+      \strng{translatorbibnamehash}{3f90ab3f31c3c7da5d3580fb4107529d}
+      \strng{translatornamehash}{3f90ab3f31c3c7da5d3580fb4107529d}
+      \strng{translatorfullhash}{3f90ab3f31c3c7da5d3580fb4107529d}
+      \strng{translatorfullhashraw}{3f90ab3f31c3c7da5d3580fb4107529d}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Écrits apocryphes chrétiens}
+      \strng{crossref}{Pleiade2}
+      \field{number}{516}
+      \field{series}{Bibliothèque de la Pléiade}
+      \field{title}{Actes de Tite}
+      \field{volume}{2}
+      \field{year}{2005}
+      \field{pages}{609\bibrangedash 615}
+      \range{pages}{7}
+    \endentry
+    \entry{Pleiade2}{book}{}{}
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Gallimard}%
+      }
+      \field{sortinit}{É}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \true{crossrefsource}
+      \field{labeltitlesource}{title}
+      \field{number}{516}
+      \field{series}{Bibliothèque de la Pléiade}
+      \field{title}{Écrits apocryphes chrétiens}
+      \field{volume}{2}
+      \field{year}{2005}
+    \endentry
+    \entry{Halkin1961}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=99e44342091df9256338abc66cc30f6e}{%
+           family={Halkin},
+           familyi={H\bibinitperiod},
+           given={François},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{99e44342091df9256338abc66cc30f6e}
+      \strng{fullhash}{99e44342091df9256338abc66cc30f6e}
+      \strng{fullhashraw}{99e44342091df9256338abc66cc30f6e}
+      \strng{bibnamehash}{99e44342091df9256338abc66cc30f6e}
+      \strng{authorbibnamehash}{99e44342091df9256338abc66cc30f6e}
+      \strng{authornamehash}{99e44342091df9256338abc66cc30f6e}
+      \strng{authorfullhash}{99e44342091df9256338abc66cc30f6e}
+      \strng{authorfullhashraw}{99e44342091df9256338abc66cc30f6e}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \true{crossrefsource}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Analecta Bollandiana}
+      \field{number}{79}
+      \field{title}{La légende crétoise de Saint Tite}
+      \field{year}{1961}
+      \field{dateera}{ce}
+      \field{pages}{241\bibrangedash 256}
+      \range{pages}{16}
+    \endentry
+    \entry{Izydorczyk1997}{collection}{}{}
+      \name{editor}{1}{}{%
+        {{hash=6a6668c8a154a0c896db9b7c53490cb0}{%
+           family={Izydorczyk},
+           familyi={I\bibinitperiod},
+           given={Zbigniew},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Tempe}%
+      }
+      \list{publisher}{1}{%
+        {Medieval \& Renaissance Texts \& Studies}%
+      }
+      \strng{namehash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{fullhash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{fullhashraw}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{bibnamehash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editorbibnamehash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editornamehash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editorfullhash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editorfullhashraw}{6a6668c8a154a0c896db9b7c53490cb0}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \true{crossrefsource}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{shorttitle}
+      \field{shorttitle}{The Medieval \emph{Gospel of Nicodemus}}
+      \field{subtitle}{Texts, Intertexts, and Contexts in Western Europe}
+      \field{title}{The Medieval \emph{Gospel of Nicodemus}}
+      \field{year}{1997}
+    \endentry
+    \entry{Klausner1997}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{hash=b0446953d3e28dcc2d63f375d2324f5b}{%
+           family={Klausner},
+           familyi={K\bibinitperiod},
+           given={David\bibnamedelima N.},
+           giveni={D\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=6a6668c8a154a0c896db9b7c53490cb0}{%
+           family={Izydorczyk},
+           familyi={I\bibinitperiod},
+           given={Zbigniew},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Tempe}%
+      }
+      \list{publisher}{1}{%
+        {Medieval \& Renaissance Texts \& Studies}%
+      }
+      \strng{namehash}{b0446953d3e28dcc2d63f375d2324f5b}
+      \strng{fullhash}{b0446953d3e28dcc2d63f375d2324f5b}
+      \strng{fullhashraw}{b0446953d3e28dcc2d63f375d2324f5b}
+      \strng{bibnamehash}{b0446953d3e28dcc2d63f375d2324f5b}
+      \strng{authorbibnamehash}{b0446953d3e28dcc2d63f375d2324f5b}
+      \strng{authornamehash}{b0446953d3e28dcc2d63f375d2324f5b}
+      \strng{authorfullhash}{b0446953d3e28dcc2d63f375d2324f5b}
+      \strng{authorfullhashraw}{b0446953d3e28dcc2d63f375d2324f5b}
+      \strng{editorbibnamehash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editornamehash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editorfullhash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editorfullhashraw}{6a6668c8a154a0c896db9b7c53490cb0}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booksubtitle}{Texts, Intertexts, and Contexts in Western Europe}
+      \field{booktitle}{The Medieval \emph{Gospel of Nicodemus}}
+      \strng{crossref}{Izydorczyk1997}
+      \field{title}{The \emph{Gospel of Nicodemus} in the Literature of Medieval Wales}
+      \field{year}{1997}
+      \field{pages}{403\bibrangedash 425}
+      \range{pages}{23}
+    \endentry
+    \entry{Ogorman1997}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{hash=0b99bc7cbc95bd13fb160f8fe60a6320}{%
+           family={O'Gorman},
+           familyi={O\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=6a6668c8a154a0c896db9b7c53490cb0}{%
+           family={Izydorczyk},
+           familyi={I\bibinitperiod},
+           given={Zbigniew},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Tempe}%
+      }
+      \list{publisher}{1}{%
+        {Medieval \& Renaissance Texts \& Studies}%
+      }
+      \strng{namehash}{0b99bc7cbc95bd13fb160f8fe60a6320}
+      \strng{fullhash}{0b99bc7cbc95bd13fb160f8fe60a6320}
+      \strng{fullhashraw}{0b99bc7cbc95bd13fb160f8fe60a6320}
+      \strng{bibnamehash}{0b99bc7cbc95bd13fb160f8fe60a6320}
+      \strng{authorbibnamehash}{0b99bc7cbc95bd13fb160f8fe60a6320}
+      \strng{authornamehash}{0b99bc7cbc95bd13fb160f8fe60a6320}
+      \strng{authorfullhash}{0b99bc7cbc95bd13fb160f8fe60a6320}
+      \strng{authorfullhashraw}{0b99bc7cbc95bd13fb160f8fe60a6320}
+      \strng{editorbibnamehash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editornamehash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editorfullhash}{6a6668c8a154a0c896db9b7c53490cb0}
+      \strng{editorfullhashraw}{6a6668c8a154a0c896db9b7c53490cb0}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booksubtitle}{Texts, Intertexts, and Contexts in Western Europe}
+      \field{booktitle}{The Medieval \emph{Gospel of Nicodemus}}
+      \strng{crossref}{Izydorczyk1997}
+      \field{title}{The \emph{Gospel of Nicodemus} in the Vernacular Literatur of Medieval France}
+      \field{year}{1997}
+      \field{pages}{103\bibrangedash 131}
+      \range{pages}{29}
+    \endentry
+    \entry{Pseudo-Epiphane}{bookinbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=c4651562f207a13496afa93af074395e}{%
+           family={{Pseudo-Épiphane}},
+           familyi={P\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=b5e81b78fc070ee6fbeddf57bce2598a}{%
+           family={Schermann},
+           familyi={S\bibinitperiod},
+           given={Theodor},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Leipzig}%
+      }
+      \list{publisher}{1}{%
+        {Teubner}%
+      }
+      \strng{namehash}{c4651562f207a13496afa93af074395e}
+      \strng{fullhash}{c4651562f207a13496afa93af074395e}
+      \strng{fullhashraw}{c4651562f207a13496afa93af074395e}
+      \strng{bibnamehash}{c4651562f207a13496afa93af074395e}
+      \strng{authorbibnamehash}{c4651562f207a13496afa93af074395e}
+      \strng{authornamehash}{c4651562f207a13496afa93af074395e}
+      \strng{authorfullhash}{c4651562f207a13496afa93af074395e}
+      \strng{authorfullhashraw}{c4651562f207a13496afa93af074395e}
+      \strng{editorbibnamehash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editornamehash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editorfullhash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editorfullhashraw}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Prophetarum vitae fabulosae indices apostolorum discipulorumque Domini Dorotheo · Epiphanio · Hippolyto aliisque vindicata}
+      \strng{crossref}{Schermann1907}
+      \field{title}{Index apostolorum discipulorumque Domini}
+      \field{year}{1907}
+      \field{pages}{107\bibrangedash 126}
+      \range{pages}{20}
+    \endentry
+    \entry{Pseudo-Hippolyte}{bookinbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=4319717c1c52031a1f92b5f6223ff875}{%
+           family={{Pseudo-Hippolyte}},
+           familyi={P\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=b5e81b78fc070ee6fbeddf57bce2598a}{%
+           family={Schermann},
+           familyi={S\bibinitperiod},
+           given={Theodor},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Leipzig}%
+      }
+      \list{publisher}{1}{%
+        {Teubner}%
+      }
+      \strng{namehash}{4319717c1c52031a1f92b5f6223ff875}
+      \strng{fullhash}{4319717c1c52031a1f92b5f6223ff875}
+      \strng{fullhashraw}{4319717c1c52031a1f92b5f6223ff875}
+      \strng{bibnamehash}{4319717c1c52031a1f92b5f6223ff875}
+      \strng{authorbibnamehash}{4319717c1c52031a1f92b5f6223ff875}
+      \strng{authornamehash}{4319717c1c52031a1f92b5f6223ff875}
+      \strng{authorfullhash}{4319717c1c52031a1f92b5f6223ff875}
+      \strng{authorfullhashraw}{4319717c1c52031a1f92b5f6223ff875}
+      \strng{editorbibnamehash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editornamehash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editorfullhash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editorfullhashraw}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Prophetarum vitae fabulosae indices apostolorum discipulorumque Domini Dorotheo · Epiphanio · Hippolyto aliisque vindicata}
+      \strng{crossref}{Schermann1907}
+      \field{title}{Index apostolorum discipulorumque Domini}
+      \field{year}{1907}
+      \field{pages}{163\bibrangedash 170}
+      \range{pages}{8}
+    \endentry
+    \entry{Schermann1907}{book}{}{}
+      \name{editor}{1}{}{%
+        {{hash=b5e81b78fc070ee6fbeddf57bce2598a}{%
+           family={Schermann},
+           familyi={S\bibinitperiod},
+           given={Theodor},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Leipzig}%
+      }
+      \list{publisher}{1}{%
+        {Teubner}%
+      }
+      \strng{namehash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{fullhash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{fullhashraw}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{bibnamehash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editorbibnamehash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editornamehash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editorfullhash}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \strng{editorfullhashraw}{b5e81b78fc070ee6fbeddf57bce2598a}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \true{crossrefsource}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{title}{Prophetarum vitae fabulosae indices apostolorum discipulorumque Domini Dorotheo · Epiphanio · Hippolyto aliisque vindicata}
+      \field{year}{1907}
+    \endentry
+    \entry{BHG1850z_o}{bookinarticle}{}{}
+      \name{bookauthor}{1}{}{%
+        {{hash=99e44342091df9256338abc66cc30f6e}{%
+           family={Halkin},
+           familyi={H\bibinitperiod},
+           given={François},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{bookauthorbibnamehash}{99e44342091df9256338abc66cc30f6e}
+      \strng{bookauthornamehash}{99e44342091df9256338abc66cc30f6e}
+      \strng{bookauthorfullhash}{99e44342091df9256338abc66cc30f6e}
+      \strng{bookauthorfullhashraw}{99e44342091df9256338abc66cc30f6e}
+      \field{sortinit}{Τ}
+      \field{sortinithash}{041864239d9c73bc9a63e4d5f14532b6}
+      \field{labeltitlesource}{title}
+      \strng{crossref}{Halkin1961}
+      \field{journaltitle}{Analecta Bollandiana}
+      \field{maintitle}{La légende crétoise de Saint Tite}
+      \field{number}{79}
+      \field{title}{Τοῦ ἁγίου ἀποστόλου Τίτου, ἐπισκόπου γενομένου Κρήτης πόλεως Γορτύνης, μαθητοῦ τοῦ ἁγίου ἀποστόλου Παύλου}
+      \field{year}{1961}
+      \field{dateera}{ce}
+      \field{pages}{244\bibrangedash 252}
+      \range{pages}{9}
+    \endentry
+    \entry{BHG1850z_r}{bookinarticle}{}{}
+      \name{bookauthor}{1}{}{%
+        {{hash=99e44342091df9256338abc66cc30f6e}{%
+           family={Halkin},
+           familyi={H\bibinitperiod},
+           given={François},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{bookauthorbibnamehash}{99e44342091df9256338abc66cc30f6e}
+      \strng{bookauthornamehash}{99e44342091df9256338abc66cc30f6e}
+      \strng{bookauthorfullhash}{99e44342091df9256338abc66cc30f6e}
+      \strng{bookauthorfullhashraw}{99e44342091df9256338abc66cc30f6e}
+      \field{sortinit}{Τ}
+      \field{sortinithash}{041864239d9c73bc9a63e4d5f14532b6}
+      \field{labeltitlesource}{title}
+      \strng{crossref}{Halkin1961}
+      \field{journaltitle}{Analecta Bollandiana}
+      \field{maintitle}{La légende crétoise de Saint Tite}
+      \field{number}{79}
+      \field{title}{Τοῦ ἁγίου ἀποστόλου Τίτου, ἐπισκόπου Γορτύνης τῆς Κρητῶν νήσου}
+      \field{year}{1961}
+      \field{dateera}{ce}
+      \field{pages}{252\bibrangedash 256}
+      \range{pages}{5}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

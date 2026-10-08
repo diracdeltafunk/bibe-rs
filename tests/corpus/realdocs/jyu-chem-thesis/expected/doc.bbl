@@ -1,0 +1,444 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{atkins}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=768c9606afd59ac272ce600d425a08c7}{%
+           family={Atkins},
+           familyi={A\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \list{publisher}{1}{%
+        {University Press}%
+      }
+      \strng{namehash}{768c9606afd59ac272ce600d425a08c7}
+      \strng{fullhash}{768c9606afd59ac272ce600d425a08c7}
+      \strng{fullhashraw}{768c9606afd59ac272ce600d425a08c7}
+      \strng{bibnamehash}{768c9606afd59ac272ce600d425a08c7}
+      \strng{authorbibnamehash}{768c9606afd59ac272ce600d425a08c7}
+      \strng{authornamehash}{768c9606afd59ac272ce600d425a08c7}
+      \strng{authorfullhash}{768c9606afd59ac272ce600d425a08c7}
+      \strng{authorfullhashraw}{768c9606afd59ac272ce600d425a08c7}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Physical Chemistry}
+      \field{year}{2006}
+      \field{pages}{111\bibrangedash 111}
+      \range{pages}{1}
+    \endentry
+    \entry{PhysRev.136.B864}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=40ea553b503fe0418f7f07689980cd95}{%
+           family={Hohenberg},
+           familyi={H\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=5d41414fe0631332e20a859e66a25627}{%
+           family={Kohn},
+           familyi={K\bibinitperiod},
+           given={W.},
+           giveni={W\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Physical Society}%
+      }
+      \strng{namehash}{7d5f8c830aae8dc4c996b32459939beb}
+      \strng{fullhash}{7d5f8c830aae8dc4c996b32459939beb}
+      \strng{fullhashraw}{7d5f8c830aae8dc4c996b32459939beb}
+      \strng{bibnamehash}{7d5f8c830aae8dc4c996b32459939beb}
+      \strng{authorbibnamehash}{7d5f8c830aae8dc4c996b32459939beb}
+      \strng{authornamehash}{7d5f8c830aae8dc4c996b32459939beb}
+      \strng{authorfullhash}{7d5f8c830aae8dc4c996b32459939beb}
+      \strng{authorfullhashraw}{7d5f8c830aae8dc4c996b32459939beb}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issue}{3B}
+      \field{journaltitle}{Phys. Rev.}
+      \field{title}{Inhomogeneous Electron Gas}
+      \field{volume}{136}
+      \field{year}{1964}
+      \field{pages}{B864\bibrangedash B871}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1103/PhysRev.136.B864
+      \endverb
+      \verb{urlraw}
+      \verb https://link.aps.org/doi/10.1103/PhysRev.136.B864
+      \endverb
+      \verb{url}
+      \verb https://link.aps.org/doi/10.1103/PhysRev.136.B864
+      \endverb
+    \endentry
+    \entry{10.1063/5.0182685}{article}{}{}
+      \name{author}{47}{}{%
+        {{hash=bc21c9e9c8cb3413fcaffd0e1ff25f28}{%
+           family={Mortensen},
+           familyi={M\bibinitperiod},
+           given={Jens\bibnamedelima J{ø}rgen},
+           giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=d6d1f0ecb6be8e676e06e168df2a3bcc}{%
+           family={Larsen},
+           familyi={L\bibinitperiod},
+           given={Ask\bibnamedelima Hjorth},
+           giveni={A\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=b398038e337b23cfc39e3eb69d8d45c2}{%
+           family={Kuisma},
+           familyi={K\bibinitperiod},
+           given={Mikael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=72a8ec3d07ba444f53ff69f61a656b52}{%
+           family={Ivanov},
+           familyi={I\bibinitperiod},
+           given={Aleksei\bibnamedelima V.},
+           giveni={A\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=d5f9759c974ab33028bcfc580051f1ac}{%
+           family={Taghizadeh},
+           familyi={T\bibinitperiod},
+           given={Alireza},
+           giveni={A\bibinitperiod}}}%
+        {{hash=c974b97923e11e4e6a6fc1485f17d7fc}{%
+           family={Peterson},
+           familyi={P\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+        {{hash=7c743479f31d7734a1705858ef8070d2}{%
+           family={Haldar},
+           familyi={H\bibinitperiod},
+           given={Anubhab},
+           giveni={A\bibinitperiod}}}%
+        {{hash=7875df413ebc66c33a7ae80c2fc73abc}{%
+           family={Dohn},
+           familyi={D\bibinitperiod},
+           given={Asmus\bibnamedelima Ougaard},
+           giveni={A\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=5da96de492be63455b6a5a7033432855}{%
+           family={Schäfer},
+           familyi={S\bibinitperiod},
+           given={Christian},
+           giveni={C\bibinitperiod}}}%
+        {{hash=ca2ab6545f6b7701779d4813197b4950}{%
+           family={Jónsson},
+           familyi={J\bibinitperiod},
+           given={Elvar\bibnamedelima Örn},
+           giveni={E\bibinitperiod\bibinitdelim Ö\bibinitperiod}}}%
+        {{hash=f3ad1e20cd661128fc91d7e2849542cc}{%
+           family={Hermes},
+           familyi={H\bibinitperiod},
+           given={Eric\bibnamedelima D.},
+           giveni={E\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=63d9fdc207430438358f8c0ba38af44a}{%
+           family={Nilsson},
+           familyi={N\bibinitperiod},
+           given={Fredrik\bibnamedelima Andreas},
+           giveni={F\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=24b21c3b95b376afbfc7d046913302e8}{%
+           family={Kastlunger},
+           familyi={K\bibinitperiod},
+           given={Georg},
+           giveni={G\bibinitperiod}}}%
+        {{hash=259908deaaa7010f1a5af7f8c962e6a8}{%
+           family={Levi},
+           familyi={L\bibinitperiod},
+           given={Gianluca},
+           giveni={G\bibinitperiod}}}%
+        {{hash=648d43f32c5f6b4f29403470f3f1f744}{%
+           family={Jónsson},
+           familyi={J\bibinitperiod},
+           given={Hannes},
+           giveni={H\bibinitperiod}}}%
+        {{hash=ced4d722b356e741f598e3e966f127e3}{%
+           family={Häkkinen},
+           familyi={H\bibinitperiod},
+           given={Hannu},
+           giveni={H\bibinitperiod}}}%
+        {{hash=c8759a931c8121eaeeaa5d11ad9b3eb5}{%
+           family={Fojt},
+           familyi={F\bibinitperiod},
+           given={Jakub},
+           giveni={J\bibinitperiod}}}%
+        {{hash=40c9f97735cc02ca9c4750ce17a8c942}{%
+           family={Kangsabanik},
+           familyi={K\bibinitperiod},
+           given={Jiban},
+           giveni={J\bibinitperiod}}}%
+        {{hash=62294ee082627d10ede11abd4ea195ed}{%
+           family={S{ø}dequist},
+           familyi={S\bibinitperiod},
+           given={Joachim},
+           giveni={J\bibinitperiod}}}%
+        {{hash=be973dc3b66c07788db508ac7b47f00c}{%
+           family={Lehtomäki},
+           familyi={L\bibinitperiod},
+           given={Jouko},
+           giveni={J\bibinitperiod}}}%
+        {{hash=564c426157f7e95fccfe9d62cc35ccd9}{%
+           family={Heske},
+           familyi={H\bibinitperiod},
+           given={Julian},
+           giveni={J\bibinitperiod}}}%
+        {{hash=3092c02d6dcd0fbcdba3e61753a38fa9}{%
+           family={Enkovaara},
+           familyi={E\bibinitperiod},
+           given={Jussi},
+           giveni={J\bibinitperiod}}}%
+        {{hash=0a7bd8c490b75d6b22d0398d7a84fa35}{%
+           family={Winther},
+           familyi={W\bibinitperiod},
+           given={Kirsten\bibnamedelima Tr{ø}strup},
+           giveni={K\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=83edeba901bc3e07f689409a1f90e28e}{%
+           family={Dulak},
+           familyi={D\bibinitperiod},
+           given={Marcin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=b5d18473d7b32e5a15e5b7b35a7ee8f2}{%
+           family={Melander},
+           familyi={M\bibinitperiod},
+           given={Marko\bibnamedelima M.},
+           giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=a3312aa132a7e7c50f62a875b1c47274}{%
+           family={Ovesen},
+           familyi={O\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=54c91d457ff4918f82a2b146f14f2742}{%
+           family={Louhivuori},
+           familyi={L\bibinitperiod},
+           given={Martti},
+           giveni={M\bibinitperiod}}}%
+        {{hash=fdf118bc8f155c62f9f0f9662c120249}{%
+           family={Walter},
+           familyi={W\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=16ce46361969f169b38a5131a0249e6c}{%
+           family={Gjerding},
+           familyi={G\bibinitperiod},
+           given={Morten},
+           giveni={M\bibinitperiod}}}%
+        {{hash=b6d607d6d67e15a82ba63081890a1e2d}{%
+           family={Lopez-Acevedo},
+           familyi={L\bibinithyphendelim A\bibinitperiod},
+           given={Olga},
+           giveni={O\bibinitperiod}}}%
+        {{hash=3fb0aac54db7a4dd6abef3e49ce87430}{%
+           family={Erhart},
+           familyi={E\bibinitperiod},
+           given={Paul},
+           giveni={P\bibinitperiod}}}%
+        {{hash=aa2c6c574199d4bc30b3710200c146dd}{%
+           family={Warmbier},
+           familyi={W\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=390c8b160fbb605937b224bc506e45ce}{%
+           family={Würdemann},
+           familyi={W\bibinitperiod},
+           given={Rolf},
+           giveni={R\bibinitperiod}}}%
+        {{hash=c8bf449054d58eba199934f3453ffa63}{%
+           family={Kaappa},
+           familyi={K\bibinitperiod},
+           given={Sami},
+           giveni={S\bibinitperiod}}}%
+        {{hash=2421be3cd2a21b418346791b615b3e8b}{%
+           family={Latini},
+           familyi={L\bibinitperiod},
+           given={Simone},
+           giveni={S\bibinitperiod}}}%
+        {{hash=2fec814301411b61841ebe1191481ed7}{%
+           family={Boland},
+           familyi={B\bibinitperiod},
+           given={Tara\bibnamedelima Maria},
+           giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=5f6bd3483468f5e247020105d0e362e8}{%
+           family={Bligaard},
+           familyi={B\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=f225a49af02b2ca057d166ed7718b6d3}{%
+           family={Skovhus},
+           familyi={S\bibinitperiod},
+           given={Thorbj{ø}rn},
+           giveni={T\bibinitperiod}}}%
+        {{hash=b507478e329f53b7cbb6e9a974e1a819}{%
+           family={Susi},
+           familyi={S\bibinitperiod},
+           given={Toma},
+           giveni={T\bibinitperiod}}}%
+        {{hash=147f95cea92934f541b87656f2915827}{%
+           family={Maxson},
+           familyi={M\bibinitperiod},
+           given={Tristan},
+           giveni={T\bibinitperiod}}}%
+        {{hash=51287e222eebe34655f70c596abc79f9}{%
+           family={Rossi},
+           familyi={R\bibinitperiod},
+           given={Tuomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=c6649d02b24225ca4c9012cee6c790de}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Xi},
+           giveni={X\bibinitperiod}}}%
+        {{hash=fd6f59f743fe890b3d75cbcb27583f12}{%
+           family={Schmerwitz},
+           familyi={S\bibinitperiod},
+           given={Yorick\bibnamedelimb Leonard\bibnamedelima A.},
+           giveni={Y\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=f08a785e9a1a6a50e44feb678e09296b}{%
+           family={Schi{ø}tz},
+           familyi={S\bibinitperiod},
+           given={Jakob},
+           giveni={J\bibinitperiod}}}%
+        {{hash=a929aca9aed6c828e525ab4f308947ed}{%
+           family={Olsen},
+           familyi={O\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=bc75248c1f61517c16c96cb1d3a7d169}{%
+           family={Jacobsen},
+           familyi={J\bibinitperiod},
+           given={Karsten\bibnamedelima Wedel},
+           giveni={K\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=f50755e3cece0f1aa82b3525506063be}{%
+           family={Thygesen},
+           familyi={T\bibinitperiod},
+           given={Kristian\bibnamedelima Sommer},
+           giveni={K\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{3176b774e94854c871e363a4414e2cbc}
+      \strng{fullhash}{3176b774e94854c871e363a4414e2cbc}
+      \strng{fullhashraw}{3176b774e94854c871e363a4414e2cbc}
+      \strng{bibnamehash}{3176b774e94854c871e363a4414e2cbc}
+      \strng{authorbibnamehash}{3176b774e94854c871e363a4414e2cbc}
+      \strng{authornamehash}{3176b774e94854c871e363a4414e2cbc}
+      \strng{authorfullhash}{3176b774e94854c871e363a4414e2cbc}
+      \strng{authorfullhashraw}{3176b774e94854c871e363a4414e2cbc}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{J. Chem. Phys.}
+      \field{month}{03}
+      \field{number}{9}
+      \field{title}{GPAW: An open Python package for electronic structure calculations}
+      \field{volume}{160}
+      \field{year}{2024}
+      \field{pages}{092503}
+      \range{pages}{1}
+    \endentry
+    \entry{ohje}{report}{}{}
+      \name{author}{1}{}{%
+        {{hash=668974098ac7ebd279696c5f6dc4d890}{%
+           family={Apulainen},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Jyväskylän yliopisto, Kemian laitos}%
+      }
+      \strng{namehash}{668974098ac7ebd279696c5f6dc4d890}
+      \strng{fullhash}{668974098ac7ebd279696c5f6dc4d890}
+      \strng{fullhashraw}{668974098ac7ebd279696c5f6dc4d890}
+      \strng{bibnamehash}{668974098ac7ebd279696c5f6dc4d890}
+      \strng{authorbibnamehash}{668974098ac7ebd279696c5f6dc4d890}
+      \strng{authornamehash}{668974098ac7ebd279696c5f6dc4d890}
+      \strng{authorfullhash}{668974098ac7ebd279696c5f6dc4d890}
+      \strng{authorfullhashraw}{668974098ac7ebd279696c5f6dc4d890}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Opinnäytteiden kirjoitusohje}
+      \field{type}{techreport}
+      \field{year}{2023}
+    \endentry
+    \entry{iupac}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=17fa023172095df2a317856dddb0ada8}{%
+           family={{International Union of Pure and Applied Chemistry (IUPAC)}},
+           familyi={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{17fa023172095df2a317856dddb0ada8}
+      \strng{fullhash}{17fa023172095df2a317856dddb0ada8}
+      \strng{fullhashraw}{17fa023172095df2a317856dddb0ada8}
+      \strng{bibnamehash}{17fa023172095df2a317856dddb0ada8}
+      \strng{authorbibnamehash}{17fa023172095df2a317856dddb0ada8}
+      \strng{authornamehash}{17fa023172095df2a317856dddb0ada8}
+      \strng{authorfullhash}{17fa023172095df2a317856dddb0ada8}
+      \strng{authorfullhashraw}{17fa023172095df2a317856dddb0ada8}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{(5.2.2026).}
+      \field{title}{Compendium of Chemical Terminology}
+      \verb{urlraw}
+      \verb https://goldbook.iupac.org
+      \endverb
+      \verb{url}
+      \verb https://goldbook.iupac.org
+      \endverb
+    \endentry
+    \entry{thesis}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{hash=0d483c65ee13f6fe2d3493b9ea2d38a2}{%
+           family={Kotoneva},
+           familyi={K\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Jyväskylän yliopisto, kemian laitos}%
+      }
+      \list{location}{1}{%
+        {Jyväskylä}%
+      }
+      \strng{namehash}{0d483c65ee13f6fe2d3493b9ea2d38a2}
+      \strng{fullhash}{0d483c65ee13f6fe2d3493b9ea2d38a2}
+      \strng{fullhashraw}{0d483c65ee13f6fe2d3493b9ea2d38a2}
+      \strng{bibnamehash}{0d483c65ee13f6fe2d3493b9ea2d38a2}
+      \strng{authorbibnamehash}{0d483c65ee13f6fe2d3493b9ea2d38a2}
+      \strng{authornamehash}{0d483c65ee13f6fe2d3493b9ea2d38a2}
+      \strng{authorfullhash}{0d483c65ee13f6fe2d3493b9ea2d38a2}
+      \strng{authorfullhashraw}{0d483c65ee13f6fe2d3493b9ea2d38a2}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Steroidit supramolekulaarisessa kemiassa}
+      \field{type}{pro gradu -tutkielma}
+      \field{year}{1995}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,1058 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{abbott1981}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=42e780d90070bf50f59170c191996f73}{%
+           family={Abbott},
+           familyi={A\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Chicago}%
+      }
+      \list{publisher}{1}{%
+        {University of Chicago Press}%
+      }
+      \strng{namehash}{42e780d90070bf50f59170c191996f73}
+      \strng{fullhash}{42e780d90070bf50f59170c191996f73}
+      \strng{fullhashraw}{42e780d90070bf50f59170c191996f73}
+      \strng{bibnamehash}{42e780d90070bf50f59170c191996f73}
+      \strng{authorbibnamehash}{42e780d90070bf50f59170c191996f73}
+      \strng{authornamehash}{42e780d90070bf50f59170c191996f73}
+      \strng{authorfullhash}{42e780d90070bf50f59170c191996f73}
+      \strng{authorfullhashraw}{42e780d90070bf50f59170c191996f73}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The System of Professions}
+      \field{year}{1981}
+    \endentry
+    \entry{ASA1997}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=93f56cf8679654a3dbece05300f84157}{%
+           family={{American Sociological Association}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Washington, DC}%
+      }
+      \list{publisher}{1}{%
+        {American Sociological Association}%
+      }
+      \strng{namehash}{93f56cf8679654a3dbece05300f84157}
+      \strng{fullhash}{93f56cf8679654a3dbece05300f84157}
+      \strng{fullhashraw}{93f56cf8679654a3dbece05300f84157}
+      \strng{bibnamehash}{93f56cf8679654a3dbece05300f84157}
+      \strng{authorbibnamehash}{93f56cf8679654a3dbece05300f84157}
+      \strng{authornamehash}{93f56cf8679654a3dbece05300f84157}
+      \strng{authorfullhash}{93f56cf8679654a3dbece05300f84157}
+      \strng{authorfullhashraw}{93f56cf8679654a3dbece05300f84157}
+      \field{extraname}{1}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{ASA Action Alert, October 15}
+      \field{title}{Call for Help: Social Science Knowledge on Race, Racism, and Race Relations}
+      \field{year}{1997}
+      \verb{urlraw}
+      \verb http://www.asanet.org/racecall.htm
+      \endverb
+      \verb{url}
+      \verb http://www.asanet.org/racecall.htm
+      \endverb
+    \endentry
+    \entry{asawebinar2023}{video}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=93f56cf8679654a3dbece05300f84157}{%
+           family={{American Sociological Association}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{93f56cf8679654a3dbece05300f84157}
+      \strng{fullhash}{93f56cf8679654a3dbece05300f84157}
+      \strng{fullhashraw}{93f56cf8679654a3dbece05300f84157}
+      \strng{bibnamehash}{93f56cf8679654a3dbece05300f84157}
+      \strng{authorbibnamehash}{93f56cf8679654a3dbece05300f84157}
+      \strng{authornamehash}{93f56cf8679654a3dbece05300f84157}
+      \strng{authorfullhash}{93f56cf8679654a3dbece05300f84157}
+      \strng{authorfullhashraw}{93f56cf8679654a3dbece05300f84157}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Webinar}
+      \field{month}{5}
+      \field{title}{The Intersectional Future of Qualitative Data Analysis}
+      \field{year}{2023}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.asanet.org/webinar/the-intersectional-future-of-qualitative-data-analysis/
+      \endverb
+      \verb{url}
+      \verb https://www.asanet.org/webinar/the-intersectional-future-of-qualitative-data-analysis/
+      \endverb
+    \endentry
+    \entry{bernard1957}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=75b3b82c5ee82b73b2aeb4f3993ebb07}{%
+           family={Bernard},
+           familyi={B\bibinitperiod},
+           given={Claude},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=a89e744c78801ac3283654f19f0dd046}{%
+           family={Greene},
+           familyi={G\bibinitperiod},
+           given={H.\bibnamedelimi C.},
+           giveni={H\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Dover}%
+      }
+      \strng{namehash}{75b3b82c5ee82b73b2aeb4f3993ebb07}
+      \strng{fullhash}{75b3b82c5ee82b73b2aeb4f3993ebb07}
+      \strng{fullhashraw}{75b3b82c5ee82b73b2aeb4f3993ebb07}
+      \strng{bibnamehash}{75b3b82c5ee82b73b2aeb4f3993ebb07}
+      \strng{authorbibnamehash}{75b3b82c5ee82b73b2aeb4f3993ebb07}
+      \strng{authornamehash}{75b3b82c5ee82b73b2aeb4f3993ebb07}
+      \strng{authorfullhash}{75b3b82c5ee82b73b2aeb4f3993ebb07}
+      \strng{authorfullhashraw}{75b3b82c5ee82b73b2aeb4f3993ebb07}
+      \strng{translatorbibnamehash}{a89e744c78801ac3283654f19f0dd046}
+      \strng{translatornamehash}{a89e744c78801ac3283654f19f0dd046}
+      \strng{translatorfullhash}{a89e744c78801ac3283654f19f0dd046}
+      \strng{translatorfullhashraw}{a89e744c78801ac3283654f19f0dd046}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{origyear}{1865}
+      \field{title}{An Introduction to the Study of Experimental Medicine}
+      \field{year}{1957}
+    \endentry
+    \entry{brown2022}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=fadd4c89e9e6cc9e6b1371f4c8d89667}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Charlie},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Minneapolis}%
+      }
+      \list{publisher}{1}{%
+        {Cartoon Press}%
+      }
+      \strng{namehash}{fadd4c89e9e6cc9e6b1371f4c8d89667}
+      \strng{fullhash}{fadd4c89e9e6cc9e6b1371f4c8d89667}
+      \strng{fullhashraw}{fadd4c89e9e6cc9e6b1371f4c8d89667}
+      \strng{bibnamehash}{fadd4c89e9e6cc9e6b1371f4c8d89667}
+      \strng{authorbibnamehash}{fadd4c89e9e6cc9e6b1371f4c8d89667}
+      \strng{authornamehash}{fadd4c89e9e6cc9e6b1371f4c8d89667}
+      \strng{authorfullhash}{fadd4c89e9e6cc9e6b1371f4c8d89667}
+      \strng{authorfullhashraw}{fadd4c89e9e6cc9e6b1371f4c8d89667}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Peanuts and Sociology}
+      \field{year}{2022}
+    \endentry
+    \entry{charles1990}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=0d27efa46f160617bb82aad1e4968c0a}{%
+           family={Charles},
+           familyi={C\bibinitperiod},
+           given={Maria},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Stanford University}%
+      }
+      \list{location}{1}{%
+        {Stanford, CA}%
+      }
+      \strng{namehash}{0d27efa46f160617bb82aad1e4968c0a}
+      \strng{fullhash}{0d27efa46f160617bb82aad1e4968c0a}
+      \strng{fullhashraw}{0d27efa46f160617bb82aad1e4968c0a}
+      \strng{bibnamehash}{0d27efa46f160617bb82aad1e4968c0a}
+      \strng{authorbibnamehash}{0d27efa46f160617bb82aad1e4968c0a}
+      \strng{authornamehash}{0d27efa46f160617bb82aad1e4968c0a}
+      \strng{authorfullhash}{0d27efa46f160617bb82aad1e4968c0a}
+      \strng{authorfullhashraw}{0d27efa46f160617bb82aad1e4968c0a}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Occupational Sex Segregation: A Log-Linear Analysis of Patterns in 25 Industrial Countries}
+      \field{type}{PhD dissertation}
+      \field{year}{1990}
+    \endentry
+    \entry{deschenes2000}{data}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=0cdc57c20b11fab834b6168b0aff8102}{%
+           family={Deschenes},
+           familyi={D\bibinitperiod},
+           given={Elizabeth\bibnamedelima Piper},
+           giveni={E\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=837c17c29fcd97c41b932ccfdbc70616}{%
+           family={Turner},
+           familyi={T\bibinitperiod},
+           given={Susan},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b54245ec3bd00de1a0a4924c87c2e05c}{%
+           family={Petersilia},
+           familyi={P\bibinitperiod},
+           given={Joan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Ann Arbor, MI}%
+      }
+      \list{publisher}{2}{%
+        {Inter-university Consortium for Political}%
+        {Social Research [distributor]}%
+      }
+      \strng{namehash}{f310113a7df1a052bf7fd8fc728733ed}
+      \strng{fullhash}{f310113a7df1a052bf7fd8fc728733ed}
+      \strng{fullhashraw}{f310113a7df1a052bf7fd8fc728733ed}
+      \strng{bibnamehash}{f310113a7df1a052bf7fd8fc728733ed}
+      \strng{authorbibnamehash}{f310113a7df1a052bf7fd8fc728733ed}
+      \strng{authornamehash}{f310113a7df1a052bf7fd8fc728733ed}
+      \strng{authorfullhash}{f310113a7df1a052bf7fd8fc728733ed}
+      \strng{authorfullhashraw}{f310113a7df1a052bf7fd8fc728733ed}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Intensive Community Supervision in Minnesota, 1990–1992: A Dual Experiment in Prison Diversion and Enhanced Supervised Release [Computer file]}
+      \field{version}{ICPSR06849-v1}
+      \field{year}{2000}
+      \verb{doi}
+      \verb 10.3886/ICPSR06849
+      \endverb
+    \endentry
+    \entry{doe_nodate}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d6cfb2b8c4b3f9440ec4642438129367}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={Jane},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Nowhere}%
+      }
+      \list{publisher}{1}{%
+        {Mystery Press}%
+      }
+      \strng{namehash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{fullhash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{fullhashraw}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{bibnamehash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{authorbibnamehash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{authornamehash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{authorfullhash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{authorfullhashraw}{d6cfb2b8c4b3f9440ec4642438129367}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Unknown Year}
+      \field{year}{n.d.}
+    \endentry
+    \entry{dclibrary2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=ca37a021ecfc3562440af6627aebfbed}{%
+           family={{Douglas College Library}},
+           familyi={D\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Instagram}%
+      }
+      \strng{namehash}{ca37a021ecfc3562440af6627aebfbed}
+      \strng{fullhash}{ca37a021ecfc3562440af6627aebfbed}
+      \strng{fullhashraw}{ca37a021ecfc3562440af6627aebfbed}
+      \strng{bibnamehash}{ca37a021ecfc3562440af6627aebfbed}
+      \strng{authorbibnamehash}{ca37a021ecfc3562440af6627aebfbed}
+      \strng{authornamehash}{ca37a021ecfc3562440af6627aebfbed}
+      \strng{authorfullhash}{ca37a021ecfc3562440af6627aebfbed}
+      \strng{authorfullhashraw}{ca37a021ecfc3562440af6627aebfbed}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{19}
+      \field{howpublished}{Instagram post}
+      \field{month}{8}
+      \field{title}{Getting ready for the Fall semester? Come on down to the Coquitlam campus and have a look at some of our new books}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.instagram.com/p/C-3Jvj_T4o3/
+      \endverb
+      \verb{url}
+      \verb https://www.instagram.com/p/C-3Jvj_T4o3/
+      \endverb
+    \endentry
+    \entry{gao2023}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=1bba5a702766019c689b89daca8d08c1}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Rebecca},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{1bba5a702766019c689b89daca8d08c1}
+      \strng{fullhash}{1bba5a702766019c689b89daca8d08c1}
+      \strng{fullhashraw}{1bba5a702766019c689b89daca8d08c1}
+      \strng{bibnamehash}{1bba5a702766019c689b89daca8d08c1}
+      \strng{authorbibnamehash}{1bba5a702766019c689b89daca8d08c1}
+      \strng{authornamehash}{1bba5a702766019c689b89daca8d08c1}
+      \strng{authorfullhash}{1bba5a702766019c689b89daca8d08c1}
+      \strng{authorfullhashraw}{1bba5a702766019c689b89daca8d08c1}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{entrysubtype}{magazine}
+      \field{journaltitle}{Maclean's}
+      \field{title}{Janine Rogan believes in the radical power of personal finance education}
+      \field{year}{2023}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://macleans.ca/economy/janine-rogan-pink-tax
+      \endverb
+      \verb{url}
+      \verb https://macleans.ca/economy/janine-rogan-pink-tax
+      \endverb
+    \endentry
+    \entry{goodman1947b}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d146ab5ac751638646b07b1cf762f93c}{%
+           family={Goodman},
+           familyi={G\bibinitperiod},
+           given={Leo\bibnamedelima A.},
+           giveni={L\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{fullhash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{fullhashraw}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{bibnamehash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{authorbibnamehash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{authornamehash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{authorfullhash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{authorfullhashraw}{d146ab5ac751638646b07b1cf762f93c}
+      \field{extraname}{1}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biometrika}
+      \field{number}{2}
+      \field{title}{Exploratory Latent Structure Analysis Using Both Identifiable and Unidentifiable Models}
+      \field{volume}{61}
+      \field{year}{1947}
+      \field{pages}{215\bibrangedash 231}
+      \range{pages}{17}
+    \endentry
+    \entry{goodman1947a}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d146ab5ac751638646b07b1cf762f93c}{%
+           family={Goodman},
+           familyi={G\bibinitperiod},
+           given={Leo\bibnamedelima A.},
+           giveni={L\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{fullhash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{fullhashraw}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{bibnamehash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{authorbibnamehash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{authornamehash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{authorfullhash}{d146ab5ac751638646b07b1cf762f93c}
+      \strng{authorfullhashraw}{d146ab5ac751638646b07b1cf762f93c}
+      \field{extraname}{2}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{American Journal of Sociology}
+      \field{number}{5}
+      \field{title}{The Analysis of Systems of Qualitative Variables When Some of the Variables Are Unobservable. Part I—A Modified Latent Structure Approach}
+      \field{volume}{79}
+      \field{year}{1947}
+      \field{pages}{1179\bibrangedash 1259}
+      \range{pages}{81}
+    \endentry
+    \entry{johnson2019}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=aa4a83405eb5652cfc269f0942daea0a}{%
+           family={Johnson},
+           familyi={J\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Boston}%
+      }
+      \list{publisher}{1}{%
+        {Academic Publishers}%
+      }
+      \strng{namehash}{aa4a83405eb5652cfc269f0942daea0a}
+      \strng{fullhash}{aa4a83405eb5652cfc269f0942daea0a}
+      \strng{fullhashraw}{aa4a83405eb5652cfc269f0942daea0a}
+      \strng{bibnamehash}{aa4a83405eb5652cfc269f0942daea0a}
+      \strng{authorbibnamehash}{aa4a83405eb5652cfc269f0942daea0a}
+      \strng{authornamehash}{aa4a83405eb5652cfc269f0942daea0a}
+      \strng{authorfullhash}{aa4a83405eb5652cfc269f0942daea0a}
+      \strng{authorfullhashraw}{aa4a83405eb5652cfc269f0942daea0a}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Modern Sociological Theory}
+      \field{year}{2019}
+      \true{nocite}
+    \endentry
+    \entry{kao2003}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=9011879a1ce0b6c0401e4e907cddd3a1}{%
+           family={Kao},
+           familyi={K\bibinitperiod},
+           given={Grace},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b0c1f815ecfd6c5dfd57c871d8bf1cf2}{%
+           family={Thompson},
+           familyi={T\bibinitperiod},
+           given={Jennifer},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8efc7b451d0adfd59775e807986a4466}
+      \strng{fullhash}{8efc7b451d0adfd59775e807986a4466}
+      \strng{fullhashraw}{8efc7b451d0adfd59775e807986a4466}
+      \strng{bibnamehash}{8efc7b451d0adfd59775e807986a4466}
+      \strng{authorbibnamehash}{8efc7b451d0adfd59775e807986a4466}
+      \strng{authornamehash}{8efc7b451d0adfd59775e807986a4466}
+      \strng{authorfullhash}{8efc7b451d0adfd59775e807986a4466}
+      \strng{authorfullhashraw}{8efc7b451d0adfd59775e807986a4466}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Annual Review of Sociology}
+      \field{title}{Racial and Ethnic Stratification in Educational Achievement and Attainment}
+      \field{volume}{29}
+      \field{year}{2003}
+      \field{pages}{417\bibrangedash 442}
+      \range{pages}{26}
+      \verb{urlraw}
+      \verb http://arjournals.annualreviews.org/doi/abs/10.1146/annurev.soc.29.010202.100019
+      \endverb
+      \verb{url}
+      \verb http://arjournals.annualreviews.org/doi/abs/10.1146/annurev.soc.29.010202.100019
+      \endverb
+    \endentry
+    \entry{lee2021a}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=2,uniquepart=given,hash=2ebd30f98bfa3b00bbd8e2238bcbdae9}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Alex},
+           giveni={A\bibinitperiod},
+           givenun=2}}%
+      }
+      \strng{namehash}{2ebd30f98bfa3b00bbd8e2238bcbdae9}
+      \strng{fullhash}{2ebd30f98bfa3b00bbd8e2238bcbdae9}
+      \strng{fullhashraw}{2ebd30f98bfa3b00bbd8e2238bcbdae9}
+      \strng{bibnamehash}{2ebd30f98bfa3b00bbd8e2238bcbdae9}
+      \strng{authorbibnamehash}{2ebd30f98bfa3b00bbd8e2238bcbdae9}
+      \strng{authornamehash}{2ebd30f98bfa3b00bbd8e2238bcbdae9}
+      \strng{authorfullhash}{2ebd30f98bfa3b00bbd8e2238bcbdae9}
+      \strng{authorfullhashraw}{2ebd30f98bfa3b00bbd8e2238bcbdae9}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Urban Studies}
+      \field{number}{3}
+      \field{title}{Urbanization Trends}
+      \field{volume}{15}
+      \field{year}{2021}
+      \field{pages}{100\bibrangedash 110}
+      \range{pages}{11}
+    \endentry
+    \entry{lee2021b}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=2,uniquepart=given,hash=32b3f2611a3c848bbe9c8e9956be3375}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Alice},
+           giveni={A\bibinitperiod},
+           givenun=2}}%
+      }
+      \strng{namehash}{32b3f2611a3c848bbe9c8e9956be3375}
+      \strng{fullhash}{32b3f2611a3c848bbe9c8e9956be3375}
+      \strng{fullhashraw}{32b3f2611a3c848bbe9c8e9956be3375}
+      \strng{bibnamehash}{32b3f2611a3c848bbe9c8e9956be3375}
+      \strng{authorbibnamehash}{32b3f2611a3c848bbe9c8e9956be3375}
+      \strng{authornamehash}{32b3f2611a3c848bbe9c8e9956be3375}
+      \strng{authorfullhash}{32b3f2611a3c848bbe9c8e9956be3375}
+      \strng{authorfullhashraw}{32b3f2611a3c848bbe9c8e9956be3375}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Rural Review}
+      \field{number}{1}
+      \field{title}{Rural Development}
+      \field{volume}{8}
+      \field{year}{2021}
+      \field{pages}{50\bibrangedash 60}
+      \range{pages}{11}
+    \endentry
+    \entry{lockett2024}{online}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9241963a9417884b6e0f0304ac1e69d0}{%
+           family={Lockett},
+           familyi={L\bibinitperiod},
+           given={Eleesha},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{organization}{1}{%
+        {Healthline}%
+      }
+      \strng{namehash}{9241963a9417884b6e0f0304ac1e69d0}
+      \strng{fullhash}{9241963a9417884b6e0f0304ac1e69d0}
+      \strng{fullhashraw}{9241963a9417884b6e0f0304ac1e69d0}
+      \strng{bibnamehash}{9241963a9417884b6e0f0304ac1e69d0}
+      \strng{authorbibnamehash}{9241963a9417884b6e0f0304ac1e69d0}
+      \strng{authornamehash}{9241963a9417884b6e0f0304ac1e69d0}
+      \strng{authorfullhash}{9241963a9417884b6e0f0304ac1e69d0}
+      \strng{authorfullhashraw}{9241963a9417884b6e0f0304ac1e69d0}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{29}
+      \field{month}{5}
+      \field{title}{If My Adult Child has Depression, Is There Anything I Can Do?}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.healthline.com/health/depression/how-to-help-an-adult-child-with-depression
+      \endverb
+      \verb{url}
+      \verb https://www.healthline.com/health/depression/how-to-help-an-adult-child-with-depression
+      \endverb
+    \endentry
+    \entry{mason1974}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=8cca74d134d50cc42f543aafa6196f2a}{%
+           family={Mason},
+           familyi={M\bibinitperiod},
+           given={Karen\bibnamedelima O.},
+           giveni={K\bibinitperiod\bibinitdelim O\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Research Triangle Park, NC}%
+      }
+      \list{publisher}{1}{%
+        {National Institutes of Health}%
+      }
+      \strng{namehash}{8cca74d134d50cc42f543aafa6196f2a}
+      \strng{fullhash}{8cca74d134d50cc42f543aafa6196f2a}
+      \strng{fullhashraw}{8cca74d134d50cc42f543aafa6196f2a}
+      \strng{bibnamehash}{8cca74d134d50cc42f543aafa6196f2a}
+      \strng{authorbibnamehash}{8cca74d134d50cc42f543aafa6196f2a}
+      \strng{authornamehash}{8cca74d134d50cc42f543aafa6196f2a}
+      \strng{authorfullhash}{8cca74d134d50cc42f543aafa6196f2a}
+      \strng{authorfullhashraw}{8cca74d134d50cc42f543aafa6196f2a}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Women's Labor Force Participation and Fertility}
+      \field{year}{1974}
+      \true{nocite}
+    \endentry
+    \entry{phillips2001}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=1974e9134b3ee253c98e705b3b9e26e5}{%
+           family={Phillips},
+           familyi={P\bibinitperiod},
+           given={Damon\bibnamedelima J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4b1a91f02225966ddfbf340bf223e27c}{%
+           family={Zuckerman},
+           familyi={Z\bibinitperiod},
+           given={Ezra\bibnamedelima W.},
+           giveni={E\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4383416d4def5b291d44854fcb92a9df}
+      \strng{fullhash}{4383416d4def5b291d44854fcb92a9df}
+      \strng{fullhashraw}{4383416d4def5b291d44854fcb92a9df}
+      \strng{bibnamehash}{4383416d4def5b291d44854fcb92a9df}
+      \strng{authorbibnamehash}{4383416d4def5b291d44854fcb92a9df}
+      \strng{authornamehash}{4383416d4def5b291d44854fcb92a9df}
+      \strng{authorfullhash}{4383416d4def5b291d44854fcb92a9df}
+      \strng{authorfullhashraw}{4383416d4def5b291d44854fcb92a9df}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{American Journal of Sociology}
+      \field{number}{2}
+      \field{title}{Middle-status conformity: Theoretical restatement and empirical demonstration in two markets}
+      \field{volume}{107}
+      \field{year}{2001}
+      \field{pages}{379\bibrangedash 429}
+      \range{pages}{51}
+    \endentry
+    \entry{r2024}{software}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=dcdebb6b35bff7c0568bf8c50ef8626d}{%
+           family={{R Core Team}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vienna, Austria}%
+      }
+      \list{organization}{1}{%
+        {R Foundation for Statistical Computing}%
+      }
+      \strng{namehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{fullhash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{fullhashraw}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{bibnamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authorbibnamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authornamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authorfullhash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authorfullhashraw}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{R: A Language and Environment for Statistical Computing}
+      \field{version}{4.4.0}
+      \field{year}{2024}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.R-project.org/
+      \endverb
+      \verb{url}
+      \verb https://www.R-project.org/
+      \endverb
+    \endentry
+    \entry{sampson1992}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d53d79586966e33bba61829710335e24}{%
+           family={Sampson},
+           familyi={S\bibinitperiod},
+           given={Robert\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=2794831bfc53afedc2f7b2ba00276444}{%
+           family={McCord},
+           familyi={M\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New Brunswick, NJ}%
+      }
+      \list{publisher}{1}{%
+        {Transaction}%
+      }
+      \strng{namehash}{d53d79586966e33bba61829710335e24}
+      \strng{fullhash}{d53d79586966e33bba61829710335e24}
+      \strng{fullhashraw}{d53d79586966e33bba61829710335e24}
+      \strng{bibnamehash}{d53d79586966e33bba61829710335e24}
+      \strng{authorbibnamehash}{d53d79586966e33bba61829710335e24}
+      \strng{authornamehash}{d53d79586966e33bba61829710335e24}
+      \strng{authorfullhash}{d53d79586966e33bba61829710335e24}
+      \strng{authorfullhashraw}{d53d79586966e33bba61829710335e24}
+      \strng{editorbibnamehash}{2794831bfc53afedc2f7b2ba00276444}
+      \strng{editornamehash}{2794831bfc53afedc2f7b2ba00276444}
+      \strng{editorfullhash}{2794831bfc53afedc2f7b2ba00276444}
+      \strng{editorfullhashraw}{2794831bfc53afedc2f7b2ba00276444}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in Criminology Theory, Vol. 3, Facts, Frameworks, and Forecasts}
+      \field{title}{Family Management and Child Development: Insights from Social Disorganization Theory}
+      \field{year}{1992}
+      \field{pages}{63\bibrangedash 93}
+      \range{pages}{31}
+    \endentry
+    \entry{smith2020b}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5d0ddda3a367ceb26fbaeca02e391c22}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{bibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorbibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authornamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \field{extraname}{1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Cultural Review}
+      \field{number}{2}
+      \field{title}{Culture and Change}
+      \field{volume}{5}
+      \field{year}{2020}
+      \true{nocite}
+      \field{pages}{20\bibrangedash 30}
+      \range{pages}{11}
+    \endentry
+    \entry{smith2020a}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5d0ddda3a367ceb26fbaeca02e391c22}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{bibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorbibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authornamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \field{extraname}{2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Sociology}
+      \field{number}{1}
+      \field{title}{Sociology and Society}
+      \field{volume}{10}
+      \field{year}{2020}
+      \field{pages}{1\bibrangedash 10}
+      \range{pages}{10}
+    \endentry
+    \entry{smith2020c}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5d0ddda3a367ceb26fbaeca02e391c22}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Academic Books}%
+      }
+      \strng{namehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{fullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{bibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorbibnamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authornamehash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhash}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \strng{authorfullhashraw}{5d0ddda3a367ceb26fbaeca02e391c22}
+      \field{extraname}{3}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradate}{3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Theory of Action}
+      \field{year}{2020}
+      \true{nocite}
+    \endentry
+    \entry{szelenyiForthcoming}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=4cda89e549781bdcdd8a8cf4e36e624f}{%
+           family={Szelényi},
+           familyi={S\bibinitperiod},
+           given={Szonja},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b036340fb67ef4f0d7199031b676315d}{%
+           family={Olvera},
+           familyi={O\bibinitperiod},
+           given={Jacqueline},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2372b6ef4fb3feb56beb7aeb2253beed}
+      \strng{fullhash}{2372b6ef4fb3feb56beb7aeb2253beed}
+      \strng{fullhashraw}{2372b6ef4fb3feb56beb7aeb2253beed}
+      \strng{bibnamehash}{2372b6ef4fb3feb56beb7aeb2253beed}
+      \strng{authorbibnamehash}{2372b6ef4fb3feb56beb7aeb2253beed}
+      \strng{authornamehash}{2372b6ef4fb3feb56beb7aeb2253beed}
+      \strng{authorfullhash}{2372b6ef4fb3feb56beb7aeb2253beed}
+      \strng{authorfullhashraw}{2372b6ef4fb3feb56beb7aeb2253beed}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Theory and Society}
+      \field{title}{The Declining Significance of Class: Does Gender Complicate the Story?}
+      \field{year}{Forthcoming}
+    \endentry
+    \entry{treasury2019}{report}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=1c882466b3754772e39ba00032ee0cfb}{%
+           family={{Treasury Board of Canada Secretariat}},
+           familyi={T\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Government of Canada}%
+      }
+      \strng{namehash}{1c882466b3754772e39ba00032ee0cfb}
+      \strng{fullhash}{1c882466b3754772e39ba00032ee0cfb}
+      \strng{fullhashraw}{1c882466b3754772e39ba00032ee0cfb}
+      \strng{bibnamehash}{1c882466b3754772e39ba00032ee0cfb}
+      \strng{authorbibnamehash}{1c882466b3754772e39ba00032ee0cfb}
+      \strng{authornamehash}{1c882466b3754772e39ba00032ee0cfb}
+      \strng{authorfullhash}{1c882466b3754772e39ba00032ee0cfb}
+      \strng{authorfullhashraw}{1c882466b3754772e39ba00032ee0cfb}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{4}
+      \field{title}{Sources and Uses of Budget 2019 Measures by Organization for April 2019}
+      \field{year}{2019}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://www.canada.ca/en/treasury-board-secretariat/services/planned-government-spending/sources-uses-budget-measures-organization/sources-uses-budget-2019-measures-organization-04-april.html
+      \endverb
+      \verb{url}
+      \verb https://www.canada.ca/en/treasury-board-secretariat/services/planned-government-spending/sources-uses-budget-measures-organization/sources-uses-budget-2019-measures-organization-04-april.html
+      \endverb
+    \endentry
+    \entry{usbc1960}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=f54aa34563b343ab8867839fb6246c07}{%
+           family={{U.S. Bureau of the Census}},
+           familyi={U\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Washington, DC}%
+      }
+      \list{publisher}{1}{%
+        {U.S. Government Printing Office}%
+      }
+      \strng{namehash}{f54aa34563b343ab8867839fb6246c07}
+      \strng{fullhash}{f54aa34563b343ab8867839fb6246c07}
+      \strng{fullhashraw}{f54aa34563b343ab8867839fb6246c07}
+      \strng{bibnamehash}{f54aa34563b343ab8867839fb6246c07}
+      \strng{authorbibnamehash}{f54aa34563b343ab8867839fb6246c07}
+      \strng{authornamehash}{f54aa34563b343ab8867839fb6246c07}
+      \strng{authorfullhash}{f54aa34563b343ab8867839fb6246c07}
+      \strng{authorfullhashraw}{f54aa34563b343ab8867839fb6246c07}
+      \field{sortinit}{U}
+      \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Characteristics of Population, Vol. 1}
+      \field{year}{1960}
+    \endentry
+    \entry{wilson2021}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=bd1511dd03c1f299f5a01f43399dc6b9}{%
+           family={Wilson},
+           familyi={W\bibinitperiod},
+           given={Sarah},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=f85598f55a80cf7664289e75ad69856c}{%
+           family={Thompson},
+           familyi={T\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Chicago}%
+      }
+      \list{publisher}{1}{%
+        {Research Press}%
+      }
+      \strng{namehash}{bd1511dd03c1f299f5a01f43399dc6b9}
+      \strng{fullhash}{bd1511dd03c1f299f5a01f43399dc6b9}
+      \strng{fullhashraw}{bd1511dd03c1f299f5a01f43399dc6b9}
+      \strng{bibnamehash}{bd1511dd03c1f299f5a01f43399dc6b9}
+      \strng{authorbibnamehash}{bd1511dd03c1f299f5a01f43399dc6b9}
+      \strng{authornamehash}{bd1511dd03c1f299f5a01f43399dc6b9}
+      \strng{authorfullhash}{bd1511dd03c1f299f5a01f43399dc6b9}
+      \strng{authorfullhashraw}{bd1511dd03c1f299f5a01f43399dc6b9}
+      \strng{editorbibnamehash}{f85598f55a80cf7664289e75ad69856c}
+      \strng{editornamehash}{f85598f55a80cf7664289e75ad69856c}
+      \strng{editorfullhash}{f85598f55a80cf7664289e75ad69856c}
+      \strng{editorfullhashraw}{f85598f55a80cf7664289e75ad69856c}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Handbook of Sociological Methods}
+      \field{title}{Contemporary Issues in Social Research}
+      \field{year}{2021}
+      \true{nocite}
+      \field{pages}{120\bibrangedash 145}
+      \range{pages}{26}
+    \endentry
+    \entry{WHO2022}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=531217507bec092b6ec36c0f78f46736}{%
+           family={{World Health Organization}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Geneva}%
+      }
+      \list{publisher}{1}{%
+        {WHO Press}%
+      }
+      \strng{namehash}{531217507bec092b6ec36c0f78f46736}
+      \strng{fullhash}{531217507bec092b6ec36c0f78f46736}
+      \strng{fullhashraw}{531217507bec092b6ec36c0f78f46736}
+      \strng{bibnamehash}{531217507bec092b6ec36c0f78f46736}
+      \strng{authorbibnamehash}{531217507bec092b6ec36c0f78f46736}
+      \strng{authornamehash}{531217507bec092b6ec36c0f78f46736}
+      \strng{authorfullhash}{531217507bec092b6ec36c0f78f46736}
+      \strng{authorfullhashraw}{531217507bec092b6ec36c0f78f46736}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Global Health Report}
+      \field{year}{2022}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

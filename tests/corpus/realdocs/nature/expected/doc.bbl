@@ -1,0 +1,1317 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Allen1961}{report}{}{}
+      \name{author}{3}{}{%
+        {{hash=7719644e288a5ea8fac7d75b72a165f8}{%
+           family={Allen},
+           familyi={A\bibinitperiod},
+           given={R.\bibnamedelimi A.},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=39da7aed497cf73b1096748924725c15}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={D.\bibnamedelimi B.},
+           giveni={D\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=f29ebfae0b52c592871fc529fa555caf}{%
+           family={Hiscott},
+           familyi={H\bibinitperiod},
+           given={J.\bibnamedelimi E.},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {H.M.S.O.}%
+      }
+      \list{location}{1}{%
+        {London}%
+      }
+      \strng{namehash}{94a7ef71506fcdc130c6f80a47ae15f5}
+      \strng{fullhash}{bf143942b77d2578308596e889badd50}
+      \strng{fullhashraw}{bf143942b77d2578308596e889badd50}
+      \strng{bibnamehash}{bf143942b77d2578308596e889badd50}
+      \strng{authorbibnamehash}{bf143942b77d2578308596e889badd50}
+      \strng{authornamehash}{94a7ef71506fcdc130c6f80a47ae15f5}
+      \strng{authorfullhash}{bf143942b77d2578308596e889badd50}
+      \strng{authorfullhashraw}{bf143942b77d2578308596e889badd50}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{british}
+      \field{number}{AERE-R 2938}
+      \field{title}{Radioisotope Data}
+      \field{type}{UKAEA Research Group Report}
+      \field{year}{1961}
+      \true{nocite}
+    \endentry
+    \entry{Arduengo1991}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=f1382c45625acd1b6daf873e51dea1af}{%
+           family={Arduengo},
+           familyi={A\bibinitperiod},
+           given={Anthony\bibnamedelima J.},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod},
+           suffix={III},
+           suffixi={I\bibinitperiod}}}%
+        {{hash=16ac4b3f25a3e40bdf050e2116d6af24}{%
+           family={Harlow},
+           familyi={H\bibinitperiod},
+           given={Richard\bibnamedelima L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=1051cb07244c901fd1797d590b1626e2}{%
+           family={Kline},
+           familyi={K\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{8f077371b1b26ee94c5d9f42894281a0}
+      \strng{fullhash}{975546c4cb2e57ba205a61ca34cc253a}
+      \strng{fullhashraw}{975546c4cb2e57ba205a61ca34cc253a}
+      \strng{bibnamehash}{975546c4cb2e57ba205a61ca34cc253a}
+      \strng{authorbibnamehash}{975546c4cb2e57ba205a61ca34cc253a}
+      \strng{authornamehash}{8f077371b1b26ee94c5d9f42894281a0}
+      \strng{authorfullhash}{975546c4cb2e57ba205a61ca34cc253a}
+      \strng{authorfullhashraw}{975546c4cb2e57ba205a61ca34cc253a}
+      \field{extraname}{1}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{J.~Am. Chem. Soc.}
+      \field{langid}{american}
+      \field{number}{1}
+      \field{title}{A stable crystalline carbene}
+      \field{volume}{113}
+      \field{year}{1991}
+      \true{nocite}
+      \field{pages}{361\bibrangedash 363}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.1021/ja00001a054
+      \endverb
+    \endentry
+    \entry{Arduengo2001}{patent}{}{}
+      \name{author}{4}{}{%
+        {{hash=f1382c45625acd1b6daf873e51dea1af}{%
+           family={Arduengo},
+           familyi={A\bibinitperiod},
+           given={Anthony\bibnamedelima J.},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod},
+           suffix={III},
+           suffixi={I\bibinitperiod}}}%
+        {{hash=eb71f0124c3138bfa8739384e24aa183}{%
+           family={Gentry},
+           familyi={G\bibinitperiod},
+           given={Frederick\bibnamedelima P.},
+           giveni={F\bibinitperiod\bibinitdelim P\bibinitperiod},
+           suffix={Jr.},
+           suffixi={J\bibinitperiod}}}%
+        {{hash=cb8b8f92666f5219f781e385d2452a8d}{%
+           family={Taverkere},
+           familyi={T\bibinitperiod},
+           given={Prakash\bibnamedelima K.},
+           giveni={P\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=9d2806c746c33dd8e231e634e0540249}{%
+           family={Simmons},
+           familyi={S\bibinitperiod},
+           given={Howard\bibnamedelima E.},
+           giveni={H\bibinitperiod\bibinitdelim E\bibinitperiod},
+           suffix={III},
+           suffixi={I\bibinitperiod}}}%
+      }
+      \name{holder}{1}{}{%
+        {{hash=0be6331c08a3a828bfbdede19fa5cd59}{%
+           family={{E.~I. DuPont}},
+           familyi={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{8f077371b1b26ee94c5d9f42894281a0}
+      \strng{fullhash}{fe0a5812382a91d11c53df462173867e}
+      \strng{fullhashraw}{fe0a5812382a91d11c53df462173867e}
+      \strng{bibnamehash}{fe0a5812382a91d11c53df462173867e}
+      \strng{authorbibnamehash}{fe0a5812382a91d11c53df462173867e}
+      \strng{authornamehash}{8f077371b1b26ee94c5d9f42894281a0}
+      \strng{authorfullhash}{fe0a5812382a91d11c53df462173867e}
+      \strng{authorfullhashraw}{fe0a5812382a91d11c53df462173867e}
+      \strng{holderbibnamehash}{0be6331c08a3a828bfbdede19fa5cd59}
+      \strng{holdernamehash}{0be6331c08a3a828bfbdede19fa5cd59}
+      \strng{holderfullhash}{0be6331c08a3a828bfbdede19fa5cd59}
+      \strng{holderfullhashraw}{0be6331c08a3a828bfbdede19fa5cd59}
+      \field{extraname}{2}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{6177575}
+      \field{title}{Process for manufacture of imidazoles}
+      \field{type}{patentus}
+      \field{year}{2001}
+      \true{nocite}
+    \endentry
+    \entry{Armarego2003}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=030be37e55d3fea82f6c9d1522d0d9ea}{%
+           family={Armarego},
+           familyi={A\bibinitperiod},
+           given={W.\bibnamedelimi L.\bibnamedelimi F.},
+           giveni={W\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=034c2529a3fbbee57b33ca831afd213b}{%
+           family={Chai},
+           familyi={C\bibinitperiod},
+           given={Christina\bibnamedelimb Lin\bibnamedelima Li},
+           giveni={C\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Butterworth--Heine\-mann}%
+      }
+      \strng{namehash}{ef3f78a53c1db569197d42fb1cd55fe9}
+      \strng{fullhash}{ef3f78a53c1db569197d42fb1cd55fe9}
+      \strng{fullhashraw}{ef3f78a53c1db569197d42fb1cd55fe9}
+      \strng{bibnamehash}{ef3f78a53c1db569197d42fb1cd55fe9}
+      \strng{authorbibnamehash}{ef3f78a53c1db569197d42fb1cd55fe9}
+      \strng{authornamehash}{ef3f78a53c1db569197d42fb1cd55fe9}
+      \strng{authorfullhash}{ef3f78a53c1db569197d42fb1cd55fe9}
+      \strng{authorfullhashraw}{ef3f78a53c1db569197d42fb1cd55fe9}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{5}
+      \field{langid}{british}
+      \field{title}{Purification of Laboratory Chemicals}
+      \field{year}{2003}
+      \true{nocite}
+    \endentry
+    \entry{Augustine1995}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=b179e25cc4a68cfa0a2008476627dd7d}{%
+           family={Augustine},
+           familyi={A\bibinitperiod},
+           given={Robert\bibnamedelima L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Marcel Dekker}%
+      }
+      \strng{namehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{fullhash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{fullhashraw}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{bibnamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorbibnamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authornamehash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorfullhash}{b179e25cc4a68cfa0a2008476627dd7d}
+      \strng{authorfullhashraw}{b179e25cc4a68cfa0a2008476627dd7d}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{langid}{american}
+      \field{shorttitle}{Heterogeneous catalysis}
+      \field{title}{Heterogeneous Catalysis for the Synthetic Chemist}
+      \field{year}{1995}
+      \true{nocite}
+    \endentry
+    \entry{Booth1962}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=8335559dfbd3099e7ebbc7531b3ff8ff}{%
+           family={Booth},
+           familyi={B\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=296f963b05a76145cfddbc017b80d128}{%
+           family={Chatt},
+           familyi={C\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{97009e00779dd6ecc96f9d7f8691c78a}
+      \strng{fullhash}{97009e00779dd6ecc96f9d7f8691c78a}
+      \strng{fullhashraw}{97009e00779dd6ecc96f9d7f8691c78a}
+      \strng{bibnamehash}{97009e00779dd6ecc96f9d7f8691c78a}
+      \strng{authorbibnamehash}{97009e00779dd6ecc96f9d7f8691c78a}
+      \strng{authornamehash}{97009e00779dd6ecc96f9d7f8691c78a}
+      \strng{authorfullhash}{97009e00779dd6ecc96f9d7f8691c78a}
+      \strng{authorfullhashraw}{97009e00779dd6ecc96f9d7f8691c78a}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{J.~Chem. Soc.}
+      \field{langid}{british}
+      \field{title}{The reactions of carbon monoxide and nitric oxide with tertiary phosphine complexes of iron(II), cobalt(II), and nickel(II)}
+      \field{year}{1962}
+      \true{nocite}
+      \field{pages}{2099\bibrangedash 2106}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1039/JR9620002099
+      \endverb
+    \endentry
+    \entry{Corina2006}{online}{}{}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labeltitlesource}{title}
+      \field{title}{CORINA: Generation of 3D coordinates}
+      \field{urlyear}{2006}
+      \field{year}{2006}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://www.molecular-networks.com/software/corina/index.html
+      \endverb
+      \verb{url}
+      \verb http://www.molecular-networks.com/software/corina/index.html
+      \endverb
+    \endentry
+    \entry{Coghill2006}{book}{}{}
+      \name{editor}{2}{}{%
+        {{hash=f9dcd3b2548e5984ad948b19538f5549}{%
+           family={Coghill},
+           familyi={C\bibinitperiod},
+           given={Anne\bibnamedelima M.},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=e08a56adc3a20280ba59864897bceb03}{%
+           family={Garson},
+           familyi={G\bibinitperiod},
+           given={LorrinR.},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{2}{%
+        {Oxford University Press, Inc.}%
+        {The American Chemical Society}%
+      }
+      \strng{namehash}{e943ea60de2f11705b6276b0c7421690}
+      \strng{fullhash}{e943ea60de2f11705b6276b0c7421690}
+      \strng{fullhashraw}{e943ea60de2f11705b6276b0c7421690}
+      \strng{bibnamehash}{e943ea60de2f11705b6276b0c7421690}
+      \strng{editorbibnamehash}{e943ea60de2f11705b6276b0c7421690}
+      \strng{editornamehash}{e943ea60de2f11705b6276b0c7421690}
+      \strng{editorfullhash}{e943ea60de2f11705b6276b0c7421690}
+      \strng{editorfullhashraw}{e943ea60de2f11705b6276b0c7421690}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{edition}{3}
+      \field{langid}{american}
+      \field{title}{The ACS Style Guide}
+      \field{year}{2006}
+      \true{nocite}
+    \endentry
+    \entry{Cotton1999}{book}{}{}
+      \name{author}{4}{}{%
+        {{hash=6c06e7f89e6bfa82676362a7f651ded7}{%
+           family={Cotton},
+           familyi={C\bibinitperiod},
+           given={Frank\bibnamedelima Albert},
+           giveni={F\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=e1942252e9752c9cc6eaf1e3e38cfa81}{%
+           family={Wilkinson},
+           familyi={W\bibinitperiod},
+           given={Geoffrey},
+           giveni={G\bibinitperiod}}}%
+        {{hash=bf131285a192527f917d40647ba43806}{%
+           family={Murillio},
+           familyi={M\bibinitperiod},
+           given={Carlos\bibnamedelima A.},
+           giveni={C\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=6a2d357cec9902154443ce225a3a71cc}{%
+           family={Bochmann},
+           familyi={B\bibinitperiod},
+           given={Manfred},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Chichester, United Kingdom}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{88f7260467a5939a073135c23f4adbb8}
+      \strng{fullhash}{12d39542267fe789a700de8a077801d8}
+      \strng{fullhashraw}{12d39542267fe789a700de8a077801d8}
+      \strng{bibnamehash}{12d39542267fe789a700de8a077801d8}
+      \strng{authorbibnamehash}{12d39542267fe789a700de8a077801d8}
+      \strng{authornamehash}{88f7260467a5939a073135c23f4adbb8}
+      \strng{authorfullhash}{12d39542267fe789a700de8a077801d8}
+      \strng{authorfullhashraw}{12d39542267fe789a700de8a077801d8}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{6}
+      \field{langid}{british}
+      \field{title}{Advanced Inorganic Chemistry}
+      \field{year}{1999}
+      \true{nocite}
+    \endentry
+    \entry{Danopoulos2008}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=1d7d8007460bae0579b66f9ebd8a5950}{%
+           family={Pugh},
+           familyi={P\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=866a722139ff6bceac1b224f3948e365}{%
+           family={Wright},
+           familyi={W\bibinitperiod},
+           given={Joseph\bibnamedelima A.},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=4d3e0102d40dd8174e81dfbbb0594e66}{%
+           family={Danopoulos},
+           familyi={D\bibinitperiod},
+           given={Andreas\bibnamedelima A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{aa0d48a875da2fee0a81d61ac08613fe}
+      \strng{fullhash}{87d66c8783db8e3e5a21e79df1e855df}
+      \strng{fullhashraw}{87d66c8783db8e3e5a21e79df1e855df}
+      \strng{bibnamehash}{87d66c8783db8e3e5a21e79df1e855df}
+      \strng{authorbibnamehash}{87d66c8783db8e3e5a21e79df1e855df}
+      \strng{authornamehash}{aa0d48a875da2fee0a81d61ac08613fe}
+      \strng{authorfullhash}{87d66c8783db8e3e5a21e79df1e855df}
+      \strng{authorfullhashraw}{87d66c8783db8e3e5a21e79df1e855df}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{in press}
+      \field{journaltitle}{Angew. Chem. Int. Ed.}
+      \field{title}{`Pincer' pyridine dicarbene iridium complexes: facile C--H activations and unexpected $\eta^2$-imidazol-2-ylidene coordination}
+      \true{nocite}
+    \endentry
+    \entry{Dehnicke1981}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=e8a34fe33604bf5f20639666fb9936d6}{%
+           family={Dehnicke},
+           familyi={D\bibinitperiod},
+           given={Kurt},
+           giveni={K\bibinitperiod}}}%
+        {{hash=cb8055557b1915bc465853f581fed290}{%
+           family={Strähle},
+           familyi={S\bibinitperiod},
+           given={Joachim},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{fullhash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{fullhashraw}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{bibnamehash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{authorbibnamehash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{authornamehash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{authorfullhash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{authorfullhashraw}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Angew. Chem.}
+      \field{langid}{german}
+      \field{number}{5}
+      \field{title}{Die Übergangsmetall-Stickstoff-Mehrfachbindung}
+      \field{volume}{93}
+      \field{year}{1981}
+      \true{nocite}
+      \field{pages}{451\bibrangedash 464}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1002/ange.19810930506
+      \endverb
+    \endentry
+    \entry{Dehnicke1981a}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=e8a34fe33604bf5f20639666fb9936d6}{%
+           family={Dehnicke},
+           familyi={D\bibinitperiod},
+           given={Kurt},
+           giveni={K\bibinitperiod}}}%
+        {{hash=cb8055557b1915bc465853f581fed290}{%
+           family={Strähle},
+           familyi={S\bibinitperiod},
+           given={Joachim},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{fullhash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{fullhashraw}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{bibnamehash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{authorbibnamehash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{authornamehash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{authorfullhash}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \strng{authorfullhashraw}{4eb2cdf2af8448633b683b4faa98ac8f}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Angew. Chem., Int. Ed. Engl.}
+      \field{langid}{british}
+      \field{number}{5}
+      \field{title}{The transition metal--nitrogen multiple bond}
+      \field{volume}{20}
+      \field{year}{1981}
+      \true{nocite}
+      \field{pages}{413\bibrangedash 426}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1002/anie.198104133
+      \endverb
+    \endentry
+    \entry{Gaunt1999}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{hash=33227a702f5e8e68b42a62bce278a5c0}{%
+           family={Gaunt},
+           familyi={G\bibinitperiod},
+           given={Matthew\bibnamedelima James},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {University of Cambridge}%
+      }
+      \list{location}{1}{%
+        {Cambridge, United Kingdom}%
+      }
+      \strng{namehash}{33227a702f5e8e68b42a62bce278a5c0}
+      \strng{fullhash}{33227a702f5e8e68b42a62bce278a5c0}
+      \strng{fullhashraw}{33227a702f5e8e68b42a62bce278a5c0}
+      \strng{bibnamehash}{33227a702f5e8e68b42a62bce278a5c0}
+      \strng{authorbibnamehash}{33227a702f5e8e68b42a62bce278a5c0}
+      \strng{authornamehash}{33227a702f5e8e68b42a62bce278a5c0}
+      \strng{authorfullhash}{33227a702f5e8e68b42a62bce278a5c0}
+      \strng{authorfullhashraw}{33227a702f5e8e68b42a62bce278a5c0}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{british}
+      \field{title}{The investigation and design of palladium catalysed reactions}
+      \field{type}{phdthesis}
+      \field{year}{1999}
+      \true{nocite}
+    \endentry
+    \entry{Glorius2007}{book}{}{}
+      \name{editor}{1}{}{%
+        {{hash=0aa49275ba68f111d53ca7d559b1cf88}{%
+           family={Glorius},
+           familyi={G\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{0aa49275ba68f111d53ca7d559b1cf88}
+      \strng{fullhash}{0aa49275ba68f111d53ca7d559b1cf88}
+      \strng{fullhashraw}{0aa49275ba68f111d53ca7d559b1cf88}
+      \strng{bibnamehash}{0aa49275ba68f111d53ca7d559b1cf88}
+      \strng{editorbibnamehash}{0aa49275ba68f111d53ca7d559b1cf88}
+      \strng{editornamehash}{0aa49275ba68f111d53ca7d559b1cf88}
+      \strng{editorfullhash}{0aa49275ba68f111d53ca7d559b1cf88}
+      \strng{editorfullhashraw}{0aa49275ba68f111d53ca7d559b1cf88}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{langid}{british}
+      \field{series}{Topics in Organometallic Chemistry}
+      \field{title}{N-Heterocyclic Carbenes in Transition Metal Catalysis}
+      \field{volume}{21}
+      \field{year}{2007}
+      \true{nocite}
+    \endentry
+    \entry{Hahn2002}{book}{}{}
+      \name{editor}{1}{}{%
+        {{hash=cd79bf54c1ffbf91917da9524e684af3}{%
+           family={Hahn},
+           familyi={H\bibinitperiod},
+           given={Theo},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Dordrecht, Netherlands}%
+      }
+      \list{publisher}{1}{%
+        {Kluwer Academic Publishers}%
+      }
+      \strng{namehash}{cd79bf54c1ffbf91917da9524e684af3}
+      \strng{fullhash}{cd79bf54c1ffbf91917da9524e684af3}
+      \strng{fullhashraw}{cd79bf54c1ffbf91917da9524e684af3}
+      \strng{bibnamehash}{cd79bf54c1ffbf91917da9524e684af3}
+      \strng{editorbibnamehash}{cd79bf54c1ffbf91917da9524e684af3}
+      \strng{editornamehash}{cd79bf54c1ffbf91917da9524e684af3}
+      \strng{editorfullhash}{cd79bf54c1ffbf91917da9524e684af3}
+      \strng{editorfullhashraw}{cd79bf54c1ffbf91917da9524e684af3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{edition}{5}
+      \field{langid}{british}
+      \field{title}{International Tables for Crystallography}
+      \field{volume}{A}
+      \field{year}{2002}
+      \true{nocite}
+    \endentry
+    \entry{Hammond1997}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=2c8830d09f180019fbb3c09acbfbd13a}{%
+           family={Hammond},
+           familyi={H\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford, United Kingdom}%
+      }
+      \list{publisher}{2}{%
+        {International Union of Crystallography}%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{fullhash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{fullhashraw}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{bibnamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorbibnamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authornamehash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorfullhash}{2c8830d09f180019fbb3c09acbfbd13a}
+      \strng{authorfullhashraw}{2c8830d09f180019fbb3c09acbfbd13a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{chapter}{1}
+      \field{langid}{british}
+      \field{title}{The Basics of Crystallography and Diffraction}
+      \field{year}{1997}
+      \true{nocite}
+      \field{pages}{1\bibrangedash 40}
+      \range{pages}{40}
+    \endentry
+    \entry{Henry2002}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{hash=fae6aa3120cb0476438d7c9ffd2c74ae}{%
+           family={Henry},
+           familyi={H\bibinitperiod},
+           given={Patrick\bibnamedelima M.},
+           giveni={P\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=a192795330edf499a345b8e5d005617f}{%
+           family={Negishi},
+           familyi={N\bibinitperiod},
+           given={Ei-Ichi},
+           giveni={E\bibinithyphendelim I\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Wiley Interscience}%
+      }
+      \strng{namehash}{fae6aa3120cb0476438d7c9ffd2c74ae}
+      \strng{fullhash}{fae6aa3120cb0476438d7c9ffd2c74ae}
+      \strng{fullhashraw}{fae6aa3120cb0476438d7c9ffd2c74ae}
+      \strng{bibnamehash}{fae6aa3120cb0476438d7c9ffd2c74ae}
+      \strng{authorbibnamehash}{fae6aa3120cb0476438d7c9ffd2c74ae}
+      \strng{authornamehash}{fae6aa3120cb0476438d7c9ffd2c74ae}
+      \strng{authorfullhash}{fae6aa3120cb0476438d7c9ffd2c74ae}
+      \strng{authorfullhashraw}{fae6aa3120cb0476438d7c9ffd2c74ae}
+      \strng{editorbibnamehash}{a192795330edf499a345b8e5d005617f}
+      \strng{editornamehash}{a192795330edf499a345b8e5d005617f}
+      \strng{editorfullhash}{a192795330edf499a345b8e5d005617f}
+      \strng{editorfullhashraw}{a192795330edf499a345b8e5d005617f}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Handbook Of Organopalladium Chemistry for Organic Synthesis}
+      \field{chapter}{V.3.1.1}
+      \field{langid}{american}
+      \field{title}{The Wacker oxidation and related asymmetric syntheses}
+      \field{volume}{2}
+      \field{year}{2002}
+      \true{nocite}
+      \field{pages}{2119\bibrangedash 2140}
+      \range{pages}{22}
+    \endentry
+    \entry{Heyn1986}{book}{}{}
+      \name{author}{5}{}{%
+        {{hash=7bc706c8f037f6665295410618493b66}{%
+           family={Heyn},
+           familyi={H\bibinitperiod},
+           given={Bodo},
+           giveni={B\bibinitperiod}}}%
+        {{hash=aa0f4864f97bdb79366d6524b7bae83b}{%
+           family={Hippler},
+           familyi={H\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=5666adfdcc6f82dccdbefc79a64af48a}{%
+           family={Kreisel},
+           familyi={K\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=dce5edf59bfe8165b95a60b62f5c74f7}{%
+           family={Schreer},
+           familyi={S\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=e82e66ff2452f908550f844b5b7a98ca}{%
+           family={Walther},
+           familyi={W\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Weinheim, Germany}%
+      }
+      \list{publisher}{1}{%
+        {Springer-Verlag}%
+      }
+      \strng{namehash}{c08dfeb595a0cebbc35bd96d2909fb38}
+      \strng{fullhash}{7188e173cc0a0704beeace54874cf4df}
+      \strng{fullhashraw}{7188e173cc0a0704beeace54874cf4df}
+      \strng{bibnamehash}{7188e173cc0a0704beeace54874cf4df}
+      \strng{authorbibnamehash}{7188e173cc0a0704beeace54874cf4df}
+      \strng{authornamehash}{c08dfeb595a0cebbc35bd96d2909fb38}
+      \strng{authorfullhash}{7188e173cc0a0704beeace54874cf4df}
+      \strng{authorfullhashraw}{7188e173cc0a0704beeace54874cf4df}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{german}
+      \field{title}{Anorganische Synthesechemie: ein integriertes Praktikum}
+      \field{year}{1986}
+      \true{nocite}
+    \endentry
+    \entry{Hope2005}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=77b5bf8caca718ab2789699eedc201d3}{%
+           family={Hope},
+           familyi={H\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+        {{hash=26c2051e41c1d2316161773536629590}{%
+           family={Bennett},
+           familyi={B\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=80d04dc6ef73423f59404da9c9d12ed6}{%
+           family={Stuart},
+           familyi={S\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Pacific Basin Chemical Societies}%
+      }
+      \strng{namehash}{1d3b054ec72bd52cfc800922234ea41a}
+      \strng{fullhash}{6a822fe3c48395dd936215359dfeb111}
+      \strng{fullhashraw}{6a822fe3c48395dd936215359dfeb111}
+      \strng{bibnamehash}{6a822fe3c48395dd936215359dfeb111}
+      \strng{authorbibnamehash}{6a822fe3c48395dd936215359dfeb111}
+      \strng{authornamehash}{1d3b054ec72bd52cfc800922234ea41a}
+      \strng{authorfullhash}{6a822fe3c48395dd936215359dfeb111}
+      \strng{authorfullhashraw}{6a822fe3c48395dd936215359dfeb111}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Pacifichem (International Chemical Congress of Pacific Basin Societies)}
+      \field{langid}{american}
+      \field{number}{961}
+      \field{title}{Fluorous zirconium phosphonates: novel inorganic supports for catalysis}
+      \field{venue}{Hawaii, USA}
+      \field{year}{2005}
+      \true{nocite}
+    \endentry
+    \entry{Kabbe1973}{incollection}{}{}
+      \name{author}{2}{}{%
+        {{hash=64691527d09799bc7f07c35f9a5e43b5}{%
+           family={Kabbe},
+           familyi={K\bibinitperiod},
+           given={H.-J.},
+           giveni={H\bibinithyphendelim J\bibinitperiod}}}%
+        {{hash=e2ea26a231b18ad8726ff8cfacd94151}{%
+           family={Jira},
+           familyi={J\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Stuttgart, Germany}%
+      }
+      \list{publisher}{1}{%
+        {Georg Thieme Verlag}%
+      }
+      \strng{namehash}{7506c6758e9d16afa5e8ba721ea3f2fa}
+      \strng{fullhash}{7506c6758e9d16afa5e8ba721ea3f2fa}
+      \strng{fullhashraw}{7506c6758e9d16afa5e8ba721ea3f2fa}
+      \strng{bibnamehash}{7506c6758e9d16afa5e8ba721ea3f2fa}
+      \strng{authorbibnamehash}{7506c6758e9d16afa5e8ba721ea3f2fa}
+      \strng{authornamehash}{7506c6758e9d16afa5e8ba721ea3f2fa}
+      \strng{authorfullhash}{7506c6758e9d16afa5e8ba721ea3f2fa}
+      \strng{authorfullhashraw}{7506c6758e9d16afa5e8ba721ea3f2fa}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booksubtitle}{Teil 1}
+      \field{booktitle}{Ketone}
+      \field{chapter}{III}
+      \field{edition}{4}
+      \field{langid}{german}
+      \field{mainsubtitle}{Houben--Weyl}
+      \field{maintitle}{Methoden der organischen Chemie}
+      \field{part}{2a}
+      \field{title}{Durch Oxidation unter erhalt des Kohlenstoffgerüstes}
+      \field{volume}{VII}
+      \field{year}{1973}
+      \true{nocite}
+      \field{pages}{781\bibrangedash 790}
+      \range{pages}{10}
+    \endentry
+    \entry{Kirschning2004}{periodical}{}{}
+      \name{editor}{1}{}{%
+        {{hash=4606ae064e1a039c4f72673cfa066fc0}{%
+           family={Kirschning},
+           familyi={K\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Berlin, Germany}%
+        {London}%
+      }
+      \list{publisher}{1}{%
+        {Springer-Verlag}%
+      }
+      \strng{namehash}{4606ae064e1a039c4f72673cfa066fc0}
+      \strng{fullhash}{4606ae064e1a039c4f72673cfa066fc0}
+      \strng{fullhashraw}{4606ae064e1a039c4f72673cfa066fc0}
+      \strng{bibnamehash}{4606ae064e1a039c4f72673cfa066fc0}
+      \strng{editorbibnamehash}{4606ae064e1a039c4f72673cfa066fc0}
+      \strng{editornamehash}{4606ae064e1a039c4f72673cfa066fc0}
+      \strng{editorfullhash}{4606ae064e1a039c4f72673cfa066fc0}
+      \strng{editorfullhashraw}{4606ae064e1a039c4f72673cfa066fc0}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{issuetitle}{Immobilized Catalysts}
+      \field{title}{Topics in Current Chemisty}
+      \field{volume}{242}
+      \field{year}{2004}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.1007/b94543
+      \endverb
+    \endentry
+    \entry{Lancaster2003}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=7a9f5ccafb727863738da6cf95d9a48b}{%
+           family={Lancaster},
+           familyi={L\bibinitperiod},
+           given={Simon\bibnamedelima J.},
+           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{7a9f5ccafb727863738da6cf95d9a48b}
+      \strng{fullhash}{7a9f5ccafb727863738da6cf95d9a48b}
+      \strng{fullhashraw}{7a9f5ccafb727863738da6cf95d9a48b}
+      \strng{bibnamehash}{7a9f5ccafb727863738da6cf95d9a48b}
+      \strng{authorbibnamehash}{7a9f5ccafb727863738da6cf95d9a48b}
+      \strng{authornamehash}{7a9f5ccafb727863738da6cf95d9a48b}
+      \strng{authorfullhash}{7a9f5ccafb727863738da6cf95d9a48b}
+      \strng{authorfullhashraw}{7a9f5ccafb727863738da6cf95d9a48b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Alkylation of boron trifluoride with pentafluorophenyl Grignard reagent}
+      \field{urlday}{8}
+      \field{urlmonth}{10}
+      \field{urlyear}{2008}
+      \field{year}{2003}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://www.syntheticpages.org/pages/215
+      \endverb
+      \verb{url}
+      \verb http://www.syntheticpages.org/pages/215
+      \endverb
+    \endentry
+    \entry{Leeuwen1995}{collection}{}{}
+      \name{editor}{3}{}{%
+        {{hash=a09c3c8b692b3fb14f06305c17d436e2}{%
+           family={Leeuwen},
+           familyi={L\bibinitperiod},
+           given={Piet\bibnamedelimb W.\bibnamedelimi M.\bibnamedelimi N.},
+           giveni={P\bibinitperiod\bibinitdelim W\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim N\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=edfe3b439cf2532e7bd143d003374abd}{%
+           family={Morokuma},
+           familyi={M\bibinitperiod},
+           given={Keiji},
+           giveni={K\bibinitperiod}}}%
+        {{hash=938bbda399c9b6b19435a9fb55b4b1be}{%
+           family={Lenthe},
+           familyi={L\bibinitperiod},
+           given={Joop\bibnamedelima H.},
+           giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Dordrecht, Netherlands}%
+      }
+      \list{publisher}{1}{%
+        {Kluwer Academic Press}%
+      }
+      \strng{namehash}{339662538fdb68f11cc6abda463b5de1}
+      \strng{fullhash}{d1e24596b266459a86649e2bc7db5a47}
+      \strng{fullhashraw}{d1e24596b266459a86649e2bc7db5a47}
+      \strng{bibnamehash}{d1e24596b266459a86649e2bc7db5a47}
+      \strng{editorbibnamehash}{d1e24596b266459a86649e2bc7db5a47}
+      \strng{editornamehash}{339662538fdb68f11cc6abda463b5de1}
+      \strng{editorfullhash}{d1e24596b266459a86649e2bc7db5a47}
+      \strng{editorfullhashraw}{d1e24596b266459a86649e2bc7db5a47}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{langid}{british}
+      \field{number}{18}
+      \field{series}{Catalysis by Metal Compounds}
+      \field{title}{Theoretical Aspects of Homogeneous Catalysis}
+      \field{year}{1995}
+      \true{nocite}
+    \endentry
+    \entry{Muller2006}{inbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=8fe742421e800f0b51832a12edd7d1e3}{%
+           family={Sheldrick},
+           familyi={S\bibinitperiod},
+           given={George\bibnamedelima M.},
+           giveni={G\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \name{bookauthor}{5}{}{%
+        {{hash=57f66066d804db9a6a0f631aa4beba38}{%
+           family={Müller},
+           familyi={M\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=d2a0e0284aeb9efd9eb2a9f5153d2022}{%
+           family={Herbst-Irmer},
+           familyi={H\bibinithyphendelim I\bibinitperiod},
+           given={Regine},
+           giveni={R\bibinitperiod}}}%
+        {{hash=675cd700ca9a41f37f7975d6f3c6a9b7}{%
+           family={Spek},
+           familyi={S\bibinitperiod},
+           given={Anthony\bibnamedelima L.},
+           giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=988bf9a4dd564b39108be15530c02c33}{%
+           family={Schneider},
+           familyi={S\bibinitperiod},
+           given={Thomas\bibnamedelima R.},
+           giveni={T\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=699a7a6fc99c4013cacb235efc46b8b2}{%
+           family={Sawaya},
+           familyi={S\bibinitperiod},
+           given={Michael\bibnamedelima R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford, United Kingdom}%
+      }
+      \list{publisher}{2}{%
+        {International Union of Crystallography}%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{8fe742421e800f0b51832a12edd7d1e3}
+      \strng{fullhash}{8fe742421e800f0b51832a12edd7d1e3}
+      \strng{fullhashraw}{8fe742421e800f0b51832a12edd7d1e3}
+      \strng{bibnamehash}{8fe742421e800f0b51832a12edd7d1e3}
+      \strng{authorbibnamehash}{8fe742421e800f0b51832a12edd7d1e3}
+      \strng{authornamehash}{8fe742421e800f0b51832a12edd7d1e3}
+      \strng{authorfullhash}{8fe742421e800f0b51832a12edd7d1e3}
+      \strng{authorfullhashraw}{8fe742421e800f0b51832a12edd7d1e3}
+      \strng{bookauthorbibnamehash}{5fa62af8f1c133bae483d23d3d693f09}
+      \strng{bookauthornamehash}{a1e159ac27dcc50bb364e6c37c49e401}
+      \strng{bookauthorfullhash}{5fa62af8f1c133bae483d23d3d693f09}
+      \strng{bookauthorfullhashraw}{5fa62af8f1c133bae483d23d3d693f09}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Crystal Structure Refinement}
+      \field{langid}{british}
+      \field{title}{A Short History of SHELXL}
+      \field{year}{2006}
+      \true{nocite}
+    \endentry
+    \entry{Negishi2002}{collection}{}{}
+      \name{editor}{1}{}{%
+        {{hash=a192795330edf499a345b8e5d005617f}{%
+           family={Negishi},
+           familyi={N\bibinitperiod},
+           given={Ei-Ichi},
+           giveni={E\bibinithyphendelim I\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Wiley Interscience}%
+      }
+      \strng{namehash}{a192795330edf499a345b8e5d005617f}
+      \strng{fullhash}{a192795330edf499a345b8e5d005617f}
+      \strng{fullhashraw}{a192795330edf499a345b8e5d005617f}
+      \strng{bibnamehash}{a192795330edf499a345b8e5d005617f}
+      \strng{editorbibnamehash}{a192795330edf499a345b8e5d005617f}
+      \strng{editornamehash}{a192795330edf499a345b8e5d005617f}
+      \strng{editorfullhash}{a192795330edf499a345b8e5d005617f}
+      \strng{editorfullhashraw}{a192795330edf499a345b8e5d005617f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{langid}{american}
+      \field{title}{Handbook of Organopalladium Chemistry for Organic Synthesis}
+      \field{year}{2002}
+      \true{nocite}
+    \endentry
+    \entry{OxfordDiffraction2006}{manual}{}{}
+      \list{location}{1}{%
+        {Abingdon, United Kingdom}%
+      }
+      \list{publisher}{1}{%
+        {Oxford Diffraction Ltd.}%
+      }
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labeltitlesource}{title}
+      \field{langid}{british}
+      \field{title}{ABSPACK, CrysAlis CCD and CrysAlis RED}
+      \field{version}{1.171}
+      \field{year}{2006}
+      \true{nocite}
+    \endentry
+    \entry{Rees2000}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=7cfcb745321bd32bf9b39d5e339712e1}{%
+           family={Bunge},
+           familyi={B\bibinitperiod},
+           given={Scott\bibnamedelima D.},
+           giveni={S\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=f77c98d6424078ccdef54ec875f09f9f}{%
+           family={Just},
+           familyi={J\bibinitperiod},
+           given={Oliver},
+           giveni={O\bibinitperiod}}}%
+        {{hash=aef16d19e226b9e40f91a4173facd578}{%
+           family={Rees},
+           familyi={R\bibinitperiod},
+           given={William\bibnamedelima S.},
+           giveni={W\bibinitperiod\bibinitdelim S\bibinitperiod},
+           suffix={Jr.},
+           suffixi={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{09a0cf949d79d6e26b936b7bf7cdd55f}
+      \strng{fullhash}{14cfe663b9535271c392eeecd1323692}
+      \strng{fullhashraw}{14cfe663b9535271c392eeecd1323692}
+      \strng{bibnamehash}{14cfe663b9535271c392eeecd1323692}
+      \strng{authorbibnamehash}{14cfe663b9535271c392eeecd1323692}
+      \strng{authornamehash}{09a0cf949d79d6e26b936b7bf7cdd55f}
+      \strng{authorfullhash}{14cfe663b9535271c392eeecd1323692}
+      \strng{authorfullhashraw}{14cfe663b9535271c392eeecd1323692}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Angew. Chem. Int. Ed.}
+      \field{langid}{british}
+      \field{number}{17}
+      \field{title}{[\{Au[$\mu$-N(SiMe$_3$)$_2$]\}$_4$]: the first base-free gold amide}
+      \field{volume}{39}
+      \field{year}{2000}
+      \true{nocite}
+      \field{pages}{3082\bibrangedash 3084}
+      \range{pages}{3}
+    \endentry
+    \entry{Smidt1959}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=cd6594a16d941ae67c1412d35cc0cb0b}{%
+           family={Smidt},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f5f437bd54be40e2fc86b9f02ed3a36e}{%
+           family={Hafner},
+           familyi={H\bibinitperiod},
+           given={W.},
+           giveni={W\bibinitperiod}}}%
+        {{hash=e2ea26a231b18ad8726ff8cfacd94151}{%
+           family={Jira},
+           familyi={J\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=f56064a36d4454bbb4a4aa6ccbfb0d94}{%
+           family={Sedlmeier},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6b0413f80dc7f83679fb8be2235ab994}{%
+           family={Sieber},
+           familyi={S\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=4c6d59dfe020cc10eda94b62be24587a}{%
+           family={Rüttinger},
+           familyi={R\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=99d9e81e1c05f006dad13bb604e2fde6}{%
+           family={Kojer},
+           familyi={K\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{940931af67172293c844b405576d959a}
+      \strng{fullhash}{b961d34405d501be71622c55378ed65c}
+      \strng{fullhashraw}{b961d34405d501be71622c55378ed65c}
+      \strng{bibnamehash}{940931af67172293c844b405576d959a}
+      \strng{authorbibnamehash}{940931af67172293c844b405576d959a}
+      \strng{authornamehash}{940931af67172293c844b405576d959a}
+      \strng{authorfullhash}{b961d34405d501be71622c55378ed65c}
+      \strng{authorfullhashraw}{b961d34405d501be71622c55378ed65c}
+      \field{extraname}{1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Angew. Chem.}
+      \field{langid}{german}
+      \field{number}{5}
+      \field{title}{Katalytische Umsetzungen von Olefinen an Platinmetall-Verbindungen}
+      \field{volume}{71}
+      \field{year}{1959}
+      \true{nocite}
+      \field{pages}{176\bibrangedash 182}
+      \range{pages}{7}
+    \endentry
+    \entry{Smidt1962}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=5133b6014e6f3f4bfcda6649f54143ac}{%
+           family={Smidt},
+           familyi={S\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f5f437bd54be40e2fc86b9f02ed3a36e}{%
+           family={Hafner},
+           familyi={H\bibinitperiod},
+           given={W.},
+           giveni={W\bibinitperiod}}}%
+        {{hash=e2ea26a231b18ad8726ff8cfacd94151}{%
+           family={Jira},
+           familyi={J\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=6b0413f80dc7f83679fb8be2235ab994}{%
+           family={Sieber},
+           familyi={S\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=f56064a36d4454bbb4a4aa6ccbfb0d94}{%
+           family={Sedlmeier},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=a0247162fc7cce20a61a7fc87b139a54}{%
+           family={Sabel},
+           familyi={S\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{cbc5ffed02f760c4e2fedb7bda93e4e7}
+      \strng{fullhash}{8c001f98c41e3cc632a84f49861cf3e3}
+      \strng{fullhashraw}{8c001f98c41e3cc632a84f49861cf3e3}
+      \strng{bibnamehash}{cbc5ffed02f760c4e2fedb7bda93e4e7}
+      \strng{authorbibnamehash}{cbc5ffed02f760c4e2fedb7bda93e4e7}
+      \strng{authornamehash}{cbc5ffed02f760c4e2fedb7bda93e4e7}
+      \strng{authorfullhash}{8c001f98c41e3cc632a84f49861cf3e3}
+      \strng{authorfullhashraw}{8c001f98c41e3cc632a84f49861cf3e3}
+      \field{extraname}{2}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Angew. Chem., Int. Ed. Engl.}
+      \field{langid}{british}
+      \field{number}{2}
+      \field{title}{The oxidation of olefins with palladium chloride catalysts}
+      \field{volume}{1}
+      \field{year}{1962}
+      \true{nocite}
+      \field{pages}{80\bibrangedash 88}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1002/anie.196200801
+      \endverb
+    \endentry
+    \entry{Sofield2004}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=c245b435ec16ab7ab62032c0b6372c5c}{%
+           family={Sofield},
+           familyi={S\bibinitperiod},
+           given={Chadwick\bibnamedelima D.},
+           giveni={C\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=73eed4fefcc6ee50be2bade392193e26}{%
+           family={Walter},
+           familyi={W\bibinitperiod},
+           given={Marc\bibnamedelima D.},
+           giveni={M\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=850811bce0c36d9841c8baf363ee25a4}{%
+           family={Andersen},
+           familyi={A\bibinitperiod},
+           given={Richard\bibnamedelima A.},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{7c830a920f8a20931acce483afee8318}
+      \strng{fullhash}{44369cd73ffbe60f321e435951c2bdec}
+      \strng{fullhashraw}{44369cd73ffbe60f321e435951c2bdec}
+      \strng{bibnamehash}{44369cd73ffbe60f321e435951c2bdec}
+      \strng{authorbibnamehash}{44369cd73ffbe60f321e435951c2bdec}
+      \strng{authornamehash}{7c830a920f8a20931acce483afee8318}
+      \strng{authorfullhash}{44369cd73ffbe60f321e435951c2bdec}
+      \strng{authorfullhashraw}{44369cd73ffbe60f321e435951c2bdec}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Acta Crystallogr., Sect.~C: Cryst. Struct. Commun.}
+      \field{langid}{british}
+      \field{title}{\{Amidobis[$\eta^5$-1,3-bis\-(trimethylsilyl)\relax \-cyclopentadienyl]titanium(III)\}}
+      \field{year}{2004}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.1107/S0108270104018840
+      \endverb
+    \endentry
+    \entry{Toulouse1980}{proceedings}{}{}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labeltitlesource}{title}
+      \field{title}{Proceedings of the 21st International Conference on Coordination Chemistry}
+      \field{venue}{Toulouse, France}
+      \field{year}{1980}
+      \true{nocite}
+    \endentry
+    \entry{Wilson1992}{book}{}{}
+      \name{editor}{2}{}{%
+        {{hash=5387c7a697d90e4b53cf461f364490ae}{%
+           family={Wilson},
+           familyi={W\bibinitperiod},
+           given={A.\bibnamedelimi J.\bibnamedelimi C.},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=daa6c4acc1d42f1540ef7108b51ed611}{%
+           family={Prince},
+           familyi={P\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Dordrecht, Netherlands}%
+      }
+      \list{publisher}{1}{%
+        {Kluwer Academic Publishers}%
+      }
+      \strng{namehash}{9f0d9f9a4858fec11d63cf9209862eaa}
+      \strng{fullhash}{9f0d9f9a4858fec11d63cf9209862eaa}
+      \strng{fullhashraw}{9f0d9f9a4858fec11d63cf9209862eaa}
+      \strng{bibnamehash}{9f0d9f9a4858fec11d63cf9209862eaa}
+      \strng{editorbibnamehash}{9f0d9f9a4858fec11d63cf9209862eaa}
+      \strng{editornamehash}{9f0d9f9a4858fec11d63cf9209862eaa}
+      \strng{editorfullhash}{9f0d9f9a4858fec11d63cf9209862eaa}
+      \strng{editorfullhashraw}{9f0d9f9a4858fec11d63cf9209862eaa}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{edition}{3}
+      \field{langid}{british}
+      \field{maintitle}{International Tables for Crystallography}
+      \field{title}{Mathematical, Physical and Chemical Tables}
+      \field{volume}{C}
+      \field{year}{1992}
+      \true{nocite}
+    \endentry
+    \entry{Doe2026}{unpublished}{}{}
+      \name{author}{1}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eventday}{1}
+      \field{eventendday}{2}
+      \field{eventendmonth}{1}
+      \field{eventendyear}{2026}
+      \field{eventmonth}{1}
+      \field{eventtitle}{{The Conference of Foobar}}
+      \field{eventyear}{2026}
+      \field{title}{A title of a talk}
+      \field{venue}{Neverland}
+      \field{eventenddateera}{ce}
+      \field{eventdateera}{ce}
+      \true{nocite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

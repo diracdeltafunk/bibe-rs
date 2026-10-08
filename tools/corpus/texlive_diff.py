@@ -14,9 +14,13 @@ Results: out.txt / results.json; differing cases are kept under work/.
 """
 import subprocess, shutil, pathlib, re, sys, concurrent.futures as cf, json
 here=pathlib.Path('.').resolve()
-bcf=open('/Users/ben/bibe-rs/tests/corpus/styles/authoryear/authoryear.bcf',encoding='utf-8').read()
-bibers='/Users/ben/bibe-rs/target/release/bibers'
-files=[l.strip() for l in open('list.txt') if l.strip()]
+import os
+REPO=pathlib.Path(__file__).resolve().parents[2]
+bcf=open(os.environ.get('BCF', REPO/'tests/corpus/styles/authoryear/authoryear.bcf'),encoding='utf-8').read()
+ORACLE=os.environ.get('ORACLE','biber')  # or tools/oracle/biber-src (O3)
+OUT=pathlib.Path(os.environ.get('OUT','.')).resolve(); OUT.mkdir(parents=True, exist_ok=True)
+bibers=str(REPO/'target/release/bibers')
+files=[l.strip() for l in open(os.environ.get('LIST','list.txt')) if l.strip()]
 def norm(s):
     return re.sub(r'(\{\{|\\name\{[^}]*\}\{\d+\}\{)([^}]*)(\}\{%)', lambda m: m.group(1)+','.join(sorted(m.group(2).split(',')))+m.group(3), s)
 def msgs(blg):
@@ -29,11 +33,11 @@ def msgs(blg):
             out.append(m.group(1)+' - '+t)
     return sorted(out)
 def run(i,f):
-    d=here/'work'/str(i); shutil.rmtree(d,ignore_errors=True); d.mkdir(parents=True)
+    d=OUT/'work'/str(i); shutil.rmtree(d,ignore_errors=True); d.mkdir(parents=True)
     shutil.copy(f,d/'data.bib')
     (d/'t.bcf').write_text(bcf.replace('>biblatex-examples.bib<','>data.bib<'),encoding='utf-8')
     res={}
-    for who,cmd in (('biber',['biber']),('bibers',[bibers])):
+    for who,cmd in (('biber',[ORACLE]),('bibers',[bibers])):
         try:
             r=subprocess.run(cmd+['--noconf','t.bcf'],cwd=d,capture_output=True,timeout=600,env={'LANG':'en_US.UTF-8','LC_ALL':'en_US.UTF-8','PATH':'/Library/TeX/texbin:/usr/bin:/bin'})
             code=r.returncode; err=r.stderr.decode('utf-8','replace')
@@ -57,6 +61,6 @@ with cf.ThreadPoolExecutor(6) as ex:
     results=list(ex.map(lambda a: run(*a), enumerate(files)))
 from collections import Counter
 print(Counter(s for _,s,_,_ in results))
-json.dump(results, open('results.json','w'), indent=0)
+json.dump(results, open(OUT/'results.json','w'), indent=0)
 for f,s,cb,cr in results:
     if s!='SAME': print(s, cb, cr, f)

@@ -1,0 +1,2 @@
+WARN - legacy year field 'Forthcoming' in entry 'szelenyiForthcoming' is not an integer - this will probably not sort properly.
+WARN - legacy year field 'n.d.' in entry 'doe_nodate' is not an integer - this will probably not sort properly.

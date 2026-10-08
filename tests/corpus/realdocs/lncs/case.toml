@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style lncs"
+source = "texmf-dist/doc/latex/biblatex-lncs/biblatex-lncs-test.tex (TeX Live 2026), compiled with pdflatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:lncs"]

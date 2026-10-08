@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style multiple-dm"
+source = "texmf-dist/doc/latex/biblatex-opcit-booktitle/documentation/biblatex-opcit-booktitle-example.tex (TeX Live 2026), compiled with xelatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:multiple-dm"]

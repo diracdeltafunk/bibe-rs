@@ -1,0 +1,135 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{Heal:1998}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=71c41fff6b4b56b4abef878a5b42acb5}{%
+           family={Chichilnisky},
+           familyi={C\bibinitperiod},
+           given={Graciela},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=99705d3c93d8651c891e0ab248a31d35}{%
+           family={Heal},
+           familyi={H\bibinitperiod},
+           given={Geoffrey},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{0c320a826ac99eb95ee38dad3da5ad37}
+      \strng{fullhash}{0c320a826ac99eb95ee38dad3da5ad37}
+      \strng{fullhashraw}{0c320a826ac99eb95ee38dad3da5ad37}
+      \strng{bibnamehash}{0c320a826ac99eb95ee38dad3da5ad37}
+      \strng{authorbibnamehash}{0c320a826ac99eb95ee38dad3da5ad37}
+      \strng{authornamehash}{0c320a826ac99eb95ee38dad3da5ad37}
+      \strng{authorfullhash}{0c320a826ac99eb95ee38dad3da5ad37}
+      \strng{authorfullhashraw}{0c320a826ac99eb95ee38dad3da5ad37}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Nature}
+      \field{title}{Economic Returns from the Biosphere}
+      \field{volume}{391}
+      \field{year}{1998}
+      \field{pages}{629\bibrangedash 630}
+      \range{pages}{2}
+    \endentry
+    \entry{Weisbrod:1964}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=44f4b6febed853714336e6774249efd6}{%
+           family={Weisbrod},
+           familyi={W\bibinitperiod},
+           given={Burton\bibnamedelima A.},
+           giveni={B\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{44f4b6febed853714336e6774249efd6}
+      \strng{fullhash}{44f4b6febed853714336e6774249efd6}
+      \strng{fullhashraw}{44f4b6febed853714336e6774249efd6}
+      \strng{bibnamehash}{44f4b6febed853714336e6774249efd6}
+      \strng{authorbibnamehash}{44f4b6febed853714336e6774249efd6}
+      \strng{authornamehash}{44f4b6febed853714336e6774249efd6}
+      \strng{authorfullhash}{44f4b6febed853714336e6774249efd6}
+      \strng{authorfullhashraw}{44f4b6febed853714336e6774249efd6}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Quartely Journal of Economics}
+      \field{number}{3}
+      \field{title}{Collective-Consumption Services of Individual-Consumption Goods}
+      \field{volume}{78}
+      \field{year}{1964}
+      \field{pages}{471\bibrangedash 577}
+      \range{pages}{107}
+    \endentry
+    \entry{Wunder:2008}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=a2008ad345cb17ed10f2fc4ae9135995}{%
+           family={Wunder},
+           familyi={W\bibinitperiod},
+           given={Sven},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c6b5f850fa92e38dddfba3c18ad77043}{%
+           family={Engel},
+           familyi={E\bibinitperiod},
+           given={Stefanie},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=687b62fcb1be6633317f7e9839bdb40b}{%
+           family={Pagiola},
+           familyi={P\bibinitperiod},
+           given={Stefano},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{bad6dcfa7e219ea1f000b344edcf1ba8}
+      \strng{fullhash}{bad6dcfa7e219ea1f000b344edcf1ba8}
+      \strng{fullhashraw}{bad6dcfa7e219ea1f000b344edcf1ba8}
+      \strng{bibnamehash}{bad6dcfa7e219ea1f000b344edcf1ba8}
+      \strng{authorbibnamehash}{bad6dcfa7e219ea1f000b344edcf1ba8}
+      \strng{authornamehash}{bad6dcfa7e219ea1f000b344edcf1ba8}
+      \strng{authorfullhash}{bad6dcfa7e219ea1f000b344edcf1ba8}
+      \strng{authorfullhashraw}{bad6dcfa7e219ea1f000b344edcf1ba8}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Ecological Economics}
+      \field{number}{4}
+      \field{title}{Taking stock: A comparative analysis of payments for environmental services programs in developed and developing countries}
+      \field{volume}{65}
+      \field{year}{2008}
+      \field{pages}{834\bibrangedash 852}
+      \range{pages}{19}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

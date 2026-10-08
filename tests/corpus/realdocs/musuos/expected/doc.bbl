@@ -1,0 +1,290 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{noten}{music}{}{}
+      \name{author}{1}{}{%
+        {{hash=c3ffd264679dfe7c3244318c68fe6457}{%
+           family={Bach},
+           familyi={B\bibinitperiod},
+           given={Johann\bibnamedelima Sebastian},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=da5234ec428b390226a48803115bcd8a}{%
+           family={Ameln},
+           familyi={A\bibinitperiod},
+           given={Konrad},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Kassel}%
+      }
+      \list{publisher}{1}{%
+        {Bärenreiter}%
+      }
+      \strng{namehash}{c3ffd264679dfe7c3244318c68fe6457}
+      \strng{fullhash}{c3ffd264679dfe7c3244318c68fe6457}
+      \strng{fullhashraw}{c3ffd264679dfe7c3244318c68fe6457}
+      \strng{bibnamehash}{c3ffd264679dfe7c3244318c68fe6457}
+      \strng{authorbibnamehash}{c3ffd264679dfe7c3244318c68fe6457}
+      \strng{authornamehash}{c3ffd264679dfe7c3244318c68fe6457}
+      \strng{authorfullhash}{c3ffd264679dfe7c3244318c68fe6457}
+      \strng{authorfullhashraw}{c3ffd264679dfe7c3244318c68fe6457}
+      \strng{editorbibnamehash}{da5234ec428b390226a48803115bcd8a}
+      \strng{editornamehash}{da5234ec428b390226a48803115bcd8a}
+      \strng{editorfullhash}{da5234ec428b390226a48803115bcd8a}
+      \strng{editorfullhashraw}{da5234ec428b390226a48803115bcd8a}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{series}{Neue Bach-Ausgabe Serie III, Band 1}
+      \field{title}{Motetten}
+      \field{usera}{225--230}
+      \field{userb}{BWV}
+      \field{year}{1965}
+    \endentry
+    \entry{noten2}{music}{}{}
+      \name{author}{1}{}{%
+        {{hash=ffc94e68fce04e3013e23be06ad4112a}{%
+           family={Beethoven},
+           familyi={B\bibinitperiod},
+           given={Ludwig},
+           giveni={L\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \strng{namehash}{ffc94e68fce04e3013e23be06ad4112a}
+      \strng{fullhash}{ffc94e68fce04e3013e23be06ad4112a}
+      \strng{fullhashraw}{ffc94e68fce04e3013e23be06ad4112a}
+      \strng{bibnamehash}{ffc94e68fce04e3013e23be06ad4112a}
+      \strng{authorbibnamehash}{ffc94e68fce04e3013e23be06ad4112a}
+      \strng{authornamehash}{ffc94e68fce04e3013e23be06ad4112a}
+      \strng{authorfullhash}{ffc94e68fce04e3013e23be06ad4112a}
+      \strng{authorfullhashraw}{ffc94e68fce04e3013e23be06ad4112a}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labeldatesource}{nodate}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Sinfonie Nr. 3}
+      \field{usera}{55}
+    \endentry
+    \entry{sammelb}{collection}{}{}
+      \name{editor}{1}{}{%
+        {{hash=f2a2d700c3a082b501e29b69fb2dbce4}{%
+           family={Meier},
+           familyi={M\bibinitperiod},
+           given={Hans},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin}%
+      }
+      \strng{namehash}{f2a2d700c3a082b501e29b69fb2dbce4}
+      \strng{fullhash}{f2a2d700c3a082b501e29b69fb2dbce4}
+      \strng{fullhashraw}{f2a2d700c3a082b501e29b69fb2dbce4}
+      \strng{bibnamehash}{f2a2d700c3a082b501e29b69fb2dbce4}
+      \strng{editorbibnamehash}{f2a2d700c3a082b501e29b69fb2dbce4}
+      \strng{editornamehash}{f2a2d700c3a082b501e29b69fb2dbce4}
+      \strng{editorfullhash}{f2a2d700c3a082b501e29b69fb2dbce4}
+      \strng{editorfullhashraw}{f2a2d700c3a082b501e29b69fb2dbce4}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{title}{Beethoven Handbuch}
+      \field{year}{1972}
+    \endentry
+    \entry{artikel}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=57f66066d804db9a6a0f631aa4beba38}{%
+           family={Müller},
+           familyi={M\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{fullhash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{fullhashraw}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{bibnamehash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{authorbibnamehash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{authornamehash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{authorfullhash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{authorfullhashraw}{57f66066d804db9a6a0f631aa4beba38}
+      \field{extraname}{1}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Archiv für Musikwissenschaft}
+      \field{title}{Beethovens Streichquartette}
+      \field{volume}{28}
+      \field{year}{1968}
+      \field{pages}{180\bibrangedash 212}
+      \range{pages}{33}
+    \endentry
+    \entry{buch2}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=57f66066d804db9a6a0f631aa4beba38}{%
+           family={Müller},
+           familyi={M\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Kassel}%
+      }
+      \list{publisher}{1}{%
+        {Pieper}%
+      }
+      \strng{namehash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{fullhash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{fullhashraw}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{bibnamehash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{authorbibnamehash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{authornamehash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{authorfullhash}{57f66066d804db9a6a0f631aa4beba38}
+      \strng{authorfullhashraw}{57f66066d804db9a6a0f631aa4beba38}
+      \field{extraname}{2}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Beethovens Streichquartette}
+      \field{year}{1983}
+      \keyw{primaer}
+    \endentry
+    \entry{buch}{booklet}{}{}
+      \name{editor}{1}{}{%
+        {{hash=1350f4c897e1153d688aba24731dd63d}{%
+           family={Nussbaum},
+           familyi={N\bibinitperiod},
+           given={Felix},
+           giveni={F\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Kassel}%
+      }
+      \strng{namehash}{1350f4c897e1153d688aba24731dd63d}
+      \strng{fullhash}{1350f4c897e1153d688aba24731dd63d}
+      \strng{fullhashraw}{1350f4c897e1153d688aba24731dd63d}
+      \strng{bibnamehash}{1350f4c897e1153d688aba24731dd63d}
+      \strng{editorbibnamehash}{1350f4c897e1153d688aba24731dd63d}
+      \strng{editornamehash}{1350f4c897e1153d688aba24731dd63d}
+      \strng{editorfullhash}{1350f4c897e1153d688aba24731dd63d}
+      \strng{editorfullhashraw}{1350f4c897e1153d688aba24731dd63d}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{title}{Beethovens Streichquartette}
+      \field{year}{1983}
+      \keyw{primaer}
+    \endentry
+    \entry{sammart}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{hash=f63705a0e26bb530f72869b568a0aa1f}{%
+           family={Schmidt},
+           familyi={S\bibinitperiod},
+           given={Friedhelm},
+           giveni={F\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=500cbc92550c4f3e5cff41536ac7eabd}{%
+           family={dems.},
+           familyi={d\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Wien}%
+      }
+      \strng{namehash}{f63705a0e26bb530f72869b568a0aa1f}
+      \strng{fullhash}{f63705a0e26bb530f72869b568a0aa1f}
+      \strng{fullhashraw}{f63705a0e26bb530f72869b568a0aa1f}
+      \strng{bibnamehash}{f63705a0e26bb530f72869b568a0aa1f}
+      \strng{authorbibnamehash}{f63705a0e26bb530f72869b568a0aa1f}
+      \strng{authornamehash}{f63705a0e26bb530f72869b568a0aa1f}
+      \strng{authorfullhash}{f63705a0e26bb530f72869b568a0aa1f}
+      \strng{authorfullhashraw}{f63705a0e26bb530f72869b568a0aa1f}
+      \strng{editorbibnamehash}{500cbc92550c4f3e5cff41536ac7eabd}
+      \strng{editornamehash}{500cbc92550c4f3e5cff41536ac7eabd}
+      \strng{editorfullhash}{500cbc92550c4f3e5cff41536ac7eabd}
+      \strng{editorfullhashraw}{500cbc92550c4f3e5cff41536ac7eabd}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Mozart Jahrbuch}
+      \field{title}{Mozarts Streichquintette}
+      \field{volume}{2}
+      \field{year}{2011}
+    \endentry
+    \entry{internet}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=a952496f6e98fa7a0931a547ed0dd5b9}{%
+           family={Sorglos},
+           familyi={S\bibinitperiod},
+           given={Susi},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{a952496f6e98fa7a0931a547ed0dd5b9}
+      \strng{fullhash}{a952496f6e98fa7a0931a547ed0dd5b9}
+      \strng{fullhashraw}{a952496f6e98fa7a0931a547ed0dd5b9}
+      \strng{bibnamehash}{a952496f6e98fa7a0931a547ed0dd5b9}
+      \strng{authorbibnamehash}{a952496f6e98fa7a0931a547ed0dd5b9}
+      \strng{authornamehash}{a952496f6e98fa7a0931a547ed0dd5b9}
+      \strng{authorfullhash}{a952496f6e98fa7a0931a547ed0dd5b9}
+      \strng{authorfullhashraw}{a952496f6e98fa7a0931a547ed0dd5b9}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Neue Musik im Internet}
+      \field{urlday}{10}
+      \field{urlmonth}{9}
+      \field{urlyear}{2011}
+      \field{year}{2010}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb http://www.susi-sorglos-im-netz.de/neu_mus_inet.htm
+      \endverb
+      \verb{url}
+      \verb http://www.susi-sorglos-im-netz.de/neu_mus_inet.htm
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
