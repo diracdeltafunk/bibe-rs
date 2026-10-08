@@ -432,12 +432,19 @@ fn bless(opts: &Opts) -> Result<ExitCode> {
         let run = imp.run(case, &root, false)?;
         // What differs from the oracle (for review).
         if let Outcome::Fail(ms) = bibers_testkit::compare(case, &run)? {
-            println!("bless {:<50} differs from biber ({}):", case.id, case.spec.allow.join(", "));
+            println!(
+                "bless {:<50} differs from biber ({}):",
+                case.id,
+                case.spec.allow.join(", ")
+            );
             for m in ms {
                 println!("      {m}");
             }
         } else {
-            println!("bless {:<50} identical to biber (expected-bibers/ not needed)", case.id);
+            println!(
+                "bless {:<50} identical to biber (expected-bibers/ not needed)",
+                case.id
+            );
             continue;
         }
         let dir = case.dir.join(BIBERS_EXPECTED_DIR);
