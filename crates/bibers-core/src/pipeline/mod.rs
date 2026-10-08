@@ -68,6 +68,8 @@ pub struct RunState {
     pub bibcache: fetch::BibCache,
     /// `Biber::Annotation`'s global `$ANN`.
     pub annotations: crate::model::Annotations,
+    /// Label generation helper state (citekey index map).
+    pub labelalpha: labelalpha::LabelRunCache,
 }
 
 /// The result of processing: one state per processed section, in
