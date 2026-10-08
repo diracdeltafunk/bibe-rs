@@ -61,6 +61,22 @@ pub enum Quirk {
     /// from the shared data-model date-field list in place, so a custom date
     /// field whose stem ends in `date` loses its flags after the first entry.
     DatefieldHelperMutation,
+    /// BB-022/BB-023 (`crossref-date-meta`): crossref inheritance copies the
+    /// parent's derived date metadata even when the child's date parts were
+    /// kept, and the date-part guard only looks at the main `datesplit`.
+    CrossrefDateMeta,
+    /// BB-024 (`xdata-name-index`): granular XDATA name references set
+    /// 0-based name indices, and `splice` skips re-indexing the last name.
+    XdataNameIndex,
+    /// BB-025 (`xdata-rerefs`): an XDATA entry's own references are
+    /// re-resolved every time it is referenced.
+    XdataRerefs,
+    /// BB-026 (`shared-namelists`): inherited/XDATA name lists are shared
+    /// with the parent (one name-list id), so per-list state is shared.
+    SharedNamelists,
+    /// BB-067 (`dieondatamodel-no-exit`): `--dieondatamodel` logs errors but
+    /// never stops.
+    DieondatamodelNoExit,
 }
 
 impl Quirk {
@@ -83,6 +99,11 @@ impl Quirk {
         Quirk::BblCommaCleanup,
         Quirk::RangelenZeroDigit,
         Quirk::DatefieldHelperMutation,
+        Quirk::CrossrefDateMeta,
+        Quirk::XdataNameIndex,
+        Quirk::XdataRerefs,
+        Quirk::SharedNamelists,
+        Quirk::DieondatamodelNoExit,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -105,6 +126,11 @@ impl Quirk {
             Quirk::BblCommaCleanup => "bbl-comma-cleanup",
             Quirk::RangelenZeroDigit => "rangelen-zero-digit",
             Quirk::DatefieldHelperMutation => "datefield-helper-mutation",
+            Quirk::CrossrefDateMeta => "crossref-date-meta",
+            Quirk::XdataNameIndex => "xdata-name-index",
+            Quirk::XdataRerefs => "xdata-rerefs",
+            Quirk::SharedNamelists => "shared-namelists",
+            Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
         }
     }
 

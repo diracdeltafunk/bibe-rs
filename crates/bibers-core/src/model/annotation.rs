@@ -263,3 +263,140 @@ impl Annotations {
         }
     }
 }
+
+impl Annotations {
+    /// `Biber::Annotation->inherit_annotations` (Annotation.pm:65): copy
+    /// the annotations of `sourcekey`'s `sourcefield` to `targetkey`'s
+    /// `targetfield`. With `items = (sourceitem, targetitem)` only that item
+    /// (list position) of item and part annotations is copied.
+    pub fn inherit_annotations(
+        &mut self,
+        sourcekey: &str,
+        targetkey: &str,
+        sourcefield: &str,
+        targetfield: &str,
+        items: Option<(&str, &str)>,
+    ) {
+        match items {
+            None => {
+                if let Some(v) = self.field.get(sourcekey).and_then(|m| m.get(sourcefield)) {
+                    let v = v.clone();
+                    self.field
+                        .entry(targetkey.into())
+                        .or_default()
+                        .insert(targetfield.into(), v);
+                }
+                if let Some(v) = self.item.get(sourcekey).and_then(|m| m.get(sourcefield)) {
+                    let v = v.clone();
+                    self.item
+                        .entry(targetkey.into())
+                        .or_default()
+                        .insert(targetfield.into(), v);
+                }
+                if let Some(v) = self.part.get(sourcekey).and_then(|m| m.get(sourcefield)) {
+                    let v = v.clone();
+                    self.part
+                        .entry(targetkey.into())
+                        .or_default()
+                        .insert(targetfield.into(), v);
+                }
+            }
+            Some((si, ti)) => {
+                // `keys %{…}`: hash order in biber; sorted here (only the
+                // order of the `names` list depends on it).
+                if let Some(names) = self
+                    .item
+                    .get(sourcekey)
+                    .and_then(|m| m.get(sourcefield))
+                    .cloned()
+                {
+                    for (name, counts) in names {
+                        self.add_name(targetkey, targetfield, &name);
+                        if let Some(a) = counts.get(si) {
+                            self.item
+                                .entry(targetkey.into())
+                                .or_default()
+                                .entry(targetfield.into())
+                                .or_default()
+                                .entry(name.clone())
+                                .or_default()
+                                .insert(ti.into(), a.clone());
+                        }
+                    }
+                }
+                if let Some(names) = self
+                    .part
+                    .get(sourcekey)
+                    .and_then(|m| m.get(sourcefield))
+                    .cloned()
+                {
+                    for (name, counts) in names {
+                        self.add_name(targetkey, targetfield, &name);
+                        if let Some(a) = counts.get(si) {
+                            self.part
+                                .entry(targetkey.into())
+                                .or_default()
+                                .entry(targetfield.into())
+                                .or_default()
+                                .entry(name.clone())
+                                .or_default()
+                                .insert(ti.into(), a.clone());
+                        }
+                    }
+                }
+            }
+        }
+        self.mark_fields(targetkey);
+    }
+
+    /// `Biber::Annotation->copy_annotations` (Annotation.pm:121): copy all
+    /// annotations of one entry to another (related entry clones).
+    pub fn copy_annotations(&mut self, sourcekey: &str, targetkey: &str) {
+        if let Some(v) = self.field.get(sourcekey).cloned() {
+            self.field.insert(targetkey.into(), v);
+        }
+        if let Some(v) = self.item.get(sourcekey).cloned() {
+            self.item.insert(targetkey.into(), v);
+        }
+        if let Some(v) = self.part.get(sourcekey).cloned() {
+            self.part.insert(targetkey.into(), v);
+        }
+        if let Some(v) = self.names.get(sourcekey).cloned() {
+            self.names.insert(targetkey.into(), v);
+        }
+        self.mark_fields(targetkey);
+    }
+
+    fn add_name(&mut self, key: &str, field: &str, name: &str) {
+        let names = self
+            .names
+            .entry(key.into())
+            .or_default()
+            .entry(field.into())
+            .or_default();
+        let fname = perl_compat::fc(name);
+        if !names.iter().any(|n| perl_compat::fc(n) == fname) {
+            names.push(name.into());
+        }
+    }
+
+    /// `$ANN->{fields}{$key}{$f} = 1` for every annotated field of `key`.
+    fn mark_fields(&mut self, key: &str) {
+        let mut fs: Vec<String> = Vec::new();
+        if let Some(m) = self.field.get(key) {
+            fs.extend(m.keys().cloned());
+        }
+        if let Some(m) = self.item.get(key) {
+            fs.extend(m.keys().cloned());
+        }
+        if let Some(m) = self.part.get(key) {
+            fs.extend(m.keys().cloned());
+        }
+        if !fs.is_empty() {
+            let e = self.fields.entry(key.into()).or_default();
+            for f in fs {
+                e.insert(f, true);
+            }
+        }
+    }
+}

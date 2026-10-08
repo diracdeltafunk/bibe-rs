@@ -68,6 +68,10 @@ pub struct RunState {
     pub bibcache: fetch::BibCache,
     /// `Biber::Annotation`'s global `$ANN`.
     pub annotations: crate::model::Annotations,
+    /// biber's shared `$dmh->{datefields}` once a `foreach … s/date$//`
+    /// loop has mutated it in place (BB-028); `None` while pristine. See
+    /// [`resolve::datefield_stems`].
+    pub datefields: Option<Vec<String>>,
 }
 
 /// The result of processing: one state per processed section, in
