@@ -1,0 +1,5 @@
+description = "BB-094: labelalpha `v` cache is keyed by field name only: a second data list with a given-name labelalphanametemplate reuses the family-name cache and gets an empty name part"
+source = "hand-written .bcf (styles/alphabetic with modified label templates/datalists), labelalpha package"
+args = ["--noconf", "t.bcf"]
+outputs = ["t.bbl"]
+tags = ["suite:bugs", "bug:BB-094"]

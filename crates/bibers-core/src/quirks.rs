@@ -75,6 +75,14 @@ pub enum Quirk {
     /// BB-097 (`uniquelist-minyear-double-count`): uniquelist=minyear counts
     /// each complete name list twice.
     UniquelistMinyearDoubleCount,
+    /// BB-094 (`labelcache-field-key`): the labelalpha `v`/`l` width caches
+    /// are keyed by field name only, per section, so a second data list or
+    /// label part on the same field (other nameparts, name template or
+    /// visibility) reuses the first one's cache.
+    LabelcacheFieldKey,
+    /// BB-096 (`label-global-index-zero`): `substring_width=vf` ignores a
+    /// computed fixed width index of 0 (`globalindices || index`).
+    LabelGlobalIndexZero,
 }
 
 impl Quirk {
@@ -101,6 +109,8 @@ impl Quirk {
         Quirk::UniquenameFalseSkipsEntry,
         Quirk::UniquenameMinyearVisibility,
         Quirk::UniquelistMinyearDoubleCount,
+        Quirk::LabelcacheFieldKey,
+        Quirk::LabelGlobalIndexZero,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -127,6 +137,8 @@ impl Quirk {
             Quirk::UniquenameFalseSkipsEntry => "uniquename-false-skips-entry",
             Quirk::UniquenameMinyearVisibility => "uniquename-minyear-visibility",
             Quirk::UniquelistMinyearDoubleCount => "uniquelist-minyear-double-count",
+            Quirk::LabelcacheFieldKey => "labelcache-field-key",
+            Quirk::LabelGlobalIndexZero => "label-global-index-zero",
         }
     }
 

@@ -1,0 +1,5 @@
+description = "BB-096: labelalpha `substring_width=vf` ignores a computed fixed width index of 0 (`globalindices || index`)"
+source = "hand-written .bcf (styles/alphabetic with modified label templates/datalists), labelalpha package"
+args = ["--noconf", "t.bcf"]
+outputs = ["t.bbl"]
+tags = ["suite:bugs", "bug:BB-096"]
