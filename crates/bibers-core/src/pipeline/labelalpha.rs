@@ -81,7 +81,10 @@ pub fn process_labelalpha(
     };
     let bee = be.entrytype().to_string();
     // Don't add a label if skiplab is set for entry
-    if opt_truthy(cfg.blx.get(Some(&secnum), "skiplab", Some(&bee), Some(citekey))) {
+    if opt_truthy(
+        cfg.blx
+            .get(Some(&secnum), "skiplab", Some(&bee), Some(citekey)),
+    ) {
         return Ok(());
     }
     // getblxoption(undef, 'labelalpha', …): per-entry values invisible (BB-021)
@@ -109,8 +112,18 @@ pub fn process_labelalpha(
         label_final: false,
     };
     let (label, slabel) = g.genlabel(citekey);
-    set_entryfield(&mut dl.state, citekey, "labelalpha", label.map_or(J::Null, J::from));
-    set_entryfield(&mut dl.state, citekey, "sortlabelalpha", slabel.map_or(J::Null, J::from));
+    set_entryfield(
+        &mut dl.state,
+        citekey,
+        "labelalpha",
+        label.map_or(J::Null, J::from),
+    );
+    set_entryfield(
+        &mut dl.state,
+        citekey,
+        "sortlabelalpha",
+        slabel.map_or(J::Null, J::from),
+    );
     Ok(())
 }
 
@@ -311,7 +324,12 @@ pub fn normalise_string_label(cfg: &Config, s: &str) -> String {
 fn range_parts(rs: &str) -> Option<(Option<String>, Option<String>, Option<String>)> {
     let re = PerlRegex::cached(r"\A\s*(\P{Pd}+)?\s*(\p{Pd})*\s*(\P{Pd}+)?\s*\z", false).ok()?;
     let g = re.matches(rs).ok()?.into_iter().next()?;
-    let cap = |i: usize| g.get(i).copied().flatten().map(|(a, b)| rs[a..b].to_string());
+    let cap = |i: usize| {
+        g.get(i)
+            .copied()
+            .flatten()
+            .map(|(a, b)| rs[a..b].to_string())
+    };
     Some((cap(1), cap(2), cap(3)))
 }
 
@@ -490,8 +508,10 @@ impl<'a> Gen<'a> {
         let entries = self.entries;
         let be = &entries[citekey];
         let bee = be.entrytype();
-        let maxan = opt_str(self.opt("maxalphanames", Some(bee), Some(citekey))).map_or(0.0, numify);
-        let minan = opt_str(self.opt("minalphanames", Some(bee), Some(citekey))).map_or(0.0, numify);
+        let maxan =
+            opt_str(self.opt("maxalphanames", Some(bee), Some(citekey))).map_or(0.0, numify);
+        let minan =
+            opt_str(self.opt("minalphanames", Some(bee), Some(citekey))).map_or(0.0, numify);
         let mut lp: Option<String> = None;
         let mut slp: Option<String> = None;
         for part in parts {
@@ -510,8 +530,7 @@ impl<'a> Gen<'a> {
                 if self
                     .dm
                     .get_fields_of_type("list", &["name"], None)
-                    .iter()
-                    .any(|x| *x == f)
+                    .contains(&f)
                 {
                     let name = be.get_field(&f);
                     if !value_truthy(name) {
@@ -524,8 +543,8 @@ impl<'a> Gen<'a> {
                     let visible = if total > maxan { minan } else { total };
                     // m/^\d+$/ (`$` also matches before a final newline)
                     let body = inc.strip_suffix('\n').unwrap_or(inc);
-                    let is_digits = !body.is_empty()
-                        && body.chars().all(perl_compat::unicode::is_perl_digit);
+                    let is_digits =
+                        !body.is_empty() && body.chars().all(perl_compat::unicode::is_perl_digit);
                     if is_digits {
                         if visible != numify(inc) {
                             continue;
@@ -579,7 +598,8 @@ impl<'a> Gen<'a> {
         if !self.dm.is_field(field, am, nm) {
             return None;
         }
-        if self.dm.get_fieldtype(field) == Some("list") && self.dm.get_datatype(field) == Some("name")
+        if self.dm.get_fieldtype(field) == Some("list")
+            && self.dm.get_datatype(field) == Some("name")
         {
             Some(Dispatch::Name(field.to_string()))
         } else {
@@ -618,7 +638,13 @@ impl<'a> Gen<'a> {
     }
 
     /// `_label_basic` (Internals.pm:474).
-    fn label_basic(&mut self, citekey: &str, e: &str, nostrip: bool, part: &XHash) -> (String, String) {
+    fn label_basic(
+        &mut self,
+        citekey: &str,
+        e: &str,
+        nostrip: bool,
+        part: &XHash,
+    ) -> (String, String) {
         let entries = self.entries;
         let be = &entries[citekey];
         let v = be.get_field(e);
@@ -658,8 +684,8 @@ impl<'a> Gen<'a> {
         let names_arena = self.names;
         let be = &entries[citekey];
         let bee = be.entrytype().to_string();
-        let mut useprefix: Option<String> = opt_str(self.opt("useprefix", Some(&bee), Some(citekey)))
-            .map(str::to_string);
+        let mut useprefix: Option<String> =
+            opt_str(self.opt("useprefix", Some(&bee), Some(citekey))).map(str::to_string);
         let alphaothers = opt_str(cfg.blx.get(None, "alphaothers", Some(&bee), None))
             .unwrap_or("")
             .to_string();
@@ -667,10 +693,12 @@ impl<'a> Gen<'a> {
             .unwrap_or("")
             .to_string();
         let mut lantname = self.lantname.to_string();
-        if let Some(v) = opt_str(
-            cfg.blx
-                .get(Some(self.secnum), "labelalphanametemplatename", None, Some(citekey)),
-        ) {
+        if let Some(v) = opt_str(cfg.blx.get(
+            Some(self.secnum),
+            "labelalphanametemplatename",
+            None,
+            Some(citekey),
+        )) {
             lantname = v.to_string();
         }
         // No labelname: nothing to do
@@ -807,9 +835,7 @@ impl<'a> Gen<'a> {
                 }
             }
             let k = perl_idx(main_strings.len(), ii);
-            let fs: Vec<FieldInfo> = k
-                .and_then(|k| main_strings[k].clone())
-                .unwrap_or_default();
+            let fs: Vec<FieldInfo> = k.and_then(|k| main_strings[k].clone()).unwrap_or_default();
             let pns: Option<Vec<String>> = k.and_then(|k| main_partnames[k].clone());
             let s = self.process_label_attributes(
                 citekey,
@@ -909,7 +935,10 @@ impl<'a> Gen<'a> {
         let nlwc = self.cfg.biber.patterns("nolabelwidthcount");
         let mut nolabelwcis = None;
         if !nlwc.is_empty() {
-            let res: Vec<&str> = nlwc.iter().map(|p| p.value.as_deref().unwrap_or("")).collect();
+            let res: Vec<&str> = nlwc
+                .iter()
+                .map(|p| p.value.as_deref().unwrap_or(""))
+                .collect();
             nolabelwcis = match_indices(&res, &field_string);
             for r in &res {
                 if let Ok(re) = PerlRegex::cached(r, false)
@@ -927,7 +956,8 @@ impl<'a> Gen<'a> {
             }
             field_string = tmp;
         } else {
-            field_string = gcstring::substr(&field_string, subs_offset, Some(subs_width)).to_string();
+            field_string =
+                gcstring::substr(&field_string, subs_offset, Some(subs_width)).to_string();
         }
         // Padding
         if let Some(pc) = padchar {
@@ -953,7 +983,8 @@ impl<'a> Gen<'a> {
                 .collect();
             for (s, off) in wcis {
                 let len = gcs.len() as i64;
-                if off + 1 <= len {
+                // `$off + 1 <= $gc_string->length`
+                if off < len {
                     let mut o = off;
                     if o < 0 {
                         o = (o + len).max(0);
@@ -1015,19 +1046,27 @@ impl<'a> Gen<'a> {
         // The (normalised) strings and their name indices
         let mut indices: BTreeMap<String, J> = BTreeMap::new();
         for key in self.citekeys {
-            let Some(be) = self.entries.get(key) else { continue };
+            let Some(be) = self.entries.get(key) else {
+                continue;
+            };
             let f = be.get_field(field);
             if !value_truthy(f) {
                 continue;
             }
             if let Some(nps) = nameparts {
-                let Some(Value::Names(nlid)) = f else { continue };
+                let Some(Value::Names(nlid)) = f else {
+                    continue;
+                };
                 let vis = visible_alpha(self.dlstate, *nlid);
                 for n in first_n_names(self.names, *nlid, vis.as_deref()) {
                     let s: String = nps
                         .iter()
                         .map(|p| {
-                            let s = n.nameparts.get(p).and_then(|x| x.string.as_deref()).unwrap_or("");
+                            let s = n
+                                .nameparts
+                                .get(p)
+                                .and_then(|x| x.string.as_deref())
+                                .unwrap_or("");
                             if truthy(Some(s)) { s } else { "" }
                         })
                         .collect();
@@ -1355,7 +1394,8 @@ pub fn label_listdisambiguation(strings: &[Vec<String>]) -> Vec<Vec<String>> {
             } else {
                 // _gen_first_disambiguating_name_map
                 let len = rows[0].len();
-                let get = |r: &Vec<String>, j: usize| r.get(j).map_or("", String::as_str).to_string();
+                let get =
+                    |r: &Vec<String>, j: usize| r.get(j).map_or("", String::as_str).to_string();
                 for (i, ri) in rows.iter().enumerate() {
                     let check: Vec<&&Vec<String>> = rows
                         .iter()
@@ -1446,8 +1486,14 @@ mod tests {
 
     #[test]
     fn escapes() {
-        assert_eq!(escape_label("a_b~c<d"), "a\\_b{\\textasciitilde}c{\\textless}d");
-        assert_eq!(unescape_label("a\\_b{\\textasciitilde}c{\\textless}d"), "a_b~c<d");
+        assert_eq!(
+            escape_label("a_b~c<d"),
+            "a\\_b{\\textasciitilde}c{\\textless}d"
+        );
+        assert_eq!(
+            unescape_label("a\\_b{\\textasciitilde}c{\\textless}d"),
+            "a_b~c<d"
+        );
         assert_eq!(escape_label("0"), "");
     }
 
