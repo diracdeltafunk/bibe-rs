@@ -61,6 +61,16 @@ pub enum Quirk {
     /// from the shared data-model date-field list in place, so a custom date
     /// field whose stem ends in `date` loses its flags after the first entry.
     DatefieldHelperMutation,
+    /// BB-020 (`uniquename-false-skips-entry`): a per-name or per-namelist
+    /// `uniquename=false` drops the whole entry from uniquename processing.
+    UniquenameFalseSkipsEntry,
+    /// BB-095 (`uniquename-minyear-visibility`): uniquename=minyearinit/
+    /// minyearfull counts every name as visible (so the minimal scope never
+    /// records truncation), while generation uses the normal visibility.
+    UniquenameMinyearVisibility,
+    /// BB-097 (`uniquelist-minyear-double-count`): uniquelist=minyear counts
+    /// each complete name list twice.
+    UniquelistMinyearDoubleCount,
 }
 
 impl Quirk {
@@ -83,6 +93,9 @@ impl Quirk {
         Quirk::BblCommaCleanup,
         Quirk::RangelenZeroDigit,
         Quirk::DatefieldHelperMutation,
+        Quirk::UniquenameFalseSkipsEntry,
+        Quirk::UniquenameMinyearVisibility,
+        Quirk::UniquelistMinyearDoubleCount,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -105,6 +118,9 @@ impl Quirk {
             Quirk::BblCommaCleanup => "bbl-comma-cleanup",
             Quirk::RangelenZeroDigit => "rangelen-zero-digit",
             Quirk::DatefieldHelperMutation => "datefield-helper-mutation",
+            Quirk::UniquenameFalseSkipsEntry => "uniquename-false-skips-entry",
+            Quirk::UniquenameMinyearVisibility => "uniquename-minyear-visibility",
+            Quirk::UniquelistMinyearDoubleCount => "uniquelist-minyear-double-count",
         }
     }
 
