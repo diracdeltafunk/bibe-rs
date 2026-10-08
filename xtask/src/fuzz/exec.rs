@@ -19,7 +19,7 @@ const TIMEOUT_SECS: u64 = 40;
 
 /// Extra oracle runs made to rule out biber nondeterminism before a
 /// mismatch is reported.
-const CONFIRM_RUNS: usize = 4;
+const CONFIRM_RUNS: usize = 8;
 
 /// A `.bcf` from a corpus case, with its data source swapped for
 /// [`BIB_NAME`] and its citations replaced by the fuzz input's.

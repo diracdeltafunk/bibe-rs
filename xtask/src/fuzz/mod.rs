@@ -23,7 +23,8 @@ pub const HELP: &str = "\
       --seed N           Seed (default 1). Input i of seed N is always the same file.
       --count N          Number of generated inputs (default 100).
       --start N          Index of the first input (default 0).
-      --templates A,B    Template corpus cases (default: a built-in list; `all-default`).
+      --templates A,B    Template corpus cases (default: a built-in list; `all-default`;
+                         `prefix:realdocs/` = every usable case under a prefix).
       --per-input K      Templates per input, chosen at random (default 4; 0 = all).
       --oracle o3|o1     Oracle (default o3; parallel PAR biber (o1) fails spuriously).
       --examples K       Failing examples kept per signature (default 3).
@@ -155,11 +156,26 @@ pub fn fuzz(args: &[String]) -> Result<ExitCode> {
         }
         return Ok(ExitCode::SUCCESS);
     }
-    let templates: Vec<Template> = o
-        .templates
-        .iter()
-        .map(|t| Template::load(t))
-        .collect::<Result<_>>()?;
+    let mut templates: Vec<Template> = Vec::new();
+    for t in &o.templates {
+        match t.strip_prefix("prefix:") {
+            // Every usable case (one section, one data source) under a prefix.
+            Some(prefix) => {
+                for c in bibers_testkit::discover(&bibers_testkit::corpus_root())? {
+                    if c.id.starts_with(prefix) {
+                        match Template::load(&c.id) {
+                            Ok(tpl) => templates.push(tpl),
+                            Err(e) => eprintln!("skipping template {}: {e:#}", c.id),
+                        }
+                    }
+                }
+            }
+            None => templates.push(Template::load(t)?),
+        }
+    }
+    if templates.is_empty() {
+        bail!("no templates");
+    }
     let oracle = crate::runner(&o.oracle, false)?;
     let bibers = crate::runner("bibers", true)?;
     let out = o.out.clone().unwrap_or_else(|| {
