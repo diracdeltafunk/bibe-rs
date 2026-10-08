@@ -80,26 +80,35 @@ These are **not** differences by default: bibers reproduces biber's output. Each
 
 | Quirk (switch) | Reproduced biber behaviour | Behaviour with the quirk fixed | Bug | Status |
 |---|---|---|---|---|
-| `bbl-comma-cleanup` | `,}}` inside field data is rewritten to `}}` (`{Foo {bar,}}` → `{Foo {bar}}`) | Field data preserved | BB-015 | planned |
-| `rangelen-zero-digit` | `pages={105-10}` → `\range{pages}{11}` | `\range{pages}{6}` | BB-016 | planned |
-| `sortkey-eval` | Backslashes/braces in sort values can produce an empty key (entry sorts first) | Sort value used verbatim | BB-017 | planned |
-| `filter-readds-sets` | A filtered list re-adds every set and set member if any set passes | Only members of passing sets are added | BB-018 | planned |
-| `per-name-option-leak` | Per-name/per-namelist overrides leak to following names | Overrides apply only to their own name/namelist | BB-019 | planned |
-| `uniquename-false-skips-entry` | A per-name `uniquename=false` drops the whole entry from uniquename | Only that name is excluded | BB-020 | planned |
-| `entry-scoped-options-ignored` | Per-entry `labelalpha`, `labeldateparts`, `singletitle`, … are ignored | Honoured | BB-021 | implemented (lookup; call sites in M2) |
-| `crossref-date-meta` | Parent's circa/uncertain/era flags are inherited even when the child has its own date; date parts of different date fields are mixed | Date metadata inherited only together with the date | BB-022, BB-023 | planned |
-| `xdata-name-index` | Granular-XDATA names get 0-based indices / last name skipped | Consistent 1-based indices | BB-024 | planned |
-| `xdata-rerefs` | Re-resolving XDATA refs duplicates names | Resolved once | BB-025 | planned |
-| `shared-namelists` | Inherited name lists share per-list state with the parent (last processed wins) | Per-entry state | BB-026 | planned |
-| `workuniq-skipbib-token` | Only the literal `skipbib` token suppresses work uniqueness | `skipbib=true`, `dataonly` and set members respected | BB-027 | planned |
-| `datefield-helper-mutation` | Custom date fields whose stem ends in `date` lose flags after the first entry | Flags on every entry | BB-028 | planned |
-| `sort-column-type` | `labelyear`/`labelmonth`/`labelday` columns sort as strings; mixed columns typed by first item | Typed per item | BB-042 | planned |
-| `zero-is-empty` | Values equal to `0` treated as missing (year 0, `volume={0}`, …) | `0` is a value | BB-055…059 | planned |
+| `bbl-comma-cleanup` | `,}}` inside field data is rewritten to `}}` (`{Foo {bar,}}` → `{Foo {bar}}`) | Field data preserved | BB-015 | implemented |
+| `rangelen-zero-digit` | `pages={105-10}` → `\range{pages}{11}` | `\range{pages}{6}` | BB-016 | implemented |
+| `sortkey-eval` | Backslashes/braces in sort values can produce an empty key (entry sorts first) | Sort value used verbatim | BB-017 | implemented |
+| `filter-readds-sets` | A filtered list re-adds every set and set member if any set passes | Only members of passing sets are added | BB-018 | implemented |
+| `per-name-option-leak` | Per-name/per-namelist overrides leak to following names | Overrides apply only to their own name/namelist | BB-019 | implemented |
+| `uniquename-false-skips-entry` | A per-name `uniquename=false` drops the whole entry from uniquename | Only that name is excluded | BB-020 | implemented |
+| `entry-scoped-options-ignored` | Per-entry `labelalpha`, `labeldateparts`, `singletitle`, … are ignored | Honoured | BB-021 | implemented |
+| `crossref-date-meta` | Parent's circa/uncertain/era flags are inherited even when the child has its own date; date parts of different date fields are mixed | Date metadata inherited only together with the date | BB-022, BB-023 | implemented |
+| `xdata-name-index` | Granular-XDATA names get 0-based indices / last name skipped | Consistent 1-based indices | BB-024 | implemented |
+| `xdata-rerefs` | Re-resolving XDATA refs duplicates names | Resolved once | BB-025 | implemented |
+| `shared-namelists` | Inherited name lists share per-list state with the parent (last processed wins) | Per-entry state | BB-026 | implemented |
+| `workuniq-skipbib-token` | Only the literal `skipbib` token suppresses work uniqueness | `skipbib=true`, `dataonly` and set members respected | BB-027 | implemented |
+| `datefield-helper-mutation` | Custom date fields whose stem ends in `date` lose flags after the first entry | Flags on every entry | BB-028 | implemented |
+| `sort-column-type` | `labelyear`/`labelmonth`/`labelday` columns sort as strings; mixed columns typed by first item | Typed per item | BB-042 | implemented |
+| `zero-is-empty` | Values equal to `0` treated as missing (year 0, `volume={0}`, …) | `0` is a value | BB-055…059 | implemented |
 | `blx-defaults-override-conf` | Hard-coded biblatex defaults overwrite biber.conf values (maxbibnames, useprefix, …) | biber.conf values win | BB-053 | implemented |
 | `conf-labelalphanametemplate-last` | Only the last biber.conf `labelalphanametemplate` survives | All are kept | BB-083 | implemented |
 | `conf-sourcemaps-dropped` | biber.conf sourcemaps are dropped when the `.bcf` has no driver/style maps | They are merged | BB-052 | implemented |
 | `uniquename-base-check-global` | The "uniquenametemplate needs a base part" check is global across templates | Checked per template | BB-082 | implemented |
 | `duplicate-datalists` | Repeated identical `<datalist>`s are emitted twice | De-duplicated | BB-054 | implemented |
+| `smap-entrytarget-source` | `map_field_source` → `map_field_target` with `map_entrytarget` reads the value from the entry being mapped | Reads it from the target entry | BB-030 | implemented |
+| `smap-starnocited` | `map_entrykey_starnocited` applies to every entry when there is no `\nocite{*}` | Applies only to `\nocite{*}`-only entries | BB-031 | implemented |
+| `smap-mapuniq-outside-foreach` | `$MAPUNIQ`/`$MAPUNIQVAL` stay literal outside `map_foreach` | Substituted everywhere (`$MAPLOOP` stays loop-only) | BB-034 | implemented |
+| `uniquename-minyear-visibility` | uniquename=minyear* counts every name as visible but generates with normal visibility | Normal visibility in both passes | BB-095 | implemented |
+| `uniquelist-minyear-double-count` | uniquelist=minyear counts each complete name list twice | Counted once | BB-097 | implemented |
+| `labelcache-field-key` | labelalpha `v`/`l` width caches keyed by field name only, per section (shared across data lists and label parts) | Keyed by field, name parts, template and list | BB-094 | implemented |
+| `label-global-index-zero` | `substring_width=vf` ignores a computed fixed-width index of 0 | Index 0 honoured | BB-096 | implemented |
+| `dieondatamodel-no-exit` | `--dieondatamodel` logs errors but never stops | Stops at the first data model error | BB-067 | implemented |
+| `clone-endyeardivision` | Related-entry clones lose `endyeardivision` (`clone` lists `yeardivision` twice) | Copied | BB-093 | implemented |
 | *(more to be added as porting proceeds: every reproduced bug gets a row)* | | | | |
 
 Some silent biber behaviours are judged to be design decisions rather than bugs and are reproduced with no switch. Examples: `\textdollar` decoding to a raw `$` (BB-029, pinned by biber's own tests), and the btparse name-splitting rules. They are listed in biber-bugs.md but not here.

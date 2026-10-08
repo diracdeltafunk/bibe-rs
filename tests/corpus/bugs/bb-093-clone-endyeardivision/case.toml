@@ -1,0 +1,5 @@
+description = "BB-093: related-entry clones lose endyeardivision (Entry::clone lists yeardivision twice)"
+source = "scratch/verify/bb093 (coordinator reproducer)"
+args = ["--noconf", "r.bcf"]
+outputs = ["r.bbl"]
+tags = ["suite:bugs", "bug:BB-093", "feature:related"]

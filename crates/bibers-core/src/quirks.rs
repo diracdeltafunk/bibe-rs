@@ -99,6 +99,10 @@ pub enum Quirk {
     /// BB-067 (`dieondatamodel-no-exit`): `--dieondatamodel` logs errors but
     /// never stops.
     DieondatamodelNoExit,
+    /// BB-093 (`clone-endyeardivision`): `Entry::clone` lists `yeardivision`
+    /// twice and omits `endyeardivision`, so related-entry clones lose the
+    /// end date's season/division.
+    CloneEndyeardivision,
 }
 
 impl Quirk {
@@ -132,6 +136,7 @@ impl Quirk {
         Quirk::XdataRerefs,
         Quirk::SharedNamelists,
         Quirk::DieondatamodelNoExit,
+        Quirk::CloneEndyeardivision,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -165,6 +170,7 @@ impl Quirk {
             Quirk::XdataRerefs => "xdata-rerefs",
             Quirk::SharedNamelists => "shared-namelists",
             Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
+            Quirk::CloneEndyeardivision => "clone-endyeardivision",
         }
     }
 

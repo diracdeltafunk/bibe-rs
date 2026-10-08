@@ -9,8 +9,9 @@ use perl_compat::perl_truthy;
 use serde_json::Value as J;
 
 /// The derived date fields `clone` copies (Entry.pm:177-180): `yeardivision`
-/// is listed twice and `endyeardivision` is missing (BB-093), so clones lose
-/// it.
+/// is listed twice and `endyeardivision` is missing (BB-093, quirk
+/// `clone-endyeardivision`), so clones lose it. With the quirk fixed the
+/// second `yeardivision` is read as `endyeardivision`.
 const CLONE_DATE_META: [&str; 12] = [
     "dateunspecified",
     "datesplit",
@@ -195,7 +196,19 @@ fn clone(ctx: &mut Ctx, st: &mut SectionState, sh: &mut SharedLists, src: &str, 
         s.slots.get("xdatarefs").cloned().unwrap_or(J::Null),
     );
     for df in &stems {
-        for dsf in CLONE_DATE_META {
+        for (i, dsf) in CLONE_DATE_META.into_iter().enumerate() {
+            // The duplicated `yeardivision` (index 9) is biber's typo for
+            // `endyeardivision`.
+            let dsf = if i == 9
+                && !ctx
+                    .cfg
+                    .quirks
+                    .on(crate::quirks::Quirk::CloneEndyeardivision)
+            {
+                "endyeardivision"
+            } else {
+                dsf
+            };
             let f = format!("{df}{dsf}");
             if let Some(Some(v)) = s.derivedfields.get(&f)
                 && super::truthy(Some(v))

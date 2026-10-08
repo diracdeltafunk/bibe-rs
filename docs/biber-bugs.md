@@ -174,9 +174,9 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-088 | R | config.rnc, bcf.rnc, doc/biber.tex | Schema/doc/code drift: `noinits` vs `noinit`; no `nolabelwidthcount` in the schemas; `output_format` enum incomplete; `datepart` vs `date` constraint datatypes; the manual's sample biber.conf is malformed. | 02-B24 |
 | BB-089 | R | LangTags.pm | Grammar `[a-zA-z]` matches `[\]^_\``. The parser is unused but compiled at every startup. | 02-B25 |
 | BB-090 | R | Constants.pm `%LOCALE_MAP_R` | `'sr-Latn' => 'latin'`, duplicate keys, invalid `en-UK`. | 02-B26 |
-| BB-091 | R | Biber.pm:1316-1334 | `$resolved_keys` is declared outside the XDATA-ref loop, so keys can accumulate. | 02-B28 |
+| BB-091 | R | Biber.pm:1316-1334 | `$resolved_keys` is declared outside the XDATA-ref loop, so keys can accumulate. bibers reproduces this (resolve), but no input with an output effect has been found yet. | 02-B28 |
 | BB-092 | R | Biber.pm:1178-1188 | The bibtex-output pseudo-section reads a shared `.bib` once per refsection. | 02-B31 |
-| BB-093 | R | Entry.pm:179 | `clone()` lists `yeardivision` twice and omits `endyeardivision`, so related clones lose it. | 03-B12 |
+| BB-093 | V | Entry.pm:179 | `clone()` lists `yeardivision` twice and omits `endyeardivision`, so related-entry clones lose the end date's season: `date={2001-21/2002-23}` gives the original `endyeardivision=autumn`, the clone only `yeardivision=spring`. Corpus case `bugs/bb-093-clone-endyeardivision`. | 03-B12; verified in M2 |
 | BB-094 | R | Internals.pm:714,797 | The labelalpha `v`/`l` caches are keyed by field name only, per section, which is wrong across datalists or templates. | 03-B13 |
 | BB-095 | R | Biber.pm:3565 vs 3704 | Name visibility for minyear* uniquename differs between counting and generation. | 03-B14 |
 | BB-096 | R | Internals.pm:719,785 | `globalindices || index` ignores a computed global index of 0. | 03-B15 |

@@ -114,6 +114,7 @@ bugs/bb-076-btparse-diagnostic-location
 bugs/bb-077-ascii-encoding-dead-code
 bugs/bb-078-month-not-integer-warning
 bugs/bb-080-isbn-checksum
+bugs/bb-093-clone-endyeardivision
 bugs/bb-094-labelcache-field-key
 bugs/bb-096-label-global-index-zero
 bugs/others-pop-shared-list
