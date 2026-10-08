@@ -111,7 +111,10 @@ pub fn datefield_stems(ctx: &mut Ctx) -> Vec<String> {
 
 /// `$dmh->{datefields}` as it currently is (not stripped again).
 fn datefields_now(ctx: &Ctx) -> Vec<String> {
-    match (&ctx.run.datefields, ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation)) {
+    match (
+        &ctx.run.datefields,
+        ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation),
+    ) {
         (Some(v), true) => v.clone(),
         _ => ctx.dm.helpers.datefields.clone(),
     }
@@ -244,9 +247,9 @@ fn copy_field(
         _ => (e.derivedfields.get(sf).cloned().flatten(), false),
     };
     let val = match val {
-        Some(Value::Names(id)) if !ctx.cfg.quirks.on(Quirk::SharedNamelists) => Some(
-            Value::Names(shared::clone_names(&mut st.section.names, id)),
-        ),
+        Some(Value::Names(id)) if !ctx.cfg.quirks.on(Quirk::SharedNamelists) => {
+            Some(Value::Names(shared::clone_names(&mut st.section.names, id)))
+        }
         v => v,
     };
     match &val {

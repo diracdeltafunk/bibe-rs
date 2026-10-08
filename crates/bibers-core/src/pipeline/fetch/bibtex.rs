@@ -662,7 +662,12 @@ fn create_entry_inner(
 }
 
 /// `process_entry_options` (Utils.pm:1290).
-pub(crate) fn process_entry_options(ctx: &mut Ctx, citekey: &str, options: &[String], secnum: &str) {
+pub(crate) fn process_entry_options(
+    ctx: &mut Ctx,
+    citekey: &str,
+    options: &[String],
+    secnum: &str,
+) {
     for o in options {
         // s/\s+=\s+/=/g
         let o = collapse_eq(o);

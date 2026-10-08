@@ -1,8 +1,6 @@
 //! Related entries: `Biber::Entry::relclone` and `clone` (Entry.pm:63-207).
 
-use super::{
-    DATAONLY, SharedLists, alias, datefield_stems, entry_key, set_own_datafield, shared,
-};
+use super::{DATAONLY, SharedLists, alias, datefield_stems, entry_key, set_own_datafield, shared};
 use crate::model::{SectionState, Value};
 use crate::pipeline::Ctx;
 use crate::pipeline::fetch::{SecExt, collapse_eq, process_entry_options};
@@ -174,6 +172,14 @@ pub fn relclone(ctx: &mut Ctx, st: &mut SectionState, sh: &mut SharedLists, key:
 /// `newkey` (`add_entry`). Data fields are copied by reference.
 fn clone(ctx: &mut Ctx, st: &mut SectionState, sh: &mut SharedLists, src: &str, newkey: &str) {
     let stems = datefield_stems(ctx);
+    // `each %{$self->{origfields}}` autovivifies the source's origfields.
+    st.section
+        .entries
+        .get_mut(src)
+        .expect("entry")
+        .slots
+        .entry("origfields".into())
+        .or_insert_with(|| J::Object(Default::default()));
     let s = &st.section.entries[src];
     let mut new = crate::model::Entry {
         datafields: s.datafields.clone(),

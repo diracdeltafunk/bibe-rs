@@ -9,9 +9,7 @@
 //! them to the clones at the end.
 
 use super::graph::InhGraph;
-use super::{
-    SharedLists, alias, copy_field, entry_key, mutate_list, num, truthy, warn_entry,
-};
+use super::{SharedLists, alias, copy_field, entry_key, mutate_list, num, truthy, warn_entry};
 use crate::biber_error;
 use crate::log::Fatal;
 use crate::model::{Section, SectionState, Value};
@@ -55,7 +53,11 @@ fn propagate(sec: &mut Section) {
         if o != k {
             let v = sec.entries[&o].slots.get("xdatarefs").cloned();
             if let Some(v) = v {
-                sec.entries.get_mut(&k).expect("entry").slots.insert("xdatarefs".into(), v);
+                sec.entries
+                    .get_mut(&k)
+                    .expect("entry")
+                    .slots
+                    .insert("xdatarefs".into(), v);
             }
         }
     }
@@ -76,7 +78,11 @@ pub fn resolve_ref_aliases(st: &mut SectionState, key: &str) {
         let entries: Vec<String> = r
             .get("xdataentries")
             .and_then(J::as_array)
-            .map(|a| a.iter().map(|x| x.as_str().unwrap_or("").to_string()).collect())
+            .map(|a| {
+                a.iter()
+                    .map(|x| x.as_str().unwrap_or("").to_string())
+                    .collect()
+            })
             .unwrap_or_default();
         let real = |k: &String| alias(&st.section, k).map_or(k.clone(), str::to_string);
         if r.get("xdatafield").is_none_or(J::is_null) {
@@ -180,20 +186,34 @@ fn resolve_entry(ctx: &mut Ctx, st: &mut SectionState, x: &mut Xd, key: &str) ->
         let xentries: Vec<String> = xdatum
             .get("xdataentries")
             .and_then(J::as_array)
-            .map(|a| a.iter().map(|v| v.as_str().unwrap_or("").to_string()).collect())
+            .map(|a| {
+                a.iter()
+                    .map(|v| v.as_str().unwrap_or("").to_string())
+                    .collect()
+            })
             .unwrap_or_default();
         for xdref in xentries {
             let Some(xkey) = entry_key(&st.section, &xdref) else {
-                warn_entry(ctx, st, key, format!(
-                    "{bee} entry '{entry_key_s}' references XDATA entry '{xdref}' which does not exist, not resolving (section {secnum})"
-                ));
+                warn_entry(
+                    ctx,
+                    st,
+                    key,
+                    format!(
+                        "{bee} entry '{entry_key_s}' references XDATA entry '{xdref}' which does not exist, not resolving (section {secnum})"
+                    ),
+                );
                 set_resolved(st, &o, i, "0");
                 continue;
             };
             if st.section.entries[&xkey].entrytype() != "xdata" {
-                warn_entry(ctx, st, key, format!(
-                    "{bee} entry '{entry_key_s}' references XDATA entry '{xdref}' which is not an XDATA entry, not resolving (section {secnum})"
-                ));
+                warn_entry(
+                    ctx,
+                    st,
+                    key,
+                    format!(
+                        "{bee} entry '{entry_key_s}' references XDATA entry '{xdref}' which is not an XDATA entry, not resolving (section {secnum})"
+                    ),
+                );
                 set_resolved(st, &o, i, "0");
                 continue;
             }
@@ -211,17 +231,18 @@ fn resolve_entry(ctx: &mut Ctx, st: &mut SectionState, x: &mut Xd, key: &str) ->
                 .slots
                 .get("xdatarefs")
                 .is_some_and(J::is_array);
-            if has_refs
-                && (ctx.cfg.quirks.on(Quirk::XdataRerefs) || x.done.insert(xkey.clone()))
-            {
+            if has_refs && (ctx.cfg.quirks.on(Quirk::XdataRerefs) || x.done.insert(xkey.clone())) {
                 resolve_entry(ctx, st, x, &xkey)?;
             }
             let xcite = st.section.entries[&xkey].citekey().to_string();
             match s(xdatum, "xdatafield") {
                 None => {
                     // Whole-entry reference: inherit every field.
-                    let fields: Vec<String> =
-                        st.section.entries[&xkey].datafields.keys().cloned().collect();
+                    let fields: Vec<String> = st.section.entries[&xkey]
+                        .datafields
+                        .keys()
+                        .cloned()
+                        .collect();
                     for f in fields {
                         if f == "ids" {
                             continue;
@@ -301,28 +322,45 @@ fn granular(
     let ft = |f: &str| dm.get_fieldtype(f).unwrap_or("").to_string();
     let dt = |f: &str| dm.get_datatype(f).unwrap_or("").to_string();
     if ft(reffield) != ft(xdatafield) || dt(reffield) != dt(xdatafield) {
-        warn_entry(ctx, st, key, format!(
-            "Field '{reffield}' in {bee} entry '{entry_key}' which xdata references field '{xdatafield}' in entry '{xdref}' are not the same types, not resolving (section {secnum})"
-        ));
+        warn_entry(
+            ctx,
+            st,
+            key,
+            format!(
+                "Field '{reffield}' in {bee} entry '{entry_key}' which xdata references field '{xdatafield}' in entry '{xdref}' are not the same types, not resolving (section {secnum})"
+            ),
+        );
         return false;
     }
     let xval = st.section.entries[xkey].get_field(xdatafield).cloned();
     if !truthy(xval.as_ref()) {
-        warn_entry(ctx, st, key, format!(
-            "Field '{reffield}' in {bee} entry '{entry_key}' references XDATA field '{xdatafield}' in entry '{xdref}' and this field does not exist, not resolving (section {secnum})"
-        ));
+        warn_entry(
+            ctx,
+            st,
+            key,
+            format!(
+                "Field '{reffield}' in {bee} entry '{entry_key}' references XDATA field '{xdatafield}' in entry '{xdref}' and this field does not exist, not resolving (section {secnum})"
+            ),
+        );
         return false;
     }
     let xval = xval.expect("checked");
     let no_position = |ctx: &mut Ctx, st: &mut SectionState| {
-        warn_entry(ctx, st, key, format!(
-            "Field '{reffield}' in {bee} entry '{entry_key}' references field '{xdatafield}' position {xdataposition} in entry '{xdref}' and this position does not exist, not resolving (section {secnum})"
-        ));
+        warn_entry(
+            ctx,
+            st,
+            key,
+            format!(
+                "Field '{reffield}' in {bee} entry '{entry_key}' references field '{xdatafield}' position {xdataposition} in entry '{xdref}' and this position does not exist, not resolving (section {secnum})"
+            ),
+        );
     };
     let quirk_index = ctx.cfg.quirks.on(Quirk::XdataNameIndex);
     let refidx = (refposition - 1).max(0) as usize;
     if dm.field_is_type("list", "name", reffield) {
-        let target = st.section.entries[key].get_field(reffield).and_then(Value::as_names);
+        let target = st.section.entries[key]
+            .get_field(reffield)
+            .and_then(Value::as_names);
         let (Some(target), Value::Names(src)) = (target, &xval) else {
             return false;
         };
@@ -337,7 +375,11 @@ fn granular(
             tl.names.splice(at..end, srcnames);
             let ids = tl.names.clone();
             // BB-024: 0-based, and the last name is not re-indexed.
-            let n = if quirk_index { ids.len().saturating_sub(1) } else { ids.len() };
+            let n = if quirk_index {
+                ids.len().saturating_sub(1)
+            } else {
+                ids.len()
+            };
             for (i, id) in ids.iter().take(n).enumerate() {
                 let idx = if quirk_index { i } else { i + 1 };
                 arena.name_mut(*id).index = Some(idx.to_string());

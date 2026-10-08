@@ -367,7 +367,9 @@ fn check_data_constraints(
                     let Some(fv) = get(st, f) else { continue };
                     let vals: Vec<Option<Value>> = if dm.get_fieldtype(f) == Some("list") {
                         match &fv {
-                            Value::List(l) => l.iter().map(|x| Some(Value::Str(x.clone()))).collect(),
+                            Value::List(l) => {
+                                l.iter().map(|x| Some(Value::Str(x.clone()))).collect()
+                            }
                             _ => vec![Some(fv.clone())],
                         }
                     } else {

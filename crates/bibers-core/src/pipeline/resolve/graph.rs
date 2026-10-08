@@ -48,7 +48,10 @@ impl InhGraph {
     fn add(&mut self, s: &str, t: &str) -> bool {
         let new = self.edges.insert((s.to_string(), t.to_string()));
         if new {
-            self.adj.entry(s.to_string()).or_default().push(t.to_string());
+            self.adj
+                .entry(s.to_string())
+                .or_default()
+                .push(t.to_string());
         }
         new
     }

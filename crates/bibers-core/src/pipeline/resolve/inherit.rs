@@ -68,7 +68,11 @@ pub fn set_inherit_from(
     key: &str,
     parent: &str,
 ) {
-    let fields: Vec<String> = st.section.entries[parent].datafields.keys().cloned().collect();
+    let fields: Vec<String> = st.section.entries[parent]
+        .datafields
+        .keys()
+        .cloned()
+        .collect();
     for f in fields {
         if st.section.entries[key].field_exists(&f) {
             continue;
@@ -82,7 +86,11 @@ pub fn set_inherit_from(
         let f = format!("{df}datesplit");
         let v = st.section.entries[parent].get_field(&f).cloned();
         if truthy(v.as_ref()) {
-            st.section.entries.get_mut(key).expect("entry").set_field(f, v);
+            st.section
+                .entries
+                .get_mut(key)
+                .expect("entry")
+                .set_field(f, v);
         }
     }
 }
@@ -234,7 +242,11 @@ fn inherit_from(
                 .cloned()
                 .unwrap_or_default()
         });
-    let noinherit = |f: &str| niset_fields.as_ref().is_some_and(|l| l.iter().any(|x| x == f));
+    let noinherit = |f: &str| {
+        niset_fields
+            .as_ref()
+            .is_some_and(|l| l.iter().any(|x| x == f))
+    };
     let mut processed: HashSet<String> = HashSet::new();
 
     // Fields with special treatment.
@@ -283,12 +295,16 @@ fn inherit_from(
 
     // The rest of the (data) fields.
     if inherit_all == "true" {
-        let fields: Vec<String> = st.section.entries[parent].datafields.keys().cloned().collect();
+        let fields: Vec<String> = st.section.entries[parent]
+            .datafields
+            .keys()
+            .cloned()
+            .collect();
         let quirk = ctx.cfg.quirks.on(Quirk::CrossrefDateMeta);
         let mut filtered = Vec::new();
         let mut removed: Vec<String> = Vec::new();
         for f in fields {
-            if ctx.dm.helpers.dateparts.iter().any(|d| *d == f) {
+            if ctx.dm.helpers.dateparts.contains(&f) {
                 // BB-023: only the main date's datesplit is checked.
                 let ds = if quirk {
                     "datesplit".to_string()
@@ -356,7 +372,11 @@ fn inherit_from(
         let f = format!("{df}datesplit");
         let v = st.section.entries[parent].get_field(&f).cloned();
         if truthy(v.as_ref()) {
-            st.section.entries.get_mut(key).expect("entry").set_field(f, v);
+            st.section
+                .entries
+                .get_mut(key)
+                .expect("entry")
+                .set_field(f, v);
         }
     }
     Ok(())
