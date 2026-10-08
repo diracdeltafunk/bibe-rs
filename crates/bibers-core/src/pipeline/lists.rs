@@ -145,11 +145,192 @@ fn check_list_filter(_k: &str, t: &str, fs: &str, be: &Entry) -> bool {
 }
 
 /// `Biber::generate_contextdata` (Biber.pm:3972), for the data list
-/// `st.datalists[list]`. Not yet implemented: a no-op.
+/// `st.datalists[list]`: in sorted list order, sorted set members, the
+/// extraname/extradate/extratitle/extratitleyear/extraalpha numbers, the
+/// labelalpha copy, and the per-namepart uniquename values of the labelname.
 pub fn generate_contextdata(
-    _ctx: &mut Ctx,
-    _st: &mut SectionState,
-    _list: usize,
+    ctx: &mut Ctx,
+    st: &mut SectionState,
+    list: usize,
 ) -> Result<(), Fatal> {
+    use super::entries::{H, info_slot, ls, uniquename_value};
+    use serde_json::Value as J;
+    let secnum = st.section.number.clone();
+    let h = H {
+        cfg: ctx.cfg,
+        dm: ctx.dm,
+        secnum: &secnum,
+    };
+    let opt_undef = |opt: &str, et: &str, key: &str| {
+        h.cfg
+            .blx
+            .get_undef_secnum(h.cfg.quirks, &secnum, opt, Some(et), Some(key))
+            .is_some_and(crate::config::OptValue::truthy)
+    };
+    let sortsets = h
+        .cfg
+        .blx
+        .global("sortsets")
+        .is_some_and(crate::config::OptValue::truthy);
+    let sec = &st.section;
+    let dl = &mut st.datalists[list];
+    let keys = dl.keys.clone().unwrap_or_default();
+    let jstr = |s: &str| J::String(s.to_string());
+    for key in &keys {
+        let Some(be) = sec.bibentry(key) else { continue };
+        let et = be.entrytype();
+        let lni = info_slot(be, "labelnameinfo");
+
+        if et == "set" {
+            let members: Vec<String> = be
+                .get_field("entryset")
+                .and_then(Value::as_list)
+                .map(<[String]>::to_vec)
+                .unwrap_or_default();
+            let es: Vec<String> = if sortsets {
+                // `first_index` gives -1 for a missing member, and the
+                // slice then takes the last key.
+                let mut idx: Vec<i64> = members
+                    .iter()
+                    .map(|m| keys.iter().position(|k| k == m).map_or(-1, |i| i as i64))
+                    .collect();
+                idx.sort_unstable();
+                idx.iter()
+                    .filter_map(|&i| {
+                        if i < 0 {
+                            keys.len().checked_sub(i.unsigned_abs() as usize)
+                        } else {
+                            Some(i as usize)
+                        }
+                    })
+                    .filter_map(|i| keys.get(i).cloned())
+                    .collect()
+            } else {
+                members
+            };
+            ls::set_entryfield(
+                dl,
+                key,
+                "entryset",
+                J::Array(es.iter().map(|s| jstr(s)).collect()),
+            );
+        }
+
+        let skiplab = h
+            .cfg
+            .blx
+            .get(Some(&secnum), "skiplab", Some(et), Some(key))
+            .is_some_and(crate::config::OptValue::truthy);
+        if !skiplab {
+            // extraname
+            let lnh = ls::entryfield(dl, key, "labelnamehash");
+            if ls::truthy(&lnh) {
+                let lnh = ls::str_of(&lnh).unwrap_or_default();
+                if ls::get(dl, &["seen_labelname", &lnh]).map_or(0.0, |v| ls::num(&v)) > 1.0 {
+                    let v = ls::incr(dl, &["seen_extraname", &lnh]);
+                    ls::set(dl, &["extranamedata", key], J::String(v.to_string()));
+                }
+            }
+            for (opt, field, seen, extra, data) in [
+                (
+                    "labeldateparts",
+                    "nametitledateparts",
+                    "seen_nametitledateparts",
+                    "seen_extradate",
+                    "extradatedata",
+                ),
+                (
+                    "labeltitle",
+                    "nametitle",
+                    "seen_nametitle",
+                    "seen_extratitle",
+                    "extratitledata",
+                ),
+                (
+                    "labeltitleyear",
+                    "titleyear",
+                    "seen_titleyear",
+                    "seen_extratitleyear",
+                    "extratitleyeardata",
+                ),
+            ] {
+                if !opt_undef(opt, et, key) {
+                    continue;
+                }
+                let v = ls::str_of(&ls::entryfield(dl, key, field)).unwrap_or_default();
+                if ls::get(dl, &[seen, &v]).map_or(0.0, |x| ls::num(&x)) > 1.0 {
+                    let n = ls::incr(dl, &[extra, &v]);
+                    ls::set(dl, &[data, key], J::String(n.to_string()));
+                }
+            }
+            if opt_undef("labelalpha", et, key) {
+                let la = ls::entryfield(dl, key, "labelalpha");
+                ls::set(dl, &["labelalphadata", key], la.clone().unwrap_or(J::Null));
+                let la = ls::str_of(&la).unwrap_or_default();
+                if ls::get(dl, &["ladisambiguation", &la]).map_or(0.0, |x| ls::num(&x)) > 1.0 {
+                    let n = ls::incr(dl, &["seen_extraalpha", &la]);
+                    ls::set(dl, &["extraalphadata", key], J::String(n.to_string()));
+                }
+            }
+        }
+
+        // uniquename: per-namepart values for the labelname only
+        for nf in &h.dm.helpers.namelists {
+            let Some(Value::Names(nlid)) = be.get_field(nf) else {
+                continue;
+            };
+            if lni != Some(nf.as_str()) {
+                continue;
+            }
+            let nlk = nlid.key();
+            for nid in &sec.names.list(*nlid).names {
+                let nk = nid.key();
+                let un = ls::get(dl, &["namelistdata", &nlk, &nk, "un"]);
+                if !ls::truthy(&un) {
+                    continue;
+                }
+                let schema = ls::get(dl, &["namelistdata", &nlk, &nk, "namedisschema"]);
+                let schema: Vec<J> = schema
+                    .and_then(|s| s.as_array().cloned())
+                    .unwrap_or_default();
+                let mut pnun: std::collections::BTreeMap<String, String> = Default::default();
+                for (i, nss) in schema.iter().enumerate() {
+                    if Some(nss) == un.as_ref() {
+                        let mut dis: Vec<&J> = schema
+                            .get(1..i.max(1))
+                            .unwrap_or(&[])
+                            .iter()
+                            .filter(|e| {
+                                e.get(0).and_then(J::as_str) != Some("base")
+                                    && e.get(1).and_then(J::as_str) != Some("full")
+                            })
+                            .collect();
+                        dis.push(nss);
+                        pnun = dis
+                            .iter()
+                            .filter_map(|e| {
+                                let np = e.get(0).and_then(J::as_str)?;
+                                let v = e.get(1).and_then(J::as_str).unwrap_or("");
+                                Some((
+                                    np.to_string(),
+                                    if v == "fullonly" { "full" } else { v }.to_string(),
+                                ))
+                            })
+                            .collect();
+                        break;
+                    }
+                }
+                for np in sec.names.name(*nid).nameparts.keys() {
+                    let v = uniquename_value(pnun.get(np).map_or("none", String::as_str))
+                        .unwrap_or(0);
+                    ls::set(
+                        dl,
+                        &["namelistdata", &nlk, &nk, "unparts", np],
+                        J::String(v.to_string()),
+                    );
+                }
+            }
+        }
+    }
     Ok(())
 }
