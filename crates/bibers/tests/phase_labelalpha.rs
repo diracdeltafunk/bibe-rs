@@ -13,6 +13,7 @@ mod common;
 
 use bibers_core::model::dump::{dump_state, json_diff, load_state};
 use bibers_core::pipeline::{self, Ctx, labelalpha};
+use bibers_core::quirks::Quirk;
 use bibers_testkit::phase::{PhaseDump, o3_available, phase_dumps};
 use common::phase::{cases_with_prefix, find_case, setup_case};
 use serde_json::{Map, Value as J};
@@ -82,12 +83,18 @@ fn extract(state: &J, list: &str, nth: usize) -> J {
     J::Object(out)
 }
 
-fn check_one(id: &str, dumps: &[PhaseDump], target: &PhaseDump) -> Vec<String> {
+/// Run the label functions for the `process_entries_post` occurrence
+/// `target` (with the quirks `fix` fixed). Returns the expected and actual
+/// label paths.
+fn run_one(
+    id: &str,
+    dumps: &[PhaseDump],
+    target: &PhaseDump,
+    fix: &[Quirk],
+) -> Result<(J, J), String> {
     let case = find_case(id);
-    let (_work, env, s) = match setup_case(&case) {
-        Ok(x) => x,
-        Err(code) => return vec![format!("bibers setup exited with {code}")],
-    };
+    let (_work, env, s) =
+        setup_case(&case).map_err(|code| format!("bibers setup exited with {code}"))?;
     let bibers::run::Setup {
         mut cfg,
         doc,
@@ -95,6 +102,9 @@ fn check_one(id: &str, dumps: &[PhaseDump], target: &PhaseDump) -> Vec<String> {
         ..
     } = s;
     let dm = cfg.dm.take().expect("data model");
+    for q in fix {
+        cfg.quirks.fix(*q);
+    }
     let mut ctx = Ctx {
         cfg: &mut cfg,
         dm: &dm,
@@ -107,7 +117,7 @@ fn check_one(id: &str, dumps: &[PhaseDump], target: &PhaseDump) -> Vec<String> {
         .iter()
         .rfind(|d| d.section == target.section && d.seq < target.seq)
     else {
-        return vec!["no dump before".into()];
+        return Err("no dump before".into());
     };
     let mut st = load_state(&before.state().expect("before dump")).expect("load_state");
     pipeline::install_entry_options(ctx.cfg, &st);
@@ -129,19 +139,26 @@ fn check_one(id: &str, dumps: &[PhaseDump], target: &PhaseDump) -> Vec<String> {
         .map(|(i, _)| i)
         .nth(nth)
     else {
-        return vec![format!("no data list {want} in state")];
+        return Err(format!("no data list {want} in state"));
     };
     let keys = st.section.citekeys.clone();
     for k in &keys {
         if labelalpha::process_labelalpha(&mut ctx, &mut st, i, k).is_err()
             || labelalpha::process_extraalpha(&mut ctx, &mut st, i, k).is_err()
         {
-            return vec!["fatal error".into()];
+            return Err("fatal error".into());
         }
     }
     let expected = extract(&target.state().expect("expected dump"), &want, nth);
     let actual = extract(&dump_state(&st), &want, nth);
-    json_diff(&expected, &actual, &[], 25)
+    Ok((expected, actual))
+}
+
+fn check_one(id: &str, dumps: &[PhaseDump], target: &PhaseDump) -> Vec<String> {
+    match run_one(id, dumps, target, &[]) {
+        Ok((e, a)) => json_diff(&e, &a, &[], 25),
+        Err(e) => vec![e],
+    }
 }
 
 fn run(prefixes: &[&str]) {
@@ -220,4 +237,70 @@ fn biblatex_examples() {
 #[test]
 fn scale() {
     run(&["scale/"]);
+}
+
+/// Labels of the `process_entries_post` occurrence for data list `list` of
+/// `id`, computed with the quirks `fix` fixed: citekey → labelalpha.
+fn fixed_labels(id: &str, list: &str, fix: &[Quirk]) -> Option<Vec<(String, String)>> {
+    if !o3_available() {
+        return None;
+    }
+    let case = find_case(id);
+    let dumps = phase_dumps(&case, &bibers_testkit::corpus_root()).expect("phase dumps");
+    let d = dumps
+        .iter()
+        .find(|d| d.phase == "process_entries_post" && d.list.as_deref() == Some(list))
+        .expect("occurrence");
+    let (_, actual) = run_one(id, &dumps, d, fix).expect("run");
+    Some(
+        actual["fields"]
+            .as_object()
+            .expect("fields")
+            .iter()
+            .map(|(k, v)| {
+                (
+                    k.clone(),
+                    v["labelalpha"].as_str().unwrap_or("").to_string(),
+                )
+            })
+            .collect(),
+    )
+}
+
+fn pairs(v: &[(&str, &str)]) -> Vec<(String, String)> {
+    v.iter()
+        .map(|(a, b)| (a.to_string(), b.to_string()))
+        .collect()
+}
+
+/// BB-094 fixed: the second list builds its own `v` cache from given names.
+#[test]
+fn bb094_fixed() {
+    let id = "bugs/bb-094-labelcache-field-key";
+    let Some(l2) = fixed_labels(id, "L2", &[Quirk::LabelcacheFieldKey]) else {
+        return;
+    };
+    assert_eq!(l2, pairs(&[("a", "Jo00"), ("b", "Jan01"), ("c", "Jac02")]));
+    // reproduced (default): the family-name cache is reused, name parts are lost
+    let l2 = fixed_labels(id, "L2", &[]).unwrap();
+    assert_eq!(l2, pairs(&[("a", "00"), ("b", "01"), ("c", "02")]));
+}
+
+/// BB-096 fixed: a fixed width index of 0 applies (`C` for Cat and Cow).
+#[test]
+fn bb096_fixed() {
+    let id = "bugs/bb-096-label-global-index-zero";
+    let Some(l) = fixed_labels(id, "L1", &[Quirk::LabelGlobalIndexZero]) else {
+        return;
+    };
+    assert_eq!(
+        l,
+        pairs(&[
+            ("a", "A00"),
+            ("b", "B00"),
+            ("c", "C00"),
+            ("d", "D00"),
+            ("e", "C00")
+        ])
+    );
 }

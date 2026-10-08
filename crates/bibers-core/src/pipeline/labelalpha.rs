@@ -108,6 +108,7 @@ pub fn process_labelalpha(
         slots: &mut section.slots,
         dlstate: &mut dl.state,
         lantname: &dl.labelalphanametemplatename,
+        listname: &dl.name,
         run: &mut ctx.run.labelalpha,
         label_final: false,
     };
@@ -434,6 +435,8 @@ struct Gen<'a> {
     dlstate: &'a mut Option<PerlData>,
     /// The data list's labelalphanametemplate name.
     lantname: &'a str,
+    /// The data list's name.
+    listname: &'a str,
     run: &'a mut LabelRunCache,
     /// `$LABEL_FINAL`.
     label_final: bool,
@@ -458,6 +461,21 @@ impl<'a> Gen<'a> {
             .blx
             .get(Some(self.secnum), opt, et, key)
             .filter(|v| v.is_defined())
+    }
+
+    /// The `labelcache_v`/`labelcache_l` key: the field name (BB-094,
+    /// `labelcache-field-key`), or with that quirk fixed, the field, data
+    /// list and nameparts.
+    fn cache_key(&self, field: &str, nameparts: Option<&[String]>) -> String {
+        if self.quirk(Quirk::LabelcacheFieldKey) {
+            field.to_string()
+        } else {
+            format!(
+                "{field}\u{1f}{}\u{1f}{}",
+                self.listname,
+                nameparts.map(|n| n.join(",")).unwrap_or_default()
+            )
+        }
     }
 
     /// `_genlabel` (Internals.pm:340): `[label, sortlabel]` (`undef` if the
@@ -1009,11 +1027,13 @@ impl<'a> Gen<'a> {
         nameparts: Option<&[String]>,
         sw: &str,
     ) -> String {
+        let ck = self.cache_key(field, nameparts);
+        let zero_quirk = self.quirk(Quirk::LabelGlobalIndexZero);
         let root = self
             .slots
             .entry("labelcache_v".to_string())
             .or_insert_with(|| J::Object(Map::new()));
-        let exists = root.get(field).is_some_and(|v| !v.is_null());
+        let exists = root.get(&ck).is_some_and(|v| !v.is_null());
         if !exists {
             let lcache = self.build_cache_v(field, attrs, nameparts, sw);
             let root = self
@@ -1021,18 +1041,18 @@ impl<'a> Gen<'a> {
                 .entry("labelcache_v".to_string())
                 .or_insert_with(|| J::Object(Map::new()));
             if let J::Object(o) = root {
-                o.insert(field.to_string(), lcache);
+                o.insert(ck.clone(), lcache);
             } else {
                 let mut o = Map::new();
-                o.insert(field.to_string(), lcache);
+                o.insert(ck.clone(), lcache);
                 *root = J::Object(o);
             }
         }
         let root = self.slots.get_mut("labelcache_v").expect("labelcache_v");
-        let Some(J::Object(lcache)) = root.get_mut(field) else {
+        let Some(J::Object(lcache)) = root.get_mut(&ck) else {
             return String::new();
         };
-        lookup_v(lcache, field_string).unwrap_or_default()
+        lookup_v(lcache, field_string, zero_quirk).unwrap_or_default()
     }
 
     /// Build the `v` cache for `field` over all section citekeys.
@@ -1171,11 +1191,12 @@ impl<'a> Gen<'a> {
         nameparts: Option<&[String]>,
         index: Option<i64>,
     ) -> String {
+        let ck = self.cache_key(field, nameparts);
         let nindex = self.run.first_index(self.secnum, self.citekeys, citekey);
         let exists = self
             .slots
             .get("labelcache_l")
-            .and_then(|r| r.get(field))
+            .and_then(|r| r.get(&ck))
             .is_some_and(|v| !v.is_null());
         if !exists {
             let mut strings: Vec<Vec<String>> = Vec::with_capacity(self.citekeys.len());
@@ -1227,13 +1248,13 @@ impl<'a> Gen<'a> {
                 *root = J::Object(Map::new());
             }
             if let J::Object(r) = root {
-                r.insert(field.to_string(), J::Object(o));
+                r.insert(ck.clone(), J::Object(o));
             }
         }
         let Some(J::Object(lcache)) = self
             .slots
             .get_mut("labelcache_l")
-            .and_then(|r| r.get_mut(field))
+            .and_then(|r| r.get_mut(&ck))
         else {
             return String::new();
         };
@@ -1285,13 +1306,16 @@ fn first_n_names<'a>(
 /// The `v` cache lookup:
 /// `${$lcache->{$s}{data}}[$lcache->{globalindices}{$s} || $lcache->{$s}{index}]`,
 /// with Perl's autovivification of `globalindices` and `$lcache->{$s}{data}`.
-fn lookup_v(lcache: &mut Map<String, J>, s: &str) -> Option<String> {
+///
+/// With `zero_quirk` (BB-096, `label-global-index-zero`) a global index of
+/// `0` is ignored (`||`); fixed, any defined global index is used.
+fn lookup_v(lcache: &mut Map<String, J>, s: &str, zero_quirk: bool) -> Option<String> {
     let gi = lcache
         .entry("globalindices".to_string())
         .or_insert_with(|| J::Object(Map::new()))
         .get(s)
         .and_then(J::as_str)
-        .filter(|x| truthy(Some(x)))
+        .filter(|x| !zero_quirk || truthy(Some(x)))
         .map(str::to_string);
     let ent = lcache
         .entry(s.to_string())

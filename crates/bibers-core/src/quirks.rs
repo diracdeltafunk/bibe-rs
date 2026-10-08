@@ -61,6 +61,14 @@ pub enum Quirk {
     /// from the shared data-model date-field list in place, so a custom date
     /// field whose stem ends in `date` loses its flags after the first entry.
     DatefieldHelperMutation,
+    /// BB-094 (`labelcache-field-key`): the labelalpha `v`/`l` width caches
+    /// are keyed by field name only, per section, so a second data list or
+    /// label part on the same field (other nameparts, name template or
+    /// visibility) reuses the first one's cache.
+    LabelcacheFieldKey,
+    /// BB-096 (`label-global-index-zero`): `substring_width=vf` ignores a
+    /// computed fixed width index of 0 (`globalindices || index`).
+    LabelGlobalIndexZero,
 }
 
 impl Quirk {
@@ -83,6 +91,8 @@ impl Quirk {
         Quirk::BblCommaCleanup,
         Quirk::RangelenZeroDigit,
         Quirk::DatefieldHelperMutation,
+        Quirk::LabelcacheFieldKey,
+        Quirk::LabelGlobalIndexZero,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -105,6 +115,8 @@ impl Quirk {
             Quirk::BblCommaCleanup => "bbl-comma-cleanup",
             Quirk::RangelenZeroDigit => "rangelen-zero-digit",
             Quirk::DatefieldHelperMutation => "datefield-helper-mutation",
+            Quirk::LabelcacheFieldKey => "labelcache-field-key",
+            Quirk::LabelGlobalIndexZero => "label-global-index-zero",
         }
     }
 
