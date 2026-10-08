@@ -40,7 +40,10 @@ fn only_labelalpha(line: &str) -> bool {
                 .map_or("", |(_, r)| r.strip_suffix(')').unwrap_or(r)),
         )
         .ok()
-        .and_then(|v| v.as_object().map(|o| o.keys().all(|k| k.ends_with("labelalpha"))))
+        .and_then(|v| {
+            v.as_object()
+                .map(|o| o.keys().all(|k| k.ends_with("labelalpha")))
+        })
         .unwrap_or(false)
 }
 

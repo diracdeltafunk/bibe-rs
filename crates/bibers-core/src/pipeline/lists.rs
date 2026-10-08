@@ -177,7 +177,9 @@ pub fn generate_contextdata(
     let keys = dl.keys.clone().unwrap_or_default();
     let jstr = |s: &str| J::String(s.to_string());
     for key in &keys {
-        let Some(be) = sec.bibentry(key) else { continue };
+        let Some(be) = sec.bibentry(key) else {
+            continue;
+        };
         let et = be.entrytype();
         let lni = info_slot(be, "labelnameinfo");
 
@@ -321,8 +323,8 @@ pub fn generate_contextdata(
                     }
                 }
                 for np in sec.names.name(*nid).nameparts.keys() {
-                    let v = uniquename_value(pnun.get(np).map_or("none", String::as_str))
-                        .unwrap_or(0);
+                    let v =
+                        uniquename_value(pnun.get(np).map_or("none", String::as_str)).unwrap_or(0);
                     ls::set(
                         dl,
                         &["namelistdata", &nlk, &nk, "unparts", np],

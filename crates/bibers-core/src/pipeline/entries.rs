@@ -18,7 +18,9 @@ use crate::biber_error;
 use crate::config::{Config, OptValue};
 use crate::datamodel::DataModel;
 use crate::log::{Fatal, Logger};
-use crate::model::{DataList, Entry, Name, NameId, NameListId, PerlData, Section, SectionState, Value};
+use crate::model::{
+    DataList, Entry, Name, NameId, NameListId, PerlData, Section, SectionState, Value,
+};
 use crate::perlish::{fc, lc, nfc, numify, truthy};
 use crate::quirks::Quirk;
 use md5::{Digest, Md5};
@@ -184,7 +186,10 @@ pub(crate) fn perl_str(v: Option<&Value>) -> String {
     match v {
         None => String::new(),
         Some(Value::Str(s)) => s.clone(),
-        Some(Value::Names(id)) => format!("Biber::Entry::Names=HASH(0x{:x})", 0x1000_0000 + id.0 as u64 * 0x18),
+        Some(Value::Names(id)) => format!(
+            "Biber::Entry::Names=HASH(0x{:x})",
+            0x1000_0000 + id.0 as u64 * 0x18
+        ),
         Some(_) => "ARRAY".to_string(),
     }
 }
@@ -441,7 +446,11 @@ pub(crate) fn getnamehash(
     let count = names.names.len();
     let visible = ls::get(
         dl,
-        &["namelistdata", &nlid.key(), if bib { "visbib" } else { "viscite" }],
+        &[
+            "namelistdata",
+            &nlid.key(),
+            if bib { "visbib" } else { "viscite" },
+        ],
     )
     .map_or(0.0, |v| ls::num(&v));
     let nps = h.nameparts();
@@ -667,11 +676,17 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
     let namelistsall = &ctx.dm.helpers.namelistsall;
     let use_ok = |opt: &str| {
         !cfg.blx.registry.is_declared(&format!("use{opt}"))
-            || opt_true(cfg.blx.get(Some(secnum), &format!("use{opt}"), Some(&et), Some(key)))
+            || opt_true(
+                cfg.blx
+                    .get(Some(secnum), &format!("use{opt}"), Some(&et), Some(key)),
+            )
     };
     let mut lni = None;
     for ln in &spec {
-        let lnameopt = ln.strip_prefix("short").filter(|r| !r.is_empty()).unwrap_or(ln);
+        let lnameopt = ln
+            .strip_prefix("short")
+            .filter(|r| !r.is_empty())
+            .unwrap_or(ln);
         if !namelistsall.iter().any(|n| n == ln) {
             ctx.log.biber_warn(format!(
                 "Labelname candidate '{ln}' is not a name field - skipping"
@@ -767,7 +782,11 @@ fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
                 f.insert("timezone".into(), s(&rest[6]));
                 f.insert(
                     "pseudodate".into(),
-                    if pseudodate { J::String("1".into()) } else { J::Null },
+                    if pseudodate {
+                        J::String("1".into())
+                    } else {
+                        J::Null
+                    },
                 );
                 f.insert(
                     "source".into(),
@@ -789,10 +808,14 @@ fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
     let Some(J::Object(ldi)) = be.slots.get("labeldateinfo").cloned() else {
         return;
     };
-    let field_str = |be: &Entry, f: &str| be.get_field(f).and_then(Value::as_str).map(str::to_string);
+    let field_str =
+        |be: &Entry, f: &str| be.get_field(f).and_then(Value::as_str).map(str::to_string);
     if let Some(J::Object(df)) = ldi.get("field") {
         let g = |k: &str| df.get(k).and_then(J::as_str).map(str::to_string);
-        let pseudodate = df.get("pseudodate").and_then(J::as_str).is_some_and(|s| truthy(Some(s)));
+        let pseudodate = df
+            .get("pseudodate")
+            .and_then(J::as_str)
+            .is_some_and(|s| truthy(Some(s)));
         let year = g("year").unwrap_or_default();
         let yv = be.get_field(&year).cloned();
         be.set_field("labelyear", yv);
@@ -1025,7 +1048,9 @@ pub(crate) fn process_namedis(
                 let level = np
                     .disambiguation
                     .clone()
-                    .or_else(|| uniquename_context(n_un.as_deref().unwrap_or("false")).map(str::to_string))
+                    .or_else(|| {
+                        uniquename_context(n_un.as_deref().unwrap_or("false")).map(str::to_string)
+                    })
                     .map(|l| fc(&l))
                     .unwrap_or_default();
                 let lastns = namestrings.last().cloned().unwrap_or_default();
@@ -1085,7 +1110,9 @@ fn set_namedis(dl: &mut DataList, d: &NameDis) {
         if let DisPart::Base(parts) = se {
             o.insert(
                 "basenamestring".into(),
-                d.namestrings.get(i).map_or(J::Null, |s| J::String(s.clone())),
+                d.namestrings
+                    .get(i)
+                    .map_or(J::Null, |s| J::String(s.clone())),
             );
             o.insert(
                 "basenamestringparts".into(),
@@ -1144,7 +1171,9 @@ pub fn process_visible_names(
     let dl = &mut st.datalists[list];
     let sec = &st.section;
     for key in &sec.citekeys {
-        let Some(be) = sec.bibentry(key) else { continue };
+        let Some(be) = sec.bibentry(key) else {
+            continue;
+        };
         let et = be.entrytype();
         // Option values keep their string form (biber stores the scalar).
         let o = |name: &str| -> (f64, J) {
@@ -1169,12 +1198,14 @@ pub fn process_visible_names(
             let count = sec.names.list(*nlid).names.len();
             let cnt = (count as f64, J::String(count.to_string()));
             let cap = |m: &(f64, J)| if cnt.0 < m.0 { cnt.clone() } else { m.clone() };
-            let (l_mincn, l_minbn, l_minsn, l_minan) = (cap(&mincn), cap(&minbn), cap(&minsn), cap(&minan));
+            let (l_mincn, l_minbn, l_minsn, l_minan) =
+                (cap(&mincn), cap(&minbn), cap(&minsn), cap(&minan));
             let vis_alpha = if cnt.0 > maxan { l_minan } else { cnt.clone() };
-            let ul_or = |dl: &mut DataList, d: (f64, J)| match ls::get(dl, &["namelistdata", &nlk, "ul"]) {
-                Some(v) => (ls::num(&v), v),
-                None => d,
-            };
+            let ul_or =
+                |dl: &mut DataList, d: (f64, J)| match ls::get(dl, &["namelistdata", &nlk, "ul"]) {
+                    Some(v) => (ls::num(&v), v),
+                    None => d,
+                };
             let mut vis_cite = if cnt.0 > maxcn {
                 ul_or(dl, l_mincn)
             } else {
@@ -1183,8 +1214,16 @@ pub fn process_visible_names(
             if pluralothers && cnt.0 - vis_cite.0 == 1.0 {
                 vis_cite = cnt.clone();
             }
-            let vis_bib = if cnt.0 > maxbn { ul_or(dl, l_minbn) } else { cnt.clone() };
-            let vis_sort = if cnt.0 > maxsn { ul_or(dl, l_minsn) } else { cnt.clone() };
+            let vis_bib = if cnt.0 > maxbn {
+                ul_or(dl, l_minbn)
+            } else {
+                cnt.clone()
+            };
+            let vis_sort = if cnt.0 > maxsn {
+                ul_or(dl, l_minsn)
+            } else {
+                cnt.clone()
+            };
             ls::set(dl, &["namelistdata", &nlk, "viscite"], vis_cite.1);
             ls::set(dl, &["namelistdata", &nlk, "visbib"], vis_bib.1);
             ls::set(dl, &["namelistdata", &nlk, "vissort"], vis_sort.1);
@@ -1259,7 +1298,12 @@ fn process_fullhash(
     if let Some(nlid) = names_field(be, info_slot(be, "labelnamefhinfo")) {
         let fh = getfullhash(&h, ctx.log, sec, dl, key, nlid)?;
         ls::set_entryfield(dl, key, "fullhash", J::String(fh));
-        ls::set_entryfield(dl, key, "fullhashraw", J::String(getfullhashraw(&h, sec, nlid)));
+        ls::set_entryfield(
+            dl,
+            key,
+            "fullhashraw",
+            J::String(getfullhashraw(&h, sec, nlid)),
+        );
     }
     for n in &h.dm.helpers.namelistsall {
         let Some(nlid) = names_field(be, Some(n)) else {
@@ -1411,7 +1455,10 @@ fn process_extratitleyear(h: &H, st: &mut SectionState, list: usize, key: &str) 
     }
     let title = perl_str(info_slot(be, "labeltitleinfo").and_then(|f| be.get_field(f)));
     let s = |f: &str| be.get_str(f).filter(|s| truthy(Some(s)));
-    let year = s("labelyear").or_else(|| s("year")).unwrap_or("").to_string();
+    let year = s("labelyear")
+        .or_else(|| s("year"))
+        .unwrap_or("")
+        .to_string();
     let ty = format!("{title},{year}");
     ls::set_entryfield(dl, key, "titleyear", J::String(ty.clone()));
     let path = ["seen_titleyear", ty.as_str()];
@@ -1491,7 +1538,12 @@ fn process_workuniqueness(
         if !ignored("uniquetitle", lti) {
             ls::incr(dl, &["seentitle", &id]);
         }
-        ls::set_entryfield(dl, key, "seentitle", title.clone().map_or(J::Null, J::String));
+        ls::set_entryfield(
+            dl,
+            key,
+            "seentitle",
+            title.clone().map_or(J::Null, J::String),
+        );
     }
     if lti.is_some()
         && lni.is_none()
@@ -1501,7 +1553,12 @@ fn process_workuniqueness(
         if !ignored("uniquebaretitle", lti) {
             ls::incr(dl, &["seenbaretitle", &id]);
         }
-        ls::set_entryfield(dl, key, "seenbaretitle", title.clone().map_or(J::Null, J::String));
+        ls::set_entryfield(
+            dl,
+            key,
+            "seenbaretitle",
+            title.clone().map_or(J::Null, J::String),
+        );
     }
     if let Some(ln) = lni
         && lti.is_some()
@@ -1559,13 +1616,12 @@ fn process_pername_hashes(
     key: &str,
 ) -> Result<(), Fatal> {
     let be = st.section.bibentry(key).expect("entry");
-    let lists: Vec<NameListId> = h
-        .dm
-        .helpers
-        .namelistsall
-        .iter()
-        .filter_map(|n| names_field(be, Some(n)))
-        .collect();
+    let lists: Vec<NameListId> =
+        h.dm.helpers
+            .namelistsall
+            .iter()
+            .filter_map(|n| names_field(be, Some(n)))
+            .collect();
     for nlid in lists {
         for nid in st.section.names.list(nlid).names.clone() {
             let hash = genpnhash(h, log, &st.section, &st.datalists[list], key, nlid, nid)?;
@@ -1620,7 +1676,12 @@ fn process_uniqueprimaryauthor(
         .unwrap_or("")
         .to_string();
     let dl = &mut st.datalists[list];
-    ls::set_entryfield(dl, key, "seenprimaryauthor", pabase.clone().map_or(J::Null, J::String));
+    ls::set_entryfield(
+        dl,
+        key,
+        "seenprimaryauthor",
+        pabase.clone().map_or(J::Null, J::String),
+    );
     ls::set(
         dl,
         &["seenpa", pabase.as_deref().unwrap_or(""), &hash],
@@ -1650,7 +1711,9 @@ pub fn process_entries_final(
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     for key in &sec.citekeys {
-        let Some(be) = sec.bibentry(key) else { continue };
+        let Some(be) = sec.bibentry(key) else {
+            continue;
+        };
         let et = be.entrytype();
         // generate_singletitle / uniquetitle / uniquebaretitle: `defined`
         for (opt, seen, out) in [
@@ -1672,7 +1735,11 @@ pub fn process_entries_final(
         // generate_uniquework / uniquepa: truthiness
         for (opt, seen, out) in [
             ("uniquework", "seenwork", "uniquework"),
-            ("uniqueprimaryauthor", "seenprimaryauthor", "uniqueprimaryauthor"),
+            (
+                "uniqueprimaryauthor",
+                "seenprimaryauthor",
+                "uniqueprimaryauthor",
+            ),
         ] {
             if !opt_true(h.opt_undef(opt, Some(et), Some(key))) {
                 continue;
@@ -1696,4 +1763,35 @@ pub fn process_entries_final(
         }
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Expected values from perl 5.42 (oracle O3) running biber's
+    /// `normalise_string_hash` and `md5_hex(encode_utf8(NFC(…)))`.
+    #[test]
+    fn hashes_match_perl() {
+        for (s, n, h) in [
+            ("Smith", "Smith", "e95f770ac4fb91ac2e4873e4b2dfc0e6"),
+            ("0", "", "d41d8cd98f00b204e9800998ecf8427e"),
+            ("\\\"{a} b.~c", "34:abc", "92ba9a8239f0751943cee98d7845a0b3"),
+            ("\\\\é  x", "\\é:x", "c2033b4b5f262edb0609baf4e4d96492"),
+            ("a\\\nb", "a10:b", "0253981ad5a64d7109311753912d5869"),
+            (
+                "\\ss {}x\u{2003}y",
+                "ss:xy",
+                "3f0282ebf01e62d30a005f7a2ea49778",
+            ),
+            (
+                "Mu\u{308}ller+",
+                "Mu\u{308}ller+",
+                "a2830c9f96a7c99944cd583ad11a8b8f",
+            ),
+        ] {
+            assert_eq!(normalise_string_hash(s), n, "{s:?}");
+            assert_eq!(hash_string(s), h, "{s:?}");
+        }
+    }
 }
