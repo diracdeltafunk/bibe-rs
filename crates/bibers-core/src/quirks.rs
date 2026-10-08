@@ -83,6 +83,22 @@ pub enum Quirk {
     /// BB-096 (`label-global-index-zero`): `substring_width=vf` ignores a
     /// computed fixed width index of 0 (`globalindices || index`).
     LabelGlobalIndexZero,
+    /// BB-022/BB-023 (`crossref-date-meta`): crossref inheritance copies the
+    /// parent's derived date metadata even when the child's date parts were
+    /// kept, and the date-part guard only looks at the main `datesplit`.
+    CrossrefDateMeta,
+    /// BB-024 (`xdata-name-index`): granular XDATA name references set
+    /// 0-based name indices, and `splice` skips re-indexing the last name.
+    XdataNameIndex,
+    /// BB-025 (`xdata-rerefs`): an XDATA entry's own references are
+    /// re-resolved every time it is referenced.
+    XdataRerefs,
+    /// BB-026 (`shared-namelists`): inherited/XDATA name lists are shared
+    /// with the parent (one name-list id), so per-list state is shared.
+    SharedNamelists,
+    /// BB-067 (`dieondatamodel-no-exit`): `--dieondatamodel` logs errors but
+    /// never stops.
+    DieondatamodelNoExit,
 }
 
 impl Quirk {
@@ -111,6 +127,11 @@ impl Quirk {
         Quirk::UniquelistMinyearDoubleCount,
         Quirk::LabelcacheFieldKey,
         Quirk::LabelGlobalIndexZero,
+        Quirk::CrossrefDateMeta,
+        Quirk::XdataNameIndex,
+        Quirk::XdataRerefs,
+        Quirk::SharedNamelists,
+        Quirk::DieondatamodelNoExit,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -139,6 +160,11 @@ impl Quirk {
             Quirk::UniquelistMinyearDoubleCount => "uniquelist-minyear-double-count",
             Quirk::LabelcacheFieldKey => "labelcache-field-key",
             Quirk::LabelGlobalIndexZero => "label-global-index-zero",
+            Quirk::CrossrefDateMeta => "crossref-date-meta",
+            Quirk::XdataNameIndex => "xdata-name-index",
+            Quirk::XdataRerefs => "xdata-rerefs",
+            Quirk::SharedNamelists => "shared-namelists",
+            Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
         }
     }
 

@@ -9,6 +9,7 @@ pub mod names;
 mod sbcs;
 
 pub use bibtex::{BibCache, FetchOpts};
+pub(crate) use bibtex::{collapse_eq, process_entry_options};
 
 use super::Ctx;
 use crate::log::Fatal;

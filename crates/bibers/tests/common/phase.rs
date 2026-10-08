@@ -118,6 +118,7 @@ fn check_one(
     dumps: &[PhaseDump],
     target: &PhaseDump,
     ignore: &[&str],
+    norm: Option<Normalise>,
 ) -> Vec<String> {
     let work = tempfile::tempdir().expect("tempdir");
     for f in case.input_files(root).expect("inputs") {
@@ -224,7 +225,12 @@ fn check_one(
         st
     };
     pipeline::capture_entry_options(ctx.cfg, &mut st);
-    let actual = dump_state(&st);
+    let mut actual = dump_state(&st);
+    let mut expected = expected;
+    if let Some(n) = norm {
+        n(&mut expected);
+        n(&mut actual);
+    }
     json_diff(&expected, &actual, ignore, LIMIT)
 }
 
@@ -241,6 +247,22 @@ pub fn check_phase_at(
     case_ids: &[&str],
     extra_ignore: &[&str],
 ) -> (usize, Vec<String>) {
+    check_phase_norm_at(root, phase, case_ids, extra_ignore, None)
+}
+
+/// A normalisation applied to both biber's and bibers' state (the dump's
+/// `state` object) before comparing, for values whose order is
+/// nondeterministic in biber.
+pub type Normalise = fn(&mut serde_json::Value);
+
+/// [`check_phase_at`] with a normalisation.
+pub fn check_phase_norm_at(
+    root: &std::path::Path,
+    phase: &str,
+    case_ids: &[&str],
+    extra_ignore: &[&str],
+    norm: Option<Normalise>,
+) -> (usize, Vec<String>) {
     let mut ignore: Vec<&str> = DEFAULT_IGNORE.to_vec();
     ignore.extend_from_slice(extra_ignore);
     let mut checked = 0;
@@ -251,7 +273,7 @@ pub fn check_phase_at(
             phase_dumps(&case, root).unwrap_or_else(|e| panic!("phase dumps for {id}: {e:#}"));
         for d in dumps.iter().filter(|d| d.phase == phase) {
             checked += 1;
-            let diffs = check_one(root, &case, &dumps, d, &ignore);
+            let diffs = check_one(root, &case, &dumps, d, &ignore, norm);
             if !diffs.is_empty() {
                 failures.push(format!(
                     "{} ({}):\n  {}",
@@ -273,11 +295,22 @@ pub fn assert_phase(phase: &str, case_ids: &[&str]) {
 
 /// [`assert_phase`] with additional ignored paths.
 pub fn assert_phase_ignoring(phase: &str, case_ids: &[&str], extra_ignore: &[&str]) {
+    assert_phase_normalised(phase, case_ids, extra_ignore, None);
+}
+
+/// [`assert_phase_ignoring`] with a normalisation of both states.
+pub fn assert_phase_normalised(
+    phase: &str,
+    case_ids: &[&str],
+    extra_ignore: &[&str],
+    norm: Option<Normalise>,
+) {
     if !o3_available() {
         eprintln!("skipping {phase}: oracle O3 not built");
         return;
     }
-    let (checked, failures) = check_phase(phase, case_ids, extra_ignore);
+    let (checked, failures) =
+        check_phase_norm_at(&corpus_root(), phase, case_ids, extra_ignore, norm);
     assert!(checked > 0, "{phase}: no occurrences in the given cases");
     assert!(
         failures.is_empty(),
