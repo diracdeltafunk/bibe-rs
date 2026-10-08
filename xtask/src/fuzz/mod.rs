@@ -151,8 +151,16 @@ pub fn fuzz(args: &[String]) -> Result<ExitCode> {
     let o = parse(args)?;
     if o.print {
         for i in o.start..o.start + o.count {
-            println!("%%%% seed {} input {i}", o.seed);
-            print!("{}", generate::generate(o.seed, i).render_bib());
+            let input = generate::generate(o.seed, i);
+            println!(
+                "%%%% seed {} input {i}: args {:?}, options {:?}, nocite* {}, cites {:?}",
+                o.seed,
+                input.args,
+                input.opts,
+                input.nocite_all,
+                input.cites.iter().map(|c| c.key.as_str()).collect::<Vec<_>>()
+            );
+            print!("{}", input.render_bib());
         }
         return Ok(ExitCode::SUCCESS);
     }
