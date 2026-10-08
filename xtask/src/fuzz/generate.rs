@@ -531,12 +531,52 @@ impl Gen {
 
         let (cites, nocite_all) = self.cites();
         let opts = self.option_tweaks();
+        let args = self.cli_args();
         FuzzInput {
             items,
             cites,
             nocite_all,
             opts,
+            args,
         }
+    }
+
+    /// Extra command-line options (none 70% of the time).
+    fn cli_args(&mut self) -> Vec<String> {
+        const ARGS: &[&str] = &[
+            "--isbn-normalise",
+            "--isbn13",
+            "--decodecharsset=full",
+            "--output-safechars",
+            "--output-encoding=latin1",
+            "--output-encoding=ascii",
+            "--fixinits",
+            "--mincrossrefs=1",
+            "--minxrefs=1",
+            "--sortcase=0",
+            "--sortupper=0",
+            "--sortlocale=de_DE",
+            "--sortlocale=sv_SE",
+            "--noxname",
+            "--validate-datamodel",
+            "--nostdmacros",
+            "--xsvsep=\\s*;\\s*",
+            "--listsep=&",
+            "--namesep=und",
+            "--others-string=etal",
+            "--input-encoding=latin1",
+        ];
+        let mut out: Vec<String> = Vec::new();
+        if self.r.chance(0.7) {
+            return out;
+        }
+        for _ in 0..self.r.range(1, 2) {
+            let a = self.r.pick(ARGS).to_string();
+            if !out.contains(&a) {
+                out.push(a);
+            }
+        }
+        out
     }
 
     /// Global option overrides (none half of the time).

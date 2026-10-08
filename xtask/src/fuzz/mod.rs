@@ -447,6 +447,9 @@ pub fn fuzz_min(args: &[String]) -> Result<ExitCode> {
             .join(" "),
         if min.nocite_all { " \\nocite{*}" } else { "" }
     );
+    if !min.args.is_empty() {
+        println!("% command-line options: {:?}", min.args);
+    }
     if !min.opts.is_empty() {
         println!("% option overrides: {:?}", min.opts);
     }
@@ -464,8 +467,9 @@ pub fn fuzz_min(args: &[String]) -> Result<ExitCode> {
     std::fs::write(case_dir.join(BIB_NAME), &bib)?;
     std::fs::write(case_dir.join(&tpl.bcf_name), tpl.bcf(&min))?;
     let q = |s: &str| toml::Value::String(s.to_string()).to_string();
+    let spec = tpl.spec(&min, String::new(), String::new());
     let text = format!(
-        "description = {}\nsource = {}\nargs = [\"--noconf\", {}]\noutputs = [{}]\n\
+        "description = {}\nsource = {}\nargs = [{}]\noutputs = [{}]\n\
          tags = [\"suite:fuzz\", {}]\n",
         q(&format!(
             "fuzz: minimised reproducer for diff shape {shape}"
@@ -476,7 +480,11 @@ pub fn fuzz_min(args: &[String]) -> Result<ExitCode> {
             field("index")?,
             tpl.id
         )),
-        q(&tpl.bcf_name),
+        spec.args
+            .iter()
+            .map(|a| q(a))
+            .collect::<Vec<_>>()
+            .join(", "),
         q(&tpl.bbl_name()),
         q(&format!("template:{}", tpl.id)),
     );

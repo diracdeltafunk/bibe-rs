@@ -96,11 +96,14 @@ impl Template {
     }
 
     /// The case spec used for fuzz runs and for minimised corpus cases.
-    pub fn spec(&self, description: String, source: String) -> CaseSpec {
+    pub fn spec(&self, input: &FuzzInput, description: String, source: String) -> CaseSpec {
+        let mut args = vec!["--noconf".to_string()];
+        args.extend(input.args.iter().cloned());
+        args.push(self.bcf_name.clone());
         CaseSpec {
             description,
             source,
-            args: vec!["--noconf".into(), self.bcf_name.clone()],
+            args,
             shared: vec![],
             outputs: vec![self.bbl_name()],
             log: None,
@@ -121,7 +124,7 @@ impl Template {
         Ok(Case {
             id: format!("fuzz/{}", self.id),
             dir: dir.to_path_buf(),
-            spec: self.spec(String::new(), String::new()),
+            spec: self.spec(input, String::new(), String::new()),
         })
     }
 }

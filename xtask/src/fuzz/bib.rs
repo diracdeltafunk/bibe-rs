@@ -15,6 +15,9 @@ pub struct FuzzInput {
     /// Global option overrides applied to the template `.bcf` (key, value).
     #[serde(default)]
     pub opts: Vec<(String, String)>,
+    /// Extra command-line options (between `--noconf` and the `.bcf`).
+    #[serde(default)]
+    pub args: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
