@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style mla"
+source = "texmf-dist/doc/latex/biblatex-mla/doc/examples.tex (TeX Live 2026), compiled with xelatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:mla"]

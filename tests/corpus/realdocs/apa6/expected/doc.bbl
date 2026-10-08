@@ -1,0 +1,147 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{Lassen2006}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=9859f085b399022e84a5f22c7e26dfae}{%
+           family={Lassen},
+           familyi={L\bibinitperiod},
+           given={Stephen\bibnamedelima R.},
+           giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=41f0003a04629fda9fadb3f7cc1a424a}{%
+           family={Steele},
+           familyi={S\bibinitperiod},
+           given={Michael\bibnamedelima M.},
+           giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=359a93b7c3e76123ae0e97ce57a119a3}{%
+           family={Sailor},
+           familyi={S\bibinitperiod},
+           given={Wayne},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a64fb7f538e2c34109e1e0136e81118d}
+      \strng{fullhash}{bddd431150c2314fd2e222d253318848}
+      \strng{fullhashraw}{bddd431150c2314fd2e222d253318848}
+      \strng{bibnamehash}{bddd431150c2314fd2e222d253318848}
+      \strng{authorbibnamehash}{bddd431150c2314fd2e222d253318848}
+      \strng{authornamehash}{a64fb7f538e2c34109e1e0136e81118d}
+      \strng{authorfullhash}{bddd431150c2314fd2e222d253318848}
+      \strng{authorfullhashraw}{bddd431150c2314fd2e222d253318848}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychology in the Schools}
+      \field{number}{6}
+      \field{title}{The relationship of school-wide positive behavior support to academic achievement in an urban middle school}
+      \field{volume}{43}
+      \field{year}{2006}
+      \field{pages}{701\bibrangedash 712}
+      \range{pages}{12}
+    \endentry
+    \entry{Shotton1989}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=10caa8ca4c58e610538df79cbad5a57a}{%
+           family={Shotton},
+           familyi={S\bibinitperiod},
+           given={Margaret\bibnamedelima A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {London, England}%
+      }
+      \list{publisher}{1}{%
+        {Taylor \& Francis}%
+      }
+      \strng{namehash}{10caa8ca4c58e610538df79cbad5a57a}
+      \strng{fullhash}{10caa8ca4c58e610538df79cbad5a57a}
+      \strng{fullhashraw}{10caa8ca4c58e610538df79cbad5a57a}
+      \strng{bibnamehash}{10caa8ca4c58e610538df79cbad5a57a}
+      \strng{authorbibnamehash}{10caa8ca4c58e610538df79cbad5a57a}
+      \strng{authornamehash}{10caa8ca4c58e610538df79cbad5a57a}
+      \strng{authorfullhash}{10caa8ca4c58e610538df79cbad5a57a}
+      \strng{authorfullhashraw}{10caa8ca4c58e610538df79cbad5a57a}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Computer addiction? {A} study of computer dependency}
+      \field{year}{1989}
+    \endentry
+    \entry{vonDavier2011}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=efb89e0f0a80dde3910e905889b9d062}{%
+           family={Davier},
+           familyi={D\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod},
+           givenun=0,
+           prefix={von},
+           prefixi={v\bibinitperiod}}}%
+        {{un=0,uniquepart=base,hash=2cc81e4f038d69d1f4ad525eb2209079}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Xueli},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0c365176e412b5b35f9099b467715db5}{%
+           family={Carstensen},
+           familyi={C\bibinitperiod},
+           given={Claus\bibnamedelima H.},
+           giveni={C\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{fd7ca6b641928e95da9d7497a3915b00}
+      \strng{fullhash}{1cf8c6ba4e5cd24dcad92f22edc15b3d}
+      \strng{fullhashraw}{1cf8c6ba4e5cd24dcad92f22edc15b3d}
+      \strng{bibnamehash}{1cf8c6ba4e5cd24dcad92f22edc15b3d}
+      \strng{authorbibnamehash}{1cf8c6ba4e5cd24dcad92f22edc15b3d}
+      \strng{authornamehash}{fd7ca6b641928e95da9d7497a3915b00}
+      \strng{authorfullhash}{1cf8c6ba4e5cd24dcad92f22edc15b3d}
+      \strng{authorfullhashraw}{1cf8c6ba4e5cd24dcad92f22edc15b3d}
+      \field{sortinit}{v}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychometrika}
+      \field{title}{Measuring growth in a longitudinal large-scale assessment with a general latent variable model}
+      \field{volume}{76}
+      \field{year}{2011}
+      \field{pages}{318\bibrangedash 336}
+      \range{pages}{19}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

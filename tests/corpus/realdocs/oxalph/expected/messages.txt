@@ -1,0 +1,2 @@
+WARN - BibTeX subsystem: warning: comma(s) at end of name (removing)
+WARN - legacy year field '1480s' in entry 'davinci1480mr' is not an integer - this will probably not sort properly.

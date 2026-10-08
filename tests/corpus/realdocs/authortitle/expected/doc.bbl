@@ -1,0 +1,475 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{Anschriften}{booklet}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=591d93986ed31013bc5101c4b73073dc}{%
+           family={\tschechB{Č}ižinská},
+           familyi={Č\bibinitperiod},
+           given={Helena},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=72ee0ec728b18e07f75d4bfc499ac0fe}{%
+           family={Poltavec},
+           familyi={P\bibinitperiod},
+           given={Petr},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ea51830a8ddfafe33a601d310e2c6a86}
+      \strng{fullhash}{ea51830a8ddfafe33a601d310e2c6a86}
+      \strng{fullhashraw}{ea51830a8ddfafe33a601d310e2c6a86}
+      \strng{bibnamehash}{ea51830a8ddfafe33a601d310e2c6a86}
+      \strng{authorbibnamehash}{ea51830a8ddfafe33a601d310e2c6a86}
+      \strng{authornamehash}{ea51830a8ddfafe33a601d310e2c6a86}
+      \strng{authorfullhash}{ea51830a8ddfafe33a601d310e2c6a86}
+      \strng{authorfullhashraw}{ea51830a8ddfafe33a601d310e2c6a86}
+      \field{sortinit}{Č}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{ngerman}
+      \field{title}{Schema der Wandmalereien und Anschriften in der St.\@ Gabrielkirche in Prag}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+    \entry{Clayton}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=71477ff5281ea7e7dbf77a29c316ee8f}{%
+           family={Clayton},
+           familyi={C\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{71477ff5281ea7e7dbf77a29c316ee8f}
+      \strng{fullhash}{71477ff5281ea7e7dbf77a29c316ee8f}
+      \strng{fullhashraw}{71477ff5281ea7e7dbf77a29c316ee8f}
+      \strng{bibnamehash}{71477ff5281ea7e7dbf77a29c316ee8f}
+      \strng{authorbibnamehash}{71477ff5281ea7e7dbf77a29c316ee8f}
+      \strng{authornamehash}{71477ff5281ea7e7dbf77a29c316ee8f}
+      \strng{authorfullhash}{71477ff5281ea7e7dbf77a29c316ee8f}
+      \strng{authorfullhashraw}{71477ff5281ea7e7dbf77a29c316ee8f}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Adoremus Bulletin}
+      \field{langid}{american}
+      \field{month}{5}
+      \field{number}{7}
+      \field{title}{The Beuronese School: Nature and Grace in Liturgical Art}
+      \field{volume}{21}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{9}
+      \range{pages}{1}
+      \verb{urlraw}
+      \verb https://adoremus.org/2016/05/15/beuronese-school-nature-grace-liturgical-art/
+      \endverb
+      \verb{url}
+      \verb https://adoremus.org/2016/05/15/beuronese-school-nature-grace-liturgical-art/
+      \endverb
+    \endentry
+    \entry{Groeger}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=f8530ce63c5acb5e3f422f0eec7caf3e}{%
+           family={Gröger},
+           familyi={G\bibinitperiod},
+           given={Augustinus},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Beuron}%
+      }
+      \list{publisher}{1}{%
+        {Beuroner Kunstverlag}%
+      }
+      \strng{namehash}{f8530ce63c5acb5e3f422f0eec7caf3e}
+      \strng{fullhash}{f8530ce63c5acb5e3f422f0eec7caf3e}
+      \strng{fullhashraw}{f8530ce63c5acb5e3f422f0eec7caf3e}
+      \strng{bibnamehash}{f8530ce63c5acb5e3f422f0eec7caf3e}
+      \strng{authorbibnamehash}{f8530ce63c5acb5e3f422f0eec7caf3e}
+      \strng{authornamehash}{f8530ce63c5acb5e3f422f0eec7caf3e}
+      \strng{authorfullhash}{f8530ce63c5acb5e3f422f0eec7caf3e}
+      \strng{authorfullhashraw}{f8530ce63c5acb5e3f422f0eec7caf3e}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{ngerman}
+      \field{subtitle}{Ein lange verkanntes Kleinod}
+      \field{title}{Die „Krypta“ unter der Beuroner Gnadenkapelle}
+      \field{year}{2014}
+      \field{dateera}{ce}
+    \endentry
+    \entry{Evangelistar}{book}{}{}
+      \name{author}{4}{ul=1}{%
+        {{un=0,uniquepart=base,hash=f8530ce63c5acb5e3f422f0eec7caf3e}{%
+           family={Gröger},
+           familyi={G\bibinitperiod},
+           given={Augustinus},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6388b5314356ab75c9d700036ebc900b}{%
+           family={Bubna-Litic},
+           familyi={B\bibinithyphendelim L\bibinitperiod},
+           given={Monica},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=48d3081865827d0369a48234e0c6ba12}{%
+           family={Kunštat},
+           familyi={K\bibinitperiod},
+           given={Miroslav},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cfbcd330d884cc2f80530379310d23ab}{%
+           family={Navrátilová},
+           familyi={N\bibinitperiod},
+           given={Hana},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Prag}%
+      }
+      \strng{namehash}{9274938b01220e7ad4e9df7aa4c7da61}
+      \strng{fullhash}{049dc5636e38a71fee49c20174ccb23b}
+      \strng{fullhashraw}{049dc5636e38a71fee49c20174ccb23b}
+      \strng{bibnamehash}{9274938b01220e7ad4e9df7aa4c7da61}
+      \strng{authorbibnamehash}{9274938b01220e7ad4e9df7aa4c7da61}
+      \strng{authornamehash}{9274938b01220e7ad4e9df7aa4c7da61}
+      \strng{authorfullhash}{049dc5636e38a71fee49c20174ccb23b}
+      \strng{authorfullhashraw}{049dc5636e38a71fee49c20174ccb23b}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{Knižní malba Beuronské umělecké školy. Die Buchmalerei der Beuroner Kunstschule}
+      \field{title}{Liber Evangeliorum}
+      \field{titleaddon}{{\ifcurrentbaselanguage{German}{Deutsch und tschechisch. Hrsg. vom Stiftungsfonds Malakim in Zusammenarbeit mit dem Verein der Freunde der Beuroner Kunst}{German and Czech. Ed. by the Endowment fund Malakim in collaboration with the Society of Friends of Beuronese Art}}}
+      \field{year}{2016}
+      \field{dateera}{ce}
+    \endentry
+    \entry{Kappel}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=0b423d108e27e16d8e04fd89baa81895}{%
+           family={Kappel},
+           familyi={K\bibinitperiod},
+           given={Kai},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{un=0,uniquepart=base,hash=760e14d3f23d00643801e61bf97961ac}{%
+           family={Wagner},
+           familyi={W\bibinitperiod},
+           given={Velten},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Hildesheim}%
+      }
+      \list{publisher}{1}{%
+        {Quensen}%
+      }
+      \strng{namehash}{0b423d108e27e16d8e04fd89baa81895}
+      \strng{fullhash}{0b423d108e27e16d8e04fd89baa81895}
+      \strng{fullhashraw}{0b423d108e27e16d8e04fd89baa81895}
+      \strng{bibnamehash}{0b423d108e27e16d8e04fd89baa81895}
+      \strng{authorbibnamehash}{0b423d108e27e16d8e04fd89baa81895}
+      \strng{authornamehash}{0b423d108e27e16d8e04fd89baa81895}
+      \strng{authorfullhash}{0b423d108e27e16d8e04fd89baa81895}
+      \strng{authorfullhashraw}{0b423d108e27e16d8e04fd89baa81895}
+      \strng{editorbibnamehash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editornamehash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editorfullhash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editorfullhashraw}{760e14d3f23d00643801e61bf97961ac}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booksubtitle}{Peter Lenz und die Beuroner Kunstschule}
+      \field{booktitle}{Avantgardist und Malermönch}
+      \strng{crossref}{Avantgardist}
+      \field{langid}{ngerman}
+      \field{subtitle}{Die Planungen Desiderius Lenz' für die Abtei Eibingen (1898--1900)}
+      \field{title}{\enquote{Etwas Ganzes, Architektur mit bildender Kunst}}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \field{pages}{57\bibrangedash 68}
+      \range{pages}{12}
+    \endentry
+    \entry{KrinsA}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d8a93b3f83c86ce957ad398b5ed44043}{%
+           family={Krins},
+           familyi={K\bibinitperiod},
+           given={Hubert},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Beuron}%
+      }
+      \list{publisher}{1}{%
+        {Beuroner Kunstverlag}%
+      }
+      \strng{namehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{fullhash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{fullhashraw}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{bibnamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorbibnamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authornamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorfullhash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorfullhashraw}{d8a93b3f83c86ce957ad398b5ed44043}
+      \field{extraname}{1}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{ngerman}
+      \field{subtitle}{»Wie ein Lichtblick vom Himmel«}
+      \field{title}{Die Kunst der Beuroner Schule}
+      \field{year}{1998}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{KrinsB}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d8a93b3f83c86ce957ad398b5ed44043}{%
+           family={Krins},
+           familyi={K\bibinitperiod},
+           given={Hubert},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Lindenberg}%
+      }
+      \list{publisher}{1}{%
+        {Kunstverlag Josef Fink}%
+      }
+      \strng{namehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{fullhash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{fullhashraw}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{bibnamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorbibnamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authornamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorfullhash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorfullhashraw}{d8a93b3f83c86ce957ad398b5ed44043}
+      \field{extraname}{2}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{3}
+      \field{langid}{ngerman}
+      \field{title}{Gnadenkapelle und Mauruskapelle in Beuron}
+      \field{year}{2013}
+      \field{dateera}{ce}
+    \endentry
+    \entry{Pieta}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d8a93b3f83c86ce957ad398b5ed44043}{%
+           family={Krins},
+           familyi={K\bibinitperiod},
+           given={Hubert},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{un=0,uniquepart=base,hash=760e14d3f23d00643801e61bf97961ac}{%
+           family={Wagner},
+           familyi={W\bibinitperiod},
+           given={Velten},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Hildesheim}%
+      }
+      \list{publisher}{1}{%
+        {Quensen}%
+      }
+      \strng{namehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{fullhash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{fullhashraw}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{bibnamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorbibnamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authornamehash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorfullhash}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{authorfullhashraw}{d8a93b3f83c86ce957ad398b5ed44043}
+      \strng{editorbibnamehash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editornamehash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editorfullhash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editorfullhashraw}{760e14d3f23d00643801e61bf97961ac}
+      \field{extraname}{3}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booksubtitle}{Peter Lenz und die Beuroner Kunstschule}
+      \field{booktitle}{Avantgardist und Malermönch}
+      \strng{crossref}{Avantgardist}
+      \field{langid}{ngerman}
+      \field{title}{Zwei Notizen zur Pietà von St.\@ Gabriel in Prag}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \field{pages}{69\bibrangedash 72}
+      \range{pages}{4}
+    \endentry
+    \entry{Lang}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=bcb9285bf6bfd18a89d2e2e675ffce74}{%
+           family={Lang},
+           familyi={L\bibinitperiod},
+           given={Claudia},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Regensburg}%
+      }
+      \list{publisher}{1}{%
+        {Schnell \& Steiner}%
+      }
+      \strng{namehash}{bcb9285bf6bfd18a89d2e2e675ffce74}
+      \strng{fullhash}{bcb9285bf6bfd18a89d2e2e675ffce74}
+      \strng{fullhashraw}{bcb9285bf6bfd18a89d2e2e675ffce74}
+      \strng{bibnamehash}{bcb9285bf6bfd18a89d2e2e675ffce74}
+      \strng{authorbibnamehash}{bcb9285bf6bfd18a89d2e2e675ffce74}
+      \strng{authornamehash}{bcb9285bf6bfd18a89d2e2e675ffce74}
+      \strng{authorfullhash}{bcb9285bf6bfd18a89d2e2e675ffce74}
+      \strng{authorfullhashraw}{bcb9285bf6bfd18a89d2e2e675ffce74}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{ngerman}
+      \field{subtitle}{Das Kunstschaffen des Benediktinerordens unter Rückgriff auf archaische Stilelemente und gleichzeitigem Aufbruch in die Moderne}
+      \field{title}{Die Goldschmiedekunst der Beuroner Schule}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Siebenmorgen}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=344d42285e90f69702d9a1c57f96f37f}{%
+           family={Siebenmorgen},
+           familyi={S\bibinitperiod},
+           given={Harald},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Sigmaringen}%
+      }
+      \list{publisher}{1}{%
+        {Thorbecke}%
+      }
+      \strng{namehash}{344d42285e90f69702d9a1c57f96f37f}
+      \strng{fullhash}{344d42285e90f69702d9a1c57f96f37f}
+      \strng{fullhashraw}{344d42285e90f69702d9a1c57f96f37f}
+      \strng{bibnamehash}{344d42285e90f69702d9a1c57f96f37f}
+      \strng{authorbibnamehash}{344d42285e90f69702d9a1c57f96f37f}
+      \strng{authornamehash}{344d42285e90f69702d9a1c57f96f37f}
+      \strng{authorfullhash}{344d42285e90f69702d9a1c57f96f37f}
+      \strng{authorfullhashraw}{344d42285e90f69702d9a1c57f96f37f}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{ngerman}
+      \field{subtitle}{Peter Lenz und Jakob Wüger 1850--1875. Ein Beitrag zur Genese der Formabstraktion in der Moderne}
+      \field{title}{Die Anfänge der »Beuroner Kunstschule«}
+      \field{year}{1983}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Emaus}{booklet}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=fc99b91bc39489cd001714dfeb551159}{%
+           family={Simandlová},
+           familyi={S\bibinitperiod},
+           given={Klára},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{fc99b91bc39489cd001714dfeb551159}
+      \strng{fullhash}{fc99b91bc39489cd001714dfeb551159}
+      \strng{fullhashraw}{fc99b91bc39489cd001714dfeb551159}
+      \strng{bibnamehash}{fc99b91bc39489cd001714dfeb551159}
+      \strng{authorbibnamehash}{fc99b91bc39489cd001714dfeb551159}
+      \strng{authornamehash}{fc99b91bc39489cd001714dfeb551159}
+      \strng{authorfullhash}{fc99b91bc39489cd001714dfeb551159}
+      \strng{authorfullhashraw}{fc99b91bc39489cd001714dfeb551159}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{ngerman}
+      \field{subtitle}{Geschichte und Führer durch das Kloster}
+      \field{title}{Das Emaus-Kloster}
+      \field{year}{2008}
+      \field{dateera}{ce}
+    \endentry
+    \entry{Avantgardist}{collection}{}{}
+      \name{editor}{1}{}{%
+        {{un=0,uniquepart=base,hash=760e14d3f23d00643801e61bf97961ac}{%
+           family={Wagner},
+           familyi={W\bibinitperiod},
+           given={Velten},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Hildesheim}%
+      }
+      \list{publisher}{1}{%
+        {Quensen}%
+      }
+      \strng{namehash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{fullhash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{fullhashraw}{760e14d3f23d00643801e61bf97961ac}
+      \strng{bibnamehash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editorbibnamehash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editornamehash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editorfullhash}{760e14d3f23d00643801e61bf97961ac}
+      \strng{editorfullhashraw}{760e14d3f23d00643801e61bf97961ac}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{langid}{ngerman}
+      \field{subtitle}{Peter Lenz und die Beuroner Kunstschule}
+      \field{title}{Avantgardist und Malermönch}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,171 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{beck1995}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=d5148cebb18611ce1c74228c4b3f0567}{%
+           family={Beck},
+           familyi={B\bibinitperiod},
+           given={Nathaniel},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d367ae7accd68d2fe1561a556ef5904d}{%
+           family={Katz},
+           familyi={K\bibinitperiod},
+           given={Jonathan\bibnamedelima N.},
+           giveni={J\bibinitperiod\bibinitdelim N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{085e4767058b8d9a341d2f5e3348ff81}
+      \strng{fullhash}{085e4767058b8d9a341d2f5e3348ff81}
+      \strng{fullhashraw}{085e4767058b8d9a341d2f5e3348ff81}
+      \strng{bibnamehash}{085e4767058b8d9a341d2f5e3348ff81}
+      \strng{authorbibnamehash}{085e4767058b8d9a341d2f5e3348ff81}
+      \strng{authornamehash}{085e4767058b8d9a341d2f5e3348ff81}
+      \strng{authorfullhash}{085e4767058b8d9a341d2f5e3348ff81}
+      \strng{authorfullhashraw}{085e4767058b8d9a341d2f5e3348ff81}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We examine some issues in the estimation of time-series cross-section models, calling into question the conclusions of many published studies, particularly in the field of comparative political economy. We show that the generalized least squares approach of Parks produces standard errors that lead to extreme overconfidence, often underestimating variability by 50\% or more. We also provide an alternative estimator of the standard errors that is correct when the error structures show complications found in this type of model. Monte Carlo analysis shows that these ``panel-corrected standard errors'' perform well. The utility of our approach is demonstrated via a reanalysis of one ``social democratic corporatist'' model.}
+      \field{journaltitle}{American Political Science Review}
+      \field{number}{3}
+      \field{title}{What to Do (and Not to Do) with Time-Series Cross-Section Data}
+      \field{volume}{89}
+      \field{year}{1995}
+      \true{nocite}
+      \field{pages}{634\bibrangedash 647}
+      \range{pages}{14}
+    \endentry
+    \entry{lamport1994}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5d77435450d10a850a5b58577b9a456b}{%
+           family={Lamport},
+           familyi={L\bibinitperiod},
+           given={Leslie},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Reading, MA}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley}%
+      }
+      \strng{namehash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{fullhash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{fullhashraw}{5d77435450d10a850a5b58577b9a456b}
+      \strng{bibnamehash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{authorbibnamehash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{authornamehash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{authorfullhash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{authorfullhashraw}{5d77435450d10a850a5b58577b9a456b}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2}
+      \field{title}{{\LaTeX}: A Document Preparation System}
+      \field{year}{1994}
+      \true{nocite}
+    \endentry
+    \entry{riker1968}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=4fe9483688572d63994fc732ade3de7c}{%
+           family={Riker},
+           familyi={R\bibinitperiod},
+           given={William\bibnamedelima H.},
+           giveni={W\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0d13bf8f67e68aa1f1c4948298bd4052}{%
+           family={Ordeshook},
+           familyi={O\bibinitperiod},
+           given={Peter\bibnamedelima C.},
+           giveni={P\bibinitperiod\bibinitdelim C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3bd3efbb4ac3015c16f35b946ae3e01f}
+      \strng{fullhash}{3bd3efbb4ac3015c16f35b946ae3e01f}
+      \strng{fullhashraw}{3bd3efbb4ac3015c16f35b946ae3e01f}
+      \strng{bibnamehash}{3bd3efbb4ac3015c16f35b946ae3e01f}
+      \strng{authorbibnamehash}{3bd3efbb4ac3015c16f35b946ae3e01f}
+      \strng{authornamehash}{3bd3efbb4ac3015c16f35b946ae3e01f}
+      \strng{authorfullhash}{3bd3efbb4ac3015c16f35b946ae3e01f}
+      \strng{authorfullhashraw}{3bd3efbb4ac3015c16f35b946ae3e01f}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{Formalizes the individual decision to vote as $R = PB - C + D$, where $P$ is the probability of casting the decisive vote, $B$ the differential benefit between outcomes, $C$ the cost of voting, and $D$ the consumption value of the act itself. The positive $D$-term is what lets rational-choice models accommodate observed turnout; it is also where most of the subsequent theoretical debate concentrates. Still the point of departure for formal work on turnout.}
+      \field{journaltitle}{American Political Science Review}
+      \field{number}{1}
+      \field{title}{A Theory of the Calculus of Voting}
+      \field{volume}{62}
+      \field{year}{1968}
+      \true{nocite}
+      \field{pages}{25\bibrangedash 42}
+      \range{pages}{18}
+    \endentry
+    \entry{shannon1948}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=536c91678d1dde76c9acd47047556291}{%
+           family={Shannon},
+           familyi={S\bibinitperiod},
+           given={Claude\bibnamedelima E.},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{536c91678d1dde76c9acd47047556291}
+      \strng{fullhash}{536c91678d1dde76c9acd47047556291}
+      \strng{fullhashraw}{536c91678d1dde76c9acd47047556291}
+      \strng{bibnamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorbibnamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authornamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorfullhash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorfullhashraw}{536c91678d1dde76c9acd47047556291}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The recent development of various methods of modulation such as PCM and PPM which exchange bandwidth for signal-to-noise ratio has intensified the interest in a general theory of communication. A basis for such a theory is contained in the important papers of Nyquist and Hartley on this subject. In the present paper we will extend the theory to include a number of new factors, in particular the effect of noise in the channel, and the savings possible due to the statistical structure of the original message and due to the nature of the final destination of the information.}
+      \field{annotation}{Founding text of information theory. The source-coding and channel-coding theorems articulated here remain the backbone of modern telecommunications and data compression, and Shannon's probabilistic framing of information underpins much later work in statistical inference and machine learning. The two-part structure (discrete vs.\ continuous channels) still shapes how the subject is taught.}
+      \field{journaltitle}{Bell System Technical Journal}
+      \field{number}{3}
+      \field{title}{A Mathematical Theory of Communication}
+      \field{volume}{27}
+      \field{year}{1948}
+      \true{nocite}
+      \field{pages}{379\bibrangedash 423}
+      \range{pages}{45}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

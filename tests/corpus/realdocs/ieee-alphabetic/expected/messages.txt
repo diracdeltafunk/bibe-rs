@@ -1,0 +1,12 @@
+WARN - legacy year field '1986-05' in entry 'IEEEexample:techreptypeii' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1987-08' in entry 'IEEEexample:techrep' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1992-05-20' in entry 'IEEEexample:jppat' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1995-01-11' in entry 'IEEEexample:frenchpatreq' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1995-09/1995-10' in entry 'IEEEexample:articledualmonths' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1996-08' in entry 'IEEEexample:periodical' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1997-09-16' in entry 'IEEEexample:uspat' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1999-01' in entry 'IEEEexample:masterstype' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1999-03' in entry 'IEEEexample:confwithvolume' is not an integer - this will probably not sort properly.
+WARN - legacy year field '1999-12-05/1999-12-09' in entry 'IEEEexample:confwithadddays' is not an integer - this will probably not sort properly.
+WARN - legacy year field '2000-05' in entry 'IEEEexample:phdurl' is not an integer - this will probably not sort properly.
+WARN - legacy year field '2002-10' in entry 'IEEEexample:techrepstdsub' is not an integer - this will probably not sort properly.

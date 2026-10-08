@@ -1,0 +1,1589 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{IEEEexample:incollectionwithseries}{inbook}{}{}
+      \name{author}{2}{}{%
+        {{hash=94cdb735ba460238c967b823514c5283}{%
+           family={Anderson},
+           familyi={A\bibinitperiod},
+           given={J.\bibnamedelimi B.},
+           giveni={J\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=0aa1d1aceb45479a6847acea01dfe563}{%
+           family={Tepe},
+           familyi={T\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Springer-Verlag}%
+      }
+      \strng{namehash}{23d67f3aa9231e74ae982bcc053a0136}
+      \strng{fullhash}{23d67f3aa9231e74ae982bcc053a0136}
+      \strng{fullhashraw}{23d67f3aa9231e74ae982bcc053a0136}
+      \strng{bibnamehash}{23d67f3aa9231e74ae982bcc053a0136}
+      \strng{authorbibnamehash}{23d67f3aa9231e74ae982bcc053a0136}
+      \strng{authornamehash}{23d67f3aa9231e74ae982bcc053a0136}
+      \strng{authorfullhash}{23d67f3aa9231e74ae982bcc053a0136}
+      \strng{authorfullhashraw}{23d67f3aa9231e74ae982bcc053a0136}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Codes, Systems and Graphical Models}
+      \field{series}{{IMA} Volumes in Mathematics and Its Applications}
+      \field{title}{Properties of the Tailbiting {BCJR} Decoder}
+      \field{year}{2000}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:inbookpagesnote}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=813f9a697ad91522a9f12c089258e1b4}{%
+           family={Bul},
+           familyi={B\bibinitperiod},
+           given={B.\bibnamedelimi K.},
+           giveni={B\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Moscow}%
+      }
+      \list{publisher}{1}{%
+        {Energia Press}%
+      }
+      \strng{namehash}{813f9a697ad91522a9f12c089258e1b4}
+      \strng{fullhash}{813f9a697ad91522a9f12c089258e1b4}
+      \strng{fullhashraw}{813f9a697ad91522a9f12c089258e1b4}
+      \strng{bibnamehash}{813f9a697ad91522a9f12c089258e1b4}
+      \strng{authorbibnamehash}{813f9a697ad91522a9f12c089258e1b4}
+      \strng{authornamehash}{813f9a697ad91522a9f12c089258e1b4}
+      \strng{authorfullhash}{813f9a697ad91522a9f12c089258e1b4}
+      \strng{authorfullhashraw}{813f9a697ad91522a9f12c089258e1b4}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{(in Russian)}
+      \field{title}{Theory Principles and Design of Magnetic Circuits}
+      \field{year}{1964}
+      \true{nocite}
+      \field{pages}{464}
+      \range{pages}{1}
+    \endentry
+    \entry{IEEEexample:bookwitheditor}{book}{}{}
+      \name{editor}{2}{}{%
+        {{hash=3e96d01e2791b38b0d243dfda1bf488c}{%
+           family={Candy},
+           familyi={C\bibinitperiod},
+           given={J.\bibnamedelimi C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=368635ce81970322161017a87db78ac2}{%
+           family={Temes},
+           familyi={T\bibinitperiod},
+           given={G.\bibnamedelimi C.},
+           giveni={G\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {{IEEE} Press.}%
+      }
+      \strng{namehash}{3ed9139a1091f8601bd256ffccf3ab69}
+      \strng{fullhash}{3ed9139a1091f8601bd256ffccf3ab69}
+      \strng{fullhashraw}{3ed9139a1091f8601bd256ffccf3ab69}
+      \strng{bibnamehash}{3ed9139a1091f8601bd256ffccf3ab69}
+      \strng{editorbibnamehash}{3ed9139a1091f8601bd256ffccf3ab69}
+      \strng{editornamehash}{3ed9139a1091f8601bd256ffccf3ab69}
+      \strng{editorfullhash}{3ed9139a1091f8601bd256ffccf3ab69}
+      \strng{editorfullhashraw}{3ed9139a1091f8601bd256ffccf3ab69}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{title}{Oversampling Delta-Sigma Data Converters Theory, Design and Simulation}
+      \field{year}{1992}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:bookwithseriesvolume}{book}{}{}
+      \name{editor}{1}{}{%
+        {{hash=3299e45e98b339812b9798c47f997b51}{%
+           family={Breckling},
+           familyi={B\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Germany}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{3299e45e98b339812b9798c47f997b51}
+      \strng{fullhash}{3299e45e98b339812b9798c47f997b51}
+      \strng{fullhashraw}{3299e45e98b339812b9798c47f997b51}
+      \strng{bibnamehash}{3299e45e98b339812b9798c47f997b51}
+      \strng{editorbibnamehash}{3299e45e98b339812b9798c47f997b51}
+      \strng{editornamehash}{3299e45e98b339812b9798c47f997b51}
+      \strng{editorfullhash}{3299e45e98b339812b9798c47f997b51}
+      \strng{editorfullhashraw}{3299e45e98b339812b9798c47f997b51}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{series}{Lecture Notes in Statistics}
+      \field{title}{The Analysis of Directional Time Series: Applications to Wind Speed and Direction}
+      \field{volume}{61}
+      \field{year}{1989}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:articlelargepages}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=dbd136a6f6d8cf561ba8c8a1f3beb5e5}{%
+           family={Castaldini},
+           familyi={C\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=951a84f769c97aa2dc26a6b017282d6c}{%
+           family={Cavallini},
+           familyi={C\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=b301c32721e63b36aa3cb768108cecaf}{%
+           family={Fraboni},
+           familyi={F\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=7fec3f466a850dad195e4b827a58202e}{%
+           family={Fernandez},
+           familyi={F\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=bd8a0e420b48b9cdc5bdd7be997445a9}{%
+           family={Piqueras},
+           familyi={P\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{05d2080b881fb362847e19c460e4c3d6}
+      \strng{fullhash}{c8c80a872da2ca50b0655601c766f4e7}
+      \strng{fullhashraw}{c8c80a872da2ca50b0655601c766f4e7}
+      \strng{bibnamehash}{c8c80a872da2ca50b0655601c766f4e7}
+      \strng{authorbibnamehash}{c8c80a872da2ca50b0655601c766f4e7}
+      \strng{authornamehash}{05d2080b881fb362847e19c460e4c3d6}
+      \strng{authorfullhash}{c8c80a872da2ca50b0655601c766f4e7}
+      \strng{authorfullhashraw}{c8c80a872da2ca50b0655601c766f4e7}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Phys. Rev. B.}
+      \field{number}{23}
+      \field{title}{Midgap Traps Related to Compensation Processes in {CdTe} Alloys}
+      \field{volume}{56}
+      \field{year}{1997}
+      \true{nocite}
+      \field{pages}{14897\bibrangedash 14900}
+      \range{pages}{4}
+    \endentry
+    \entry{IEEEexample:articlearticlenumber}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=7f498b2b44d58734fc05fed702c13e33}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Xiaofei},
+           giveni={X\bibinitperiod}}}%
+        {{hash=51347346b2a6a63c7687744107d98c0a}{%
+           family={Cao},
+           familyi={C\bibinitperiod},
+           given={Weijia},
+           giveni={W\bibinitperiod}}}%
+        {{hash=412e1388b73ef19ade8c52ca3431f84c}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={Yao},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=59d949502d65c030576706083dcd7a6d}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Yicong},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{9a9a70391571bd35d39ad1cfb303d0ea}
+      \strng{fullhash}{61175bfa7059ed1592a760dd7c68b6f1}
+      \strng{fullhashraw}{61175bfa7059ed1592a760dd7c68b6f1}
+      \strng{bibnamehash}{61175bfa7059ed1592a760dd7c68b6f1}
+      \strng{authorbibnamehash}{61175bfa7059ed1592a760dd7c68b6f1}
+      \strng{authornamehash}{9a9a70391571bd35d39ad1cfb303d0ea}
+      \strng{authorfullhash}{61175bfa7059ed1592a760dd7c68b6f1}
+      \strng{authorfullhashraw}{61175bfa7059ed1592a760dd7c68b6f1}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eid}{5528715}
+      \field{journaltitle}{IEEE Trans. Geosci. Remote Sens.}
+      \field{title}{Hyperspectral Image Transformer Classification Networks}
+      \field{volume}{60}
+      \field{year}{2022}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.1109/TGRS.2022.3171551
+      \endverb
+    \endentry
+    \entry{IEEEexample:TBPmisc}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=f505f60174393253876cad69c835200c}{%
+           family={Coates},
+           familyi={C\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=6d228d022e78bc98d745bfc152757836}{%
+           family={Hero},
+           familyi={H\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=3c741ec940f16542ae177e2396990384}{%
+           family={Nowak},
+           familyi={N\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=157b76b236652cb9356cda33d2182911}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{d2d9383818bdc666b51794af4b7d3aac}
+      \strng{fullhash}{3ffbca061af73d494828348a259d7928}
+      \strng{fullhashraw}{3ffbca061af73d494828348a259d7928}
+      \strng{bibnamehash}{3ffbca061af73d494828348a259d7928}
+      \strng{authorbibnamehash}{3ffbca061af73d494828348a259d7928}
+      \strng{authornamehash}{d2d9383818bdc666b51794af4b7d3aac}
+      \strng{authorfullhash}{3ffbca061af73d494828348a259d7928}
+      \strng{authorfullhashraw}{3ffbca061af73d494828348a259d7928}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE J. Selected Areas Commun.}
+      \field{month}{05}
+      \field{note}{to be published}
+      \field{title}{Internet Tomography}
+      \field{year}{2002}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:book_typical}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=381a87a0ac1c7336c9343ac57d754305}{%
+           family={Cullity},
+           familyi={C\bibinitperiod},
+           given={B.\bibnamedelimi D.},
+           giveni={B\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Reading, MA}%
+      }
+      \list{publisher}{1}{%
+        {Addison--Wesley}%
+      }
+      \strng{namehash}{381a87a0ac1c7336c9343ac57d754305}
+      \strng{fullhash}{381a87a0ac1c7336c9343ac57d754305}
+      \strng{fullhashraw}{381a87a0ac1c7336c9343ac57d754305}
+      \strng{bibnamehash}{381a87a0ac1c7336c9343ac57d754305}
+      \strng{authorbibnamehash}{381a87a0ac1c7336c9343ac57d754305}
+      \strng{authornamehash}{381a87a0ac1c7336c9343ac57d754305}
+      \strng{authorfullhash}{381a87a0ac1c7336c9343ac57d754305}
+      \strng{authorfullhashraw}{381a87a0ac1c7336c9343ac57d754305}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Introduction to Magnetic Materials}
+      \field{year}{1972}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:incollectionmanyauthors}{inbook}{}{}
+      \name{author}{21}{}{%
+        {{hash=b74b36850ecdbcf7596fd375a3b18b8e}{%
+           family={Dawson},
+           familyi={D\bibinitperiod},
+           given={R.\bibnamedelimi M.\bibnamedelimi A.},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=fa9a5ae7001bbfe887613744eabf475f}{%
+           family={Shen},
+           familyi={S\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=6c9e5b2f9903ea17e7bae3fa03df26fb}{%
+           family={Furst},
+           familyi={F\bibinitperiod},
+           given={D.\bibnamedelimi A.},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=3edc9028bcaab791b8790713cf82d280}{%
+           family={Connor},
+           familyi={C\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=a0500bbf3611a2701c42d5a654c84732}{%
+           family={Hsu},
+           familyi={H\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=694bdeae885457e1d5c0aa6da7eb9069}{%
+           family={Kane},
+           familyi={K\bibinitperiod},
+           given={M.\bibnamedelimi G.},
+           giveni={M\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=12435deb788b59b47f93d9f65e9a1258}{%
+           family={Stewart},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi G.},
+           giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=cba11d817ade8f0ab0d4f405f3ef56d9}{%
+           family={Ipri},
+           familyi={I\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=2d7c4cdb9866581778f9894c003c9f4e}{%
+           family={King},
+           familyi={K\bibinitperiod},
+           given={C.\bibnamedelimi N.},
+           giveni={C\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=df7e76ce42b41cd02174262e9b5b2bc0}{%
+           family={Green},
+           familyi={G\bibinitperiod},
+           given={P.\bibnamedelimi J.},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=d3a25a709f8035155fd831e3dddf5c0b}{%
+           family={Flegal},
+           familyi={F\bibinitperiod},
+           given={R.\bibnamedelimi T.},
+           giveni={R\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=590639224ce494528b9a1f8121a76f10}{%
+           family={Pearson},
+           familyi={P\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=a94a1f761e1a18278be93a9e249ed68c}{%
+           family={Barrow},
+           familyi={B\bibinitperiod},
+           given={W.\bibnamedelimi A.},
+           giveni={W\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=05d86f3ce8a689376331ef1b5a8d2998}{%
+           family={Dickey},
+           familyi={D\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+        {{hash=67655def7c5b2f9c869f9bb0aa3b2e08}{%
+           family={Ping},
+           familyi={P\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=36ae907241a1c53d855cc3f543e02166}{%
+           family={Tang},
+           familyi={T\bibinitperiod},
+           given={C.\bibnamedelimi W.},
+           giveni={C\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=02553786d4f59e167b27d5f3415d3a5f}{%
+           family={Slyke},
+           familyi={S\bibinitperiod},
+           given={S.\bibnamedelimi Van.},
+           giveni={S\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=4e6fe5946a342625d61c1d8e3370d779}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=3b3d8a7d315744c8cea7f094e48581d2}{%
+           family={Shi},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=097399e60aa43df9fe7943b85cd42364}{%
+           family={Sturm},
+           familyi={S\bibinitperiod},
+           given={J.\bibnamedelimi C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=87acb21284c01365aa068ad671dd9bdb}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={M.\bibnamedelimi H.},
+           giveni={M\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{75315911ac3b4cf7e5cca5551b25b25b}
+      \strng{fullhash}{d8b328c29b7809ba553a19d355573ba1}
+      \strng{fullhashraw}{d8b328c29b7809ba553a19d355573ba1}
+      \strng{bibnamehash}{75315911ac3b4cf7e5cca5551b25b25b}
+      \strng{authorbibnamehash}{75315911ac3b4cf7e5cca5551b25b25b}
+      \strng{authornamehash}{75315911ac3b4cf7e5cca5551b25b25b}
+      \strng{authorfullhash}{d8b328c29b7809ba553a19d355573ba1}
+      \strng{authorfullhashraw}{d8b328c29b7809ba553a19d355573ba1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{{SID} Tech. Dig.}
+      \field{title}{Design of an Improved Pixel for a Polysilicon Active-Matrix Organic {LED} Display}
+      \field{volume}{29}
+      \field{year}{1998}
+      \true{nocite}
+      \field{pages}{11\bibrangedash 14}
+      \range{pages}{4}
+    \endentry
+    \entry{IEEEexample:repeatedauthorone}{inbook}{}{}
+      \name{author}{3}{}{%
+        {{hash=e71856544013998a6afdb111ae37b021}{%
+           family={Dai},
+           familyi={D\bibinitperiod},
+           given={W.},
+           giveni={W\bibinitperiod}}}%
+        {{hash=c55ce4081da9eeddac170e92ce916841}{%
+           family={Pham},
+           familyi={P\bibinitperiod},
+           given={H.\bibnamedelimi V.},
+           giveni={H\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=e05af46d8e8891d1005431bdb5dd29fc}{%
+           family={Milenkovic},
+           familyi={M\bibinitperiod},
+           given={O.},
+           giveni={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{c433488cb731f339aa39d414c67b8603}
+      \strng{fullhash}{5e2c0f39876d76299c4414de40d64782}
+      \strng{fullhashraw}{5e2c0f39876d76299c4414de40d64782}
+      \strng{bibnamehash}{5e2c0f39876d76299c4414de40d64782}
+      \strng{authorbibnamehash}{5e2c0f39876d76299c4414de40d64782}
+      \strng{authornamehash}{c433488cb731f339aa39d414c67b8603}
+      \strng{authorfullhash}{5e2c0f39876d76299c4414de40d64782}
+      \strng{authorfullhashraw}{5e2c0f39876d76299c4414de40d64782}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IEEE Information Theory Workshop on Networking and Information Theory}
+      \field{title}{Distortion-rate functions for quantized compressive sensing}
+      \field{year}{2009}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:repeatedauthortwo}{inbook}{}{}
+      \name{author}{3}{}{%
+        {{hash=e71856544013998a6afdb111ae37b021}{%
+           family={Dai},
+           familyi={D\bibinitperiod},
+           given={W.},
+           giveni={W\bibinitperiod}}}%
+        {{hash=c55ce4081da9eeddac170e92ce916841}{%
+           family={Pham},
+           familyi={P\bibinitperiod},
+           given={H.\bibnamedelimi V.},
+           giveni={H\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=e05af46d8e8891d1005431bdb5dd29fc}{%
+           family={Milenkovic},
+           familyi={M\bibinitperiod},
+           given={O.},
+           giveni={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{c433488cb731f339aa39d414c67b8603}
+      \strng{fullhash}{5e2c0f39876d76299c4414de40d64782}
+      \strng{fullhashraw}{5e2c0f39876d76299c4414de40d64782}
+      \strng{bibnamehash}{5e2c0f39876d76299c4414de40d64782}
+      \strng{authorbibnamehash}{5e2c0f39876d76299c4414de40d64782}
+      \strng{authornamehash}{c433488cb731f339aa39d414c67b8603}
+      \strng{authorfullhash}{5e2c0f39876d76299c4414de40d64782}
+      \strng{authorfullhashraw}{5e2c0f39876d76299c4414de40d64782}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IEEE Information Theory Workshop on Networking and Information Theory}
+      \field{title}{comparative study of quantized compressive sensing schemes}
+      \field{year}{2009}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:presentedatconf}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=e3025eaf963ea763f7a4e7af1e6b2c9e}{%
+           family={Finn},
+           familyi={F\bibinitperiod},
+           given={S.\bibnamedelimi G.},
+           giveni={S\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=a659d6d46520f2464ee381a78a518332}{%
+           family={Médard},
+           familyi={M\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=4743ab5c53bf47fa17d99bd329aeafd7}{%
+           family={Barry},
+           familyi={B\bibinitperiod},
+           given={R.\bibnamedelimi A.},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Montreal, Que., Canada}%
+      }
+      \strng{namehash}{f337283e0874e3c206d4e3f2975a45e2}
+      \strng{fullhash}{c3f5fccb52469deb86eb23eb6c08a744}
+      \strng{fullhashraw}{c3f5fccb52469deb86eb23eb6c08a744}
+      \strng{bibnamehash}{c3f5fccb52469deb86eb23eb6c08a744}
+      \strng{authorbibnamehash}{c3f5fccb52469deb86eb23eb6c08a744}
+      \strng{authornamehash}{f337283e0874e3c206d4e3f2975a45e2}
+      \strng{authorfullhash}{c3f5fccb52469deb86eb23eb6c08a744}
+      \strng{authorfullhashraw}{c3f5fccb52469deb86eb23eb6c08a744}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eventtitle}{{IEEE} International Conference on Communications}
+      \field{title}{A Novel Approach to Automatic Protection Switching Using Trees}
+      \field{year}{1997}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:motmanual}{manual}{}{}
+      \list{organization}{1}{%
+        {Motorola}%
+      }
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{title}{{FLEXChip} Signal Processor ({MC68175/D})}
+      \field{year}{1996}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:incollection_chpp}{inbook}{}{}
+      \name{author}{3}{}{%
+        {{hash=52119c54432071924fc17d518a20436a}{%
+           family={Hedelin},
+           familyi={H\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=5c2147ba904e68761f439627987be11a}{%
+           family={Knagenhjelm},
+           familyi={K\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=f8235caa3e320e23130ce557f5f20b66}{%
+           family={Skoglund},
+           familyi={S\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=cc80b933a515f905fccc1d07cf27c800}{%
+           family={Kleijn},
+           familyi={K\bibinitperiod},
+           given={W.\bibnamedelimi B.},
+           giveni={W\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=60753453ff63d457a476446baecfa5cc}{%
+           family={Paliwal},
+           familyi={P\bibinitperiod},
+           given={K.\bibnamedelimi K.},
+           giveni={K\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Amsterdam, The Netherlands}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier Science}%
+      }
+      \strng{namehash}{73e201e067c03270774f2673f21a6b79}
+      \strng{fullhash}{84c31794225ec4d7c21cd2b674c08987}
+      \strng{fullhashraw}{84c31794225ec4d7c21cd2b674c08987}
+      \strng{bibnamehash}{84c31794225ec4d7c21cd2b674c08987}
+      \strng{authorbibnamehash}{84c31794225ec4d7c21cd2b674c08987}
+      \strng{authornamehash}{73e201e067c03270774f2673f21a6b79}
+      \strng{authorfullhash}{84c31794225ec4d7c21cd2b674c08987}
+      \strng{authorfullhashraw}{84c31794225ec4d7c21cd2b674c08987}
+      \strng{editorbibnamehash}{1759948d7aa1f63769a496bd19979d8e}
+      \strng{editornamehash}{1759948d7aa1f63769a496bd19979d8e}
+      \strng{editorfullhash}{1759948d7aa1f63769a496bd19979d8e}
+      \strng{editorfullhashraw}{1759948d7aa1f63769a496bd19979d8e}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Speech Coding and Synthesis}
+      \field{chapter}{10}
+      \field{title}{Theory for Transmission of Vector Quantization Data}
+      \field{year}{1995}
+      \true{nocite}
+      \field{pages}{347\bibrangedash 396}
+      \range{pages}{50}
+    \endentry
+    \entry{IEEEexample:jppat}{patent}{}{}
+      \name{author}{1}{}{%
+        {{hash=8584fa2e87a42095224162d7f7c2c40c}{%
+           family={Hideki},
+           familyi={H\bibinitperiod},
+           given={U.},
+           giveni={U\bibinitperiod}}}%
+      }
+      \strng{namehash}{8584fa2e87a42095224162d7f7c2c40c}
+      \strng{fullhash}{8584fa2e87a42095224162d7f7c2c40c}
+      \strng{fullhashraw}{8584fa2e87a42095224162d7f7c2c40c}
+      \strng{bibnamehash}{8584fa2e87a42095224162d7f7c2c40c}
+      \strng{authorbibnamehash}{8584fa2e87a42095224162d7f7c2c40c}
+      \strng{authornamehash}{8584fa2e87a42095224162d7f7c2c40c}
+      \strng{authorfullhash}{8584fa2e87a42095224162d7f7c2c40c}
+      \strng{authorfullhashraw}{8584fa2e87a42095224162d7f7c2c40c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{152932/92}
+      \field{title}{Quadrature Modulation Circuit}
+      \field{type}{patentjp}
+      \field{year}{1992-05-20}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:periodical}{periodical}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{title}{IEEE Personal Commun. Mag., Special Issue on Wireless {ATM}}
+      \field{volume}{3}
+      \field{year}{1996-08}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:standard}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{{IEEE} Std. 802.11}
+      \field{title}{Wireless {LAN} Medium Access Control {(MAC)} and Physical Layer {(PHY)} Specification}
+      \field{year}{1997}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:electronhowinfo}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=a25d21ec614ebedb82800ec385049ac1}{%
+           family={Jacobson},
+           familyi={J\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{a25d21ec614ebedb82800ec385049ac1}
+      \strng{fullhash}{a25d21ec614ebedb82800ec385049ac1}
+      \strng{fullhashraw}{a25d21ec614ebedb82800ec385049ac1}
+      \strng{bibnamehash}{a25d21ec614ebedb82800ec385049ac1}
+      \strng{authorbibnamehash}{a25d21ec614ebedb82800ec385049ac1}
+      \strng{authornamehash}{a25d21ec614ebedb82800ec385049ac1}
+      \strng{authorfullhash}{a25d21ec614ebedb82800ec385049ac1}
+      \strng{authorfullhashraw}{a25d21ec614ebedb82800ec385049ac1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{end2end-interest mailing list}
+      \field{title}{Modified {TCP} Congestion Avoidance Algorithm}
+      \field{urlmonth}{4}
+      \field{urlyear}{1990}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb ftp://ftp.isi.edu/end2end/end2end-interest-1990.mail
+      \endverb
+      \verb{url}
+      \verb ftp://ftp.isi.edu/end2end/end2end-interest-1990.mail
+      \endverb
+    \endentry
+    \entry{IEEEexample:techrep}{report}{}{}
+      \name{author}{3}{}{%
+        {{hash=cca40f5feee47612fde3401ff9243dd0}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=7c6c08c52f1ffd02fc65a88adbee1e4f}{%
+           family={Ramakrishnan},
+           familyi={R\bibinitperiod},
+           given={K.\bibnamedelimi K.},
+           giveni={K\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=ed0ddc72616219accf3000544bc13468}{%
+           family={Chiu},
+           familyi={C\bibinitperiod},
+           given={D.\bibnamedelimi M.},
+           giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Digital Equipment Corporation}%
+      }
+      \list{location}{1}{%
+        {MA}%
+      }
+      \strng{namehash}{85e6588cb2d574b12a46dd46e13529be}
+      \strng{fullhash}{acf00789c1ab327cceea4335a203728c}
+      \strng{fullhashraw}{acf00789c1ab327cceea4335a203728c}
+      \strng{bibnamehash}{acf00789c1ab327cceea4335a203728c}
+      \strng{authorbibnamehash}{acf00789c1ab327cceea4335a203728c}
+      \strng{authornamehash}{85e6588cb2d574b12a46dd46e13529be}
+      \strng{authorfullhash}{acf00789c1ab327cceea4335a203728c}
+      \strng{authorfullhashraw}{acf00789c1ab327cceea4335a203728c}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{DEC-TR-506}
+      \field{title}{Congestion Avoidance in Computer Networks with a Connectionless Network Layer}
+      \field{type}{techreport}
+      \field{year}{1987-08}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:TBParticle}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=9e77aa5d4ba85e1aa82f1ee190a75f72}{%
+           family={Kahale},
+           familyi={K\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=56a2b7be4c43a3e739a7ebbfc700125d}{%
+           family={Urbanke},
+           familyi={U\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{6a5d180984a37fa3b6346e9a84176c4b}
+      \strng{fullhash}{6a5d180984a37fa3b6346e9a84176c4b}
+      \strng{fullhashraw}{6a5d180984a37fa3b6346e9a84176c4b}
+      \strng{bibnamehash}{6a5d180984a37fa3b6346e9a84176c4b}
+      \strng{authorbibnamehash}{6a5d180984a37fa3b6346e9a84176c4b}
+      \strng{authornamehash}{6a5d180984a37fa3b6346e9a84176c4b}
+      \strng{authorfullhash}{6a5d180984a37fa3b6346e9a84176c4b}
+      \strng{authorfullhashraw}{6a5d180984a37fa3b6346e9a84176c4b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Trans. Inf. Theory}
+      \field{note}{submitted for publication}
+      \field{title}{On the Minimum Distance of Parallel and Serially Concatenated Codes}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:techrepstdsub}{report}{}{}
+      \name{author}{1}{}{%
+        {{hash=e13f9a75da27fcf2fb4ca57495293abd}{%
+           family={Kandala},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {{IEEE} 802.11 {TGe}}%
+      }
+      \strng{namehash}{e13f9a75da27fcf2fb4ca57495293abd}
+      \strng{fullhash}{e13f9a75da27fcf2fb4ca57495293abd}
+      \strng{fullhashraw}{e13f9a75da27fcf2fb4ca57495293abd}
+      \strng{bibnamehash}{e13f9a75da27fcf2fb4ca57495293abd}
+      \strng{authorbibnamehash}{e13f9a75da27fcf2fb4ca57495293abd}
+      \strng{authornamehash}{e13f9a75da27fcf2fb4ca57495293abd}
+      \strng{authorfullhash}{e13f9a75da27fcf2fb4ca57495293abd}
+      \strng{authorfullhashraw}{e13f9a75da27fcf2fb4ca57495293abd}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{02/680r0}
+      \field{title}{Changes to {A}nnex {D}}
+      \field{type}{techreport}
+      \field{year}{2002-10}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:masterstype}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{hash=10fe746d549e045afc0d6e239f5915cf}{%
+           family={Karnik},
+           familyi={K\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Indian Institute of Science}%
+      }
+      \list{location}{1}{%
+        {Bangalore, India}%
+      }
+      \strng{namehash}{10fe746d549e045afc0d6e239f5915cf}
+      \strng{fullhash}{10fe746d549e045afc0d6e239f5915cf}
+      \strng{fullhashraw}{10fe746d549e045afc0d6e239f5915cf}
+      \strng{bibnamehash}{10fe746d549e045afc0d6e239f5915cf}
+      \strng{authorbibnamehash}{10fe746d549e045afc0d6e239f5915cf}
+      \strng{authornamehash}{10fe746d549e045afc0d6e239f5915cf}
+      \strng{authorfullhash}{10fe746d549e045afc0d6e239f5915cf}
+      \strng{authorfullhashraw}{10fe746d549e045afc0d6e239f5915cf}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Performance of {TCP} Congestion Control with Rate Feedback: {TCP/ABR} and Rate Adaptive {TCP/IP}}
+      \field{type}{M. Eng. thesis}
+      \field{year}{1999-01}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:frenchpatreq}{patent}{}{}
+      \name{author}{2}{}{%
+        {{hash=5d57ca2b859006d0c025c9688fa56e92}{%
+           family={Kowalik},
+           familyi={K\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=da95c854234834b882d60d205bb17fe0}{%
+           family={Isard},
+           familyi={I\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {french}%
+      }
+      \strng{namehash}{05d68af28ca0f82e303ce6315a3f857f}
+      \strng{fullhash}{05d68af28ca0f82e303ce6315a3f857f}
+      \strng{fullhashraw}{05d68af28ca0f82e303ce6315a3f857f}
+      \strng{bibnamehash}{05d68af28ca0f82e303ce6315a3f857f}
+      \strng{authorbibnamehash}{05d68af28ca0f82e303ce6315a3f857f}
+      \strng{authornamehash}{05d68af28ca0f82e303ce6315a3f857f}
+      \strng{authorfullhash}{05d68af28ca0f82e303ce6315a3f857f}
+      \strng{authorfullhashraw}{05d68af28ca0f82e303ce6315a3f857f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{9500261}
+      \field{title}{Estimateur d'un Défaut de Fonctionnement d'un Modulateur en Quadrature et Étage de Modulation l'Utilisant}
+      \field{type}{French Patent Request}
+      \field{year}{1995-01-11}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:phdurl}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{hash=34eb0d3545d5a6175d27a342936002b1}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Q.},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Univ. of Delaware}%
+      }
+      \list{location}{1}{%
+        {Newark, NJ}%
+      }
+      \strng{namehash}{34eb0d3545d5a6175d27a342936002b1}
+      \strng{fullhash}{34eb0d3545d5a6175d27a342936002b1}
+      \strng{fullhashraw}{34eb0d3545d5a6175d27a342936002b1}
+      \strng{bibnamehash}{34eb0d3545d5a6175d27a342936002b1}
+      \strng{authorbibnamehash}{34eb0d3545d5a6175d27a342936002b1}
+      \strng{authornamehash}{34eb0d3545d5a6175d27a342936002b1}
+      \strng{authorfullhash}{34eb0d3545d5a6175d27a342936002b1}
+      \strng{authorfullhashraw}{34eb0d3545d5a6175d27a342936002b1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Delay Characterization and Performance Control of Wide-area Networks}
+      \field{type}{phdthesis}
+      \field{year}{2000-05}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://www.ece.udel.edu/~qli
+      \endverb
+      \verb{url}
+      \verb http://www.ece.udel.edu/~qli
+      \endverb
+    \endentry
+    \entry{IEEEexample:masters}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{hash=c8d4e3140646ce7b9e17e34f6a89be40}{%
+           family={Loh},
+           familyi={L\bibinitperiod},
+           given={Nin\bibnamedelima C.},
+           giveni={N\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Massachusetts Institute of Technology}%
+      }
+      \list{location}{1}{%
+        {Cambridge, MA}%
+      }
+      \strng{namehash}{c8d4e3140646ce7b9e17e34f6a89be40}
+      \strng{fullhash}{c8d4e3140646ce7b9e17e34f6a89be40}
+      \strng{fullhashraw}{c8d4e3140646ce7b9e17e34f6a89be40}
+      \strng{bibnamehash}{c8d4e3140646ce7b9e17e34f6a89be40}
+      \strng{authorbibnamehash}{c8d4e3140646ce7b9e17e34f6a89be40}
+      \strng{authornamehash}{c8d4e3140646ce7b9e17e34f6a89be40}
+      \strng{authorfullhash}{c8d4e3140646ce7b9e17e34f6a89be40}
+      \strng{authorfullhashraw}{c8d4e3140646ce7b9e17e34f6a89be40}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{High-Resolution Micromachined Interferometric Accelerometer}
+      \field{type}{mathesis}
+      \field{year}{1992}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:electronorgadd}{online}{}{}
+      \name{author}{2}{}{%
+        {{hash=42ace3506b6fe98bf5a8012588fc83e8}{%
+           family={Lorenz},
+           familyi={L\bibinitperiod},
+           given={D.\bibnamedelimi H.},
+           giveni={D\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=b76ed0113b9a5744de91f182e9101df9}{%
+           family={Orda},
+           familyi={O\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Dept. Elect. Eng., Technion}%
+      }
+      \list{location}{1}{%
+        {Haifa, Israel}%
+      }
+      \strng{namehash}{d62d323d244fa9d7aed9143b23729bad}
+      \strng{fullhash}{d62d323d244fa9d7aed9143b23729bad}
+      \strng{fullhashraw}{d62d323d244fa9d7aed9143b23729bad}
+      \strng{bibnamehash}{d62d323d244fa9d7aed9143b23729bad}
+      \strng{authorbibnamehash}{d62d323d244fa9d7aed9143b23729bad}
+      \strng{authornamehash}{d62d323d244fa9d7aed9143b23729bad}
+      \strng{authorfullhash}{d62d323d244fa9d7aed9143b23729bad}
+      \strng{authorfullhashraw}{d62d323d244fa9d7aed9143b23729bad}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Optimal Partition of {QoS} Requirements on Unicast Paths and Multicast Trees}
+      \field{urlmonth}{7}
+      \field{urlyear}{1998}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb ftp://ftp.technion.ac.il/pub/supported/ee/Network/lor.mopq98.ps
+      \endverb
+      \verb{url}
+      \verb ftp://ftp.technion.ac.il/pub/supported/ee/Network/lor.mopq98.ps
+      \endverb
+    \endentry
+    \entry{IEEEexample:book}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=a7ca7cf4783f7271b703501b0f46a412}{%
+           family={Metev},
+           familyi={M\bibinitperiod},
+           given={S.\bibnamedelimi M.},
+           giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=76c484077994dfba1c8c875b6fd0764b}{%
+           family={Veiko},
+           familyi={V\bibinitperiod},
+           given={V.\bibnamedelimi P.},
+           giveni={V\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=9ed2085980bfddddd6296f0915e40ffa}{%
+           family={Osgood},
+           familyi={O\bibinitperiod},
+           given={R.\bibnamedelimi M.},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod},
+           suffix={Jr.},
+           suffixi={J\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Germany}%
+      }
+      \list{publisher}{1}{%
+        {Springer-Verlag}%
+      }
+      \strng{namehash}{5436d4b67088f3e24892e48038003b37}
+      \strng{fullhash}{5436d4b67088f3e24892e48038003b37}
+      \strng{fullhashraw}{5436d4b67088f3e24892e48038003b37}
+      \strng{bibnamehash}{5436d4b67088f3e24892e48038003b37}
+      \strng{authorbibnamehash}{5436d4b67088f3e24892e48038003b37}
+      \strng{authornamehash}{5436d4b67088f3e24892e48038003b37}
+      \strng{authorfullhash}{5436d4b67088f3e24892e48038003b37}
+      \strng{authorfullhashraw}{5436d4b67088f3e24892e48038003b37}
+      \strng{editorbibnamehash}{9ed2085980bfddddd6296f0915e40ffa}
+      \strng{editornamehash}{9ed2085980bfddddd6296f0915e40ffa}
+      \strng{editorfullhash}{9ed2085980bfddddd6296f0915e40ffa}
+      \strng{editorfullhashraw}{9ed2085980bfddddd6296f0915e40ffa}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2}
+      \field{title}{Laser Assisted Microtechnology}
+      \field{year}{1998}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:techreptypeii}{report}{}{}
+      \name{author}{2}{}{%
+        {{hash=304087496a673dac5fddb67ea897023b}{%
+           family={Middleton},
+           familyi={M\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=b19f072dcc067b3ce80353d09afc712c}{%
+           family={Spaulding},
+           familyi={S\bibinitperiod},
+           given={A.\bibnamedelimi D.},
+           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{institution}{2}{%
+        {National Telecommunications}%
+        {Information Administration ({NTIA}), U.S. Dept. of Commerce}%
+      }
+      \strng{namehash}{27ae8b542b9741823a53a13660b5615b}
+      \strng{fullhash}{27ae8b542b9741823a53a13660b5615b}
+      \strng{fullhashraw}{27ae8b542b9741823a53a13660b5615b}
+      \strng{bibnamehash}{27ae8b542b9741823a53a13660b5615b}
+      \strng{authorbibnamehash}{27ae8b542b9741823a53a13660b5615b}
+      \strng{authornamehash}{27ae8b542b9741823a53a13660b5615b}
+      \strng{authorfullhash}{27ae8b542b9741823a53a13660b5615b}
+      \strng{authorfullhashraw}{27ae8b542b9741823a53a13660b5615b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{86-194}
+      \field{title}{A Tutorial Review of Elements of Weak Signal Detection in Non-{G}aussian {EMI} Environments}
+      \field{type}{NTIA Report}
+      \field{year}{1986-05}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:confwithpapertype}{inproceedings}{}{}
+      \name{author}{11}{}{%
+        {{hash=07672e80ebcfd5232034e5736b26b8ae}{%
+           family={Mikkelsen},
+           familyi={M\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=13ed29b843f74c814bfc67677ac1d0be}{%
+           family={Raybon},
+           familyi={R\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=7a2fb6173c706a40756ab54764a0f123}{%
+           family={Essiambre},
+           familyi={E\bibinitperiod},
+           given={R.-J.},
+           giveni={R\bibinithyphendelim J\bibinitperiod}}}%
+        {{hash=f96e576cf1bbe4fbec6ec4b647b2b424}{%
+           family={Dreyer},
+           familyi={D\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=1fd38aa73e6bf9efc15dbd3a6f782bc1}{%
+           family={Su.},
+           familyi={S\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=60e8be97d4d590b0f9dd8e5657253199}{%
+           family={Nelson},
+           familyi={N\bibinitperiod},
+           given={L.\bibnamedelimi E.},
+           giveni={L\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=17a69c7ee2bc96bbdf051305f1565b9a}{%
+           family={Johnson},
+           familyi={J\bibinitperiod},
+           given={J.\bibnamedelimi E.},
+           giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=e182dbe1629c56b971efb11aa6499963}{%
+           family={Shtengel},
+           familyi={S\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=e6618577508aa2c2d143baac08be5d82}{%
+           family={Bond},
+           familyi={B\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=5ff1995d2a163f1d5a6f79afa506bb24}{%
+           family={Moodie},
+           familyi={M\bibinitperiod},
+           given={D.\bibnamedelimi G.},
+           giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=a4e712351f9b6fd19e9462f8a7055bf4}{%
+           family={Ellis},
+           familyi={E\bibinitperiod},
+           given={A.\bibnamedelimi D.},
+           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Nice, France}%
+      }
+      \strng{namehash}{b566ea1b04d4103acb4b3fd5ebc8019d}
+      \strng{fullhash}{eebbc12939100a5a5c20dd0702e3706f}
+      \strng{fullhashraw}{eebbc12939100a5a5c20dd0702e3706f}
+      \strng{bibnamehash}{b566ea1b04d4103acb4b3fd5ebc8019d}
+      \strng{authorbibnamehash}{b566ea1b04d4103acb4b3fd5ebc8019d}
+      \strng{authornamehash}{b566ea1b04d4103acb4b3fd5ebc8019d}
+      \strng{authorfullhash}{eebbc12939100a5a5c20dd0702e3706f}
+      \strng{authorfullhashraw}{eebbc12939100a5a5c20dd0702e3706f}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proc. {ECOC}'99}
+      \field{title}{160 {Gbit/s} Single-channel Transmission Over 300 km Nonzero-dispersion Fiber With Semiconductor Based Transmitter and Demultiplexer}
+      \field{year}{1999}
+      \true{nocite}
+      \field{pages}{28\bibrangedash 29}
+      \range{pages}{2}
+    \endentry
+    \entry{IEEEexample:articledualmonths}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=e66486924c96fdba19e8795d66c5dc8e}{%
+           family={Okada},
+           familyi={O\bibinitperiod},
+           given={Y.},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=ae450baa0a6fcac8ca10a98d9e329ea0}{%
+           family={Dejima},
+           familyi={D\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+        {{hash=2433c7235c8e59bd1c49905f736fe4a4}{%
+           family={Ohishi},
+           familyi={O\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{f433ecb1ba11cf160be6639a44946df5}
+      \strng{fullhash}{607466c505fea8cc91c55c654d42f96a}
+      \strng{fullhashraw}{607466c505fea8cc91c55c654d42f96a}
+      \strng{bibnamehash}{607466c505fea8cc91c55c654d42f96a}
+      \strng{authorbibnamehash}{607466c505fea8cc91c55c654d42f96a}
+      \strng{authornamehash}{f433ecb1ba11cf160be6639a44946df5}
+      \strng{authorfullhash}{607466c505fea8cc91c55c654d42f96a}
+      \strng{authorfullhashraw}{607466c505fea8cc91c55c654d42f96a}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Trans. Ind. Appl.}
+      \field{title}{Analysis and Comparison of {PM} Synchronous Motor and Induction Motor Type Magnetic Bearings}
+      \field{volume}{31}
+      \field{year}{1995-09/1995-10}
+      \true{nocite}
+      \field{pages}{1047\bibrangedash 1053}
+      \range{pages}{7}
+    \endentry
+    \entry{IEEEexample:unpublished}{unpublished}{}{}
+      \name{author}{2}{}{%
+        {{hash=ed2d3480b5b32bc15c035c52ca1b868d}{%
+           family={Ott},
+           familyi={O\bibinitperiod},
+           given={T.\bibnamedelimi J.},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=f2b20fb067a023f436bf1727d7d7398c}{%
+           family={Aggarwal},
+           familyi={A\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{0984cdac7f3b6012664f267fad58a86d}
+      \strng{fullhash}{0984cdac7f3b6012664f267fad58a86d}
+      \strng{fullhashraw}{0984cdac7f3b6012664f267fad58a86d}
+      \strng{bibnamehash}{0984cdac7f3b6012664f267fad58a86d}
+      \strng{authorbibnamehash}{0984cdac7f3b6012664f267fad58a86d}
+      \strng{authornamehash}{0984cdac7f3b6012664f267fad58a86d}
+      \strng{authorfullhash}{0984cdac7f3b6012664f267fad58a86d}
+      \strng{authorfullhashraw}{0984cdac7f3b6012664f267fad58a86d}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Unpublished}
+      \field{title}{{TCP} over {ATM}: {ABR} or {UBR}}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:techreptype}{report}{}{}
+      \name{author}{3}{}{%
+        {{hash=f5f8c3e8402e4ef5634f1b4af0b4cc15}{%
+           family={Padhye},
+           familyi={P\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=375b1941e183d56025b7311a1e405a78}{%
+           family={Firoiu},
+           familyi={F\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=3bf7f7be8156738f24f12da4fee41ef9}{%
+           family={Towsley},
+           familyi={T\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Univ. of Massachusetts}%
+      }
+      \list{location}{1}{%
+        {Amherst, MA}%
+      }
+      \strng{namehash}{13289420725f70d787bc0f9ebf60df88}
+      \strng{fullhash}{7574c1463af3c59d7575bf96e434ad30}
+      \strng{fullhashraw}{7574c1463af3c59d7575bf96e434ad30}
+      \strng{bibnamehash}{7574c1463af3c59d7575bf96e434ad30}
+      \strng{authorbibnamehash}{7574c1463af3c59d7575bf96e434ad30}
+      \strng{authornamehash}{13289420725f70d787bc0f9ebf60df88}
+      \strng{authorfullhash}{7574c1463af3c59d7575bf96e434ad30}
+      \strng{authorfullhashraw}{7574c1463af3c59d7575bf96e434ad30}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{99-02}
+      \field{title}{A Stochastic Model of {TCP} {R}eno Congestion Avoidance and Control}
+      \field{type}{CMPSCI Tech. Rep.}
+      \field{year}{1999}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:inbook}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=7254550fa01ea503a11ab5b795c6ecf1}{%
+           family={Rose},
+           familyi={R\bibinitperiod},
+           given={H.\bibnamedelimi E.},
+           giveni={H\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Oxford Univ. Press}%
+      }
+      \strng{namehash}{7254550fa01ea503a11ab5b795c6ecf1}
+      \strng{fullhash}{7254550fa01ea503a11ab5b795c6ecf1}
+      \strng{fullhashraw}{7254550fa01ea503a11ab5b795c6ecf1}
+      \strng{bibnamehash}{7254550fa01ea503a11ab5b795c6ecf1}
+      \strng{authorbibnamehash}{7254550fa01ea503a11ab5b795c6ecf1}
+      \strng{authornamehash}{7254550fa01ea503a11ab5b795c6ecf1}
+      \strng{authorfullhash}{7254550fa01ea503a11ab5b795c6ecf1}
+      \strng{authorfullhashraw}{7254550fa01ea503a11ab5b795c6ecf1}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{chapter}{3}
+      \field{title}{A Course in Number Theory}
+      \field{year}{1988}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:uspat}{patent}{}{}
+      \name{author}{3}{}{%
+        {{hash=70a9139d8d9771cb1ff6659479459069}{%
+           family={Sorace},
+           familyi={S\bibinitperiod},
+           given={Ronald\bibnamedelima E.},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=bce334386c9e66fe7daeb1cab022c3c8}{%
+           family={Reinhardt},
+           familyi={R\bibinitperiod},
+           given={Victor\bibnamedelima S.},
+           giveni={V\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=3245d6de74c3a6bcf4a0b92327e18a05}{%
+           family={Vaughn},
+           familyi={V\bibinitperiod},
+           given={Steven\bibnamedelima A.},
+           giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \name{holder}{1}{}{%
+        {{hash=03b8626677baebf54d2c938589e758d6}{%
+           family={Company},
+           familyi={C\bibinitperiod},
+           given={Hughes\bibnamedelima Aircraft},
+           giveni={H\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Los Angeles, CA}%
+      }
+      \strng{namehash}{06bee5f3e6e376d90e6907f221a077c2}
+      \strng{fullhash}{3df4b0b4fbee468a342074aef18300be}
+      \strng{fullhashraw}{3df4b0b4fbee468a342074aef18300be}
+      \strng{bibnamehash}{3df4b0b4fbee468a342074aef18300be}
+      \strng{authorbibnamehash}{3df4b0b4fbee468a342074aef18300be}
+      \strng{authornamehash}{06bee5f3e6e376d90e6907f221a077c2}
+      \strng{authorfullhash}{3df4b0b4fbee468a342074aef18300be}
+      \strng{authorfullhashraw}{3df4b0b4fbee468a342074aef18300be}
+      \strng{holderbibnamehash}{03b8626677baebf54d2c938589e758d6}
+      \strng{holdernamehash}{03b8626677baebf54d2c938589e758d6}
+      \strng{holderfullhash}{03b8626677baebf54d2c938589e758d6}
+      \strng{holderfullhashraw}{03b8626677baebf54d2c938589e758d6}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{5668842}
+      \field{title}{High-Speed Digital-to-{RF} Converter}
+      \field{type}{patentus}
+      \field{year}{1997-09-16}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:incollection}{inbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=cb2284b12344e5c4715a78bc5310aa30}{%
+           family={Sorin},
+           familyi={S\bibinitperiod},
+           given={W.\bibnamedelimi V.},
+           giveni={W\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=836d3a51d35db259b4f1e029040e0580}{%
+           family={Derickson},
+           familyi={D\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Englewood Cliffs, NJ}%
+      }
+      \list{publisher}{1}{%
+        {Prentice--Hall}%
+      }
+      \strng{namehash}{cb2284b12344e5c4715a78bc5310aa30}
+      \strng{fullhash}{cb2284b12344e5c4715a78bc5310aa30}
+      \strng{fullhashraw}{cb2284b12344e5c4715a78bc5310aa30}
+      \strng{bibnamehash}{cb2284b12344e5c4715a78bc5310aa30}
+      \strng{authorbibnamehash}{cb2284b12344e5c4715a78bc5310aa30}
+      \strng{authornamehash}{cb2284b12344e5c4715a78bc5310aa30}
+      \strng{authorfullhash}{cb2284b12344e5c4715a78bc5310aa30}
+      \strng{authorfullhashraw}{cb2284b12344e5c4715a78bc5310aa30}
+      \strng{editorbibnamehash}{836d3a51d35db259b4f1e029040e0580}
+      \strng{editornamehash}{836d3a51d35db259b4f1e029040e0580}
+      \strng{editorfullhash}{836d3a51d35db259b4f1e029040e0580}
+      \strng{editorfullhashraw}{836d3a51d35db259b4f1e029040e0580}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Fiber Optic Test and Measurement}
+      \field{title}{Optical Reflectometry for Component Characterization}
+      \field{year}{1998}
+      \true{nocite}
+    \endentry
+    \entry{IEEEexample:electronhowinfo2}{online}{}{}
+      \name{author}{2}{}{%
+        {{hash=f60f2560264532e1033ee38c09be938b}{%
+           family={Valloppillil},
+           familyi={V\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=5ed2f212850e37b6106e182f449b74ca}{%
+           family={Ross},
+           familyi={R\bibinitperiod},
+           given={K.\bibnamedelimi W.},
+           giveni={K\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{c2fbfb2a3ddaae4a06c23c8a7f85a7b9}
+      \strng{fullhash}{c2fbfb2a3ddaae4a06c23c8a7f85a7b9}
+      \strng{fullhashraw}{c2fbfb2a3ddaae4a06c23c8a7f85a7b9}
+      \strng{bibnamehash}{c2fbfb2a3ddaae4a06c23c8a7f85a7b9}
+      \strng{authorbibnamehash}{c2fbfb2a3ddaae4a06c23c8a7f85a7b9}
+      \strng{authornamehash}{c2fbfb2a3ddaae4a06c23c8a7f85a7b9}
+      \strng{authorfullhash}{c2fbfb2a3ddaae4a06c23c8a7f85a7b9}
+      \strng{authorfullhashraw}{c2fbfb2a3ddaae4a06c23c8a7f85a7b9}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Internet draft}
+      \field{title}{Cache Array Routing Protocol v1.1}
+      \field{urlyear}{1998}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://ds1.internic.net/internet-drafts/draft-vinod-carp-v1-03.txt
+      \endverb
+      \verb{url}
+      \verb http://ds1.internic.net/internet-drafts/draft-vinod-carp-v1-03.txt
+      \endverb
+    \endentry
+    \entry{IEEEexample:confwithpaper}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=1ee6a8bbbc8835e2a0478788d59b653f}{%
+           family={Wegmuller},
+           familyi={W\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=a49c66cacc3b353bf59a26008aab180a}{%
+           family={Weid},
+           familyi={W\bibinitperiod},
+           given={J.\bibnamedelimi P.},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+           prefix={von\bibnamedelima der},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=1b236ffaf7d8e75e74605c5be1d03000}{%
+           family={Oberson},
+           familyi={O\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=6c7d3bafdfe6e75582eb9c11259e7402}{%
+           family={Gisin},
+           familyi={G\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Munich, Germany}%
+      }
+      \strng{namehash}{616a1a65cb60be195a326c99730f9865}
+      \strng{fullhash}{ab3912b6bbdf75fe9edb0c8d4bc58837}
+      \strng{fullhashraw}{ab3912b6bbdf75fe9edb0c8d4bc58837}
+      \strng{bibnamehash}{ab3912b6bbdf75fe9edb0c8d4bc58837}
+      \strng{authorbibnamehash}{ab3912b6bbdf75fe9edb0c8d4bc58837}
+      \strng{authornamehash}{616a1a65cb60be195a326c99730f9865}
+      \strng{authorfullhash}{ab3912b6bbdf75fe9edb0c8d4bc58837}
+      \strng{authorfullhashraw}{ab3912b6bbdf75fe9edb0c8d4bc58837}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proc. {ECOC}'00}
+      \field{title}{High Resolution Fiber Distributed Measurements With Coherent {OFDR}}
+      \field{year}{2000}
+      \true{nocite}
+      \field{pages}{109}
+      \range{pages}{1}
+    \endentry
+    \entry{IEEEexample:confwithvolume}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=8604ea151bd11b91c6416fdfb39549a2}{%
+           family={Yajnik},
+           familyi={Y\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=7c88293c4831166130c019d6b8b90349}{%
+           family={Moon},
+           familyi={M\bibinitperiod},
+           given={S.\bibnamedelimi B.},
+           giveni={S\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=6c58dcdce4e24607c5c71f4633fc7774}{%
+           family={Kurose},
+           familyi={K\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=3bf7f7be8156738f24f12da4fee41ef9}{%
+           family={Towsley},
+           familyi={T\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \strng{namehash}{07b1aa72e3a4a0b50888c61c8b9d7516}
+      \strng{fullhash}{39512108e1aeea551f1e3f8b9a5acae5}
+      \strng{fullhashraw}{39512108e1aeea551f1e3f8b9a5acae5}
+      \strng{bibnamehash}{39512108e1aeea551f1e3f8b9a5acae5}
+      \strng{authorbibnamehash}{39512108e1aeea551f1e3f8b9a5acae5}
+      \strng{authornamehash}{07b1aa72e3a4a0b50888c61c8b9d7516}
+      \strng{authorfullhash}{39512108e1aeea551f1e3f8b9a5acae5}
+      \strng{authorfullhashraw}{39512108e1aeea551f1e3f8b9a5acae5}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proc. {IEEE} {INFOCOM}'99}
+      \field{title}{Measurement and Modeling of the Temporal Dependence in Packet Loss}
+      \field{volume}{1}
+      \field{year}{1999-03}
+      \true{nocite}
+      \field{pages}{345\bibrangedash 352}
+      \range{pages}{8}
+    \endentry
+    \entry{IEEEexample:confwithadddays}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=8dbf8a78f04246bd26ec86197e63aeef}{%
+           family={Yee},
+           familyi={Y\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=83bfa7ef2700add50a943933cd8e5d81}{%
+           family={Hanzo},
+           familyi={H\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Rio de Janeiro, Brazil}%
+      }
+      \strng{namehash}{4c3151aa3be3933e906640546b5c43e6}
+      \strng{fullhash}{4c3151aa3be3933e906640546b5c43e6}
+      \strng{fullhashraw}{4c3151aa3be3933e906640546b5c43e6}
+      \strng{bibnamehash}{4c3151aa3be3933e906640546b5c43e6}
+      \strng{authorbibnamehash}{4c3151aa3be3933e906640546b5c43e6}
+      \strng{authornamehash}{4c3151aa3be3933e906640546b5c43e6}
+      \strng{authorfullhash}{4c3151aa3be3933e906640546b5c43e6}
+      \strng{authorfullhashraw}{4c3151aa3be3933e906640546b5c43e6}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proc. {IEEE} Globecom '99}
+      \field{title}{Radial Basis Function Decision Feedback Equaliser Assisted Burst-by-burst Adaptive Modulation}
+      \field{year}{1999-12-05/1999-12-09}
+      \true{nocite}
+      \field{pages}{2183\bibrangedash 2187}
+      \range{pages}{5}
+    \endentry
+    \entry{IEEEexample:confwithvolumetitle}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=f8556f2caa8ce891a2cb3f3329fa5790}{%
+           family={{Amador Pérez}},
+           familyi={A\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=87c3817202bd4569dbe6625977b83c99}{%
+           family={{Rodríguez Solís}},
+           familyi={R\bibinitperiod},
+           given={R.\bibnamedelimi A.},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{17274e7501b1acf807a6acf627f39c73}
+      \strng{fullhash}{17274e7501b1acf807a6acf627f39c73}
+      \strng{fullhashraw}{17274e7501b1acf807a6acf627f39c73}
+      \strng{bibnamehash}{17274e7501b1acf807a6acf627f39c73}
+      \strng{authorbibnamehash}{17274e7501b1acf807a6acf627f39c73}
+      \strng{authornamehash}{17274e7501b1acf807a6acf627f39c73}
+      \strng{authorfullhash}{17274e7501b1acf807a6acf627f39c73}
+      \strng{authorfullhashraw}{17274e7501b1acf807a6acf627f39c73}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Slot Ring Antennas {II}}
+      \field{edition}{2}
+      \field{maintitle}{Proc. {IEEE} Antennas Propag. Soc. Int. Symp.}
+      \field{month}{7}
+      \field{title}{Analysis of a {CPW-fed} annular slot ring antenna using {DOE}}
+      \field{volume}{3}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{4301\bibrangedash 4304}
+      \range{pages}{4}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

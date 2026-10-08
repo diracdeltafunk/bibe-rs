@@ -1,0 +1,92 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Tol}{online}{}{}
+      \name{author}{1}{}{%
+        {{hash=1446aef43e7ab4d493bd3f78b23ec489}{%
+           family={Tol},
+           familyi={T\bibinitperiod},
+           given={Paul},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{1446aef43e7ab4d493bd3f78b23ec489}
+      \strng{fullhash}{1446aef43e7ab4d493bd3f78b23ec489}
+      \strng{fullhashraw}{1446aef43e7ab4d493bd3f78b23ec489}
+      \strng{bibnamehash}{1446aef43e7ab4d493bd3f78b23ec489}
+      \strng{authorbibnamehash}{1446aef43e7ab4d493bd3f78b23ec489}
+      \strng{authornamehash}{1446aef43e7ab4d493bd3f78b23ec489}
+      \strng{authorfullhash}{1446aef43e7ab4d493bd3f78b23ec489}
+      \strng{authorfullhashraw}{1446aef43e7ab4d493bd3f78b23ec489}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Paul Tol's Notes: Colour schemes and templates}
+      \field{urlday}{19}
+      \field{urlmonth}{1}
+      \field{urlyear}{2026}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://sronpersonalpages.nl/~pault/
+      \endverb
+      \verb{url}
+      \verb https://sronpersonalpages.nl/~pault/
+      \endverb
+    \endentry
+    \entry{Okabe_2002}{online}{}{}
+      \name{author}{2}{}{%
+        {{hash=c27ff2601673ac082045555895979a95}{%
+           family={Okabe},
+           familyi={O\bibinitperiod},
+           given={Masataka},
+           giveni={M\bibinitperiod}}}%
+        {{hash=961ffd271dddbdf7236fe373b6f92799}{%
+           family={Ito},
+           familyi={I\bibinitperiod},
+           given={Kei},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{aa5d5f4d88871b69e47d294570304877}
+      \strng{fullhash}{aa5d5f4d88871b69e47d294570304877}
+      \strng{fullhashraw}{aa5d5f4d88871b69e47d294570304877}
+      \strng{bibnamehash}{aa5d5f4d88871b69e47d294570304877}
+      \strng{authorbibnamehash}{aa5d5f4d88871b69e47d294570304877}
+      \strng{authornamehash}{aa5d5f4d88871b69e47d294570304877}
+      \strng{authorfullhash}{aa5d5f4d88871b69e47d294570304877}
+      \strng{authorfullhashraw}{aa5d5f4d88871b69e47d294570304877}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{Color Universal Design (CUD): How to make figures and presentations that are friendly to Colorblind people}}
+      \field{year}{2008}
+      \verb{urlraw}
+      \verb https://jfly.uni-koeln.de/color/
+      \endverb
+      \verb{url}
+      \verb https://jfly.uni-koeln.de/color/
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

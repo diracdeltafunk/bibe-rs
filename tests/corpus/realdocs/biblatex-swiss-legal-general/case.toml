@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style biblatex-swiss-legal-general"
+source = "texmf-dist/doc/latex/biblatex-swiss-legal/doc_source/biblatex-swiss-legal.tex (TeX Live 2026), compiled with pdflatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:biblatex-swiss-legal-general"]

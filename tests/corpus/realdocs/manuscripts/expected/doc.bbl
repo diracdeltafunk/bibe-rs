@@ -1,0 +1,1216 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{manuscripts/global//global/global/global}
+    \entry{Lake1938}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=3ab1429505fe45a5f58fb7c7a84cf3ea}{%
+           family={Lake},
+           familyi={L\bibinitperiod},
+           given={Kirsopp},
+           giveni={K\bibinitperiod}}}%
+        {{hash=444608480f88b91b1de91eb2d1827dc9}{%
+           family={Lake},
+           familyi={L\bibinitperiod},
+           given={Silvia},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Boston}%
+      }
+      \list{publisher}{2}{%
+        {The American Academy of Arts}%
+        {Sciences}%
+      }
+      \strng{namehash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{fullhash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{fullhashraw}{d4590c50d0877cb7243acdd54973c603}
+      \strng{bibnamehash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{authorbibnamehash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{authornamehash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{authorfullhash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{authorfullhashraw}{d4590c50d0877cb7243acdd54973c603}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{bookpagination}{notice}
+      \field{maintitle}{Dated greek minuscule manuscripts to the year 1200}
+      \field{title}{Manuscripts in Rome, in Messina, in Naples, and in London}
+      \field{volume}{9}
+      \field{year}{1938}
+      \true{nocite}
+    \endentry
+    \entry{Richard857}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=23bac6a565eac7ba58b6c738c915a501}{%
+           family={Franchi\bibnamedelimb de'\bibnamedelima Cavalieri},
+           familyi={F\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={Pio\bibnamedelima Petro},
+           giveni={P\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Bruxelles}%
+      }
+      \list{publisher}{1}{%
+        {Société des Bollandistes}%
+      }
+      \strng{namehash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{fullhash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{fullhashraw}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{bibnamehash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{authorbibnamehash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{authornamehash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{authorfullhash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{authorfullhashraw}{23bac6a565eac7ba58b6c738c915a501}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Catalogus codicum hagiographicorum graecorum Bibliothecae Vaticanae}
+      \field{year}{1899}
+      \true{nocite}
+    \endentry
+    \entry{C}{manuscript}{}{}
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{annotation}{Some comments	}
+      \field{bookpagination}{folio}
+      \field{collection}{Additional greek manuscript}
+      \field{columns}{1}
+      \field{dating}{\textsc{viii}-\textsc{ix}\textsuperscript{e} c.}
+      \field{layer}{inf}
+      \field{library}{University Library}
+      \field{pagetotal}{16}
+      \field{shelfmark}{4489}
+      \field{shorthand}{C}
+      \field{support}{pergament}
+      \true{nocite}
+      \field{pages}{11\recto\bibrangedash 11\verso}
+      \range{pages}{-1}
+    \endentry
+    \entry{Ehrhard}{mvbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=a22f734befe97f5497a03a75be4da471}{%
+           family={Ehrhard},
+           familyi={E\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Osnabrück}%
+      }
+      \list{origlocation}{1}{%
+        {Leipzig}%
+      }
+      \list{origpublisher}{1}{%
+        {J. C. Hinrichs Verlag}%
+      }
+      \list{publisher}{1}{%
+        {Otto Zeller Verlag}%
+      }
+      \strng{namehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{fullhash}{a22f734befe97f5497a03a75be4da471}
+      \strng{fullhashraw}{a22f734befe97f5497a03a75be4da471}
+      \strng{bibnamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorbibnamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authornamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorfullhash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorfullhashraw}{a22f734befe97f5497a03a75be4da471}
+      \field{extraname}{1}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{origendyear}{1952}
+      \field{origyear}{1937}
+      \field{subtitle}{von den Anfängen bis zum Ende des 16. Jahrhunderts}
+      \field{title}{Überlieferung und Bestand der hagiographischen und homiletischen Literatur der griechischen Kirche}
+      \field{volumes}{3}
+      \field{year}{1965}
+      \field{origenddateera}{ce}
+      \field{origdateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Ehrhard1.1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=a22f734befe97f5497a03a75be4da471}{%
+           family={Ehrhard},
+           familyi={E\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Osnabrück}%
+      }
+      \list{origlocation}{1}{%
+        {Leipzig}%
+      }
+      \list{origpublisher}{1}{%
+        {J. C. Hinrichs Verlag}%
+      }
+      \list{publisher}{1}{%
+        {Otto Zeller Verlag}%
+      }
+      \strng{namehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{fullhash}{a22f734befe97f5497a03a75be4da471}
+      \strng{fullhashraw}{a22f734befe97f5497a03a75be4da471}
+      \strng{bibnamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorbibnamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authornamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorfullhash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorfullhashraw}{a22f734befe97f5497a03a75be4da471}
+      \field{extraname}{2}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{maintitle}
+      \strng{crossref}{Ehrhard}
+      \field{mainsubtitle}{von den Anfängen bis zum Ende des 16. Jahrhunderts}
+      \field{maintitle}{Überlieferung und Bestand der hagiographischen und homiletischen Literatur der griechischen Kirche}
+      \field{origendyear}{1952}
+      \field{origyear}{1937}
+      \field{part}{1}
+      \field{volume}{1}
+      \field{volumes}{3}
+      \field{year}{1965}
+      \field{origenddateera}{ce}
+      \field{origdateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Bodleian_quarto_t1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=0e9cc320f7770826d63eb70ccc956e3b}{%
+           family={Coxe},
+           familyi={C\bibinitperiod},
+           given={Henry},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \list{publisher}{1}{%
+        {Bodleian Library}%
+      }
+      \strng{namehash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{fullhash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{fullhashraw}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{bibnamehash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{authorbibnamehash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{authornamehash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{authorfullhash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{authorfullhashraw}{0e9cc320f7770826d63eb70ccc956e3b}
+      \field{extraname}{1}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{bookpagination}{column}
+      \field{maintitle}{Quarto Catalogues}
+      \field{origyear}{1853}
+      \field{subtitle}{Reprinted with corrections from the edition of 1853}
+      \field{title}{Greek Manuscripts}
+      \field{volume}{1}
+      \field{year}{1969}
+      \field{origdateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Richard1842.1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=d71424534fa3423e3816760d71b45cdd}{%
+           family={Coxe},
+           familyi={C\bibinitperiod},
+           given={Henricus},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \list{publisher}{1}{%
+        {Typographeus Academicus}%
+      }
+      \strng{namehash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{fullhash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{fullhashraw}{d71424534fa3423e3816760d71b45cdd}
+      \strng{bibnamehash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{authorbibnamehash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{authornamehash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{authorfullhash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{authorfullhashraw}{d71424534fa3423e3816760d71b45cdd}
+      \field{extraname}{2}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{bookpagination}{column}
+      \field{maintitle}{Catalogi codicum manuscriptorum Bibliothecae Bodleianae}
+      \field{title}{recensionem codicum graecorum continens}
+      \field{volume}{1}
+      \field{year}{1853}
+      \true{nocite}
+    \endentry
+    \entry{L}{manuscript}{}{}
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{annotation}{Some comments \par Some comments}
+      \field{catalog}{\cites[543D-546C]{Richard1842.1}{Bodleian_quarto_t1}}
+      \field{collection}{Laudian Collection}
+      \field{columns}{1}
+      \field{dating}{\textsc{xvi}\textsuperscript{e} c.}
+      \field{library}{Bodleian Library}
+      \field{pagetotal}{426}
+      \field{shelfmark}{Gr.~64a}
+      \field{shorthand}{L}
+      \field{support}{paper}
+      \true{nocite}
+      \field{pages}{219\bibrangedash 238}
+      \range{pages}{20}
+    \endentry
+    \entry{Batiffoll1891}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=c5f4afd99ec397d65d8dc9cdd1983e88}{%
+           family={Batiffol},
+           familyi={B\bibinitperiod},
+           given={Pierre},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Alphonse Picard}%
+      }
+      \strng{namehash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{fullhash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{fullhashraw}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{bibnamehash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{authorbibnamehash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{authornamehash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{authorfullhash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{authorfullhashraw}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{contribution à l'histoire de la Vaticane}
+      \field{title}{L'abbaye de Rossano}
+      \field{year}{1891}
+      \true{nocite}
+    \endentry
+    \entry{Richard192-3}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=48e71218b617a9ff1556990b9567a5e3}{%
+           family={Omont},
+           familyi={O\bibinitperiod},
+           given={Henri},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Alphonse Picard}%
+      }
+      \strng{namehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{fullhash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{fullhashraw}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{bibnamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorbibnamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authornamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorfullhash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorfullhashraw}{48e71218b617a9ff1556990b9567a5e3}
+      \field{extraname}{1}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \strng{crossref}{Richard192}
+      \field{endyear}{1898}
+      \field{subtitle}{Belles-Lettres, Coislin - Supplément, Paris et départements}
+      \field{title}{Ancien fonds grec}
+      \field{volume}{3}
+      \field{volumes}{4}
+      \field{year}{1888}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Richard192}{mvbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=48e71218b617a9ff1556990b9567a5e3}{%
+           family={Omont},
+           familyi={O\bibinitperiod},
+           given={Henri},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Alphonse Picard}%
+      }
+      \strng{namehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{fullhash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{fullhashraw}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{bibnamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorbibnamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authornamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorfullhash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorfullhashraw}{48e71218b617a9ff1556990b9567a5e3}
+      \field{extraname}{2}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{endyear}{1898}
+      \field{volumes}{4}
+      \field{year}{1886}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{S}{manuscript}{}{}
+      \name{scribe}{1}{}{%
+        {{hash=a36e5df6089966dca4b38397aae00efd}{%
+           family={Stephen},
+           familyi={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{origin}{1}{%
+        {Constantinople}%
+      }
+      \strng{scribebibnamehash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribenamehash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribefullhash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribefullhashraw}{a36e5df6089966dca4b38397aae00efd}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[55]{Richard192-3}[678-679]{Ehrhard1.1}}
+      \field{collection}{Supplément grec}
+      \field{columns}{2}
+      \field{dating}{\textsc{x}\textsuperscript{e} c.}
+      \field{library}{Bibliothèque nationale de France}
+      \field{pagetotal}{282}
+      \field{shelfmark}{241}
+      \field{shorthand}{S}
+      \field{shortlibrary}{BNF}
+      \field{support}{Pergament}
+      \true{nocite}
+      \field{pages}{233\verso\bibrangedash 245\recto}
+      \range{pages}{-1}
+    \endentry
+    \entry{Richard834}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=9b8c5784a3b945692488ac17e1123d2a}{%
+           family={Devreesse},
+           familyi={D\bibinitperiod},
+           given={Robertus},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vatican}%
+      }
+      \list{publisher}{1}{%
+        {Bibliotheca Vaticana}%
+      }
+      \strng{namehash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{fullhash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{fullhashraw}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{bibnamehash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{authorbibnamehash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{authornamehash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{authorfullhash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{authorfullhashraw}{9b8c5784a3b945692488ac17e1123d2a}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{maintitle}{Bibliothecae Apostolicae Vaticanae codices manu scripti recensiti iussu Pii~XI Pontificis Maximi, Praeside Iohanne Mercati S. Georgii in Velabro Card. Diacono, S. R. E. Bybliothecario (\emph{sic}) et Scriniario}
+      \field{subtitle}{Codices~1485-1683}
+      \field{title}{Codices Vaticani Graeci}
+      \field{year}{1950}
+      \true{nocite}
+    \endentry
+    \entry{U}{manuscript}{}{}
+      \name{scribe}{1}{}{%
+        {{hash=23f2fde806f5030261b225fd35c17a36}{%
+           family={Dorothee},
+           familyi={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vatican}%
+      }
+      \list{origin}{1}{%
+        {Constantinople (Monastère Saint~Jean le Précurseur)}%
+      }
+      \strng{scribebibnamehash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribenamehash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribefullhash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribefullhashraw}{23f2fde806f5030261b225fd35c17a36}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[334]{Lake1938}[161-164]{Richard857}[421-425]{Richard834}[673-676]{Ehrhard1.1}[80]{Batiffoll1891}}
+      \field{collection}{Grec}
+      \field{columns}{1}
+      \field{dating}{\textsc{x}\textsuperscript{e} c.}
+      \field{library}{Biblioteca Apostolica Vaticana}
+      \field{pagetotal}{406}
+      \field{shelfmark}{1671}
+      \field{shorthand}{U}
+      \field{support}{Pergament}
+      \true{nocite}
+      \field{pages}{326\verso\bibrangedash 340\verso}
+      \range{pages}{-1}
+    \endentry
+    \entry{O}{manuscript}{}{}
+      \list{location}{1}{%
+        {Vienna}%
+      }
+      \list{origin}{1}{%
+        {Constantinople ?}%
+      }
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[50-54]{Richard2445}[682-688]{Ehrhard1.1}}
+      \field{collection}{Hist. gr.}
+      \field{columns}{2}
+      \field{dating}{\textsc{xi}\textsuperscript{e} c.}
+      \field{library}{Österreichische Nationalbibliothek}
+      \field{pagetotal}{310}
+      \field{shelfmark}{45}
+      \field{shorthand}{O}
+      \field{shortlibrary}{ÖNB}
+      \field{support}{pergament}
+      \true{nocite}
+      \field{pages}{263\recto\bibrangedash 273\verso}
+      \range{pages}{-1}
+    \endentry
+    \entry{Richard2445}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=e3bc9b9aa73d1b8a3e165ae3df3634af}{%
+           family={Hunger},
+           familyi={H\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vienne}%
+      }
+      \list{publisher}{1}{%
+        {Georg Prachner Verlag}%
+      }
+      \strng{namehash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{fullhash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{fullhashraw}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{bibnamehash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{authorbibnamehash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{authornamehash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{authorfullhash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{authorfullhashraw}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{maintitle}{Katalog der griechischen handschriften des Österreichischen Nationalbibliothek}
+      \field{title}{Codices historici, codices philosophici et philologici}
+      \field{year}{1961}
+      \true{nocite}
+    \endentry
+  \enddatalist
+  \datalist[list]{shorthand:shorthand/global//global/global/global}
+    \entry{C}{manuscript}{}{}
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{annotation}{Some comments	}
+      \field{bookpagination}{folio}
+      \field{collection}{Additional greek manuscript}
+      \field{columns}{1}
+      \field{dating}{\textsc{viii}-\textsc{ix}\textsuperscript{e} c.}
+      \field{layer}{inf}
+      \field{library}{University Library}
+      \field{pagetotal}{16}
+      \field{shelfmark}{4489}
+      \field{shorthand}{C}
+      \field{support}{pergament}
+      \true{nocite}
+      \field{pages}{11\recto\bibrangedash 11\verso}
+      \range{pages}{-1}
+    \endentry
+    \entry{L}{manuscript}{}{}
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{annotation}{Some comments \par Some comments}
+      \field{catalog}{\cites[543D-546C]{Richard1842.1}{Bodleian_quarto_t1}}
+      \field{collection}{Laudian Collection}
+      \field{columns}{1}
+      \field{dating}{\textsc{xvi}\textsuperscript{e} c.}
+      \field{library}{Bodleian Library}
+      \field{pagetotal}{426}
+      \field{shelfmark}{Gr.~64a}
+      \field{shorthand}{L}
+      \field{support}{paper}
+      \true{nocite}
+      \field{pages}{219\bibrangedash 238}
+      \range{pages}{20}
+    \endentry
+    \entry{O}{manuscript}{}{}
+      \list{location}{1}{%
+        {Vienna}%
+      }
+      \list{origin}{1}{%
+        {Constantinople ?}%
+      }
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[50-54]{Richard2445}[682-688]{Ehrhard1.1}}
+      \field{collection}{Hist. gr.}
+      \field{columns}{2}
+      \field{dating}{\textsc{xi}\textsuperscript{e} c.}
+      \field{library}{Österreichische Nationalbibliothek}
+      \field{pagetotal}{310}
+      \field{shelfmark}{45}
+      \field{shorthand}{O}
+      \field{shortlibrary}{ÖNB}
+      \field{support}{pergament}
+      \true{nocite}
+      \field{pages}{263\recto\bibrangedash 273\verso}
+      \range{pages}{-1}
+    \endentry
+    \entry{S}{manuscript}{}{}
+      \name{scribe}{1}{}{%
+        {{hash=a36e5df6089966dca4b38397aae00efd}{%
+           family={Stephen},
+           familyi={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{origin}{1}{%
+        {Constantinople}%
+      }
+      \strng{scribebibnamehash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribenamehash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribefullhash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribefullhashraw}{a36e5df6089966dca4b38397aae00efd}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[55]{Richard192-3}[678-679]{Ehrhard1.1}}
+      \field{collection}{Supplément grec}
+      \field{columns}{2}
+      \field{dating}{\textsc{x}\textsuperscript{e} c.}
+      \field{library}{Bibliothèque nationale de France}
+      \field{pagetotal}{282}
+      \field{shelfmark}{241}
+      \field{shorthand}{S}
+      \field{shortlibrary}{BNF}
+      \field{support}{Pergament}
+      \true{nocite}
+      \field{pages}{233\verso\bibrangedash 245\recto}
+      \range{pages}{-1}
+    \endentry
+    \entry{U}{manuscript}{}{}
+      \name{scribe}{1}{}{%
+        {{hash=23f2fde806f5030261b225fd35c17a36}{%
+           family={Dorothee},
+           familyi={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vatican}%
+      }
+      \list{origin}{1}{%
+        {Constantinople (Monastère Saint~Jean le Précurseur)}%
+      }
+      \strng{scribebibnamehash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribenamehash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribefullhash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribefullhashraw}{23f2fde806f5030261b225fd35c17a36}
+      \field{sortinit}{U}
+      \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[334]{Lake1938}[161-164]{Richard857}[421-425]{Richard834}[673-676]{Ehrhard1.1}[80]{Batiffoll1891}}
+      \field{collection}{Grec}
+      \field{columns}{1}
+      \field{dating}{\textsc{x}\textsuperscript{e} c.}
+      \field{library}{Biblioteca Apostolica Vaticana}
+      \field{pagetotal}{406}
+      \field{shelfmark}{1671}
+      \field{shorthand}{U}
+      \field{support}{Pergament}
+      \true{nocite}
+      \field{pages}{326\verso\bibrangedash 340\verso}
+      \range{pages}{-1}
+    \endentry
+  \enddatalist
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{C}{manuscript}{}{}
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \field{sortinit}{}
+      \field{sortinithash}{495dc9894017a8b12cafa9c619d10c0c}
+      \field{annotation}{Some comments	}
+      \field{bookpagination}{folio}
+      \field{collection}{Additional greek manuscript}
+      \field{columns}{1}
+      \field{dating}{\textsc{viii}-\textsc{ix}\textsuperscript{e} c.}
+      \field{layer}{inf}
+      \field{library}{University Library}
+      \field{pagetotal}{16}
+      \field{shelfmark}{4489}
+      \field{shorthand}{C}
+      \field{support}{pergament}
+      \true{nocite}
+      \field{pages}{11\recto\bibrangedash 11\verso}
+      \range{pages}{-1}
+    \endentry
+    \entry{U}{manuscript}{}{}
+      \name{scribe}{1}{}{%
+        {{hash=23f2fde806f5030261b225fd35c17a36}{%
+           family={Dorothee},
+           familyi={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vatican}%
+      }
+      \list{origin}{1}{%
+        {Constantinople (Monastère Saint~Jean le Précurseur)}%
+      }
+      \strng{scribebibnamehash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribenamehash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribefullhash}{23f2fde806f5030261b225fd35c17a36}
+      \strng{scribefullhashraw}{23f2fde806f5030261b225fd35c17a36}
+      \field{sortinit}{}
+      \field{sortinithash}{495dc9894017a8b12cafa9c619d10c0c}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[334]{Lake1938}[161-164]{Richard857}[421-425]{Richard834}[673-676]{Ehrhard1.1}[80]{Batiffoll1891}}
+      \field{collection}{Grec}
+      \field{columns}{1}
+      \field{dating}{\textsc{x}\textsuperscript{e} c.}
+      \field{library}{Biblioteca Apostolica Vaticana}
+      \field{pagetotal}{406}
+      \field{shelfmark}{1671}
+      \field{shorthand}{U}
+      \field{support}{Pergament}
+      \true{nocite}
+      \field{pages}{326\verso\bibrangedash 340\verso}
+      \range{pages}{-1}
+    \endentry
+    \entry{O}{manuscript}{}{}
+      \list{location}{1}{%
+        {Vienna}%
+      }
+      \list{origin}{1}{%
+        {Constantinople ?}%
+      }
+      \field{sortinit}{}
+      \field{sortinithash}{495dc9894017a8b12cafa9c619d10c0c}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[50-54]{Richard2445}[682-688]{Ehrhard1.1}}
+      \field{collection}{Hist. gr.}
+      \field{columns}{2}
+      \field{dating}{\textsc{xi}\textsuperscript{e} c.}
+      \field{library}{Österreichische Nationalbibliothek}
+      \field{pagetotal}{310}
+      \field{shelfmark}{45}
+      \field{shorthand}{O}
+      \field{shortlibrary}{ÖNB}
+      \field{support}{pergament}
+      \true{nocite}
+      \field{pages}{263\recto\bibrangedash 273\verso}
+      \range{pages}{-1}
+    \endentry
+    \entry{L}{manuscript}{}{}
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \field{sortinit}{}
+      \field{sortinithash}{495dc9894017a8b12cafa9c619d10c0c}
+      \field{annotation}{Some comments \par Some comments}
+      \field{catalog}{\cites[543D-546C]{Richard1842.1}{Bodleian_quarto_t1}}
+      \field{collection}{Laudian Collection}
+      \field{columns}{1}
+      \field{dating}{\textsc{xvi}\textsuperscript{e} c.}
+      \field{library}{Bodleian Library}
+      \field{pagetotal}{426}
+      \field{shelfmark}{Gr.~64a}
+      \field{shorthand}{L}
+      \field{support}{paper}
+      \true{nocite}
+      \field{pages}{219\bibrangedash 238}
+      \range{pages}{20}
+    \endentry
+    \entry{S}{manuscript}{}{}
+      \name{scribe}{1}{}{%
+        {{hash=a36e5df6089966dca4b38397aae00efd}{%
+           family={Stephen},
+           familyi={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{origin}{1}{%
+        {Constantinople}%
+      }
+      \strng{scribebibnamehash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribenamehash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribefullhash}{a36e5df6089966dca4b38397aae00efd}
+      \strng{scribefullhashraw}{a36e5df6089966dca4b38397aae00efd}
+      \field{sortinit}{}
+      \field{sortinithash}{495dc9894017a8b12cafa9c619d10c0c}
+      \field{annotation}{Some comments \par Some comments}
+      \field{bookpagination}{folio}
+      \field{catalog}{\cites[55]{Richard192-3}[678-679]{Ehrhard1.1}}
+      \field{collection}{Supplément grec}
+      \field{columns}{2}
+      \field{dating}{\textsc{x}\textsuperscript{e} c.}
+      \field{library}{Bibliothèque nationale de France}
+      \field{pagetotal}{282}
+      \field{shelfmark}{241}
+      \field{shorthand}{S}
+      \field{shortlibrary}{BNF}
+      \field{support}{Pergament}
+      \true{nocite}
+      \field{pages}{233\verso\bibrangedash 245\recto}
+      \range{pages}{-1}
+    \endentry
+    \entry{Batiffoll1891}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=c5f4afd99ec397d65d8dc9cdd1983e88}{%
+           family={Batiffol},
+           familyi={B\bibinitperiod},
+           given={Pierre},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Alphonse Picard}%
+      }
+      \strng{namehash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{fullhash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{fullhashraw}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{bibnamehash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{authorbibnamehash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{authornamehash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{authorfullhash}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \strng{authorfullhashraw}{c5f4afd99ec397d65d8dc9cdd1983e88}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{contribution à l'histoire de la Vaticane}
+      \field{title}{L'abbaye de Rossano}
+      \field{year}{1891}
+      \true{nocite}
+    \endentry
+    \entry{Richard1842.1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=d71424534fa3423e3816760d71b45cdd}{%
+           family={Coxe},
+           familyi={C\bibinitperiod},
+           given={Henricus},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \list{publisher}{1}{%
+        {Typographeus Academicus}%
+      }
+      \strng{namehash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{fullhash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{fullhashraw}{d71424534fa3423e3816760d71b45cdd}
+      \strng{bibnamehash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{authorbibnamehash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{authornamehash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{authorfullhash}{d71424534fa3423e3816760d71b45cdd}
+      \strng{authorfullhashraw}{d71424534fa3423e3816760d71b45cdd}
+      \field{extraname}{1}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{bookpagination}{column}
+      \field{maintitle}{Catalogi codicum manuscriptorum Bibliothecae Bodleianae}
+      \field{title}{recensionem codicum graecorum continens}
+      \field{volume}{1}
+      \field{year}{1853}
+      \true{nocite}
+    \endentry
+    \entry{Bodleian_quarto_t1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=0e9cc320f7770826d63eb70ccc956e3b}{%
+           family={Coxe},
+           familyi={C\bibinitperiod},
+           given={Henry},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Oxford}%
+      }
+      \list{publisher}{1}{%
+        {Bodleian Library}%
+      }
+      \strng{namehash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{fullhash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{fullhashraw}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{bibnamehash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{authorbibnamehash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{authornamehash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{authorfullhash}{0e9cc320f7770826d63eb70ccc956e3b}
+      \strng{authorfullhashraw}{0e9cc320f7770826d63eb70ccc956e3b}
+      \field{extraname}{2}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{bookpagination}{column}
+      \field{maintitle}{Quarto Catalogues}
+      \field{origyear}{1853}
+      \field{subtitle}{Reprinted with corrections from the edition of 1853}
+      \field{title}{Greek Manuscripts}
+      \field{volume}{1}
+      \field{year}{1969}
+      \field{origdateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Richard834}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=9b8c5784a3b945692488ac17e1123d2a}{%
+           family={Devreesse},
+           familyi={D\bibinitperiod},
+           given={Robertus},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vatican}%
+      }
+      \list{publisher}{1}{%
+        {Bibliotheca Vaticana}%
+      }
+      \strng{namehash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{fullhash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{fullhashraw}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{bibnamehash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{authorbibnamehash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{authornamehash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{authorfullhash}{9b8c5784a3b945692488ac17e1123d2a}
+      \strng{authorfullhashraw}{9b8c5784a3b945692488ac17e1123d2a}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{maintitle}{Bibliothecae Apostolicae Vaticanae codices manu scripti recensiti iussu Pii~XI Pontificis Maximi, Praeside Iohanne Mercati S. Georgii in Velabro Card. Diacono, S. R. E. Bybliothecario (\emph{sic}) et Scriniario}
+      \field{subtitle}{Codices~1485-1683}
+      \field{title}{Codices Vaticani Graeci}
+      \field{year}{1950}
+      \true{nocite}
+    \endentry
+    \entry{Ehrhard1.1}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=a22f734befe97f5497a03a75be4da471}{%
+           family={Ehrhard},
+           familyi={E\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Osnabrück}%
+      }
+      \list{origlocation}{1}{%
+        {Leipzig}%
+      }
+      \list{origpublisher}{1}{%
+        {J. C. Hinrichs Verlag}%
+      }
+      \list{publisher}{1}{%
+        {Otto Zeller Verlag}%
+      }
+      \strng{namehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{fullhash}{a22f734befe97f5497a03a75be4da471}
+      \strng{fullhashraw}{a22f734befe97f5497a03a75be4da471}
+      \strng{bibnamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorbibnamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authornamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorfullhash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorfullhashraw}{a22f734befe97f5497a03a75be4da471}
+      \field{extraname}{1}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{maintitle}
+      \strng{crossref}{Ehrhard}
+      \field{mainsubtitle}{von den Anfängen bis zum Ende des 16. Jahrhunderts}
+      \field{maintitle}{Überlieferung und Bestand der hagiographischen und homiletischen Literatur der griechischen Kirche}
+      \field{origendyear}{1952}
+      \field{origyear}{1937}
+      \field{part}{1}
+      \field{volume}{1}
+      \field{volumes}{3}
+      \field{year}{1965}
+      \field{origenddateera}{ce}
+      \field{origdateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Ehrhard}{mvbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=a22f734befe97f5497a03a75be4da471}{%
+           family={Ehrhard},
+           familyi={E\bibinitperiod},
+           given={Albert},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Osnabrück}%
+      }
+      \list{origlocation}{1}{%
+        {Leipzig}%
+      }
+      \list{origpublisher}{1}{%
+        {J. C. Hinrichs Verlag}%
+      }
+      \list{publisher}{1}{%
+        {Otto Zeller Verlag}%
+      }
+      \strng{namehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{fullhash}{a22f734befe97f5497a03a75be4da471}
+      \strng{fullhashraw}{a22f734befe97f5497a03a75be4da471}
+      \strng{bibnamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorbibnamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authornamehash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorfullhash}{a22f734befe97f5497a03a75be4da471}
+      \strng{authorfullhashraw}{a22f734befe97f5497a03a75be4da471}
+      \field{extraname}{2}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{origendyear}{1952}
+      \field{origyear}{1937}
+      \field{subtitle}{von den Anfängen bis zum Ende des 16. Jahrhunderts}
+      \field{title}{Überlieferung und Bestand der hagiographischen und homiletischen Literatur der griechischen Kirche}
+      \field{volumes}{3}
+      \field{year}{1965}
+      \field{origenddateera}{ce}
+      \field{origdateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Richard857}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=23bac6a565eac7ba58b6c738c915a501}{%
+           family={Franchi\bibnamedelimb de'\bibnamedelima Cavalieri},
+           familyi={F\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={Pio\bibnamedelima Petro},
+           giveni={P\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Bruxelles}%
+      }
+      \list{publisher}{1}{%
+        {Société des Bollandistes}%
+      }
+      \strng{namehash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{fullhash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{fullhashraw}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{bibnamehash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{authorbibnamehash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{authornamehash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{authorfullhash}{23bac6a565eac7ba58b6c738c915a501}
+      \strng{authorfullhashraw}{23bac6a565eac7ba58b6c738c915a501}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Catalogus codicum hagiographicorum graecorum Bibliothecae Vaticanae}
+      \field{year}{1899}
+      \true{nocite}
+    \endentry
+    \entry{Richard2445}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=e3bc9b9aa73d1b8a3e165ae3df3634af}{%
+           family={Hunger},
+           familyi={H\bibinitperiod},
+           given={Herbert},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vienne}%
+      }
+      \list{publisher}{1}{%
+        {Georg Prachner Verlag}%
+      }
+      \strng{namehash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{fullhash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{fullhashraw}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{bibnamehash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{authorbibnamehash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{authornamehash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{authorfullhash}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \strng{authorfullhashraw}{e3bc9b9aa73d1b8a3e165ae3df3634af}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{maintitle}{Katalog der griechischen handschriften des Österreichischen Nationalbibliothek}
+      \field{title}{Codices historici, codices philosophici et philologici}
+      \field{year}{1961}
+      \true{nocite}
+    \endentry
+    \entry{Lake1938}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=3ab1429505fe45a5f58fb7c7a84cf3ea}{%
+           family={Lake},
+           familyi={L\bibinitperiod},
+           given={Kirsopp},
+           giveni={K\bibinitperiod}}}%
+        {{hash=444608480f88b91b1de91eb2d1827dc9}{%
+           family={Lake},
+           familyi={L\bibinitperiod},
+           given={Silvia},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Boston}%
+      }
+      \list{publisher}{2}{%
+        {The American Academy of Arts}%
+        {Sciences}%
+      }
+      \strng{namehash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{fullhash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{fullhashraw}{d4590c50d0877cb7243acdd54973c603}
+      \strng{bibnamehash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{authorbibnamehash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{authornamehash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{authorfullhash}{d4590c50d0877cb7243acdd54973c603}
+      \strng{authorfullhashraw}{d4590c50d0877cb7243acdd54973c603}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{bookpagination}{notice}
+      \field{maintitle}{Dated greek minuscule manuscripts to the year 1200}
+      \field{title}{Manuscripts in Rome, in Messina, in Naples, and in London}
+      \field{volume}{9}
+      \field{year}{1938}
+      \true{nocite}
+    \endentry
+    \entry{Richard192}{mvbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=48e71218b617a9ff1556990b9567a5e3}{%
+           family={Omont},
+           familyi={O\bibinitperiod},
+           given={Henri},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Alphonse Picard}%
+      }
+      \strng{namehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{fullhash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{fullhashraw}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{bibnamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorbibnamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authornamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorfullhash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorfullhashraw}{48e71218b617a9ff1556990b9567a5e3}
+      \field{extraname}{1}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{endyear}{1898}
+      \field{volumes}{4}
+      \field{year}{1886}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{Richard192-3}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=48e71218b617a9ff1556990b9567a5e3}{%
+           family={Omont},
+           familyi={O\bibinitperiod},
+           given={Henri},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Paris}%
+      }
+      \list{publisher}{1}{%
+        {Alphonse Picard}%
+      }
+      \strng{namehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{fullhash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{fullhashraw}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{bibnamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorbibnamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authornamehash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorfullhash}{48e71218b617a9ff1556990b9567a5e3}
+      \strng{authorfullhashraw}{48e71218b617a9ff1556990b9567a5e3}
+      \field{extraname}{2}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \strng{crossref}{Richard192}
+      \field{endyear}{1898}
+      \field{subtitle}{Belles-Lettres, Coislin - Supplément, Paris et départements}
+      \field{title}{Ancien fonds grec}
+      \field{volume}{3}
+      \field{volumes}{4}
+      \field{year}{1888}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

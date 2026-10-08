@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style authoryear"
+source = "texmf-dist/doc/latex/biblatex-abs-annote/biblatex-abs-annote-example.tex (TeX Live 2026), compiled with pdflatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:authoryear"]

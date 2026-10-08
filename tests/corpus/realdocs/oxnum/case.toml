@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style oxnum"
+source = "texmf-dist/doc/latex/biblatex-oxref/oxnum-doc.tex (TeX Live 2026), compiled with lualatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:oxnum"]

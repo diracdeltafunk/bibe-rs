@@ -1,0 +1,914 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{Abello2017}{report}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=f93b63b3e8e11ac5f259c92b47e091ba}{%
+           family={Abelló},
+           familyi={A\bibinitperiod},
+           given={Ma\bibnamedelima Teresa},
+           giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b9e0fc63eb749e2f878ac16b2512923d}{%
+           family={Rietkerk},
+           familyi={R\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6ef09c8359809860ba4f80dc17e9a720}{%
+           family={Bemment},
+           familyi={B\bibinitperiod},
+           given={Neil},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a953b3f236f8ecbfb97ee16cc2f58c70}
+      \strng{fullhash}{4ad73e39a1179b4ec96693b11a81a42a}
+      \strng{fullhashraw}{4ad73e39a1179b4ec96693b11a81a42a}
+      \strng{bibnamehash}{4ad73e39a1179b4ec96693b11a81a42a}
+      \strng{authorbibnamehash}{4ad73e39a1179b4ec96693b11a81a42a}
+      \strng{authornamehash}{a953b3f236f8ecbfb97ee16cc2f58c70}
+      \strng{authorfullhash}{4ad73e39a1179b4ec96693b11a81a42a}
+      \strng{authorfullhashraw}{4ad73e39a1179b4ec96693b11a81a42a}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{EAZA Best Practice Guidelines for Gorillas EAZA BEST PRACTICE GUIDELINES Great Ape Taxon Advisory Group GORILLA (Gorilla gorilla gorilla) (2nd Edition)}
+      \field{type}{techreport}
+      \field{year}{2017}
+    \endentry
+    \entry{AnkelSimons2007}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=890b6bc0946c0a20f7dd7653603609c4}{%
+           family={Ankel-Simons},
+           familyi={A\bibinithyphendelim S\bibinitperiod},
+           given={Friderun},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier Academic Press}%
+      }
+      \strng{namehash}{890b6bc0946c0a20f7dd7653603609c4}
+      \strng{fullhash}{890b6bc0946c0a20f7dd7653603609c4}
+      \strng{fullhashraw}{890b6bc0946c0a20f7dd7653603609c4}
+      \strng{bibnamehash}{890b6bc0946c0a20f7dd7653603609c4}
+      \strng{authorbibnamehash}{890b6bc0946c0a20f7dd7653603609c4}
+      \strng{authornamehash}{890b6bc0946c0a20f7dd7653603609c4}
+      \strng{authorfullhash}{890b6bc0946c0a20f7dd7653603609c4}
+      \strng{authorfullhashraw}{890b6bc0946c0a20f7dd7653603609c4}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{3}
+      \field{isbn}{1865843830}
+      \field{title}{Primate Anatomy An Introduction}
+      \field{year}{2007}
+      \verb{urlraw}
+      \verb http://www.bookaid.org
+      \endverb
+      \verb{url}
+      \verb http://www.bookaid.org
+      \endverb
+    \endentry
+    \entry{NYT2023}{newspaper}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=e1828973d0275bfbae8e155db4ff21c6}{%
+           family={Apuzzo},
+           familyi={A\bibinitperiod},
+           given={Matt},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d36e8f170ee6aaf77c0af14c930f54fa}{%
+           family={Gebrekidan},
+           familyi={G\bibinitperiod},
+           given={Selam},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a697ba062f2a232bba86d4b3eea4508d}
+      \strng{fullhash}{a697ba062f2a232bba86d4b3eea4508d}
+      \strng{fullhashraw}{a697ba062f2a232bba86d4b3eea4508d}
+      \strng{bibnamehash}{a697ba062f2a232bba86d4b3eea4508d}
+      \strng{authorbibnamehash}{a697ba062f2a232bba86d4b3eea4508d}
+      \strng{authornamehash}{a697ba062f2a232bba86d4b3eea4508d}
+      \strng{authorfullhash}{a697ba062f2a232bba86d4b3eea4508d}
+      \strng{authorfullhashraw}{a697ba062f2a232bba86d4b3eea4508d}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{4}
+      \field{eventday}{5}
+      \field{eventmonth}{3}
+      \field{eventyear}{2023}
+      \field{journaltitle}{The New York Times}
+      \field{month}{3}
+      \field{title}{Profits and pandemics: how pharmaceutical companies fought for monopoly power at the WHO}
+      \field{urlday}{10}
+      \field{urlmonth}{3}
+      \field{urlyear}{2023}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{eventdateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.nytimes.com/2023/03/04/health/who-pharmaceutical-monopoly.html
+      \endverb
+      \verb{url}
+      \verb https://www.nytimes.com/2023/03/04/health/who-pharmaceutical-monopoly.html
+      \endverb
+    \endentry
+    \entry{Balan2017}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=8086f40dce1107faffbb148fa008cded}{%
+           family={{Arroyo Balán}},
+           familyi={A\bibinitperiod},
+           given={Fabián\bibnamedelima Leonardo},
+           giveni={F\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Facultade de Veterinaria Universidade de Santiago de Compostela}%
+      }
+      \strng{namehash}{8086f40dce1107faffbb148fa008cded}
+      \strng{fullhash}{8086f40dce1107faffbb148fa008cded}
+      \strng{fullhashraw}{8086f40dce1107faffbb148fa008cded}
+      \strng{bibnamehash}{8086f40dce1107faffbb148fa008cded}
+      \strng{authorbibnamehash}{8086f40dce1107faffbb148fa008cded}
+      \strng{authornamehash}{8086f40dce1107faffbb148fa008cded}
+      \strng{authorfullhash}{8086f40dce1107faffbb148fa008cded}
+      \strng{authorfullhashraw}{8086f40dce1107faffbb148fa008cded}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Formulación de Esporas de Hongos Parasiticidas en Pellets Nutricionales}
+      \field{type}{phdthesis}
+      \field{year}{2017}
+      \verb{urlraw}
+      \verb http://hdl.handle.net/10347/15820
+      \endverb
+      \verb{url}
+      \verb http://hdl.handle.net/10347/15820
+      \endverb
+      \keyw{phdthesis}
+    \endentry
+    \entry{Asa2011}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=e33f9ed2c724092e8fbbe56310f75d4e}{%
+           family={Asa},
+           familyi={A\bibinitperiod},
+           given={Cheryl},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3e5120ac0e124b938c38e56da389c676}{%
+           family={Boutelle},
+           familyi={B\bibinitperiod},
+           given={Sally},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=778c80833b2c6ee1756f69296d327369}{%
+           family={R.\bibnamedelimi EricFowler},
+           familyi={R\bibinitperiod\bibinitdelim E\bibinitperiod},
+           given={Murray\bibnamedelimb E.\bibnamedelimi Miller},
+           giveni={M\bibinitperiod\bibinitdelim E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier Saunders}%
+      }
+      \strng{namehash}{2aeba93e80ebf1d3c95a99d5cf0fa9c4}
+      \strng{fullhash}{2aeba93e80ebf1d3c95a99d5cf0fa9c4}
+      \strng{fullhashraw}{2aeba93e80ebf1d3c95a99d5cf0fa9c4}
+      \strng{bibnamehash}{2aeba93e80ebf1d3c95a99d5cf0fa9c4}
+      \strng{authorbibnamehash}{2aeba93e80ebf1d3c95a99d5cf0fa9c4}
+      \strng{authornamehash}{2aeba93e80ebf1d3c95a99d5cf0fa9c4}
+      \strng{authorfullhash}{2aeba93e80ebf1d3c95a99d5cf0fa9c4}
+      \strng{authorfullhashraw}{2aeba93e80ebf1d3c95a99d5cf0fa9c4}
+      \strng{editorbibnamehash}{778c80833b2c6ee1756f69296d327369}
+      \strng{editornamehash}{778c80833b2c6ee1756f69296d327369}
+      \strng{editorfullhash}{778c80833b2c6ee1756f69296d327369}
+      \strng{editorfullhashraw}{778c80833b2c6ee1756f69296d327369}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{1}
+      \field{journaltitle}{Fowler's Zoo and Wild Animal Medicine Current Therapy}
+      \field{title}{Contraception}
+      \field{volume}{7}
+      \field{year}{2011}
+      \field{pages}{8\bibrangedash 14}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1016/B978-1-4377-1986-4.00002-0
+      \endverb
+    \endentry
+    \entry{ZooBarcelona:Timeline}{online}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c4e45100d2620e931bd91d27be65c993}{%
+           family={Barcelona},
+           familyi={B\bibinitperiod},
+           given={Zoo},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{c4e45100d2620e931bd91d27be65c993}
+      \strng{fullhash}{c4e45100d2620e931bd91d27be65c993}
+      \strng{fullhashraw}{c4e45100d2620e931bd91d27be65c993}
+      \strng{bibnamehash}{c4e45100d2620e931bd91d27be65c993}
+      \strng{authorbibnamehash}{c4e45100d2620e931bd91d27be65c993}
+      \strng{authornamehash}{c4e45100d2620e931bd91d27be65c993}
+      \strng{authorfullhash}{c4e45100d2620e931bd91d27be65c993}
+      \strng{authorfullhashraw}{c4e45100d2620e931bd91d27be65c993}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labeldatesource}{nodate}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Timeline – Walk through the past, present and future of a conservation institution for biodiversity}
+      \verb{urlraw}
+      \verb https://historia.zoobarcelona.cat/en/
+      \endverb
+      \verb{url}
+      \verb https://historia.zoobarcelona.cat/en/
+      \endverb
+    \endentry
+    \entry{Bogitsh2013}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=b4a4d9a9342edee02f53d2886bf15dfa}{%
+           family={Bogitsh},
+           familyi={B\bibinitperiod},
+           given={Burton\bibnamedelima Jerome},
+           giveni={B\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ce0908c8d829132702c95d067ae4be04}{%
+           family={Carter},
+           familyi={C\bibinitperiod},
+           given={Clint\bibnamedelima Earl},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Academic Press}%
+      }
+      \strng{namehash}{4e21a87e737dc580f979f3be5736b11e}
+      \strng{fullhash}{4e21a87e737dc580f979f3be5736b11e}
+      \strng{fullhashraw}{4e21a87e737dc580f979f3be5736b11e}
+      \strng{bibnamehash}{4e21a87e737dc580f979f3be5736b11e}
+      \strng{authorbibnamehash}{4e21a87e737dc580f979f3be5736b11e}
+      \strng{authornamehash}{4e21a87e737dc580f979f3be5736b11e}
+      \strng{authorfullhash}{4e21a87e737dc580f979f3be5736b11e}
+      \strng{authorfullhashraw}{4e21a87e737dc580f979f3be5736b11e}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{4}
+      \field{isbn}{9780124159150}
+      \field{title}{Human parasitology}
+      \field{year}{2013}
+    \endentry
+    \entry{Duddington1955}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=7ac63027943771f229eaea30b3a90755}{%
+           family={Duddington},
+           familyi={D\bibinitperiod},
+           given={C.\bibnamedelimi L.},
+           giveni={C\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7ac63027943771f229eaea30b3a90755}
+      \strng{fullhash}{7ac63027943771f229eaea30b3a90755}
+      \strng{fullhashraw}{7ac63027943771f229eaea30b3a90755}
+      \strng{bibnamehash}{7ac63027943771f229eaea30b3a90755}
+      \strng{authorbibnamehash}{7ac63027943771f229eaea30b3a90755}
+      \strng{authornamehash}{7ac63027943771f229eaea30b3a90755}
+      \strng{authorfullhash}{7ac63027943771f229eaea30b3a90755}
+      \strng{authorfullhashraw}{7ac63027943771f229eaea30b3a90755}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Botanical Review}
+      \field{number}{7}
+      \field{title}{Fungi that Attack Microscopic Animals}
+      \field{volume}{21}
+      \field{year}{1955}
+      \field{pages}{377\bibrangedash 439}
+      \range{pages}{63}
+      \verb{doi}
+      \verb 10.1007/bf02872434
+      \endverb
+    \endentry
+    \entry{Duque2018}{report}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=6c0e3eea23d29e0dce649a1f33d9e1ee}{%
+           family={Duque},
+           familyi={D\bibinitperiod},
+           given={Daniela},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=88d33934e10fd64a746702e0c4172d1a}{%
+           family={Lopes},
+           familyi={L\bibinitperiod},
+           given={Ricardo},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=604268ec0a859565054e31d8054680fb}{%
+           family={Sampaio},
+           familyi={S\bibinitperiod},
+           given={Filipe},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=49a5805a344a23209f300ddc8a6628ee}{%
+           family={Silva},
+           familyi={S\bibinitperiod},
+           given={Augusto},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=034c58ab10b90e1ada634a916a86bc2a}{%
+           family={Simões},
+           familyi={S\bibinitperiod},
+           given={Paula\bibnamedelima Brilhante},
+           giveni={P\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Laboratório Veterinário INNO}%
+      }
+      \strng{namehash}{f884f6ed96fdcc9247bd7ca43eaf5adc}
+      \strng{fullhash}{e130b7c0b68eb9b80d5d410cd4a85340}
+      \strng{fullhashraw}{e130b7c0b68eb9b80d5d410cd4a85340}
+      \strng{bibnamehash}{e130b7c0b68eb9b80d5d410cd4a85340}
+      \strng{authorbibnamehash}{e130b7c0b68eb9b80d5d410cd4a85340}
+      \strng{authornamehash}{f884f6ed96fdcc9247bd7ca43eaf5adc}
+      \strng{authorfullhash}{e130b7c0b68eb9b80d5d410cd4a85340}
+      \strng{authorfullhashraw}{e130b7c0b68eb9b80d5d410cd4a85340}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{4}
+      \field{title}{Prevalência parasitária gastrointestinal em 1419 casos (2015-2017), comparando a análise coprológica de 1 versus 3 amostras}
+      \field{type}{techreport}
+      \field{year}{2018}
+    \endentry
+    \entry{Fiby2020}{report}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3d525c2f489b3ea6ecfac80f8784d776}{%
+           family={Fiby},
+           familyi={F\bibinitperiod},
+           given={Monika},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3d525c2f489b3ea6ecfac80f8784d776}
+      \strng{fullhash}{3d525c2f489b3ea6ecfac80f8784d776}
+      \strng{fullhashraw}{3d525c2f489b3ea6ecfac80f8784d776}
+      \strng{bibnamehash}{3d525c2f489b3ea6ecfac80f8784d776}
+      \strng{authorbibnamehash}{3d525c2f489b3ea6ecfac80f8784d776}
+      \strng{authornamehash}{3d525c2f489b3ea6ecfac80f8784d776}
+      \strng{authorfullhash}{3d525c2f489b3ea6ecfac80f8784d776}
+      \strng{authorfullhashraw}{3d525c2f489b3ea6ecfac80f8784d776}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Bio-floors in Animal Enclosures}
+      \field{type}{techreport}
+      \field{year}{2020}
+    \endentry
+    \entry{Lysek1982}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=9945ef064da50b577b3d1b608eaf534a}{%
+           family={Lýsek},
+           familyi={L\bibinitperiod},
+           given={Hynek},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6ddbb67ecc6fb48bcc397f929e83ef75}{%
+           family={Fassatiová},
+           familyi={F\bibinitperiod},
+           given={O.},
+           giveni={O\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d2101a13e6d3abf5715ae1e66defaff8}{%
+           family={Pineda},
+           familyi={P\bibinitperiod},
+           given={N.\bibnamedelimi Cuervo},
+           giveni={N\bibinitperiod\bibinitdelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c4543950487814187b3234f9a84af06d}{%
+           family={Lorenzo},
+           familyi={L\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=12eb63a8f3736d47cf7c1b2f6e51d67a}{%
+           family={{Hernández Malagón}},
+           familyi={H\bibinitperiod},
+           given={José\bibnamedelima Ángel},
+           giveni={J\bibinitperiod\bibinitdelim Á\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{42eb159185cc5ba5ebb56a770ddfe62d}
+      \strng{fullhash}{cc9fece5a9b7ecf4b37079e1290d1c83}
+      \strng{fullhashraw}{cc9fece5a9b7ecf4b37079e1290d1c83}
+      \strng{bibnamehash}{cc9fece5a9b7ecf4b37079e1290d1c83}
+      \strng{authorbibnamehash}{cc9fece5a9b7ecf4b37079e1290d1c83}
+      \strng{authornamehash}{42eb159185cc5ba5ebb56a770ddfe62d}
+      \strng{authorfullhash}{cc9fece5a9b7ecf4b37079e1290d1c83}
+      \strng{authorfullhashraw}{cc9fece5a9b7ecf4b37079e1290d1c83}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0015--5683}
+      \field{journaltitle}{Folia Parasitologica}
+      \field{month}{1}
+      \field{number}{3}
+      \field{title}{Ovicidal fungi in soils of Cuba.}
+      \field{volume}{29}
+      \field{year}{1982}
+      \field{pages}{265\bibrangedash 270}
+      \range{pages}{6}
+      \verb{urlraw}
+      \verb https://europepmc.org/article/med/6890012
+      \endverb
+      \verb{url}
+      \verb https://europepmc.org/article/med/6890012
+      \endverb
+    \endentry
+    \entry{Carvalho2002}{thesis}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=6f652a3bc76633d9317449f498e9003b}{%
+           family={Madeira\bibnamedelimb de\bibnamedelima Carvalho},
+           familyi={M\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={Luís\bibnamedelima Manuel},
+           giveni={L\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Faculdade de Medicina Veterinária}%
+      }
+      \strng{namehash}{6f652a3bc76633d9317449f498e9003b}
+      \strng{fullhash}{6f652a3bc76633d9317449f498e9003b}
+      \strng{fullhashraw}{6f652a3bc76633d9317449f498e9003b}
+      \strng{bibnamehash}{6f652a3bc76633d9317449f498e9003b}
+      \strng{authorbibnamehash}{6f652a3bc76633d9317449f498e9003b}
+      \strng{authornamehash}{6f652a3bc76633d9317449f498e9003b}
+      \strng{authorfullhash}{6f652a3bc76633d9317449f498e9003b}
+      \strng{authorfullhashraw}{6f652a3bc76633d9317449f498e9003b}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Epidemiologia e controlo da estrongilidose em diferentes sistemas de produção equina em Portugal}
+      \field{type}{mathesis}
+      \field{year}{2002}
+      \keyw{mastersthesis}
+    \endentry
+    \entry{Carvalho2007}{article}{}{}
+      \name{author}{6}{ul=1}{%
+        {{un=0,uniquepart=base,hash=6f652a3bc76633d9317449f498e9003b}{%
+           family={Madeira\bibnamedelimb de\bibnamedelima Carvalho},
+           familyi={M\bibinitperiod\bibinitdelim d\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={Luís\bibnamedelima Manuel},
+           giveni={L\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5dae11e6859e838f4f8491d9cca624a9}{%
+           family={Gillespie},
+           familyi={G\bibinitperiod},
+           given={A.\bibnamedelimi T.},
+           giveni={A\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6bd3e66b2587c50d33b8c1b5c6308fff}{%
+           family={Serra},
+           familyi={S\bibinitperiod},
+           given={P.\bibnamedelimi M.},
+           giveni={P\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=955d09bc5060bd42b0e2952554312ac9}{%
+           family={Bernardo},
+           familyi={B\bibinitperiod},
+           given={F.\bibnamedelimi A.},
+           giveni={F\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c36510cf72670baee6d7675472b97c51}{%
+           family={Farrim},
+           familyi={F\bibinitperiod},
+           given={A.\bibnamedelimi P.},
+           giveni={A\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=18d34768111e9e86b1ead2c8d417ef16}{%
+           family={Fazendeiro},
+           familyi={F\bibinitperiod},
+           given={I.\bibnamedelimi M.},
+           giveni={I\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{49e357846a6199d5dc692972de4495fa}
+      \strng{fullhash}{27cf9eb292f4cc07f333d516de10994f}
+      \strng{fullhashraw}{27cf9eb292f4cc07f333d516de10994f}
+      \strng{bibnamehash}{49e357846a6199d5dc692972de4495fa}
+      \strng{authorbibnamehash}{49e357846a6199d5dc692972de4495fa}
+      \strng{authornamehash}{49e357846a6199d5dc692972de4495fa}
+      \strng{authorfullhash}{27cf9eb292f4cc07f333d516de10994f}
+      \strng{authorfullhashraw}{27cf9eb292f4cc07f333d516de10994f}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{REVISTA PORTUGUESA DE CIÊNCIAS VETERINÁRIAS}
+      \field{title}{Eficácia do fungo nematófago \textit{Duddingtonia flagrans} no controlo biológico da estrongilidose equina no Ribatejo Efficacy of the nematofagous fungi \textit{Duddingtonia flagrans} in the biological control of horse strongylosis in the Ribatejo}
+      \field{volume}{102}
+      \field{year}{2007}
+      \field{pages}{233\bibrangedash 247}
+      \range{pages}{15}
+      \keyw{()}
+    \endentry
+    \entry{Migaki1982}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=cc99d079d0c2340f49ced1abdff59abc}{%
+           family={Migaki},
+           familyi={M\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=422d2aa8bd219f83ed14a3ae3c1886f5}{%
+           family={Schmidt},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi E.},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fe4bae3192fcbd717f38ecb7dbc06373}{%
+           family={Toft},
+           familyi={T\bibinitperiod},
+           given={J.\bibnamedelimi D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=37c7a7b5e69179478eaff09756d74120}{%
+           family={Kaufmann},
+           familyi={K\bibinitperiod},
+           given={A.\bibnamedelimi F.},
+           giveni={A\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8484bb2a67c823a0eb7a54f74a65f4bd}
+      \strng{fullhash}{2a72ed86f0fb46aa78d5ac326ad336b8}
+      \strng{fullhashraw}{2a72ed86f0fb46aa78d5ac326ad336b8}
+      \strng{bibnamehash}{2a72ed86f0fb46aa78d5ac326ad336b8}
+      \strng{authorbibnamehash}{2a72ed86f0fb46aa78d5ac326ad336b8}
+      \strng{authornamehash}{8484bb2a67c823a0eb7a54f74a65f4bd}
+      \strng{authorfullhash}{2a72ed86f0fb46aa78d5ac326ad336b8}
+      \strng{authorfullhashraw}{2a72ed86f0fb46aa78d5ac326ad336b8}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Vet. Pathol}
+      \field{title}{Mycotic Infections of the Alimentary Tract of Nonhuman Primates: A Review}
+      \field{volume}{19}
+      \field{year}{1982}
+      \field{pages}{93\bibrangedash 103}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1177/030098588201907s07
+      \endverb
+    \endentry
+    \entry{Miller2011}{report}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=b0209f041703039ef47777ac38244665}{%
+           family={Miller},
+           familyi={M\bibinitperiod},
+           given={R.\bibnamedelimi Eric},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=05451dbca88c1e8c3c81c16f02327858}{%
+           family={Fowler},
+           familyi={F\bibinitperiod},
+           given={Murray},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{76331006c188f4e8b91494886fa64da9}
+      \strng{fullhash}{76331006c188f4e8b91494886fa64da9}
+      \strng{fullhashraw}{76331006c188f4e8b91494886fa64da9}
+      \strng{bibnamehash}{76331006c188f4e8b91494886fa64da9}
+      \strng{authorbibnamehash}{76331006c188f4e8b91494886fa64da9}
+      \strng{authornamehash}{76331006c188f4e8b91494886fa64da9}
+      \strng{authorfullhash}{76331006c188f4e8b91494886fa64da9}
+      \strng{authorfullhashraw}{76331006c188f4e8b91494886fa64da9}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Zoo and Wild Animal Medicine CURRENT THERAPY}
+      \field{type}{techreport}
+      \field{year}{2011}
+    \endentry
+    \entry{Modry2017}{book}{}{}
+      \name{author}{6}{ul=2}{%
+        {{un=0,uniquepart=base,hash=726b7255684d7f3b0d7a9a91b1514d2a}{%
+           family={Modrý},
+           familyi={M\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f50524b0370d001a7316bffd0a48ed59}{%
+           family={Hofmannová},
+           familyi={H\bibinitperiod},
+           given={Lada},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3a9083b0315607560dd198b1a984f698}{%
+           family={Mihalca},
+           familyi={M\bibinitperiod},
+           given={Andrei\bibnamedelima D.},
+           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7a8f67213fead9a6f8b5bf51f0dfce2d}{%
+           family={Juránková},
+           familyi={J\bibinitperiod},
+           given={Jana},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9ccf8351d7e091a331663d741aa852ad}{%
+           family={Neumayerová},
+           familyi={N\bibinitperiod},
+           given={Helena},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c8a2fb0212290d0c0afc735a2697a920}{%
+           family={D’Amico},
+           familyi={D\bibinitperiod},
+           given={Gianluca},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5312cf44f17c90e73d533674e3905973}
+      \strng{fullhash}{eb604f70590bc3de993cd449d0097d77}
+      \strng{fullhashraw}{eb604f70590bc3de993cd449d0097d77}
+      \strng{bibnamehash}{5312cf44f17c90e73d533674e3905973}
+      \strng{authorbibnamehash}{5312cf44f17c90e73d533674e3905973}
+      \strng{authornamehash}{5312cf44f17c90e73d533674e3905973}
+      \strng{authorfullhash}{eb604f70590bc3de993cd449d0097d77}
+      \strng{authorfullhashraw}{eb604f70590bc3de993cd449d0097d77}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Field and laboratory diagnostics of parasitic diseases of domestic animals: from sampling to diagnosis}
+      \field{year}{2017}
+    \endentry
+    \entry{Modry2015}{book}{}{}
+      \name{author}{4}{ul=2}{%
+        {{un=0,uniquepart=base,hash=726b7255684d7f3b0d7a9a91b1514d2a}{%
+           family={Modrý},
+           familyi={M\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6fa38eaeb4704093bdeb2d314af3647f}{%
+           family={Petrzelková},
+           familyi={P\bibinitperiod},
+           given={Klára\bibnamedelima J.},
+           giveni={K\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2329d91c176d69539b3a352c6513a8dc}{%
+           family={Kalousová},
+           familyi={K\bibinitperiod},
+           given={Barbora},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fd8509a5b3151fff6b23293aaffe0590}{%
+           family={Hasegawa},
+           familyi={H\bibinitperiod},
+           given={Hideo},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5da45b48a8106a31c4727dd548bf915e}
+      \strng{fullhash}{e13930da00cdc3a4628a5c7ee5066dcc}
+      \strng{fullhashraw}{e13930da00cdc3a4628a5c7ee5066dcc}
+      \strng{bibnamehash}{e13930da00cdc3a4628a5c7ee5066dcc}
+      \strng{authorbibnamehash}{e13930da00cdc3a4628a5c7ee5066dcc}
+      \strng{authornamehash}{5da45b48a8106a31c4727dd548bf915e}
+      \strng{authorfullhash}{e13930da00cdc3a4628a5c7ee5066dcc}
+      \strng{authorfullhashraw}{e13930da00cdc3a4628a5c7ee5066dcc}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Parasites of Apes: An Atlas of Coproscopic Diagnostics}
+      \field{year}{2015}
+    \endentry
+    \entry{Riadigos2014}{article}{}{}
+      \name{author}{9}{}{%
+        {{un=0,uniquepart=base,hash=18b550f26862fd915484078ff58c852d}{%
+           family={Riádigos},
+           familyi={R\bibinitperiod},
+           given={Silvia\bibnamedelima Miguélez},
+           giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=76d71cda1b67c5744747b039575e76ba}{%
+           family={{Arias Vázquez}},
+           familyi={A\bibinitperiod},
+           given={María\bibnamedelima Sol},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a89886864b9a645892589b9bc14437db}{%
+           family={Cano},
+           familyi={C\bibinitperiod},
+           given={Esther\bibnamedelima Valderrábano},
+           giveni={E\bibinitperiod\bibinitdelim V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=55aa55081ad246004ddf14c2935a6254}{%
+           family={Fraga},
+           familyi={F\bibinitperiod},
+           given={Pablo\bibnamedelima Piñeiro},
+           giveni={P\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=987371eb571c375a7fd909dc23286322}{%
+           family={Uzal},
+           familyi={U\bibinitperiod},
+           given={Diego\bibnamedelima Gómez},
+           giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e5d20802f968876b90eb724c8af2fba}{%
+           family={Marcos},
+           familyi={M\bibinitperiod},
+           given={María\bibnamedelima Fernández},
+           giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=65df3b7d74a4706ce0a81544e1c440bd}{%
+           family={{Bonilla Quintero}},
+           familyi={B\bibinitperiod},
+           given={Rodrigo},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=638d351fff5a0d777af77bad75715bbf}{%
+           family={Fernández},
+           familyi={F\bibinitperiod},
+           given={Rita\bibnamedelima Sánchez-Andrade},
+           giveni={R\bibinitperiod\bibinitdelim S\bibinithyphendelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=101284ed5318c4cb121165c6c895daed}{%
+           family={{Madeira de Carvalho}},
+           familyi={M\bibinitperiod},
+           given={Luis\bibnamedelima Manuel},
+           giveni={L\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3ff1dacef9e3358a94e1f25cd5a60d97}
+      \strng{fullhash}{4c1c061675d562d35884eae2a3b8624b}
+      \strng{fullhashraw}{4c1c061675d562d35884eae2a3b8624b}
+      \strng{bibnamehash}{3ff1dacef9e3358a94e1f25cd5a60d97}
+      \strng{authorbibnamehash}{3ff1dacef9e3358a94e1f25cd5a60d97}
+      \strng{authornamehash}{3ff1dacef9e3358a94e1f25cd5a60d97}
+      \strng{authorfullhash}{4c1c061675d562d35884eae2a3b8624b}
+      \strng{authorfullhashraw}{4c1c061675d562d35884eae2a3b8624b}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2182--8865}
+      \field{journaltitle}{Pastagens e Forragens}
+      \field{title}{Control Biológico de Nematodos Parásitos en Antílopes (\textit{Cervicapra cervicapra}) en Cautividad}
+      \field{volume}{34}
+      \field{year}{2014}
+      \field{pages}{47\bibrangedash 56}
+      \range{pages}{10}
+    \endentry
+    \entry{Taylor2016}{book}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=b26d1552e6f779faa2d061baa14ef54d}{%
+           family={Taylor},
+           familyi={T\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0203674e0a6793176a71e1e33021986e}{%
+           family={Coop},
+           familyi={C\bibinitperiod},
+           given={R.\bibnamedelimi L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=76f4255217d704e00d27cdd9e87b07ba}{%
+           family={Wall},
+           familyi={W\bibinitperiod},
+           given={R.\bibnamedelimi L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley Blackwell}%
+      }
+      \strng{namehash}{a2eb27c529ecbcd627cee86f09690132}
+      \strng{fullhash}{f86556529fe8e0feb28c37df5f0d8b76}
+      \strng{fullhashraw}{f86556529fe8e0feb28c37df5f0d8b76}
+      \strng{bibnamehash}{f86556529fe8e0feb28c37df5f0d8b76}
+      \strng{authorbibnamehash}{f86556529fe8e0feb28c37df5f0d8b76}
+      \strng{authornamehash}{a2eb27c529ecbcd627cee86f09690132}
+      \strng{authorfullhash}{f86556529fe8e0feb28c37df5f0d8b76}
+      \strng{authorfullhashraw}{f86556529fe8e0feb28c37df5f0d8b76}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{4}
+      \field{title}{Veterinary Parasitology}
+      \field{year}{2016}
+    \endentry
+    \entry{Zoos2022}{manual}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=4b08a27f2210eca347b3190313656a28}{%
+           family={Zoos},
+           familyi={Z\bibinitperiod}}}%
+        {{un=0,uniquepart=base,hash=392a7f334e71bc8fbccbfe6c4dbee364}{%
+           family={Aquaria},
+           familyi={A\bibinitperiod},
+           given={European\bibnamedelimb Association\bibnamedelima of},
+           giveni={E\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim o\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4077907e7a1c4d8d658d2149105c27c0}
+      \strng{fullhash}{4077907e7a1c4d8d658d2149105c27c0}
+      \strng{fullhashraw}{4077907e7a1c4d8d658d2149105c27c0}
+      \strng{bibnamehash}{4077907e7a1c4d8d658d2149105c27c0}
+      \strng{authorbibnamehash}{4077907e7a1c4d8d658d2149105c27c0}
+      \strng{authornamehash}{4077907e7a1c4d8d658d2149105c27c0}
+      \strng{authorfullhash}{4077907e7a1c4d8d658d2149105c27c0}
+      \strng{authorfullhashraw}{4077907e7a1c4d8d658d2149105c27c0}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{EAZA Membership and Accreditation Manual}
+      \field{year}{2022}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,1 @@
+WARN - BibTeX subsystem: latex-via-exemplos.bib, line 9, warning: 149 characters of junk seen at toplevel

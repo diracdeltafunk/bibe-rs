@@ -1,0 +1,474 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{jour}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=c1e55df57f6dfc3d7d670baa552b4e0a}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Temple\bibnamedelima F.},
+           giveni={T\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=75962bba95c5349d125f124ce197a2b4}{%
+           family={Waterman},
+           familyi={W\bibinitperiod},
+           given={Michael\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{fa84a48764a57aeb995b1af15d9a8d0b}
+      \strng{fullhash}{fa84a48764a57aeb995b1af15d9a8d0b}
+      \strng{fullhashraw}{fa84a48764a57aeb995b1af15d9a8d0b}
+      \strng{bibnamehash}{fa84a48764a57aeb995b1af15d9a8d0b}
+      \strng{authorbibnamehash}{fa84a48764a57aeb995b1af15d9a8d0b}
+      \strng{authornamehash}{fa84a48764a57aeb995b1af15d9a8d0b}
+      \strng{authorfullhash}{fa84a48764a57aeb995b1af15d9a8d0b}
+      \strng{authorfullhashraw}{fa84a48764a57aeb995b1af15d9a8d0b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{14}
+      \field{journaltitle}{J. Mol. Biol.}
+      \field{month}{7}
+      \field{title}{Identification of Common Molecular Subsequences}
+      \field{volume}{147}
+      \field{year}{1981}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{195\bibrangedash 197}
+      \range{pages}{3}
+      \verb{doi}
+      \verb 10.1016/0022-2836(81)90087-5
+      \endverb
+    \endentry
+    \entry{lncschap}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=f5c30e55de30a6c74b0f674f77b29a44}{%
+           family={May},
+           familyi={M\bibinitperiod},
+           given={Patrick},
+           giveni={P\bibinitperiod}}}%
+        {{hash=3a6aadb0e2a443f7b6657945518585b1}{%
+           family={Ehrlich},
+           familyi={E\bibinitperiod},
+           given={Hans-Christian},
+           giveni={H\bibinithyphendelim C\bibinitperiod}}}%
+        {{hash=a8ee507f496e43705d0c170feeb81861}{%
+           family={Steinke},
+           familyi={S\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+      }
+      \name{editor}{3}{}{%
+        {{hash=8b8c8b5c1b3dc86af1da0b8cf6eb08f4}{%
+           family={Nagel},
+           familyi={N\bibinitperiod},
+           given={Wolfgang\bibnamedelima E.},
+           giveni={W\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=b32b850350f905e1bb98cdbfaf857d57}{%
+           family={Walter},
+           familyi={W\bibinitperiod},
+           given={Wolfgang\bibnamedelima V.},
+           giveni={W\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=69b1ffd40d606bf86bedca673816fde6}{%
+           family={Lehner},
+           familyi={L\bibinitperiod},
+           given={Wolfgang},
+           giveni={W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{c86c6db5b143c34007ef58a67439eadc}
+      \strng{fullhash}{c86c6db5b143c34007ef58a67439eadc}
+      \strng{fullhashraw}{c86c6db5b143c34007ef58a67439eadc}
+      \strng{bibnamehash}{c86c6db5b143c34007ef58a67439eadc}
+      \strng{authorbibnamehash}{c86c6db5b143c34007ef58a67439eadc}
+      \strng{authornamehash}{c86c6db5b143c34007ef58a67439eadc}
+      \strng{authorfullhash}{c86c6db5b143c34007ef58a67439eadc}
+      \strng{authorfullhashraw}{c86c6db5b143c34007ef58a67439eadc}
+      \strng{editorbibnamehash}{0fa70d517108d80f4da049efc0577915}
+      \strng{editornamehash}{0fa70d517108d80f4da049efc0577915}
+      \strng{editorfullhash}{0fa70d517108d80f4da049efc0577915}
+      \strng{editorfullhashraw}{0fa70d517108d80f4da049efc0577915}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eventtitle}{Euro-Par 2006}
+      \field{series}{LNCS}
+      \field{title}{ZIB Structure Prediction Pipeline: Composing a Complex Biological Workflow through Web Services}
+      \field{volume}{4128}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{1148\bibrangedash 1158}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1007/11823285_121
+      \endverb
+    \endentry
+    \entry{book}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=ef1fd4a400dec702b5baeeac0f942be7}{%
+           family={Foster},
+           familyi={F\bibinitperiod},
+           given={Ian},
+           giveni={I\bibinitperiod}}}%
+        {{hash=5bfec4c02577e5f42b9a44b0fd808e64}{%
+           family={Kesselman},
+           familyi={K\bibinitperiod},
+           given={Carl},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {San Francisco}%
+      }
+      \list{publisher}{1}{%
+        {Morgan Kaufmann}%
+      }
+      \strng{namehash}{cdfa82616bf8afdd2a7c54164027c9a1}
+      \strng{fullhash}{cdfa82616bf8afdd2a7c54164027c9a1}
+      \strng{fullhashraw}{cdfa82616bf8afdd2a7c54164027c9a1}
+      \strng{bibnamehash}{cdfa82616bf8afdd2a7c54164027c9a1}
+      \strng{authorbibnamehash}{cdfa82616bf8afdd2a7c54164027c9a1}
+      \strng{authornamehash}{cdfa82616bf8afdd2a7c54164027c9a1}
+      \strng{authorfullhash}{cdfa82616bf8afdd2a7c54164027c9a1}
+      \strng{authorfullhashraw}{cdfa82616bf8afdd2a7c54164027c9a1}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{1-55860-475-8}
+      \field{title}{The Grid: Blueprint for a New Computing Infrastructure}
+      \field{year}{1999}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{proceeding1}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=47ba814950dcfd7124ba0435f457b90a}{%
+           family={Czajkowski},
+           familyi={C\bibinitperiod},
+           given={Karl},
+           giveni={K\bibinitperiod}}}%
+        {{hash=314850894b465a2cee114911a3a87073}{%
+           family={Fitzgerald},
+           familyi={F\bibinitperiod},
+           given={Steven},
+           giveni={S\bibinitperiod}}}%
+        {{hash=ef1fd4a400dec702b5baeeac0f942be7}{%
+           family={Foster},
+           familyi={F\bibinitperiod},
+           given={Ian},
+           giveni={I\bibinitperiod}}}%
+        {{hash=5bfec4c02577e5f42b9a44b0fd808e64}{%
+           family={Kesselman},
+           familyi={K\bibinitperiod},
+           given={Carl},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE Press, New York}%
+      }
+      \strng{namehash}{07003f9c17d136d39c85a91e85d0cb3b}
+      \strng{fullhash}{3a74290ad92c4265a0940047e7d9bbec}
+      \strng{fullhashraw}{3a74290ad92c4265a0940047e7d9bbec}
+      \strng{bibnamehash}{3a74290ad92c4265a0940047e7d9bbec}
+      \strng{authorbibnamehash}{3a74290ad92c4265a0940047e7d9bbec}
+      \strng{authornamehash}{07003f9c17d136d39c85a91e85d0cb3b}
+      \strng{authorfullhash}{3a74290ad92c4265a0940047e7d9bbec}
+      \strng{authorfullhashraw}{3a74290ad92c4265a0940047e7d9bbec}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eventtitle}{10th IEEE International Symposium on High Performance Distributed Computing}
+      \field{title}{Grid Information Services for Distributed Resource Sharing}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{181\bibrangedash 184}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1109/HPDC.2001.945188
+      \endverb
+    \endentry
+    \entry{proceeding2}{report}{}{}
+      \name{author}{4}{}{%
+        {{hash=ef1fd4a400dec702b5baeeac0f942be7}{%
+           family={Foster},
+           familyi={F\bibinitperiod},
+           given={Ian},
+           giveni={I\bibinitperiod}}}%
+        {{hash=5bfec4c02577e5f42b9a44b0fd808e64}{%
+           family={Kesselman},
+           familyi={K\bibinitperiod},
+           given={Carl},
+           giveni={C\bibinitperiod}}}%
+        {{hash=1f83028d1cef38451d46f7bf85c8fc0a}{%
+           family={Nick},
+           familyi={N\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=d341576b59ba8faab7a9718954e0ad3a}{%
+           family={Tuecke},
+           familyi={T\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Global Grid Forum}%
+      }
+      \strng{namehash}{8f0a4299cd7fd1aee95ab1ca428e2201}
+      \strng{fullhash}{1b3fa3674eb956fb84ff0ef958b5311a}
+      \strng{fullhashraw}{1b3fa3674eb956fb84ff0ef958b5311a}
+      \strng{bibnamehash}{1b3fa3674eb956fb84ff0ef958b5311a}
+      \strng{authorbibnamehash}{1b3fa3674eb956fb84ff0ef958b5311a}
+      \strng{authornamehash}{8f0a4299cd7fd1aee95ab1ca428e2201}
+      \strng{authorfullhash}{1b3fa3674eb956fb84ff0ef958b5311a}
+      \strng{authorfullhashraw}{1b3fa3674eb956fb84ff0ef958b5311a}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Physiology of the Grid: an Open Grid Services Architecture for Distributed Systems Integration}
+      \field{type}{Technical report}
+      \field{year}{2002}
+      \field{dateera}{ce}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://toolkit.globus.org/alliance/publications/papers.php#OGSA
+      \endverb
+      \verb{url}
+      \verb http://toolkit.globus.org/alliance/publications/papers.php#OGSA
+      \endverb
+    \endentry
+    \entry{url}{online}{}{}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labeltitlesource}{title}
+      \field{title}{National Center for Biotechnology Information}
+      \true{nocite}
+      \verb{urlraw}
+      \verb http://www.ncbi.nlm.nih.gov
+      \endverb
+      \verb{url}
+      \verb http://www.ncbi.nlm.nih.gov
+      \endverb
+    \endentry
+    \entry{clar:eke}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=837e87b9ccaa32b2e6da7c253e3e4790}{%
+           family={Clarke},
+           familyi={C\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+        {{hash=dd71050c22033b96d40d9ca433516968}{%
+           family={Ekeland},
+           familyi={E\bibinitperiod},
+           given={I.},
+           giveni={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{fullhash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{fullhashraw}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{bibnamehash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{authorbibnamehash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{authornamehash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{authorfullhash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{authorfullhashraw}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \field{extraname}{1}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Arch. Rat. Mech. Anal.}
+      \field{title}{Nonlinear oscillations and boundary-value problems for Hamiltonian systems}
+      \field{volume}{78}
+      \field{year}{1982}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{315\bibrangedash 333}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1007/BF00249584
+      \endverb
+    \endentry
+    \entry{clar:eke:2}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=837e87b9ccaa32b2e6da7c253e3e4790}{%
+           family={Clarke},
+           familyi={C\bibinitperiod},
+           given={Frank},
+           giveni={F\bibinitperiod}}}%
+        {{hash=dd71050c22033b96d40d9ca433516968}{%
+           family={Ekeland},
+           familyi={E\bibinitperiod},
+           given={I.},
+           giveni={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{fullhash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{fullhashraw}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{bibnamehash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{authorbibnamehash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{authornamehash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{authorfullhash}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \strng{authorfullhashraw}{c52b50b69ba44a9cea1738aba95c7aa6}
+      \field{extraname}{2}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Note CRAS Paris}
+      \field{title}{Solutions périodiques, du période donnée, des équations hamiltoniennes}
+      \field{volume}{287}
+      \field{year}{1978}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{1013\bibrangedash 1015}
+      \range{pages}{3}
+    \endentry
+    \entry{mich:tar}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=c56758393df29784f0887afdb71a5af6}{%
+           family={Michalek},
+           familyi={M\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=ef22c556b9050616edd00a97455e17b3}{%
+           family={Tarantello},
+           familyi={T\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{37911db412c103914306dfd3f812cade}
+      \strng{fullhash}{37911db412c103914306dfd3f812cade}
+      \strng{fullhashraw}{37911db412c103914306dfd3f812cade}
+      \strng{bibnamehash}{37911db412c103914306dfd3f812cade}
+      \strng{authorbibnamehash}{37911db412c103914306dfd3f812cade}
+      \strng{authornamehash}{37911db412c103914306dfd3f812cade}
+      \strng{authorfullhash}{37911db412c103914306dfd3f812cade}
+      \strng{authorfullhashraw}{37911db412c103914306dfd3f812cade}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{J. Diff. Eq.}
+      \field{title}{Subharmonic solutions with prescribed minimal period for nonautonomous Hamiltonian systems}
+      \field{volume}{72}
+      \field{year}{1988}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{28\bibrangedash 55}
+      \range{pages}{28}
+    \endentry
+    \entry{tar}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=ef22c556b9050616edd00a97455e17b3}{%
+           family={Tarantello},
+           familyi={T\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{ef22c556b9050616edd00a97455e17b3}
+      \strng{fullhash}{ef22c556b9050616edd00a97455e17b3}
+      \strng{fullhashraw}{ef22c556b9050616edd00a97455e17b3}
+      \strng{bibnamehash}{ef22c556b9050616edd00a97455e17b3}
+      \strng{authorbibnamehash}{ef22c556b9050616edd00a97455e17b3}
+      \strng{authornamehash}{ef22c556b9050616edd00a97455e17b3}
+      \strng{authorfullhash}{ef22c556b9050616edd00a97455e17b3}
+      \strng{authorfullhashraw}{ef22c556b9050616edd00a97455e17b3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Annali di Matematica Pura}
+      \field{pubstate}{to appear}
+      \field{title}{Subharmonic solutions for Hamiltonian systems via a $\bbbz_{p}$ pseudoindex theory}
+      \true{nocite}
+    \endentry
+    \entry{rab}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=1f11c56d1d9d387d6fb8435190929a57}{%
+           family={Rabinowitz},
+           familyi={R\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{1f11c56d1d9d387d6fb8435190929a57}
+      \strng{fullhash}{1f11c56d1d9d387d6fb8435190929a57}
+      \strng{fullhashraw}{1f11c56d1d9d387d6fb8435190929a57}
+      \strng{bibnamehash}{1f11c56d1d9d387d6fb8435190929a57}
+      \strng{authorbibnamehash}{1f11c56d1d9d387d6fb8435190929a57}
+      \strng{authornamehash}{1f11c56d1d9d387d6fb8435190929a57}
+      \strng{authorfullhash}{1f11c56d1d9d387d6fb8435190929a57}
+      \strng{authorfullhashraw}{1f11c56d1d9d387d6fb8435190929a57}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Comm. Pure Appl. Math.}
+      \field{title}{On subharmonic solutions of a Hamiltonian system}
+      \field{volume}{33}
+      \field{year}{1980}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{609\bibrangedash 633}
+      \range{pages}{25}
+    \endentry
+    \entry{georgiev2015sqema}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=407a84c92e7c08161c2163ef7890db7f}{%
+           family={Georgiev},
+           familyi={G\bibinitperiod},
+           given={Dimiter},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{407a84c92e7c08161c2163ef7890db7f}
+      \strng{fullhash}{407a84c92e7c08161c2163ef7890db7f}
+      \strng{fullhashraw}{407a84c92e7c08161c2163ef7890db7f}
+      \strng{bibnamehash}{407a84c92e7c08161c2163ef7890db7f}
+      \strng{authorbibnamehash}{407a84c92e7c08161c2163ef7890db7f}
+      \strng{authornamehash}{407a84c92e7c08161c2163ef7890db7f}
+      \strng{authorfullhash}{407a84c92e7c08161c2163ef7890db7f}
+      \strng{authorfullhashraw}{407a84c92e7c08161c2163ef7890db7f}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{SQEMA with Universal Modality}
+      \field{year}{2015}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://store.fmi.uni-sofia.bg/fmi/logic/sqema/sqema_gwt_20180317_2/Dimiter_Georgiev_PLS.pdf
+      \endverb
+      \verb{url}
+      \verb https://store.fmi.uni-sofia.bg/fmi/logic/sqema/sqema_gwt_20180317_2/Dimiter_Georgiev_PLS.pdf
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

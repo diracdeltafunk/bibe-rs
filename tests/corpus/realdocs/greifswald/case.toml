@@ -1,0 +1,5 @@
+description = "TeX Live documentation example using biblatex style greifswald"
+source = "texmf-dist/doc/latex/biblatex-greifswald/biblatex-greifswald-example.tex (TeX Live 2026), compiled with pdflatex"
+args = ["--noconf", "doc.bcf"]
+outputs = ["doc.bbl"]
+tags = ["suite:realdocs", "style:greifswald"]
