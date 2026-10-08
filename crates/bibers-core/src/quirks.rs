@@ -65,6 +65,16 @@ pub enum Quirk {
     /// entries whose `options` field holds the literal token `skipbib`
     /// (`skipbib=true`, `dataonly` and set members are still counted).
     WorkuniqSkipbibToken,
+    /// BB-020 (`uniquename-false-skips-entry`): a per-name or per-namelist
+    /// `uniquename=false` drops the whole entry from uniquename processing.
+    UniquenameFalseSkipsEntry,
+    /// BB-095 (`uniquename-minyear-visibility`): uniquename=minyearinit/
+    /// minyearfull counts every name as visible (so the minimal scope never
+    /// records truncation), while generation uses the normal visibility.
+    UniquenameMinyearVisibility,
+    /// BB-097 (`uniquelist-minyear-double-count`): uniquelist=minyear counts
+    /// each complete name list twice.
+    UniquelistMinyearDoubleCount,
 }
 
 impl Quirk {
@@ -88,6 +98,9 @@ impl Quirk {
         Quirk::RangelenZeroDigit,
         Quirk::DatefieldHelperMutation,
         Quirk::WorkuniqSkipbibToken,
+        Quirk::UniquenameFalseSkipsEntry,
+        Quirk::UniquenameMinyearVisibility,
+        Quirk::UniquelistMinyearDoubleCount,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -111,6 +124,9 @@ impl Quirk {
             Quirk::RangelenZeroDigit => "rangelen-zero-digit",
             Quirk::DatefieldHelperMutation => "datefield-helper-mutation",
             Quirk::WorkuniqSkipbibToken => "workuniq-skipbib-token",
+            Quirk::UniquenameFalseSkipsEntry => "uniquename-false-skips-entry",
+            Quirk::UniquenameMinyearVisibility => "uniquename-minyear-visibility",
+            Quirk::UniquelistMinyearDoubleCount => "uniquelist-minyear-double-count",
         }
     }
 
