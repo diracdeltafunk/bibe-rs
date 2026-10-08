@@ -392,6 +392,7 @@ pub fn resolve_alias_refs(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fa
         }
         xdata::resolve_ref_aliases(st, &key);
     }
+    xdata::propagate(&mut st.section);
     Ok(())
 }
 

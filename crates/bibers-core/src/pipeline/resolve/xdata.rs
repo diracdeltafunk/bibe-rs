@@ -41,7 +41,7 @@ fn owner(sec: &Section, key: &str) -> String {
 }
 
 /// Copy every owner's references to the clones sharing them.
-fn propagate(sec: &mut Section) {
+pub fn propagate(sec: &mut Section) {
     let keys: Vec<String> = sec
         .entries
         .iter()
@@ -65,7 +65,7 @@ fn propagate(sec: &mut Section) {
 
 /// The XDATA part of `resolve_alias_refs` for one citekey (BB-091: the
 /// resolved whole-entry keys accumulate in one array shared by all
-/// whole-entry references of the entry).
+/// whole-entry references of the entry). Call [`propagate`] afterwards.
 pub fn resolve_ref_aliases(st: &mut SectionState, key: &str) {
     let o = owner(&st.section, key);
     let Some(J::Array(refs)) = st.section.entries[&o].slots.get("xdatarefs").cloned() else {
@@ -106,7 +106,6 @@ pub fn resolve_ref_aliases(st: &mut SectionState, key: &str) {
         .expect("entry")
         .slots
         .insert("xdatarefs".into(), J::Array(refs));
-    propagate(&mut st.section);
 }
 
 struct Xd {

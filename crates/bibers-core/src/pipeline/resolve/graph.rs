@@ -110,3 +110,34 @@ impl InhGraph {
         found
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// N children of a parent that has its own parent: biber's bookkeeping
+    /// is cubic here (BB-110); ours stays linear and gives the same records
+    /// and answers.
+    #[test]
+    fn crossref_cascade_is_linear() {
+        let mut st = SectionState {
+            config_state: json!({"crossref": []}),
+            ..Default::default()
+        };
+        let mut g = InhGraph::load(&st, "crossref");
+        let n = 20_000;
+        for i in 0..n {
+            let c = format!("c{i}");
+            assert!(!g.get_inheritance("p", &c));
+            g.set_inheritance(&mut st, "p", &c);
+            assert!(!g.is_path_after_set(&c, "p"));
+            // cascade: the parent inherits from the grandparent again
+            g.set_inheritance(&mut st, "g", "p");
+            assert!(!g.is_path_after_set("p", "g"));
+        }
+        assert_eq!(st.config_state["crossref"].as_array().unwrap().len(), 2 * n);
+        // A loop is found.
+        g.set_inheritance(&mut st, "c7", "g");
+        assert!(g.is_path_after_set("g", "c7"));
+    }
+}
