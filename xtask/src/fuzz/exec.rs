@@ -17,6 +17,10 @@ pub const BIB_NAME: &str = "fuzz.bib";
 /// Per-run timeout (seconds).
 const TIMEOUT_SECS: u64 = 40;
 
+/// Extra oracle runs made to rule out biber nondeterminism before a
+/// mismatch is reported.
+const CONFIRM_RUNS: usize = 4;
+
 /// A `.bcf` from a corpus case, with its data source swapped for
 /// [`BIB_NAME`] and its citations replaced by the fuzz input's.
 #[derive(Debug, Clone)]
@@ -150,11 +154,15 @@ pub fn check(
     let b = bibers.run(&case, &root, false)?;
     let (mut shapes, mut detail) = compare_runs(&case, &o, &b);
     if confirm && !shapes.is_empty() && !shapes.contains("o3-timeout") {
-        let o2 = oracle.run(&case, &root, false)?;
-        let (s2, _) = compare_runs(&case, &o, &o2);
-        if !s2.is_empty() {
-            shapes = BTreeSet::from(["o3-nondeterministic".to_string()]);
-            detail.insert_str(0, "oracle runs differ from each other\n");
+        // Hash-order effects in biber can need several runs to show.
+        for _ in 0..CONFIRM_RUNS {
+            let o2 = oracle.run(&case, &root, false)?;
+            let (s2, _) = compare_runs(&case, &o, &o2);
+            if !s2.is_empty() {
+                shapes = BTreeSet::from(["o3-nondeterministic".to_string()]);
+                detail.insert_str(0, "oracle runs differ from each other\n");
+                break;
+            }
         }
     }
     Ok(Verdict {
