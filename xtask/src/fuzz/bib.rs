@@ -12,6 +12,9 @@ pub struct FuzzInput {
     pub cites: Vec<Cite>,
     /// `\nocite{*}` (emitted after the explicit citations).
     pub nocite_all: bool,
+    /// Global option overrides applied to the template `.bcf` (key, value).
+    #[serde(default)]
+    pub opts: Vec<(String, String)>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]

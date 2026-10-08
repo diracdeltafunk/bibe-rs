@@ -431,6 +431,9 @@ pub fn fuzz_min(args: &[String]) -> Result<ExitCode> {
             .join(" "),
         if min.nocite_all { " \\nocite{*}" } else { "" }
     );
+    if !min.opts.is_empty() {
+        println!("% option overrides: {:?}", min.opts);
+    }
     let v = check(&min, &tpl, &oracle, &bibers, true)?;
     println!("{}", v.detail);
     if o.dry_run {

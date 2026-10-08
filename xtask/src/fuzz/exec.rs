@@ -72,7 +72,19 @@ impl Template {
     }
 
     pub fn bcf(&self, input: &FuzzInput) -> String {
-        format!("{}{}{}", self.head, input.render_citekeys(), self.tail)
+        let mut head = self.head.clone();
+        for (k, v) in &input.opts {
+            // Every occurrence: biblatex repeats global options in per-type blocks.
+            let re = Regex::new(&format!(
+                r"(<bcf:key>{}</bcf:key>\s*<bcf:value>)[^<]*(</bcf:value>)",
+                regex::escape(k)
+            ))
+            .expect("valid regex");
+            head = re
+                .replace_all(&head, format!("${{1}}{}${{2}}", super::bib::xml_escape(v)))
+                .into_owned();
+        }
+        format!("{head}{}{}", input.render_citekeys(), self.tail)
     }
 
     pub fn bbl_name(&self) -> String {

@@ -530,11 +530,67 @@ impl Gen {
         }
 
         let (cites, nocite_all) = self.cites();
+        let opts = self.option_tweaks();
         FuzzInput {
             items,
             cites,
             nocite_all,
+            opts,
         }
+    }
+
+    /// Global option overrides (none half of the time).
+    fn option_tweaks(&mut self) -> Vec<(String, String)> {
+        const TWEAKS: &[(&str, &[&str])] = &[
+            ("mincrossrefs", &["1", "3"]),
+            ("minxrefs", &["1"]),
+            ("labelalpha", &["1"]),
+            ("labeltitle", &["1"]),
+            ("labeltitleyear", &["1"]),
+            ("labeldateparts", &["0", "1"]),
+            ("singletitle", &["1"]),
+            ("uniquetitle", &["1"]),
+            ("uniquebaretitle", &["1"]),
+            ("uniquework", &["1"]),
+            ("uniqueprimaryauthor", &["1"]),
+            ("maxcitenames", &["1", "2", "99"]),
+            ("mincitenames", &["1", "2"]),
+            ("maxbibnames", &["1", "99"]),
+            ("maxsortnames", &["1", "2"]),
+            ("minsortnames", &["1"]),
+            ("maxalphanames", &["1", "2", "4"]),
+            ("minalphanames", &["1", "2"]),
+            (
+                "uniquename",
+                &[
+                    "false", "init", "full", "allinit", "allfull", "mininit", "minfull",
+                ],
+            ),
+            ("uniquelist", &["false", "true", "minyear"]),
+            ("useprefix", &["0", "1"]),
+            ("useauthor", &["0"]),
+            ("useeditor", &["0"]),
+            ("usetranslator", &["1"]),
+            ("sortcase", &["0"]),
+            ("sortupper", &["0"]),
+            ("julian", &["1"]),
+            ("nosortothers", &["1"]),
+            ("nohashothers", &["1"]),
+            ("noroman", &["1"]),
+            ("maxitems", &["1", "2"]),
+        ];
+        let mut out: Vec<(String, String)> = Vec::new();
+        if self.r.chance(0.5) {
+            return out;
+        }
+        for _ in 0..self.r.range(1, 3) {
+            let (k, vs) = *self.r.pick(TWEAKS);
+            if out.iter().any(|(x, _)| x == k) {
+                continue;
+            }
+            out.push((k.to_string(), self.r.pick(vs).to_string()));
+        }
+        out
     }
 
     fn key(&mut self, i: usize) -> String {

@@ -131,6 +131,12 @@ impl<'a> Minimiser<'a> {
                 ..base.clone()
             });
             cur.cites = cites;
+            let base = cur.clone();
+            let opts = self.ddmin(cur.opts.clone(), &|xs| FuzzInput {
+                opts: xs.to_vec(),
+                ..base.clone()
+            });
+            cur.opts = opts;
             if cur.nocite_all {
                 let c = FuzzInput {
                     nocite_all: false,

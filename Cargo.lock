@@ -835,6 +835,11 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "bibers-testkit",
+ "regex",
+ "serde",
+ "serde_json",
+ "similar",
+ "tempfile",
  "toml",
 ]
 
