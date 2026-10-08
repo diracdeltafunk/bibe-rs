@@ -418,6 +418,19 @@ pub fn fuzz_min(args: &[String]) -> Result<ExitCode> {
         bib.len()
     );
     println!("{bib}");
+    println!(
+        "% citations: {}{}",
+        min.cites
+            .iter()
+            .map(|c| if c.nocite {
+                format!("\\nocite{{{}}}", c.key)
+            } else {
+                format!("\\cite{{{}}}", c.key)
+            })
+            .collect::<Vec<_>>()
+            .join(" "),
+        if min.nocite_all { " \\nocite{*}" } else { "" }
+    );
     let v = check(&min, &tpl, &oracle, &bibers, true)?;
     println!("{}", v.detail);
     if o.dry_run {

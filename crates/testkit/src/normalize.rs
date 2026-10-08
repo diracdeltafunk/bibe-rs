@@ -39,7 +39,7 @@ pub fn blg_messages(blg: &str, workdir: &Path) -> Vec<String> {
     static LINE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^\[\d+\]\s+\S+>\s+(WARN|ERROR)\s+-\s+(.*)$").unwrap());
     static TMPBIB: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"\S*/[0-9a-f]{32}_\d+\.utf8").unwrap());
+        LazyLock::new(|| Regex::new(r"[^\s']*/[0-9a-f]{32}_\d+\.utf8").unwrap());
     static PERLSRC: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"\bat \S+\.p[ml] line \d+").unwrap());
     // macOS reports /var/... temp dirs as /private/var/... depending on how
