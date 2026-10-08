@@ -1,0 +1,5 @@
+description = "Regression: non-ASCII date/month text must not panic (byte slicing in the timezone check); found by the TeX Live differential run (thesis-qom references.bib)"
+source = "hand-written after scratch/tlbib case 329"
+args = ["--noconf", "r.bcf"]
+outputs = ["r.bbl"]
+tags = ["suite:regress", "feature:dates"]

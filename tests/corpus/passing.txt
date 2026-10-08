@@ -274,6 +274,7 @@ ported/uniqueness-7
 ported/uniqueness-8
 ported/uniqueness-9
 ported/uniqueness-nameparts-1
+regress/date-nonascii-no-tz
 scale/mixed-1000
 styles/alphabetic
 styles/alphabetic--giveninits-true

@@ -1,0 +1,110 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{a}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d6cfb2b8c4b3f9440ec4642438129367}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={Jane},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{fullhash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{fullhashraw}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{bibnamehash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{authorbibnamehash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{authornamehash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{authorfullhash}{d6cfb2b8c4b3f9440ec4642438129367}
+      \strng{authorfullhashraw}{d6cfb2b8c4b3f9440ec4642438129367}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{اسفند}
+      \field{title}{One}
+      \field{year}{1394}
+    \endentry
+    \entry{c}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5786028c91027fd5b018127ba520b8a9}{%
+           family={Poe},
+           familyi={P\bibinitperiod},
+           given={Al},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5786028c91027fd5b018127ba520b8a9}
+      \strng{fullhash}{5786028c91027fd5b018127ba520b8a9}
+      \strng{fullhashraw}{5786028c91027fd5b018127ba520b8a9}
+      \strng{bibnamehash}{5786028c91027fd5b018127ba520b8a9}
+      \strng{authorbibnamehash}{5786028c91027fd5b018127ba520b8a9}
+      \strng{authornamehash}{5786028c91027fd5b018127ba520b8a9}
+      \strng{authorfullhash}{5786028c91027fd5b018127ba520b8a9}
+      \strng{authorfullhashraw}{5786028c91027fd5b018127ba520b8a9}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{hour}{10}
+      \field{minute}{0}
+      \field{month}{1}
+      \field{second}{0}
+      \field{timezone}{+01\bibtzminsep 00}
+      \field{title}{Three}
+      \field{year}{2020}
+      \field{dateera}{ce}
+    \endentry
+    \entry{b}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=ad7c95689f83e3e57466a10d7224e09c}{%
+           family={Roe},
+           familyi={R\bibinitperiod},
+           given={Jim},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ad7c95689f83e3e57466a10d7224e09c}
+      \strng{fullhash}{ad7c95689f83e3e57466a10d7224e09c}
+      \strng{fullhashraw}{ad7c95689f83e3e57466a10d7224e09c}
+      \strng{bibnamehash}{ad7c95689f83e3e57466a10d7224e09c}
+      \strng{authorbibnamehash}{ad7c95689f83e3e57466a10d7224e09c}
+      \strng{authornamehash}{ad7c95689f83e3e57466a10d7224e09c}
+      \strng{authorfullhash}{ad7c95689f83e3e57466a10d7224e09c}
+      \strng{authorfullhashraw}{ad7c95689f83e3e57466a10d7224e09c}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labeldatesource}{nodate}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Two}
+      \warn{\item book entry 'b' (r.bib): Invalid format 'زمستان 1391' of date field 'date' - ignoring}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

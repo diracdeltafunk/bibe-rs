@@ -318,8 +318,11 @@ impl DateParser {
         if let Some(r) = s.strip_suffix('Z') {
             s = r.to_string();
             tz = Some("UTC".to_string());
-        } else if s.len() >= 6 {
-            let t = &s[s.len() - 6..];
+        } else if let Some(t) = s.get(s.len().saturating_sub(6)..)
+            && t.len() == 6
+        {
+            // A timezone suffix is ASCII; a non-boundary offset (multi-byte
+            // text) simply cannot be one.
             let b = t.as_bytes();
             if (b[0] == b'+' || b[0] == b'-')
                 && b[1].is_ascii_digit()
@@ -329,7 +332,8 @@ impl DateParser {
                 && b[5].is_ascii_digit()
             {
                 tz = Some(t.to_string());
-                s.truncate(s.len() - 6);
+                let cut = s.len() - 6;
+                s.truncate(cut);
             }
         }
         // ISO8601-2:2016 4.8 (yeardivisions)

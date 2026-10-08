@@ -1,0 +1,2 @@
+WARN - book entry 'b' (r.bib): Invalid format 'زمستان 1391' of date field 'date' - ignoring
+WARN - legacy month field 'اسفند' in entry 'a' is not an integer - this will probably not sort properly.

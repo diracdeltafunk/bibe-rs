@@ -41,9 +41,7 @@ fn run(phase: &str, prefixes: &[&str]) {
         .filter_map(|f| {
             let mut lines = f.lines();
             let head = lines.next().unwrap_or("").to_string();
-            let rest: Vec<&str> = lines
-                .filter(|l| !l.contains("=HASH(0x"))
-                .collect();
+            let rest: Vec<&str> = lines.filter(|l| !l.contains("=HASH(0x")).collect();
             (!rest.is_empty()).then(|| format!("{head}\n{}", rest.join("\n")))
         })
         .collect();
