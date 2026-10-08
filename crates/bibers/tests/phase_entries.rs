@@ -17,36 +17,6 @@ const SKIP: &[(&str, &str)] = &[
     ("ported/full-bibtex-", "bibtex output is deferred (DC-030)"),
 ];
 
-/// Paths produced by the labelalpha package (`process_labelalpha` and
-/// `process_extraalpha`, called from `process_entries_post`), ignored until
-/// it is merged.
-const LABELALPHA: &[&str] = &[
-    "datalists.*.state.fields.*.labelalpha",
-    "datalists.*.state.fields.*.sortlabelalpha",
-    "datalists.*.state.ladisambiguation",
-    "section.labelcache_l",
-    "section.labelcache_v",
-];
-
-/// A diff line for a `fields` entry that only the labelalpha package
-/// creates (`{"labelalpha":…,"sortlabelalpha":…}`).
-fn only_labelalpha(line: &str) -> bool {
-    let l = line.trim();
-    l.contains(".state.fields.")
-        && l.contains(": missing (expected {\"labelalpha\":")
-        && l.ends_with('}') | l.ends_with(')')
-        && serde_json::from_str::<serde_json::Value>(
-            l.split_once("(expected ")
-                .map_or("", |(_, r)| r.strip_suffix(')').unwrap_or(r)),
-        )
-        .ok()
-        .and_then(|v| {
-            v.as_object()
-                .map(|o| o.keys().all(|k| k.ends_with("labelalpha")))
-        })
-        .unwrap_or(false)
-}
-
 // Diff lines mentioning `=HASH(0x…)` are skipped: biber stringifies a
 // name list used as `labeltitle` with its memory address (nondeterministic);
 // bibers uses a fixed fake address per name list (`entries::perl_str`).
@@ -65,19 +35,14 @@ fn run(phase: &str, prefixes: &[&str]) {
     }
     let ids = cases(prefixes);
     let refs: Vec<&str> = ids.iter().map(String::as_str).collect();
-    let ignore: &[&str] = if phase == "process_entries_post" {
-        LABELALPHA
-    } else {
-        &[]
-    };
-    let (checked, failures) = check_phase(phase, &refs, ignore);
+    let (checked, failures) = check_phase(phase, &refs, &[]);
     let failures: Vec<String> = failures
         .into_iter()
         .filter_map(|f| {
             let mut lines = f.lines();
             let head = lines.next().unwrap_or("").to_string();
             let rest: Vec<&str> = lines
-                .filter(|l| !only_labelalpha(l) && !l.contains("=HASH(0x"))
+                .filter(|l| !l.contains("=HASH(0x"))
                 .collect();
             (!rest.is_empty()).then(|| format!("{head}\n{}", rest.join("\n")))
         })
