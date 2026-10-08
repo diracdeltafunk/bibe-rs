@@ -168,15 +168,24 @@ pub fn check(
 /// Messages after the fuzz-specific normalisations of documented
 /// deliberate differences:
 /// - DC-042: btparse diagnostics name the user's file, not a temp file;
-/// - DC-046: the text of undecodable-byte errors differs.
+/// - DC-046: the text of undecodable-byte errors differs;
+/// - DC-017: which way round biber names an XDATA cycle depends on hash
+///   order, so the pair is sorted.
 pub fn fuzz_messages(msgs: &[String]) -> Vec<String> {
     static ENC: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"(cannot be read in encoding '[^']*'): .*").unwrap());
+    static CYCLE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"^(ERROR - Circular XDATA inheritance between )'(.*)'<->'(.*)'$").unwrap()
+    });
     let mut out: Vec<String> = msgs
         .iter()
         .map(|m| {
             let m = m.replace("<TMPBIB>", BIB_NAME);
-            ENC.replace_all(&m, "$1: <ENCERR>").into_owned()
+            let m = ENC.replace_all(&m, "$1: <ENCERR>").into_owned();
+            match CYCLE.captures(&m) {
+                Some(c) if c[2] > c[3] => format!("{}'{}'<->'{}'", &c[1], &c[3], &c[2]),
+                _ => m,
+            }
         })
         .collect();
     out.sort();

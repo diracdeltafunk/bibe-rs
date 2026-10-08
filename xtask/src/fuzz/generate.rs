@@ -578,6 +578,10 @@ impl Gen {
             ("nohashothers", &["1"]),
             ("noroman", &["1"]),
             ("maxitems", &["1", "2"]),
+            (
+                "sortlocale",
+                &["auto", "ngerman", "swedish", "french", "spanish"],
+            ),
         ];
         let mut out: Vec<(String, String)> = Vec::new();
         if self.r.chance(0.5) {
@@ -1310,6 +1314,14 @@ impl Gen {
             8 => t.push_str(" 🙂"),
             9 => t.push_str(" עברית"),
             10 => t.push_str(", {\\'{\\i}}"),
+            11 => t.push_str("\n    continued\tline"),
+            12 => t.push_str(" 50% {\\%} {\\\\} \\\\"),
+            13 => t.push_str(" @ sign"),
+            14 => t.push_str(" \\url{http://x.org/~a}"),
+            15 => t.push_str("  double  space "),
+            16 => t.push_str(" {\\noopsort{a}}z"),
+            17 => t.push_str(" \\`a\\^o\\~n\\=e\\.z\\'y\\\"y"),
+            18 => t.push_str(" {\\dj} {\\l} {\\ae} {\\OE} {\\ng} {\\th}"),
             _ => {}
         }
         t
