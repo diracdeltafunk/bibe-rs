@@ -118,6 +118,8 @@ bugs/bb-093-clone-endyeardivision
 bugs/bb-094-labelcache-field-key
 bugs/bb-096-label-global-index-zero
 bugs/others-pop-shared-list
+fuzz/perlio-encoding-split-ascii
+fuzz/perlio-encoding-split-latin1
 ported/annotations-1
 ported/basic-misc-1
 ported/basic-misc-2
