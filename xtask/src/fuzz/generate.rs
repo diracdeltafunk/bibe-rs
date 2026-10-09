@@ -565,9 +565,15 @@ impl Gen {
             "--namesep=und",
             "--others-string=etal",
             "--input-encoding=latin1",
+            "--output-encoding=cp1252",
+            "--output-encoding=latin2",
+            "--output-safecharsset=full",
+            "--decodecharsset=null",
+            "--isbn-normalise",
+            "--sortcase=false",
         ];
         let mut out: Vec<String> = Vec::new();
-        if self.r.chance(0.7) {
+        if self.r.chance(0.6) {
             return out;
         }
         for _ in 0..self.r.range(1, 2) {
