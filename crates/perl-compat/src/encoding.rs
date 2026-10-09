@@ -106,6 +106,85 @@ impl Encoding {
         }
     }
 
+    /// Size of the buffer of a PerlIO `:encoding(…)` layer
+    /// (`ext/PerlIO-encoding/encoding.xs`, `PerlIOEncode_get_base`).
+    pub const PERLIO_ENCODING_BUFSIZ: usize = 1024;
+
+    /// Encode as writing `s` through a PerlIO `:encoding(…)` layer really
+    /// does, including its buffer-boundary bug: the layer collects the
+    /// string's internal UTF-8 bytes in a 1024-byte buffer and encodes each
+    /// full buffer separately, so a multi-byte character that straddles a
+    /// buffer boundary is split. If the leading fragment is a prefix of the
+    /// UTF-8 of some encodable character, `Encode` stops there and the
+    /// fragment is carried into the next buffer (the character survives, and
+    /// later boundaries shift by the carried length). Otherwise the leading
+    /// fragment becomes one `\x{fffd}` and each byte of the trailing
+    /// fragment another one. Verified against perl 5.42 / Encode (O3).
+    /// UTF-8 output is unaffected.
+    pub fn encode_perlio_layer(&self, s: &str) -> Vec<u8> {
+        let Inner::Byte(b) = self.0 else {
+            return s.as_bytes().to_vec();
+        };
+        const FFFD: &[u8] = b"\\x{fffd}";
+        let bytes = s.as_bytes();
+        let mut out = Vec::with_capacity(bytes.len());
+        let mut i = 0; // next stream byte not yet in a buffer
+        let mut carry: Vec<u8> = Vec::new();
+        while i < bytes.len() || !carry.is_empty() {
+            let take = (Self::PERLIO_ENCODING_BUFSIZ - carry.len()).min(bytes.len() - i);
+            let mut buf = std::mem::take(&mut carry);
+            buf.extend_from_slice(&bytes[i..i + take]);
+            i += take;
+            let last = i == bytes.len();
+            let mut j = 0;
+            while j < buf.len() {
+                let lead = buf[j];
+                let need = match lead {
+                    0x00..=0x7F => 1,
+                    0xC0..=0xDF => 2,
+                    0xE0..=0xEF => 3,
+                    0xF0..=0xF7 => 4,
+                    _ => 0, // continuation byte without a lead byte
+                };
+                if need == 0 {
+                    out.extend_from_slice(FFFD);
+                    j += 1;
+                } else if j + need <= buf.len() {
+                    let c = std::str::from_utf8(&buf[j..j + need])
+                        .ok()
+                        .and_then(|x| x.chars().next())
+                        .unwrap_or('\u{FFFD}');
+                    match Self::byte(b, c) {
+                        Some(x) => out.push(x),
+                        None => out.extend(format!("\\x{{{:04x}}}", c as u32).bytes()),
+                    }
+                    j += need;
+                } else {
+                    // A character cut by the buffer boundary.
+                    let frag = &buf[j..];
+                    if !last && Self::is_encodable_prefix(b, frag) {
+                        carry = frag.to_vec();
+                    } else {
+                        out.extend_from_slice(FFFD);
+                    }
+                    j = buf.len();
+                }
+            }
+        }
+        out
+    }
+
+    /// Is `frag` a proper prefix of the UTF-8 form of an encodable character?
+    fn is_encodable_prefix(b: &ByteEncoding, frag: &[u8]) -> bool {
+        let mut tmp = [0u8; 4];
+        b.encode.iter().any(|(cp, _)| {
+            char::from_u32(*cp).is_some_and(|c| {
+                let u = c.encode_utf8(&mut tmp).as_bytes();
+                u.len() > frag.len() && u.starts_with(frag)
+            })
+        })
+    }
+
     /// Decode bytes (`decode($enc, $bytes)`, default check: undefined bytes
     /// and malformed UTF-8 become U+FFFD).
     pub fn decode(&self, bytes: &[u8]) -> String {
@@ -129,6 +208,44 @@ mod tests {
         for e in ENCODINGS {
             assert!(e.encode.windows(2).all(|w| w[0].0 < w[1].0), "{}", e.name);
         }
+    }
+
+    /// Expected outputs recorded from perl 5.42 (O3): `print` of `"a" x
+    /// (1024 - split) . $ch . "Z"` to a `:encoding($enc)` file handle.
+    #[test]
+    fn perlio_layer_buffer_splits() {
+        let tail = |enc: &str, ch: &str, split: usize| -> String {
+            let e = find_encoding(enc).unwrap();
+            let s = format!("{}{ch}Z", "a".repeat(1024 - split));
+            let out = e.encode_perlio_layer(&s);
+            String::from_utf8_lossy(&out[1024 - split..]).into_owned()
+        };
+        let f = |n: usize| format!("{}Z", "\\x{fffd}".repeat(n));
+        assert_eq!(tail("ascii", "é", 1), f(2));
+        assert_eq!(tail("ascii", "λ", 1), f(2));
+        assert_eq!(tail("ascii", "ﬁ", 1), f(3));
+        assert_eq!(tail("ascii", "ﬁ", 2), f(2));
+        assert_eq!(tail("ascii", "😀", 1), f(4));
+        assert_eq!(tail("ascii", "😀", 2), f(3));
+        assert_eq!(tail("ascii", "😀", 3), f(2));
+        assert_eq!(tail("latin1", "é", 1), "\u{FFFD}Z"); // byte E9 (lossy view)
+        assert_eq!(tail("latin1", "λ", 1), f(2));
+        assert_eq!(tail("latin1", "€", 1), f(3));
+        assert_eq!(tail("latin1", "€", 2), f(2));
+        assert_eq!(tail("cp1252", "€", 1), "\u{FFFD}Z"); // byte 80
+        assert_eq!(tail("cp1252", "€", 2), "\u{FFFD}Z");
+        assert_eq!(tail("cp1252", "\u{2010}", 1), "\\x{2010}Z");
+        assert_eq!(tail("cp1252", "\u{2010}", 2), "\\x{2010}Z");
+        // A carried fragment shifts the next boundary (1023 + 1024).
+        let e = find_encoding("latin1").unwrap();
+        for (pos, want) in [(2046, "\\x{fffd}\\x{fffd}Z"), (2047, "\\x{03bb}Z")] {
+            let s = format!("{}é{}λZ", "a".repeat(1023), "b".repeat(pos - 1025));
+            let out = e.encode_perlio_layer(&s);
+            assert_eq!(String::from_utf8_lossy(&out[pos - 1..]), want, "λ at {pos}");
+        }
+        // Short strings and UTF-8 are unaffected.
+        assert_eq!(e.encode_perlio_layer("é€"), e.encode_perlqq("é€"));
+        assert_eq!(Encoding::UTF8.encode_perlio_layer("λ"), "λ".as_bytes());
     }
 
     #[test]
