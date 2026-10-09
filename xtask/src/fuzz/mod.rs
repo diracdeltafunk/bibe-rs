@@ -158,7 +158,11 @@ pub fn fuzz(args: &[String]) -> Result<ExitCode> {
                 input.args,
                 input.opts,
                 input.nocite_all,
-                input.cites.iter().map(|c| c.key.as_str()).collect::<Vec<_>>()
+                input
+                    .cites
+                    .iter()
+                    .map(|c| c.key.as_str())
+                    .collect::<Vec<_>>()
             );
             print!("{}", input.render_bib());
         }
