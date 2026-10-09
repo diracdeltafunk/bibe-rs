@@ -51,12 +51,19 @@ pub fn uniqueness(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<(
         section, datalists, ..
     } = st;
     let entries = entry_infos(ctx, section);
-    run(
+    let converged = run(
         ctx.cfg.quirks,
         &section.names,
         &entries,
         &mut datalists[list],
     );
+    if !converged {
+        // biber never terminates here (BB-149); bibers stops (DC-052).
+        ctx.log.biber_warn(format!(
+            "uniquename/uniquelist processing did not converge after {MAX_PASSES} passes for list '{}' in section {} (biber would loop forever on this data); uniqueness information may be incomplete",
+            datalists[list].name, section.number
+        ));
+    }
     Ok(())
 }
 
@@ -117,7 +124,8 @@ fn entry_infos(ctx: &Ctx, section: &Section) -> Vec<EntryInfo> {
 
 /// Run the uniqueness loop on a data list (the part of
 /// [`uniqueness`] that doesn't need the option store).
-pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut DataList) {
+/// Returns `false` if the iteration was stopped at [`MAX_PASSES`].
+pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut DataList) -> bool {
     let changed = dl
         .slots
         .get("unulchanged")
@@ -138,7 +146,7 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         statics: HashMap::new(),
         lists: HashMap::new(),
     };
-    u.iterate();
+    let converged = u.iterate();
     let Uniq {
         changed,
         unc,
@@ -160,6 +168,7 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         "unulchanged".into(),
         J::from(if changed { "1" } else { "0" }),
     );
+    converged
 }
 
 // ---------------------------------------------------------------------------
@@ -781,8 +790,10 @@ impl<'a> Uniq<'a, '_> {
         !self.changed
     }
 
-    /// The loop of `Biber::uniqueness` (Biber.pm:3387-3414).
-    fn iterate(&mut self) {
+    /// The loop of `Biber::uniqueness` (Biber.pm:3387-3414). Returns
+    /// `false` if it did not converge within [`MAX_PASSES`] (biber would
+    /// loop forever: BB-149).
+    fn iterate(&mut self) -> bool {
         let mut first_ul_pass = true;
         for _ in 0..MAX_PASSES {
             if !self.done() {
@@ -790,7 +801,7 @@ impl<'a> Uniq<'a, '_> {
                 self.create_uniquename_info();
                 self.generate_uniquename();
             } else {
-                break;
+                return true;
             }
             if first_ul_pass || !self.done() {
                 self.changed = false;
@@ -798,9 +809,10 @@ impl<'a> Uniq<'a, '_> {
                 self.create_uniquelist_info();
                 self.generate_uniquelist();
             } else {
-                break;
+                return true;
             }
         }
+        false
     }
 
     /// The per-name uniquename values of a list's names, as the first name

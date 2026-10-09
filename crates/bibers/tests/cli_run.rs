@@ -109,3 +109,25 @@ fn deferred_features_fail_cleanly() {
     assert_eq!(run(d.path(), &["--fix-quirks=bogus", "x"]), 2);
     assert!(!d.path().join("x.blg").exists());
 }
+
+#[test]
+fn uniqueness_terminates_where_biber_loops_forever() {
+    // BB-149: a name whose XDATA reference cannot be resolved leaves a name
+    // with no parts, and biber's uniquename/uniquelist loop never ends.
+    // bibers stops at its pass cap (DC-052) and says so.
+    let d = tempfile::tempdir().unwrap();
+    let bcf = std::fs::read_to_string(corpus("regress/date-nonascii-no-tz/r.bcf")).unwrap();
+    std::fs::write(d.path().join("t.bcf"), bcf.replace(">r.bib<", ">t.bib<")).unwrap();
+    std::fs::write(
+        d.path().join("t.bib"),
+        "@misc{k,author={xdata=xd1-author},title={T}}\n",
+    )
+    .unwrap();
+    assert_eq!(run(d.path(), &["--noconf", "t"]), 0);
+    let blg = read(&d.path().join("t.blg"));
+    assert!(
+        blg.contains("WARN - uniquename/uniquelist processing did not converge"),
+        "{blg}"
+    );
+    assert!(read(&d.path().join("t.bbl")).contains("\\entry{k}{misc}"));
+}

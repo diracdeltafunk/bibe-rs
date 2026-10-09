@@ -52,11 +52,12 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-014 | Order in which mincrossrefs/minxrefs-promoted entries are added (visible with `sorting=none` or sort ties) | First-reference order | BB-061 | implemented (resolve) |
 | DC-015 | Order of dynamic sets under `\nocite{*}` | `.bcf` declaration order | BB-062 | implemented (fetch) |
 | DC-016 | Order of deferred WARN messages in `.blg`/stdout | Emission order (deterministic) | BB-065 | planned |
-| DC-017 | Which cycle is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | implemented (resolve) |
+| DC-017 | Which cycle (and in which order its two keys) is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | implemented (resolve) |
 | DC-037 | Order in which entries created by sourcemap `entry_new`/`entry_clone` steps are instantiated (`%newentries` hash order) | Creation order | — | implemented (sourcemap) |
 | DC-039 | Sort keys of verbatim/URI *list* fields: biber's `_sort_verbatim` stringifies the array reference (`ARRAY(0x…)`, a memory address), so these entries sort arbitrarily | The fixed string `ARRAY` (equal keys, so citation order decides) | BB-135 | implemented (sort) |
 | DC-047 | Order in which entries are created under `\nocite{*}` (hash order in biber) | `.bib` file order | — | implemented (fetch) |
 | DC-048 | When a name list is used as `labeltitle` (e.g. chicago's per-type labeltitlespec), biber's extratitle/extratitleyear/uniquetitle/uniquework keys contain the stringified object address `Biber::Entry::Names=HASH(0x…)` | A fixed fake address per name list: same identity semantics (equal for shared lists, distinct otherwise), deterministic | BB-146 | implemented (entries) |
+| DC-053 | Output for granular XDATA references when an entry lists the same XDATA key twice depends on Perl hash order in biber | One fixed order (bibers' deterministic resolution order); equals one of biber's possible outputs | BB-151 | implemented (resolve) |
 | DC-018 | `$MAPUNIQ` values in sourcemaps (time-based in biber, so the `.bbl` differs on every run) | Deterministic values: the n-th `$MAPUNIQ` of a run is `base62(10^16 + n)` in `suniqid`'s alphabet (`0-9a-zA-Z`, nine characters), so keys are unique within a run and identical across runs. | BB-113 | implemented (sourcemap) |
 
 ### 1d. Unavoidable representation differences
@@ -109,6 +110,7 @@ These are **not** differences by default: bibers reproduces biber's output. Each
 | `label-global-index-zero` | `substring_width=vf` ignores a computed fixed-width index of 0 | Index 0 honoured | BB-096 | implemented |
 | `dieondatamodel-no-exit` | `--dieondatamodel` logs errors but never stops | Stops at the first data model error | BB-067 | implemented |
 | `clone-endyeardivision` | Related-entry clones lose `endyeardivision` (`clone` lists `yeardivision` twice) | Copied | BB-093 | implemented |
+| `perlio-encoding-split` | Non-UTF-8 `--output-encoding`: multi-byte characters straddling 1024-byte chunk boundaries become `\x{fffd}` (or shift later boundaries) | Each character encoded whole | BB-152 | implemented |
 | *(more to be added as porting proceeds: every reproduced bug gets a row)* | | | | |
 
 Some silent biber behaviours are judged to be design decisions rather than bugs and are reproduced with no switch. Examples: `\textdollar` decoding to a raw `$` (BB-029, pinned by biber's own tests), and the btparse name-splitting rules. They are listed in biber-bugs.md but not here.
@@ -144,7 +146,7 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 |---|---|---|---|
 | DC-040 | `This is Biber 2.22` banner; `--version` prints `biber version: 2.22` | `This is bibers <version> (biber 2.22 compatible)`; `--version` prints `bibers version: <version> (biber 2.22 compatible)`. *Check latexmk/arara don't parse these.* | implemented |
 | DC-041 | Location tag `Biber.pm:4487>` (Perl file:line) | A Rust module/location tag. The format is kept and the contents are not meaningful across implementations. | planned |
-| DC-042 | btparse diagnostics name a temp file (`<md5>_<pid>.utf8`) and pass-2 line numbers | Name the user's `.bib` file and its real line numbers | BB-076 | implemented (fetch) |
+| DC-042 | btparse diagnostics and the "Invalid or undefined BibTeX entry key in file '…'" warning name a temp file (`<md5>_<pid>.utf8`) and use pass-2 line numbers | Name the user's `.bib` file and its real line numbers | BB-076 | implemented (fetch) |
 | DC-043 | `INFO` lines specific to biber internals (PAR cache, Perl modules, …) | Omitted or replaced | planned |
 | DC-044 | `--debug`/`--trace` output (Perl data dumps) | Different content. Also, `--debug` does **not** stop btparse errors being fatal (BB-075). | planned |
 | DC-046 | Error text for undecodable bytes in a data file (Perl's `Encode` message, e.g. `utf8 "\xA6" does not map to Unicode`) | A similar message naming the file, encoding and byte; not byte-identical | implemented (fetch) |
@@ -155,4 +157,4 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 |---|---|---|
 | DC-050 | `--fix-quirks` option (§2) | planned |
 | DC-051 | `--compat=2.22` (pin quirk defaults to a biber version once upstream fixes change them) | planned |
-| DC-052 | The uniquename/uniquelist iteration has no bound in biber | Capped at 1,000 passes (real data converges in 2–3) | implemented (uniqueness) |
+| DC-052 | The uniquename/uniquelist iteration has no bound in biber, and some inputs make it loop forever (BB-149) | Capped at 1,000 passes (real data converges in 2–3); hitting the cap emits a WARN naming the list and section | BB-149 | implemented (uniqueness) |
