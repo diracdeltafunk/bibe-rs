@@ -293,7 +293,24 @@ Original M2 scope: biblatex-examples.bib under numeric, authoryear, alphabetic a
 
 This is the largest milestone. Order inside it: parse → handlers → writer for `sorting=none` with no uniqueness → sorting → labels/hashes → uniqueness → extra*/labelalpha → dependency features.
 
-**M3: Breadth.**
+**M3: Breadth**: *done (2026-10-09).*
+- **Discovery against biber:**
+  - 8 style templates × 964 TeX Live `.bib` files;
+  - 165 biblatex documents from TeX Live docs, using 52 distinct styles, many with their own source maps and data models;
+  - ~100,800 differential fuzz runs (`cargo xtask fuzz`, with a delta-debugging minimiser).
+
+  Everything is byte-identical apart from documented differences.
+- **Fixes:**
+  - a panic on non-ASCII dates;
+  - the PerlIO chunked-encoding quirk;
+  - an xname warning;
+  - a WARN when uniqueness hits its pass cap (biber loops forever, BB-149);
+  - the planned fixes DC-002 (multi-macro `@string`) and DC-003 (`\char` braces).
+- **New corpus suites:** `realdocs/` (45 styles), `fuzz/`, `regress/`.
+- **Corpus:** 512/529 pass; the other 17 are deferred features (BibLaTeXML input, tool mode: M4).
+- **Re-running discovery:** `tools/corpus/texlive_diff.py`, `tools/corpus/realdocs_diff.py`, `cargo xtask fuzz --seed N --count K`.
+
+Original M3 scope:
 - All of t/tdata and the ported assertions; the full style × option matrix including contributed styles.
 - Multiple sections, datalists and filters; user sourcemaps (PCRE2 and the replacement interpreter); all locales and tailorings; transliteration.
 - Option scoping edge cases, `--validate-datamodel`, encodings.

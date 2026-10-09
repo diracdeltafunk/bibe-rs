@@ -435,7 +435,16 @@ fn cache_data(
         if verbs.iter().any(|vb| *vb == fc(f)) {
             v.to_string()
         } else {
-            recoder.decode(v)
+            let d = recoder.decode(v);
+            // DC-003: a decoded value with unbalanced braces (e.g. `\char"7B`
+            // → `{`) breaks biber's pass 2 (fatal error, the next entry is
+            // swallowed: BB-003). Leave such a value undecoded instead: the
+            // macro then reaches the .bbl, where LaTeX typesets it.
+            if !btparse::compat::braces_round_trip(&d) && btparse::compat::braces_round_trip(v) {
+                v.to_string()
+            } else {
+                d
+            }
         }
     });
     if !opts.nostdmacros {

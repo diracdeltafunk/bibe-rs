@@ -21,8 +21,8 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | Id | biber behaviour | bibers behaviour | Bug | Status |
 |---|---|---|---|---|
 | DC-001 | `uniquelist` crashes when a labelname family name is literally `final` | Processes normally (name keys can't collide with internal bookkeeping) | BB-001 | implemented (uniqueness) |
-| DC-002 | Several macros in one `@string{a="x", b="y"}` → fatal syntax error | All macros defined, as in BibTeX | BB-002 | planned |
-| DC-003 | `\char"7B`/`\char123` in a field → fatal syntax error, and the next entry is swallowed | Decodes to a literal brace character without breaking parsing. *Exact output TBD when implemented.* | BB-003 | planned |
+| DC-002 | Several macros in one `@string{a="x", b="y"}` → fatal syntax error | All macros defined, as in BibTeX (verified: identical to biber on the same macros split into separate `@string`s) | BB-002 | implemented (btparse compat) |
+| DC-003 | `\char"7B`/`\char123` in a field → fatal syntax error, and the next entry is swallowed | A field whose LaTeX decoding would leave unbalanced braces is kept undecoded (`\char"7B` reaches the `.bbl`, where LaTeX typesets it); parsing continues normally | BB-003 | implemented (fetch) |
 | DC-004 | A regex metacharacter in `presort` (e.g. `a(b`) → fatal | `presort` is treated as a literal string | BB-004 | implemented (sort) |
 | DC-005 | biber.conf `<noinit>`/`<nolabel>` in the documented form → crash; `<sortinclusion>` alone → crash | Parsed as documented | BB-005, BB-006 | implemented (config) |
 | DC-006 | A section with citations but no data sources (while other sections have some) → crash | Warns that keys were not found, as for any missing key | BB-007 | implemented (fetch) |

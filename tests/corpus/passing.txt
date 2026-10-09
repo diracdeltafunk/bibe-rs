@@ -53,6 +53,8 @@ biblatex-examples/94-labelprefix
 biblatex-examples/96-dates
 biblatex-examples/97-annotations
 bugs/bb-001-uniquelist-final-crash
+bugs/bb-002-multiple-string-macros
+bugs/bb-003-char-brace
 bugs/bb-004-presort-regex
 bugs/bb-005-conf-noinit-crash
 bugs/bb-005-conf-nolabel-crash

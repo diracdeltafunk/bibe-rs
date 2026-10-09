@@ -3,10 +3,13 @@
 //! biber parses each `.bib` twice: pass 1 (`parse_decode`) parses the file,
 //! LaTeX-decodes every non-verbatim field value and writes a new BibTeX text,
 //! which pass 2 (`cache_data`) parses again. The artefacts of that round trip
-//! (multi-macro `@string`s losing their commas, decoded values with
-//! unbalanced braces corrupting the second parse, ...) are visible in biber's
-//! output, so the pipeline reproduces them by running the same text through
-//! [`crate::BtState::parse`] twice. This module builds the pass-1 text.
+//! (decoded values with unbalanced braces corrupting the second parse, ...)
+//! are visible in biber's output, so the pipeline reproduces them by running
+//! the same text through [`crate::BtState::parse`] twice. This module builds
+//! the pass-1 text. Two round-trip artefacts that make biber fail are fixed
+//! (docs/compat.md DC-002, DC-003): multi-macro `@string`s keep their commas
+//! here, and the caller leaves values undecoded when decoding would unbalance
+//! their braces.
 
 use crate::bib::{Entry, Metatype};
 
@@ -47,9 +50,15 @@ pub fn reserialise_entry(
             out.push_str("}\n");
         }
         Metatype::MacroDef => {
-            // NB: no separator between definitions (biber bug, research 01 B1)
+            // biber writes no separator between definitions, so a multi-macro
+            // `@string` is a fatal syntax error in its pass 2 (BB-002).
+            // bibers fixes this (docs/compat.md DC-002): definitions are
+            // comma-separated, as in the source.
             out.push_str("@STRING{");
-            for (name, value) in entry.fieldlist_values() {
+            for (i, (name, value)) in entry.fieldlist_values().enumerate() {
+                if i > 0 {
+                    out.push_str(", ");
+                }
                 out.push_str(name);
                 out.push_str(" = {");
                 out.push_str(value.unwrap_or(""));
