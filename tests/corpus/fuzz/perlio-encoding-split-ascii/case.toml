@@ -1,0 +1,5 @@
+description = "fuzz: --output-encoding=ascii: multi-byte characters straddling the 1024-byte PerlIO :encoding buffer become \\x{fffd} (Quirk::PerlioEncodingSplit)"
+source = "found by cargo xtask fuzz (seed 6, e.g. input 391 on styles/chicago-authordate); hand-reduced"
+args = ["--noconf", "--output-encoding=ascii", "authoryear.bcf"]
+outputs = ["authoryear.bbl"]
+tags = ["suite:fuzz", "template:styles/authoryear"]

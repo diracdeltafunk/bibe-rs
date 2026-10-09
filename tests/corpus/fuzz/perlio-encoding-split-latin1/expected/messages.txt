@@ -1,0 +1,6 @@
+WARN - The entry 'b0' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'b1' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'b2' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'c0' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'c1' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'c2' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
