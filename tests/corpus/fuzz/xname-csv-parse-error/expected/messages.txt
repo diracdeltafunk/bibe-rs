@@ -1,0 +1,2 @@
+WARN - Invalid namepart option '' found in extended name format name 'author' in entry 'k6', ignoring
+WARN - Invalid namepart option '' found in extended name format name 'editor' in entry 'k5', ignoring

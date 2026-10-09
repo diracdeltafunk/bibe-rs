@@ -199,8 +199,14 @@ fn split_initials(npv: &str) -> Vec<Option<String>> {
 }
 
 /// `split_xsv` (Utils.pm:1893): `Text::CSV` with `sep_char ','`,
-/// `binary`, `allow_whitespace`. A parse error gives no fields.
-pub fn split_xsv(s: &str) -> Vec<String> {
+/// `binary`, `allow_whitespace`. On a parse error `fields()` returns
+/// `undef`, which biber iterates over as one undefined field: `None`.
+pub fn split_xsv(s: &str) -> Vec<Option<String>> {
+    split_xsv_ok(s).map_or_else(|| vec![None], |v| v.into_iter().map(Some).collect())
+}
+
+/// The fields of a successful `Text::CSV` parse, `None` on a parse error.
+fn split_xsv_ok(s: &str) -> Option<Vec<String>> {
     let ws = |c: char| c == ' ' || c == '\t';
     let c: Vec<char> = s.chars().collect();
     let mut out = Vec::new();
@@ -214,7 +220,7 @@ pub fn split_xsv(s: &str) -> Vec<String> {
             i += 1;
             loop {
                 if i >= c.len() {
-                    return Vec::new();
+                    return None;
                 }
                 if c[i] == '"' {
                     if i + 1 < c.len() && c[i + 1] == '"' {
@@ -232,12 +238,12 @@ pub fn split_xsv(s: &str) -> Vec<String> {
                 i += 1;
             }
             if i < c.len() && c[i] != ',' {
-                return Vec::new();
+                return None;
             }
         } else {
             while i < c.len() && c[i] != ',' {
                 if c[i] == '"' {
-                    return Vec::new();
+                    return None;
                 }
                 field.push(c[i]);
                 i += 1;
@@ -252,7 +258,7 @@ pub fn split_xsv(s: &str) -> Vec<String> {
         }
         i += 1; // the comma
     }
-    out
+    Some(out)
 }
 
 /// `split(/[\h~]+(?![^{]*\})/, $part)`.
@@ -512,7 +518,7 @@ pub fn parsename_x(cfg: &NameCfg, namestr: &str, fieldname: &str, key: &str) -> 
     let mut pernameopts: Vec<(String, Option<String>)> = Vec::new();
     let mut warnings = Vec::new();
     for np in split_xsv(namestr) {
-        let (npn, npv) = match xname_kv(&np, cfg.xnamesep) {
+        let (npn, npv) = match np.as_deref().and_then(|np| xname_kv(np, cfg.xnamesep)) {
             Some((n, v)) => (lc(n), Some(v)),
             None => (String::new(), None),
         };
@@ -623,8 +629,10 @@ mod tests {
         );
         assert_eq!(
             split_xsv(r#"family=Doe, "given=J, Jr""#),
-            vec!["family=Doe", "given=J, Jr"]
+            vec![Some("family=Doe".into()), Some("given=J, Jr".into())]
         );
+        // A parse error: Text::CSV's fields() returns one undef.
+        assert_eq!(split_xsv(r#"given={{"}}"#), vec![None]);
         assert_eq!(split_initial_parts("A~{B C} D"), vec!["A", "{B C}", "D"]);
         assert_eq!(
             xname_kv("family = Doe", "="),

@@ -120,6 +120,7 @@ bugs/bb-096-label-global-index-zero
 bugs/others-pop-shared-list
 fuzz/perlio-encoding-split-ascii
 fuzz/perlio-encoding-split-latin1
+fuzz/xname-csv-parse-error
 ported/annotations-1
 ported/basic-misc-1
 ported/basic-misc-2
