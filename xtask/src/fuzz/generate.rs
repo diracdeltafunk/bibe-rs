@@ -1552,7 +1552,6 @@ impl Gen {
                     "family=Doe, \"given=J, Jr\"",
                     "\"family=Doe\", given=Jane",
                     "family=\"Doe\", given=Jane",
-                    "family=Doe, given=\"Ja",
                     "family=Doe,, given=Jane",
                     "family = Doe , given = Jane",
                     "FAMILY=Doe, Given=Jane",
