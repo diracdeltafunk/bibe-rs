@@ -73,6 +73,10 @@ fn corpus_goldens() {
                 init = v.strip_suffix('}').map(str::to_string);
             } else if let Some(v) = line.strip_prefix("\\field{sortinithash}{") {
                 if let (Some(i), Some(h)) = (init.take(), v.strip_suffix('}')) {
+                    // `\x{…}`: an --output-encoding=ascii golden (perlqq escapes)
+                    if i.contains("\\x{") {
+                        continue;
+                    }
                     pairs.insert((i, h.to_string()));
                 }
             }

@@ -103,6 +103,13 @@ pub enum Quirk {
     /// twice and omits `endyeardivision`, so related-entry clones lose the
     /// end date's season/division.
     CloneEndyeardivision,
+    /// (`perlio-encoding-split`; found by `cargo xtask fuzz`, no BB id yet):
+    /// with a non-UTF-8 `--output-encoding`, the PerlIO `:encoding` layer
+    /// encodes the `.bbl` in 1024-byte chunks of its internal UTF-8, so a
+    /// multi-byte character straddling a chunk boundary is written as
+    /// `\x{fffd}` sequences (unless the encoding can represent a character
+    /// starting with the cut-off prefix).
+    PerlioEncodingSplit,
 }
 
 impl Quirk {
@@ -137,6 +144,7 @@ impl Quirk {
         Quirk::SharedNamelists,
         Quirk::DieondatamodelNoExit,
         Quirk::CloneEndyeardivision,
+        Quirk::PerlioEncodingSplit,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -171,6 +179,7 @@ impl Quirk {
             Quirk::SharedNamelists => "shared-namelists",
             Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
             Quirk::CloneEndyeardivision => "clone-endyeardivision",
+            Quirk::PerlioEncodingSplit => "perlio-encoding-split",
         }
     }
 

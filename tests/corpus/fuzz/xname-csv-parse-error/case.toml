@@ -1,0 +1,5 @@
+description = "fuzz: an extended-format name that Text::CSV cannot parse yields one undef field (one 'Invalid namepart option' warning)"
+source = "cargo xtask fuzz (seed 7, input 958, template styles/alphabetic), minimised by cargo xtask fuzz-min"
+args = ["--noconf", "alphabetic.bcf"]
+outputs = ["alphabetic.bbl"]
+tags = ["suite:fuzz", "template:styles/alphabetic"]

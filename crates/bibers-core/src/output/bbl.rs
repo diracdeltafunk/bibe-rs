@@ -1398,7 +1398,12 @@ pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
     if output_encoding_name(ctx) == "UTF-8" {
         return Ok(text.as_bytes().to_vec());
     }
-    Ok(find_output_encoding(ctx)?.encode_perlqq(text))
+    let enc = find_output_encoding(ctx)?;
+    Ok(if ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit) {
+        enc.encode_perlio_layer(text)
+    } else {
+        enc.encode_perlqq(text)
+    })
 }
 
 /// The locale of a sorting template (for the sortinit collator).
