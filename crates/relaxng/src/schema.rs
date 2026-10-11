@@ -134,6 +134,10 @@ pub(crate) struct SchemaAst {
     pub(crate) nodes: Vec<Ast>,
     pub(crate) defs: Vec<Def>,
     pub(crate) start: AstId,
+    /// The operands of each n-ary `interleave` (and `mixed`), keyed by the
+    /// root of its binary fold. libxml2's interleave behaviour depends on
+    /// these groups (see `validate::Libxml2Interleave`).
+    pub(crate) nary: HashMap<AstId, Vec<AstId>>,
 }
 
 struct GrammarScope {
@@ -169,6 +173,7 @@ struct Parser<'r, 'a> {
     grammars: Vec<GrammarScope>,
     resolver: &'r Resolver<'a>,
     open: Vec<String>,
+    nary: HashMap<AstId, Vec<AstId>>,
 }
 
 fn line_of(n: Node<'_, '_>) -> u32 {
@@ -253,6 +258,7 @@ pub(crate) fn parse(
         grammars: Vec::new(),
         resolver,
         open: vec![base.to_string()],
+        nary: HashMap::new(),
     };
     let root = doc.root_element();
     if !is_rng(&root) {
@@ -272,6 +278,7 @@ pub(crate) fn parse(
         nodes: p.nodes,
         defs: p.defs,
         start,
+        nary: p.nary,
     })
 }
 
@@ -386,8 +393,14 @@ impl Parser<'_, '_> {
                     "interleave" => Ast::Interleave,
                     _ => Ast::Choice,
                 };
-                self.fold(ids, f)
-                    .ok_or_else(|| err(n, format!("<{name}> must have at least one child")))
+                let operands = ids.clone();
+                let r = self
+                    .fold(ids, f)
+                    .ok_or_else(|| err(n, format!("<{name}> must have at least one child")))?;
+                if name == "interleave" && operands.len() > 1 {
+                    self.nary.insert(r, operands);
+                }
+                Ok(r)
             }
             "optional" | "zeroOrMore" | "oneOrMore" | "mixed" | "list" => {
                 let kids = rng_children(n)?;
@@ -405,7 +418,9 @@ impl Parser<'_, '_> {
                     "oneOrMore" => self.push(Ast::OneOrMore(p)),
                     "mixed" => {
                         let t = self.push(Ast::Text);
-                        self.push(Ast::Interleave(p, t))
+                        let r = self.push(Ast::Interleave(p, t));
+                        self.nary.insert(r, vec![p, t]);
+                        r
                     }
                     _ => self.push(Ast::List(p)),
                 })

@@ -186,6 +186,8 @@ pub(crate) struct Compiled {
     pub(crate) elems: Vec<(u32, Id)>,
     pub(crate) dts: Vec<DataType>,
     pub(crate) vals: Vec<ValueSpec>,
+    /// The groups (operands) of each n-ary interleave of the schema.
+    pub(crate) interleaves: HashMap<Id, Vec<Id>>,
 }
 
 #[derive(Clone, Copy)]
@@ -218,6 +220,7 @@ pub(crate) fn compile(ast: &SchemaAst) -> Result<Compiled, SchemaError> {
             elems: Vec::new(),
             dts: Vec::new(),
             vals: Vec::new(),
+            interleaves: HashMap::new(),
         },
         defs: vec![DefState::New; ast.defs.len()],
         work: Vec::new(),
@@ -240,6 +243,21 @@ impl Compiler<'_> {
     }
 
     fn pat(&mut self, a: AstId) -> Result<Id, SchemaError> {
+        if let Some(ops) = self.ast.nary.get(&a) {
+            let mut ids = Vec::with_capacity(ops.len());
+            for &o in ops {
+                ids.push(self.pat(o)?);
+            }
+            let mut acc = ids[0];
+            for &x in &ids[1..] {
+                acc = self.c.arena.interleave(acc, x);
+            }
+            if matches!(self.c.arena.get(acc), Pat::Interleave(..)) {
+                let groups: Vec<Id> = ids.into_iter().filter(|&g| g != EMPTY).collect();
+                self.c.interleaves.entry(acc).or_insert(groups);
+            }
+            return Ok(acc);
+        }
         Ok(match &self.ast.nodes[a] {
             Ast::Empty => EMPTY,
             Ast::NotAllowed => NOT_ALLOWED,

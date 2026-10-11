@@ -124,6 +124,16 @@ impl fmt::Display for ValidateError {
 
 impl std::error::Error for ValidateError {}
 
+/// Validation options.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct Options {
+    /// Reproduce libxml2's interleave behaviour, which rejects some valid
+    /// documents when an operand of an `interleave` is itself an
+    /// `interleave` (black-box model of libxml2 2.9.13; see
+    /// `validate.rs`). Off by default: the specification's verdict.
+    pub libxml2_interleave: bool,
+}
+
 /// Loads the document an `include` or `externalRef` points to: given the
 /// base URI of the referencing schema document and the `href`, returns the
 /// referenced document's own base URI and its text.
@@ -188,9 +198,14 @@ impl Schema {
 
     /// Validate an XML document given as text.
     pub fn validate_str(&self, text: &str) -> Result<(), ValidateError> {
+        self.validate_str_with(text, &Options::default())
+    }
+
+    /// [`Schema::validate_str`] with options.
+    pub fn validate_str_with(&self, text: &str, opts: &Options) -> Result<(), ValidateError> {
         let doc = roxmltree::Document::parse_with_options(text, parsing_options())
             .map_err(|e| ValidateError::NotWellFormed(e.to_string()))?;
-        let errs = self.validate(&doc);
+        let errs = self.validate_with(&doc, opts);
         if errs.is_empty() {
             Ok(())
         } else {
@@ -204,7 +219,12 @@ impl Schema {
     /// several errors can be reported; the verdict is exactly that of the
     /// derivative algorithm.
     pub fn validate(&self, doc: &roxmltree::Document<'_>) -> Vec<ValidityError> {
-        validate::validate(&self.compiled, doc)
+        validate::validate(&self.compiled, doc, &Options::default())
+    }
+
+    /// [`Schema::validate`] with options.
+    pub fn validate_with(&self, doc: &roxmltree::Document<'_>, opts: &Options) -> Vec<ValidityError> {
+        validate::validate(&self.compiled, doc, opts)
     }
 
     /// Whether `doc` is valid.

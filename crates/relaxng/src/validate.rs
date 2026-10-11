@@ -35,8 +35,18 @@ enum AfterFn {
     FlipAfter(Id),
 }
 
+/// The sibling pointers of an element's children, as libxml2 manipulates
+/// them while validating an interleave (see [`Validator::libxml2_check`]).
+struct Siblings<'d> {
+    next: Vec<Option<usize>>,
+    prev: Vec<Option<usize>>,
+    names: Vec<(&'d str, &'d str)>,
+}
+
 struct Validator<'c, 'd> {
     c: &'c Compiled,
+    libxml2_interleave: bool,
+    group_names: HashMap<Id, Vec<u32>>,
     a: crate::pattern::Arena,
     names: HashMap<(&'d str, &'d str), u32>,
     stod_memo: HashMap<(Id, u32), Id>,
@@ -77,9 +87,11 @@ fn children<'a, 'i>(n: Node<'a, 'i>) -> Vec<Child<'a, 'i>> {
     out
 }
 
-pub(crate) fn validate(c: &Compiled, doc: &Document<'_>) -> Vec<ValidityError> {
+pub(crate) fn validate(c: &Compiled, doc: &Document<'_>, opts: &crate::Options) -> Vec<ValidityError> {
     let mut v = Validator {
         c,
+        libxml2_interleave: opts.libxml2_interleave,
+        group_names: HashMap::new(),
         a: c.arena.clone(),
         names: HashMap::new(),
         stod_memo: HashMap::new(),
@@ -498,6 +510,9 @@ impl<'c, 'd> Validator<'c, 'd> {
             }
         }
         let p4 = self.children(p3, node, &ctx);
+        if self.libxml2_interleave {
+            self.libxml2_check(p3, node);
+        }
         let p5 = self.etd(p4);
         if p5 == NOT_ALLOWED {
             let mut exp = Vec::new();
@@ -515,6 +530,161 @@ impl<'c, 'd> Validator<'c, 'd> {
             return if r == NOT_ALLOWED { self.after_skip(p1) } else { r };
         }
         p5
+    }
+
+    // -----------------------------------------------------------------
+    // libxml2's interleave
+
+    /// Reproduce libxml2's interleave validation (black-box model,
+    /// libxml2 2.9.13), which rejects some valid documents when an
+    /// interleave group is itself an interleave.
+    ///
+    /// libxml2 validates an interleave by walking the children through
+    /// their `next` pointers, assigning each to the group (operand) whose
+    /// elements it matches and relinking the `next` pointers into one
+    /// chain per group. It then validates each group in schema order on its
+    /// chain (cut at the group's last node, and restored afterwards); a
+    /// group's validation must consume its whole chain ("Extra element …
+    /// in interleave"). Finally it restores the sibling order by walking
+    /// back through the `prev` pointers from the node after the last one it
+    /// walked to the first one, setting `prev->next`. When a group is
+    /// itself an interleave, that restore runs while the enclosing
+    /// interleave's chains are in use and resets the `next` pointers of
+    /// other groups' nodes lying between the group's nodes in document
+    /// order, so a later group's chain can run into a foreign element.
+    ///
+    /// Only an element whose whole content is one interleave is modelled
+    /// (with no non-whitespace text; libxml2 ignores whitespace-only text
+    /// here); the groups' own validation is reduced to consuming the nodes
+    /// they can match, which gives the same verdict on documents that are
+    /// valid by the specification.
+    fn libxml2_check(&mut self, p3: Id, node: Node<'d, '_>) {
+        let Pat::After(content, _) = self.a.get(p3) else {
+            return;
+        };
+        if !self.c.interleaves.contains_key(&content) {
+            return;
+        }
+        let mut kids = Vec::new();
+        for ch in node.children() {
+            if ch.is_element() {
+                kids.push(ch);
+            } else if ch.is_text() && !is_ws(ch.text().unwrap_or("")) {
+                return;
+            }
+        }
+        let n = kids.len();
+        let mut sib = Siblings {
+            next: (0..n).map(|i| (i + 1 < n).then_some(i + 1)).collect(),
+            prev: (0..n).map(|i| i.checked_sub(1)).collect(),
+            names: kids
+                .iter()
+                .map(|k| (k.tag_name().namespace().unwrap_or(""), k.tag_name().name()))
+                .collect(),
+        };
+        let (ok, left) = self.sim(&mut sib, content, (n > 0).then_some(0));
+        if !ok || left.is_some() {
+            let local = node.tag_name().name();
+            self.error(
+                node,
+                format!("Element {local} failed to validate content: invalid sequence in interleave (libxml2)"),
+            );
+        }
+    }
+
+    /// The name classes of the elements a group can contain (not looking
+    /// into elements).
+    fn names_of(&mut self, p: Id) -> Vec<u32> {
+        if let Some(v) = self.group_names.get(&p) {
+            return v.clone();
+        }
+        let mut out = Vec::new();
+        let mut stack = vec![p];
+        let mut seen = std::collections::HashSet::new();
+        while let Some(q) = stack.pop() {
+            if !seen.insert(q) {
+                continue;
+            }
+            match self.a.get(q) {
+                Pat::Choice(x, y) | Pat::Group(x, y) | Pat::Interleave(x, y) => {
+                    stack.push(x);
+                    stack.push(y);
+                }
+                Pat::OneOrMore(x) => stack.push(x),
+                Pat::Element(nc, _) => out.push(nc),
+                _ => {}
+            }
+        }
+        self.group_names.insert(p, out.clone());
+        out
+    }
+
+    fn belongs(&self, names: &[u32], sib: &Siblings<'_>, i: usize) -> bool {
+        let (ns, local) = sib.names[i];
+        names.iter().any(|&nc| self.contains(nc, ns, local))
+    }
+
+    /// Validate group `p` on the chain starting at `seq`: (ok, leftover).
+    fn sim(&mut self, sib: &mut Siblings<'_>, p: Id, seq: Option<usize>) -> (bool, Option<usize>) {
+        let mut p = p;
+        // optional(interleave)
+        while let Pat::Choice(EMPTY, x) = self.a.get(p) {
+            p = x;
+        }
+        let Some(groups) = self.c.interleaves.get(&p).cloned() else {
+            let names = self.names_of(p);
+            let mut cur = seq;
+            while let Some(i) = cur {
+                if !self.belongs(&names, sib, i) {
+                    break;
+                }
+                cur = sib.next[i];
+            }
+            return (true, cur);
+        };
+        let gnames: Vec<Vec<u32>> = groups.iter().map(|&g| self.names_of(g)).collect();
+        let mut lists: Vec<Option<usize>> = vec![None; groups.len()];
+        let mut lasts: Vec<Option<usize>> = vec![None; groups.len()];
+        let start = seq;
+        let mut lastchg = None;
+        let mut cur = seq;
+        while let Some(i) = cur {
+            let Some(g) = (0..groups.len()).find(|&g| self.belongs(&gnames[g], sib, i)) else {
+                break;
+            };
+            match lasts[g] {
+                Some(l) => sib.next[l] = Some(i),
+                None => lists[g] = Some(i),
+            }
+            lasts[g] = Some(i);
+            lastchg = Some(sib.next[i].unwrap_or(i));
+            cur = sib.next[i];
+        }
+        let lastelem = cur;
+        let mut ok = true;
+        for (g, &gp) in groups.iter().enumerate() {
+            let saved = lasts[g].map(|l| {
+                let s = sib.next[l];
+                sib.next[l] = None;
+                s
+            });
+            let (r, left) = self.sim(sib, gp, lists[g]);
+            if !r || left.is_some() {
+                ok = false;
+                break;
+            }
+            if let (Some(l), Some(s)) = (lasts[g], saved) {
+                sib.next[l] = s;
+            }
+        }
+        if let Some(mut c) = lastchg {
+            while Some(c) != start {
+                let Some(pv) = sib.prev[c] else { break };
+                sib.next[pv] = Some(c);
+                c = pv;
+            }
+        }
+        (ok, lastelem)
     }
 
     fn text_error(&mut self, p: Id, node: Node<'_, '_>, s: &str) {
