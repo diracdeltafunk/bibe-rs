@@ -1,0 +1,164 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{ascii}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=06a47edae2e847800cfd78323a0e6be8}{%
+           family={Encalcer},
+           familyi={E\bibinitperiod},
+           given={Edward},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {A press}%
+      }
+      \strng{namehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{fullhash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{fullhashraw}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{bibnamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorbibnamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authornamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorfullhash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorfullhashraw}{06a47edae2e847800cfd78323a0e6be8}
+      \field{labelalpha}{Enc99}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{A plain title}
+      \field{year}{1999}
+    \endentry
+    \entry{mixed}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=00162bed44b55cdf8ac11fb4b8242f4c}{%
+           family={M\"{u}ller},
+           familyi={M\bibinitperiod},
+           given={J\"{u}rgen},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5f93000002113556b124d9a976c8a4a8}{%
+           family={¬ª¬Ó¬Ñ¬ß¬à¬Ó},
+           familyi={¬ª\bibinitperiod},
+           given={¬ª¬Ó¬Ñ¬ß},
+           giveni={¬ª\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=252654e29e5656218f9b24e528dc0bf3}{%
+           family={èİ},
+           familyi={èİ\bibinitperiod},
+           given={á³Ù¥},
+           giveni={á³\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{fullhash}{783dd26772da689f980ec09c7b69f048}
+      \strng{fullhashraw}{783dd26772da689f980ec09c7b69f048}
+      \strng{bibnamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorbibnamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authornamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorfullhash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorfullhashraw}{783dd26772da689f980ec09c7b69f048}
+      \field{labelalpha}{M¬ªèİ10}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{1 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à1 ¥á¥â\textgamma{}. 2 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à2 ¥á¥â\textgamma{}. 3 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à3 ¥á¥â\textgamma{}. 4 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à4 ¥á¥â\textgamma{}. 5 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à5 ¥á¥â\textgamma{}. 6 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à6 ¥á¥â\textgamma{}. 7 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à7 ¥á¥â\textgamma{}. 8 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à8 ¥á¥â\textgamma{}. 9 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à9 ¥á¥â\textgamma{}. 10 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à10 ¥á¥â\textgamma{}. 11 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à11 ¥á¥â\textgamma{}. 12 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à12 ¥á¥â\textgamma{}. 13 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à13 ¥á¥â\textgamma{}. 14 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à14 ¥á¥â\textgamma{}. 15 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à15 ¥á¥â\textgamma{}. 16 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à16 ¥á¥â\textgamma{}. 17 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à17 ¥á¥â\textgamma{}. 18 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à18 ¥á¥â\textgamma{}. 19 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à19 ¥á¥â\textgamma{}. 20 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à20 ¥á¥â\textgamma{}. 21 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à21 ¥á¥â\textgamma{}. 22 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à22 ¥á¥â\textgamma{}. 23 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à23 ¥á¥â\textgamma{}. 24 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à24 ¥á¥â\textgamma{}. 25 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à25 ¥á¥â\textgamma{}. 26 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à26 ¥á¥â\textgamma{}. 27 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à27 ¥á¥â\textgamma{}. 28 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à28 ¥á¥â\textgamma{}. 29 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à29 ¥á¥â\textgamma{}. 30 ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ¢à30 ¥á¥â\textgamma{}.}
+      \field{journaltitle}{ñéÙş\x{53c2}ÍÅÙş\x{732e}£¬\x{7b80}\x{4f53}í®\x{4e0e}Ûåô÷í®¡£ ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï.}
+      \field{title}{\^{S}ome \texttstroke{}itle with \x{fb01} ligature, ¢æ and \textonehalf{}}
+      \field{year}{2010}
+    \endentry
+    \entry{long}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d24314ad2a67e742a0684784008666bb}{%
+           family={±è},
+           familyi={±è\bibinitperiod},
+           given={Ã¶¼ö},
+           giveni={Ã¶\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{fullhash}{d24314ad2a67e742a0684784008666bb}
+      \strng{fullhashraw}{d24314ad2a67e742a0684784008666bb}
+      \strng{bibnamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorbibnamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authornamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorfullhash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorfullhashraw}{d24314ad2a67e742a0684784008666bb}
+      \field{labelalpha}{±è20}
+      \field{sortinit}{±è}
+      \field{sortinithash}{48bb2f23ca5b8e7a5708a0ef0fdcac85}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£ ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£}
+      \field{title}{ÇÑ±¹¾î Âü°í ¹®Çå ¸ñ·Ï.}
+      \field{year}{2020}
+    \endentry
+    \entry{nihon}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=35c8e9d659d924feeb2afe326c1c06c7}{%
+           family={ß£ï£},
+           familyi={ß£\bibinitperiod},
+           given={÷¼\x{90ce}},
+           giveni={÷¼\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cef95e294b1cf0343a0f217fa7b05189}{%
+           family={ÖÂÙÊ},
+           familyi={ÖÂ\bibinitperiod},
+           given={ü£í­},
+           giveni={ü£\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {ÔÔÌÈõó÷ú}%
+      }
+      \strng{namehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{fullhash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{fullhashraw}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{bibnamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorbibnamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authornamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorfullhash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorfullhashraw}{18702bf41b2676ed18cbbbad81f59532}
+      \field{labelalpha}{ß£ÖÂ01}
+      \field{sortinit}{ß£}
+      \field{sortinithash}{b521918382d9ffa793432354046408f8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{ìíÜâåŞªÎÙş\x{732e}ÙÍ\x{9332}¡£«««¿«««Ê¡¢ªÒªéª¬ªÊ¡¢ùÓí®¡£ÚâÊÇ\x{ff76}\x{ff80}\x{ff76}\x{ff85}¡£}
+      \field{year}{2001}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

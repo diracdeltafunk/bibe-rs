@@ -1,0 +1,3 @@
+WARN - The entry 'long' has characters which cannot be encoded in 'euc-kr'. Recoding problematic characters into macros.
+WARN - The entry 'mixed' has characters which cannot be encoded in 'euc-kr'. Recoding problematic characters into macros.
+WARN - The entry 'nihon' has characters which cannot be encoded in 'euc-kr'. Recoding problematic characters into macros.

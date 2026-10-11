@@ -1,0 +1,164 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{ascii}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=06a47edae2e847800cfd78323a0e6be8}{%
+           family={Encalcer},
+           familyi={E\bibinitperiod},
+           given={Edward},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {A press}%
+      }
+      \strng{namehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{fullhash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{fullhashraw}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{bibnamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorbibnamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authornamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorfullhash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorfullhashraw}{06a47edae2e847800cfd78323a0e6be8}
+      \field{labelalpha}{Enc99}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{A plain title}
+      \field{year}{1999}
+    \endentry
+    \entry{mixed}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=00162bed44b55cdf8ac11fb4b8242f4c}{%
+           family={M\"{u}ller},
+           familyi={M\bibinitperiod},
+           given={J\"{u}rgen},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5f93000002113556b124d9a976c8a4a8}{%
+           family={~{'*'S'Q'_'`'S~}},
+           familyi={~{'*~}\bibinitperiod},
+           given={~{'*'S'Q'_~}},
+           giveni={~{'*~}\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=252654e29e5656218f9b24e528dc0bf3}{%
+           family={~{Mu~}},
+           familyi={~{Mu~}\bibinitperiod},
+           given={~{P!Cw~}},
+           giveni={~{P!~}\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{fullhash}{783dd26772da689f980ec09c7b69f048}
+      \strng{fullhashraw}{783dd26772da689f980ec09c7b69f048}
+      \strng{bibnamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorbibnamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authornamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorfullhash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorfullhashraw}{783dd26772da689f980ec09c7b69f048}
+      \field{labelalpha}{M~{'*Mu~}10}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{1 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}1 ~{&A&B~}\textgamma{}. 2 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}2 ~{&A&B~}\textgamma{}. 3 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}3 ~{&A&B~}\textgamma{}. 4 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}4 ~{&A&B~}\textgamma{}. 5 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}5 ~{&A&B~}\textgamma{}. 6 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}6 ~{&A&B~}\textgamma{}. 7 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}7 ~{&A&B~}\textgamma{}. 8 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}8 ~{&A&B~}\textgamma{}. 9 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}9 ~{&A&B~}\textgamma{}. 10 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}10 ~{&A&B~}\textgamma{}. 11 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}11 ~{&A&B~}\textgamma{}. 12 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLe~}~{WVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}12 ~{&A&B~}\textgamma{}. 13 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}13 ~{&A&B~}\textgamma{}. 14 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}14 ~{&A&B~}\textgamma{}. 15 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}15 ~{&A&B~}\textgamma{}. 16 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#~}~{0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}16 ~{&A&B~}\textgamma{}. 17 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}17 ~{&A&B~}\textgamma{}. 18 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}18 ~{&A&B~}\textgamma{}. 19 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}19 ~{&A&B~}\textgamma{}. 20 ~{HU1>~}\x{8a9e}~{$NNDOW~}~{D?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}20 ~{&A&B~}\textgamma{}. 21 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}21 ~{&A&B~}\textgamma{}. 22 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}22 ~{&A&B~}\textgamma{}. 23 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}23 ~{&A&B~}\textgamma{}. 24 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}24 ~{&A&B~}\textgamma{}. 25 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}25 ~{&A&B~}\textgamma{}. 26 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}26 ~{&A&B~}\textgamma{}. 27 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}27 ~{&A&B~}\textgamma{}. 28 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}28 ~{&A&B~}\textgamma{}. 29 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}29 ~{&A&B~}\textgamma{}. 30 ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} ~{!m~}30 ~{&A&B~}\textgamma{}.}
+      \field{journaltitle}{~{VPND2N?<NDOW#,<rLeWVSk71~}\x{9ad4}~{WV!#~} \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}.}
+      \field{title}{\^{S}ome \texttstroke{}itle with \x{fb01} ligature, \x{20ac} and \textonehalf{}}
+      \field{year}{2010}
+    \endentry
+    \entry{long}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d24314ad2a67e742a0684784008666bb}{%
+           family={\x{ae40}},
+           familyi={\x{ae40}\bibinitperiod},
+           given={\x{cca0}\x{c218}},
+           giveni={\x{cca0}\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{fullhash}{d24314ad2a67e742a0684784008666bb}
+      \strng{fullhashraw}{d24314ad2a67e742a0684784008666bb}
+      \strng{bibnamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorbibnamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authornamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorfullhash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorfullhashraw}{d24314ad2a67e742a0684784008666bb}
+      \field{labelalpha}{\x{ae40}20}
+      \field{sortinit}{\x{ae40}}
+      \field{sortinithash}{48bb2f23ca5b8e7a5708a0ef0fdcac85}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?~}~{%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J~}~{!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~} ~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~}}
+      \field{title}{\x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}.}
+      \field{year}{2020}
+    \endentry
+    \entry{nihon}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=35c8e9d659d924feeb2afe326c1c06c7}{%
+           family={~{I=Lo~}},
+           familyi={~{I=~}\bibinitperiod},
+           given={~{L+@I~}},
+           giveni={~{L+~}\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cef95e294b1cf0343a0f217fa7b05189}{%
+           family={\x{9234}~{D>~}},
+           familyi={\x{9234}\bibinitperiod},
+           given={~{;(WS~}},
+           giveni={~{;(~}\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {\x{6771}~{>)3v0f~}}%
+      }
+      \strng{namehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{fullhash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{fullhashraw}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{bibnamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorbibnamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authornamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorfullhash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorfullhashraw}{18702bf41b2676ed18cbbbad81f59532}
+      \field{labelalpha}{~{I=~}\x{9234}01}
+      \field{sortinit}{~{I=~}}
+      \field{sortinithash}{b521918382d9ffa793432354046408f8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{~{HU1>~}\x{8a9e}~{$NNDOWD?~}\x{9332}~{!#%+%?%+%J!"$R$i$,$J!"~}\x{6f22}~{WV!#0k=G~}\x{ff76}\x{ff80}\x{ff76}\x{ff85}~{!#~}}
+      \field{year}{2001}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

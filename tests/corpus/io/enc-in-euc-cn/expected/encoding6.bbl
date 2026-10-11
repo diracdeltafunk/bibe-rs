@@ -1,0 +1,160 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{long}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=d41d8cd98f00b204e9800998ecf8427e}{%
+}}%
+      }
+      \strng{namehash}{d41d8cd98f00b204e9800998ecf8427e}
+      \strng{fullhash}{d41d8cd98f00b204e9800998ecf8427e}
+      \strng{fullhashraw}{d41d8cd98f00b204e9800998ecf8427e}
+      \strng{bibnamehash}{d41d8cd98f00b204e9800998ecf8427e}
+      \strng{authorbibnamehash}{d41d8cd98f00b204e9800998ecf8427e}
+      \strng{authornamehash}{d41d8cd98f00b204e9800998ecf8427e}
+      \strng{authorfullhash}{d41d8cd98f00b204e9800998ecf8427e}
+      \strng{authorfullhashraw}{d41d8cd98f00b204e9800998ecf8427e}
+      \field{labelalpha}{20}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。 日本の文献目。カタカナ、ひらがな、字。半角。}
+      \field{title}{.}
+      \field{year}{2020}
+    \endentry
+    \entry{ascii}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=06a47edae2e847800cfd78323a0e6be8}{%
+           family={Encalcer},
+           familyi={E\bibinitperiod},
+           given={Edward},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {A press}%
+      }
+      \strng{namehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{fullhash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{fullhashraw}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{bibnamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorbibnamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authornamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorfullhash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorfullhashraw}{06a47edae2e847800cfd78323a0e6be8}
+      \field{labelalpha}{Enc99}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{A plain title}
+      \field{year}{1999}
+    \endentry
+    \entry{mixed}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=00162bed44b55cdf8ac11fb4b8242f4c}{%
+           family={Müller},
+           familyi={M\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5f93000002113556b124d9a976c8a4a8}{%
+           family={Иванов},
+           familyi={И\bibinitperiod},
+           given={Иван},
+           giveni={И\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=252654e29e5656218f9b24e528dc0bf3}{%
+           family={王},
+           familyi={王\bibinitperiod},
+           given={小明},
+           giveni={小\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{fullhash}{783dd26772da689f980ec09c7b69f048}
+      \strng{fullhashraw}{783dd26772da689f980ec09c7b69f048}
+      \strng{bibnamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorbibnamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authornamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorfullhash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorfullhashraw}{783dd26772da689f980ec09c7b69f048}
+      \field{labelalpha}{MИ王10}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{1 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №1 αβγ. 2 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №2 αβγ. 3 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №3 αβγ. 4 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №4 αβγ. 5 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №5 αβγ. 6 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №6 αβγ. 7 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №7 αβγ. 8 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №8 αβγ. 9 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №9 αβγ. 10 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №10 αβγ. 11 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №11 αβγ. 12 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №12 αβγ. 13 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №13 αβγ. 14 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №14 αβγ. 15 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №15 αβγ. 16 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №16 αβγ. 17 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №17 αβγ. 18 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №18 αβγ. 19 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №19 αβγ. 20 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №20 αβγ. 21 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №21 αβγ. 22 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №22 αβγ. 23 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №23 αβγ. 24 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №24 αβγ. 25 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №25 αβγ. 26 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №26 αβγ. 27 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №27 αβγ. 28 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №28 αβγ. 29 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №29 αβγ. 30 日本の文献目。カタカナ、ひらがな、字。半角。 中文参考文献，简体字与繁字。 . ncdé “quotes” №30 αβγ.}
+      \field{journaltitle}{中文参考文献，简体字与繁字。 .}
+      \field{title}{ome itle with ligature, and}
+      \field{year}{2010}
+    \endentry
+    \entry{nihon}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=35c8e9d659d924feeb2afe326c1c06c7}{%
+           family={山田},
+           familyi={山\bibinitperiod},
+           given={太郎},
+           giveni={太\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ca5bf71e15972158f6efe5613970bd36}{%
+           family={木},
+           familyi={木\bibinitperiod},
+           given={花子},
+           giveni={花\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {京出版}%
+      }
+      \strng{namehash}{55f92179dfe6cc9afdfb5d15316629fa}
+      \strng{fullhash}{55f92179dfe6cc9afdfb5d15316629fa}
+      \strng{fullhashraw}{55f92179dfe6cc9afdfb5d15316629fa}
+      \strng{bibnamehash}{55f92179dfe6cc9afdfb5d15316629fa}
+      \strng{authorbibnamehash}{55f92179dfe6cc9afdfb5d15316629fa}
+      \strng{authornamehash}{55f92179dfe6cc9afdfb5d15316629fa}
+      \strng{authorfullhash}{55f92179dfe6cc9afdfb5d15316629fa}
+      \strng{authorfullhashraw}{55f92179dfe6cc9afdfb5d15316629fa}
+      \field{labelalpha}{山木01}
+      \field{sortinit}{山}
+      \field{sortinithash}{b521918382d9ffa793432354046408f8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{日本の文献目。カタカナ、ひらがな、字。半角。}
+      \field{year}{2001}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
