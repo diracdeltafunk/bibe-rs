@@ -706,10 +706,20 @@ impl Writer {
         st: &SectionState,
         key: &str,
     ) -> Result<(), Fatal> {
-        let Some(orig) = st.section.bibentry(key) else {
+        // `Section::bibentry` resolves citekey aliases (Section.pm:518).
+        let real = st
+            .section
+            .citekey_alias
+            .get(key)
+            .filter(|k| perl_truthy(k))
+            .map_or(key, String::as_str);
+        let Some(orig) = st.section.bibentry(real) else {
             biber_error!(ctx.log, "Cannot find entry with key '{key}' to output")?;
             return Ok(());
         };
+        // The entry is written (and indexed) under its own key.
+        let key = orig.citekey().to_string();
+        let key = key.as_str();
         // The writer deletes fields as it goes (crossref/xdata, date parts).
         let mut be = orig.clone();
         let secnum = st.section.number.clone();

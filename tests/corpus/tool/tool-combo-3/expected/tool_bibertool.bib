@@ -1,0 +1,114 @@
+@String{P = "Publisher"}
+
+@Unpublished{i3\v{S},
+                Options  = {useprefix=false},
+                Abstract = {Some abstract %50 of which is useless},
+                Author   = {AAA and BBB and CCC and DDD and EEE},
+                Lista    = {list test},
+                Listb    = {late and early},
+                Listc    = {late and early},
+                Location = {one and two},
+                Date     = {2003},
+                Keywords = {keyword,keyword2,keyword3},
+                Title    = {\v{S} title},
+                Userb    = {test},
+}
+
+@Book{xd1,
+                Author = {Ellington, Edward Paul},
+}
+
+@Xdata{macmillan,
+                Date = {2001},
+                Ids  = {macmillanalias},
+}
+
+@Xdata{macmillan:pub,
+                Publisher = {Macmillan},
+                Ids       = {macmillan:pubALIAS},
+}
+
+@Xdata{macmillan:loc,
+                Location = {New York and London},
+                Note     = {A Note},
+}
+
+@Book{b1,
+                Location            = {London and Edinburgh},
+                Location+an:default = {1=ann1;2=ann2},
+                Crossref            = {mvalias},
+                Date                = {1999},
+                Title               = {Booktitle},
+                Title+an:default    = {=ann1, ann2},
+}
+
+@Mvbook{mv1,
+                Ids        = {mvalias},
+                Subtitle   = {Mainsubtitle},
+                Title      = {Maintitle},
+                Titleaddon = {Maintitleaddon},
+}
+
+@Book{dt1,
+                Date      = {2004-04-25T14:34:00/2004-04-05T14:37:06},
+                Eventdate = {2004-04-25T14:34:00+05:00/2004-04-05T15:34:00+05:00},
+                Origdate  = {2004-04-25T14:34:00Z/2004-04-05T14:34:05Z},
+                Urldate   = {2004-04-25T14:34:00/2004-04-05T15:00:00},
+}
+
+@Article{m1,
+                Date         = {2017},
+                Journaltitle = {A Journal},
+}
+
+@Book{badcr1,
+                Author = {Foo},
+                Date   = {2019},
+                Title  = {Foo},
+}
+
+@Book{badcr2,
+                Author = {Bar},
+                Date   = {2019},
+                Title  = {Bar},
+}
+
+@Book{gxd1,
+                Author       = {Smith, Simon and xdata=gxd2-author-1},
+                Editor       = {xdata=gxd2-editor-2},
+                Translator   = {xdata=gxd2-author-3},
+                Lista        = {xdata=gxd3-location-5},
+                Location     = {xdata=gxd3-location-1 and B},
+                Organization = {xdata=gxd2-author-3},
+                Publisher    = {xdata=gxd2},
+                Addendum     = {xdata=missing},
+                Note         = {xdata=gxd2-note},
+                Title        = {xdata=gxd4-title},
+}
+
+@Xdata{gxd2,
+                Author = {Bloom, Brian and Anderson, Arthur},
+                Editor = {Wool, William and xdata=gxd4-editor-1},
+}
+
+@Xdata{gxd3,
+                Location = {A and C},
+}
+
+@Xdata{gxd4,
+                Editor = {Frill, Frank},
+                Title  = {Some title},
+}
+
+@Book{bo1,
+                Author = {Smith, Simon},
+                Ids    = {box1,box2},
+}
+
+@Book{ld1,
+                Author    = {AAA and BBB and CCC and DDD and EEE},
+                Publisher = P,
+                Date      = {2003-04},
+                Title     = {A title},
+}
+

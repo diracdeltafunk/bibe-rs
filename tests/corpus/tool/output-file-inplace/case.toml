@@ -1,0 +1,6 @@
+description = "tool mode writing over its own input"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-file=tooldata.bib", "tooldata.bib"]
+outputs = ["tooldata.bib"]
+log = "tooldata.bib.blg"
+tags = ["suite:tool", "feature:tool"]

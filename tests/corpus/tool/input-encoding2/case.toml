@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/encoding2.bib"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "encoding2.bib"]
+outputs = ["encoding2_bibertool.bib"]
+log = "encoding2.bib.blg"
+tags = ["suite:tool", "feature:tool"]

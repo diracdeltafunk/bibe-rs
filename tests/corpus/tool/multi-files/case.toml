@@ -1,0 +1,6 @@
+description = "tool mode with two data files (only the last file's comments)"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "tooldata.bib", "second.bib"]
+outputs = ["tooldata_bibertool.bib"]
+log = "tooldata.bib.blg"
+tags = ["suite:tool", "feature:tool"]

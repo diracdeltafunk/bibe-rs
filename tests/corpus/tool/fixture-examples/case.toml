@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/examples.bib"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "examples.bib"]
+outputs = ["examples_bibertool.bib"]
+log = "examples.bib.blg"
+tags = ["suite:tool", "feature:tool"]

@@ -1,0 +1,6 @@
+description = "tool mode with two data files, reversed"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-align", "second.bib", "tooldata.bib"]
+outputs = ["second_bibertool.bib"]
+log = "second.bib.blg"
+tags = ["suite:tool", "feature:tool"]

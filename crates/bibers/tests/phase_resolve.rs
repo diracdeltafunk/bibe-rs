@@ -7,16 +7,18 @@ mod common;
 /// Corpus cases whose resolve phases deliberately differ from biber (or
 /// whose input fetch_data cannot read yet), with the documented reason.
 const EXCLUDED: &[(&str, &str)] = &[
-    // tool mode / bibtex output (DC-030): bibers' setup refuses these
-    ("ported/bibtex-output-1", "DC-030"),
-    ("ported/full-bibtex-1", "DC-030"),
-    ("ported/tool-1", "DC-030"),
-    ("ported/tool-2", "DC-030"),
-    ("ported/tool-3", "DC-030"),
-    ("ported/tool-4", "DC-030"),
-    ("ported/tool-bltxml-1", "DC-030"),
-    ("ported/tool-bltxml-2", "DC-030"),
-    ("ported/tool-bltxml-inout-1", "DC-030"),
+    // tool mode / bibtex output: the phases run in `prepare_tool` order
+    // (or with `tool` set), which the phase-dump replay does not model;
+    // covered end to end by the corpus.
+    ("ported/bibtex-output-1", "tool mode"),
+    ("ported/full-bibtex-1", "tool mode"),
+    ("ported/tool-1", "tool mode"),
+    ("ported/tool-2", "tool mode"),
+    ("ported/tool-3", "tool mode"),
+    ("ported/tool-4", "tool mode"),
+    ("ported/tool-bltxml-1", "tool mode"),
+    ("ported/tool-bltxml-2", "tool mode"),
+    ("ported/tool-bltxml-inout-1", "tool mode"),
 ];
 
 fn cases() -> Vec<String> {

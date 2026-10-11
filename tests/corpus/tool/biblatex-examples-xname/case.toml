@@ -1,0 +1,7 @@
+description = "tool mode over biblatex-examples.bib --output-xname --output-legacy-dates"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-xname", "--output-legacy-dates", "biblatex-examples.bib"]
+outputs = ["biblatex-examples_bibertool.bib"]
+shared = ["biblatex-examples.bib"]
+log = "biblatex-examples.bib.blg"
+tags = ["suite:tool", "feature:tool"]

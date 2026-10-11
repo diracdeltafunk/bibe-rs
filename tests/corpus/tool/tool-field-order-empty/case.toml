@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: empty --output-field-order"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-field-order=,", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

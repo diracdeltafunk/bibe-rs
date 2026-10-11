@@ -9,12 +9,12 @@ use common::phase::{cases_with_prefix, check_phase};
 
 /// Cases (id prefixes) excluded from a suite, with the reason.
 const SKIP: &[(&str, &str)] = &[
-    ("ported/tool-", "tool mode is deferred (DC-030)"),
+    ("ported/tool-", "tool mode skips these phases"),
     (
         "ported/bibtex-output-",
-        "bibtex output is deferred (DC-030)",
+        "bibtex output (tool option set) skips these phases",
     ),
-    ("ported/full-bibtex-", "bibtex output is deferred (DC-030)"),
+    ("ported/full-bibtex-", "bibtex output (tool option set) skips these phases"),
 ];
 
 // Diff lines mentioning `=HASH(0x…)` are skipped: biber stringifies a

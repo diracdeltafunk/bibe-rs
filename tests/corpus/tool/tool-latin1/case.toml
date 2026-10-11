@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: --output-encoding=latin1 (BB-048 on '?')"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-encoding=latin1", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

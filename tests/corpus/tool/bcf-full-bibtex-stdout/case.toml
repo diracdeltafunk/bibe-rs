@@ -1,0 +1,6 @@
+description = "--output-format=bibtex to stdout"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--output-format=bibtex", "--onlylog", "--output-file=-", "full-bibtex.bcf"]
+outputs = ["@stdout"]
+log = "full-bibtex.blg"
+tags = ["suite:tool", "feature:tool"]

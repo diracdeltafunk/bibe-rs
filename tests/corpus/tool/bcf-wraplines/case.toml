@@ -1,0 +1,6 @@
+description = "--output-format=bibtex from t/tdata/bibtex-output.bcf -w 50 --output-align"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--output-format=bibtex", "-w", "50", "--output-align", "bibtex-output.bcf"]
+outputs = ["bibtex-output_biber.bib"]
+log = "bibtex-output.blg"
+tags = ["suite:tool", "feature:tool"]

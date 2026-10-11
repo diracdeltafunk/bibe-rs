@@ -1,0 +1,137 @@
+@String{Jnl = "Journal of Things"}
+@String{Loc = "Berlin"}
+@String{Pub = "Publisher Name"}
+
+@Book{season1,
+                Author       = {Doe, John},
+                Publisher    = Pub,
+                Date         = {2020-21},
+                Title        = {Spring book},
+                Yeardivision = {spring},
+}
+
+@Book{season2,
+                Author       = {Doe, John and von Neumann, Jr., John},
+                Location     = Loc,
+                Date         = {2020},
+                Title        = {Southern winter?},
+                Yeardivision = {winterS},
+}
+
+@Book{unspec1,
+                Author = {Roe, Richard},
+                Date   = {199X},
+                Title  = {Decade},
+}
+
+@Book{unspec2,
+                Editor = {{Barnes and Noble}},
+                Date   = {19XX},
+                Title  = {Century},
+}
+
+@Book{unspec3,
+                Date  = {1999-00},
+                Title = {Month unspecified},
+}
+
+@Book{unspec4,
+                Date  = {1999-01-00},
+                Title = {Day unspecified},
+}
+
+@Book{unspec5,
+                Date  = {1999-00-00},
+                Title = {Day in year},
+}
+
+@Book{midnight,
+                Date      = {2020-01-01},
+                Eventdate = {2020-01-01T10:20:30+02:00},
+                Title     = {Midnight},
+}
+
+@Book{year0,
+                Title = {Year zero},
+}
+
+@Book{circa,
+                Date     = {1850~/1860?},
+                Origdate = {1700%},
+                Title    = {Circa},
+}
+
+@Book{era,
+                Date  = {-44-03-15},
+                Title = {BCE},
+}
+
+@Book{open,
+                Date  = {1990/},
+                Pages = {10--},
+                Title = {Open range},
+}
+
+@Book{legacy,
+                Date  = {1995-03},
+                Pages = {1--10,20--30},
+                Title = {Legacy},
+}
+
+@Book{legacy2,
+                Date  = {1996-11},
+                Title = {Legacy numeric month},
+}
+
+@Book{legacyday,
+                Date  = {1995-03-04},
+                Title = {Legacy with day},
+}
+
+@Article{ann,
+                Author            = {Alpha, A. and Beta, B. and others},
+                Author+an:default = {1=corresponding;2:family=Lit},
+                Url               = {http://example.org/a?b=c},
+                Journaltitle      = Jnl,
+                Keywords          = {a,b,c},
+                Title             = {Annotated},
+                Title+an:alt      = {=alternative},
+}
+
+@Online{verb,
+                Url     = {http://example.org/caf\'e},
+                Note    = {x},
+                Title   = {\"{U}n\"{\i}c\"{o}d\'{e} \textquotedblleft{}quotes\textquotedblright{} -- dash \ss{}},
+                Urldate = {2020-05-06},
+}
+
+@Inproceedings{opts,
+                Options   = {skipbib=1},
+                Author    = {Ignored, Dup},
+                Booktitle = {Proceedings},
+                Crossref  = {proc},
+                Date      = {2001-01},
+                Title     = {Options and a very long title that will need to be wrapped when the output is wrapped at
+															f
+															o
+															r
+															t
+															y
+															c
+															o
+															l
+															u
+															m
+															n
+															s
+															}
+															,
+}
+
+@Proceedings{proc,
+                Editor    = {Epsilon, E.},
+                Publisher = Pub,
+                Date      = {2001},
+                Title     = {The Proceedings},
+}
+

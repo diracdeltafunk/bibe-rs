@@ -1,0 +1,6 @@
+WARN - I didn't find a database entry for xdata entry 'bltxxd1' in entry 'xd2' - ignoring (section 99999)
+WARN - I didn't find a database entry for xdata entry 'missingxd' in entry 'xd1' - ignoring (section 99999)
+WARN - book entry 'gxd1' has XDATA reference from field 'addendum' that contains no source field (section 99999)
+WARN - book entry 'gxd1' has XDATA reference from field 'publisher' that contains no source field (section 99999)
+WARN - book entry 'gxd1g' has XDATA reference from field 'addendum' that contains no source field (section 99999)
+WARN - book entry 'gxd1g' has XDATA reference from field 'publisher' that contains no source field (section 99999)

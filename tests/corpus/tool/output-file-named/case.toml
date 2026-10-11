@@ -1,0 +1,6 @@
+description = "tool mode with --output-file"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-file=out.bib", "tooldata.bib"]
+outputs = ["out.bib"]
+log = "tooldata.bib.blg"
+tags = ["suite:tool", "feature:tool"]

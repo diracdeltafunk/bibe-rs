@@ -1,0 +1,6 @@
+description = "--output-format=bibtex from a multi-section .bcf (t/tdata/sections.bcf)"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--output-format=bibtex", "sections.bcf"]
+outputs = ["sections_biber.bib"]
+log = "sections.blg"
+tags = ["suite:tool", "feature:tool"]

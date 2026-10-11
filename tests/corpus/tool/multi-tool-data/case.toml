@@ -1,0 +1,6 @@
+description = "tool.bib and a synthetic file together"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-resolve", "tool.bib", "tooldata.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: --output-encoding=utf8 (not normalised in tool mode)"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-encoding=utf8", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

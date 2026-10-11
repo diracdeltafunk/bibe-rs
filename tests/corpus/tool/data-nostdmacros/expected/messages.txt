@@ -1,0 +1,11 @@
+WARN - Date in entry 'circa' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'era' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'legacyday' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'midnight' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'unspec1' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'unspec2' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'unspec3' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'unspec4' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'unspec5' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - legacy month field 'January' in entry 'opts' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'mar' in entry 'legacy' is not an integer - this will probably not sort properly.
