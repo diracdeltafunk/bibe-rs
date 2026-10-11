@@ -7,7 +7,7 @@
 # Prints the number of mutants, the libxml2 verdict counts, and every
 # disagreement.
 set -euo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 out=$1 seed=$2 count=$3 schema=$4
 shift 4
 rm -rf "$out"
