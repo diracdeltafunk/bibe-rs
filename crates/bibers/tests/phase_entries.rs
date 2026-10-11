@@ -14,7 +14,10 @@ const SKIP: &[(&str, &str)] = &[
         "ported/bibtex-output-",
         "bibtex output (tool option set) skips these phases",
     ),
-    ("ported/full-bibtex-", "bibtex output (tool option set) skips these phases"),
+    (
+        "ported/full-bibtex-",
+        "bibtex output (tool option set) skips these phases",
+    ),
 ];
 
 // Diff lines mentioning `=HASH(0x…)` are skipped: biber stringifies a

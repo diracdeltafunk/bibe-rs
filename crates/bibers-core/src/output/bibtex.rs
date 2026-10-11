@@ -553,7 +553,11 @@ impl Writer {
                 .unwrap_or_default();
             if perl_truthy(&s) {
                 let mut s = s.replace('~', " ");
-                if n.strip.get(np).and_then(|v| v.as_deref()).is_some_and(perl_truthy) {
+                if n.strip
+                    .get(np)
+                    .and_then(|v| v.as_deref())
+                    .is_some_and(perl_truthy)
+                {
                     s = format!("{{{s}}}");
                 }
                 parts.insert(np, s);
@@ -606,7 +610,10 @@ impl Writer {
             .get("sortingnamekeytemplatename")
             .filter(|v| slot_truthy(Some(v)))
         {
-            out.push(format!("sortingnamekeytemplatename{xns}{}", slot_str(Some(v))));
+            out.push(format!(
+                "sortingnamekeytemplatename{xns}{}",
+                slot_str(Some(v))
+            ));
         }
         out.join(", ")
     }
@@ -983,7 +990,10 @@ impl Writer {
     fn recode(&self, ctx: &mut Ctx, key: &str, text: String) -> Result<String, Fatal> {
         let b = &ctx.cfg.biber;
         let dset = b.get_str("decodecharsset").unwrap_or("base").to_string();
-        let eset = b.get_str("output_safecharsset").unwrap_or("base").to_string();
+        let eset = b
+            .get_str("output_safecharsset")
+            .unwrap_or("base")
+            .to_string();
         let recoder =
             || latex_recode::Recoder::builtin(&dset, &eset, latex_recode::RecodeOptions::BIBER);
         if b.is_true("output_safechars") {
@@ -1028,7 +1038,13 @@ impl Writer {
         acc.push_str(" = ");
         // Is the field value a macro? If so, replace with macro.
         let mut value = value.to_string();
-        if let Some(m) = ctx.run.bibcache.rstrings.get(&value).filter(|m| perl_truthy(m)) {
+        if let Some(m) = ctx
+            .run
+            .bibcache
+            .rstrings
+            .get(&value)
+            .filter(|m| perl_truthy(m))
+        {
             self.usedstrings.insert(m.clone(), value.clone());
             value = o.casing(m);
         }
@@ -1223,7 +1239,11 @@ fn strip_annotation<'a>(s: &'a str, ann: &str) -> &'a str {
 /// the `99999` section, then `output`). Returns the text to encode.
 pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<String, Fatal> {
     let mut w = Writer::new(ctx)?;
-    for st in processed.sections.iter().filter(|s| s.section.number == SECTION) {
+    for st in processed
+        .sections
+        .iter()
+        .filter(|s| s.section.number == SECTION)
+    {
         w.create_output_section(ctx, st)?;
     }
     Ok(w.output(ctx, processed))

@@ -409,7 +409,11 @@ pub fn extract_entries(
         && let Some(c) = ctx.run.bibcache.comments.get(filename).cloned()
     {
         let mc = &mut ctx.run.bibcache.master_comments;
-        if ctx.cfg.quirks.on(crate::quirks::Quirk::ToolCommentsLastFile) {
+        if ctx
+            .cfg
+            .quirks
+            .on(crate::quirks::Quirk::ToolCommentsLastFile)
+        {
             *mc = Some(c);
         } else if ctx.run.bibcache.counts.get(filename).copied().unwrap_or(0) < 2 {
             mc.get_or_insert_with(Vec::new).extend(c);
