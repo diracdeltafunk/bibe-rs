@@ -651,6 +651,21 @@ pub fn parse_ctrlfile(
         return Err(Fatal);
     }
 
+    // Biber.pm:375-378 (DC-033).
+    if cfg.biber.is_true("validate_control") {
+        crate::xmlcheck::validate_biber_xml(
+            log,
+            env,
+            &path,
+            crate::xmlcheck::SchemaKind::Control,
+            cfg.quirks,
+        )?;
+    }
+    // Biber.pm:380-417.
+    if cfg.biber.is_true("convert_control") {
+        crate::bcfhtml::convert_control(log, env, &path)?;
+    }
+
     info!(log, "Reading '{path}'");
     let buf = nfd_except_datasources(&raw);
     let root = match xmlin(&buf, bcf_force_array) {

@@ -110,6 +110,11 @@ pub enum Quirk {
     /// `\x{fffd}` sequences (unless the encoding can represent a character
     /// starting with the cut-off prefix).
     PerlioEncodingSplit,
+    /// (`libxml2-interleave`; a libxml2 2.9 bug, no BB id yet): biber
+    /// validates with libxml2, whose interleave implementation rejects some
+    /// valid documents when an interleave operand is itself an interleave
+    /// (the generated biblatexml schema; `--validate-bltxml`).
+    Libxml2Interleave,
 }
 
 impl Quirk {
@@ -145,6 +150,7 @@ impl Quirk {
         Quirk::DieondatamodelNoExit,
         Quirk::CloneEndyeardivision,
         Quirk::PerlioEncodingSplit,
+        Quirk::Libxml2Interleave,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -180,6 +186,7 @@ impl Quirk {
             Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
             Quirk::CloneEndyeardivision => "clone-endyeardivision",
             Quirk::PerlioEncodingSplit => "perlio-encoding-split",
+            Quirk::Libxml2Interleave => "libxml2-interleave",
         }
     }
 
