@@ -173,7 +173,7 @@ pub fn mapuniq_id(n: u64) -> String {
 ///
 /// With the quirk fixed (`bb034_fixed`), `$MAPUNIQ`/`$MAPUNIQVAL` are also
 /// substituted outside loops (`$MAPLOOP` stays literal there).
-fn maploopreplace(
+pub(crate) fn maploopreplace(
     run: &mut MapRunState,
     s: Option<&str>,
     maploop: &str,
@@ -200,7 +200,7 @@ fn maploopreplace(
 }
 
 /// `Biber::Utils::appendstrict_check` (Utils.pm:1917).
-fn appendstrict_check(step: &MapStep, orig: &str, val: &str) -> String {
+pub(crate) fn appendstrict_check(step: &MapStep, orig: &str, val: &str) -> String {
     if perl_truthy_opt(step.get("map_appendstrict")) {
         if perl_truthy(orig) {
             format!("{orig}{val}")

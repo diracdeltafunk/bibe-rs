@@ -110,6 +110,27 @@ pub enum Quirk {
     /// `\x{fffd}` sequences (unless the encoding can represent a character
     /// starting with the cut-off prefix).
     PerlioEncodingSplit,
+    /// BB-050 (`bltxml-eprint-attrs`): a misplaced parenthesis makes the
+    /// biblatexml `eprint` `type`/`class` attributes ignored.
+    BltxmlEprintAttrs,
+    /// BB-051 (`bltxml-uri-escape`): biblatexml URIs are percent-escaped at
+    /// input from NFD text (`urlraw` escaped too, `é` as `e%CC%81`).
+    BltxmlUriEscape,
+    /// (`bltxml-relatedoptions`, DC-031 report): `relatedoptions` is read
+    /// from a `relatedoptions` attribute instead of `options`, so it is
+    /// always empty.
+    BltxmlRelatedoptions,
+    /// (`bltxml-namepart-initial`, DC-031 report): the `initial` attribute
+    /// of a simple `namepart` is read from the `name` element instead.
+    BltxmlNamepartInitial,
+    /// (`bltxml-smap-matchi`, DC-031 report): biblatexml source maps ignore
+    /// `map_matchi`/`map_notmatchi` case-insensitivity for matches without
+    /// replacement, and `map_notmatchi` is not negated.
+    BltxmlSmapMatchi,
+    /// (`bltxml-smap-node-string`, DC-031 report): mapping a field to a new
+    /// (non-name) field, or using an XPath value as a string, stores the
+    /// serialised XML of the source node instead of its text.
+    BltxmlSmapNodeString,
 }
 
 impl Quirk {
@@ -145,6 +166,12 @@ impl Quirk {
         Quirk::DieondatamodelNoExit,
         Quirk::CloneEndyeardivision,
         Quirk::PerlioEncodingSplit,
+        Quirk::BltxmlEprintAttrs,
+        Quirk::BltxmlUriEscape,
+        Quirk::BltxmlRelatedoptions,
+        Quirk::BltxmlNamepartInitial,
+        Quirk::BltxmlSmapMatchi,
+        Quirk::BltxmlSmapNodeString,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -180,6 +207,12 @@ impl Quirk {
             Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
             Quirk::CloneEndyeardivision => "clone-endyeardivision",
             Quirk::PerlioEncodingSplit => "perlio-encoding-split",
+            Quirk::BltxmlEprintAttrs => "bltxml-eprint-attrs",
+            Quirk::BltxmlUriEscape => "bltxml-uri-escape",
+            Quirk::BltxmlRelatedoptions => "bltxml-relatedoptions",
+            Quirk::BltxmlNamepartInitial => "bltxml-namepart-initial",
+            Quirk::BltxmlSmapMatchi => "bltxml-smap-matchi",
+            Quirk::BltxmlSmapNodeString => "bltxml-smap-node-string",
         }
     }
 

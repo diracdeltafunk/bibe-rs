@@ -2,4 +2,4 @@ description = "biber t/tdata/biblatexml.bcf (used by t/biblatexml.t)"
 source = "vendor/biber/t/tdata/biblatexml.bcf"
 args = ["--noconf", "biblatexml.bcf"]
 outputs = ["biblatexml.bbl"]
-tags = ["suite:tdata", "feature:biblatexml", "deferred:DC-031"]
+tags = ["suite:tdata", "feature:biblatexml"]

@@ -2,6 +2,7 @@
 //! data source parsing (`Biber::Input::file::bibtex`), source maps and field
 //! handlers.
 
+pub mod biblatexml;
 mod bibtex;
 pub mod dates;
 pub mod encoding;
@@ -585,16 +586,7 @@ fn locate(ctx: &mut Ctx, name: &str) -> Result<Option<String>, Fatal> {
 fn check_datasource(ctx: &mut Ctx, ds: &Datasource) -> Result<bool, Fatal> {
     let t = ds.type_.as_deref().unwrap_or("");
     let dt = ds.datatype.as_deref().unwrap_or("");
-    if t == "file" && dt == "biblatexml" {
-        // DC-031
-        biber_error!(
-            ctx.log,
-            "biblatexml data sources are not supported yet by bibers (DC-031): '{}'",
-            ds.name.as_deref().unwrap_or("")
-        )?;
-        return Ok(false);
-    }
-    if t != "file" || dt != "bibtex" {
+    if t != "file" || (dt != "bibtex" && dt != "biblatexml") {
         biber_error!(
             ctx.log,
             "Error loading data source package 'Biber::Input::{t}::{dt}' for '{dt}' '{t}' datasource. Valid type/datatypes are: file/biblatexml,file/bibtex"
@@ -618,6 +610,10 @@ fn read_datasource(
             .biber_warn("Data source '' is empty, ignoring".to_string());
         return Ok(keys.to_vec());
     };
+    if ds.datatype.as_deref() == Some("biblatexml") {
+        // the encoding is ignored: XML is always read as UTF-8
+        return biblatexml::extract_entries(ctx, st, opts, &file, keys);
+    }
     let enc = ds.encoding.clone().unwrap_or_else(|| "UTF-8".into());
     bibtex::extract_entries(ctx, st, opts, &file, &enc, keys)
 }
@@ -673,6 +669,9 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
         if remaining.is_empty() && !st.section.allkeys {
             break;
         }
+        if ds.datatype.as_deref() == Some("biblatexml") {
+            biblatexml_schema(ctx)?;
+        }
         if !check_datasource(ctx, ds)? {
             continue;
         }
@@ -698,6 +697,37 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     let mut kwd = Vec::new();
     get_dependents(ctx, st, &opts, &dss, keys, &mut kwd)?;
     super::sync_annotations(ctx, st);
+    Ok(())
+}
+
+/// Biber.pm:4629-4646: write the bltxml RNG schema next to the `.bcf`
+/// (unless `--no-bltxml-schema`), once per run.
+fn biblatexml_schema(ctx: &mut Ctx) -> Result<(), Fatal> {
+    if ctx.cfg.biber.is_true("no_bltxml_schema") || ctx.run.bltxml.schema_done {
+        return Ok(());
+    }
+    let bcf = ctx.cfg.biber.get_str("bcf").unwrap_or("").to_string();
+    let mut outfile = biblatexml::schema_file(&bcf);
+    if let Some(outdir) = ctx
+        .cfg
+        .biber
+        .get_str("output_directory")
+        .filter(|d| perl_compat::perl_truthy(d))
+    {
+        outfile = crate::env::catfile(outdir, crate::env::basename(&outfile));
+    }
+    info!(
+        ctx.log,
+        "Writing BibLaTeXML RNG schema '{outfile}' for datamodel"
+    );
+    let rng = crate::bltxml_schema::generate_bltxml_schema(ctx.dm);
+    if let Err(e) = std::fs::write(ctx.env.resolve(&outfile), rng) {
+        return Err(biblatexml::die(
+            ctx,
+            &format!("Cannot write BibLaTeXML RNG schema '{outfile}': {e}"),
+        ));
+    }
+    ctx.run.bltxml.schema_done = true;
     Ok(())
 }
 

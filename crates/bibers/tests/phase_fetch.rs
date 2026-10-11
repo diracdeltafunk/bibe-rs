@@ -8,15 +8,7 @@ use std::path::{Path, PathBuf};
 /// Corpus cases whose `fetch_data` deliberately differs from biber, with
 /// the documented reason.
 const EXCLUDED: &[(&str, &str)] = &[
-    // biblatexml data sources are not supported yet (DC-031)
-    ("tdata/biblatexml", "DC-031"),
-    ("tdata/datalists", "DC-031"),
-    ("tdata/xdata-noloop", "DC-031"),
-    ("bugs/bb-050-bltxml-eprint", "DC-031"),
-    ("bugs/bb-051-bltxml-uri-escaping", "DC-031"),
-    ("ported/biblatexml-1", "DC-031"),
-    ("ported/datalists-1", "DC-031"),
-    ("ported/xdata-1", "DC-031"),
+    // biblatexml in tool mode (DC-030)
     ("ported/tool-bltxml-1", "DC-031"),
     ("ported/tool-bltxml-2", "DC-031"),
     ("ported/tool-bltxml-inout-1", "DC-031"),

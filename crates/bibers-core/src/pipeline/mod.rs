@@ -66,6 +66,8 @@ pub struct RunState {
     /// `Biber::Input::file::bibtex`'s `$cache`: parsed data files (read once
     /// per run), citekey aliases, per-file reference counts.
     pub bibcache: fetch::BibCache,
+    /// `Biber::Input::file::biblatexml`'s module state.
+    pub bltxml: fetch::biblatexml::BltxmlRunState,
     /// `Biber::Annotation`'s global `$ANN`.
     pub annotations: crate::model::Annotations,
     /// Label generation helper state (citekey index map).

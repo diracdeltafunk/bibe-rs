@@ -18,7 +18,11 @@ use std::fmt;
 #[derive(Clone, Debug, PartialEq)]
 pub enum XPathError {
     /// The expression does not parse (`Invalid expression`, …).
-    Syntax { expr: String, pos: usize, msg: String },
+    Syntax {
+        expr: String,
+        pos: usize,
+        msg: String,
+    },
     /// A name test uses a prefix with no namespace binding.
     UndefinedPrefix(String),
     /// A call to an unknown function.
@@ -163,7 +167,10 @@ enum Expr {
     Bin(BinOp, Box<Expr>, Box<Expr>),
     Neg(Box<Expr>),
     /// A location path (`absolute`: starts at the root).
-    Path { absolute: bool, steps: Vec<Step> },
+    Path {
+        absolute: bool,
+        steps: Vec<Step>,
+    },
     /// A filter expression followed by an optional relative path.
     Filter {
         primary: Box<Expr>,
@@ -718,7 +725,12 @@ impl XPath {
 
     /// Evaluate with `node` as the context node; `ns` are the prefix
     /// bindings available to name tests.
-    pub fn eval(&self, dom: &Dom, node: NodeId, ns: &[(Option<String>, String)]) -> Result<XValue, XPathError> {
+    pub fn eval(
+        &self,
+        dom: &Dom,
+        node: NodeId,
+        ns: &[(Option<String>, String)],
+    ) -> Result<XValue, XPathError> {
         let ev = Eval { dom, ns };
         ev.eval(&self.expr, node, 1, 1)
     }
@@ -875,7 +887,9 @@ impl Eval<'_> {
             },
             NodeTest::Any | NodeTest::NsAny(_) | NodeTest::Name(..) => {
                 let name = match (kind, principal_attr) {
-                    (Kind::Element { name, .. }, false) | (Kind::Attribute { name, .. }, true) => name,
+                    (Kind::Element { name, .. }, false) | (Kind::Attribute { name, .. }, true) => {
+                        name
+                    }
                     _ => return false,
                 };
                 match t {
@@ -1009,7 +1023,10 @@ impl Eval<'_> {
             XValue::Str(s) => s.clone(),
             XValue::Num(n) => number_to_string(*n),
             XValue::Bool(b) => if *b { "true" } else { "false" }.into(),
-            XValue::Nodes(ns) => ns.first().map(|n| self.string_value(*n)).unwrap_or_default(),
+            XValue::Nodes(ns) => ns
+                .first()
+                .map(|n| self.string_value(*n))
+                .unwrap_or_default(),
         }
     }
 
@@ -1084,7 +1101,14 @@ impl Eval<'_> {
         }
     }
 
-    fn func(&self, name: &str, args: &[Expr], node: NodeId, pos: usize, size: usize) -> Result<XValue, XPathError> {
+    fn func(
+        &self,
+        name: &str,
+        args: &[Expr],
+        node: NodeId,
+        pos: usize,
+        size: usize,
+    ) -> Result<XValue, XPathError> {
         let arity = |ok: bool| {
             if ok {
                 Ok(())
@@ -1196,7 +1220,12 @@ impl Eval<'_> {
             "normalize-space" => {
                 arity(n <= 1)?;
                 let s = s_arg(0)?;
-                XValue::Str(s.split(is_xml_space).filter(|w| !w.is_empty()).collect::<Vec<_>>().join(" "))
+                XValue::Str(
+                    s.split(is_xml_space)
+                        .filter(|w| !w.is_empty())
+                        .collect::<Vec<_>>()
+                        .join(" "),
+                )
             }
             "translate" => {
                 arity(n == 3)?;
@@ -1340,10 +1369,27 @@ mod tests {
     fn paths() {
         let (d, e) = doc();
         assert_eq!(val(&d, e, "./bltx:title"), "T");
-        assert_eq!(val(&d, e, "./bltx:names[@type='author']/bltx:name[2]/bltx:namepart[@type='family']"), "B");
-        assert_eq!(val(&d, e, "./bltx:names[@type='author']/bltx:name[1]/@useprefix"), "true");
+        assert_eq!(
+            val(
+                &d,
+                e,
+                "./bltx:names[@type='author']/bltx:name[2]/bltx:namepart[@type='family']"
+            ),
+            "B"
+        );
+        assert_eq!(
+            val(
+                &d,
+                e,
+                "./bltx:names[@type='author']/bltx:name[1]/@useprefix"
+            ),
+            "true"
+        );
         assert_eq!(find(&d, e, "*").unwrap().len(), 4);
-        assert_eq!(val(&d, e, "/bltx:entries/bltx:entry[@id='e2']/@entrytype"), "misc");
+        assert_eq!(
+            val(&d, e, "/bltx:entries/bltx:entry[@id='e2']/@entrytype"),
+            "misc"
+        );
         assert_eq!(val(&d, e, "./bltx:date[not(@type)]"), "2000");
         assert_eq!(val(&d, e, "./bltx:date[last()]"), "1999");
         assert_eq!(val(&d, e, ".//bltx:namepart[. = 'C']"), "C");
@@ -1351,7 +1397,10 @@ mod tests {
         assert_eq!(val(&d, e, "./@id | ./bltx:title"), "e1T");
         assert_eq!(val(&d, e, "(./bltx:names//bltx:namepart)[last()]"), "C");
         assert_eq!(val(&d, e, "./bltx:title/.."), d.text_content(e));
-        assert_eq!(val(&d, e, "./bltx:title/preceding-sibling::*[1]/@type"), "author");
+        assert_eq!(
+            val(&d, e, "./bltx:title/preceding-sibling::*[1]/@type"),
+            "author"
+        );
         assert_eq!(find(&d, e, "./title").unwrap().len(), 0);
         assert!(matches!(
             find(&d, e, "./foo:title"),
@@ -1375,7 +1424,10 @@ mod tests {
         };
         assert_eq!(ev("count(./bltx:date)"), XValue::Num(2.0));
         assert_eq!(ev("concat('a', 'b', 1)"), XValue::Str("ab1".into()));
-        assert_eq!(ev("substring('12345', 1.5, 2.6)"), XValue::Str("234".into()));
+        assert_eq!(
+            ev("substring('12345', 1.5, 2.6)"),
+            XValue::Str("234".into())
+        );
         assert_eq!(ev("normalize-space('  a  b ')"), XValue::Str("a b".into()));
         assert_eq!(ev("1 div 0 > 2 and 5 mod 2 = 1"), XValue::Bool(true));
         assert_eq!(ev("./bltx:date = 1999"), XValue::Bool(true));

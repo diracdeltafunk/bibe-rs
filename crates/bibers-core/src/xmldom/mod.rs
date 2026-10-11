@@ -139,8 +139,11 @@ impl Dom {
         let kind = match n.node_type() {
             roxmltree::NodeType::Element => {
                 let tn = n.tag_name();
-                let prefix = source_prefix(src, n.range().start, tn.name())
-                    .or_else(|| tn.namespace().and_then(|u| n.lookup_prefix(u)).map(str::to_string));
+                let prefix = source_prefix(src, n.range().start, tn.name()).or_else(|| {
+                    tn.namespace()
+                        .and_then(|u| n.lookup_prefix(u))
+                        .map(str::to_string)
+                });
                 let name = QName {
                     prefix: prefix.filter(|p| !p.is_empty()),
                     local: tn.name().to_string(),
@@ -527,7 +530,11 @@ impl Dom {
         let mut cur = id;
         while let Some(p) = self.parent(cur) {
             if self.is_attribute(cur) {
-                let i = self.attributes(p).iter().position(|a| *a == cur).unwrap_or(0);
+                let i = self
+                    .attributes(p)
+                    .iter()
+                    .position(|a| *a == cur)
+                    .unwrap_or(0);
                 path.push(i as u32);
                 path.push(0);
             } else {
@@ -540,6 +547,110 @@ impl Dom {
         path.push(cur.0);
         path.reverse();
         path
+    }
+
+    /// `toString` (libxml2's node serialisation, no formatting): what a node
+    /// object stringifies to in Perl. A namespace used in the subtree but
+    /// declared outside it is declared on the serialised root, as a copied
+    /// node carries it.
+    pub fn to_xml_string(&self, id: NodeId) -> String {
+        let mut extra: Vec<(Option<String>, String)> = Vec::new();
+        if self.is_element(id) {
+            self.collect_undeclared(id, &mut Vec::new(), &mut extra);
+        }
+        let mut out = String::new();
+        self.serialise(id, &extra, &mut out);
+        out
+    }
+
+    fn collect_undeclared(
+        &self,
+        id: NodeId,
+        scope: &mut Vec<Option<String>>,
+        out: &mut Vec<(Option<String>, String)>,
+    ) {
+        let Kind::Element {
+            name,
+            attrs,
+            nsdefs,
+        } = &self.node(id).kind
+        else {
+            return;
+        };
+        let depth = scope.len();
+        scope.extend(nsdefs.iter().map(|(p, _)| p.clone()));
+        let mut uses: Vec<&QName> = vec![name];
+        uses.extend(attrs.iter().filter_map(|a| self.name(*a)));
+        for q in uses {
+            if let Some(ns) = &q.ns
+                && q.prefix.as_deref() != Some("xml")
+                && !scope.contains(&q.prefix)
+                && !out.iter().any(|(p, _)| *p == q.prefix)
+            {
+                out.push((q.prefix.clone(), ns.clone()));
+            }
+        }
+        for &c in self.children(id) {
+            self.collect_undeclared(c, scope, out);
+        }
+        scope.truncate(depth);
+    }
+
+    fn serialise(&self, id: NodeId, extra: &[(Option<String>, String)], out: &mut String) {
+        match &self.node(id).kind {
+            Kind::Document => {
+                for &c in self.children(id) {
+                    self.serialise(c, &[], out);
+                }
+            }
+            Kind::Text(t) => out.push_str(&escape_text(t)),
+            Kind::Comment(t) => {
+                out.push_str("<!--");
+                out.push_str(t);
+                out.push_str("-->");
+            }
+            Kind::Pi { target, data } => {
+                out.push_str("<?");
+                out.push_str(target);
+                if !data.is_empty() {
+                    out.push(' ');
+                    out.push_str(data);
+                }
+                out.push_str("?>");
+            }
+            Kind::Attribute { name, value } => {
+                out.push_str(&format!(" {}=\"{}\"", name.qualified(), escape_attr(value)));
+            }
+            Kind::Element {
+                name,
+                attrs,
+                nsdefs,
+            } => {
+                out.push('<');
+                out.push_str(&name.qualified());
+                for (p, u) in nsdefs.iter().chain(extra) {
+                    match p {
+                        Some(p) => out.push_str(&format!(" xmlns:{p}=\"{}\"", escape_attr(u))),
+                        None => out.push_str(&format!(" xmlns=\"{}\"", escape_attr(u))),
+                    }
+                }
+                for &a in attrs {
+                    self.serialise(a, &[], out);
+                }
+                let cs = self.children(id);
+                if cs.is_empty() {
+                    out.push_str("/>");
+                    return;
+                }
+                out.push('>');
+                for &c in cs {
+                    self.serialise(c, &[], out);
+                }
+                out.push_str("</");
+                out.push_str(&name.qualified());
+                out.push('>');
+            }
+        }
     }
 
     /// The `nodePath` of a node (as `XML::LibXML`'s, used in debug messages).
@@ -575,6 +686,37 @@ impl Dom {
             format!("{pp}/{me}")
         }
     }
+}
+
+fn escape_text(s: &str) -> String {
+    let mut o = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => o.push_str("&amp;"),
+            '<' => o.push_str("&lt;"),
+            '>' => o.push_str("&gt;"),
+            '\r' => o.push_str("&#13;"),
+            c => o.push(c),
+        }
+    }
+    o
+}
+
+fn escape_attr(s: &str) -> String {
+    let mut o = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => o.push_str("&amp;"),
+            '<' => o.push_str("&lt;"),
+            '>' => o.push_str("&gt;"),
+            '"' => o.push_str("&quot;"),
+            '\n' => o.push_str("&#10;"),
+            '\r' => o.push_str("&#13;"),
+            '\t' => o.push_str("&#9;"),
+            c => o.push(c),
+        }
+    }
+    o
 }
 
 /// The qualified element name as written at byte `start` (`<prefix:local`).
@@ -616,8 +758,10 @@ mod tests {
 
     #[test]
     fn edits() {
-        let mut d = Dom::parse(&format!(r#"<b:entries xmlns:b="{NS}"><b:t>x</b:t></b:entries>"#))
-            .unwrap();
+        let mut d = Dom::parse(&format!(
+            r#"<b:entries xmlns:b="{NS}"><b:t>x</b:t></b:entries>"#
+        ))
+        .unwrap();
         let root = d.element_children(d.document()).next().unwrap();
         let c = d.clone_deep(root);
         assert_eq!(d.text_content(c), "x");
