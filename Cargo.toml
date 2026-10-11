@@ -18,6 +18,7 @@ btparse = { path = "crates/btparse" }
 latex-recode = { path = "crates/latex-recode" }
 ucollate = { path = "crates/ucollate" }
 perl-compat = { path = "crates/perl-compat" }
+relaxng = { path = "crates/relaxng" }
 
 anyhow = "1"
 regex = "1"
