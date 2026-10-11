@@ -43,6 +43,16 @@ pub struct BibCache {
     pub preamble: HashMap<String, Vec<String>>,
     /// `{orig_key_order}{$filename}`.
     pub orig_key_order: HashMap<String, Vec<String>>,
+    /// `{comments}{$filename}`: `@comment` values (tool mode only, unless
+    /// `--strip-comments`), after `process_comment`.
+    pub comments: HashMap<String, Vec<String>>,
+    /// `$Biber::MASTER->{comments}`: the comments of the last data source
+    /// read that has any (bibtex.pm:338-342); written by the bibtex output.
+    pub master_comments: Option<Vec<String>>,
+    /// `%RSTRINGS` (Constants.pm:100): `@string` value → macro name, over
+    /// every data file read (bibtex.pm:1535-1539). Used by the bibtex
+    /// output to write macros back.
+    pub rstrings: HashMap<String, String>,
 }
 
 /// Option values used while reading data, looked up once per `fetch_data`.
@@ -391,6 +401,14 @@ pub fn extract_entries(
             .get_or_insert_with(Vec::new)
             .extend(p.iter().cloned());
     }
+
+    // Save comments if in tool mode (bibtex.pm:338-342): the last data
+    // source with comments wins.
+    if ctx.cfg.biber.tool()
+        && let Some(c) = ctx.run.bibcache.comments.get(filename)
+    {
+        ctx.run.bibcache.master_comments = Some(c.clone());
+    }
     Ok(rkeys)
 }
 
@@ -469,7 +487,31 @@ fn cache_data(
                     .push(nfd(entry.value.as_deref().unwrap_or("")));
                 continue;
             }
-            btparse::Metatype::Comment | btparse::Metatype::MacroDef => continue,
+            // Save comments for output in tool mode unless comment stripping
+            // is requested (bibtex.pm:1527-1533).
+            btparse::Metatype::Comment => {
+                if ctx.cfg.biber.tool() && !ctx.cfg.biber.is_true("strip_comments") {
+                    let c = process_comment(entry.value.as_deref().unwrap_or(""));
+                    ctx.run
+                        .bibcache
+                        .comments
+                        .entry(filename.to_string())
+                        .or_default()
+                        .push(c);
+                }
+                continue;
+            }
+            // Record macros so that tool mode can output them
+            // (bibtex.pm:1535-1539).
+            btparse::Metatype::MacroDef => {
+                for (f, v) in entry.fieldlist_values() {
+                    ctx.run
+                        .bibcache
+                        .rstrings
+                        .insert(v.unwrap_or("").to_string(), f.to_string());
+                }
+                continue;
+            }
             btparse::Metatype::Regular => {}
         }
         let key = match entry.key.as_deref() {
@@ -549,6 +591,36 @@ fn cache_data(
             .push(key);
     }
     Ok(())
+}
+
+/// `process_comment` (Utils.pm:1586): re-instate the line breaks of
+/// structured JabRef comments.
+fn process_comment(comment: &str) -> String {
+    if !comment.contains("jabref-meta:") {
+        return comment.to_string();
+    }
+    // s/([:;])\s(\d)/$1\n$2/xmsg
+    let c: Vec<char> = comment.chars().collect();
+    let mut out = String::with_capacity(comment.len() + 8);
+    let mut i = 0;
+    while i < c.len() {
+        if (c[i] == ':' || c[i] == ';')
+            && i + 2 < c.len()
+            && is_perl_space(c[i + 1])
+            && is_perl_digit(c[i + 2])
+        {
+            out.push(c[i]);
+            out.push('\n');
+            out.push(c[i + 2]);
+            i += 3;
+            continue;
+        }
+        out.push(c[i]);
+        i += 1;
+    }
+    // s/\z/\n/xms
+    out.push('\n');
+    out
 }
 
 fn push_diags(x: &mut Extract, p: &btparse::ParsedFile) {

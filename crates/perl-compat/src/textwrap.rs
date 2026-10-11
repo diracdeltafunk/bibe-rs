@@ -151,6 +151,23 @@ fn at_big_z(t: &[char], i: usize) -> bool {
 
 /// `Text::Wrap::wrap($ip, $xp, $text)` with `$columns = columns`.
 pub fn wrap(columns: i64, ip: &str, xp: &str, text: &str) -> String {
+    wrap_with(columns, ip, xp, text, true)
+}
+
+/// [`wrap`] with `$Text::Wrap::unexpand = 0` (biber's bibtex output,
+/// bibtex.pm:17): output lines are not re-tabbed.
+pub fn wrap_no_unexpand(columns: i64, ip: &str, xp: &str, text: &str) -> String {
+    wrap_with(columns, ip, xp, text, false)
+}
+
+fn wrap_with(columns: i64, ip: &str, xp: &str, text: &str, unexpand_lines: bool) -> String {
+    let unexpand = |s: &str| {
+        if unexpand_lines {
+            unexpand(s)
+        } else {
+            s.to_string()
+        }
+    };
     let mut columns = columns;
     let t: Vec<char> = expand(text).chars().collect();
     let xlen_s = |s: &str| xlen(&expand(s).chars().collect::<Vec<_>>()) as i64;

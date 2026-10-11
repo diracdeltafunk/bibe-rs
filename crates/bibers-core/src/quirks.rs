@@ -110,6 +110,13 @@ pub enum Quirk {
     /// `\x{fffd}` sequences (unless the encoding can represent a character
     /// starting with the cut-off prefix).
     PerlioEncodingSplit,
+    /// BB-047 (`bibtex-winters-typo`): the bibtex writer's year-division
+    /// map has `WinterS` for `winterS`, so that season is lost from dates.
+    BibtexWinterSTypo,
+    /// BB-048 (`bibtex-encoding-question-mark`): with a non-UTF-8 output
+    /// encoding the bibtex writer tests `encode(...) =~ /\?/`, so a literal
+    /// `?` makes it LaTeX-recode the entry and warn.
+    BibtexEncodingQuestionMark,
 }
 
 impl Quirk {
@@ -145,6 +152,8 @@ impl Quirk {
         Quirk::DieondatamodelNoExit,
         Quirk::CloneEndyeardivision,
         Quirk::PerlioEncodingSplit,
+        Quirk::BibtexWinterSTypo,
+        Quirk::BibtexEncodingQuestionMark,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -180,6 +189,8 @@ impl Quirk {
             Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
             Quirk::CloneEndyeardivision => "clone-endyeardivision",
             Quirk::PerlioEncodingSplit => "perlio-encoding-split",
+            Quirk::BibtexWinterSTypo => "bibtex-winters-typo",
+            Quirk::BibtexEncodingQuestionMark => "bibtex-encoding-question-mark",
         }
     }
 

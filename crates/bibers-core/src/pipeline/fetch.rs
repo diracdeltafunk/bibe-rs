@@ -676,9 +676,15 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
         if !check_datasource(ctx, ds)? {
             continue;
         }
+        // Slightly different message for tool mode (Biber.pm:4676).
+        let sec = if ctx.cfg.biber.tool() {
+            String::new()
+        } else {
+            format!(" for section {secnum}")
+        };
         info!(
             ctx.log,
-            "Looking for {} {} '{}' for section {secnum}",
+            "Looking for {} {} '{}'{sec}",
             ds.datatype.as_deref().unwrap_or(""),
             ds.type_.as_deref().unwrap_or(""),
             ds.name.as_deref().unwrap_or("")
