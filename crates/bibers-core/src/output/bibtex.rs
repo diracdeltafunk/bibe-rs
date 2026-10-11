@@ -378,6 +378,15 @@ impl Writer {
         // `my $x = …` truthiness of a date part
         let present = |v: &Option<String>| v.as_deref().is_some_and(|s| o.present(s));
         let mut datestring = String::new();
+        // Quirk `bibtex-unspecified-dates`: `sprintf('%.2d', 'XX')` is `00`.
+        let xx_quirk = ctx.cfg.quirks.on(Quirk::BibtexUnspecifiedDates);
+        let pad2_unspec = |v: &str| {
+            if !xx_quirk && v == "XX" {
+                v.to_string()
+            } else {
+                pad2(v)
+            }
+        };
         let mut overridey: Option<String> = None;
         let mut overridem: Option<String> = None;
         let mut overrideem: Option<String> = None;
@@ -444,13 +453,13 @@ impl Writer {
             let sm = or(overridem, get(be, "month"));
             if present(&sm) {
                 datestring.push('-');
-                datestring.push_str(&pad2(sm.as_deref().unwrap_or("")));
+                datestring.push_str(&pad2_unspec(sm.as_deref().unwrap_or("")));
                 del(be, "month");
             }
             let sd = or(overrided, get(be, "day"));
             if present(&sd) {
                 datestring.push('-');
-                datestring.push_str(&pad2(sd.as_deref().unwrap_or("")));
+                datestring.push_str(&pad2_unspec(sd.as_deref().unwrap_or("")));
                 del(be, "day");
             }
             let t = |be: &Entry, f: &str| get(be, f).is_some_and(|s| perl_truthy(&s));
@@ -645,7 +654,17 @@ impl Writer {
     fn construct_annotation(ctx: &Ctx, key: &str, field: &str, name: &str) -> String {
         let ann = &ctx.run.annotations;
         let mut out = Vec::new();
-        let v = |a: &crate::model::Annotation| a.value.clone().unwrap_or_default();
+        // Literal annotations lose their quotes (quirk
+        // `bibtex-literal-annotations`).
+        let keep_literal = !ctx.cfg.quirks.on(Quirk::BibtexLiteralAnnotations);
+        let v = |a: &crate::model::Annotation| {
+            let s = a.value.clone().unwrap_or_default();
+            if keep_literal && a.literal {
+                format!("\"{s}\"")
+            } else {
+                s
+            }
+        };
         if let Some(a) = ann
             .field
             .get(key)
@@ -1003,7 +1022,7 @@ impl Writer {
             self.usedstrings.insert(m.clone(), value.clone());
             value = o.casing(m);
         }
-        if ctx.run.bt.macros.get(&value).is_some_and(|t| !t.is_empty()) {
+        if macro_text(ctx, &value).is_some_and(|t| !t.is_empty()) {
             acc.push_str(&value);
             acc.push_str(",\n");
         } else {
@@ -1031,7 +1050,7 @@ impl Writer {
         if !self.opts.all_macrodefs && !self.usedstrings.get(m).is_some_and(|v| perl_truthy(v)) {
             return;
         }
-        let text = ctx.run.bt.macros.get(m).unwrap_or("");
+        let text = macro_text(ctx, m).unwrap_or("");
         let s = format!(
             "@{}{{{} = \"{}\"}}\n",
             self.opts.casing("string"),
@@ -1074,6 +1093,21 @@ impl Writer {
             }
             put("\n");
         }
+        // Quirk `tool-drops-preambles` fixed: the data's `@preamble`s.
+        if tool && !ctx.cfg.quirks.on(Quirk::ToolDropsPreambles) {
+            let pre: Vec<&String> = processed
+                .sections
+                .iter()
+                .filter(|s| s.section.number == SECTION)
+                .flat_map(|s| s.preamble.iter().flatten())
+                .collect();
+            for p in &pre {
+                put(&format!("@{}{{\"{p}\"}}\n", self.opts.casing("preamble")));
+            }
+            if !pre.is_empty() {
+                put("\n");
+            }
+        }
         // One special section, sorted by the global sorting template.
         let stn = match ctx.cfg.blx.global("sortingtemplatename") {
             Some(OptValue::Str(s)) => s.clone(),
@@ -1110,6 +1144,17 @@ impl Writer {
         }
         out
     }
+}
+
+/// `Text::BibTeX::macro_text`/`macro_length` for a (NFD) Perl string: the
+/// XS passes the string's UTF-8 bytes, but libbtparse keys its table by the
+/// NFC bytes of the source, so a name with decomposable characters is never
+/// found.
+fn macro_text<'a>(ctx: &'a Ctx, name: &str) -> Option<&'a str> {
+    if nfc(name) != name {
+        return None;
+    }
+    ctx.run.bt.macros.get(name)
 }
 
 /// `$stz =~ s/\\bibtzminsep\s+/:/`.

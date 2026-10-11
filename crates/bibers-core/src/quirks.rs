@@ -117,6 +117,19 @@ pub enum Quirk {
     /// encoding the bibtex writer tests `encode(...) =~ /\?/`, so a literal
     /// `?` makes it LaTeX-recode the entry and warn.
     BibtexEncodingQuestionMark,
+    /// (`bibtex-unspecified-dates`; new, see the tool package report): the
+    /// bibtex writer formats the `XX` of ISO 8601-2 unspecified months and
+    /// days with `sprintf('%.2d')`, so `1999-XX` is written as `1999-00`.
+    BibtexUnspecifiedDates,
+    /// (`bibtex-literal-annotations`; new): the bibtex writer drops the
+    /// quotes of literal annotations (`="text"` is written as `=text`).
+    BibtexLiteralAnnotations,
+    /// (`tool-comments-last-file`; new): in tool mode only the `@comment`s
+    /// of the last data source that has any are output.
+    ToolCommentsLastFile,
+    /// (`tool-drops-preambles`; new): tool-mode (and bibtex) output does
+    /// not write the data's `@preamble`s.
+    ToolDropsPreambles,
 }
 
 impl Quirk {
@@ -154,6 +167,10 @@ impl Quirk {
         Quirk::PerlioEncodingSplit,
         Quirk::BibtexWinterSTypo,
         Quirk::BibtexEncodingQuestionMark,
+        Quirk::BibtexUnspecifiedDates,
+        Quirk::BibtexLiteralAnnotations,
+        Quirk::ToolCommentsLastFile,
+        Quirk::ToolDropsPreambles,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -191,6 +208,10 @@ impl Quirk {
             Quirk::PerlioEncodingSplit => "perlio-encoding-split",
             Quirk::BibtexWinterSTypo => "bibtex-winters-typo",
             Quirk::BibtexEncodingQuestionMark => "bibtex-encoding-question-mark",
+            Quirk::BibtexUnspecifiedDates => "bibtex-unspecified-dates",
+            Quirk::BibtexLiteralAnnotations => "bibtex-literal-annotations",
+            Quirk::ToolCommentsLastFile => "tool-comments-last-file",
+            Quirk::ToolDropsPreambles => "tool-drops-preambles",
         }
     }
 

@@ -403,11 +403,17 @@ pub fn extract_entries(
     }
 
     // Save comments if in tool mode (bibtex.pm:338-342): the last data
-    // source with comments wins.
+    // source with comments wins (quirk `tool-comments-last-file`); with the
+    // quirk fixed, the comments of every data source are kept, in order.
     if ctx.cfg.biber.tool()
-        && let Some(c) = ctx.run.bibcache.comments.get(filename)
+        && let Some(c) = ctx.run.bibcache.comments.get(filename).cloned()
     {
-        ctx.run.bibcache.master_comments = Some(c.clone());
+        let mc = &mut ctx.run.bibcache.master_comments;
+        if ctx.cfg.quirks.on(crate::quirks::Quirk::ToolCommentsLastFile) {
+            *mc = Some(c);
+        } else if ctx.run.bibcache.counts.get(filename).copied().unwrap_or(0) < 2 {
+            mc.get_or_insert_with(Vec::new).extend(c);
+        }
     }
     Ok(rkeys)
 }
@@ -505,10 +511,14 @@ fn cache_data(
             // (bibtex.pm:1535-1539).
             btparse::Metatype::MacroDef => {
                 for (f, v) in entry.fieldlist_values() {
+                    // `$entry->get($f)` with the NFD name from `fieldlist`
+                    // finds nothing when the name has decomposable
+                    // characters (Text::BibTeX keys fields by NFC bytes).
+                    let v = if nfc(f) == f { v.unwrap_or("") } else { "" };
                     ctx.run
                         .bibcache
                         .rstrings
-                        .insert(v.unwrap_or("").to_string(), f.to_string());
+                        .insert(v.to_string(), f.to_string());
                 }
                 continue;
             }
