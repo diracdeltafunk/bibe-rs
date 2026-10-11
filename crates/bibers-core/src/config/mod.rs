@@ -63,6 +63,9 @@ pub struct Config {
     pub dm: Option<DataModel>,
     /// Run-global source map state (`$MAPUNIQVAL`, the `$MAPUNIQ` counter).
     pub sourcemap_run: crate::pipeline::sourcemap::MapRunState,
+    /// A user recode data file (`--recodedata`), loaded by
+    /// [`crate::recodedata::load`]; `None`: biber's built-in `recode_data.xml`.
+    pub recodedata: Option<std::sync::Arc<latex_recode::RecodeData>>,
 }
 
 /// A command-line option value after `GetOptions` and bin/biber's
@@ -87,6 +90,21 @@ impl Config {
             biber: BiberOptions::with_defaults(),
             quirks,
             ..Config::default()
+        }
+    }
+
+    /// The LaTeX recoder for the `decodecharsset`/`output_safecharsset`
+    /// options (`Biber::LaTeX::Recode::init_sets`), over the user recode
+    /// data file if one was given.
+    pub fn recoder(
+        &self,
+        opts: latex_recode::RecodeOptions,
+    ) -> std::sync::Arc<latex_recode::Recoder> {
+        let d = self.biber.get_str("decodecharsset").unwrap_or("base");
+        let e = self.biber.get_str("output_safecharsset").unwrap_or("base");
+        match &self.recodedata {
+            Some(data) => std::sync::Arc::new(latex_recode::Recoder::new(data, d, e, opts)),
+            None => latex_recode::Recoder::builtin(d, e, opts),
         }
     }
 

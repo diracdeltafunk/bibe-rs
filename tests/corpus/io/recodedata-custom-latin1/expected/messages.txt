@@ -1,0 +1,1 @@
+WARN - The entry 'test' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.

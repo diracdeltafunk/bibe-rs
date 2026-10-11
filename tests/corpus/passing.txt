@@ -123,6 +123,12 @@ bugs/others-pop-shared-list
 fuzz/perlio-encoding-split-ascii
 fuzz/perlio-encoding-split-latin1
 fuzz/xname-csv-parse-error
+io/recodedata-custom-base
+io/recodedata-custom-latin1
+io/recodedata-custom-mine
+io/recodedata-custom-mixed
+io/recodedata-custom-noset
+io/recodedata-override-full
 ported/annotations-1
 ported/basic-misc-1
 ported/basic-misc-2

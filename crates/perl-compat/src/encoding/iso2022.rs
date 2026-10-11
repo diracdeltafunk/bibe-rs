@@ -66,20 +66,25 @@ impl Kind {
     /// `decode($octets, $chk)` on one line with CHECK = `FB_CROAK`.
     pub fn decode_line(self, line: &[u8]) -> Result<String, String> {
         match self {
+            // The decoder leaves a residue in `$_[1]` (JIS7: from the first
+            // 8-bit byte on, or an unrecognised escape; 2022-KR: an
+            // unrecognised escape). PerlIO prepends it to the next read and,
+            // at EOF, decodes it again forever: biber hangs. bibers fails.
             Kind::Jis7Bit | Kind::Iso2022Jp | Kind::Iso2022Jp1 => {
-                // Residue: from the first non-ASCII byte on (dropped).
-                let end = line.iter().position(|b| *b >= 0x80).unwrap_or(line.len());
-                let mut s = jis_euc(&line[..end]);
-                if let Some(p) = s.iter().position(|b| *b == 0x1b) {
-                    s.truncate(p);
+                if let Some(b) = line.iter().find(|b| **b >= 0x80) {
+                    return Err(hang_error(self, *b));
+                }
+                let s = jis_euc(line);
+                if s.contains(&0x1b) {
+                    return Err(hang_error(self, 0x1b));
                 }
                 let (o, _) = xs::encode_method(xs("euc-jp"), Dir::Decode, &s, Check::FB_PERLQQ)?;
                 Ok(String::from_utf8(o).expect("utf8"))
             }
             Kind::Iso2022Kr => {
-                let mut s = iso_euc(line);
-                if let Some(p) = s.iter().position(|b| *b == 0x1b) {
-                    s.truncate(p);
+                let s = iso_euc(line);
+                if s.contains(&0x1b) {
+                    return Err(hang_error(self, 0x1b));
                 }
                 let (o, _) = xs::encode_method(xs("euc-kr"), Dir::Decode, &s, Check::FB_PERLQQ)?;
                 Ok(String::from_utf8(o).expect("utf8"))
@@ -87,6 +92,17 @@ impl Kind {
             Kind::Hz => hz_decode(line),
         }
     }
+}
+
+fn hang_error(k: Kind, b: u8) -> String {
+    let name = match k {
+        Kind::Jis7Bit => "7bit-jis",
+        Kind::Iso2022Jp => "iso-2022-jp",
+        Kind::Iso2022Jp1 => "iso-2022-jp-1",
+        Kind::Iso2022Kr => "iso-2022-kr",
+        Kind::Hz => "hz",
+    };
+    format!("{name} \"\\x{b:02X}\" cannot be decoded (perl's Encode loops forever on this input)")
 }
 
 fn is_euc(b: u8) -> bool {

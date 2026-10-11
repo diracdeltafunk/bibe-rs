@@ -254,19 +254,7 @@ impl Encoding {
     /// Encode's croak message (without perl's ` at FILE line N.`).
     pub fn decode_layer(&self, bytes: &[u8]) -> Result<String, String> {
         match self.0 {
-            Inner::Utf8 { strict } => match std::str::from_utf8(bytes) {
-                Ok(s) => Ok(s.to_string()),
-                Err(e) => {
-                    let p = e.valid_up_to();
-                    let n = e.error_len().unwrap_or(bytes.len() - p);
-                    let esc: String = bytes[p..p + n]
-                        .iter()
-                        .map(|b| format!("\\x{b:02X}"))
-                        .collect();
-                    let name = if strict { "UTF-8" } else { "utf8" };
-                    Err(format!("{name} \"{esc}\" does not map to Unicode"))
-                }
-            },
+            Inner::Utf8 { strict } => utf8_decode(bytes, strict),
             Inner::Xs(x) => {
                 // A partial character at the very end is silently dropped
                 // (PerlIOEncode_fill hits EOF with it still pending).
@@ -306,6 +294,118 @@ impl Encoding {
                 .unwrap_or_else(|_| String::from_utf8_lossy(bytes).into_owned()),
         }
     }
+}
+
+/// `Encode::utf8::decode` through a PerlIO layer (`process_utf8` with
+/// `FB_CROAK|STOP_AT_PARTIAL`): a partial character at the end is dropped;
+/// strict UTF-8 rejects surrogates, noncharacters and code points above
+/// U+10FFFF. Lax `utf8` accepts those, but Rust strings cannot hold
+/// surrogates or values above U+10FFFF: they become U+FFFD (as DC-019).
+fn utf8_decode(bytes: &[u8], strict: bool) -> Result<String, String> {
+    let name = if strict { "UTF-8" } else { "utf8" };
+    let err = |s: &[u8]| {
+        let esc: String = s.iter().map(|b| format!("\\x{b:02X}")).collect();
+        format!("{name} \"{esc}\" does not map to Unicode")
+    };
+    let mut out = String::with_capacity(bytes.len());
+    let mut i = 0;
+    while i < bytes.len() {
+        let b = bytes[i];
+        if b < 0x80 {
+            out.push(b as char);
+            i += 1;
+            continue;
+        }
+        let need = match b {
+            0xC0..=0xDF => 2,
+            0xE0..=0xEF => 3,
+            0xF0..=0xF7 => 4,
+            0x80..=0xBF => return Err(err(&bytes[i..i + 1])),
+            _ => {
+                // perl's extended UTF-8 (5 to 13 bytes): never acceptable.
+                let n = match b {
+                    0xF8..=0xFB => 5,
+                    0xFC..=0xFD => 6,
+                    0xFE => 7,
+                    _ => 13,
+                };
+                let cont = bytes[i + 1..]
+                    .iter()
+                    .take(n - 1)
+                    .take_while(|c| (0x80..=0xBF).contains(*c))
+                    .count();
+                return Err(err(&bytes[i..i + 1 + cont]));
+            }
+        };
+        let cont = bytes[i + 1..]
+            .iter()
+            .take(need - 1)
+            .take_while(|c| (0x80..=0xBF).contains(*c))
+            .count();
+        if cont < need - 1 {
+            if i + 1 + cont == bytes.len() && valid_partial(&bytes[i..], need, strict) {
+                break; // partial character at EOF: dropped
+            }
+            return Err(err(&bytes[i..i + 1 + cont]));
+        }
+        let seq = &bytes[i..i + need];
+        let mut v = (b as u32) & (0x7F >> need);
+        for c in &seq[1..] {
+            v = (v << 6) | (*c as u32 & 0x3F);
+        }
+        let min = [0, 0, 0x80, 0x800, 0x10000][need];
+        if v < min {
+            return Err(err(seq)); // overlong
+        }
+        let surrogate = (0xD800..=0xDFFF).contains(&v);
+        let nonchar = (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v);
+        if strict && (surrogate || nonchar || v > 0x10FFFF) {
+            return Err(err(seq));
+        }
+        out.push(char::from_u32(v).unwrap_or('\u{FFFD}'));
+        i += need;
+    }
+    Ok(out)
+}
+
+/// `is_utf8_valid_partial_char_flags`: can the incomplete sequence `p`
+/// (lead byte expecting `need` bytes) still become an acceptable character?
+fn valid_partial(p: &[u8], need: usize, strict: bool) -> bool {
+    let mut lo = (p[0] as u32) & (0x7F >> need);
+    for c in &p[1..] {
+        lo = (lo << 6) | (*c as u32 & 0x3F);
+    }
+    let missing = need - p.len();
+    let hi = (lo << (6 * missing)) | ((1 << (6 * missing)) - 1);
+    let lo = lo << (6 * missing);
+    let min = [0, 0, 0x80, 0x800, 0x10000][need];
+    let lo = lo.max(min);
+    if lo > hi {
+        return false;
+    }
+    if !strict {
+        return true;
+    }
+    // Some value in [lo, hi] that is neither a surrogate, a noncharacter
+    // nor above U+10FFFF.
+    let hi = hi.min(0x10FFFF);
+    let mut v = lo;
+    while v <= hi {
+        if (0xD800..=0xDFFF).contains(&v) {
+            v = 0xE000;
+            continue;
+        }
+        if (0xFDD0..=0xFDEF).contains(&v) {
+            v = 0xFDF0;
+            continue;
+        }
+        if (v & 0xFFFE) == 0xFFFE {
+            v += 1;
+            continue;
+        }
+        return true;
+    }
+    false
 }
 
 /// `Encode::utf8::encode` (Encode.xs:677, `process_utf8`): strict UTF-8

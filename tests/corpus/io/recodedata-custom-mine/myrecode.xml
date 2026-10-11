@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texmap>
+  <maps type="letters" set="base,mine">
+    <map><from>ss</from>                    <to hex="DF">ß</to></map>
+    <map><from>myoe</from>                  <to hex="153">œ</to></map>
+    <map><from preferred="1">oe</from>      <to hex="153">œ</to></map>
+    <map><from>l</from>                     <to hex="142">ł</to></map>
+    <map><from>o</from>                     <to hex="F8">ø</to></map>
+  </maps>
+  <maps type="diacritics" set="base">
+    <map><from>"</from>                     <to hex="308">̈</to></map>
+    <map><from>'</from>                     <to hex="301">́</to></map>
+  </maps>
+  <maps type="diacritics" set="mine">
+    <map><from>`</from>                     <to hex="300">̀</to></map>
+  </maps>
+  <maps type="symbols" set="mine">
+    <map><from>textuparrow</from>           <to hex="2191">↑</to></map>
+    <map><from>textmyarrow</from>           <to hex="2191">↑</to></map>
+  </maps>
+  <maps type="punctuation" set="base,mine">
+    <map><from preferred="1" raw="1">--</from> <to hex="2013">–</to></map>
+  </maps>
+  <decode_exclude>
+    <char>o</char>
+  </decode_exclude>
+  <encode_exclude>
+    <char>{</char>
+  </encode_exclude>
+</texmap>

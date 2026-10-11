@@ -64,6 +64,15 @@ impl Env {
         !p.is_empty() && self.resolve(p).is_file()
     }
 
+    /// `IPC::Cmd::can_run('kpsewhich')`.
+    pub fn can_run_kpsewhich(&self) -> bool {
+        self.use_kpsewhich
+            && Command::new("kpsewhich")
+                .arg("--version")
+                .output()
+                .is_ok_and(|o| o.status.success())
+    }
+
     /// Run `kpsewhich <name>` and return its first output line, if any.
     pub fn kpsewhich(&self, name: &str) -> Option<String> {
         if !self.use_kpsewhich {

@@ -95,11 +95,7 @@ impl FetchOpts {
             .global("gregorianstart")
             .and_then(OptValue::as_str)
             .and_then(parse_gs);
-        let recoder = latex_recode::Recoder::builtin(
-            b.get_str("decodecharsset").unwrap_or("base"),
-            b.get_str("output_safecharsset").unwrap_or("base"),
-            latex_recode::RecodeOptions::default(),
-        );
+        let recoder = ctx.cfg.recoder(latex_recode::RecodeOptions::default());
         FetchOpts {
             xsvsep,
             namesep: s("namesep"),

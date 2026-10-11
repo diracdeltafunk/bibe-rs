@@ -29,6 +29,7 @@ Requirements: Python ≥ 3.12, TeX Live with biblatex (`pdflatex`, `lualatex`, `
 - `deferred:DC-NNN` marks cases that need a feature bibers defers to M4 (docs/compat.md §4). bibers is expected to fail these until the feature lands.
 - `perl-die` marks cases where biber dies with a Perl error. The exit code then comes from `errno`: the PAR binary (O1) exits with 25, the source build (O3) with 255.
 - `o3-differs` marks cases where O3 legitimately differs from O1: the CJK sort locales (BB-011) and the Perl-die exit codes. `cargo xtask golden --check --oracle o3` reports these cases as mismatches.
+- `o3-golden` marks cases whose expectations come from O3 (`cargo xtask golden --oracle o3 <case>`) because O1 cannot run them: with `--recodedata`, the TeX Live PAR binary dies silently (exit 25) on the first entry with a date field, while the source build works.
 
 ## Nondeterminism found while building the corpus
 

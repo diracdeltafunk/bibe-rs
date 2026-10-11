@@ -1446,16 +1446,8 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     } else {
         Some(find_output_encoding(ctx)?)
     };
-    let recoder = (safechars || enc.is_some()).then(|| {
-        latex_recode::Recoder::builtin(
-            ctx.cfg.biber.get_str("decodecharsset").unwrap_or("base"),
-            ctx.cfg
-                .biber
-                .get_str("output_safecharsset")
-                .unwrap_or("base"),
-            latex_recode::RecodeOptions::BIBER,
-        )
-    });
+    let recoder =
+        (safechars || enc.is_some()).then(|| ctx.cfg.recoder(latex_recode::RecodeOptions::BIBER));
     let sortdebug = ctx.cfg.biber.is_true("sortdebug");
     let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
 

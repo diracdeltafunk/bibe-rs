@@ -1,0 +1,68 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{test}{book}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=78a374afc67ab100c731e2f89eb63b52}{%
+           family={\"Encalcer},
+           familyi={\\bibinitperiod},
+           given={Edward},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=58580f4a5b1c902f7b5238882fa64a73}{%
+           family={\ss{}e},
+           familyi={e\bibinitperiod},
+           given={Jo},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=43dafe7f45aa4d5340684321cf9c96ad}{%
+           family={\'Ab},
+           familyi={\\bibinitperiod},
+           given={\o{}ystein},
+           giveni={y\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {A press -- Œuvres \oe{} Straße}%
+      }
+      \strng{namehash}{fd78086ae97a925fec6f8459199eaa75}
+      \strng{fullhash}{fd78086ae97a925fec6f8459199eaa75}
+      \strng{fullhashraw}{fd78086ae97a925fec6f8459199eaa75}
+      \strng{bibnamehash}{fd78086ae97a925fec6f8459199eaa75}
+      \strng{authorbibnamehash}{fd78086ae97a925fec6f8459199eaa75}
+      \strng{authornamehash}{fd78086ae97a925fec6f8459199eaa75}
+      \strng{authorfullhash}{fd78086ae97a925fec6f8459199eaa75}
+      \strng{authorfullhashraw}{fd78086ae97a925fec6f8459199eaa75}
+      \field{labelalpha}{EeA99}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{\textuparrow{} à \'e titlé \myoe{} \l{} ł – \textmyarrow{} \`a ø}
+      \field{year}{1999}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -42,6 +42,13 @@ fn digests(name: &str, all: &str) -> (String, String, String) {
         }
     }
     let mut h = Sha256::new();
+    // ENCODE_DUMP=<dir>: write the decode lines (to diff with the probe's
+    // `ENCODE_DUMP` output when a digest differs).
+    let dump = std::env::var_os("ENCODE_DUMP").map(|d| {
+        std::cell::RefCell::new(
+            std::fs::File::create(std::path::Path::new(&d).join(format!("{name}.rs.txt"))).unwrap(),
+        )
+    });
     for s in &seqs {
         let r = match e.decode_layer(s) {
             Ok(t) => t
@@ -51,7 +58,12 @@ fn digests(name: &str, all: &str) -> (String, String, String) {
                 .join(" "),
             Err(m) => format!("ERR {m}"),
         };
-        h.update(format!("{}:{}\n", hex(s), r).as_bytes());
+        let line = format!("{}:{}\n", hex(s), r);
+        if let Some(d) = &dump {
+            use std::io::Write as _;
+            d.borrow_mut().write_all(line.as_bytes()).unwrap();
+        }
+        h.update(line.as_bytes());
     }
     (cbd, layer, hex(h.finalize()))
 }
@@ -99,6 +111,16 @@ fn encodings_match_perl() {
         }
         let (cb, layer, dec) = digests(name, &all);
         for (k, got) in [("cb", cb), ("layer", layer), ("dec", dec)] {
+            // No `dec` for the needs_lines encodings (perl hangs reading
+            // malformed input; see encode_digests.pl).
+            if d[k].is_null() {
+                continue;
+            }
+            // Lax `utf8` decodes surrogates and values above U+10FFFF, which
+            // Rust strings cannot hold (U+FFFD instead; docs/compat.md DC-019).
+            if name == "utf8" && k == "dec" {
+                continue;
+            }
             if d[k].as_str() != Some(&got) {
                 bad.push(format!("{name} {k}"));
             }

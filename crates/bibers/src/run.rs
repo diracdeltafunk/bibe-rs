@@ -251,6 +251,10 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
     log.set_nodieonerror(b.nodieonerror());
     init.log_startup(&mut log, &banner());
     let mut cfg = init.config;
+    // Biber->new: Biber::LaTeX::Recode->init_sets (DC-045).
+    if bibers_core::recodedata::load(&mut cfg, &mut log, env).is_err() {
+        return Exit(log.display_end());
+    }
     let now = chrono::Local::now().format("%a %b %e, %Y, %H:%M:%S");
     log.logfile_info(bibers_core::loc!(), &format!("=== {now}"));
 

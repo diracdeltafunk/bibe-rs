@@ -72,6 +72,14 @@ for my $enc (@encs) {
     close $fh;
   }
   $d{layer} = sha256_hex($buf);
+  # Reading the needs_lines encodings through a layer hangs on most
+  # malformed input (residue at EOF is decoded again forever), so their
+  # decoding is not compared here.
+  if ($o->needs_lines) {
+    $out{encodings}{$o->name} = \%d;
+    print STDERR "$enc\n";
+    next;
+  }
   my $h = Digest::SHA->new(256);
   my @seqs = (map { chr } 0 .. 255);
   for my $a (0 .. 255) { push @seqs, map { chr($a) . chr($_) } 0 .. 255 }
@@ -79,8 +87,14 @@ for my $enc (@encs) {
     for my $b (0xA1 .. 0xFE) { push @seqs, map { chr($a) . chr($b) . chr($_) } 0xA1 .. 0xFE }
   }
   local $SIG{__WARN__} = sub { };
+  # ENCODE_DUMP=<dir>: also write the lines (see encode_exhaustive.rs).
+  my $dump;
+  open($dump, '>:raw', "$ENV{ENCODE_DUMP}/" . $o->name . ".pl.txt") or die if $ENV{ENCODE_DUMP};
   for my $s (@seqs) {
-    $h->add(unpack('H*', $s) . ':' . read_layer($enc, $s) . "\n");
+    my $line = unpack('H*', $s) . ':' . read_layer($enc, $s) . "\n";
+    utf8::encode($line);
+    print $dump $line if $dump;
+    $h->add($line);
   }
   $d{dec} = $h->hexdigest;
   $out{encodings}{$o->name} = \%d;
