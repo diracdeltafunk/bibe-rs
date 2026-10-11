@@ -17,6 +17,7 @@ pub mod output;
 pub mod perlish;
 pub mod pipeline;
 pub mod quirks;
+pub mod xmldom;
 pub mod xmlin;
 
 /// The biber version bibers is compatible with.
