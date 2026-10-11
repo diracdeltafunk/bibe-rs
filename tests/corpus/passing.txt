@@ -129,6 +129,7 @@ ported/basic-misc-2
 ported/basic-misc-3
 ported/basic-misc-4
 ported/bibtex-aliases-1
+ported/bibtex-output-1
 ported/crossrefs-1
 ported/dateformats-1
 ported/dateformats-2
@@ -154,6 +155,7 @@ ported/extradate-4
 ported/extratitle-1
 ported/extratitleyear-1
 ported/full-bbl-1
+ported/full-bibtex-1
 ported/labelalpha-1
 ported/labelalpha-10
 ported/labelalpha-11
@@ -253,6 +255,10 @@ ported/sorting-6
 ported/sorting-7
 ported/sorting-8
 ported/sorting-9
+ported/tool-1
+ported/tool-2
+ported/tool-3
+ported/tool-4
 ported/translit-1
 ported/truncation-1
 ported/truncation-2
