@@ -1,0 +1,1 @@
+ERROR - Data file 'encoding6.bib' cannot be read in encoding 'utf8': Can't interchange noncharacter code point U+FDD1 at <PERLSRC> line <N>.

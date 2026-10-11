@@ -1,0 +1,5 @@
+description = "\\char of noncharacters (U+FDD0, U+1FFFF): U+FFFD in the .bbl"
+source = "tools/corpus/gen_io_nonchar.sh"
+args = ["--noconf", "encoding6.bcf"]
+outputs = ["encoding6.bbl"]
+tags = ["suite:io", "feature:encoding"]

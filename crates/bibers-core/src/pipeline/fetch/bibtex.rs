@@ -443,6 +443,20 @@ fn cache_data(
             }
         }
     });
+    // biber writes the decoded buffer to its temp file through PerlIO's
+    // :utf8_strict layer (slurp_switchw), which turns noncharacters (e.g.
+    // from `\char"FDD0`) into U+FFFD.
+    let lbuf: String = lbuf
+        .chars()
+        .map(|c| {
+            let v = c as u32;
+            if (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v) {
+                '\u{FFFD}'
+            } else {
+                c
+            }
+        })
+        .collect();
     if !opts.nostdmacros {
         for (k, v) in btparse::BIBER_MONTHS {
             ctx.run.bt.macros.define(k, v);

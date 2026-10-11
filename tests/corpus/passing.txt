@@ -176,6 +176,8 @@ io/recodedata-custom-mine
 io/recodedata-custom-mixed
 io/recodedata-custom-noset
 io/recodedata-override-full
+io/utf8-noncharacter-decoded
+io/utf8-noncharacter-literal
 ported/annotations-1
 ported/basic-misc-1
 ported/basic-misc-2

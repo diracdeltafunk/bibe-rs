@@ -16,10 +16,21 @@ fn is_utf8_strict_layer(name: &str) -> bool {
 /// short description (biber appends Perl's `$@`; docs/compat.md DC-046).
 pub fn decode(bytes: &[u8], name: &str) -> Result<String, String> {
     if is_utf8_strict_layer(name) {
-        return String::from_utf8(bytes.to_vec()).map_err(|e| {
+        let s = String::from_utf8(bytes.to_vec()).map_err(|e| {
             let b = bytes[e.utf8_error().valid_up_to()];
             format!("utf8 \"\\x{b:02X}\" does not map to Unicode")
-        });
+        })?;
+        // PerlIO::utf8_strict also rejects noncharacters.
+        if let Some(c) = s.chars().find(|c| {
+            let v = *c as u32;
+            (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v)
+        }) {
+            return Err(format!(
+                "Can't interchange noncharacter code point U+{:04X}",
+                c as u32
+            ));
+        }
+        return Ok(s);
     }
     match lookup(name) {
         Lookup::Found(e) => e.decode_layer(bytes),
