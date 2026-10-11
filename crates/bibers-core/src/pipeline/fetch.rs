@@ -6,7 +6,6 @@ mod bibtex;
 pub mod dates;
 pub mod encoding;
 pub mod names;
-mod sbcs;
 
 pub use bibtex::{BibCache, FetchOpts};
 pub(crate) use bibtex::{collapse_eq, process_entry_options};
