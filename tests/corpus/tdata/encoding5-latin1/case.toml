@@ -2,4 +2,4 @@ description = "UTF-8 .bib -> latin1 .bbl (t/encoding.t)"
 source = "vendor/biber/t/tdata/encoding5.bcf"
 args = ["--noconf", "--output-encoding=latin1", "encoding5.bcf"]
 outputs = ["encoding5.bbl"]
-tags = ["suite:tdata", "feature:encoding", "deferred:DC-034"]
+tags = ["suite:tdata", "feature:encoding"]

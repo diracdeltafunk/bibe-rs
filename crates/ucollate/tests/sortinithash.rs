@@ -63,6 +63,10 @@ fn corpus_goldens() {
     let mut pairs = BTreeSet::new();
     for f in &files {
         // a few goldens use --output-encoding other than UTF-8; skip them
+        // (io/enc-*: some, like iso-2022-jp, are valid UTF-8 but not text)
+        if f.to_string_lossy().contains("/io/enc-") {
+            continue;
+        }
         let Ok(text) = std::fs::read_to_string(f) else {
             continue;
         };

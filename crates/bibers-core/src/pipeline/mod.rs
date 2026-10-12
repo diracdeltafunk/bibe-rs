@@ -74,9 +74,6 @@ pub struct RunState {
     /// loop has mutated it in place (BB-028); `None` while pristine. See
     /// [`resolve::datefield_stems`].
     pub datefields: Option<Vec<String>>,
-    /// Remote data sources: `%REMOTE_MAP`, biber's temp directory and the
-    /// `%ENV` changes biber makes for HTTPS (DC-032).
-    pub remote: crate::remote::RemoteState,
 }
 
 /// The result of processing: one state per processed section, in

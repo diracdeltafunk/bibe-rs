@@ -66,6 +66,9 @@ pub struct Config {
     /// A user recode data file (`--recodedata`), loaded by
     /// [`crate::recodedata::load`]; `None`: biber's built-in `recode_data.xml`.
     pub recodedata: Option<std::sync::Arc<latex_recode::RecodeData>>,
+    /// Remote data sources and control files: `%REMOTE_MAP`, biber's temp
+    /// directory and the `%ENV` changes biber makes for HTTPS (DC-032).
+    pub remote: crate::remote::RemoteState,
 }
 
 /// A command-line option value after `GetOptions` and bin/biber's

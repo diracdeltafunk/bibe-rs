@@ -579,49 +579,9 @@ fn locate(ctx: &mut Ctx, name: &str) -> Result<Option<String>, Fatal> {
     }
 }
 
-/// The remote branch of `locate_data_file` (Utils.pm:231-305): fetch
-/// `source` into biber's temp directory (once per run) and return the local
-/// path. A failed fetch is an ERROR; with `--nodieonerror` the (empty) temp
-/// file is used, as in biber.
+/// The remote branch of `locate_data_file` (see [`crate::remote::locate`]).
 fn fetch_remote(ctx: &mut Ctx, source: &str, tls: bool) -> Result<String, Fatal> {
-    info!(
-        ctx.log,
-        "Data source '{source}' is a remote BibTeX data source - fetching ..."
-    );
-    if let Some(p) = ctx.run.remote.cache.get(source) {
-        let p = p.clone();
-        info!(ctx.log, "Found '{source}' in remote source cache");
-        return Ok(p);
-    }
-    if tls {
-        let b = &ctx.cfg.biber;
-        let nointernalca = b.get_str("ssl-nointernalca").is_some();
-        let noverify = b.get_str("ssl-noverify-host").is_some();
-        crate::remote::setup_ssl_env(&mut ctx.run.remote.env, nointernalca, noverify);
-    }
-    let keep = ctx.cfg.biber.is_true("noremove_tmp_dir");
-    let dir = match ctx.run.remote.tempdir(keep) {
-        Ok(d) => d,
-        Err(e) => {
-            biber_error!(ctx.log, "Cannot create temporary directory: {e}")?;
-            return Ok(String::new());
-        }
-    };
-    let (path, err) = match crate::remote::fetch_to_file(source, &dir, &ctx.run.remote.env) {
-        Ok(r) => r,
-        Err(e) => {
-            biber_error!(ctx.log, "Cannot write temporary file in '{}': {e}", dir.display())?;
-            return Ok(String::new());
-        }
-    };
-    if let Some(status) = err {
-        biber_error!(
-            ctx.log,
-            "Could not fetch '{source}' (HTTP error: {status})"
-        )?;
-    }
-    ctx.run.remote.cache.insert(source.to_string(), path.clone());
-    Ok(path)
+    crate::remote::locate(ctx.cfg, ctx.log, source, tls)
 }
 
 /// Check a data source's type/datatype is supported. `Ok(false)` to skip it.

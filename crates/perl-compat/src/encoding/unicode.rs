@@ -167,9 +167,8 @@ impl UniEnc {
             s = size;
             be = Some(true);
             if bom != 0xFEFF {
-                if bom == 0xFFFE {
-                    be = Some(false);
-                } else if bom == 0xFFFE_0000 {
+                // BOM16LE / BOM32LE
+                if bom == 0xFFFE || bom == 0xFFFE_0000 {
                     be = Some(false);
                 } else {
                     s = 0;

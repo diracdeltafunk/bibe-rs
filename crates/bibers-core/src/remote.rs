@@ -77,10 +77,7 @@ pub struct EnvOverrides {
 
 impl EnvOverrides {
     pub fn get(&self, k: &str) -> Option<String> {
-        self.vars
-            .get(k)
-            .cloned()
-            .or_else(|| std::env::var(k).ok())
+        self.vars.get(k).cloned().or_else(|| std::env::var(k).ok())
     }
     fn exists(&self, k: &str) -> bool {
         self.get(k).is_some()
@@ -93,8 +90,7 @@ impl EnvOverrides {
 /// biber's CA setup for HTTPS/FTPS sources (Utils.pm:241-275), applied to
 /// the (simulated) environment.
 pub fn setup_ssl_env(env: &mut EnvOverrides, nointernalca: bool, noverify_host: bool) {
-    if !env.exists("PERL_LWP_SSL_CA_FILE") && !env.exists("PERL_LWP_SSL_CA_PATH") && !nointernalca
-    {
+    if !env.exists("PERL_LWP_SSL_CA_FILE") && !env.exists("PERL_LWP_SSL_CA_PATH") && !nointernalca {
         // Mozilla::CA's cacert.pem: represented by the built-in list.
         env.set("PERL_LWP_SSL_CA_FILE", MOZILLA_CA);
     }
@@ -224,9 +220,7 @@ impl Url {
             .split_once("://")
             .map(|(_, r)| r.split(['/', '?']).next().unwrap_or(""))
             .unwrap_or("");
-        auth.rsplit_once('@')
-            .map_or(auth, |(_, h)| h)
-            .to_string()
+        auth.rsplit_once('@').map_or(auth, |(_, h)| h).to_string()
     }
 
     /// Resolve a `Location` against this URL (RFC 3986 §5.2).
@@ -537,10 +531,7 @@ fn http_exchange(
         .ok_or_else(|| format!("Bad response status line: '{status}'"))?;
     let message = parts.next().unwrap_or("").trim().to_string();
     let mut headers: Vec<(String, String)> = Vec::new();
-    loop {
-        let Some(l) = read_line(&mut r).map_err(|e| errno_text(&e))? else {
-            break;
-        };
+    while let Some(l) = read_line(&mut r).map_err(|e| errno_text(&e))? {
         if l.is_empty() {
             break;
         }
@@ -584,7 +575,10 @@ fn http_exchange(
             resp.body.extend(buf);
             read_line(&mut r).map_err(|e| errno_text(&e))?;
         }
-    } else if let Some(n) = resp.header("Content-Length").and_then(|v| v.parse::<u64>().ok()) {
+    } else if let Some(n) = resp
+        .header("Content-Length")
+        .and_then(|v| v.parse::<u64>().ok())
+    {
         r.take(n)
             .read_to_end(&mut resp.body)
             .map_err(|e| errno_text(&e))?;
@@ -609,9 +603,7 @@ fn proxy_for(url: &Url, env: &EnvOverrides) -> Option<Url> {
             if d == "*" {
                 return None;
             }
-            if !d.is_empty()
-                && (url.host == d || url.host.ends_with(&format!(".{d}")))
-            {
+            if !d.is_empty() && (url.host == d || url.host.ends_with(&format!(".{d}"))) {
                 return None;
             }
         }
@@ -644,7 +636,10 @@ fn http_simple(url: &Url, tls: &TlsEnv, env: &EnvOverrides) -> Response {
             if let Some(ui) = &p.userinfo {
                 h.insert(
                     0,
-                    ("Proxy-Authorization".into(), format!("Basic {}", base64(&percent_decode(ui)))),
+                    (
+                        "Proxy-Authorization".into(),
+                        format!("Basic {}", base64(&percent_decode(ui))),
+                    ),
                 );
             }
             let mut s = stream;
@@ -671,7 +666,13 @@ fn http_simple(url: &Url, tls: &TlsEnv, env: &EnvOverrides) -> Response {
                 .and_then(|c| c.parse().ok())
                 .unwrap_or(500);
             if !(200..300).contains(&code) {
-                let msg = head.lines().next().unwrap_or("").splitn(3, ' ').nth(2).unwrap_or("");
+                let msg = head
+                    .lines()
+                    .next()
+                    .unwrap_or("")
+                    .splitn(3, ' ')
+                    .nth(2)
+                    .unwrap_or("");
                 let r = Response::error(code, msg.trim());
                 return Response::error(
                     500,
@@ -851,10 +852,7 @@ fn tls_connect(
     // Handshake now, so certificate errors are connect errors (as in LWP).
     while s.conn.is_handshaking() {
         if let Err(e) = s.conn.complete_io(&mut s.sock) {
-            let msg = match e
-                .get_ref()
-                .and_then(|x| x.downcast_ref::<rustls::Error>())
-            {
+            let msg = match e.get_ref().and_then(|x| x.downcast_ref::<rustls::Error>()) {
                 Some(rustls::Error::InvalidCertificate(
                     rustls::CertificateError::NotValidForName
                     | rustls::CertificateError::NotValidForNameContext { .. },
@@ -889,13 +887,16 @@ impl Ftp {
         msg.push(first.get(4..).unwrap_or("").to_string());
         if first.as_bytes().get(3) == Some(&b'-') {
             let end = format!("{code} ");
-            loop {
-                let Some(l) = read_line(&mut self.r)? else { break };
+            while let Some(l) = read_line(&mut self.r)? {
                 if l.starts_with(&end) {
                     msg.push(l[4..].to_string());
                     break;
                 }
-                msg.push(l.strip_prefix(&format!("{code}-")).unwrap_or(&l).to_string());
+                msg.push(
+                    l.strip_prefix(&format!("{code}-"))
+                        .unwrap_or(&l)
+                        .to_string(),
+                );
             }
         }
         self.code = code;
@@ -964,9 +965,8 @@ fn ftp_session(f: &mut Ftp, url: &Url) -> std::io::Result<Response> {
             };
             let u = String::from_utf8_lossy(&percent_decode(u)).into_owned();
             let p = p.map(|p| String::from_utf8_lossy(&percent_decode(p)).into_owned());
-            let p = p.or_else(|| {
-                (u == "anonymous" || u == "ftp").then(|| "anonymous@".to_string())
-            });
+            let p =
+                p.or_else(|| (u == "anonymous" || u == "ftp").then(|| "anonymous@".to_string()));
             (u, p)
         }
         None => ("anonymous".to_string(), Some("anonymous@".to_string())),
@@ -1095,13 +1095,13 @@ fn request(source: &str, env: &EnvOverrides) -> Response {
 
 /// Run-wide remote state: biber's `%REMOTE_MAP` cache, its temp directory
 /// and the environment changes it made.
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct RemoteState {
     /// URL → downloaded file.
     pub cache: BTreeMap<String, String>,
     pub env: EnvOverrides,
     tempdir: Option<std::path::PathBuf>,
-    _guard: Option<tempfile::TempDir>,
+    _guard: Option<Arc<tempfile::TempDir>>,
 }
 
 impl RemoteState {
@@ -1118,11 +1118,62 @@ impl RemoteState {
         if keep {
             let _ = td.keep();
         } else {
-            self._guard = Some(td);
+            self._guard = Some(Arc::new(td));
         }
         self.tempdir = Some(p.clone());
         Ok(p)
     }
+}
+
+/// The remote branch of `locate_data_file` (Utils.pm:231-305): fetch
+/// `source` into biber's temp directory (once per run) and return the local
+/// path. A failed fetch is an ERROR; with `--nodieonerror` the (empty) temp
+/// file is used, as in biber.
+pub fn locate(
+    cfg: &mut crate::config::Config,
+    log: &mut crate::log::Logger,
+    source: &str,
+    tls: bool,
+) -> Result<String, crate::log::Fatal> {
+    crate::info!(
+        log,
+        "Data source '{source}' is a remote BibTeX data source - fetching ..."
+    );
+    if let Some(p) = cfg.remote.cache.get(source) {
+        let p = p.clone();
+        crate::info!(log, "Found '{source}' in remote source cache");
+        return Ok(p);
+    }
+    if tls {
+        let b = &cfg.biber;
+        let nointernalca = b.get_str("ssl-nointernalca").is_some();
+        let noverify = b.get_str("ssl-noverify-host").is_some();
+        setup_ssl_env(&mut cfg.remote.env, nointernalca, noverify);
+    }
+    let keep = cfg.biber.is_true("noremove_tmp_dir");
+    let dir = match cfg.remote.tempdir(keep) {
+        Ok(d) => d,
+        Err(e) => {
+            crate::biber_error!(log, "Cannot create temporary directory: {e}")?;
+            return Ok(String::new());
+        }
+    };
+    let (path, err) = match fetch_to_file(source, &dir, &cfg.remote.env) {
+        Ok(r) => r,
+        Err(e) => {
+            crate::biber_error!(
+                log,
+                "Cannot write temporary file in '{}': {e}",
+                dir.display()
+            )?;
+            return Ok(String::new());
+        }
+    };
+    if let Some(status) = err {
+        crate::biber_error!(log, "Could not fetch '{source}' (HTTP error: {status})")?;
+    }
+    cfg.remote.cache.insert(source.to_string(), path.clone());
+    Ok(path)
 }
 
 /// Fetch `source` into a new `biber_remote_data_source_XXXXX.bib` file in
@@ -1172,7 +1223,10 @@ mod tests {
 
     #[test]
     fn status_lines() {
-        assert_eq!(Response::error(503, "").status_line(), "503 Service Unavailable");
+        assert_eq!(
+            Response::error(503, "").status_line(),
+            "503 Service Unavailable"
+        );
         assert_eq!(Response::error(599, "").status_line(), "599 Unknown code");
         assert_eq!(Response::error(404, "Nope").status_line(), "404 Nope");
     }

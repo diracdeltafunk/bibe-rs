@@ -68,30 +68,30 @@ EXTRA = {
         bcf="encoding3.bcf",
         args=["--noconf", "--input-encoding=latin1", "--output-encoding=cp1252", "encoding3.bcf"],
         description="latin1 .bib -> CP1252 .bbl (t/encoding.t)",
-        tags=["feature:encoding", "deferred:DC-034"]),
+        tags=["feature:encoding"]),
     "encoding4-latin2-latin3": dict(
         bcf="encoding4.bcf",
         args=["--noconf", "--input-encoding=latin2", "--output-encoding=latin3", "encoding4.bcf"],
         description="latin2 .bib -> latin3 .bbl (t/encoding.t)",
-        tags=["feature:encoding", "deferred:DC-034"]),
+        tags=["feature:encoding"]),
     "encoding4-latin2-latin1": dict(
         bcf="encoding4.bcf",
         args=["--noconf", "--input-encoding=latin2", "--output-encoding=latin1", "encoding4.bcf"],
         description="latin2 .bib -> latin1 .bbl: unencodable characters (t/encoding.t)",
-        tags=["feature:encoding", "deferred:DC-034"]),
+        tags=["feature:encoding"]),
     "encoding5-latin1": dict(
         bcf="encoding5.bcf", args=["--noconf", "--output-encoding=latin1", "encoding5.bcf"],
         description="UTF-8 .bib -> latin1 .bbl (t/encoding.t)",
-        tags=["feature:encoding", "deferred:DC-034"]),
+        tags=["feature:encoding"]),
     "encoding6-safechars": dict(
         bcf="encoding6.bcf", args=["--noconf", "--output-safechars", "encoding6.bcf"],
         description="UTF-8 .bib -> UTF-8 .bbl with --output-safechars (t/encoding.t)",
-        tags=["feature:encoding", "deferred:DC-034"]),
+        tags=["feature:encoding"]),
     "encoding6-safecharsset-full": dict(
         bcf="encoding6.bcf",
         args=["--noconf", "--output-safechars", "--output-safecharsset=full", "encoding6.bcf"],
         description="UTF-8 .bib -> UTF-8 .bbl, --output-safecharsset=full (t/encoding.t)",
-        tags=["feature:encoding", "deferred:DC-034"]),
+        tags=["feature:encoding"]),
     # t/configfile.t: general.bcf with the test biber.conf and --mincrossrefs=7.
     "general-configfile": dict(
         bcf="general.bcf",

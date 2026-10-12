@@ -57,6 +57,9 @@ fn start() -> Servers {
         "/redir-abs.bib".into(),
         Route::redirect(301, &format!("http://127.0.0.1:{}/a.bib", http.port)),
     );
+    // A remote control file whose data source is on the HTTP server.
+    let doc = bcf(&[format!("http://127.0.0.1:{}/a.bib", http.port)]).expect("bcf");
+    r2.insert("/doc.bcf".into(), Route::ok(doc));
     let https = servers::http(r2, Some(Cert::Localhost));
     let https_wrong = servers::http(r, Some(Cert::WrongHost));
     let mut f = BTreeMap::new();
@@ -197,6 +200,19 @@ const SCENARIOS: &[Scenario] = &[
     sc("ftp-refused", &["ftp://127.0.0.1:1/a.bib"], &[], &[]),
     sc("ftps", &["ftps://127.0.0.1:{ftpport}/pub/a.bib"], &[], &[]),
     sc("dns-fail", &["http://nonexistent.invalid/a.bib"], &[], &[]),
+    // No URLs: the arguments name the control file.
+    sc(
+        "bcf-remote",
+        &[],
+        &["--nolog", "-O", "remote.bbl", "{https}/doc.bcf"],
+        &[("PERL_LWP_SSL_CA_FILE", CA)],
+    ),
+    sc(
+        "bcf-remote-404",
+        &[],
+        &["--nolog", "-O", "remote.bbl", "{https}/nodoc.bcf"],
+        &[("PERL_LWP_SSL_CA_FILE", CA)],
+    ),
 ];
 
 fn expand(s: &str, sv: &Servers) -> String {
@@ -260,7 +276,9 @@ fn run_one(r: &Runner, scn: &Scenario, sv: &Servers) -> Result<Outcome> {
         .prefix("bibers-remote-")
         .tempdir()?;
     let urls: Vec<String> = scn.urls.iter().map(|u| expand(u, sv)).collect();
-    std::fs::write(dir.path().join("remote.bcf"), bcf(&urls)?)?;
+    if !urls.is_empty() {
+        std::fs::write(dir.path().join("remote.bcf"), bcf(&urls)?)?;
+    }
     for s in [&sv.http, &sv.https, &sv.https_wrong, &sv.ftp] {
         s.log.lock().unwrap().clear();
     }
@@ -268,8 +286,12 @@ fn run_one(r: &Runner, scn: &Scenario, sv: &Servers) -> Result<Outcome> {
     let mut cmd = Command::new(prog);
     cmd.args(lead)
         .arg("--noconf")
-        .args(scn.args)
-        .arg("remote.bcf")
+        .args(scn.args.iter().map(|a| expand(a, sv)))
+        .args(if urls.is_empty() {
+            None
+        } else {
+            Some("remote.bcf")
+        })
         .current_dir(dir.path());
     for v in [
         "PERL_LWP_SSL_CA_FILE",
@@ -301,6 +323,12 @@ fn run_one(r: &Runner, scn: &Scenario, sv: &Servers) -> Result<Outcome> {
     let out = cmd.output()?;
     let bbl = std::fs::read_to_string(dir.path().join("remote.bbl")).unwrap_or_default();
     let blg = std::fs::read_to_string(dir.path().join("remote.blg")).unwrap_or_default();
+    let stdout = String::from_utf8_lossy(&out.stdout).into_owned();
+    let screen: Vec<String> = stdout
+        .lines()
+        .filter(|l| l.starts_with("WARN - ") || l.starts_with("ERROR - "))
+        .map(|l| normalise(l, sv))
+        .collect();
     let messages = blg_messages(&blg, dir.path())
         .into_iter()
         .map(|m| normalise(&m, sv))
@@ -327,7 +355,7 @@ fn run_one(r: &Runner, scn: &Scenario, sv: &Servers) -> Result<Outcome> {
     Ok(Outcome {
         exit: out.status.code(),
         bbl: normalise(&bbl, sv),
-        messages,
+        messages: if blg.is_empty() { screen } else { messages },
         requests,
     })
 }

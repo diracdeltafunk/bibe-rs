@@ -473,7 +473,7 @@ CASES: list[Case] = [
          "scratch/output/bugs/t1.bib (docs/research/05 B15)",
          {"test.bib": "@online{url1, author={Ux, Ann}, title={Url}, url={http://example.org/caf\u00e9?a=1}, date={2003}}\n"},
          tex=doc(), args=["--noconf", "--output-safechars", "doc.bcf"],
-         tags=["deferred:DC-034"]),
+         tags=[]),
     Case("bb-049-empty-section-no-refsection", "BB-049",
          "a refsection with no found entries emits no \\refsection block, losing its \\missing lines",
          "scratch/output/bugs/miss.tex (docs/research/05 B22)",
