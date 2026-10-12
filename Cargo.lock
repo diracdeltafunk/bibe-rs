@@ -40,6 +40,8 @@ dependencies = [
  "bibers-testkit",
  "chrono",
  "perl-compat",
+ "relaxng",
+ "roxmltree",
  "serde_json",
  "tempfile",
 ]
