@@ -1156,6 +1156,18 @@ impl Writer {
                     && l.labelalphanametemplatename == "global"
                     && l.namehashtemplatename == "global"
             });
+        // biber dies (`->[0]->get_keys` on undef) when the global sorting
+        // template is not the list's (e.g. biber.conf's `sortingtemplatename`
+        // with `blx-defaults-override-conf` fixed); bibers uses the section's
+        // first entry list instead.
+        let list = list.or_else(|| {
+            processed
+                .sections
+                .iter()
+                .filter(|s| s.section.number == SECTION)
+                .flat_map(|s| s.datalists.iter())
+                .find(|l| l.type_ == "entry")
+        });
         if let Some(l) = list {
             for k in l.keys.as_deref().unwrap_or(&[]) {
                 if let Some(e) = self.entries.get(k) {
