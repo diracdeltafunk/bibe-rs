@@ -12,7 +12,7 @@
 //! | [`isbn`] | `Business::ISBN` 3.012 (+ RangeMessage.xml), `Business::ISSN` 1.008, `Business::ISMN` 1.205 | – |
 //! | [`uri`] | `URI->new($s)->as_string` (URI 5.34), `URI::Escape` | – |
 //! | [`roman`] | `Text::Roman` 3.5 `isroman`/`roman2int` | – |
-//! | [`encoding`] | `Encode` single-byte encodings + aliases (`find_encoding`, `encode`, `decode`) | – |
+//! | [`encoding`] | `Encode` 3.21: `find_encoding` name resolution, every table-driven encoding (single-byte, CJK, EBCDIC, Mac), UTF-16/32, ISO-2022-JP/KR, HZ, `utf8`; the PerlIO `:encoding` layer | – |
 //! | [`textwrap`] | `Text::Wrap::wrap` 2024.001, `Text::Tabs` `expand`/`unexpand` | – |
 //! | [`sort`] | perl `cmp`/`sort` (code point order), `reduce_array` | – |
 //!

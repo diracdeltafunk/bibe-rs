@@ -133,3 +133,24 @@ fn encodings_match_perl() {
         bad.join(", ")
     );
 }
+
+/// Re-run the probe for a few encodings with O3 and compare with the
+/// committed digests (`cargo test -p perl-compat -- --ignored`).
+#[test]
+#[ignore]
+fn oracle_live() {
+    let encs = ["cp1252", "shiftjis", "euc-jp", "UTF-16", "iso-2022-jp"];
+    let Some(out) = common::run_probe("encode_digests.pl", &encs, b"") else {
+        return;
+    };
+    let live: Value = serde_json::from_slice(&out).expect("probe json");
+    let committed = load();
+    for e in encs {
+        let name = perl_compat::encoding::find_encoding(e).unwrap().name();
+        assert_eq!(
+            live["encodings"][name], committed["encodings"][name],
+            "{name}: regenerate tests/data/encode_digests.json"
+        );
+    }
+    assert_eq!(live["aliases"], committed["aliases"]);
+}

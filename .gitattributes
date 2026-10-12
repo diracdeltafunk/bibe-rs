@@ -4,3 +4,7 @@
 
 # Vendored verbatim (byte-identical to biber 2.22's copy, mixed line endings): never convert.
 data/isbn/RangeMessage.xml -text
+
+# Encoded test data (UTF-16, Shift_JIS, ...) and binary tables: never convert.
+tests/corpus/io/** -text
+crates/perl-compat/data/*.bin -text
