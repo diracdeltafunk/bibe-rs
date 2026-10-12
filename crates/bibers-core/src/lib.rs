@@ -18,6 +18,7 @@ pub mod perlish;
 pub mod pipeline;
 pub mod quirks;
 pub mod recodedata;
+pub mod remote;
 pub mod xmlin;
 
 /// The biber version bibers is compatible with.
