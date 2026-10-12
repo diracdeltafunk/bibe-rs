@@ -92,7 +92,7 @@ enum Axis {
     Parent,
     Preceding,
     PrecedingSibling,
-    SelfAxis,
+    Itself,
 }
 
 impl Axis {
@@ -110,7 +110,7 @@ impl Axis {
             "parent" => Axis::Parent,
             "preceding" => Axis::Preceding,
             "preceding-sibling" => Axis::PrecedingSibling,
-            "self" => Axis::SelfAxis,
+            "self" => Axis::Itself,
             _ => return None,
         })
     }
@@ -581,7 +581,7 @@ impl Parser<'_> {
     fn step_into(&mut self, steps: &mut Vec<Step>) -> Result<(), XPathError> {
         if self.eat(&Tok::Dot) {
             steps.push(Step {
-                axis: Axis::SelfAxis,
+                axis: Axis::Itself,
                 test: NodeTest::Node,
                 preds: Vec::new(),
             });
@@ -918,7 +918,7 @@ impl Eval<'_> {
         let d = self.dom;
         let is_attr = d.is_attribute(n);
         match axis {
-            Axis::SelfAxis => vec![n],
+            Axis::Itself => vec![n],
             Axis::Child => {
                 if is_attr {
                     vec![]

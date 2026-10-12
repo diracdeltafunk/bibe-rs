@@ -3,3 +3,4 @@
 //! docs/compat.md DC-020…DC-031).
 
 pub mod bbl;
+pub mod biblatexml;
