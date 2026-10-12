@@ -1,0 +1,103 @@
+{"exists":1,"expr":"./bltx:title","nodes":["/bltx:entries/bltx:entry[1]/bltx:title"],"value":"The Title"}
+{"exists":1,"expr":"./bltx:title/text()","nodes":["/bltx:entries/bltx:entry[1]/bltx:title/text()[1]","/bltx:entries/bltx:entry[1]/bltx:title/text()[2]"],"value":"The Title"}
+{"exists":1,"expr":"*","nodes":["/bltx:entries/bltx:entry[1]/bltx:names","/bltx:entries/bltx:entry[1]/bltx:title","/bltx:entries/bltx:entry[1]/bltx:date[1]","/bltx:entries/bltx:entry[1]/bltx:date[2]","/bltx:entries/bltx:entry[1]/bltx:pages","/bltx:entries/bltx:entry[1]/o:title","/bltx:entries/bltx:entry[1]/bltx:note","/bltx:entries/bltx:entry[1]/bltx:volume"],"value":"\n      DoeJohnQ\n      Roe\n    The Title200119901992151012other  spaced   note 3"}
+{"exists":1,"expr":"./*","nodes":["/bltx:entries/bltx:entry[1]/bltx:names","/bltx:entries/bltx:entry[1]/bltx:title","/bltx:entries/bltx:entry[1]/bltx:date[1]","/bltx:entries/bltx:entry[1]/bltx:date[2]","/bltx:entries/bltx:entry[1]/bltx:pages","/bltx:entries/bltx:entry[1]/o:title","/bltx:entries/bltx:entry[1]/bltx:note","/bltx:entries/bltx:entry[1]/bltx:volume"],"value":"\n      DoeJohnQ\n      Roe\n    The Title200119901992151012other  spaced   note 3"}
+{"exists":1,"expr":"node()","nodes":["/bltx:entries/bltx:entry[1]/text()[1]","/bltx:entries/bltx:entry[1]/bltx:names","/bltx:entries/bltx:entry[1]/text()[2]","/bltx:entries/bltx:entry[1]/bltx:title","/bltx:entries/bltx:entry[1]/text()[3]","/bltx:entries/bltx:entry[1]/bltx:date[1]","/bltx:entries/bltx:entry[1]/text()[4]","/bltx:entries/bltx:entry[1]/bltx:date[2]","/bltx:entries/bltx:entry[1]/text()[5]","/bltx:entries/bltx:entry[1]/bltx:pages","/bltx:entries/bltx:entry[1]/text()[6]","/bltx:entries/bltx:entry[1]/o:title","/bltx:entries/bltx:entry[1]/text()[7]","/bltx:entries/bltx:entry[1]/bltx:note","/bltx:entries/bltx:entry[1]/text()[8]","/bltx:entries/bltx:entry[1]/bltx:volume","/bltx:entries/bltx:entry[1]/text()[9]"],"value":"\n    \n      DoeJohnQ\n      Roe\n    \n    The Title\n    2001\n    19901992\n    151012\n    other\n      spaced   note \n    3\n  "}
+{"exists":1,"expr":"./@id","nodes":["/bltx:entries/bltx:entry[1]/@id"],"value":"e1"}
+{"exists":1,"expr":"./@*","nodes":["/bltx:entries/bltx:entry[1]/@id","/bltx:entries/bltx:entry[1]/@entrytype"],"value":"e1book"}
+{"exists":1,"expr":"@entrytype","nodes":["/bltx:entries/bltx:entry[1]/@entrytype"],"value":"book"}
+{"exists":1,"expr":"./bltx:names[@type='author']","nodes":["/bltx:entries/bltx:entry[1]/bltx:names"],"value":"\n      DoeJohnQ\n      Roe\n    "}
+{"exists":1,"expr":"./bltx:names[@type='author']/bltx:name[2]","nodes":["/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[2]"],"value":"Roe"}
+{"exists":1,"expr":"./bltx:names[@type='author']/bltx:name[1]/bltx:namepart[@type='given']/bltx:namepart","nodes":["/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[2]/bltx:namepart[1]","/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[2]/bltx:namepart[2]"],"value":"JohnQ"}
+{"exists":1,"expr":"./bltx:names/bltx:name[last()]","nodes":["/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[2]"],"value":"Roe"}
+{"exists":1,"expr":"./bltx:names/bltx:name[position()=1]/@gender","nodes":["/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/@gender"],"value":"sm"}
+{"exists":1,"expr":"./bltx:date","nodes":["/bltx:entries/bltx:entry[1]/bltx:date[1]","/bltx:entries/bltx:entry[1]/bltx:date[2]"],"value":"200119901992"}
+{"exists":1,"expr":"./bltx:date[@type]","nodes":["/bltx:entries/bltx:entry[1]/bltx:date[2]"],"value":"19901992"}
+{"exists":1,"expr":"./bltx:date[not(@type)]","nodes":["/bltx:entries/bltx:entry[1]/bltx:date[1]"],"value":"2001"}
+{"exists":1,"expr":"./bltx:date[@type='orig']/bltx:start","nodes":["/bltx:entries/bltx:entry[1]/bltx:date[2]/bltx:start"],"value":"1990"}
+{"exists":1,"expr":".//bltx:namepart","nodes":["/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[1]","/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[2]","/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[2]/bltx:namepart[1]","/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[2]/bltx:namepart[2]","/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[2]/bltx:namepart"],"value":"DoeJohnQJohnQRoe"}
+{"exists":1,"expr":".//bltx:namepart[@initial]","nodes":["/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[2]/bltx:namepart[1]"],"value":"John"}
+{"exists":1,"expr":".//bltx:item[2]/bltx:end","nodes":["/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]/bltx:end"],"value":"12"}
+{"exists":1,"expr":"(.//bltx:start)[2]","nodes":["/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[1]/bltx:start"],"value":"1"}
+{"exists":1,"expr":"./bltx:pages//bltx:start | ./bltx:pages//bltx:end","nodes":["/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[1]/bltx:start","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[1]/bltx:end","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]/bltx:start","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]/bltx:end"],"value":"151012"}
+{"exists":1,"expr":"./bltx:title/..","nodes":["/bltx:entries/bltx:entry[1]"],"value":"\n    \n      DoeJohnQ\n      Roe\n    \n    The Title\n    2001\n    19901992\n    151012\n    other\n      spaced   note \n    3\n  "}
+{"exists":1,"expr":"./bltx:title/../@id","nodes":["/bltx:entries/bltx:entry[1]/@id"],"value":"e1"}
+{"exists":0,"expr":"./bltx:volume/following-sibling::*","nodes":[],"value":""}
+{"exists":1,"expr":"./bltx:volume/preceding-sibling::*[1]","nodes":["/bltx:entries/bltx:entry[1]/bltx:note"],"value":"  spaced   note "}
+{"exists":1,"expr":"./bltx:title/following::bltx:volume","nodes":["/bltx:entries/bltx:entry[1]/bltx:volume","/bltx:entries/bltx:entry[2]/bltx:volume"],"value":"312"}
+{"exists":1,"expr":"./bltx:note/preceding::bltx:start","nodes":["/bltx:entries/bltx:entry[1]/bltx:date[2]/bltx:start","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[1]/bltx:start","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]/bltx:start"],"value":"1990110"}
+{"exists":1,"expr":"./bltx:title/ancestor::*","nodes":["/bltx:entries","/bltx:entries/bltx:entry[1]"],"value":"\n  \n    \n      DoeJohnQ\n      Roe\n    \n    The Title\n    2001\n    19901992\n    151012\n    other\n      spaced   note \n    3\n  \n  Second12\n\n    \n      DoeJohnQ\n      Roe\n    \n    The Title\n    2001\n    19901992\n    151012\n    other\n      spaced   note \n    3\n  "}
+{"exists":1,"expr":"./bltx:title/ancestor-or-self::bltx:entry/@id","nodes":["/bltx:entries/bltx:entry[1]/@id"],"value":"e1"}
+{"exists":1,"expr":"./bltx:title/self::bltx:title","nodes":["/bltx:entries/bltx:entry[1]/bltx:title"],"value":"The Title"}
+{"exists":0,"expr":"./bltx:title/self::bltx:note","nodes":[],"value":""}
+{"exists":1,"expr":"./descendant::bltx:end","nodes":["/bltx:entries/bltx:entry[1]/bltx:date[2]/bltx:end","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[1]/bltx:end","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]/bltx:end"],"value":"1992512"}
+{"exists":1,"expr":"./child::bltx:date[2]/attribute::type","nodes":["/bltx:entries/bltx:entry[1]/bltx:date[2]/@type"],"value":"orig"}
+{"exists":1,"expr":"./o:title","nodes":["/bltx:entries/bltx:entry[1]/o:title"],"value":"other"}
+{"exists":0,"expr":"./title","nodes":[],"value":""}
+{"exists":1,"expr":"./bltx:*","nodes":["/bltx:entries/bltx:entry[1]/bltx:names","/bltx:entries/bltx:entry[1]/bltx:title","/bltx:entries/bltx:entry[1]/bltx:date[1]","/bltx:entries/bltx:entry[1]/bltx:date[2]","/bltx:entries/bltx:entry[1]/bltx:pages","/bltx:entries/bltx:entry[1]/bltx:note","/bltx:entries/bltx:entry[1]/bltx:volume"],"value":"\n      DoeJohnQ\n      Roe\n    The Title200119901992151012  spaced   note 3"}
+{"exists":1,"expr":"./o:*","nodes":["/bltx:entries/bltx:entry[1]/o:title"],"value":"other"}
+{"exists":1,"expr":"/bltx:entries/bltx:entry[@id=\"e2\"]/bltx:title","nodes":["/bltx:entries/bltx:entry[2]/bltx:title"],"value":"Second"}
+{"exists":1,"expr":"//bltx:volume","nodes":["/bltx:entries/bltx:entry[1]/bltx:volume","/bltx:entries/bltx:entry[2]/bltx:volume"],"value":"312"}
+{"exists":1,"expr":"//bltx:volume[. > 5]","nodes":["/bltx:entries/bltx:entry[2]/bltx:volume"],"value":"12"}
+{"exists":1,"expr":"//bltx:volume[. = 3]","nodes":["/bltx:entries/bltx:entry[1]/bltx:volume"],"value":"3"}
+{"exists":1,"expr":"//bltx:entry[bltx:volume = '12']/@id","nodes":["/bltx:entries/bltx:entry[2]/@id"],"value":"e2"}
+{"exists":1,"expr":"//bltx:entry[count(bltx:date) > 1]/@id","nodes":["/bltx:entries/bltx:entry[1]/@id"],"value":"e1"}
+{"exists":1,"expr":"//bltx:title[contains(., 'Sec')]","nodes":["/bltx:entries/bltx:entry[2]/bltx:title"],"value":"Second"}
+{"exists":1,"expr":"//bltx:title[starts-with(., 'The')]","nodes":["/bltx:entries/bltx:entry[1]/bltx:title"],"value":"The Title"}
+{"exists":1,"expr":"//bltx:entry[@id='e1' and @entrytype='book']/bltx:volume","nodes":["/bltx:entries/bltx:entry[1]/bltx:volume"],"value":"3"}
+{"exists":1,"expr":"//bltx:entry[@id='e1' or @id='e2']/@id","nodes":["/bltx:entries/bltx:entry[1]/@id","/bltx:entries/bltx:entry[2]/@id"],"value":"e1e2"}
+{"exists":1,"expr":"count(.//bltx:namepart)","nodes":[],"value":"5"}
+{"exists":1,"expr":"string(./bltx:note)","nodes":[],"value":"  spaced   note "}
+{"exists":1,"expr":"normalize-space(./bltx:note)","nodes":[],"value":"spaced note"}
+{"exists":1,"expr":"string-length(./bltx:title)","nodes":[],"value":"9"}
+{"exists":1,"expr":"concat(./@id, '-', ./bltx:volume)","nodes":[],"value":"e1-3"}
+{"exists":1,"expr":"substring(./bltx:title, 2, 3)","nodes":[],"value":"he "}
+{"exists":0,"expr":"substring-before(./bltx:title, 'T')","nodes":[],"value":""}
+{"exists":1,"expr":"substring-after(./bltx:title, ' ')","nodes":[],"value":"Title"}
+{"exists":1,"expr":"translate(./bltx:title, 'Te', 'tE')","nodes":[],"value":"thE titlE"}
+{"exists":1,"expr":"sum(//bltx:volume)","nodes":[],"value":"15"}
+{"exists":1,"expr":"floor(2.5)","nodes":[],"value":"2"}
+{"exists":1,"expr":"ceiling(2.5)","nodes":[],"value":"3"}
+{"exists":1,"expr":"round(2.5)","nodes":[],"value":"3"}
+{"exists":1,"expr":"round(-2.5)","nodes":[],"value":"-2"}
+{"exists":1,"expr":"1 div 0","nodes":[],"value":"NaN"}
+{"exists":0,"expr":"0 div 0","nodes":[],"value":"NaN"}
+{"exists":1,"expr":"5 mod 3","nodes":[],"value":"2"}
+{"exists":1,"expr":"-5 mod 3","nodes":[],"value":"-2"}
+{"exists":1,"expr":"2 + 3 * 4","nodes":[],"value":"14"}
+{"exists":1,"expr":"(2 + 3) * 4","nodes":[],"value":"20"}
+{"exists":1,"expr":"7 div 2","nodes":[],"value":"3.5"}
+{"exists":1,"expr":"number(\"12\")","nodes":[],"value":"12"}
+{"exists":1,"expr":"number(\" 1.5 \")","nodes":[],"value":"1.5"}
+{"exists":0,"expr":"number(\"x\")","nodes":[],"value":"NaN"}
+{"exists":0,"expr":"boolean(./bltx:zz)","nodes":[],"value":"false"}
+{"exists":0,"expr":"not(./bltx:title)","nodes":[],"value":"false"}
+{"exists":1,"expr":"true()","nodes":[],"value":"true"}
+{"exists":0,"expr":"false()","nodes":[],"value":"false"}
+{"exists":1,"expr":"./bltx:volume * 2","nodes":[],"value":"6"}
+{"exists":1,"expr":"./bltx:volume = \"3\"","nodes":[],"value":"true"}
+{"exists":1,"expr":"./bltx:date != 2001","nodes":[],"value":"true"}
+{"exists":1,"expr":"name(./*[1])","nodes":[],"value":"bltx:names"}
+{"exists":1,"expr":"local-name(./*[1])","nodes":[],"value":"names"}
+{"exists":1,"expr":"namespace-uri(./*[1])","nodes":[],"value":"http://biblatex-biber.sourceforge.net/biblatexml"}
+{"exists":1,"expr":"name(./o:title)","nodes":[],"value":"o:title"}
+{"exists":1,"expr":"last()","nodes_error":1,"value_error":1}
+{"exists":1,"expr":"position()","nodes_error":1,"value_error":1}
+{"exists":1,"expr":"./bltx:date[1] | ./bltx:title","nodes":["/bltx:entries/bltx:entry[1]/bltx:title","/bltx:entries/bltx:entry[1]/bltx:date[1]"],"value":"The Title2001"}
+{"exists_error":1,"expr":"./bltx:title[","nodes_error":1,"value_error":1}
+{"exists_error":1,"expr":"/[@id=\"x\"]","nodes_error":1,"value_error":1}
+{"exists_error":1,"expr":"./bltx:title]","nodes_error":1,"value_error":1}
+{"exists":1,"expr":"./foo:bar","nodes_error":1,"value_error":1}
+{"exists":1,"expr":"unknownfn(1)","nodes_error":1,"value_error":1}
+{"exists_error":1,"expr":"./bltx:date[@type=]","nodes_error":1,"value_error":1}
+{"exists_error":1,"expr":"","nodes_error":1,"value_error":1}
+{"exists":1,"expr":"$var","nodes_error":1,"value_error":1}
+{"exists":1,"expr":"./bltx:names[@type = 'author']/bltx:name[2]/bltx:namepart[@type='family']","nodes":["/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[2]/bltx:namepart"],"value":"Roe"}
+{"exists":1,"expr":"//bltx:item[bltx:start = 10]","nodes":["/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]"],"value":"1012"}
+{"exists":1,"expr":"//bltx:start[. >= 10]","nodes":["/bltx:entries/bltx:entry[1]/bltx:date[2]/bltx:start","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]/bltx:start"],"value":"199010"}
+{"exists":1,"expr":"//bltx:start[. < \"5\"]","nodes":["/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[1]/bltx:start"],"value":"1"}
+{"exists":1,"expr":".//text()[normalize-space()]","nodes":["/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[1]/text()","/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[2]/bltx:namepart[1]/text()","/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[1]/bltx:namepart[2]/bltx:namepart[2]/text()","/bltx:entries/bltx:entry[1]/bltx:names/bltx:name[2]/bltx:namepart/text()","/bltx:entries/bltx:entry[1]/bltx:title/text()[1]","/bltx:entries/bltx:entry[1]/bltx:title/text()[2]","/bltx:entries/bltx:entry[1]/bltx:date[1]/text()","/bltx:entries/bltx:entry[1]/bltx:date[2]/bltx:start/text()","/bltx:entries/bltx:entry[1]/bltx:date[2]/bltx:end/text()","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[1]/bltx:start/text()","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[1]/bltx:end/text()","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]/bltx:start/text()","/bltx:entries/bltx:entry[1]/bltx:pages/bltx:list/bltx:item[2]/bltx:end/text()","/bltx:entries/bltx:entry[1]/o:title/text()","/bltx:entries/bltx:entry[1]/bltx:note/text()","/bltx:entries/bltx:entry[1]/bltx:volume/text()"],"value":"DoeJohnQRoeThe Title200119901992151012other  spaced   note 3"}
+{"exists":1,"expr":".//comment()","nodes":["/bltx:entries/bltx:entry[1]/bltx:title/comment()"],"value":" c "}
+{"exists":0,"expr":".//processing-instruction()","nodes":[],"value":""}
+{"exists":0,"expr":"id(\"e1\")","nodes":[],"value":""}
+{"exists":0,"expr":"lang(\"en\")","nodes":[],"value":"false"}

@@ -105,7 +105,10 @@ fn schema_matches_biber() {
 fn schema_options() {
     let d = setup();
     assert_eq!(
-        run(d.path(), &["--noconf", "-q", "--no-bltxml-schema", "biblatexml.bcf"]),
+        run(
+            d.path(),
+            &["--noconf", "-q", "--no-bltxml-schema", "biblatexml.bcf"]
+        ),
         0
     );
     assert!(!d.path().join("biblatexml.rng").exists());

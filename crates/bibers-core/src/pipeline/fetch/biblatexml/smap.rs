@@ -22,7 +22,7 @@ use crate::pipeline::Ctx;
 use crate::pipeline::fetch::{FetchOpts, SecExt};
 use crate::pipeline::sourcemap::{appendstrict_check, maploopreplace, select_maps};
 use crate::quirks::Quirk;
-use crate::xmldom::xpath::{XPath, XValue};
+use crate::xmldom::xpath::XPath;
 use crate::xmldom::{Dom, Kind, NodeId};
 use perl_compat::regex::{CaptureDigits, expand_imatches, imatch, ireplace, split_default_xsvsep};
 use perl_compat::truth::{num_cmp_str, perl_truthy, perl_truthy_opt};
@@ -168,10 +168,7 @@ impl Engine<'_, '_> {
         let ns = self.dom.in_scope_ns(node);
         let r = XPath::compile(xpath).and_then(|x| x.eval(self.dom, node, &ns));
         match r {
-            Ok(XValue::Nodes(v)) => Ok(v.iter().map(|n| self.dom.text_content(*n)).collect()),
-            Ok(XValue::Str(s)) => Ok(s),
-            Ok(XValue::Bool(b)) => Ok(if b { "true" } else { "false" }.into()),
-            Ok(XValue::Num(n)) => Ok(crate::xmldom::xpath::number_to_string(n)),
+            Ok(v) => Ok(crate::xmldom::xpath::literal_value(self.dom, &v)),
             Err(e) => Err(die(self.ctx, &xpath_die_msg(self.src.filename, xpath, &e))),
         }
     }

@@ -692,8 +692,28 @@ impl Dom {
                     name.qualified()
                 }
             }
-            Kind::Text(_) => "text()".into(),
-            Kind::Comment(_) => "comment()".into(),
+            Kind::Text(_) | Kind::Comment(_) => {
+                let is_text = self.is_text(id);
+                let same: Vec<NodeId> = self
+                    .children(p)
+                    .iter()
+                    .copied()
+                    .filter(|c| {
+                        if is_text {
+                            self.is_text(*c)
+                        } else {
+                            matches!(self.node(*c).kind, Kind::Comment(_))
+                        }
+                    })
+                    .collect();
+                let base = if is_text { "text()" } else { "comment()" };
+                if same.len() > 1 {
+                    let i = same.iter().position(|c| *c == id).unwrap_or(0) + 1;
+                    format!("{base}[{i}]")
+                } else {
+                    base.to_string()
+                }
+            }
             Kind::Pi { target, .. } => format!("processing-instruction('{target}')"),
             Kind::Document => String::new(),
         };

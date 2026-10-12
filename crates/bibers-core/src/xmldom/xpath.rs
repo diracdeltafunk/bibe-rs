@@ -33,6 +33,8 @@ pub enum XPathError {
     InvalidType,
     /// A variable reference (no variables are bound).
     UndefinedVariable(String),
+    /// `last()`/`position()` outside a predicate.
+    InvalidContext,
 }
 
 impl fmt::Display for XPathError {
@@ -46,6 +48,7 @@ impl fmt::Display for XPathError {
             XPathError::Arity(n) => write!(f, "Invalid number of arguments to '{n}'"),
             XPathError::InvalidType => f.write_str("Invalid type"),
             XPathError::UndefinedVariable(v) => write!(f, "Undefined variable '${v}'"),
+            XPathError::InvalidContext => f.write_str("Invalid context size"),
         }
     }
 }
@@ -60,6 +63,7 @@ impl XPathError {
             XPathError::Arity(_) => "Invalid number of arguments",
             XPathError::InvalidType => "Invalid type",
             XPathError::UndefinedVariable(_) => "Undefined variable",
+            XPathError::InvalidContext => "Invalid context size",
         }
     }
 }
@@ -732,7 +736,8 @@ impl XPath {
         ns: &[(Option<String>, String)],
     ) -> Result<XValue, XPathError> {
         let ev = Eval { dom, ns };
-        ev.eval(&self.expr, node, 1, 1)
+        // libxml2 leaves the context size/position unset at the top level
+        ev.eval(&self.expr, node, 0, 0)
     }
 }
 
@@ -1128,10 +1133,16 @@ impl Eval<'_> {
         Ok(match name {
             "last" => {
                 arity(n == 0)?;
+                if size == 0 {
+                    return Err(XPathError::InvalidContext);
+                }
                 XValue::Num(size as f64)
             }
             "position" => {
                 arity(n == 0)?;
+                if size == 0 {
+                    return Err(XPathError::InvalidContext);
+                }
                 XValue::Num(pos as f64)
             }
             "count" => {
@@ -1310,6 +1321,19 @@ pub fn string_to_number(s: &str) -> f64 {
         return f64::NAN;
     }
     t.parse().unwrap_or(f64::NAN)
+}
+
+/// What `$node->findvalue($xpath)` returns for a result: the string values
+/// of all nodes concatenated (`XML::LibXML::NodeList::to_literal`), `true`/
+/// `false`, a number as XML::LibXML stringifies it, or the string.
+pub fn literal_value(dom: &Dom, v: &XValue) -> String {
+    match v {
+        XValue::Nodes(ns) => ns.iter().map(|n| dom.text_content(*n)).collect(),
+        XValue::Str(s) => s.clone(),
+        XValue::Bool(b) => if *b { "true" } else { "false" }.into(),
+        XValue::Num(n) if !n.is_finite() => "NaN".into(),
+        XValue::Num(n) => number_to_string(*n),
+    }
 }
 
 /// XPath `string()` of a number.
