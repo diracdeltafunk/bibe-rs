@@ -1448,6 +1448,15 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     };
     let recoder =
         (safechars || enc.is_some()).then(|| ctx.cfg.recoder(latex_recode::RecodeOptions::BIBER));
+    // UnicodeOutputNulCheck: biber's NUL test misfires for UTF-16/32.
+    let nul_check = ctx.cfg.quirks.on(Quirk::UnicodeOutputNulCheck);
+    let unencodable = |e: Encoding, nul: bool, s: &str| {
+        if nul {
+            e.has_unencodable(s)
+        } else {
+            e.has_unencodable_char(s)
+        }
+    };
     let sortdebug = ctx.cfg.biber.is_true("sortdebug");
     let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
 
@@ -1459,7 +1468,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     if let Some(pa) = processed.sections.last().and_then(|s| s.preamble.as_ref()) {
         let mut pa = pa.join("%\n");
         if let Some(r) = &recoder {
-            if safechars || enc.is_some_and(|e| e.has_unencodable(&nfc(&pa))) {
+            if safechars || enc.is_some_and(|e| unencodable(e, nul_check, &nfc(&pa))) {
                 pa = r.encode(&pa);
             }
         }
@@ -1512,7 +1521,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
                     if safechars {
                         es = r.encode(&es);
                     } else if let Some(e) = enc
-                        && e.has_unencodable(&nfc(&es))
+                        && unencodable(e, nul_check, &nfc(&es))
                     {
                         es = r.encode(&es);
                         ctx.log.biber_warn(format!(

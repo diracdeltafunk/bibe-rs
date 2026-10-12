@@ -242,6 +242,20 @@ impl Encoding {
         self.encode_nul_fallback(s).contains(&0)
     }
 
+    /// What [`has_unencodable`](Self::has_unencodable) means to test: does
+    /// `s` contain a character the encoding cannot represent? Differs only
+    /// for UTF-16/32 and UCS-2, where the NUL test misfires (UCS-2 cannot
+    /// represent characters above U+FFFF; noncharacters become U+FFFD).
+    pub fn has_unencodable_char(&self, s: &str) -> bool {
+        match self.0 {
+            Inner::Uni(u) => s.chars().any(|c| {
+                let v = c as u32;
+                (u.ucs2 && v > 0xFFFF) || (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v)
+            }),
+            _ => self.has_unencodable(s),
+        }
+    }
+
     /// Can `c` be encoded (on its own)?
     pub fn can_encode(&self, c: char) -> bool {
         let mut b = [0u8; 4];
@@ -253,6 +267,14 @@ impl Encoding {
     /// `STOP_AT_PARTIAL|FB_CROAK` (`File::Slurper::read_text`). The error is
     /// Encode's croak message (without perl's ` at FILE line N.`).
     pub fn decode_layer(&self, bytes: &[u8]) -> Result<String, String> {
+        self.decode_layer_chunked(bytes, true)
+    }
+
+    /// [`decode_layer`](Self::decode_layer); without `chunked`, UTF-16/32
+    /// input is decoded whole instead of in PerlIO's 1024-byte chunks (where
+    /// a surrogate pair cut by a chunk boundary is a "Partial character"
+    /// error).
+    pub fn decode_layer_chunked(&self, bytes: &[u8], chunked: bool) -> Result<String, String> {
         match self.0 {
             Inner::Utf8 { strict } => utf8_decode(bytes, strict),
             Inner::Xs(x) => {
@@ -264,7 +286,8 @@ impl Encoding {
             Inner::Uni(u) => {
                 let mut st = unicode::State::default();
                 let mut out = String::new();
-                for chunk in bytes.chunks(1024) {
+                let n = if chunked { 1024 } else { bytes.len().max(1) };
+                for chunk in bytes.chunks(n) {
                     let (s, _) = u.decode_croak(chunk, &mut st)?;
                     out.push_str(&s);
                 }
@@ -529,6 +552,23 @@ mod tests {
                 .unwrap()
                 .has_unencodable("\u{2041}")
         );
+        let u = find_encoding("UTF-16").unwrap();
+        assert!(!u.has_unencodable_char("a\u{1F600}"));
+        assert!(
+            find_encoding("UCS-2BE")
+                .unwrap()
+                .has_unencodable_char("a\u{1F600}")
+        );
+        // A surrogate pair across the 1024-byte read chunks (perl croaks).
+        let mut s = "a".repeat(510);
+        s.push('\u{1F600}');
+        let bytes = u.encode_layer(&s, false);
+        assert_eq!(bytes.len(), 2 + 1020 + 4);
+        assert_eq!(
+            u.decode_layer(&bytes).unwrap_err(),
+            "UTF-16:Partial character"
+        );
+        assert_eq!(u.decode_layer_chunked(&bytes, false).unwrap(), s);
     }
 
     #[test]

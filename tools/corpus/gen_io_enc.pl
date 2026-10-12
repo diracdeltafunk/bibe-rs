@@ -112,4 +112,21 @@ writecase("enc-inout-sjis-eucjp", "--input-encoding=shiftjis --output-encoding=e
           ['--input-encoding=shiftjis', '--output-encoding=euc-jp'],
           Encode::find_encoding('shiftjis')->encode(join('', grep {
             length(eval { encode('shiftjis', $_, Encode::FB_CROAK() | Encode::LEAVE_SRC()) } // '') } split //, $bib)));
+# UTF-16 with a surrogate pair cut by PerlIO's 1024-byte read chunks: biber
+# cannot read the file ("UTF-16:Partial character"; quirk utf16-chunk-surrogate).
+# BOM (2 bytes) + 510 BMP characters put the high surrogate at byte 1022.
+{
+  my $pre = "% padding ";
+  my $text = $pre . ('x' x (510 - length($pre) - 1)) . "\n\x{1F600}\n$bib";
+  writecase("enc-in-utf-16-surrogate-split",
+            "--input-encoding=UTF-16 with a surrogate pair across PerlIO's 1024-byte chunk boundary",
+            ['--input-encoding=UTF-16'], encode('UTF-16', $text));
+  # The read error lacks perl's " at FILE line N." (docs/compat.md DC-046).
+  open my $c, '>>', "$dir/enc-in-utf-16-surrogate-split/case.toml" or die;
+  print $c qq(allow = ["DC-046"]\n);
+  close $c;
+}
+# The same character elsewhere is fine.
+writecase("enc-in-utf-16-astral", "--input-encoding=UTF-16 with characters outside the BMP",
+          ['--input-encoding=UTF-16'], encode('UTF-16', "% \x{1F600}\n$bib"));
 print STDERR "done\n";

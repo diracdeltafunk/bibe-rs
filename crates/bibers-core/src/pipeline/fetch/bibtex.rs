@@ -225,7 +225,8 @@ pub fn extract_entries(
             .biber_warn(format!("Data source '{filename}' is empty, ignoring"));
         return Ok(rkeys);
     }
-    let text = match encoding::decode(&bytes, encoding) {
+    let utf16_chunks = ctx.cfg.quirks.on(crate::quirks::Quirk::Utf16ChunkSurrogate);
+    let text = match encoding::decode(&bytes, encoding, utf16_chunks) {
         Ok(t) => Some(t),
         Err(e) => {
             biber_error!(

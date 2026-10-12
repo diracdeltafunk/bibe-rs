@@ -1,0 +1,5 @@
+description = "--input-encoding=UTF-16 with characters outside the BMP"
+source = "tools/corpus/gen_io_enc.pl (bibers M4 io package, DC-034); .bcf from t/tdata/encoding6.bcf"
+args = ["--noconf", "--input-encoding=UTF-16", "encoding6.bcf"]
+outputs = ["encoding6.bbl"]
+tags = ["suite:io", "feature:encoding"]

@@ -132,6 +132,8 @@ io/enc-in-euc-jp
 io/enc-in-euc-kr
 io/enc-in-shiftjis
 io/enc-in-utf-16
+io/enc-in-utf-16-astral
+io/enc-in-utf-16-surrogate-split
 io/enc-in-utf-16le
 io/enc-in-utf-16le-bom
 io/enc-in-utf-32be

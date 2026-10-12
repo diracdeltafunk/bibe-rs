@@ -110,6 +110,18 @@ pub enum Quirk {
     /// `\x{fffd}` sequences (unless the encoding can represent a character
     /// starting with the cut-off prefix).
     PerlioEncodingSplit,
+    /// (`unicode-output-nul-check`; M4 io package, no BB id yet): biber
+    /// tests "can this entry be encoded" with `encode($enc, $s, sub {"\0"})
+    /// =~ /\0/`, which is true for nearly every string in UTF-16/UTF-32/UCS-2
+    /// (their code units contain NUL bytes), so with such an
+    /// `--output-encoding` every entry is recoded into LaTeX macros with a
+    /// "cannot be encoded" WARN.
+    UnicodeOutputNulCheck,
+    /// (`utf16-chunk-surrogate`; M4 io package, no BB id yet): a UTF-16 data
+    /// source is read through PerlIO in 1024-byte chunks, and Encode::Unicode
+    /// croaks "UTF-16:Partial character" when a surrogate pair straddles a
+    /// chunk boundary, so the file cannot be read.
+    Utf16ChunkSurrogate,
 }
 
 impl Quirk {
@@ -145,6 +157,8 @@ impl Quirk {
         Quirk::DieondatamodelNoExit,
         Quirk::CloneEndyeardivision,
         Quirk::PerlioEncodingSplit,
+        Quirk::UnicodeOutputNulCheck,
+        Quirk::Utf16ChunkSurrogate,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -180,6 +194,8 @@ impl Quirk {
             Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
             Quirk::CloneEndyeardivision => "clone-endyeardivision",
             Quirk::PerlioEncodingSplit => "perlio-encoding-split",
+            Quirk::UnicodeOutputNulCheck => "unicode-output-nul-check",
+            Quirk::Utf16ChunkSurrogate => "utf16-chunk-surrogate",
         }
     }
 
