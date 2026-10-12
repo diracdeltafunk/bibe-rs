@@ -313,17 +313,22 @@ impl Engine<'_, '_> {
         }
 
         // entry clone: biber re-runs create_entry without maps on the
-        // current entry, which creates (overwrites) the entry under its
-        // *own* id, not the clone key (BB-new: clones are never created)
+        // current entry, but that creates (overwrites) the entry under its
+        // *own* id, so the clone key ends up cited without an entry and
+        // biber dies in get_dependents. bibers creates the clone, as
+        // intended: a copy of the entry in its current (partly mapped) state
+        // under the clone key.
         if let Some(prefix) = self
             .mlr(step, "map_entry_clone", ml)
             .filter(|s| perl_truthy(s))
         {
             debug!(self.ctx.log, "{keyp}cloning entry with prefix '{prefix}'");
-            instantiate(
-                self.ctx, self.st, self.opts, self.src, self.dom, self.entry, self.entry,
-            )?;
             let ck = format!("{prefix}{key}");
+            let clone = self.dom.clone_deep(self.entry);
+            self.dom.set_attribute(clone, "id", &ck);
+            instantiate(
+                self.ctx, self.st, self.opts, self.src, self.dom, clone, self.entry,
+            )?;
             rkeys.retain(|k| *k != ck);
             if self.st.section.allkeys {
                 self.st.section.add_citekeys(std::slice::from_ref(&ck));
@@ -871,7 +876,9 @@ fn valid_node_name(s: &str) -> bool {
     };
     let combining = |c: char| matches!(c, '\u{300}'..='\u{36f}' | '\u{483}'..='\u{486}' | '\u{591}'..='\u{5c4}' | '\u{64b}'..='\u{652}');
     (first.is_alphabetic() || first == '_' || first == ':')
-        && cs.all(|c| c.is_alphanumeric() || matches!(c, '_' | '-' | ':' | '.' | '\u{b7}') || combining(c))
+        && cs.all(|c| {
+            c.is_alphanumeric() || matches!(c, '_' | '-' | ':' | '.' | '\u{b7}') || combining(c)
+        })
 }
 
 /// `m/names\[\@type\s*=\s*'(.+)'\]/`.

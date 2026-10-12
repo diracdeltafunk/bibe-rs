@@ -488,6 +488,24 @@ impl Dom {
     /// `cloneNode(1)`: a detached deep copy (attributes and namespace
     /// declarations included).
     pub fn clone_deep(&mut self, id: NodeId) -> NodeId {
+        let new = self.clone_inner(id);
+        // namespaces used in the copy but declared above it are declared on
+        // the copy (libxml2 reconciles them when copying)
+        if self.is_element(id) {
+            let mut extra = Vec::new();
+            self.collect_undeclared(id, &mut Vec::new(), &mut extra);
+            if let Kind::Element { nsdefs, .. } = &mut self.node_mut(new).kind {
+                for d in extra {
+                    if !nsdefs.iter().any(|(p, _)| *p == d.0) {
+                        nsdefs.push(d);
+                    }
+                }
+            }
+        }
+        new
+    }
+
+    fn clone_inner(&mut self, id: NodeId) -> NodeId {
         let kind = match &self.node(id).kind {
             Kind::Element { name, nsdefs, .. } => Kind::Element {
                 name: name.clone(),
@@ -505,7 +523,7 @@ impl Dom {
             }
         }
         for c in self.children(id).to_vec() {
-            let nc = self.clone_deep(c);
+            let nc = self.clone_inner(c);
             self.node_mut(nc).parent = Some(new);
             self.node_mut(new).children.push(nc);
         }

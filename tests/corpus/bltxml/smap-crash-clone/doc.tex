@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\DeclareSourcemap{\maps[datatype=biblatexml]{
+  \map{\step[fieldsource=title, match=\regexp{Original}, final]\step[entryclone={cl:}]\step[fieldset=addendum, fieldvalue={after clone}]}
+}}
+\addbibresource[datatype=biblatexml]{test.bltxml}
+\begin{document}
+\nocite{*}
+\printbibliography
+\end{document}

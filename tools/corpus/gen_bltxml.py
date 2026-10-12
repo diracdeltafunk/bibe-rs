@@ -343,6 +343,7 @@ MAPS_CRASH_NOTFIELD = smap(r"\map{\step[notfield=pubstate, fieldset=pubstate, fi
 MAPS_CRASH_PERTYPE = smap(r"\map{\pertype{book}\step[fieldset=pubstate, fieldvalue={pertype}]}")
 MAPS_CRASH_MATCHES = smap(r"\map[overwrite]{\step[fieldsource=userb, matches={beta,gamma}, replace={B,C}]}")
 MAPS_CRASH_ENTRYNULL = smap(r"\map{\step[fieldsource=note, match=\regexp{DROP}, final]\step[entrynull]}")
+MAPS_CRASH_CLONE = smap(r"\map{\step[fieldsource=title, match=\regexp{Original}, final]\step[entryclone={cl:}]\step[fieldset=addendum, fieldvalue={after clone}]}")
 MAPS_CRASH_NULL = smap(r"\map{\step[fieldset=userc, null]}")
 MAPS_BAD_NAME = smap(r"\map[overwrite]{\step[fieldset={./bltx:names[@type='author']/bltx:name[2]/@gender}, fieldvalue={sm}]}")
 MAPS_BAD_XPATH = smap(r"\map{\step[fieldsource={./bltx:title[}, final]\step[fieldset=userf, fieldvalue={x}]}")
@@ -405,6 +406,8 @@ CASES: list[Case] = [
          {"test.bltxml": MAPPED}, doc(preamble=MAPS_CRASH_ENTRYNULL), allow=["DC-031"], tags=["perl-die"]),
     Case("smap-crash-entrynull-cited", "map_entry_null on a cited key: biber dies; bibers drops the entry with a warning",
          {"test.bltxml": MAPPED}, doc(preamble=MAPS_CRASH_ENTRYNULL, body=r"\cite{m1,m3}"), allow=["DC-031"], tags=["perl-die"]),
+    Case("smap-crash-clone", "map_entry_clone: biber re-creates the original entry instead of the clone and dies on the clone key; bibers creates the clone",
+         {"test.bltxml": MAPPED}, doc(preamble=MAPS_CRASH_CLONE), allow=["DC-031"], tags=["perl-die"]),
     Case("smap-crash-null", "map_null on a field an entry does not have: biber dies (unbindNode on undef); bibers does nothing",
          {"test.bltxml": MAPPED}, doc(preamble=MAPS_CRASH_NULL), allow=["DC-031"], tags=["perl-die"]),
     Case("smap-bad-name", "a map creating an element from an XPath step that selects nothing (bltx:name[2]): XML::LibXML dies ('bad name'); bibers reports an ERROR",
