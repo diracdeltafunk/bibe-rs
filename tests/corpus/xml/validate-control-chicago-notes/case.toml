@@ -1,0 +1,6 @@
+description = "--validate-control on chicago-notes: biblatex writes map_entry_nocite, which bcf.rng lacks (fatal)"
+source = "tests/corpus/styles/chicago-notes (gen_styles.py)"
+args = ["--noconf", "--validate-control", "chicago-notes.bcf"]
+outputs = ["chicago-notes.bbl"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:xml", "feature:validate-control"]

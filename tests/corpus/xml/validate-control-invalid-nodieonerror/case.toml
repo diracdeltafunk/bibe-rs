@@ -1,0 +1,5 @@
+description = "--validate-control --nodieonerror: an invalid .bcf is reported and processing continues"
+source = "vendor/biber/t/tdata/general.bcf"
+args = ["--noconf", "--validate-control", "--nodieonerror", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:xml", "feature:validate-control"]

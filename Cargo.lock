@@ -54,6 +54,7 @@ dependencies = [
  "md-5",
  "perl-compat",
  "regex",
+ "relaxng",
  "roxmltree",
  "serde_json",
  "tempfile",

@@ -1,0 +1,5 @@
+description = "--convert-control: maps.bcf as HTML"
+source = "vendor/biber/t/tdata/maps.bcf"
+args = ["--noconf", "--convert-control", "maps.bcf"]
+outputs = ["maps.bbl", "maps.bcf.html"]
+tags = ["suite:xml", "feature:convert-control"]

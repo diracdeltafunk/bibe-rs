@@ -16,6 +16,7 @@ Requirements: Python ≥ 3.12, TeX Live with biblatex (`pdflatex`, `lualatex`, `
 | `gen_examples.py` | `biblatex-examples/` | One case per biblatex example document (`$TEXMFDIST/doc/latex/biblatex/examples/*.tex`), compiled with pdflatex, or lualatex/xelatex if it loads fontspec/xeCJK. `biblatex-examples.bib` comes from `tests/corpus/shared/`. Skipped: `95-customlists` (`$MAPUNIQ` is time-based, BB-113). |
 | `gen_styles.py` | `styles/` | `\nocite{*}` (plus a few `\cite`s) over `biblatex-examples.bib` for the 26 standard styles, 15 contributed styles, and an option matrix that varies one option at a time from authoryear/alphabetic/numeric. `--list` prints the cases. |
 | `gen_bugs.py` | `bugs/` | One case per biber bug with an observable effect (`docs/biber-bugs.md`, status V/C). The reproducers are inline in the script. `--list-skipped` lists the bugs without a case and why. |
+| `gen_xml.py` | `xml/` | `--validate-control`/`--validate-config` on valid and edited (invalid) `t/tdata` inputs and a real `.bcf` biber rejects, and `--convert-control` on several `.bcf`s (t/configfile.t validation part; t/bcfvalidation.t is `crates/bibers/tests/xml.rs`). |
 | `gen_scale.py` | `scale/`, benchmarks | `corpus` writes the committed `scale/mixed-1000` case. `bench [--out DIR] [SHAPE:N…]` writes larger synthetic inputs (default `target/bench-corpus/`, gitignored). Shapes are documented in the script. |
 | `bench.sh` | — | Times `$BIBER` (default `biber`) over the benchmark inputs. |
 | `corpuslib.py` | — | Shared helpers. |

@@ -1,0 +1,5 @@
+description = "--validate-config --nodieonerror: an invalid config file is reported and processing continues"
+source = "vendor/biber/t/tdata/general.bcf + biber-test.conf"
+args = ["--configfile=biber-test.conf", "--validate-config", "--nodieonerror", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:xml", "feature:validate-config"]

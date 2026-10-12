@@ -42,6 +42,9 @@ pub fn blg_messages(blg: &str, workdir: &Path) -> Vec<String> {
         LazyLock::new(|| Regex::new(r"[^\s']*/[0-9a-f]{32}_\d+\.utf8").unwrap());
     static PERLSRC: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"\bat \S+\.p[ml] line \d+").unwrap());
+    static SCHEMA: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"against schema '[^'\s]*/(bcf|config)\.rng'").unwrap()
+    });
     // macOS reports /var/... temp dirs as /private/var/... depending on how
     // the path was obtained; normalise both spellings.
     let work = workdir.to_string_lossy().into_owned();
@@ -56,6 +59,7 @@ pub fn blg_messages(blg: &str, workdir: &Path) -> Vec<String> {
             let msg = c[2].replace(&work, "<WORK>").replace(&work_alt, "<WORK>");
             let msg = TMPBIB.replace_all(&msg, "<TMPBIB>");
             let msg = PERLSRC.replace_all(&msg, "at <PERLSRC> line <N>");
+            let msg = SCHEMA.replace_all(&msg, "against schema '<SCHEMA>/$1.rng'");
             format!("{} - {}", &c[1], msg)
         })
         .collect();
@@ -90,11 +94,13 @@ mod tests {
         let blg = "[0] Config.pm:1> INFO - This is Biber 2.22\n\
                    [12] Biber.pm:2> WARN - I didn't find a database entry for 'x' (section 0)\n\
                    [13] Utils.pm:3> ERROR - BibTeX subsystem: /var/folders/zz/T/0123456789abcdef0123456789abcdef_42.utf8, line 3, syntax error\n\
+                   [15] Utils.pm:480> ERROR - 'a.bcf' failed to validate against schema '/var/folders/T/par-62656e/cache-bc/inc/lib/Biber/bcf.rng'\n\
                    [14] Biber.pm:4> ERROR - Data file 'a.bib' cannot be read in encoding 'utf8': Can't decode ill-formed UTF-8 octet sequence <A6> at /var/folders/T/par-62656e/cache-bc/inc/lib/File/Slurper.pm line 59.\n";
         let msgs = blg_messages(blg, Path::new("/tmp/w"));
         assert_eq!(
             msgs,
             vec![
+                "ERROR - 'a.bcf' failed to validate against schema '<SCHEMA>/bcf.rng'".to_string(),
                 "ERROR - BibTeX subsystem: <TMPBIB>, line 3, syntax error".to_string(),
                 "ERROR - Data file 'a.bib' cannot be read in encoding 'utf8': Can't decode ill-formed UTF-8 octet sequence <A6> at <PERLSRC> line <N>.".to_string(),
                 "WARN - I didn't find a database entry for 'x' (section 0)".to_string(),

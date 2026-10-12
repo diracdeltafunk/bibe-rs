@@ -28,6 +28,7 @@ tests/corpus/
 | `scale/` | one 1000-entry synthetic case (bigger inputs: `gen_scale.py bench`) | `gen_scale.py` |
 | `ported/` | biber's `t/*.t` assertions | (separate) |
 | `fuzz/` | minimised reproducers of bibers bugs found by differential fuzzing (one `.bcf` template from `styles/`, `fuzz.bib`) | `cargo xtask fuzz` / `cargo xtask fuzz-min` |
+| `xml/` | RELAX NG validation (`--validate-control`, `--validate-config`; valid and invalid inputs) and `--convert-control` (the `.html` is an output) | `gen_xml.py` |
 
 See `tools/corpus/README.md` for tags and regeneration.
 
