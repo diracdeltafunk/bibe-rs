@@ -18,6 +18,8 @@ toml.workspace = true
 tempfile.workspace = true
 similar.workspace = true
 wait-timeout.workspace = true
+rustls.workspace = true
+rustls-pki-types.workspace = true
 
 [lints]
 workspace = true

@@ -19,6 +19,7 @@ pub mod compare;
 pub mod normalize;
 pub mod phase;
 pub mod run;
+pub mod servers;
 
 pub use case::{Case, CaseSpec, CompareMode, ExpectedMeta, discover};
 pub use compare::{Outcome, compare, compare_bibers};
