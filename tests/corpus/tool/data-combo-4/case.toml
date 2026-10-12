@@ -1,0 +1,6 @@
+description = "tool mode over a synthetic .bib: --output-encoding=latin1 --output-no-macrodefs --output-annotation-marker=+ann --output-xdatamarker=xd --output-field-replace=journaltitle:journal,location:address --output-resolve-crossrefs"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-encoding=latin1", "--output-no-macrodefs", "--output-annotation-marker=+ann", "--output-xdatamarker=xd", "--output-field-replace=journaltitle:journal,location:address", "--output-resolve-crossrefs", "tooldata.bib"]
+outputs = ["tooldata_bibertool.bib"]
+log = "tooldata.bib.blg"
+tags = ["suite:tool", "feature:tool"]

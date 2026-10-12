@@ -1377,7 +1377,7 @@ pub fn output_encoding_name(ctx: &Ctx) -> String {
 }
 
 /// The output encoding (DC-034: single-byte encodings and UTF-8 only).
-fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
+pub(crate) fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
     let name = output_encoding_name(ctx);
     match find_encoding(&name) {
         Some(e) => Ok(e),

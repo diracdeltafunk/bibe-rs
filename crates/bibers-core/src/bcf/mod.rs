@@ -151,7 +151,8 @@ pub struct Section {
 }
 
 impl Section {
-    fn new(number: &str) -> Self {
+    /// An empty section.
+    pub fn new(number: &str) -> Self {
         Section {
             number: number.to_string(),
             ..Section::default()
@@ -1340,6 +1341,13 @@ pub fn process_setup(cfg: &mut Config, log: &mut Logger, doc: &mut Document) -> 
         }
     }
 
+    setup_datamodel(cfg, log)
+}
+
+/// The tail of `process_setup` (Biber.pm:1209-1225), which is all of
+/// `process_setup_tool` (Biber.pm:1237): build the data model, resolve
+/// datafield sets, force `output_safechars` for ASCII output.
+pub fn setup_datamodel(cfg: &mut Config, log: &mut Logger) -> Result<(), Fatal> {
     let dms = match cfg.blx.global("datamodel") {
         Some(OptValue::Datamodel(v)) => v.clone(),
         _ => Vec::new(),

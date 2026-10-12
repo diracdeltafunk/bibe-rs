@@ -323,7 +323,8 @@ fn apply_blx_defaults(cfg: &mut Config) {
 /// `_initopts` (Config.pm:115-313), up to (not including) logger set-up.
 ///
 /// `opts` is bin/biber's `$opts` hash; `argv` the remaining positional
-/// arguments; `tool_conf` the path of biber-tool.conf for tool mode.
+/// arguments; `tool_conf` the path of biber-tool.conf for tool mode (`None`: the built-in
+/// copy, [`conf_file::BIBER_TOOL_CONF`]).
 pub fn initopts(
     opts: &mut CliOptions,
     argv: &[String],
@@ -352,8 +353,13 @@ pub fn initopts(
 
     let is_tool =
         matches!(opts.get("tool"), Some(CliValue::Str(s)) if crate::perlish::truthy(Some(s)));
-    if is_tool && let Some(tc) = tool_conf {
-        let conf = conf_file::read_conf(env, tc)?;
+    // Config.pm:146-156: the tool-mode default config (biber-tool.conf,
+    // built in unless a path is given).
+    if is_tool {
+        let conf = match tool_conf {
+            Some(tc) => conf_file::read_conf(env, tc)?,
+            None => conf_file::parse_conf(conf_file::BIBER_TOOL_CONF, "biber-tool.conf")?,
+        };
         notes.extend(conf_file::apply_conf(&mut cfg, &conf));
     }
 

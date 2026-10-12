@@ -20,6 +20,8 @@ pub struct CaseSpec {
     #[serde(default)]
     pub shared: Vec<String>,
     /// Output files (relative to the work directory) compared with `expected/`.
+    /// The name [`STDOUT_OUTPUT`] stands for the program's standard output
+    /// (for `--output-file -`).
     pub outputs: Vec<String>,
     /// The `.blg` whose WARN/ERROR messages are compared. Defaults to the
     /// first output with its extension replaced by `.blg`.
@@ -102,6 +104,8 @@ pub const EXPECTED_DIR: &str = "expected";
 /// (docs/compat.md); only allowed when `allow` lists the `DC-NNN` ids.
 pub const BIBERS_EXPECTED_DIR: &str = "expected-bibers";
 pub const MESSAGES_FILE: &str = "messages.txt";
+/// The `outputs` name of the program's standard output.
+pub const STDOUT_OUTPUT: &str = "@stdout";
 pub const META_FILE: &str = "meta.toml";
 
 impl Case {

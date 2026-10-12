@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/encoding3.bib"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--input-encoding=latin1", "encoding3.bib"]
+outputs = ["encoding3_bibertool.bib"]
+log = "encoding3.bib.blg"
+tags = ["suite:tool", "feature:tool"]

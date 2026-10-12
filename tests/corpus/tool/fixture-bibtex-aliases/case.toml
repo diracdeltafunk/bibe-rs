@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/bibtex-aliases.bib"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "bibtex-aliases.bib"]
+outputs = ["bibtex-aliases_bibertool.bib"]
+log = "bibtex-aliases.bib.blg"
+tags = ["suite:tool", "feature:tool"]

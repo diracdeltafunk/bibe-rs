@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/sections1.bib"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "sections1.bib"]
+outputs = ["sections1_bibertool.bib"]
+log = "sections1.bib.blg"
+tags = ["suite:tool", "feature:tool"]

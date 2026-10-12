@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: --output-resolve-xdata --output-resolve-sets --output-align --output-field-order=options,abstract,dates,names --output-legacy-dates --output-fieldcase=lower"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-resolve-xdata", "--output-resolve-sets", "--output-align", "--output-field-order=options,abstract,dates,names", "--output-legacy-dates", "--output-fieldcase=lower", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

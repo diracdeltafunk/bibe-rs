@@ -1,0 +1,143 @@
+@STRING{N = "NotUsed"}
+@STRING{P = "Publisher"}
+
+@UNPUBLISHED{i3Š,
+  AUTHOR = {family:AAA AND family:BBB AND
+            family:CCC AND family:DDD AND
+            family:EEE},
+  TITLE = {Š title},
+  ABSTRACT = {Some abstract %50 of which is
+              useless},
+  DATE = {2003},
+  KEYWORDS = {keyword,keyword2,keyword3},
+  LISTA = {list test},
+  LISTB = {late AND early},
+  LISTC = {late AND early},
+  LOCATION = {one AND two},
+  OPTIONS = {useprefix=false},
+  USERB = {test},
+}
+
+@BOOK{xd1,
+  AUTHOR = {family:Ellington, given:Edward Paul},
+}
+
+@XDATA{macmillan,
+  DATE = {2001},
+  IDS = {macmillanalias},
+}
+
+@XDATA{macmillan:pub,
+  IDS = {macmillan:pubALIAS},
+  PUBLISHER = {Macmillan},
+}
+
+@XDATA{macmillan:loc,
+  LOCATION = {New York AND London},
+  NOTE = {A Note},
+}
+
+@BOOK{b1,
+  TITLE = {Booktitle},
+  CROSSREF = {mvalias},
+  DATE = {1999},
+  LOCATION = {London AND Edinburgh},
+  LOCATION+an:default = {1=ann1;2=ann2},
+  TITLE+an:default = {=ann1, ann2},
+}
+
+@MVBOOK{mv1,
+  TITLE = {Maintitle},
+  IDS = {mvalias},
+  SUBTITLE = {Mainsubtitle},
+  TITLEADDON = {Maintitleaddon},
+}
+
+@BOOK{dt1,
+  DATE =
+          {2004-04-25T14:34:00/2004-04-05T14:37:0
+          6},
+  EVENTDATE =
+               {2004-04-25T14:34:00+05:00/2004-04
+               -05T15:34:00+05:00},
+  ORIGDATE =
+              {2004-04-25T14:34:00Z/2004-04-05T14
+              :34:05Z},
+  URLDATE =
+             {2004-04-25T14:34:00/2004-04-05T15:0
+             0:00},
+}
+
+@ARTICLE{m1,
+  DATE = {2017},
+  JOURNALTITLE = {A Journal},
+}
+
+@BOOK{badcr1,
+  AUTHOR = {family:Foo},
+  TITLE = {Foo},
+  DATE = {2019},
+}
+
+@BOOK{badcr2,
+  AUTHOR = {family:Bar},
+  TITLE = {Bar},
+  DATE = {2019},
+}
+
+@BOOK{gxd1,
+  AUTHOR = {family:Smith, given:Simon AND
+            xdata:gxd2-author-1},
+  EDITOR = {xdata:gxd2-editor-2},
+  TRANSLATOR = {xdata:gxd2-author-3},
+  TITLE = {xdata:gxd4-title},
+  ADDENDUM = {xdata:missing},
+  LISTA = {xdata:gxd3-location-5},
+  LOCATION = {xdata:gxd3-location-1 AND B},
+  NOTE = {xdata:gxd2-note},
+  ORGANIZATION = {xdata:gxd2-author-3},
+  PUBLISHER = {xdata:gxd2},
+}
+
+@XDATA{gxd2,
+  AUTHOR = {family:Bloom, given:Brian AND
+            family:Anderson, given:Arthur},
+  EDITOR = {family:Wool, given:William AND
+            xdata:gxd4-editor-1},
+}
+
+@XDATA{gxd3,
+  LOCATION = {A AND C},
+}
+
+@XDATA{gxd4,
+  EDITOR = {family:Frill, given:Frank},
+  TITLE = {Some title},
+}
+
+@BOOK{bo1,
+  AUTHOR = {family:Smith, given:Simon},
+  IDS = {box1,box2},
+}
+
+@BOOK{ld1,
+  AUTHOR = {family:AAA AND family:BBB AND
+            family:CCC AND family:DDD AND
+            family:EEE},
+  TITLE = {A title},
+  DATE = {2003-04},
+  PUBLISHER = P,
+}
+
+@COMMENT{Comment 1}
+@COMMENT{Comment 2}
+@COMMENT{jabref-meta: groupstree:
+0 AllEntriesGroup:;
+1 ExplicitGroup:Doktorandkurser\;2\;;
+2 KeywordGroup:Från könsroll till genus\;0\;course\;UCGS Från könsrolltill genus\;0\;0\;;
+2 KeywordGroup:Historiska och filosofiska perspektiv på psykologi\;0\;course\;Historiska och filosofiska perspektiv på psykologi\;0\;0\;;
+2 KeywordGroup:Kurs i introduktion\;0\;course\;Kurs i introduktion\;0\;0\;;
+2 KeywordGroup:Fenomenologi, kön och genus\;0\;course\;UCGS Fenomenologi\;0\;0\;;
+2 KeywordGroup:Quantitative Research Methods\;0\;course\;QMR\;0\;0\;;
+2 KeywordGroup:Multivariate Analysis\;0\;course\;MVA\;1\;0\;;
+}

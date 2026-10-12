@@ -1,0 +1,137 @@
+@STRING{JNL = "Journal of Things"}
+@STRING{LOC = "Berlin"}
+@STRING{LOC = "Berlin"}
+@STRING{PUB = "Publisher Name"}
+
+@MISC{second1,
+  AUTHOR   = {Zeta, Z.},
+  LOCATION = LOC,
+  RELATED  = {season1},
+  TITLE    = {From the second file},
+}
+
+@SET{set1,
+}
+
+@BOOK{season1,
+  AUTHOR       = {Doe, John},
+  PUBLISHER    = PUB,
+  DATE         = {2020-21},
+  TITLE        = {Spring book},
+  YEARDIVISION = {spring},
+}
+
+@BOOK{season2,
+  AUTHOR       = {Doe, John and von Neumann, Jr., John},
+  LOCATION     = LOC,
+  DATE         = {2020},
+  TITLE        = {Southern winter?},
+  YEARDIVISION = {winterS},
+}
+
+@BOOK{unspec1,
+  AUTHOR = {Roe, Richard},
+  DATE   = {199X},
+  TITLE  = {Decade},
+}
+
+@BOOK{unspec2,
+  EDITOR = {{Barnes and Noble}},
+  DATE   = {19XX},
+  TITLE  = {Century},
+}
+
+@BOOK{unspec3,
+  DATE  = {1999-00},
+  TITLE = {Month unspecified},
+}
+
+@BOOK{unspec4,
+  DATE  = {1999-01-00},
+  TITLE = {Day unspecified},
+}
+
+@BOOK{unspec5,
+  DATE  = {1999-00-00},
+  TITLE = {Day in year},
+}
+
+@BOOK{midnight,
+  DATE      = {2020-01-01},
+  EVENTDATE = {2020-01-01T10:20:30+02:00},
+  TITLE     = {Midnight},
+}
+
+@BOOK{year0,
+  TITLE = {Year zero},
+}
+
+@BOOK{circa,
+  DATE     = {1850~/1860?},
+  ORIGDATE = {1700%},
+  TITLE    = {Circa},
+}
+
+@BOOK{era,
+  DATE  = {-44-03-15},
+  TITLE = {BCE},
+}
+
+@BOOK{open,
+  DATE  = {1990/},
+  PAGES = {10--},
+  TITLE = {Open range},
+}
+
+@BOOK{legacy,
+  DATE  = {1995-03},
+  PAGES = {1--10,20--30},
+  TITLE = {Legacy},
+}
+
+@BOOK{legacy2,
+  DATE  = {1996-11},
+  TITLE = {Legacy numeric month},
+}
+
+@BOOK{legacyday,
+  DATE  = {1995-03-04},
+  TITLE = {Legacy with day},
+}
+
+@ARTICLE{ann,
+  AUTHOR            = {Alpha, A. and Beta, B. and others},
+  AUTHOR+an:default = {1=corresponding;2:family=Lit},
+  URL               = {http://example.org/a?b=c},
+  JOURNALTITLE      = JNL,
+  KEYWORDS          = {a,b,c},
+  TITLE             = {Annotated},
+  TITLE+an:alt      = {=alternative},
+}
+
+@ONLINE{verb,
+  URL     = {http://example.org/caf\'e},
+  NOTE    = {x},
+  TITLE   = {Ünïcödé “quotes” – dash ß},
+  URLDATE = {2020-05-06},
+}
+
+@INPROCEEDINGS{opts,
+  OPTIONS   = {skipbib=1},
+  AUTHOR    = {Ignored, Dup},
+  BOOKTITLE = {Proceedings},
+  CROSSREF  = {proc},
+  DATE      = {2001-01},
+  TITLE     = {Options and a very long title that will need to be wrapped when the output is wrapped at forty columns},
+}
+
+@PROCEEDINGS{proc,
+  EDITOR    = {Epsilon, E.},
+  PUBLISHER = PUB,
+  DATE      = {2001},
+  TITLE     = {The Proceedings},
+}
+
+@COMMENT{A plain comment}
+@COMMENT{jabref-meta: databaseType:biblatex;
+}

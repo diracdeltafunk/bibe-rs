@@ -1,0 +1,6 @@
+description = "explicit format and --logfile"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-format=bibtex", "--logfile=x", "tooldata.bib"]
+outputs = ["tooldata_bibertool.bib"]
+log = "x.blg"
+tags = ["suite:tool", "feature:tool"]

@@ -1,0 +1,6 @@
+description = "biber t/tool-config.t: tool mode with t/tdata/tool-testconfig.conf"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--configfile=tool-testconfig.conf", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool", "t:tool-config"]

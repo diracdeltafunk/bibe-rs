@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: --output-align --output-indent=4 --output-fieldcase=lower --output-resolve --output-xname --output-legacy-dates"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-align", "--output-indent=4", "--output-fieldcase=lower", "--output-resolve", "--output-xname", "--output-legacy-dates", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

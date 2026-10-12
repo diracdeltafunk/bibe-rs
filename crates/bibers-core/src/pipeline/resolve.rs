@@ -110,7 +110,7 @@ pub fn datefield_stems(ctx: &mut Ctx) -> Vec<String> {
 }
 
 /// `$dmh->{datefields}` as it currently is (not stripped again).
-fn datefields_now(ctx: &Ctx) -> Vec<String> {
+pub fn datefields_now(ctx: &Ctx) -> Vec<String> {
     match (
         &ctx.run.datefields,
         ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation),

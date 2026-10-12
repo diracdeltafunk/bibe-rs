@@ -27,6 +27,7 @@ tests/corpus/
 | `bugs/` | one reproducer per biber bug (`docs/biber-bugs.md`), recording biber's actual behaviour | `gen_bugs.py` |
 | `scale/` | one 1000-entry synthetic case (bigger inputs: `gen_scale.py bench`) | `gen_scale.py` |
 | `ported/` | biber's `t/*.t` assertions | (separate) |
+| `tool/` | tool mode (`--tool`) and `--output-format=bibtex` with the `--output-*` options | `gen_tool.py` |
 | `fuzz/` | minimised reproducers of bibers bugs found by differential fuzzing (one `.bcf` template from `styles/`, `fuzz.bib`) | `cargo xtask fuzz` / `cargo xtask fuzz-min` |
 
 See `tools/corpus/README.md` for tags and regeneration.

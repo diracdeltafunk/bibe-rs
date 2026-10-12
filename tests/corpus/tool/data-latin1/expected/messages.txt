@@ -1,0 +1,5 @@
+WARN - The entry 'ann' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'circa' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'season2' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - The entry 'verb' has characters which cannot be encoded in 'latin1'. Recoding problematic characters into macros.
+WARN - legacy month field 'mar' in entry 'legacy' is not an integer - this will probably not sort properly.

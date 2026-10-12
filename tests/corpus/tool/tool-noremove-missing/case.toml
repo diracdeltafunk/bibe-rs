@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: --tool-noremove-missing-dependants"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--tool-noremove-missing-dependants", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

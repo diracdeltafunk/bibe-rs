@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: custom --output-field-order (classes and fields)"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-field-order=title,dates,names,author,lists,keywords", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

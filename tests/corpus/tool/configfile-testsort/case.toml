@@ -1,0 +1,6 @@
+description = "tool mode with t/tdata/tool-testsort.conf, all defaults"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--configfile=tool-testsort.conf", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

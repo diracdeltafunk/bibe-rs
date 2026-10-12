@@ -1,0 +1,6 @@
+description = "tool mode over a synthetic .bib: -w (80) with tab indent"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "-w", "--output-indent=1t", "tooldata.bib"]
+outputs = ["tooldata_bibertool.bib"]
+log = "tooldata.bib.blg"
+tags = ["suite:tool", "feature:tool"]
