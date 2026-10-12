@@ -335,7 +335,9 @@ impl Compiler<'_> {
                 }
                 DefState::New => {
                     self.defs[*d] = DefState::InProgress;
-                    let body = self.ast.defs[*d].body.expect("checked when the grammar ended");
+                    let body = self.ast.defs[*d]
+                        .body
+                        .expect("checked when the grammar ended");
                     let id = self.pat(body)?;
                     self.defs[*d] = DefState::Done(id);
                     id
@@ -442,7 +444,8 @@ pub(crate) mod check {
         let mut r = Vec::new();
         reps(a, &mut r);
         reps(b, &mut r);
-        r.iter().any(|(ns, l)| a.contains(ns, l) && b.contains(ns, l))
+        r.iter()
+            .any(|(ns, l)| a.contains(ns, l) && b.contains(ns, l))
     }
 
     fn any_overlap(a: &[NameClass], b: &[NameClass]) -> bool {
@@ -484,7 +487,9 @@ pub(crate) mod check {
                     let inter = matches!(self.ast.nodes[a], Ast::Interleave(..));
                     simple_forbidden(if inter { "interleave" } else { "group" })?;
                     if f.in_except || (inter && f.in_list) {
-                        return Err(e("group/interleave is not allowed here (data/except or list)"));
+                        return Err(e(
+                            "group/interleave is not allowed here (data/except or list)",
+                        ));
                     }
                     let g = Flags {
                         in_one_or_more_group: f.in_one_or_more_group || f.in_one_or_more,
@@ -495,7 +500,9 @@ pub(crate) mod check {
                     let (ix, iy) = (self.info(*x)?, self.info(*y)?);
                     if inter {
                         if any_overlap(&ix.elements, &iy.elements) {
-                            return Err(e("elements with overlapping names in both operands of an interleave"));
+                            return Err(e(
+                                "elements with overlapping names in both operands of an interleave",
+                            ));
                         }
                         if ix.text && iy.text {
                             return Err(e("text in both operands of an interleave"));
@@ -528,7 +535,13 @@ pub(crate) mod check {
                 Ast::Data { except, .. } => {
                     simple_forbidden("data")?;
                     if let Some(x) = except {
-                        self.paths(*x, Flags { in_except: true, ..f })?;
+                        self.paths(
+                            *x,
+                            Flags {
+                                in_except: true,
+                                ..f
+                            },
+                        )?;
                     }
                 }
                 Ast::Value { .. } => simple_forbidden("value")?,
@@ -549,7 +562,9 @@ pub(crate) mod check {
                 }
                 Ast::Element(_, x) => {
                     if f.in_attribute || f.in_list || f.in_except {
-                        return Err(e("element is not allowed in an attribute, list or data/except"));
+                        return Err(e(
+                            "element is not allowed in an attribute, list or data/except",
+                        ));
                     }
                     let i = self.info(*x)?;
                     if i.ct.is_none() && !self.not_allowed(*x) {

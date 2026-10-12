@@ -33,10 +33,20 @@ fn check(s: &Schema, valid: &[&str], invalid: &[&str]) {
 #[test]
 fn empty_text_and_not_allowed() {
     let s = schema(r#"<element name="a"><empty/></element>"#);
-    check(&s, &["<a/>", "<a> </a>", "<a><!-- c --></a>"], &["<a>x</a>", "<a><b/></a>", "<b/>"]);
+    check(
+        &s,
+        &["<a/>", "<a> </a>", "<a><!-- c --></a>"],
+        &["<a>x</a>", "<a><b/></a>", "<b/>"],
+    );
     let s = schema(r#"<element name="a"><text/></element>"#);
-    check(&s, &["<a/>", "<a>x</a>", "<a>x<!--c-->y</a>"], &["<a><b/></a>"]);
-    let s = schema(r#"<element name="a"><choice><notAllowed/><element name="b"><empty/></element></choice></element>"#);
+    check(
+        &s,
+        &["<a/>", "<a>x</a>", "<a>x<!--c-->y</a>"],
+        &["<a><b/></a>"],
+    );
+    let s = schema(
+        r#"<element name="a"><choice><notAllowed/><element name="b"><empty/></element></choice></element>"#,
+    );
     check(&s, &["<a><b/></a>"], &["<a/>"]);
 }
 
@@ -51,7 +61,11 @@ fn group_choice_one_or_more() {
     );
     check(
         &s,
-        &["<r><a/><b/><d/></r>", "<r><a/><c/><d/><d/><e/><e/><f/></r>", "<r>\n <a/> <b/>\n<d/></r>"],
+        &[
+            "<r><a/><b/><d/></r>",
+            "<r><a/><c/><d/><d/><e/><e/><f/></r>",
+            "<r>\n <a/> <b/>\n<d/></r>",
+        ],
         &[
             "<r><b/><a/><d/></r>",
             "<r><a/><b/><c/><d/></r>",
@@ -74,10 +88,20 @@ fn interleave_and_mixed() {
     );
     check(
         &s,
-        &["<r><a/><c/><d/></r>", "<r><b/><c/><a/><b/><d/></r>", "<r><c/><b/><d/><a/></r>"],
-        &["<r><d/><c/><a/></r>", "<r><c/><d/></r>", "<r><a/><a/><c/><d/></r>"],
+        &[
+            "<r><a/><c/><d/></r>",
+            "<r><b/><c/><a/><b/><d/></r>",
+            "<r><c/><b/><d/><a/></r>",
+        ],
+        &[
+            "<r><d/><c/><a/></r>",
+            "<r><c/><d/></r>",
+            "<r><a/><a/><c/><d/></r>",
+        ],
     );
-    let s = schema(r#"<element name="p"><mixed><zeroOrMore><element name="b"><text/></element></zeroOrMore></mixed></element>"#);
+    let s = schema(
+        r#"<element name="p"><mixed><zeroOrMore><element name="b"><text/></element></zeroOrMore></mixed></element>"#,
+    );
     check(&s, &["<p>x<b>y</b>z<b/></p>", "<p/>"], &["<p><c/></p>"]);
 }
 
@@ -100,7 +124,11 @@ fn nested_interleave_libxml2_quirk() {
         assert!(s.validate_str(d).is_ok(), "{d}");
         assert!(s.validate_str_with(d, &lib).is_err(), "{d}");
     }
-    for d in ["<r><a/><c/><d/><b/></r>", "<r><c/><a/><d/><b/></r>", "<r><a/><b/><c/><d/></r>"] {
+    for d in [
+        "<r><a/><c/><d/><b/></r>",
+        "<r><c/><a/><d/><b/></r>",
+        "<r><a/><b/><c/><d/></r>",
+    ] {
         assert!(s.validate_str_with(d, &lib).is_ok(), "{d}");
     }
 }
@@ -114,12 +142,27 @@ fn attributes() {
     );
     check(
         &s,
-        &[r#"<a x=""/>"#, r#"<a x="v" y=" 1 "/>"#, r#"<a y="1" x="v" z="q" w="r"/>"#, r#"<a xmlns:p="urn:p" x="1" p:z="1"/>"#],
-        &["<a/>", r#"<a x="v" y="2"/>"#, r#"<a xmlns:n="urn:no" x="1" n:z="1"/>"#],
+        &[
+            r#"<a x=""/>"#,
+            r#"<a x="v" y=" 1 "/>"#,
+            r#"<a y="1" x="v" z="q" w="r"/>"#,
+            r#"<a xmlns:p="urn:p" x="1" p:z="1"/>"#,
+        ],
+        &[
+            "<a/>",
+            r#"<a x="v" y="2"/>"#,
+            r#"<a xmlns:n="urn:no" x="1" n:z="1"/>"#,
+        ],
     );
     // An optional attribute whose value pattern is nullable.
-    let s = schema(r#"<element name="a"><attribute name="x"><optional><data type="int"/></optional></attribute></element>"#);
-    check(&s, &[r#"<a x=""/>"#, r#"<a x=" "/>"#, r#"<a x="3"/>"#], &[r#"<a x="q"/>"#]);
+    let s = schema(
+        r#"<element name="a"><attribute name="x"><optional><data type="int"/></optional></attribute></element>"#,
+    );
+    check(
+        &s,
+        &[r#"<a x=""/>"#, r#"<a x=" "/>"#, r#"<a x="3"/>"#],
+        &[r#"<a x="q"/>"#],
+    );
 }
 
 #[test]
@@ -175,10 +218,21 @@ fn data_value_list_except() {
         ],
     );
     let s = schema(r#"<element name="q"><data type="QName"/></element>"#);
-    check(&s, &[r#"<q xmlns:p="urn:p">p:x</q>"#, "<q>x</q>"], &["<q>u:x</q>", "<q>1x</q>"]);
-    let s = schema(r#"<element name="q" xmlns:p="urn:p"><value type="QName">p:x</value></element>"#);
-    check(&s, &[r#"<q xmlns:z="urn:p">z:x</q>"#], &[r#"<q xmlns:p="urn:other">p:x</q>"#]);
-    let s = schema(r#"<element name="s"><data type="string"><param name="minLength">1</param></data></element>"#);
+    check(
+        &s,
+        &[r#"<q xmlns:p="urn:p">p:x</q>"#, "<q>x</q>"],
+        &["<q>u:x</q>", "<q>1x</q>"],
+    );
+    let s =
+        schema(r#"<element name="q" xmlns:p="urn:p"><value type="QName">p:x</value></element>"#);
+    check(
+        &s,
+        &[r#"<q xmlns:z="urn:p">z:x</q>"#],
+        &[r#"<q xmlns:p="urn:other">p:x</q>"#],
+    );
+    let s = schema(
+        r#"<element name="s"><data type="string"><param name="minLength">1</param></data></element>"#,
+    );
     check(&s, &["<s> </s>", "<s>x</s>"], &["<s/>", "<s></s>"]);
 }
 
@@ -197,7 +251,10 @@ fn grammar_features() {
     );
     check(
         &s,
-        &[r#"<a x="1"><a x="2" y="3"/></a>"#, r#"<b><c><a x="1"/></c></b>"#],
+        &[
+            r#"<a x="1"><a x="2" y="3"/></a>"#,
+            r#"<b><c><a x="1"/></c></b>"#,
+        ],
         &["<a/>", r#"<b><c/></b>"#, "<c/>"],
     );
 }
@@ -219,7 +276,11 @@ fn include_and_external_ref() {
         r#"<grammar {RNG}><include href="lib.rng"><start><element name="list"><zeroOrMore><ref name="item"/></zeroOrMore><optional><externalRef href="pat.rng"/></optional></element></start></include></grammar>"#
     );
     let s = Schema::parse_with_resolver(&text, "main.rng", &resolver).unwrap();
-    check(&s, &["<list><item>a</item><ext/></list>", "<list/>"], &["<x/>", "<list><ext/><item/></list>"]);
+    check(
+        &s,
+        &["<list><item>a</item><ext/></list>", "<list/>"],
+        &["<x/>", "<list><ext/><item/></list>"],
+    );
     assert!(Schema::parse(&text).is_err());
 }
 
@@ -250,7 +311,9 @@ fn schema_errors() {
 
 #[test]
 fn messages_have_lines_and_elements() {
-    let s = schema(r#"<element name="r"><element name="a"><attribute name="n"><data type="int"/></attribute></element></element>"#);
+    let s = schema(
+        r#"<element name="r"><element name="a"><attribute name="n"><data type="int"/></attribute></element></element>"#,
+    );
     let Err(ValidateError::Invalid(errs)) = s.validate_str("<r>\n<a n='x'/>\n</r>") else {
         panic!()
     };
@@ -260,13 +323,18 @@ fn messages_have_lines_and_elements() {
         errs[0].display_in("f.xml"),
         "f.xml:2: element a: Relax-NG validity error : Invalid attribute n for element a"
     );
-    assert!(matches!(s.validate_str("<r>"), Err(ValidateError::NotWellFormed(_))));
+    assert!(matches!(
+        s.validate_str("<r>"),
+        Err(ValidateError::NotWellFormed(_))
+    ));
 }
 
 #[test]
 fn biber_schemas_compile() {
     for f in ["bcf.rng", "config.rng"] {
-        let p = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../data/schemata").join(f);
+        let p = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../data/schemata")
+            .join(f);
         Schema::from_file(&p).unwrap_or_else(|e| panic!("{f}: {e}"));
     }
 }

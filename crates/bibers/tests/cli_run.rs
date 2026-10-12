@@ -105,7 +105,7 @@ fn deferred_features_fail_cleanly() {
     let d = tempfile::tempdir().unwrap();
     assert_eq!(run(d.path(), &["--tool", "x.bib"]), 2);
     assert_eq!(run(d.path(), &["--output-format=dot", "x"]), 2);
-    assert_eq!(run(d.path(), &["--validate-control", "x"]), 2);
+    assert_eq!(run(d.path(), &["--validate-bltxml", "x"]), 2);
     assert_eq!(run(d.path(), &["--fix-quirks=bogus", "x"]), 2);
     assert!(!d.path().join("x.blg").exists());
 }

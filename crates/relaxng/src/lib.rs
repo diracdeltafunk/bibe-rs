@@ -160,7 +160,9 @@ impl Schema {
     /// `externalRef` are errors (use [`Schema::parse_with_resolver`]).
     pub fn parse(text: &str) -> Result<Schema, SchemaError> {
         let no_refs = |_: &str, href: &str| -> Result<(String, String), String> {
-            Err(format!("cannot load '{href}': no resolver for external references"))
+            Err(format!(
+                "cannot load '{href}': no resolver for external references"
+            ))
         };
         Self::parse_with_resolver(text, "", &no_refs)
     }
@@ -223,7 +225,11 @@ impl Schema {
     }
 
     /// [`Schema::validate`] with options.
-    pub fn validate_with(&self, doc: &roxmltree::Document<'_>, opts: &Options) -> Vec<ValidityError> {
+    pub fn validate_with(
+        &self,
+        doc: &roxmltree::Document<'_>,
+        opts: &Options,
+    ) -> Vec<ValidityError> {
         validate::validate(&self.compiled, doc, opts)
     }
 

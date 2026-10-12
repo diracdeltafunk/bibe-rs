@@ -41,7 +41,9 @@ pub enum SchemaKind<'a> {
     Bltxml(&'a str),
 }
 
-fn builtin(kind: SchemaKind<'_>) -> &'static Schema {
+/// The compiled built-in schema for `Control` or `Config` (`Bltxml` gives the
+/// `.bcf` schema).
+pub fn builtin_schema(kind: SchemaKind<'_>) -> &'static Schema {
     static BCF: OnceLock<Schema> = OnceLock::new();
     static CONFIG: OnceLock<Schema> = OnceLock::new();
     let (cell, text) = match kind {
@@ -83,8 +85,14 @@ pub fn validate_biber_xml(
     };
     let generated;
     let (schema, schema_name): (&Schema, String) = match kind {
-        SchemaKind::Control => (builtin(kind), format!("{BUILTIN_SCHEMA_DIR}/bcf.rng")),
-        SchemaKind::Config => (builtin(kind), format!("{BUILTIN_SCHEMA_DIR}/config.rng")),
+        SchemaKind::Control => (
+            builtin_schema(kind),
+            format!("{BUILTIN_SCHEMA_DIR}/bcf.rng"),
+        ),
+        SchemaKind::Config => (
+            builtin_schema(kind),
+            format!("{BUILTIN_SCHEMA_DIR}/config.rng"),
+        ),
         SchemaKind::Bltxml(path) => {
             let text = match std::fs::read_to_string(env.resolve(path)) {
                 Ok(t) => t,
@@ -122,12 +130,18 @@ pub fn validate_biber_xml(
             for e in &errs {
                 debug!(log, "{}", e.display_in(file));
             }
-            biber_error!(log, "'{file}' failed to validate against schema '{schema_name}'")
+            biber_error!(
+                log,
+                "'{file}' failed to validate against schema '{schema_name}'"
+            )
         }
         Err(ValidateError::NotWellFormed(e)) => {
             // biber dies in XML::LibXML's parser here (a Perl error); the
             // .bcf and config file are already known to be well-formed.
-            biber_error!(log, "'{file}' failed to validate against schema '{schema_name}'\n{file}: {e}")
+            biber_error!(
+                log,
+                "'{file}' failed to validate against schema '{schema_name}'\n{file}: {e}"
+            )
         }
     }
 }
@@ -138,7 +152,7 @@ mod tests {
 
     #[test]
     fn builtin_schemas_compile() {
-        let _ = builtin(SchemaKind::Control);
-        let _ = builtin(SchemaKind::Config);
+        let _ = builtin_schema(SchemaKind::Control);
+        let _ = builtin_schema(SchemaKind::Config);
     }
 }

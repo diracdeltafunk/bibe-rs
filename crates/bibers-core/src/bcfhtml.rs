@@ -143,7 +143,10 @@ fn kids<'a, 'i>(n: Option<N<'a, 'i>>, name: &str) -> Vec<N<'a, 'i>> {
 
 /// `./bcf:a/bcf:b`
 fn kids2<'a, 'i>(n: Option<N<'a, 'i>>, a: &str, b: &str) -> Vec<N<'a, 'i>> {
-    kids(n, a).into_iter().flat_map(|x| kids(Some(x), b)).collect()
+    kids(n, a)
+        .into_iter()
+        .flat_map(|x| kids(Some(x), b))
+        .collect()
 }
 
 /// `./@name` (string value; "" when absent).
@@ -168,7 +171,9 @@ fn is(n: N<'_, '_>, name: &str, v: &str) -> bool {
 
 /// The text node children (`./text()`).
 fn texts<'a>(n: N<'a, '_>) -> impl Iterator<Item = &'a str> {
-    n.children().filter(|c| c.is_text()).map(|c| c.text().unwrap_or(""))
+    n.children()
+        .filter(|c| c.is_text())
+        .map(|c| c.text().unwrap_or(""))
 }
 
 /// `value-of select="./text()"`: the first text node.
@@ -243,7 +248,13 @@ pub fn render(doc: &Document<'_>) -> String {
     o.raw("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n");
     o.open_a("html", &[("xmlns", "http://www.w3.org/1999/xhtml")]);
     o.open("head");
-    o.open_a("meta", &[("http-equiv", "Content-Type"), ("content", "text/html; charset=UTF-8")]);
+    o.open_a(
+        "meta",
+        &[
+            ("http-equiv", "Content-Type"),
+            ("content", "text/html; charset=UTF-8"),
+        ],
+    );
     o.close("meta");
     o.el("title", "BibLaTeX control file");
     o.open_a("style", &[("type", "text/css")]);
@@ -335,7 +346,12 @@ fn optionscope(o: &mut Out, cf: Option<N<'_, '_>>) {
         o.el("b", av(os, "type"));
         o.close("td");
         o.close("tr");
-        o.head_row(&["Option", "Datatype", "Output by backend?", "Input as by backend"]);
+        o.head_row(&[
+            "Option",
+            "Datatype",
+            "Output by backend?",
+            "Input as by backend",
+        ]);
         o.close("thead");
         o.open("tbody");
         for opt in sorted(kids(Some(os), "option"), by_text) {
@@ -458,7 +474,10 @@ fn sourcemaps(o: &mut Out, cf: Option<N<'_, '_>>) {
             } else {
                 o.text("default overwrite");
             }
-            for (elem, label) in [("per_type", "for types"), ("per_datasource", "for datasources")] {
+            for (elem, label) in [
+                ("per_type", "for types"),
+                ("per_datasource", "for datasources"),
+            ] {
                 let items = kids(Some(map), elem);
                 if !items.is_empty() {
                     o.text("\n                    , ");
@@ -492,7 +511,11 @@ fn sourcemaps(o: &mut Out, cf: Option<N<'_, '_>>) {
         }
     }
     key_box(o, |o| {
-        li_b(o, |o| o.el_c("span", "map_final", "condition"), ": condition must obtain or mapping terminates");
+        li_b(
+            o,
+            |o| o.el_c("span", "map_final", "condition"),
+            ": condition must obtain or mapping terminates",
+        );
         li_b(
             o,
             |o| {
@@ -513,10 +536,26 @@ fn sourcemaps(o: &mut Out, cf: Option<N<'_, '_>>) {
         );
         li_b(o, |o| o.el_c("span", "map_null", "field"), ": Delete field");
         li_b(o, |o| o.el_c("span", "map_null", "entry"), ": Delete entry");
-        li_b(o, |o| o.text("field=\"string\""), ": Set field to \"string\"");
-        li_b(o, |o| o.el_c("span", "map_origentrytype", "TYPE"), ": Most recently mentioned source entrytype");
-        li_b(o, |o| o.el_c("span", "map_origfield", "FIELD"), ": Most recently source field");
-        li_b(o, |o| o.el_c("span", "map_origfieldval", "FIELDVAL"), ": Most recently source field value");
+        li_b(
+            o,
+            |o| o.text("field=\"string\""),
+            ": Set field to \"string\"",
+        );
+        li_b(
+            o,
+            |o| o.el_c("span", "map_origentrytype", "TYPE"),
+            ": Most recently mentioned source entrytype",
+        );
+        li_b(
+            o,
+            |o| o.el_c("span", "map_origfield", "FIELD"),
+            ": Most recently source field",
+        );
+        li_b(
+            o,
+            |o| o.el_c("span", "map_origfieldval", "FIELDVAL"),
+            ": Most recently source field value",
+        );
         li_b(
             o,
             |o| {
@@ -586,10 +625,22 @@ fn map_step(o: &mut Out, s: N<'_, '_>) {
     }
     for (a, t) in [
         ("map_entrykey_cited", "Entry must be CITED via \\cite{key}"),
-        ("map_entrykey_nocited", "Entry must be NOCITED via \\nocite{key} or \\nocite{*}"),
-        ("map_entrykey_citedornocited", "Entry must be CITED or NOCITED via \\cite{key} or \\nocite{key}"),
-        ("map_entrykey_allnocited", "Entry must be NOCITED via \\nocite{}"),
-        ("map_entrykey_starnocited", "Entry must only be NOCITED via \\nocite{*}"),
+        (
+            "map_entrykey_nocited",
+            "Entry must be NOCITED via \\nocite{key} or \\nocite{*}",
+        ),
+        (
+            "map_entrykey_citedornocited",
+            "Entry must be CITED or NOCITED via \\cite{key} or \\nocite{key}",
+        ),
+        (
+            "map_entrykey_allnocited",
+            "Entry must be NOCITED via \\nocite{}",
+        ),
+        (
+            "map_entrykey_starnocited",
+            "Entry must only be NOCITED via \\nocite{*}",
+        ),
     ] {
         if has(s, a) {
             o.el("span", t);
@@ -644,12 +695,27 @@ fn labelalphanametemplates(o: &mut Out, cf: Option<N<'_, '_>>) {
         o.close("h4");
         o.open("table");
         o.open("thead");
-        o.head_row(&["Order", "Pre", "Use option", "Width", "Side", "Compound", "Namepart"]);
+        o.head_row(&[
+            "Order",
+            "Pre",
+            "Use option",
+            "Width",
+            "Side",
+            "Compound",
+            "Namepart",
+        ]);
         o.close("thead");
         o.open("tbody");
         for np in sorted(kids(Some(t), "namepart"), by_order) {
             o.open("tr");
-            for a in ["order", "pre", "use", "substring_width", "substring_side", "substring_compound"] {
+            for a in [
+                "order",
+                "pre",
+                "use",
+                "substring_width",
+                "substring_side",
+                "substring_compound",
+            ] {
                 o.el("td", av(np, a));
             }
             o.el("td", text1(np));
@@ -763,11 +829,19 @@ fn labelalphatemplates(o: &mut Out, cf: Option<N<'_, '_>>) {
         o.close("table");
     }
     key_box(o, |o| {
-        li_b(o, |o| o.text("Heading key"), ": Label parts are concatenated together in part order shown");
+        li_b(
+            o,
+            |o| o.text("Heading key"),
+            ": Label parts are concatenated together in part order shown",
+        );
         o.open("li");
         o.el("b", "Labelpart key");
         o.text(": ");
-        o.el_c("span", "la_final", "Final label, no more parts are considered");
+        o.el_c(
+            "span",
+            "la_final",
+            "Final label, no more parts are considered",
+        );
         o.text(". \"namecount=n");
         o.raw("&rarr;");
         o.el_c("span", "la_fieldkey", "field");
@@ -882,7 +956,10 @@ fn inheritance(o: &mut Out, cf: Option<N<'_, '_>>) {
     if inh.is_empty() {
         return;
     }
-    let defaults: Vec<N<'_, '_>> = inh.iter().flat_map(|i| kids(Some(*i), "defaults")).collect();
+    let defaults: Vec<N<'_, '_>> = inh
+        .iter()
+        .flat_map(|i| kids(Some(*i), "defaults"))
+        .collect();
     let any_default = |a: &str, v: &str| defaults.iter().any(|d| is(*d, a, v));
     o.empty("hr");
     o.el("h3", "Inheritance");
@@ -897,18 +974,27 @@ fn inheritance(o: &mut Out, cf: Option<N<'_, '_>>) {
     o.text(" *");
     o.close("td");
     o.open("td");
-    o.open_c("span", any_default("override_target", "true").then_some("inherit_override"));
+    o.open_c(
+        "span",
+        any_default("override_target", "true").then_some("inherit_override"),
+    );
     if any_default("inherit_all", "true") {
         o.text("\n                    * ");
         o.close("span");
         o.raw("&rarr;");
-        o.open_c("span", any_default("override_target", "false").then_some("inherit_override"));
+        o.open_c(
+            "span",
+            any_default("override_target", "false").then_some("inherit_override"),
+        );
         o.text("\n                    * ");
     } else {
         o.text("\n                      *");
         o.close("span");
         o.raw("&rarr;");
-        o.open_c("span", any_default("override_target", "false").then_some("inherit_override"));
+        o.open_c(
+            "span",
+            any_default("override_target", "false").then_some("inherit_override"),
+        );
         o.raw("&empty;");
     }
     o.close("span");
@@ -928,16 +1014,25 @@ fn inheritance(o: &mut Out, cf: Option<N<'_, '_>>) {
         type_pair(o, tp);
         o.close("td");
         o.open("td");
-        o.open_c("span", is(tp, "override_target", "true").then_some("inherit_override"));
+        o.open_c(
+            "span",
+            is(tp, "override_target", "true").then_some("inherit_override"),
+        );
         o.text("\n                        *");
         o.close("span");
         if is(tp, "inherit_all", "true") {
             o.raw(" &asymp; ");
-            o.open_c("span", is(tp, "override_target", "false").then_some("inherit_override"));
+            o.open_c(
+                "span",
+                is(tp, "override_target", "false").then_some("inherit_override"),
+            );
             o.text("\n                        *");
         } else {
             o.raw("&rarr;");
-            o.open_c("span", is(tp, "override_target", "false").then_some("inherit_override"));
+            o.open_c(
+                "span",
+                is(tp, "override_target", "false").then_some("inherit_override"),
+            );
             o.raw("&empty;");
         }
         o.close("span");
@@ -971,11 +1066,17 @@ fn inheritance(o: &mut Out, cf: Option<N<'_, '_>>) {
                 o.raw(" &rarr; ");
                 o.raw("&empty;");
             } else {
-                o.open_c("span", is(f, "override_target", "true").then_some("inherit_override"));
+                o.open_c(
+                    "span",
+                    is(f, "override_target", "true").then_some("inherit_override"),
+                );
                 o.text(av(f, "source"));
                 o.close("span");
                 o.raw(" &rarr; ");
-                o.open_c("span", is(f, "override_target", "false").then_some("inherit_override"));
+                o.open_c(
+                    "span",
+                    is(f, "override_target", "false").then_some("inherit_override"),
+                );
                 o.text(av(f, "target"));
                 o.close("span");
             }
@@ -1036,8 +1137,12 @@ fn global_flag(cf: Option<N<'_, '_>>, key: &str) -> bool {
         .filter(|o| is(*o, "component", "biber"))
         .flat_map(|o| kids(Some(o), "option"))
         .any(|opt| {
-            kids(Some(opt), "key").iter().any(|k| texts(*k).any(|t| t == key))
-                && kids(Some(opt), "value").iter().any(|v| texts(*v).next().is_some())
+            kids(Some(opt), "key")
+                .iter()
+                .any(|k| texts(*k).any(|t| t == key))
+                && kids(Some(opt), "value")
+                    .iter()
+                    .any(|v| texts(*v).next().is_some())
         })
 }
 
@@ -1068,8 +1173,18 @@ fn sorting(o: &mut Out, cf: Option<N<'_, '_>>) {
     o.close("tbody");
     o.close("table");
     for (title, head, elem, item) in [
-        ("Sorting exclusions", "Fields excluded from sorting", "sortexclusion", "exclusion"),
-        ("Sorting inclusions", "Fields forcibly included in sorting", "sortinclusion", "inclusion"),
+        (
+            "Sorting exclusions",
+            "Fields excluded from sorting",
+            "sortexclusion",
+            "exclusion",
+        ),
+        (
+            "Sorting inclusions",
+            "Fields forcibly included in sorting",
+            "sortinclusion",
+            "inclusion",
+        ),
     ] {
         o.el("h4", title);
         o.open("table");
@@ -1091,7 +1206,13 @@ fn sorting(o: &mut Out, cf: Option<N<'_, '_>>) {
     o.el("h4", "Uniquename Template");
     o.open("table");
     o.open("thead");
-    o.head_row(&["Order", "Base", "Use option", "Disambiguation level", "Namepart"]);
+    o.head_row(&[
+        "Order",
+        "Base",
+        "Use option",
+        "Disambiguation level",
+        "Namepart",
+    ]);
     o.close("thead");
     o.open("tbody");
     for np in sorted(kids2(cf, "uniquenametemplate", "namepart"), by_order) {
@@ -1196,11 +1317,23 @@ fn sorting_template(o: &mut Out, spec: N<'_, '_>, sortupper: bool, sortcase: boo
     for s in &sorts {
         let s = *s;
         o.open_c("td", is(s, "final", "1").then_some("sort_final"));
-        o.raw(if is(s, "sort_direction", "descending") { "&darr;" } else { "&uarr;" });
+        o.raw(if is(s, "sort_direction", "descending") {
+            "&darr;"
+        } else {
+            "&uarr;"
+        });
         o.open("tt");
-        let upper = if has(s, "sortupper") { is(s, "sortupper", "1") } else { sortupper };
+        let upper = if has(s, "sortupper") {
+            is(s, "sortupper", "1")
+        } else {
+            sortupper
+        };
         o.text(if upper { "Aa/" } else { "aA/" });
-        let case = if has(s, "sortcase") { is(s, "sortcase", "1") } else { sortcase };
+        let case = if has(s, "sortcase") {
+            is(s, "sortcase", "1")
+        } else {
+            sortcase
+        };
         o.text(if case { "A" } else { "a" });
         o.close("tt");
         o.close("td");
@@ -1244,7 +1377,11 @@ fn sorting_template(o: &mut Out, spec: N<'_, '_>, sortupper: bool, sortcase: boo
     o.close("tbody");
     o.close("table");
     key_box(o, |o| {
-        li_b(o, |o| o.text("Heading Format"), ": (sort-direction)(case-order)/(case-sensitivity)");
+        li_b(
+            o,
+            |o| o.text("Heading Format"),
+            ": (sort-direction)(case-order)/(case-sensitivity)",
+        );
         o.open("li");
         o.el("b", "Heading key");
         o.text(": ");
@@ -1260,7 +1397,11 @@ fn sorting_template(o: &mut Out, spec: N<'_, '_>, sortupper: bool, sortcase: boo
         o.text(" = case-sensitive sorting, ");
         o.el("tt", "a");
         o.text(" = case-insensitive sorting, ");
-        o.el_c("span", "sort_final", "sort fieldset is final master key if defined");
+        o.el_c(
+            "span",
+            "sort_final",
+            "sort fieldset is final master key if defined",
+        );
         o.close("li");
         o.open("li");
         o.el("b", "Field key");
@@ -1332,7 +1473,8 @@ fn datamodel(o: &mut Out, cf: Option<N<'_, '_>>) {
     if dm.is_empty() {
         return;
     }
-    let all = |name: &str| -> Vec<N<'_, '_>> { dm.iter().flat_map(|d| kids(Some(*d), name)).collect() };
+    let all =
+        |name: &str| -> Vec<N<'_, '_>> { dm.iter().flat_map(|d| kids(Some(*d), name)).collect() };
     o.empty("hr");
     o.el("h3", "Data Model");
     o.el("h4", "Constants");
@@ -1341,7 +1483,10 @@ fn datamodel(o: &mut Out, cf: Option<N<'_, '_>>) {
     o.head_row(&["Name", "Type", "Value"]);
     o.close("thead");
     o.open("tbody");
-    for c in all("constants").into_iter().flat_map(|c| kids(Some(c), "constant")) {
+    for c in all("constants")
+        .into_iter()
+        .flat_map(|c| kids(Some(c), "constant"))
+    {
         o.open("tr");
         o.el("td", av(c, "name"));
         o.el("td", av(c, "type"));
@@ -1370,11 +1515,15 @@ fn datamodel(o: &mut Out, cf: Option<N<'_, '_>>) {
     o.close("div");
     o.close("td");
     o.close("tr");
-    for et in all("entrytypes").into_iter().flat_map(|e| kids(Some(e), "entrytype")) {
+    for et in all("entrytypes")
+        .into_iter()
+        .flat_map(|e| kids(Some(e), "entrytype"))
+    {
         o.open("tr");
         o.el("td", text1(et));
         o.open("td");
-        let mentions = |ef: &N<'_, '_>| kids(Some(*ef), "entrytype").iter().any(|x| text_eq(*x, et));
+        let mentions =
+            |ef: &N<'_, '_>| kids(Some(*ef), "entrytype").iter().any(|x| text_eq(*x, et));
         if !entryfields.iter().any(mentions) {
             o.el_c("div", "global_entrytype_fields", "GLOBAL fields");
         }
@@ -1395,7 +1544,10 @@ fn datamodel(o: &mut Out, cf: Option<N<'_, '_>>) {
     o.head_row(&["Field", "Field Format", "Data type"]);
     o.close("thead");
     o.open("tbody");
-    for f in all("fields").into_iter().flat_map(|f| kids(Some(f), "field")) {
+    for f in all("fields")
+        .into_iter()
+        .flat_map(|f| kids(Some(f), "field"))
+    {
         o.open("tr");
         o.open("td");
         o.text(text1(f));
@@ -1406,7 +1558,14 @@ fn datamodel(o: &mut Out, cf: Option<N<'_, '_>>) {
             o.raw("&loz;");
         }
         o.close("td");
-        o.el("td", if has(f, "format") { av(f, "format") } else { "standard" });
+        o.el(
+            "td",
+            if has(f, "format") {
+                av(f, "format")
+            } else {
+                "standard"
+            },
+        );
         o.open("td");
         o.text(av(f, "datatype"));
         o.raw("&nbsp;");
@@ -1543,7 +1702,10 @@ fn constraint(o: &mut Out, c: N<'_, '_>) {
             let fs = kids(Some(x), "field");
             let n = fs.len();
             for (i, f) in fs.into_iter().enumerate() {
-                o.open_c("span", is(f, "coerce", "true").then_some("field_xor_coerce"));
+                o.open_c(
+                    "span",
+                    is(f, "coerce", "true").then_some("field_xor_coerce"),
+                );
                 o.text(text1(f));
                 o.close("span");
                 if i + 1 != n {
@@ -1601,8 +1763,14 @@ fn sections(o: &mut Out, cf: Option<N<'_, '_>>) {
     }
     o.close("ul");
     o.close("td");
-    let sec0: Vec<N<'_, '_>> = kids(cf, "section").into_iter().filter(|s| is(*s, "number", "0")).collect();
-    let keys: Vec<N<'_, '_>> = sec0.iter().flat_map(|s| kids(Some(*s), "citekey")).collect();
+    let sec0: Vec<N<'_, '_>> = kids(cf, "section")
+        .into_iter()
+        .filter(|s| is(*s, "number", "0"))
+        .collect();
+    let keys: Vec<N<'_, '_>> = sec0
+        .iter()
+        .flat_map(|s| kids(Some(*s), "citekey"))
+        .collect();
     o.open("td");
     o.open("ul");
     for k in keys.iter().filter(|k| !is(**k, "type", "set")) {
@@ -1709,11 +1877,23 @@ fn datalists(o: &mut Out, cf: Option<N<'_, '_>>) {
         o.close("h4");
         o.open("table");
         o.open("thead");
-        o.head_row(&["Type", "Sorting Scheme", "Labelprefix", "Uniquename Template Name", "Labelalphaname Template Name"]);
+        o.head_row(&[
+            "Type",
+            "Sorting Scheme",
+            "Labelprefix",
+            "Uniquename Template Name",
+            "Labelalphaname Template Name",
+        ]);
         o.close("thead");
         o.open("tbody");
         o.open("tr");
-        for a in ["type", "sortscheme", "labelprefix", "uniquenametemplatename", "labelalphanametemplatename"] {
+        for a in [
+            "type",
+            "sortscheme",
+            "labelprefix",
+            "uniquenametemplatename",
+            "labelalphanametemplatename",
+        ] {
             o.el("td", av(dl, a));
         }
         o.close("tr");

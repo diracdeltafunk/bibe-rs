@@ -17,9 +17,13 @@ pub(crate) fn compile(pattern: &str) -> Result<Regex, String> {
     };
     let body = p.reg_exp()?;
     if p.pos != p.chars.len() {
-        return Err(format!("invalid regular expression '{pattern}': unexpected '{}'", p.chars[p.pos]));
+        return Err(format!(
+            "invalid regular expression '{pattern}': unexpected '{}'",
+            p.chars[p.pos]
+        ));
     }
-    Regex::new(&format!("^(?:{body})$")).map_err(|e| format!("invalid regular expression '{pattern}': {e}"))
+    Regex::new(&format!("^(?:{body})$"))
+        .map_err(|e| format!("invalid regular expression '{pattern}': {e}"))
 }
 
 struct Parser {
@@ -222,12 +226,20 @@ impl Parser {
             return self.err("trailing backslash");
         };
         self.pos += 1;
-        let wrap = |items: String| if in_class { items } else { format!("[{items}]") };
+        let wrap = |items: String| {
+            if in_class {
+                items
+            } else {
+                format!("[{items}]")
+            }
+        };
         Ok(match c {
             'n' => wrap(lit('\n')),
             'r' => wrap(lit('\r')),
             't' => wrap(lit('\t')),
-            '\\' | '|' | '.' | '?' | '*' | '+' | '(' | ')' | '{' | '}' | '-' | '[' | ']' | '^' => wrap(lit(c)),
+            '\\' | '|' | '.' | '?' | '*' | '+' | '(' | ')' | '{' | '}' | '-' | '[' | ']' | '^' => {
+                wrap(lit(c))
+            }
             's' => wrap("\\x{20}\\x{9}\\x{A}\\x{D}".into()),
             'S' => wrap("[^\\x{20}\\x{9}\\x{A}\\x{D}]".into()),
             'd' => wrap("\\p{Nd}".into()),
@@ -258,9 +270,9 @@ impl Parser {
                     format!("[{}\\x{{{a:X}}}-\\x{{{b:X}}}]", if neg { "^" } else { "" })
                 } else {
                     const CATS: &[&str] = &[
-                        "L", "Lu", "Ll", "Lt", "Lm", "Lo", "M", "Mn", "Mc", "Me", "N", "Nd", "Nl", "No", "P", "Pc",
-                        "Pd", "Ps", "Pe", "Pi", "Pf", "Po", "Z", "Zs", "Zl", "Zp", "S", "Sm", "Sc", "Sk", "So", "C",
-                        "Cc", "Cf", "Co", "Cn",
+                        "L", "Lu", "Ll", "Lt", "Lm", "Lo", "M", "Mn", "Mc", "Me", "N", "Nd", "Nl",
+                        "No", "P", "Pc", "Pd", "Ps", "Pe", "Pi", "Pf", "Po", "Z", "Zs", "Zl", "Zp",
+                        "S", "Sm", "Sc", "Sk", "So", "C", "Cc", "Cf", "Co", "Cn",
                     ];
                     if !CATS.contains(&prop.as_str()) {
                         return self.err(&format!("unknown property '{prop}'"));
@@ -309,8 +321,10 @@ impl Parser {
                 let save = self.pos;
                 let next = self.peek2();
                 match next {
-                    Some('n' | 'r' | 't' | '\\' | '|' | '.' | '?' | '*' | '+' | '(' | ')' | '{' | '}' | '-' | '['
-                    | ']' | '^') => {
+                    Some(
+                        'n' | 'r' | 't' | '\\' | '|' | '.' | '?' | '*' | '+' | '(' | ')' | '{'
+                        | '}' | '-' | '[' | ']' | '^',
+                    ) => {
                         self.pos += 2;
                         let ch = match next.unwrap() {
                             'n' => '\n',
@@ -345,8 +359,8 @@ impl Parser {
                             Some('r') => '\r',
                             Some('t') => '\t',
                             Some(
-                                ch @ ('\\' | '|' | '.' | '?' | '*' | '+' | '(' | ')' | '{' | '}' | '-' | '[' | ']'
-                                | '^'),
+                                ch @ ('\\' | '|' | '.' | '?' | '*' | '+' | '(' | ')' | '{' | '}'
+                                | '-' | '[' | ']' | '^'),
                             ) => ch,
                             _ => return self.err("invalid range end"),
                         }

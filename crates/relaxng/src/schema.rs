@@ -246,12 +246,11 @@ pub(crate) fn parse(
     base: &str,
     resolver: &Resolver<'_>,
 ) -> Result<SchemaAst, SchemaError> {
-    let doc = Document::parse_with_options(text, crate::parsing_options()).map_err(|e| {
-        SchemaError {
+    let doc =
+        Document::parse_with_options(text, crate::parsing_options()).map_err(|e| SchemaError {
             message: format!("schema is not well-formed: {e}"),
             line: Some(e.pos().row),
-        }
-    })?;
+        })?;
     let mut p = Parser {
         nodes: Vec::new(),
         defs: Vec::new(),
@@ -262,7 +261,10 @@ pub(crate) fn parse(
     };
     let root = doc.root_element();
     if !is_rng(&root) {
-        return Err(err(root, "the root element is not in the RELAX NG namespace"));
+        return Err(err(
+            root,
+            "the root element is not in the RELAX NG namespace",
+        ));
     }
     let inh = Inh {
         ns: String::new(),
@@ -310,7 +312,12 @@ impl Parser<'_, '_> {
     }
 
     /// The children of `n` as patterns, grouped (§4.12).
-    fn group_children(&mut self, n: Node<'_, '_>, kids: &[Node<'_, '_>], inh: &Inh) -> Result<AstId, SchemaError> {
+    fn group_children(
+        &mut self,
+        n: Node<'_, '_>,
+        kids: &[Node<'_, '_>],
+        inh: &Inh,
+    ) -> Result<AstId, SchemaError> {
         let mut ids = Vec::new();
         for &k in kids {
             ids.push(self.pattern(k, inh)?);
@@ -318,15 +325,17 @@ impl Parser<'_, '_> {
         self.fold(ids, Ast::Group).ok_or_else(|| {
             err(
                 n,
-                format!("<{}> must have at least one pattern child", n.tag_name().name()),
+                format!(
+                    "<{}> must have at least one pattern child",
+                    n.tag_name().name()
+                ),
             )
         })
     }
 
     fn load(&mut self, n: Node<'_, '_>, inh: &Inh) -> Result<(String, String), SchemaError> {
-        let href = attr(n, "href").ok_or_else(|| {
-            err(n, format!("<{}> without href", n.tag_name().name()))
-        })?;
+        let href = attr(n, "href")
+            .ok_or_else(|| err(n, format!("<{}> without href", n.tag_name().name())))?;
         let href = trim(href);
         let (b, text) = (self.resolver)(&inh.base, href).map_err(|e| err(n, e))?;
         if self.open.contains(&b) {
@@ -436,14 +445,18 @@ impl Parser<'_, '_> {
                 }))
             }
             "ref" | "parentRef" => {
-                let rn = trim(attr(n, "name").ok_or_else(|| err(n, format!("<{name}> without name")))?);
+                let rn =
+                    trim(attr(n, "name").ok_or_else(|| err(n, format!("<{name}> without name")))?);
                 let g = inh
                     .grammar
                     .ok_or_else(|| err(n, format!("<{name} name=\"{rn}\"> outside a grammar")))?;
                 let g = if name == "parentRef" {
-                    self.grammars[g]
-                        .parent
-                        .ok_or_else(|| err(n, format!("<parentRef name=\"{rn}\"> without a parent grammar")))?
+                    self.grammars[g].parent.ok_or_else(|| {
+                        err(
+                            n,
+                            format!("<parentRef name=\"{rn}\"> without a parent grammar"),
+                        )
+                    })?
                 } else {
                     g
                 };
@@ -461,13 +474,16 @@ impl Parser<'_, '_> {
                 Ok(self.push(Ast::Ref(d)))
             }
             "data" => {
-                let ty = trim(attr(n, "type").ok_or_else(|| err(n, "<data> without type"))?).to_string();
+                let ty =
+                    trim(attr(n, "type").ok_or_else(|| err(n, "<data> without type"))?).to_string();
                 let mut params = Vec::new();
                 let mut except = None;
                 for k in rng_children(n)? {
                     match k.tag_name().name() {
                         "param" if except.is_none() => {
-                            let pn = trim(attr(k, "name").ok_or_else(|| err(k, "<param> without name"))?);
+                            let pn = trim(
+                                attr(k, "name").ok_or_else(|| err(k, "<param> without name"))?,
+                            );
                             params.push((pn.to_string(), text_content(k)));
                         }
                         "except" if except.is_none() => {
@@ -476,10 +492,10 @@ impl Parser<'_, '_> {
                             for e in rng_children(k)? {
                                 ids.push(self.pattern(e, &kinh)?);
                             }
-                            except = Some(
-                                self.fold(ids, Ast::Choice)
-                                    .ok_or_else(|| err(k, "<except> must have at least one child"))?,
-                            );
+                            except =
+                                Some(self.fold(ids, Ast::Choice).ok_or_else(|| {
+                                    err(k, "<except> must have at least one child")
+                                })?);
                         }
                         other => return Err(err(k, format!("<{other}> is not allowed in <data>"))),
                     }
@@ -580,13 +596,19 @@ impl Parser<'_, '_> {
                     return Err(err(n, "<anyName> is not allowed in an <except>"));
                 }
                 if name == "nsName" && except_of == Some("nsName") {
-                    return Err(err(n, "<nsName> is not allowed in the <except> of an <nsName>"));
+                    return Err(err(
+                        n,
+                        "<nsName> is not allowed in the <except> of an <nsName>",
+                    ));
                 }
                 let kids = rng_children(n)?;
                 let mut except = None;
                 for k in kids {
                     if k.tag_name().name() != "except" || except.is_some() {
-                        return Err(err(k, format!("<{}> is not allowed in <{name}>", k.tag_name().name())));
+                        return Err(err(
+                            k,
+                            format!("<{}> is not allowed in <{name}>", k.tag_name().name()),
+                        ));
                     }
                     let kinh = inherit(k, &inh);
                     let mut acc: Option<NameClass> = None;
@@ -597,7 +619,10 @@ impl Parser<'_, '_> {
                             Some(a) => NameClass::Choice(Box::new(a), Box::new(nc)),
                         });
                     }
-                    except = Some(Box::new(acc.ok_or_else(|| err(k, "<except> must have at least one child"))?));
+                    except =
+                        Some(Box::new(acc.ok_or_else(|| {
+                            err(k, "<except> must have at least one child")
+                        })?));
                 }
                 Ok(if name == "anyName" {
                     NameClass::AnyName(except)
@@ -663,7 +688,9 @@ impl Parser<'_, '_> {
                     self.add_body(d, body, c)?;
                 }
                 "define" => {
-                    let name = trim(attr(c, "name").ok_or_else(|| err(c, "<define> without name"))?).to_string();
+                    let name =
+                        trim(attr(c, "name").ok_or_else(|| err(c, "<define> without name"))?)
+                            .to_string();
                     if ov.defines.contains(&name) {
                         found.defines.insert(name);
                         continue;
@@ -709,11 +736,19 @@ impl Parser<'_, '_> {
                     self.open.pop();
                     r?;
                     if own.start && !f2.start {
-                        return Err(err(c, "<include> overrides start, but the included grammar has none"));
+                        return Err(err(
+                            c,
+                            "<include> overrides start, but the included grammar has none",
+                        ));
                     }
                     for d in &own.defines {
                         if !f2.defines.contains(d) {
-                            return Err(err(c, format!("<include> overrides '{d}', which the included grammar does not define")));
+                            return Err(err(
+                                c,
+                                format!(
+                                    "<include> overrides '{d}', which the included grammar does not define"
+                                ),
+                            ));
                         }
                     }
                     found.start |= ov.start && f2.start;
@@ -735,7 +770,10 @@ impl Parser<'_, '_> {
         match attr(n, "combine").map(trim) {
             None => {
                 if self.defs[d].plain > 0 {
-                    return Err(err(n, format!("'{name}' is defined twice without a combine attribute")));
+                    return Err(err(
+                        n,
+                        format!("'{name}' is defined twice without a combine attribute"),
+                    ));
                 }
                 self.defs[d].plain += 1;
             }
@@ -748,7 +786,10 @@ impl Parser<'_, '_> {
                 if let Some(prev) = self.defs[d].combine
                     && prev != m
                 {
-                    return Err(err(n, format!("'{name}' is combined with both choice and interleave")));
+                    return Err(err(
+                        n,
+                        format!("'{name}' is combined with both choice and interleave"),
+                    ));
                 }
                 self.defs[d].combine = Some(m);
             }

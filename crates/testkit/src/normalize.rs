@@ -42,9 +42,8 @@ pub fn blg_messages(blg: &str, workdir: &Path) -> Vec<String> {
         LazyLock::new(|| Regex::new(r"[^\s']*/[0-9a-f]{32}_\d+\.utf8").unwrap());
     static PERLSRC: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"\bat \S+\.p[ml] line \d+").unwrap());
-    static SCHEMA: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"against schema '[^'\s]*/(bcf|config)\.rng'").unwrap()
-    });
+    static SCHEMA: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"against schema '[^'\s]*/(bcf|config)\.rng'").unwrap());
     // macOS reports /var/... temp dirs as /private/var/... depending on how
     // the path was obtained; normalise both spellings.
     let work = workdir.to_string_lossy().into_owned();

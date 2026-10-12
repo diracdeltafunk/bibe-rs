@@ -87,7 +87,11 @@ fn children<'a, 'i>(n: Node<'a, 'i>) -> Vec<Child<'a, 'i>> {
     out
 }
 
-pub(crate) fn validate(c: &Compiled, doc: &Document<'_>, opts: &crate::Options) -> Vec<ValidityError> {
+pub(crate) fn validate(
+    c: &Compiled,
+    doc: &Document<'_>,
+    opts: &crate::Options,
+) -> Vec<ValidityError> {
     let mut v = Validator {
         c,
         libxml2_interleave: opts.libxml2_interleave,
@@ -181,7 +185,11 @@ impl<'c, 'd> Validator<'c, 'd> {
                 for w in s.split([' ', '\t', '\n', '\r']).filter(|w| !w.is_empty()) {
                     q = self.text_deriv(q, w, ctx);
                 }
-                if self.a.nullable(q) { EMPTY } else { NOT_ALLOWED }
+                if self.a.nullable(q) {
+                    EMPTY
+                } else {
+                    NOT_ALLOWED
+                }
             }
             _ => NOT_ALLOWED,
         }
@@ -483,14 +491,27 @@ impl<'c, 'd> Validator<'c, 'd> {
             return p;
         }
         let ctx = move |prefix: &str| {
-            node.lookup_namespace_uri(if prefix.is_empty() { None } else { Some(prefix) })
-                .map(str::to_string)
+            node.lookup_namespace_uri(if prefix.is_empty() {
+                None
+            } else {
+                Some(prefix)
+            })
+            .map(str::to_string)
         };
         let mut p2 = p1;
         for att in node.attributes() {
-            let q = self.att_deriv(p2, att.namespace().unwrap_or(""), att.name(), att.value(), &ctx);
+            let q = self.att_deriv(
+                p2,
+                att.namespace().unwrap_or(""),
+                att.name(),
+                att.value(),
+                &ctx,
+            );
             if q == NOT_ALLOWED {
-                self.error(node, format!("Invalid attribute {} for element {local}", att.name()));
+                self.error(
+                    node,
+                    format!("Invalid attribute {} for element {local}", att.name()),
+                );
             } else {
                 p2 = q;
             }
@@ -521,13 +542,20 @@ impl<'c, 'd> Validator<'c, 'd> {
             if exp.len() == 1 {
                 msg.push_str(&format!(": expecting an element {}, got nothing", exp[0]));
             } else if !exp.is_empty() {
-                msg.push_str(&format!(": expecting one of the elements {}", exp.join(", ")));
+                msg.push_str(&format!(
+                    ": expecting one of the elements {}",
+                    exp.join(", ")
+                ));
             } else if self.accepts_text(p4, 0) {
                 msg.push_str(": expecting text");
             }
             self.error(node, msg);
             let r = self.after_skip(p4);
-            return if r == NOT_ALLOWED { self.after_skip(p1) } else { r };
+            return if r == NOT_ALLOWED {
+                self.after_skip(p1)
+            } else {
+                r
+            };
         }
         p5
     }

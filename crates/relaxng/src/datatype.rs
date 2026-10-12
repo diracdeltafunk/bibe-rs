@@ -236,7 +236,11 @@ fn parse_len(name: &str, v: &str) -> Result<usize, String> {
 
 impl DataType {
     /// Compile datatype `ty` of library `lib` with `params`.
-    pub(crate) fn new(lib: &str, ty: &str, params: &[(String, String)]) -> Result<DataType, String> {
+    pub(crate) fn new(
+        lib: &str,
+        ty: &str,
+        params: &[(String, String)],
+    ) -> Result<DataType, String> {
         let kind = lookup(lib, ty)?;
         let mut dt = DataType {
             kind,
@@ -342,9 +346,8 @@ impl DataType {
                 let first = parts.next()?;
                 let ok = |p: &str, alnum: bool| {
                     (1..=8).contains(&p.len())
-                        && p.chars().all(|c| {
-                            c.is_ascii_alphabetic() || (alnum && c.is_ascii_digit())
-                        })
+                        && p.chars()
+                            .all(|c| c.is_ascii_alphabetic() || (alnum && c.is_ascii_digit()))
                 };
                 if !ok(first, false) || !parts.all(|p| ok(p, true)) {
                     return None;
@@ -356,7 +359,11 @@ impl DataType {
             NmToken => is_nmtoken(s).then(|| Val::Str(s.to_string()))?,
             NmTokens | NcNames => {
                 let items: Vec<std::string::String> = s.split(' ').map(str::to_string).collect();
-                let check = if self.kind == NmTokens { is_nmtoken } else { is_ncname };
+                let check = if self.kind == NmTokens {
+                    is_nmtoken
+                } else {
+                    is_ncname
+                };
                 if s.is_empty() || !items.iter().all(|i| check(i)) {
                     return None;
                 }
@@ -370,9 +377,11 @@ impl DataType {
             Decimal => Val::Dec(self::Decimal::parse(s, true)?),
             Integer { min, max } => {
                 let d = self::Decimal::parse(s, false)?;
-                if min.is_some_and(|m| d.cmp(&self::Decimal::parse(m, false).unwrap()) == Ordering::Less)
-                    || max.is_some_and(|m| d.cmp(&self::Decimal::parse(m, false).unwrap()) == Ordering::Greater)
-                {
+                if min.is_some_and(|m| {
+                    d.cmp(&self::Decimal::parse(m, false).unwrap()) == Ordering::Less
+                }) || max.is_some_and(|m| {
+                    d.cmp(&self::Decimal::parse(m, false).unwrap()) == Ordering::Greater
+                }) {
                     return None;
                 }
                 Val::Dec(d)
@@ -484,16 +493,18 @@ impl DataType {
 }
 
 impl ValueSpec {
-    pub(crate) fn new(lib: &str, ty: &str, value: &str, nsctx: &NsContext) -> Result<ValueSpec, String> {
+    pub(crate) fn new(
+        lib: &str,
+        ty: &str,
+        value: &str,
+        nsctx: &NsContext,
+    ) -> Result<ValueSpec, String> {
         let dt = DataType::new(lib, ty, &[])?;
         let ctx = |p: &str| nsctx.resolve(p).map(str::to_string);
         let v = dt
             .check(value, &ctx)
             .ok_or_else(|| format!("'{value}' is not a valid value of datatype '{ty}'"))?;
-        Ok(ValueSpec {
-            dt,
-            value: v,
-        })
+        Ok(ValueSpec { dt, value: v })
     }
 }
 
@@ -778,7 +789,11 @@ impl Moment {
                 m.frac = r[..n].trim_end_matches('0').to_string();
                 rest = &r[n..];
             }
-            if mi > 59 || se > 59 || h > 24 || (h == 24 && (mi != 0 || se != 0 || !m.frac.is_empty())) {
+            if mi > 59
+                || se > 59
+                || h > 24
+                || (h == 24 && (mi != 0 || se != 0 || !m.frac.is_empty()))
+            {
                 return None;
             }
             m.hour = h;
@@ -814,10 +829,8 @@ impl Moment {
     /// (days, seconds of day) after normalising to UTC (when `utc`).
     fn instant(&self, utc: bool) -> (i64, i64) {
         let days = days_from_civil(self.year, self.month, self.day);
-        let mut secs = days * 86400
-            + self.hour as i64 * 3600
-            + self.minute as i64 * 60
-            + self.second as i64;
+        let mut secs =
+            days * 86400 + self.hour as i64 * 3600 + self.minute as i64 * 60 + self.second as i64;
         if utc && let Some(tz) = self.tz {
             secs -= tz as i64 * 60;
         }
@@ -859,7 +872,10 @@ fn parse_duration(s: &str) -> Option<(i64, Decimal)> {
             }
             continue;
         }
-        let n = r.bytes().take_while(|b| b.is_ascii_digit() || *b == b'.').count();
+        let n = r
+            .bytes()
+            .take_while(|b| b.is_ascii_digit() || *b == b'.')
+            .count();
         if n == 0 || n >= r.len() {
             return None;
         }
@@ -879,7 +895,11 @@ fn parse_duration(s: &str) -> Option<(i64, Decimal)> {
         }
         order = rank;
         let d = Decimal::parse(num, rank == 6)?;
-        let whole: i64 = if d.int.is_empty() { 0 } else { d.int.parse().ok()? };
+        let whole: i64 = if d.int.is_empty() {
+            0
+        } else {
+            d.int.parse().ok()?
+        };
         match rank {
             1 => months += whole * 12,
             2 => months += whole,
@@ -985,7 +1005,10 @@ mod tests {
     use super::*;
 
     fn dt(ty: &str, params: &[(&str, &str)]) -> DataType {
-        let p: Vec<(String, String)> = params.iter().map(|(a, b)| (a.to_string(), b.to_string())).collect();
+        let p: Vec<(String, String)> = params
+            .iter()
+            .map(|(a, b)| (a.to_string(), b.to_string()))
+            .collect();
         DataType::new(XSD_DATATYPES, ty, &p).unwrap()
     }
 
@@ -1074,8 +1097,22 @@ mod tests {
         assert!(!ok(&dt("base64Binary", &[]), "YWJ"));
         assert!(ok(&dt("double", &[]), "-1.5E3") && ok(&dt("float", &[]), "INF"));
         assert!(!ok(&dt("double", &[]), "1e"));
-        assert!(DataType::new(XSD_DATATYPES, "string", &[("whiteSpace".into(), "collapse".into())]).is_err());
-        assert!(DataType::new(XSD_DATATYPES, "boolean", &[("minLength".into(), "1".into())]).is_err());
+        assert!(
+            DataType::new(
+                XSD_DATATYPES,
+                "string",
+                &[("whiteSpace".into(), "collapse".into())]
+            )
+            .is_err()
+        );
+        assert!(
+            DataType::new(
+                XSD_DATATYPES,
+                "boolean",
+                &[("minLength".into(), "1".into())]
+            )
+            .is_err()
+        );
         assert!(DataType::new(XSD_DATATYPES, "nosuch", &[]).is_err());
     }
 }
