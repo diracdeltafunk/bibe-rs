@@ -582,14 +582,10 @@ impl Engine<'_, '_> {
             let xp = self.compile(level, &xn)?;
             if truthy("map_null") {
                 debug!(self.ctx.log, "{tp}Deleting field xpath '{xn}'");
-                match self.findnodes(etarget, &xn)?.first() {
-                    Some(&n) => self.dom.unbind(n),
-                    None => {
-                        return Err(die(
-                            self.ctx,
-                            &format!("{tp}Field xpath '{xn}' selects nothing (XPath error)"),
-                        ));
-                    }
+                // biber dies (unbindNode on undef) when there is no such
+                // field; deleting nothing is a no-op, as in the bibtex engine
+                if let Some(&n) = self.findnodes(etarget, &xn)?.first() {
+                    self.dom.unbind(n);
                 }
             } else {
                 if self.exists(etarget, &xp) && !Self::overwrite(smap, map) {
@@ -664,6 +660,18 @@ impl Engine<'_, '_> {
         } else {
             self.dom.text_content(n)
         }
+    }
+
+    /// XML::LibXML dies with "bad name" creating an element or attribute
+    /// with an invalid name (e.g. a step `bltx:name[2]` that selects nothing).
+    fn bad_name(&mut self, n: &str) -> Fatal {
+        die(
+            self.ctx,
+            &format!(
+                "Source mapping (key={}): cannot create a node named '{n}' (not a valid XML name)",
+                self.key
+            ),
+        )
     }
 
     /// `_changenode` (biblatexml.pm:1450). `Ok(Err(msg))` is biber's
@@ -824,6 +832,9 @@ impl Engine<'_, '_> {
                             }
                         }
                     } else {
+                        if !valid_node_name(np) {
+                            return Err(self.bad_name(np));
+                        }
                         let nn = self.dom.new_element(np);
                         self.dom.append_child(parent, nn);
                         self.dom.set_namespace(nn, super::BLTX_NS, super::BLTX);
@@ -834,6 +845,9 @@ impl Engine<'_, '_> {
                     }
                 } else if let Some(an) = node.strip_prefix('@') {
                     if terminal {
+                        if !valid_node_name(an) {
+                            return Err(self.bad_name(an));
+                        }
                         let s = as_str(self, &val);
                         self.dom.set_attribute(parent, an, &s);
                     }
@@ -847,6 +861,17 @@ impl Engine<'_, '_> {
         }
         Ok(Ok(()))
     }
+}
+
+/// `LibXML_test_node_name` (XML::LibXML croaks "bad name" for others).
+fn valid_node_name(s: &str) -> bool {
+    let mut cs = s.chars();
+    let Some(first) = cs.next() else {
+        return false;
+    };
+    let combining = |c: char| matches!(c, '\u{300}'..='\u{36f}' | '\u{483}'..='\u{486}' | '\u{591}'..='\u{5c4}' | '\u{64b}'..='\u{652}');
+    (first.is_alphabetic() || first == '_' || first == ':')
+        && cs.all(|c| c.is_alphanumeric() || matches!(c, '_' | '-' | ':' | '.' | '\u{b7}') || combining(c))
 }
 
 /// `m/names\[\@type\s*=\s*'(.+)'\]/`.

@@ -251,7 +251,12 @@ pub fn extract_entries(
             }
             st.section.add_everykey(&key);
             st.section.set_keytods(&key, filename);
-            create_entry(ctx, st, opts, &src, &mut dom, &key, entry, true, &mut rkeys)?;
+            // `map_entry_null`: biber still adds the key to the citekeys (and
+            // then dies in get_dependents on the missing entry); it is
+            // dropped instead
+            if !create_entry(ctx, st, opts, &src, &mut dom, &key, entry, true, &mut rkeys)? {
+                continue;
+            }
             ctx.run
                 .bltxml
                 .orig_key_order
@@ -303,9 +308,16 @@ pub fn extract_entries(
                 );
                 if !st.section.entries.contains_key(wanted) {
                     st.section.set_keytods(wanted, filename);
-                    create_entry(
+                    if !create_entry(
                         ctx, st, opts, &src, &mut dom, wanted, entry, true, &mut rkeys,
-                    )?;
+                    )? {
+                        // biber keeps the citekey and dies later on the
+                        // missing entry; drop it as the bibtex reader does
+                        st.section.del_citekey(wanted);
+                        ctx.log.biber_warn(format!(
+                            "Entry with key '{wanted}' in section '{secnum}' is cited and found but not created (likely due to sourcemap)"
+                        ));
+                    }
                 }
                 rkeys.retain(|k| k != wanted);
             } else if let Some(alias_of) = id_alias(&dom, wanted) {
@@ -327,10 +339,11 @@ pub fn extract_entries(
                     if !st.section.entries.contains_key(&alias_of.1) {
                         st.section.set_keytods(&alias_of.1, filename);
                         let k = alias_of.1.clone();
-                        create_entry(
+                        if create_entry(
                             ctx, st, opts, &src, &mut dom, &k, alias_of.0, true, &mut rkeys,
-                        )?;
-                        st.section.add_citekeys(std::slice::from_ref(&k));
+                        )? {
+                            st.section.add_citekeys(std::slice::from_ref(&k));
+                        }
                     }
                 }
                 rkeys.retain(|k| k != wanted);
@@ -383,11 +396,11 @@ fn create_entry(
     entry: NodeId,
     with_maps: bool,
     rkeys: &mut Vec<String>,
-) -> Result<(), Fatal> {
+) -> Result<bool, Fatal> {
     let news = if with_maps {
         match smap::apply(ctx, st, opts, src_ref(src), dom, key, entry, rkeys)? {
             Some(n) => n,
-            None => return Ok(()),
+            None => return Ok(false),
         }
     } else {
         Vec::new()
@@ -396,7 +409,7 @@ fn create_entry(
     for e in news {
         instantiate(ctx, st, opts, src_ref(src), dom, e, entry)?;
     }
-    Ok(())
+    Ok(true)
 }
 
 /// The data source name and section, for the map engine.

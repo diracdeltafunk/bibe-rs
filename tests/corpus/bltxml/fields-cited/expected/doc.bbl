@@ -1,0 +1,376 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{f4}{collection}{}{}
+      \name{editor}{1}{}{%
+        {{un=0,uniquepart=base,hash=97762c59bd53b1e33024b0305edc82c4}{%
+           family={Ed},
+           familyi={E\bibinitperiod},
+           given={Itor},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{2}{%
+        {Berlin}%
+        {Paris}%
+      }
+      \list{publisher}{2}{%
+        {Pub A}%
+        {Pub B}%
+      }
+      \strng{namehash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{fullhash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{fullhashraw}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{bibnamehash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editorbibnamehash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editornamehash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editorfullhash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editorfullhashraw}{97762c59bd53b1e33024b0305edc82c4}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{crossrefsource}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Collection Booktitle}
+      \field{title}{Collection}
+      \field{year}{1998}
+      \field{dateera}{ce}
+    \endentry
+    \entry{1779cf3aa50c413afc7e05adb7e1b0de}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=a35895592a0999dd2d54d2d7ffbbe52d}{%
+           family={Poe},
+           familyi={P\bibinitperiod},
+           given={Edgar},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{fullhash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{fullhashraw}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{bibnamehash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{authorbibnamehash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{authornamehash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{authorfullhash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{authorfullhashraw}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{clonesourcekey}{f3}
+      \field{edition}{2}
+      \field{relatedtype}{translationof}
+      \field{title}{Book}
+      \strng{xref}{f4}
+      \field{year}{1999}
+      \field{dateera}{ce}
+      \field{related}{bd19836ddb62c11c55ab251ccaca5645}
+    \endentry
+    \entry{f3}{book}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \inset{s1}
+      \name{author}{1}{}{%
+        {{hash=a35895592a0999dd2d54d2d7ffbbe52d}{%
+           family={Poe},
+           familyi={P\bibinitperiod},
+           given={Edgar},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{fullhash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{fullhashraw}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{bibnamehash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{authorbibnamehash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{authornamehash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{authorfullhash}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \strng{authorfullhashraw}{a35895592a0999dd2d54d2d7ffbbe52d}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2}
+      \field{relatedtype}{translationof}
+      \field{title}{Book}
+      \strng{xref}{f4}
+      \field{year}{1999}
+      \field{dateera}{ce}
+      \field{related}{bd19836ddb62c11c55ab251ccaca5645}
+    \endentry
+    \entry{f2}{inbook}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \inset{s1}
+      \name{author}{1}{}{%
+        {{hash=be7119af9acc1f59af73547344e82831}{%
+           family={Roe},
+           familyi={R\bibinitperiod},
+           given={Jane},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=97762c59bd53b1e33024b0305edc82c4}{%
+           family={Ed},
+           familyi={E\bibinitperiod},
+           given={Itor},
+           giveni={I\bibinitperiod}}}%
+      }
+      \list{location}{2}{%
+        {Berlin}%
+        {Paris}%
+      }
+      \list{publisher}{2}{%
+        {Pub A}%
+        {Pub B}%
+      }
+      \strng{namehash}{be7119af9acc1f59af73547344e82831}
+      \strng{fullhash}{be7119af9acc1f59af73547344e82831}
+      \strng{fullhashraw}{be7119af9acc1f59af73547344e82831}
+      \strng{bibnamehash}{be7119af9acc1f59af73547344e82831}
+      \strng{authorbibnamehash}{be7119af9acc1f59af73547344e82831}
+      \strng{authornamehash}{be7119af9acc1f59af73547344e82831}
+      \strng{authorfullhash}{be7119af9acc1f59af73547344e82831}
+      \strng{authorfullhashraw}{be7119af9acc1f59af73547344e82831}
+      \strng{editorbibnamehash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editornamehash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editorfullhash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editorfullhashraw}{97762c59bd53b1e33024b0305edc82c4}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Collection Booktitle}
+      \strng{crossref}{f4}
+      \field{title}{Chapter}
+      \field{year}{1998}
+      \field{dateera}{ce}
+      \field{pages}{5\bibrangedash 9}
+      \range{pages}{5}
+    \endentry
+    \entry{3667f6a0c97490758d7dc9659d01ea34}{inbook}{skipbib=true,skipbiblist=true}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=be7119af9acc1f59af73547344e82831}{%
+           family={Roe},
+           familyi={R\bibinitperiod},
+           given={Jane},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{un=0,uniquepart=base,hash=97762c59bd53b1e33024b0305edc82c4}{%
+           family={Ed},
+           familyi={E\bibinitperiod},
+           given={Itor},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{2}{%
+        {Berlin}%
+        {Paris}%
+      }
+      \list{publisher}{2}{%
+        {Pub A}%
+        {Pub B}%
+      }
+      \strng{namehash}{be7119af9acc1f59af73547344e82831}
+      \strng{fullhash}{be7119af9acc1f59af73547344e82831}
+      \strng{fullhashraw}{be7119af9acc1f59af73547344e82831}
+      \strng{bibnamehash}{be7119af9acc1f59af73547344e82831}
+      \strng{authorbibnamehash}{be7119af9acc1f59af73547344e82831}
+      \strng{authornamehash}{be7119af9acc1f59af73547344e82831}
+      \strng{authorfullhash}{be7119af9acc1f59af73547344e82831}
+      \strng{authorfullhashraw}{be7119af9acc1f59af73547344e82831}
+      \strng{editorbibnamehash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editornamehash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editorfullhash}{97762c59bd53b1e33024b0305edc82c4}
+      \strng{editorfullhashraw}{97762c59bd53b1e33024b0305edc82c4}
+      \field{extraname}{1}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{clonesourcekey}{f2}
+      \field{booktitle}{Collection Booktitle}
+      \strng{crossref}{f4}
+      \field{title}{Chapter}
+      \field{year}{1998}
+      \field{dateera}{ce}
+      \field{pages}{5\bibrangedash 9}
+      \range{pages}{5}
+    \endentry
+    \entry{s1}{set}{}{}
+      \set{f2,f3}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{annotation}{A set}
+    \endentry
+    \entry{f1}{article}{skipbiblist=true,useprefix=true}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{2}{%
+        {english}%
+        {german}%
+      }
+      \list{location}{1}{%
+        {  Spaced  location  }%
+      }
+      \list{publisher}{1}{%
+        {Plain Publisher}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{sortinit}{x}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract text}
+      \field{annotation}{generic annotation}
+      \field{day}{3}
+      \field{isbn}{0-201-13447-0}
+      \field{journaltitle}{Journal of Things}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{note}{A note continues}
+      \field{number}{3}
+      \field{pagetotal}{123}
+      \field{relatedstring}{str}
+      \field{relatedtype}{multivolume}
+      \field{subtitle}{Sub \& <title>}
+      \field{title}{A \& B <c> title with é and é}
+      \field{usera}{verbatim? no, literal}
+      \field{volume}{10}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \field{related}{3667f6a0c97490758d7dc9659d01ea34,1779cf3aa50c413afc7e05adb7e1b0de}
+      \field{pages}{1\bibrangedash 10\bibrangessep 15\bibrangedash\bibrangessep 20\bibrangedash}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1000/xyz_1
+      \endverb
+      \verb{eprint}
+      \verb 1234.5678
+      \endverb
+      \verb{urlraw}
+      \verb http://example.org/a%20b?x=e%CC%81
+      \endverb
+      \verb{url}
+      \verb http://example.org/a%20b?x=e%CC%81
+      \endverb
+      \keyw{kw1, kw2}
+      \annotation{field}{title}{default}{}{}{0}{t-ann}
+      \annotation{field}{title}{other}{}{}{0}{other}
+      \annotation{item}{language}{alt}{2}{}{1}{lang2}
+      \annotation{part}{author}{default}{1}{family}{0}{fam}
+    \endentry
+    \entry{bd19836ddb62c11c55ab251ccaca5645}{article}{skipbib=true,skipbiblist=true,skiplab=true,useprefix=false}{}
+      \name{author}{1}{}{%
+        {{hash=bd051a2f7a5f377e3a62581b0e0f8577}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{2}{%
+        {english}%
+        {german}%
+      }
+      \list{location}{1}{%
+        {  Spaced  location  }%
+      }
+      \list{publisher}{1}{%
+        {Plain Publisher}%
+      }
+      \strng{namehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{fullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{bibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorbibnamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authornamehash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhash}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \strng{authorfullhashraw}{bd051a2f7a5f377e3a62581b0e0f8577}
+      \field{sortinit}{x}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{clonesourcekey}{f1}
+      \field{abstract}{Abstract text}
+      \field{annotation}{generic annotation}
+      \field{day}{3}
+      \field{isbn}{0-201-13447-0}
+      \field{journaltitle}{Journal of Things}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{note}{A note continues}
+      \field{number}{3}
+      \field{pagetotal}{123}
+      \field{relatedstring}{str}
+      \field{relatedtype}{multivolume}
+      \field{subtitle}{Sub \& <title>}
+      \field{title}{A \& B <c> title with é and é}
+      \field{usera}{verbatim? no, literal}
+      \field{volume}{10}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \field{related}{3667f6a0c97490758d7dc9659d01ea34,1779cf3aa50c413afc7e05adb7e1b0de}
+      \field{pages}{1\bibrangedash 10\bibrangessep 15\bibrangedash\bibrangessep 20\bibrangedash}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1000/xyz_1
+      \endverb
+      \verb{eprint}
+      \verb 1234.5678
+      \endverb
+      \verb{urlraw}
+      \verb http://example.org/a%20b?x=e%CC%81
+      \endverb
+      \verb{url}
+      \verb http://example.org/a%20b?x=e%CC%81
+      \endverb
+      \keyw{kw1, kw2}
+      \annotation{field}{title}{default}{}{}{0}{t-ann}
+      \annotation{field}{title}{other}{}{}{0}{other}
+      \annotation{item}{language}{alt}{2}{}{1}{lang2}
+      \annotation{part}{author}{default}{1}{family}{0}{fam}
+    \endentry
+  \enddatalist
+  \missing{f1alias}
+\endrefsection
+\endinput
+

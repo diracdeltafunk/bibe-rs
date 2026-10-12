@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\DeclareSourcemap{\maps[datatype=biblatexml]{
+  \map{\step[fieldsource=note, match=\regexp{DROP}, final]\step[entrynull]}
+}}
+\addbibresource[datatype=biblatexml]{test.bltxml}
+\begin{document}
+\cite{m1,m3}
+\printbibliography
+\end{document}

@@ -1,0 +1,8 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\addbibresource[datatype=biblatexml]{test.bltxml}
+\begin{document}
+\cite{c1,c3,c6,missing}
+\printbibliography
+\end{document}

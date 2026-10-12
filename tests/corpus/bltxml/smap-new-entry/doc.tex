@@ -1,0 +1,12 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\DeclareSourcemap{\maps[datatype=biblatexml]{
+  \map{\step[fieldsource=title, match=\regexp{Original}, final]\step[entrynew=newkey, entrynewtype=book]\step[entrytarget=newkey, fieldset=title, fieldvalue={New}]\step[entrytarget=nokey, fieldset=title, fieldvalue={New}]\step[entrytarget=newkey, fieldset={./@entrytype}, fieldvalue={misc}]}
+  \map[foreach={./bltx:usere}]{\step[entrynew={loop:$MAPLOOP}, entrynewtype=misc]}
+}}
+\addbibresource[datatype=biblatexml]{test.bltxml}
+\begin{document}
+\nocite{*}
+\printbibliography
+\end{document}

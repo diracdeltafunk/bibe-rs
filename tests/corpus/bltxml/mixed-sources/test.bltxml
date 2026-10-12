@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="c1" entrytype="inbook">
+    <bltx:title>C1</bltx:title>
+    <bltx:crossref>c2</bltx:crossref>
+    <bltx:ids><bltx:key>c1alias</bltx:key></bltx:ids>
+  </bltx:entry>
+  <bltx:entry id="c2" entrytype="book">
+    <bltx:title>C2</bltx:title>
+    <bltx:booktitle>C2 book</bltx:booktitle>
+    <bltx:date>1999</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="c3" entrytype="misc">
+    <bltx:title>C3 first</bltx:title>
+    <bltx:xdata>c4</bltx:xdata>
+  </bltx:entry>
+  <bltx:entry id="c3" entrytype="misc">
+    <bltx:title>C3 second</bltx:title>
+  </bltx:entry>
+  <bltx:entry id="c4" entrytype="xdata">
+    <bltx:note>From c4</bltx:note>
+  </bltx:entry>
+  <bltx:entry id="c5" entrytype="misc">
+    <bltx:title>C5 not cited</bltx:title>
+  </bltx:entry>
+  <bltx:entry id="c6" entrytype="misc">
+    <bltx:title>C6</bltx:title>
+    <bltx:related><bltx:list><bltx:item type="reprint" ids="c5"/></bltx:list></bltx:related>
+  </bltx:entry>
+</bltx:entries>

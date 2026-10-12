@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\DeclareSourcemap{\maps[datatype=biblatexml]{
+  \map[overwrite]{\step[fieldset={./bltx:names[@type='author']/bltx:name[2]/@gender}, fieldvalue={sm}]}
+}}
+\addbibresource[datatype=biblatexml]{test.bltxml}
+\begin{document}
+\nocite{*}
+\printbibliography
+\end{document}

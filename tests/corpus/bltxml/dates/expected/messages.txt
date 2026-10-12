@@ -1,0 +1,1 @@
+WARN - misc entry 'd25' (test.bltxml): Invalid format 'abc' of date field 'bltx:date' range end - ignoring

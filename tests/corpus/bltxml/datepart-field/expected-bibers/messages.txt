@@ -1,0 +1,1 @@
+WARN - Datamodel: misc entry 'a' (test.bltxml): Field 'year' (fieldtype 'field', format 'default', datatype 'datepart') cannot be given in BibLaTeXML data - ignoring

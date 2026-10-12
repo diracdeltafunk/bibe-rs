@@ -1,0 +1,3 @@
+WARN - I didn't find a database entry for xdata entry 'missingx' in entry 'e3' - ignoring (section 0)
+WARN - book entry 'e3' has XDATA reference from field 'subtitle' that contains no source field (section 0)
+WARN - book entry 'e3' references XDATA entry 'missingx' which does not exist, not resolving (section 0)

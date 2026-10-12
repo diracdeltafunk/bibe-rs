@@ -1,0 +1,5 @@
+WARN - Datamodel: misc entry 'i3' (test.bltxml): Invalid format 'xyz' of date field 'bltx:date' range start - ignoring
+WARN - misc entry 'i1' (test.bltxml): Invalid format 'abc' of date field 'bltx:date' - ignoring
+WARN - misc entry 'i2' (test.bltxml): Invalid format '/2001' of date field 'bltx:date' - ignoring
+WARN - misc entry 'i4' (test.bltxml): Invalid format '-380' of date field 'bltx:date' - ignoring
+WARN - misc entry 'i5' (test.bltxml): Invalid format ' 2001 ' of date field 'bltx:date' - ignoring
