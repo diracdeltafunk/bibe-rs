@@ -223,6 +223,15 @@ impl Encoding {
         self.encode_cb(s, &|_| vec![0u8])
     }
 
+    /// `encode($enc, $s)` (CHECK 0): unmappable characters become the
+    /// encoding's substitution character (`?` for most) and one-way
+    /// fallback mappings are used. biber's bibtex output tests
+    /// `encode($outenc, NFC($s)) =~ /\?/` (Output/bibtex.pm:401).
+    pub fn encode_default(&self, s: &str) -> Vec<u8> {
+        let mut st = LayerState::default();
+        self.encode_chunk(s.as_bytes(), Check::DEFAULT, &mut st).0
+    }
+
     /// `encode($enc, $s, $coderef)`: unmappable characters are replaced by
     /// `cb(code point)` (where the encoding supports a code-reference CHECK).
     pub fn encode_cb(&self, s: &str, cb: &dyn Fn(u32) -> Vec<u8>) -> Vec<u8> {
@@ -456,6 +465,7 @@ fn utf8_encode(buf: &[u8], strict: bool, chk: Check<'_>) -> (Vec<u8>, usize) {
         if nonchar || malformed {
             match chk.cb {
                 Some(cb) => out.extend(cb(c)),
+                None if !chk.perlqq => out.extend_from_slice("\u{FFFD}".as_bytes()),
                 None if n == 1 && malformed => out.extend(format!("\\x{:02X}", buf[i]).bytes()),
                 None => out.extend(format!("\\x{{{c:04X}}}").bytes()),
             }

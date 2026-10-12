@@ -64,6 +64,7 @@ for my $enc (@encs) {
   my $o = find_encoding($enc) or die $enc;
   my %d;
   $d{cb} = sha256_hex(encode($enc, $all, sub { sprintf '<%X>', $_[0] }));
+  { local $SIG{__WARN__} = sub { }; $d{def} = sha256_hex(encode($enc, $all)); }
   my $buf = '';
   {
     local $SIG{__WARN__} = sub { };

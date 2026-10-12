@@ -27,11 +27,12 @@ fn hex(d: impl AsRef<[u8]>) -> String {
     d.as_ref().iter().map(|b| format!("{b:02x}")).collect()
 }
 
-fn digests(name: &str, all: &str) -> (String, String, String) {
+fn digests(name: &str, all: &str) -> (String, String, String, String) {
     let e = find_encoding(name).unwrap_or_else(|| panic!("{name}"));
     let cb = |c: u32| format!("<{c:X}>").into_bytes();
     let cbd = hex(Sha256::digest(e.encode_cb(all, &cb)));
     let layer = hex(Sha256::digest(e.encode_layer(all, true)));
+    let def = hex(Sha256::digest(e.encode_default(all)));
     let mut seqs: Vec<Vec<u8>> = (0..=255u8).map(|b| vec![b]).collect();
     for a in 0..=255u8 {
         seqs.extend((0..=255u8).map(|b| vec![a, b]));
@@ -65,7 +66,7 @@ fn digests(name: &str, all: &str) -> (String, String, String) {
         }
         h.update(line.as_bytes());
     }
-    (cbd, layer, hex(h.finalize()))
+    (cbd, layer, hex(h.finalize()), def)
 }
 
 fn load() -> Value {
@@ -109,8 +110,8 @@ fn encodings_match_perl() {
         {
             continue;
         }
-        let (cb, layer, dec) = digests(name, &all);
-        for (k, got) in [("cb", cb), ("layer", layer), ("dec", dec)] {
+        let (cb, layer, dec, def) = digests(name, &all);
+        for (k, got) in [("cb", cb), ("layer", layer), ("dec", dec), ("def", def)] {
             // No `dec` for the needs_lines encodings (perl hangs reading
             // malformed input; see encode_digests.pl).
             if d[k].is_null() {
