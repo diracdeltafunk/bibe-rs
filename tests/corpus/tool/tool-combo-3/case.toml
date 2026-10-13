@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: --output-safechars --output-indent=2t --wraplines=60 --strip-comments --output-fieldcase=title --output-align"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-safechars", "--output-indent=2t", "--wraplines=60", "--strip-comments", "--output-fieldcase=title", "--output-align", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

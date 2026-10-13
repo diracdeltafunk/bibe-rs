@@ -131,6 +131,31 @@ pub enum Quirk {
     /// (non-name) field, or using an XPath value as a string, stores the
     /// serialised XML of the source node instead of its text.
     BltxmlSmapNodeString,
+    /// BB-047 (`bibtex-winters-typo`): the bibtex writer's year-division
+    /// map has `WinterS` for `winterS`, so that season is lost from dates.
+    BibtexWinterSTypo,
+    /// BB-048 (`bibtex-encoding-question-mark`): with a non-UTF-8 output
+    /// encoding the bibtex writer tests `encode(...) =~ /\?/`, so a literal
+    /// `?` makes it LaTeX-recode the entry and warn.
+    BibtexEncodingQuestionMark,
+    /// (`bibtex-unspecified-dates`; new, see the tool package report): the
+    /// bibtex writer formats the `XX` of ISO 8601-2 unspecified months and
+    /// days with `sprintf('%.2d')`, so `1999-XX` is written as `1999-00`.
+    BibtexUnspecifiedDates,
+    /// (`bibtex-literal-annotations`; new): the bibtex writer drops the
+    /// quotes of literal annotations (`="text"` is written as `=text`).
+    BibtexLiteralAnnotations,
+    /// (`tool-comments-last-file`; new): in tool mode only the `@comment`s
+    /// of the last data source that has any are output.
+    ToolCommentsLastFile,
+    /// (`tool-drops-preambles`; new): tool-mode (and bibtex) output does
+    /// not write the data's `@preamble`s.
+    ToolDropsPreambles,
+    /// (`libxml2-interleave`; a libxml2 2.9 bug, no BB id yet): biber
+    /// validates with libxml2, whose interleave implementation rejects some
+    /// valid documents when an interleave operand is itself an interleave
+    /// (the generated biblatexml schema; `--validate-bltxml`).
+    Libxml2Interleave,
 }
 
 impl Quirk {
@@ -172,6 +197,13 @@ impl Quirk {
         Quirk::BltxmlNamepartInitial,
         Quirk::BltxmlSmapMatchi,
         Quirk::BltxmlSmapNodeString,
+        Quirk::BibtexWinterSTypo,
+        Quirk::BibtexEncodingQuestionMark,
+        Quirk::BibtexUnspecifiedDates,
+        Quirk::BibtexLiteralAnnotations,
+        Quirk::ToolCommentsLastFile,
+        Quirk::ToolDropsPreambles,
+        Quirk::Libxml2Interleave,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -213,6 +245,13 @@ impl Quirk {
             Quirk::BltxmlNamepartInitial => "bltxml-namepart-initial",
             Quirk::BltxmlSmapMatchi => "bltxml-smap-matchi",
             Quirk::BltxmlSmapNodeString => "bltxml-smap-node-string",
+            Quirk::BibtexWinterSTypo => "bibtex-winters-typo",
+            Quirk::BibtexEncodingQuestionMark => "bibtex-encoding-question-mark",
+            Quirk::BibtexUnspecifiedDates => "bibtex-unspecified-dates",
+            Quirk::BibtexLiteralAnnotations => "bibtex-literal-annotations",
+            Quirk::ToolCommentsLastFile => "tool-comments-last-file",
+            Quirk::ToolDropsPreambles => "tool-drops-preambles",
+            Quirk::Libxml2Interleave => "libxml2-interleave",
         }
     }
 

@@ -8,6 +8,7 @@
 
 pub mod bcf;
 pub mod bltxml_schema;
+pub mod bcfhtml;
 pub mod config;
 pub mod datamodel;
 pub mod env;
@@ -19,6 +20,7 @@ pub mod perlish;
 pub mod pipeline;
 pub mod quirks;
 pub mod xmldom;
+pub mod xmlcheck;
 pub mod xmlin;
 pub mod xmlwriter;
 

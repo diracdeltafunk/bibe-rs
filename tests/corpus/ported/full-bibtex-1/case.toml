@@ -3,4 +3,4 @@ source = "vendor/biber/t/full-bibtex.t + t/tdata (traced by tools/port-tests)"
 args = ["--noconf", "--output-format=bibtex", "--output-align", "full-bibtex.bcf"]
 outputs = ["full-bibtex_biber.bib"]
 log = "full-bibtex.blg"
-tags = ["suite:ported", "t:full-bibtex", "deferred:m4"]
+tags = ["suite:ported", "t:full-bibtex"]

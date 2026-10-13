@@ -40,6 +40,7 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-133 | C | Biber.pm:4756 (`get_dependents`) with sourcemap `entry_null` | If a sourcemap creates an entry that ends up in citekeys (via `entry_nocite`, or in any `\nocite{*}` section) and a later step drops that entry with `entry_null`, biber crashes: "Can't call method "get_field" on an undefined value at Biber.pm line 4756". | M2 sourcemap Second trigger (fuzzer): `\cite{Knuth1992q}` where `Knuth1992q` has `related={k9}`, `k9` has `crossref={SmytheJones1992r}`, and that entry has `editor={,,}`. |
 | BB-149 | V | Biber.pm:3387-3414 (`uniqueness` loop) | **Endless loop.** A name with no name parts makes the uniquename/uniquelist iteration cycle forever (no bound on the loop). Minimal repro: `@misc{k,author={xdata=xd1-author}}` with no entry `xd1` (or `xd1` lacking `author`/that position), or `author={family=Doe, given="Ja}`. biber 2.22 was still running when killed after 60 s on a one-entry `.bib`. A second trigger (XDATA names with per-entry `maxnames=1`) minimises to 3 entries. | M3 fuzzer; verified |
 | BB-150 | C | Biber.pm:3603 (`create_uniquename_info`) | Crash with `uniquename=full`: `@proceedings{100,editor={prefix=,uniquename=false}}`, `@inproceedings{k2,shortauthor={á},crossref={100}}`, `\cite{k2}`. | M3 fuzzer (O3) |
+| BB-159 | C | Output/bibtex.pm:145; bin/biber:294 | An invalid `output_fieldcase` in biber.conf (`<output_fieldcase>bogus</output_fieldcase>`) crashes ("Can't use an undefined value as a subroutine reference", exit 25): only the command line validates it. Extends BB-008. bibers: ERROR, exit 2 (DC-007). | M4 tool |
 
 ## 2. Data loss / destructive behaviour
 
@@ -48,6 +49,8 @@ Bugs, doc/code mismatches and latent hazards found in **biber 2.22** (HEAD `02f3
 | BB-012 | C | Biber.pm:4631-4634 | Tool mode with biblatexml input whose name lacks a known extension (e.g. `data.xml`): the generated `.rng` schema path equals the input path, so the **user's data file is overwritten** before it is read. | 02-B6a |
 | BB-013 | C | bin/biber:356-364 | Tool mode on an input file with no extension: the output name equals the input name, so the **input .bib is overwritten**. | 02-B6b |
 | BB-014 | C | bin/biber:415, Output/base.pm:57-71 | The `.bbl` is opened and truncated before processing, so any error (e.g. a missing .bib) leaves a 0-byte `.bbl` and destroys the previous good one. No temp-file+rename. Possibly intentional, but undocumented. | 05-B16 |
+| BB-155 | C | Input/file/bibtex.pm:338-342 | Tool mode with several data files: `$Biber::MASTER->{comments}` is replaced per file, so only the last file's `@comment`s are written. Repro: `biber --tool a.bib b.bib`, both with `@comment`s. Quirk `tool-comments-last-file`. | M4 tool |
+| BB-156 | C | Output/bibtex.pm | Tool-mode and `--output-format=bibtex` output never write the data's `@preamble`s, so a round trip loses them. Quirk `tool-drops-preambles`. | M4 tool |
 
 ## 3. Wrong output (silent)
 
@@ -128,6 +131,9 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-058 | R | DataModel.pm:932-950 | Range constraints with `rangemin`/`rangemax` of `0`, and values of `0`, are skipped. | 02-B22 |
 | BB-059 | R | Utils.pm:683 | `normalise_string_bblxml("0")` returns `''`. | 05-B20 |
 | BB-137 | C | Entry.pm `has_keyword`; Biber.pm:3155 | `has_keyword` treats a keyword `0` as not found, and BB-018's `first {…}` is false when the first set key is `0`. | M2 sort |
+| BB-153 | C | Output/bibtex.pm:730,736 (`construct_datetime`) | ISO 8601-2 unspecified dates are corrupted: `date={1999-XX}` is written as `DATE = {1999-00}` (`1999-01-XX` → `1999-01-00`, `1999-XX-XX` → `1999-00-00`), because `'XX'` goes through `sprintf('%.2d')` (with Perl "isn't numeric" warnings). Quirk `bibtex-unspecified-dates`. | M4 tool |
+| BB-154 | C | Output/bibtex.pm (`construct_annotation`) | Literal annotations lose their quotes on output: `author+an={1="Lit"}` is written as `{1=Lit}`, which reads back as a non-literal annotation. Quirk `bibtex-literal-annotations`. | M4 tool |
+| BB-158 | C | Output/bibtex.pm (`%RSTRINGS`); Text::BibTeX | A `@string` whose name has a decomposable character (`@string{GÖTTINGEN={…}}`) loses its text: the name from `fieldlist` is NFD, `$entry->get`/`macro_text` with it return undef, so `--output-all-macrodefs` writes `@STRING{GÖTTINGEN = ""}` and the macro is not recognised in fields. Reproduced by bibers as Text::BibTeX semantics. | M4 tool |
 
 ## 4. Nondeterministic output (Perl hash order)
 
@@ -143,6 +149,7 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-113 | C | Utils.pm:1781-1784 (`maploopreplace`: `suniqid`) | `$MAPUNIQ` is generated with `Data::Uniqid::suniqid`, i.e. from the wall-clock time, so a sourcemap that keys new entries with it (`\step[entrynew=\regexp{$MAPUNIQ}]`, as biblatex's own example `95-customlists.tex` does) gives a different `.bbl` on **every** run: the entry keys change, and so does the order of entries whose sort keys tie. Documented as "random", but it defeats reproducible builds and latexmk's "did the .bbl change" check (each run looks like a change). Repro: run `biber --noconf 95-customlists.bcf` twice on the example's `.bcf` (6 runs gave 6 md5s). | corpus generation |
 | BB-151 | C | Biber.pm `resolve_xdata` / granular XDATA | Beyond BB-112's message order, the *output* depends on Perl hash order: with `@patent{a,xdata={xd1, xd1},location={xdata=xd1-location-2 and Berlin}}`, `@article{b,location={xdata=xd1-location-1 and Berlin}}`, `@xdata{xd1,location={Paris and others}}`, entry `a` gets `Paris` or `others` from run to run. | M3 fuzzer (O3) |
 | BB-152 | C | Output/base.pm (PerlIO `:encoding` layer) | With a non-UTF-8 `--output-encoding`, Perl's `:encoding` layer encodes in 1024-byte chunks: a multi-byte character straddling a chunk boundary is output as `\x{fffd}` unless the target encoding has a character starting with the cut-off bytes, in which case the remainder is carried over and later boundaries shift. Output therefore depends on where characters fall in the file. Reproduced by bibers behind `perlio-encoding-split`; cases `fuzz/perlio-encoding-split-{ascii,latin1}`. Arguably a Perl (PerlIO::encoding) bug. | M3 fuzzer |
+| BB-162 | C | Output/bibtex.pm (`getblxentryoptions` uses `keys`) | The options in the `OPTIONS` field of tool/bibtex output are written in Perl hash order, so the field changes between identical runs. bibers sorts them by name (DC-054). | M4 tool |
 
 
 ## 5. CLI, config and logging issues
@@ -164,6 +171,10 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-078 | C | bibtex.pm:1061-1066 | The misleading "not an integer" warning for `month={February}` is followed by a successful conversion to 2. | 01-B22 |
 | BB-079 | C | UCollate.pm:61-70 | Locale-mandated collation options (Thai `variable=shifted`, Danish upper-first) are overridden with only an INFO message; the manual says biber warns. | 04-B13 |
 | BB-080 | C | Constants.pm:166-182 | The `isbn` data constraint only checks that `Business::ISBN->new` succeeds, so invalid checksums pass. A separate warning says to "run with --validate_datamodel for details", which then gives none. | 02-B21 |
+| BB-157 | C | Biber.pm (`normalise_utf8` only in `parse_ctrlfile`) | In tool mode the encoding name is not normalised, so `--tool -E utf8` (Perl's lax alias) makes every entry containing `?` hit the "cannot be encoded in 'utf8'" path (BB-048) and full LaTeX recoding. Reproduced by bibers (corpus `tool/data-utf8-alias`). | M4 tool |
+| BB-160 | C | bin/biber:356-364 | Tool output naming runs `s/\.[^.]+$/_bibertool.bib/` on the whole path: an extension-less input in a dotted directory (`my.dir/refs`) gives `my_bibertool.bib` in the current directory. Variant of BB-013; bibers writes `my.dir/refs_bibertool.bib` (DC-011). | M4 tool |
+| BB-163 | C | data/schemata/bcf.rnc | `bcf.rng` lacks the `map_entry_nocite` attribute that biber implements (Input/file/bibtex.pm:475) and biblatex 3.21 writes for `\step[entrynocite]`, so `--validate-control` rejects valid control files (chicago-notes, sbl styles) with a fatal ERROR, exit 2. Corpus `xml/validate-control-chicago-notes`. | M4 xml |
+| BB-164 | C | DataModel.pm `generate_bltxml_schema` | The generated biblatexml schema rejects biber's own `t/tdata/biblatexml.bltxml` under `--validate-bltxml`: no `bltx:key` content for `bltx:ids`, no `id` attribute on `bltx:name`, no `field`/`name`/`literal` attributes on `bltx:annotation`. biber reads the file fine, but validation fails with ERROR, exit 2. | M4 xml |
 
 ## 6. Latent bugs, dead code, and doc/schema drift (lower priority; need reproducers)
 
@@ -203,6 +214,7 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 | BB-131 | C | Constants.pm ISMN constraint / Business::ISMN | The ISMN data-model check never fails: `is_valid` returns -1/-3 for invalid input, both Perl-true. Also, Business::ISMN ranges with an undef upper bound never match. | M1 perl-compat |
 | BB-132 | C (library) | Text::Roman `isroman` (used by `rangelen`) | `isroman(" ")` and `isroman("X I")` are true (its class `[@RSN]` accepts spaces), but `roman2int` returns undef for them, so a range like `X I-XV` likely yields an undef length. Effect on biber output suspected, not yet shown. | M1 perl-compat |
 | BB-134 | C | bibtex.pm `map_foreach` | `map_foreach="<field>"` on an entry lacking that field loops over the literal field *name* as if it were the value; and a `$MAPLOOP` value of `"0"` is never substituted (Perl truthiness). Both reproduced by bibers. | M2 sourcemap |
+| BB-161 | R | Output/bibtex.pm `output()` | Dies (`->[0]->get_keys` on undef) if the global `sortingtemplatename` differs from that of the section-99999 list. bibers falls back to the section's first entry list. | M4 tool |
 
 ## 7. Performance bugs (output-neutral; worth reporting with numbers)
 
@@ -214,5 +226,6 @@ Perl treats the string `"0"` as false. Many `if (my $x = …)` / `||` / `return 
 
 ## Not bugs, but worth mentioning upstream
 
+- **libxml2 (2.9.x) RELAX NG interleave bug, which biber inherits:** when an operand of an `interleave` is itself an `interleave`, libxml2 rejects some valid documents. Example: `interleave(interleave(a?,b?), interleave(c?,d?))` rejects `<r><a/><c/><b/><d/></r>` but accepts `acdb`. In biber this only affects `--validate-bltxml` against the generated biblatexml schema. bibers reproduces it (quirk `libxml2-interleave`). Report to libxml2, not biber.
 - btparse rejects `@misc{key}` (no fields) and brace-less `@comment text`, both of which BibTeX 0.99 accepts (01-B21).
 - `\true{more<list>}` handling `pop`s `others` from live entry data during output (05-B21). Harmless today, but fragile.

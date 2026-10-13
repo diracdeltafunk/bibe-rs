@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/xdata.bib"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "xdata.bib"]
+outputs = ["xdata_bibertool.bib"]
+log = "xdata.bib.blg"
+tags = ["suite:tool", "feature:tool"]

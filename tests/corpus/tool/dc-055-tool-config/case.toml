@@ -1,0 +1,6 @@
+description = "--tool-config: biber prints the path of biber-tool.conf, bibers its built-in copy (DC-055)"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool-config"]
+outputs = ["@stdout"]
+tags = ["suite:tool", "feature:tool"]
+allow = ["DC-055"]

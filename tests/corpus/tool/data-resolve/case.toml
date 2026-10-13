@@ -1,0 +1,6 @@
+description = "tool mode over a synthetic .bib: --output-resolve"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-resolve", "tooldata.bib"]
+outputs = ["tooldata_bibertool.bib"]
+log = "tooldata.bib.blg"
+tags = ["suite:tool", "feature:tool"]

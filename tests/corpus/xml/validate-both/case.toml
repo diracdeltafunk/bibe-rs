@@ -1,0 +1,5 @@
+description = "--validate-config and --validate-control together"
+source = "vendor/biber/t/tdata/general.bcf + biber-test.conf"
+args = ["--configfile=biber-test.conf", "--validate-config", "--validate-control", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:xml", "feature:validate-config", "feature:validate-control"]

@@ -1,0 +1,5 @@
+description = "--validate-config: a non-integer mincrossrefs"
+source = "vendor/biber/t/tdata/general.bcf + biber-test.conf"
+args = ["--configfile=biber-test.conf", "--validate-config", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:xml", "feature:validate-config"]

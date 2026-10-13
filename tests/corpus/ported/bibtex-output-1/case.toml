@@ -3,4 +3,4 @@ source = "vendor/biber/t/bibtex-output.t + t/tdata (traced by tools/port-tests)"
 args = ["--noconf", "--output-resolve-xdata", "--output-resolve-crossrefs", "--output-format=bibtex", "--output-align", "--sortlocale=en_GB.UTF-8", "bibtex-output.bcf"]
 outputs = ["bibtex-output_biber.bib"]
 log = "bibtex-output.blg"
-tags = ["suite:ported", "t:bibtex-output", "deferred:m4"]
+tags = ["suite:ported", "t:bibtex-output"]

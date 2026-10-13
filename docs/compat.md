@@ -26,7 +26,7 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | DC-004 | A regex metacharacter in `presort` (e.g. `a(b`) → fatal | `presort` is treated as a literal string | BB-004 | implemented (sort) |
 | DC-005 | biber.conf `<noinit>`/`<nolabel>` in the documented form → crash; `<sortinclusion>` alone → crash | Parsed as documented | BB-005, BB-006 | implemented (config) |
 | DC-006 | A section with citations but no data sources (while other sections have some) → crash | Warns that keys were not found, as for any missing key | BB-007 | implemented (fetch) |
-| DC-007 | `--output-fieldcase=Upper` (non-lowercase value) → crash | Value accepted case-insensitively | BB-008 | planned |
+| DC-007 | `--output-fieldcase=Upper` (non-lowercase value) → crash; an invalid `output_fieldcase` in biber.conf → crash | Value accepted case-insensitively; an invalid config-file value gives an ERROR, exit 2 | BB-008, BB-159 | implemented (tool) |
 | DC-008 | `-c ignoreChar=…` and other construction-only collation options → crash | `entry` is applied when the collator is constructed; the other construction-only options (`ignoreChar`, `undefChar`, `suppress`, `rewrite`, …) give an ERROR naming the option, exit 2 | BB-010 | implemented (sort; partial) |
 | DC-009 | Packaged binary dies for ja/ko/zh sort locales | Supported | BB-011 | implemented (ucollate; identical to the source-built biber) |
 | DC-024 | `-c level=5` (out-of-range collation level) crashes with out-of-memory, leaving an empty `.bbl` | ERROR naming the invalid option value, exit 2 | BB-120 | implemented (ucollate) |
@@ -39,7 +39,7 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | Id | biber behaviour | bibers behaviour | Bug | Status |
 |---|---|---|---|---|
 | DC-010 | Tool mode with biblatexml input lacking a known extension overwrites the input file with the generated `.rng` schema | Schema file name always differs from the input | BB-012 | planned (M4) |
-| DC-011 | Tool mode on an input file with no extension overwrites the input with the output | Output named `<input>_bibertool.bib` | BB-013 | planned (M4) |
+| DC-011 | Tool mode on an input file with no extension overwrites the input with the output; with a dotted directory (`my.dir/refs`) the output lands in the current directory as `my_bibertool.bib` | Output named `<input>_bibertool.bib` next to the input | BB-013, BB-160 | implemented (tool) |
 | DC-012 | The `.bbl` is truncated before processing, so any error leaves a 0-byte `.bbl` | *Undecided:* keep biber's behaviour if latexmk/biblatex rely on it (an empty `.bbl` forces a rerun); otherwise write to a temp file and rename on success. Decide in M2 with the latexmk smoke test. | BB-014 | open |
 
 ### 1c. Nondeterministic output
@@ -59,6 +59,7 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-048 | When a name list is used as `labeltitle` (e.g. chicago's per-type labeltitlespec), biber's extratitle/extratitleyear/uniquetitle/uniquework keys contain the stringified object address `Biber::Entry::Names=HASH(0x…)` | A fixed fake address per name list: same identity semantics (equal for shared lists, distinct otherwise), deterministic | BB-146 | implemented (entries) |
 | DC-053 | Output for granular XDATA references when an entry lists the same XDATA key twice depends on Perl hash order in biber | One fixed order (bibers' deterministic resolution order); equals one of biber's possible outputs | BB-151 | implemented (resolve) |
 | DC-018 | `$MAPUNIQ` values in sourcemaps (time-based in biber, so the `.bbl` differs on every run) | Deterministic values: the n-th `$MAPUNIQ` of a run is `base62(10^16 + n)` in `suniqid`'s alphabet (`0-9a-zA-Z`, nine characters), so keys are unique within a run and identical across runs. | BB-113 | implemented (sourcemap) |
+| DC-054 | The options in the `OPTIONS` field of tool/bibtex output are in Perl hash order | Sorted by option name | BB-162 | implemented (tool) |
 
 ### 1d. Unavoidable representation differences
 
@@ -70,8 +71,8 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 
 | Id | biber behaviour | bibers behaviour | Bug | Status |
 |---|---|---|---|---|
-| DC-025 | Non-tool `--output-format=bibtex` names its output by stripping from the first `.` in the *whole path* (`./t1` → `_biber.bib`; `sub.dir/t1` → `sub_biber.bib`) | `<bcf-stem>_biber.bib` next to the `.bcf` (or in `--output-directory`) | BB-068 | implemented (output itself deferred, DC-030) |
-| DC-026 | `-O -` leaves an empty file named `-` (and with `--output-directory` writes `<dir>/-` instead of stdout) | Writes to stdout; no stray file | BB-069 | implemented (CLI/output) |
+| DC-025 | Non-tool `--output-format=bibtex` names its output by stripping from the first `.` in the *whole path* (`./t1` → `_biber.bib`; `sub.dir/t1` → `sub_biber.bib`) | `<bcf-stem>_biber.bib` next to the `.bcf` (or in `--output-directory`) | BB-068 | implemented |
+| DC-026 | `-O -` leaves an empty file named `-` (and with `--output-directory` writes `<dir>/-` instead of stdout) | Writes to stdout; no stray file | BB-069 | implemented (CLI/output; also tool and bibtex output) |
 | DC-027 | With `--nodieonerror`, a missing control file cascades into a libxml crash | Stops after the "Cannot find control file" error, exit 2 | BB-071 | implemented |
 | DC-028 | `--fix-quirks` doesn't exist | Accepted only when spelt in full, so it never makes biber's abbreviations of other options ambiguous | — | implemented |
 
@@ -111,6 +112,13 @@ These are **not** differences by default: bibers reproduces biber's output. Each
 | `dieondatamodel-no-exit` | `--dieondatamodel` logs errors but never stops | Stops at the first data model error | BB-067 | implemented |
 | `clone-endyeardivision` | Related-entry clones lose `endyeardivision` (`clone` lists `yeardivision` twice) | Copied | BB-093 | implemented |
 | `perlio-encoding-split` | Non-UTF-8 `--output-encoding`: multi-byte characters straddling 1024-byte chunk boundaries become `\x{fffd}` (or shift later boundaries) | Each character encoded whole | BB-152 | implemented |
+| `bibtex-winters-typo` | Tool/bibtex output of `date={2020-32}` loses the season (`'WinterS'` typo) | Season written | BB-047 | implemented |
+| `bibtex-encoding-question-mark` | With a non-UTF-8 output encoding, any literal `?` triggers a "cannot be encoded" warning and full-entry LaTeX recoding | Only unencodable characters do | BB-048 | implemented |
+| `bibtex-unspecified-dates` | `date={1999-XX}` is written as `1999-00` | Written as `1999-XX` | BB-153 | implemented |
+| `bibtex-literal-annotations` | `author+an={1="Lit"}` is written as `{1=Lit}` | Quotes kept | BB-154 | implemented |
+| `tool-comments-last-file` | Tool mode with several data files writes only the last file's `@comment`s | All files' comments, in order | BB-155 | implemented |
+| `tool-drops-preambles` | Tool/bibtex output drops `@preamble`s | Preambles written | BB-156 | implemented |
+| `libxml2-interleave` | `--validate-bltxml` rejects some valid documents whose interleave operands are themselves interleaves (libxml2 2.9 bug) | Validated per the RELAX NG spec | libxml2 (see biber-bugs.md, "Not bugs") | implemented |
 | *(more to be added as porting proceeds: every reproduced bug gets a row)* | | | | |
 
 Some silent biber behaviours are judged to be design decisions rather than bugs and are reproduced with no switch. Examples: `\textdollar` decoding to a raw `$` (BB-029, pinned by biber's own tests), and the btparse name-splitting rules. They are listed in biber-bugs.md but not here.
@@ -131,10 +139,9 @@ Until implemented, bibers exits with a clear "not yet supported" ERROR (exit 2) 
 
 | Id | Feature | Status |
 |---|---|---|
-| DC-030 | Tool mode (`--tool`), bibtex output (`--output-format=bibtex`) and its `--output-*` formatting options | deferred |
 | DC-031 | biblatexml input and output; bltxml schema generation | deferred |
 | DC-032 | Remote (http/https/ftp) data sources | deferred |
-| DC-033 | RNG validation (`--validate-control`, `--validate-config`, `--validate-bltxml`) | deferred |
+| DC-033 | `--validate-bltxml` (needs DC-031; `--validate-control` and `--validate-config` are implemented) | deferred |
 | DC-034 | Multi-byte `--output-encoding`s other than UTF-8 (single-byte encodings and `--output-safechars` are supported) | deferred |
 | DC-045 | `--recodedata` (a user recode data file for `--output-safechars`/decoding) is not honoured yet: the built-in `recode_data.xml` is used | deferred |
 
@@ -150,6 +157,9 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 | DC-043 | `INFO` lines specific to biber internals (PAR cache, Perl modules, …) | Omitted or replaced | planned |
 | DC-044 | `--debug`/`--trace` output (Perl data dumps) | Different content. Also, `--debug` does **not** stop btparse errors being fatal (BB-075). | planned |
 | DC-046 | Error text for undecodable bytes in a data file (Perl's `Encode` message, e.g. `utf8 "\xA6" does not map to Unicode`) | A similar message naming the file, encoding and byte; not byte-identical | implemented (fetch) |
+| DC-055 | `--tool-config` prints the path of the installed biber-tool.conf | Prints the built-in biber-tool.conf itself, exit 0 (bibers has no data directory) | implemented |
+| DC-056 | Validation messages name the installed schema (`…/Biber/bcf.rng`, a PAR temp path) | Name the built-in one, `(built-in)/bcf.rng` / `(built-in)/config.rng` | implemented |
+| DC-057 | On a validation failure, `--debug` dumps libxml2's error object as a Perl structure | One DEBUG line per error in xmllint's format (`file:line: element X: Relax-NG validity error : …`) with bibers' own message texts; the INFO/ERROR lines and exit codes are biber's | implemented |
 
 ## 6. Extensions (things bibers adds)
 

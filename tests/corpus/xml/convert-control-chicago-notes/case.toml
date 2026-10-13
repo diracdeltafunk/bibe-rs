@@ -1,0 +1,6 @@
+description = "--convert-control on a large real .bcf (contributed style chicago-notes: sourcemaps, inheritance)"
+source = "tests/corpus/styles/chicago-notes (gen_styles.py)"
+args = ["--noconf", "--convert-control", "chicago-notes.bcf"]
+outputs = ["chicago-notes.bbl", "chicago-notes.bcf.html"]
+shared = ["biblatex-examples.bib"]
+tags = ["suite:xml", "feature:convert-control"]

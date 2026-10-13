@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: --output-safechars with the full set"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--output-safechars", "--output-safecharsset=full", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

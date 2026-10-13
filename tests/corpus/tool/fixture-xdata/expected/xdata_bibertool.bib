@@ -1,0 +1,142 @@
+@XDATA{macmillan:pub,
+  PUBLISHER = {Macmillan},
+  IDS = {macmillan:pubALIAS},
+}
+
+@XDATA{macmillan:loc,
+  LOCATION = {New York and London},
+  NOTE = {A Note},
+}
+
+@XDATA{macmillan,
+  IDS = {macmillanalias},
+}
+
+@BOOK{xd1,
+  AUTHOR = {Ellington, Edward},
+  DATE = {2007},
+}
+
+@BOOK{xd2,
+  AUTHOR = {Pillington, Peter},
+  PUBLISHER = {Routledge},
+  DATE = {2003},
+}
+
+@BOOK{xd3,
+  AUTHOR = {Ellington, Edward},
+  DATE = {1923},
+}
+
+@XDATA{loop:1,
+  NOTE = {Note},
+}
+
+@XDATA{loop:2,
+}
+
+@XDATA{loop:3,
+}
+
+@XDATA{loop,
+}
+
+@BOOK{gxd1,
+  AUTHOR = {Smith, Simon and xdata=gxd2-author-1},
+  EDITOR = {xdata=gxd2-editor-2},
+  NAMEA = {xdata=lxd1-author-1},
+  TRANSLATOR = {xdata=gxd2-author-3},
+  LISTA = {xdata=gxd3-location-5},
+  LOCATION = {xdata=gxd3-location-1 and B},
+  ORGANIZATION = {xdata=gxd2-author-3},
+  PUBLISHER = {xdata=gxd2},
+  ADDENDUM = {xdata=missing},
+  NOTE = {xdata=gxd2-note},
+  TITLE = {xdata=gxd4-title},
+}
+
+@BOOK{gxd1g,
+  AUTHOR = {Smith, Simon and xdata=gxd2-author},
+  EDITOR = {xdata=gxd2-editor-2},
+  NAMEA = {xdata=lxd1-author-1},
+  TRANSLATOR = {xdata=gxd2-author-3},
+  LISTA = {xdata=gxd3-location-5},
+  LOCATION = {xdata=gxd3-location and B},
+  ORGANIZATION = {xdata=gxd2-author-3},
+  PUBLISHER = {xdata=gxd2},
+  ADDENDUM = {xdata=missing},
+  NOTE = {xdata=gxd2-note},
+  TITLE = {xdata=gxd4-title},
+}
+
+@XDATA{gxd2,
+  AUTHOR = {Bloom, Brian and Anderson, Arthur},
+  EDITOR = {Wool, William and xdata=gxd4-editor-1},
+}
+
+@XDATA{gxd3,
+  LOCATION = {A and C},
+}
+
+@XDATA{gxd4,
+  EDITOR = {Frill, Frank},
+  TITLE = {Some title},
+}
+
+@BOOK{lxd1,
+  AUTHOR = {Smith, Simon and xdata=lxd1:loop-author-1},
+  EDITOR = {xdata=lxd3:loop-editor-1},
+}
+
+@XDATA{lxd1:loop,
+  AUTHOR = {xdata=lxd2:loop-author-1},
+}
+
+@XDATA{lxd2:loop,
+  AUTHOR = {xdata=lxd1:loop-author-1},
+}
+
+@XDATA{lxd3:loop,
+  EDITOR = {xdata=lxd4:loop-editor-1},
+}
+
+@XDATA{lxd4:loop,
+  EDITOR = {xdata=lxd4:loop-editor-1},
+}
+
+@XDATA{notes,
+  NOTE = {A note},
+  NOTE+an:default = {=bignote},
+}
+
+@XDATA{auths,
+  EDITOR = {Doe, John and Doe, Jane and Bee, May},
+  EDITOR+an:default = {1=bigishauthor;3=bigauthor},
+}
+
+@XDATA{nloc,
+  LOCATION = {xdata=loc-location-2},
+}
+
+@XDATA{loc,
+  INSTITUTION = {inst1 and inst2},
+  INSTITUTION+an:default = {2=biginst},
+  LOCATION = {xloc1 and xloc2},
+  LOCATION+an:default = {2=bigloc},
+}
+
+@XDATA{pub,
+  PUBLISHER = {MacMillan},
+  PUBLISHER+an:default = {1=bigpublisher},
+}
+
+@BOOK{xdann1,
+  AUTHOR = {Smith, Arthur and xdata=auths-editor-3 and xdata=auths-editor-1 and Blogs, Bill},
+  AUTHOR+an:default = {1=biggerauthor},
+  EDITOR = {Little, Raymond and xdata=auths-editor and Roth, Gerald},
+  INSTITUTION = {xdata=loc-institution and inst3},
+  LOCATION = {loca and xdata=nloc-location-1 and xdata=loc-location-2},
+  NOTE = {xdata=notes-note},
+  TITLE = {Very Long Title with XDATA},
+}
+

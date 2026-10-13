@@ -1,0 +1,134 @@
+@STRING{JNL = "Journal of Things"}
+@STRING{LOC = "Berlin"}
+@STRING{PUB = "Publisher Name"}
+@STRING{UNUSED = "Never used"}
+
+@BOOK{season1,
+  AUTHOR = {family:Doe, given:John},
+  TITLE = {Spring book},
+  DATE = {2020-21},
+  PUBLISHER = PUB,
+  YEARDIVISION = {spring},
+}
+
+@BOOK{season2,
+  AUTHOR = {family:Doe, given:John AND
+            family:Neumann, given:John,
+            prefix:von, suffix:Jr.},
+  TITLE = {Southern winter?},
+  DATE = {2020},
+  LOCATION = LOC,
+  YEARDIVISION = {winterS},
+}
+
+@BOOK{unspec1,
+  AUTHOR = {family:Roe, given:Richard},
+  TITLE = {Decade},
+  DATE = {199X},
+}
+
+@BOOK{unspec2,
+  EDITOR = {family:Barnes and Noble},
+  TITLE = {Century},
+  DATE = {19XX},
+}
+
+@BOOK{unspec3,
+  TITLE = {Month unspecified},
+  DATE = {1999-00},
+}
+
+@BOOK{unspec4,
+  TITLE = {Day unspecified},
+  DATE = {1999-01-00},
+}
+
+@BOOK{unspec5,
+  TITLE = {Day in year},
+  DATE = {1999-00-00},
+}
+
+@BOOK{midnight,
+  TITLE = {Midnight},
+  DATE = {2020-01-01},
+  EVENTDATE = {2020-01-01T10:20:30+02:00},
+}
+
+@BOOK{year0,
+  TITLE = {Year zero},
+}
+
+@BOOK{circa,
+  TITLE = {Circa},
+  DATE = {1850~/1860?},
+  ORIGDATE = {1700%},
+}
+
+@BOOK{era,
+  TITLE = {BCE},
+  DATE = {-44-03-15},
+}
+
+@BOOK{open,
+  TITLE = {Open range},
+  DATE = {1990/},
+  PAGES = {10--},
+}
+
+@BOOK{legacy,
+  TITLE = {Legacy},
+  DATE = {1995-03},
+  PAGES = {1--10,20--30},
+}
+
+@BOOK{legacy2,
+  TITLE = {Legacy numeric month},
+  DATE = {1996-11},
+}
+
+@BOOK{legacyday,
+  TITLE = {Legacy with day},
+  DATE = {1995-03-04},
+}
+
+@ARTICLE{ann,
+  AUTHOR = {family:Alpha, given:A. AND
+            family:Beta, given:B. AND others},
+  AUTHOR+an:default =
+                       {1=corresponding;2:family=
+                       Lit},
+  TITLE = {Annotated},
+  JOURNALTITLE = JNL,
+  KEYWORDS = {a,b,c},
+  TITLE+an:alt = {=alternative},
+  URL = {http://example.org/a?b=c},
+}
+
+@ONLINE{verb,
+  TITLE = {Ünïcödé “quotes” – dash ß},
+  NOTE = {x},
+  URL = {http://example.org/caf\'e},
+  URLDATE = {2020-05-06},
+}
+
+@INPROCEEDINGS{opts,
+  AUTHOR = {family:Ignored, given:Dup},
+  TITLE = {Options and a very long title that
+           will need to be wrapped when the
+           output is wrapped at forty columns},
+  BOOKTITLE = {Proceedings},
+  CROSSREF = {proc},
+  DATE = {2001-01},
+  OPTIONS = {skipbib=1},
+}
+
+@PROCEEDINGS{proc,
+  EDITOR = {family:Epsilon, given:E.},
+  TITLE = {The Proceedings},
+  DATE = {2001},
+  PUBLISHER = PUB,
+}
+
+@COMMENT{A plain comment}
+@COMMENT{jabref-meta: databaseType:biblatex;
+}

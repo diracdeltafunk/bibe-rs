@@ -56,9 +56,9 @@ fn prelude_matches_biber() {
                         msgs.push(format!("version: {code} {stdout:?}"));
                     }
                 } else if is_toolconfig {
-                    // DC-030: tool mode deferred.
-                    if *code != 2 {
-                        msgs.push("tool-config should fail".into());
+                    // DC-055: the built-in biber-tool.conf, not its path.
+                    if *code != 0 || !stdout.starts_with("<?xml") {
+                        msgs.push(format!("tool-config: {code}"));
                     }
                 } else {
                     if Some(code.to_string().as_str()) != want_exit {

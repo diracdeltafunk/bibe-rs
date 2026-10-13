@@ -94,12 +94,18 @@ impl Runner {
             }
         };
         let elapsed = start.elapsed();
-        let stdout = String::from_utf8_lossy(&out_t.join().unwrap_or_default()).into_owned();
+        let stdout_bytes = out_t.join().unwrap_or_default();
+        let stdout = String::from_utf8_lossy(&stdout_bytes).into_owned();
         let stderr = String::from_utf8_lossy(&err_t.join().unwrap_or_default()).into_owned();
 
         let mut outputs = BTreeMap::new();
         for o in &case.spec.outputs {
-            outputs.insert(o.clone(), std::fs::read(work.join(o)).ok());
+            let data = if o == crate::case::STDOUT_OUTPUT {
+                Some(stdout_bytes.clone())
+            } else {
+                std::fs::read(work.join(o)).ok()
+            };
+            outputs.insert(o.clone(), data);
         }
         let blg = std::fs::read(work.join(case.log_file()))
             .map(|b| String::from_utf8_lossy(&b).into_owned())

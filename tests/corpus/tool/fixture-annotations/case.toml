@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/annotations.bib"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "annotations.bib"]
+outputs = ["annotations_bibertool.bib"]
+log = "annotations.bib.blg"
+tags = ["suite:tool", "feature:tool"]

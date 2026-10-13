@@ -120,6 +120,10 @@ pub fn conf_force_array(n: &str) -> bool {
 #[derive(Debug, Clone)]
 pub struct ConfError(pub String);
 
+/// biber's default tool-mode config file (`data/biber-tool.conf` of biber
+/// 2.22), built in: bibers has no data directory (see `--tool-config`).
+pub const BIBER_TOOL_CONF: &str = include_str!("../../data/biber-tool.conf");
+
 /// Read and parse a config file into its `XMLin` tree.
 pub fn read_conf(env: &Env, path: &str) -> Result<XHash, ConfError> {
     let bytes = std::fs::read(env.resolve(path))
@@ -129,7 +133,12 @@ pub fn read_conf(env: &Env, path: &str) -> Result<XHash, ConfError> {
             "Failed to read biber config file '{path}'\n file is not valid UTF-8"
         ))
     })?;
-    let buf = nfd(&text);
+    parse_conf(&text, path)
+}
+
+/// Parse config file text (`path` names it in errors).
+pub fn parse_conf(text: &str, path: &str) -> Result<XHash, ConfError> {
+    let buf = nfd(text);
     match xmlin(&buf, conf_force_array) {
         Ok(XVal::Hash(h)) => Ok(h),
         Ok(_) => Ok(XHash::default()),

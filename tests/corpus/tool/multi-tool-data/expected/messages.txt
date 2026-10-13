@@ -1,0 +1,13 @@
+WARN - BibTeX subsystem: substring 2, warning: empty substring
+WARN - Field 'lista' in book entry 'gxd1' references field 'location' position 5 in entry 'gxd3' and this position does not exist, not resolving (section 99999)
+WARN - Field 'note' in book entry 'gxd1' references XDATA field 'note' in entry 'gxd2' and this field does not exist, not resolving (section 99999)
+WARN - Field 'organization' in book entry 'gxd1' which xdata references field 'author' in entry 'gxd2' are not the same types, not resolving (section 99999)
+WARN - Field 'translator' in book entry 'gxd1' references field 'author' position 3 in entry 'gxd2' and this position does not exist, not resolving (section 99999)
+WARN - I didn't find a database entry for crossref 'baz' in entry 'badcr1' - ignoring (section 99999)
+WARN - I didn't find a database entry for crossref 'baz' in entry 'badcr2' - ignoring (section 99999)
+WARN - I didn't find a database entry for xdata entry 'missingxd' in entry 'xd1' - ignoring (section 99999)
+WARN - Name in key 'badname' is empty (probably consecutive 'and'): skipping entry 'badname'
+WARN - book entry 'gxd1' has XDATA reference from field 'addendum' that contains no source field (section 99999)
+WARN - book entry 'gxd1' has XDATA reference from field 'publisher' that contains no source field (section 99999)
+WARN - book entry 'xd1' references XDATA entry 'missingxd' which does not exist, not resolving (section 99999)
+WARN - legacy month field 'mar' in entry 'legacy' is not an integer - this will probably not sort properly.

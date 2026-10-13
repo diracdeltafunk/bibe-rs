@@ -3,4 +3,4 @@ source = "vendor/biber/t/tool.t + t/tdata (traced by tools/port-tests)"
 args = ["--tool", "--configfile=tool-testsort.conf", "--output-align", "--output-resolve-crossrefs", "--output-format=bibtex", "--sortlocale=en_GB.UTF-8", "--output-xnamesep=:", "--output-xdatasep=+", "--output-legacy-dates", "tool.bib"]
 outputs = ["tool_bibertool.bib"]
 log = "tool.bib.blg"
-tags = ["suite:ported", "t:tool", "deferred:m4"]
+tags = ["suite:ported", "t:tool"]

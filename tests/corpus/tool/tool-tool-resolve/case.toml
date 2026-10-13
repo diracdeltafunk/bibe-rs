@@ -1,0 +1,6 @@
+description = "tool mode over t/tdata/tool.bib: legacy --tool-* aliases"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "--tool-resolve", "--tool-align", "--tool-fieldcase=lower", "--tool-indent=1", "tool.bib"]
+outputs = ["tool_bibertool.bib"]
+log = "tool.bib.blg"
+tags = ["suite:tool", "feature:tool"]

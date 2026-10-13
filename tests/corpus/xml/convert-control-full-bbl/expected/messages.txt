@@ -1,0 +1,4 @@
+WARN - Duplicate entry key: 'F1' in file 'full-bbl.bib', skipping ...
+WARN - I didn't find a database entry for 'C1' (section 0)
+WARN - Possible typo (case mismatch) between citation and datasource keys: 'C1' and 'c1' in file 'full-bbl.bib'
+WARN - Possible typo (case mismatch) between datasource keys: 'f1' and 'F1' in file 'full-bbl.bib'
