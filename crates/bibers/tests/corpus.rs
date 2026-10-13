@@ -32,6 +32,11 @@ fn ratchet_cases_pass() {
             failures.push(format!("{id}: listed in passing.txt but not in the corpus"));
             continue;
         };
+        let missing = case.missing_requirements();
+        if !missing.is_empty() {
+            eprintln!("skipping {id}: requires {}", missing.join(", "));
+            continue;
+        }
         let run = runner.run(case, &root, false).expect("run");
         match bibers_testkit::compare_bibers(case, &run).expect("compare") {
             Outcome::Pass => {}

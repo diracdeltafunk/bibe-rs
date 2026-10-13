@@ -2,4 +2,5 @@ description = "--recodedata with a set name the file does not define (no recodin
 source = "bibers M4 io package (DC-045): user recode data file; inputs from t/tdata/encoding6.bcf"
 args = ["--noconf", "--recodedata=myrecode.xml", "--decodecharsset=full", "--output-safecharsset=full", "--output-safechars", "encoding6.bcf"]
 outputs = ["encoding6.bbl"]
+requires = ["kpsewhich"]
 tags = ["suite:io", "feature:recodedata"]

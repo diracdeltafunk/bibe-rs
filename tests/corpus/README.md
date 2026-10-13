@@ -48,6 +48,7 @@ env = { ISBN_RANGE_MESSAGE = "…" }      # optional extra environment (LANG/LC_
 compare = "exact"                       # or "unordered-lines" (only for oracle nondeterminism, BB-061/062)
 tags = ["suite:styles", "style:apa"]    # free-form; filter with `cargo xtask corpus tag:style:apa`
 allow = []                              # DC-NNN ids from docs/compat.md whose documented differences apply
+requires = []                           # external programs needed (e.g. "kpsewhich"); the ratchet skips the case where one is missing
 timeout_secs = 300
 
 [[normalize]]                           # optional, repeatable: case-specific regex substitution applied to

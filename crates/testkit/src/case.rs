@@ -40,6 +40,11 @@ pub struct CaseSpec {
     /// accepted for this case. Each must be justified there.
     #[serde(default)]
     pub allow: Vec<String>,
+    /// External programs the case needs (e.g. `kpsewhich` for
+    /// `--recodedata`, which biber and bibers look up only via kpsewhich).
+    /// The ratchet skips the case where one is missing (CI has no TeX).
+    #[serde(default)]
+    pub requires: Vec<String>,
     /// Timeout in seconds for one run.
     #[serde(default = "default_timeout")]
     pub timeout_secs: u64,
@@ -245,4 +250,29 @@ fn walk(root: &Path, dir: &Path, out: &mut Vec<Case>) -> Result<()> {
         }
     }
     Ok(())
+}
+
+impl Case {
+    /// The programs of [`CaseSpec::requires`] that are not on `PATH`.
+    pub fn missing_requirements(&self) -> Vec<String> {
+        self.spec
+            .requires
+            .iter()
+            .filter(|p| !program_on_path(p))
+            .cloned()
+            .collect()
+    }
+}
+
+fn program_on_path(prog: &str) -> bool {
+    let Some(path) = std::env::var_os("PATH") else {
+        return false;
+    };
+    let exts: &[&str] = if cfg!(windows) {
+        &["", ".exe", ".bat", ".cmd"]
+    } else {
+        &[""]
+    };
+    std::env::split_paths(&path)
+        .any(|d| exts.iter().any(|e| d.join(format!("{prog}{e}")).is_file()))
 }
