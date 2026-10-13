@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="m1" entrytype="book">
+    <bltx:names type="author"><bltx:name><bltx:namepart type="family">Smith</bltx:namepart><bltx:namepart type="given">Ann</bltx:namepart></bltx:name><bltx:name><bltx:namepart type="family">Jones</bltx:namepart><bltx:namepart type="given">Bob</bltx:namepart></bltx:name></bltx:names>
+    <bltx:names type="editor"><bltx:name><bltx:namepart type="family">Edit</bltx:namepart><bltx:namepart type="given">Or</bltx:namepart></bltx:name></bltx:names>
+    <bltx:names type="afterword"><bltx:name><bltx:namepart type="family">After</bltx:namepart><bltx:namepart type="given">Word</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>The Original Title</bltx:title>
+    <bltx:usera>alpha</bltx:usera>
+    <bltx:userb>beta</bltx:userb>
+    <bltx:userc>gamma</bltx:userc>
+    <bltx:userd>delta</bltx:userd>
+    <bltx:usere>x, y</bltx:usere>
+    <bltx:note>Note 123-456</bltx:note>
+    <bltx:series>Series</bltx:series>
+    <bltx:date>2001</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="m2" entrytype="article">
+    <bltx:names type="author"><bltx:name><bltx:namepart type="family">Doe</bltx:namepart><bltx:namepart type="given">Jo</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>Article Title</bltx:title>
+    <bltx:journaltitle>J</bltx:journaltitle>
+    <bltx:note>keep</bltx:note>
+    <bltx:date>2002</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="m3" entrytype="misc">
+    <bltx:title>Dropped entry</bltx:title>
+    <bltx:note>DROP</bltx:note>
+  </bltx:entry>
+  <bltx:entry id="m4" entrytype="report">
+    <bltx:title>Report</bltx:title>
+    <bltx:type>techreport</bltx:type>
+    <bltx:date>2003</bltx:date>
+  </bltx:entry>
+</bltx:entries>

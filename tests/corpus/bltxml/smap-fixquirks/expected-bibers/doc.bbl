@@ -1,0 +1,168 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{m2}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9479e9e6fe4011cfddba3ef81278302d}{%
+           family={Doe},
+           familyi={D\bibinitperiod},
+           given={Jo},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{lista}{1}{%
+        {$MAPLOOP}%
+      }
+      \strng{namehash}{9479e9e6fe4011cfddba3ef81278302d}
+      \strng{fullhash}{9479e9e6fe4011cfddba3ef81278302d}
+      \strng{fullhashraw}{9479e9e6fe4011cfddba3ef81278302d}
+      \strng{bibnamehash}{9479e9e6fe4011cfddba3ef81278302d}
+      \strng{authorbibnamehash}{9479e9e6fe4011cfddba3ef81278302d}
+      \strng{authornamehash}{9479e9e6fe4011cfddba3ef81278302d}
+      \strng{authorfullhash}{9479e9e6fe4011cfddba3ef81278302d}
+      \strng{authorfullhashraw}{9479e9e6fe4011cfddba3ef81278302d}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{chapter}{cited}
+      \field{howpublished}{perds}
+      \field{journaltitle}{J}
+      \field{note}{keep}
+      \field{pubstate}{pernottype}
+      \field{series}{appended}
+      \field{title}{Article Title}
+      \field{usera}{bltx:journaltitle}
+      \field{userb}{J}
+      \field{usere}{matchi}
+      \field{year}{2002}
+      \field{dateera}{ce}
+    \endentry
+    \entry{m3}{misc}{}{}
+      \list{lista}{1}{%
+        {$MAPLOOP}%
+      }
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{perds}
+      \field{note}{DROP}
+      \field{pubstate}{pernottype}
+      \field{series}{appended}
+      \field{title}{Dropped entry}
+      \field{userb}{not overwritten}
+      \field{userc}{notkeep}
+      \true{nocite}
+    \endentry
+    \entry{m4}{misc}{}{}
+      \list{lista}{1}{%
+        {$MAPLOOP}%
+      }
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{addendum}{report}
+      \field{howpublished}{perds}
+      \field{pubstate}{pernottype}
+      \field{series}{appended}
+      \field{title}{Report}
+      \field{type}{techreport}
+      \field{userb}{not overwritten}
+      \field{year}{2003}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{m1}{book}{}{}
+      \name{annotator}{1}{}{%
+        {{hash=402f759672aa7ce53389ebf76b2ef130}{%
+           family={After},
+           familyi={A\bibinitperiod},
+           given={Word},
+           giveni={W\bibinitperiod}}}%
+      }
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=b58b9fea105eea00aca98e103266b7c9}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Ann},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=961c4f67d58fd7905840dc42756cac23}{%
+           family={Jones},
+           familyi={J\bibinitperiod},
+           given={Bob},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=8af8965bf265799aabe0dd8d6e298033}{%
+           family={Edit},
+           familyi={E\bibinitperiod},
+           given={Or},
+           giveni={O\bibinitperiod}}}%
+      }
+      \list{lista}{1}{%
+        {x}%
+      }
+      \strng{namehash}{d6a119b4221b3a6d80652028487ac411}
+      \strng{fullhash}{d6a119b4221b3a6d80652028487ac411}
+      \strng{fullhashraw}{d6a119b4221b3a6d80652028487ac411}
+      \strng{bibnamehash}{d6a119b4221b3a6d80652028487ac411}
+      \strng{annotatorbibnamehash}{402f759672aa7ce53389ebf76b2ef130}
+      \strng{annotatornamehash}{402f759672aa7ce53389ebf76b2ef130}
+      \strng{annotatorfullhash}{402f759672aa7ce53389ebf76b2ef130}
+      \strng{annotatorfullhashraw}{402f759672aa7ce53389ebf76b2ef130}
+      \strng{authorbibnamehash}{d6a119b4221b3a6d80652028487ac411}
+      \strng{authornamehash}{d6a119b4221b3a6d80652028487ac411}
+      \strng{authorfullhash}{d6a119b4221b3a6d80652028487ac411}
+      \strng{authorfullhashraw}{d6a119b4221b3a6d80652028487ac411}
+      \strng{translatorbibnamehash}{8af8965bf265799aabe0dd8d6e298033}
+      \strng{translatornamehash}{8af8965bf265799aabe0dd8d6e298033}
+      \strng{translatorfullhash}{8af8965bf265799aabe0dd8d6e298033}
+      \strng{translatorfullhashraw}{8af8965bf265799aabe0dd8d6e298033}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{perds}
+      \field{note}{Note 123-456}
+      \field{series}{Seriesappended}
+      \field{title}{The Mapped Title}
+      \field{userb}{alpha}
+      \field{userc}{notkeep}
+      \field{userd}{deltastrict}
+      \field{usere}{x, y}
+      \field{userf}{456:123}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

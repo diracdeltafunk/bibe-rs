@@ -111,6 +111,7 @@ impl Template {
             compare: CompareMode::Exact,
             tags: vec!["suite:fuzz".into(), format!("template:{}", self.id)],
             allow: vec![],
+            requires: vec![],
             timeout_secs: TIMEOUT_SECS,
             normalize: vec![],
         }

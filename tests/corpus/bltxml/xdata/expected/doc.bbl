@@ -1,0 +1,154 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{e3}{book}{}{}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{subtitle}{xdata=nofield}
+      \field{title}{Missing}
+      \true{nocite}
+      \warn{\item book entry 'e3' has XDATA reference from field 'subtitle' that contains no source field (section 0)}
+      \warn{\item book entry 'e3' references XDATA entry 'missingx' which does not exist, not resolving (section 0)}
+    \endentry
+    \entry{e1}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=9122f04b1ed978d6b93eba6e5d5d47ce}{%
+           family={Xa},
+           familyi={X\bibinitperiod},
+           given={Al},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9d63e86c3bdb02f4190134dd1227e677}{%
+           family={Xb},
+           familyi={X\bibinitperiod},
+           given={Bo},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{2}{%
+        {XLoc1}%
+        {XLoc2}%
+      }
+      \list{publisher}{1}{%
+        {XPub}%
+      }
+      \strng{namehash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{fullhash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{fullhashraw}{4c7749082605a1e9b1a54f876469043c}
+      \strng{bibnamehash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{authorbibnamehash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{authornamehash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{authorfullhash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{authorfullhashraw}{4c7749082605a1e9b1a54f876469043c}
+      \field{extraname}{1}
+      \field{sortinit}{X}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{XNote}
+      \field{title}{XTitle}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{3\bibrangedash 4}
+      \range{pages}{2}
+      \verb{urlraw}
+      \verb http://example.org/x
+      \endverb
+      \verb{url}
+      \verb http://example.org/x
+      \endverb
+    \endentry
+    \entry{e2}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=9d63e86c3bdb02f4190134dd1227e677}{%
+           family={Xb},
+           familyi={X\bibinitperiod},
+           given={Bo},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c68fe58af463ec3e298bae60141d9ba6}{%
+           family={Own},
+           familyi={O\bibinitperiod},
+           given={Name},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=9122f04b1ed978d6b93eba6e5d5d47ce}{%
+           family={Xa},
+           familyi={X\bibinitperiod},
+           given={Al},
+           giveni={A\bibinitperiod}}}%
+        {{un=0,uniquepart=base,hash=9d63e86c3bdb02f4190134dd1227e677}{%
+           family={Xb},
+           familyi={X\bibinitperiod},
+           given={Bo},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{2}{%
+        {XLoc2}%
+        {Own}%
+      }
+      \list{publisher}{1}{%
+        {}%
+      }
+      \strng{namehash}{a020ecc5131d80fedf4f123a811f5267}
+      \strng{fullhash}{a020ecc5131d80fedf4f123a811f5267}
+      \strng{fullhashraw}{a020ecc5131d80fedf4f123a811f5267}
+      \strng{bibnamehash}{a020ecc5131d80fedf4f123a811f5267}
+      \strng{authorbibnamehash}{a020ecc5131d80fedf4f123a811f5267}
+      \strng{authornamehash}{a020ecc5131d80fedf4f123a811f5267}
+      \strng{authorfullhash}{a020ecc5131d80fedf4f123a811f5267}
+      \strng{authorfullhashraw}{a020ecc5131d80fedf4f123a811f5267}
+      \strng{editorbibnamehash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{editornamehash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{editorfullhash}{4c7749082605a1e9b1a54f876469043c}
+      \strng{editorfullhashraw}{4c7749082605a1e9b1a54f876469043c}
+      \field{sortinit}{X}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{XNote}
+      \field{title}{XTitle}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{3\bibrangedash 4}
+      \range{pages}{2}
+      \verb{urlraw}
+      \verb http://example.org/x
+      \endverb
+      \verb{url}
+      \verb http://example.org/x
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

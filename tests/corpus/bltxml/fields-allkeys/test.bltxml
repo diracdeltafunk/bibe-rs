@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="f1" entrytype="article">
+    <bltx:ids><bltx:key>f1alias</bltx:key><bltx:key>f1alias2</bltx:key></bltx:ids>
+    <bltx:options>useprefix=true, skipbiblist=true</bltx:options>
+    <bltx:names type="author"><bltx:name><bltx:namepart type="family">Doe</bltx:namepart><bltx:namepart type="given">John</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>A &amp; B &lt;c&gt; title with é and &#233;</bltx:title>
+    <bltx:title>Second title is ignored</bltx:title>
+    <bltx:subtitle><![CDATA[Sub & <title>]]></bltx:subtitle>
+    <bltx:journaltitle>Journal of Things</bltx:journaltitle>
+    <bltx:volume>10</bltx:volume>
+    <bltx:number>3</bltx:number>
+    <bltx:pages><bltx:list><bltx:item><bltx:start>1</bltx:start><bltx:end>10</bltx:end></bltx:item><bltx:item><bltx:start>15</bltx:start><bltx:end></bltx:end></bltx:item><bltx:item><bltx:start>20</bltx:start></bltx:item></bltx:list></bltx:pages>
+    <bltx:keywords>kw1, kw2</bltx:keywords>
+    <bltx:language><bltx:list><bltx:item>english</bltx:item><bltx:item>german</bltx:item></bltx:list></bltx:language>
+    <bltx:publisher>Plain Publisher</bltx:publisher>
+    <bltx:location>  Spaced  location  </bltx:location>
+    <bltx:doi>10.1000/xyz_1</bltx:doi>
+    <bltx:url>http://example.org/a b?x=é</bltx:url>
+    <bltx:eprint type="arxiv" class="cs.DL">1234.5678</bltx:eprint>
+    <bltx:isbn>0-201-13447-0</bltx:isbn>
+    <bltx:langid>english</bltx:langid>
+    <bltx:abstract>Abstract text</bltx:abstract>
+    <bltx:note>A note<!-- with a comment --> continues</bltx:note>
+    <bltx:annotation>generic annotation</bltx:annotation>
+    <bltx:annotation field="title">t-ann</bltx:annotation>
+    <bltx:annotation field="language" item="2" name="alt" literal="1">lang2</bltx:annotation>
+    <bltx:annotation field="author" item="1" part="family">fam</bltx:annotation>
+    <bltx:annotation field="title" name="other" literal="0">other</bltx:annotation>
+    <bltx:related><bltx:list><bltx:item type="multivolume" ids="f2,f3" string="str" options="dataonly"/></bltx:list></bltx:related>
+    <bltx:date>2001-02-03</bltx:date>
+    <bltx:sortkey>x</bltx:sortkey>
+    <bltx:usera>verbatim? no, literal</bltx:usera>
+    <bltx:foo>unknown field</bltx:foo>
+    <x:title xmlns:x="http://example.org/other">other namespace</x:title>
+    <bltx:pagetotal>123</bltx:pagetotal>
+  </bltx:entry>
+  <bltx:entry id="f2" entrytype="inbook">
+    <bltx:names type="author"><bltx:name><bltx:namepart type="family">Roe</bltx:namepart><bltx:namepart type="given">Jane</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>Chapter</bltx:title>
+    <bltx:crossref>f4</bltx:crossref>
+    <bltx:pages><bltx:list><bltx:item><bltx:start>5</bltx:start><bltx:end>9</bltx:end></bltx:item></bltx:list></bltx:pages>
+  </bltx:entry>
+  <bltx:entry id="f3" entrytype="book">
+    <bltx:names type="author"><bltx:name><bltx:namepart type="family">Poe</bltx:namepart><bltx:namepart type="given">Edgar</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>Book</bltx:title>
+    <bltx:xref>f4</bltx:xref>
+    <bltx:date>1999</bltx:date>
+    <bltx:edition>2</bltx:edition>
+    <bltx:related><bltx:list><bltx:item type="translationof" ids="f1"/></bltx:list></bltx:related>
+  </bltx:entry>
+  <bltx:entry id="f4" entrytype="collection">
+    <bltx:names type="editor"><bltx:name><bltx:namepart type="family">Ed</bltx:namepart><bltx:namepart type="given">Itor</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>Collection</bltx:title>
+    <bltx:booktitle>Collection Booktitle</bltx:booktitle>
+    <bltx:publisher><bltx:list><bltx:item>Pub A</bltx:item><bltx:item>Pub B</bltx:item></bltx:list></bltx:publisher>
+    <bltx:location><bltx:list><bltx:item>Berlin</bltx:item><bltx:item>Paris</bltx:item></bltx:list></bltx:location>
+    <bltx:date>1998</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="s1" entrytype="set">
+    <bltx:entryset><bltx:list><bltx:item>f2</bltx:item><bltx:item>f3</bltx:item></bltx:list></bltx:entryset>
+    <bltx:annotation>A set</bltx:annotation>
+  </bltx:entry>
+</bltx:entries>

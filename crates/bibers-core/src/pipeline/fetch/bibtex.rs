@@ -703,7 +703,7 @@ enum HRes {
 }
 
 /// `biber_warn($msg, $entry)`.
-fn warn_entry(ctx: &mut Ctx, be: &mut Entry, msg: String) {
+pub(super) fn warn_entry(ctx: &mut Ctx, be: &mut Entry, msg: String) {
     let w = be
         .derivedfields
         .entry("warnings".into())
@@ -921,13 +921,13 @@ fn run_handler(
 }
 
 /// A value passed to `add_xdata_ref`.
-enum XRef<'a> {
+pub(super) enum XRef<'a> {
     Str(&'a str),
     List(&'a [String]),
 }
 
 /// `Biber::Entry::add_xdata_ref` (Entry.pm:225).
-fn add_xdata_ref(
+pub(super) fn add_xdata_ref(
     ctx: &mut Ctx,
     opts: &FetchOpts,
     be: &mut Entry,

@@ -1,0 +1,4 @@
+oracle = "bibers"
+oracle_version = "bibers version: 0.0.0 (biber 2.22 compatible)"
+exit_code = 2
+deterministic = true

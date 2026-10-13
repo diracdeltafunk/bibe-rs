@@ -1,0 +1,11 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\DeclareSourcemap{\maps[datatype=biblatexml]{
+  \map{\step[fieldsource={./bltx:title[}, final]\step[fieldset=userf, fieldvalue={x}]}
+}}
+\addbibresource[datatype=biblatexml]{test.bltxml}
+\begin{document}
+\nocite{*}
+\printbibliography
+\end{document}

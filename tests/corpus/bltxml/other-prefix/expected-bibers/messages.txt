@@ -1,0 +1,1 @@
+ERROR - BibLaTeXML data source 'test.bltxml': XPath error (Undefined namespace prefix) evaluating './bltx:ids/bltx:key'

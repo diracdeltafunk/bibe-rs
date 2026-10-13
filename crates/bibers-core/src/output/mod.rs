@@ -1,8 +1,10 @@
-//! Output writers: the `.bbl` ([`bbl`]) and bibtex data output ([`bibtex`],
-//! tool mode and `--output-format=bibtex`). `bblxml`/`dot` are dropped and
-//! biblatexml output is deferred (docs/compat.md DC-020…DC-031).
+//! Output writers: the `.bbl` ([`bbl`]), bibtex data output ([`bibtex`],
+//! tool mode and `--output-format=bibtex`) and biblatexml data output
+//! ([`biblatexml`], tool mode). `bblxml`/`dot` are dropped (docs/compat.md
+//! DC-020/DC-021).
 
 pub mod bbl;
+pub mod biblatexml;
 pub mod bibtex;
 
 use crate::log::Fatal;
@@ -16,6 +18,8 @@ pub enum OutputFormat {
     Bbl,
     /// `bibtex` (`Biber::Output::bibtex`).
     Bibtex,
+    /// `biblatexml` (`Biber::Output::biblatexml`, tool mode only).
+    Biblatexml,
 }
 
 impl OutputFormat {
@@ -24,6 +28,7 @@ impl OutputFormat {
         match name {
             "bbl" => Some(OutputFormat::Bbl),
             "bibtex" => Some(OutputFormat::Bibtex),
+            "biblatexml" => Some(OutputFormat::Biblatexml),
             _ => None,
         }
     }
@@ -42,7 +47,9 @@ impl OutputFormat {
     pub fn safechars_message(self) -> &'static str {
         match self {
             OutputFormat::Bbl => "Converting UTF-8 to TeX macros on output to .bbl",
-            OutputFormat::Bibtex => "Converting UTF-8 to TeX macros on output",
+            OutputFormat::Bibtex | OutputFormat::Biblatexml => {
+                "Converting UTF-8 to TeX macros on output"
+            }
         }
     }
 
@@ -52,6 +59,23 @@ impl OutputFormat {
         match self {
             OutputFormat::Bbl => bbl::render(ctx, processed),
             OutputFormat::Bibtex => bibtex::render(ctx, processed).map(Some),
+            OutputFormat::Biblatexml => biblatexml::render(ctx, processed).map(Some),
+        }
+    }
+
+    /// Whether the text is encoded with `--output-encoding` (and
+    /// `--output-safechars` applies). The biblatexml writer always writes
+    /// UTF-8 and never converts to TeX macros (Output/biblatexml.pm:69-72).
+    pub fn encodes_output(self) -> bool {
+        !matches!(self, OutputFormat::Biblatexml)
+    }
+
+    /// What a writer does after the output file is written: the biblatexml
+    /// writer's schema and `--validate-bltxml` (Output/biblatexml.pm:571-590).
+    pub fn after_write(self, ctx: &mut Ctx, outfile: &str) -> Result<(), Fatal> {
+        match self {
+            OutputFormat::Biblatexml => biblatexml::after_write(ctx, outfile),
+            _ => Ok(()),
         }
     }
 }

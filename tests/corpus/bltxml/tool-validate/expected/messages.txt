@@ -1,0 +1,1 @@
+ERROR - 'test.bltxml' failed to validate against schema 'test.rng'

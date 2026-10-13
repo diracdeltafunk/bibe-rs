@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\DeclareSourcemap{\maps[datatype=biblatexml]{
+  \map{\step[typesource=report, typetarget=misc, final]\step[fieldset=addendum, origentrytype]}
+  \map[overwrite]{\step[fieldsource=title, match=\regexp{Original}, replace={Mapped}]}
+  \map{\step[fieldsource=note, match=\regexp{(\d+)-(\d+)}, final]\step[fieldset=userf, fieldvalue={$2:$1}]}
+  \map[overwrite]{\step[fieldsource=usera, fieldtarget=userb]}
+  \map{\step[fieldsource=afterword, fieldtarget=annotator]}
+  \map[overwrite]{\step[fieldsource=editor, fieldtarget=translator]}
+  \map[overwrite]{\step[fieldsource=title, match=\regexp{Original}, final]\step[fieldset={./bltx:names[@type='author']/bltx:name[2]/@gender}, fieldvalue={sm}]\step[fieldset={./bltx:names[@type='author']/bltx:name[1]/bltx:namepart[@type='given']}, fieldvalue={Anna}]}
+  \map{\step[fieldsource=userc, final]\step[fieldset=userc, null]}
+  \map[overwrite]{\step[fieldset=series, fieldvalue={ appended}, append]}
+  \map[overwrite]{\step[fieldset=userd, fieldvalue={ strict}, appendstrict]\step[fieldset=edition, fieldvalue={ none}, appendstrict]}
+  \map{\step[fieldsource=journaltitle]\step[fieldset=usera, origfield]\step[fieldset=userb, origfieldval]}
+  \map[foreach=usere]{\step[fieldset=lista, fieldvalue={$MAPLOOP}, append]}
+  \map{\step[fieldsource=note, notmatch=\regexp{keep}, final]\step[fieldset=userc, fieldvalue={notkeep}]}
+  \map{\step[fieldsource=title, matchi=\regexp{article}, final]\step[fieldset=usere, fieldvalue={matchi}]}
+  \map{\pernottype{book}\step[fieldset=pubstate, fieldvalue={pernottype}]}
+  \map{\perdatasource{test.bltxml}\step[fieldset=howpublished, fieldvalue={perds}]}
+  \map{\perdatasource{other.bltxml}\step[fieldset=howpublished, fieldvalue={otherds}]}
+  \map[refsection=1]{\step[fieldset=version, fieldvalue={rs1}]}
+  \map{\step[citedornocited, final]\step[fieldset=chapter, fieldvalue={cited}]}
+  \map{\step[fieldset=userb, fieldvalue={not overwritten}]}
+}}
+\addbibresource[datatype=biblatexml]{test.bltxml}
+\begin{document}
+\nocite{*}\cite{m2}
+\printbibliography
+\end{document}

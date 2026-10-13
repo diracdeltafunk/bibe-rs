@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="i1" entrytype="misc">
+    <bltx:title>I1</bltx:title>
+    <bltx:date>abc</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="i2" entrytype="misc">
+    <bltx:title>I2</bltx:title>
+    <bltx:date>/2001</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="i3" entrytype="misc">
+    <bltx:title>I3</bltx:title>
+    <bltx:date><bltx:start>xyz</bltx:start><bltx:end>2001</bltx:end></bltx:date>
+  </bltx:entry>
+  <bltx:entry id="i4" entrytype="misc">
+    <bltx:title>I4</bltx:title>
+    <bltx:date>-380</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="i5" entrytype="misc">
+    <bltx:title>I5</bltx:title>
+    <bltx:date> 2001 </bltx:date>
+  </bltx:entry>
+</bltx:entries>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="j0" entrytype="misc">
+    <bltx:title>J 0</bltx:title>
+    <bltx:date>1500-01-01</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="j1" entrytype="misc">
+    <bltx:title>J 1</bltx:title>
+    <bltx:date>1500</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="j2" entrytype="misc">
+    <bltx:title>J 2</bltx:title>
+    <bltx:date><bltx:start>1400-02-10</bltx:start><bltx:end>1700-02-10</bltx:end></bltx:date>
+  </bltx:entry>
+</bltx:entries>

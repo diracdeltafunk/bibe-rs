@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="n1" entrytype="book">
+    <bltx:names type="author" useprefix="true" morenames="1"><bltx:name gender="sm" id="hid1" useprefix="false"><bltx:namepart type="family">Beethoven</bltx:namepart><bltx:namepart type="prefix">van</bltx:namepart><bltx:namepart type="given"><bltx:namepart initial="L">Ludwig</bltx:namepart><bltx:namepart>Maria</bltx:namepart></bltx:namepart><bltx:namepart type="suffix">Jr.</bltx:namepart></bltx:name><bltx:name initial="Q"><bltx:namepart type="family">Ångström</bltx:namepart><bltx:namepart type="given" initial="X">Anders</bltx:namepart></bltx:name><bltx:name><bltx:namepart type="family">{Barnes and Noble}</bltx:namepart></bltx:name><bltx:name><bltx:namepart type="given">Jean-Paul</bltx:namepart><bltx:namepart type="family">Sartre</bltx:namepart></bltx:name><bltx:name><bltx:namepart type="given"><bltx:namepart>Jo</bltx:namepart><bltx:namepart>B</bltx:namepart><bltx:namepart>C</bltx:namepart></bltx:namepart><bltx:namepart type="family">Three</bltx:namepart></bltx:name><bltx:name><bltx:namepart type="given"><bltx:namepart>Anne</bltx:namepart><bltx:namepart>Bea</bltx:namepart><bltx:namepart>Cee</bltx:namepart></bltx:namepart><bltx:namepart type="family">Four</bltx:namepart></bltx:name></bltx:names>
+    <bltx:names type="editor"><bltx:name><bltx:namepart type="family">Ed</bltx:namepart><bltx:namepart type="given">Only</bltx:namepart></bltx:name></bltx:names>
+    <bltx:names type="translator" morenames="true"><bltx:name><bltx:namepart type="family">Trans</bltx:namepart><bltx:namepart type="given">Lator</bltx:namepart></bltx:name></bltx:names>
+    <bltx:names type="afterword" morenames="0"><bltx:name gender="pf"><bltx:namepart type="family">After</bltx:namepart><bltx:namepart type="given">Word</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>Names</bltx:title>
+    <bltx:date>2000</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="n2" entrytype="book">
+    <bltx:names type="author"><bltx:name><bltx:namepart type="family">Doe</bltx:namepart><bltx:namepart type="given">John</bltx:namepart></bltx:name><bltx:name><bltx:namepart type="family">Doe</bltx:namepart><bltx:namepart type="given">Jane</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>Uniquename</bltx:title>
+    <bltx:date>2000</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="n3" entrytype="book">
+    <bltx:names type="author"><bltx:name uniquename="false"><bltx:namepart type="family">Doe</bltx:namepart><bltx:namepart type="given">Jim</bltx:namepart></bltx:name></bltx:names>
+    <bltx:names type="editor"></bltx:names>
+    <bltx:title>Per-name option</bltx:title>
+    <bltx:date>2000</bltx:date>
+  </bltx:entry>
+</bltx:entries>

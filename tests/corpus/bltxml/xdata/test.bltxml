@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="x1" entrytype="xdata">
+    <bltx:publisher><bltx:list><bltx:item>XPub</bltx:item></bltx:list></bltx:publisher>
+    <bltx:location><bltx:list><bltx:item>XLoc1</bltx:item><bltx:item>XLoc2</bltx:item></bltx:list></bltx:location>
+    <bltx:note>XNote</bltx:note>
+  </bltx:entry>
+  <bltx:entry id="x2" entrytype="xdata">
+    <bltx:names type="author"><bltx:name><bltx:namepart type="family">Xa</bltx:namepart><bltx:namepart type="given">Al</bltx:namepart></bltx:name><bltx:name><bltx:namepart type="family">Xb</bltx:namepart><bltx:namepart type="given">Bo</bltx:namepart></bltx:name></bltx:names>
+    <bltx:title>XTitle</bltx:title>
+    <bltx:pages><bltx:list><bltx:item><bltx:start>3</bltx:start><bltx:end>4</bltx:end></bltx:item></bltx:list></bltx:pages>
+    <bltx:url>http://example.org/x</bltx:url>
+    <bltx:xdata>x1</bltx:xdata>
+  </bltx:entry>
+  <bltx:entry id="e1" entrytype="book">
+    <bltx:xdata><bltx:list><bltx:item>x1</bltx:item><bltx:item>x2</bltx:item></bltx:list></bltx:xdata>
+    <bltx:date>2000</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="e2" entrytype="book">
+    <bltx:names type="author"><bltx:name xdata="x2-author-2"></bltx:name><bltx:name><bltx:namepart type="family">Own</bltx:namepart><bltx:namepart type="given">Name</bltx:namepart></bltx:name></bltx:names>
+    <bltx:names type="editor"><bltx:name xdata="x2-author"></bltx:name></bltx:names>
+    <bltx:title xdata="x2-title"/>
+    <bltx:note xdata="x1-note"/>
+    <bltx:location><bltx:list><bltx:item xdata="x1-location-2"/><bltx:item>Own</bltx:item></bltx:list></bltx:location>
+    <bltx:pages xdata="x2-pages"/>
+    <bltx:url xdata="x2-url"/>
+    <bltx:publisher xdata="x1-publisher"/>
+    <bltx:date>2001</bltx:date>
+  </bltx:entry>
+  <bltx:entry id="e3" entrytype="book">
+    <bltx:xdata>missingx</bltx:xdata>
+    <bltx:title>Missing</bltx:title>
+    <bltx:subtitle xdata="nofield"/>
+  </bltx:entry>
+</bltx:entries>

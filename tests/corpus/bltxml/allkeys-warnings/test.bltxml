@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bltx:entries xmlns:bltx="http://biblatex-biber.sourceforge.net/biblatexml">
+  <bltx:entry id="k1" entrytype="misc">
+    <bltx:ids><bltx:key>ka</bltx:key><bltx:key>k2</bltx:key></bltx:ids>
+    <bltx:title>K1</bltx:title>
+  </bltx:entry>
+  <bltx:entry id="k2" entrytype="misc">
+    <bltx:ids><bltx:key>ka</bltx:key><bltx:key>kb</bltx:key></bltx:ids>
+    <bltx:title>K2</bltx:title>
+  </bltx:entry>
+  <bltx:entry id="k3" entrytype="misc">
+    <bltx:ids><bltx:key>kb</bltx:key><bltx:key>k1</bltx:key></bltx:ids>
+    <bltx:title>K3</bltx:title>
+  </bltx:entry>
+  <bltx:entry id="k1" entrytype="misc">
+    <bltx:title>K1 duplicate</bltx:title>
+  </bltx:entry>
+  <bltx:entry id="K3" entrytype="misc">
+    <bltx:title>K3 case variant</bltx:title>
+  </bltx:entry>
+  <bltx:entry entrytype="misc"><bltx:title>No id</bltx:title></bltx:entry>
+  <bltx:entry id="ka" entrytype="misc">
+    <bltx:title>Real key that is also an alias</bltx:title>
+  </bltx:entry>
+</bltx:entries>

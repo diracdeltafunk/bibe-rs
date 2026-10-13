@@ -8,6 +8,7 @@
 
 pub mod bcf;
 pub mod bcfhtml;
+pub mod bltxml_schema;
 pub mod config;
 pub mod datamodel;
 pub mod env;
@@ -21,7 +22,9 @@ pub mod quirks;
 pub mod recodedata;
 pub mod remote;
 pub mod xmlcheck;
+pub mod xmldom;
 pub mod xmlin;
+pub mod xmlwriter;
 
 /// The biber version bibers is compatible with.
 pub const BIBER_VERSION: &str = "2.22";

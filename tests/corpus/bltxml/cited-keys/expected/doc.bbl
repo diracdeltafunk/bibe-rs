@@ -1,0 +1,62 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{c1}{inbook}{}{}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{C2}
+      \field{title}{C1}
+      \field{year}{1999}
+      \field{dateera}{ce}
+    \endentry
+    \entry{c3}{misc}{}{}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{note}{From c4}
+      \field{title}{C3 first}
+    \endentry
+    \entry{25ea1682e16466c0667abdc095920f6c}{misc}{skipbib=true,skipbiblist=true,skiplab=true}{}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{clonesourcekey}{c5}
+      \field{title}{C5 not cited}
+    \endentry
+    \entry{c6}{misc}{}{}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labeldatesource}{nodate}
+      \field{labeltitlesource}{title}
+      \field{relatedtype}{reprint}
+      \field{title}{C6}
+      \field{related}{25ea1682e16466c0667abdc095920f6c}
+    \endentry
+  \enddatalist
+  \missing{missing}
+\endrefsection
+\endinput
+

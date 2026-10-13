@@ -1,0 +1,442 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{d00}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 00}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d01}{misc}{}{}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{month}{2}
+      \field{title}{Date 01}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d02}{misc}{}{}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{3}
+      \field{month}{2}
+      \field{title}{Date 02}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d03}{misc}{}{}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{3}
+      \field{hour}{10}
+      \field{minute}{20}
+      \field{month}{2}
+      \field{second}{30}
+      \field{title}{Date 03}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d04}{misc}{}{}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{3}
+      \field{hour}{10}
+      \field{minute}{20}
+      \field{month}{2}
+      \field{second}{30}
+      \field{timezone}{Z}
+      \field{title}{Date 04}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d05}{misc}{}{}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{3}
+      \field{hour}{10}
+      \field{minute}{20}
+      \field{month}{2}
+      \field{second}{30}
+      \field{timezone}{+05\bibtzminsep 30}
+      \field{title}{Date 05}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d06}{misc}{}{}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{15}
+      \field{month}{3}
+      \field{title}{Date 06}
+      \field{year}{44}
+      \field{dateera}{bce}
+      \true{nocite}
+    \endentry
+    \entry{d07}{misc}{}{}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 07}
+      \field{year}{0}
+      \field{dateera}{bce}
+      \true{nocite}
+    \endentry
+    \entry{d08}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 08}
+      \field{year}{2001}
+      \true{datecirca}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d09}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 09}
+      \field{year}{2001}
+      \true{dateuncertain}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d10}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 10}
+      \field{year}{2001}
+      \true{datecirca}
+      \true{dateuncertain}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d11}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 11}
+      \field{year}{1990}
+      \field{dateunspecified}{yearindecade}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d12}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 12}
+      \field{year}{1900}
+      \field{dateunspecified}{yearincentury}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d13}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{month}{1}
+      \field{title}{Date 13}
+      \field{year}{1999}
+      \field{dateunspecified}{monthinyear}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d14}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{month}{2}
+      \field{title}{Date 14}
+      \field{year}{1999}
+      \field{dateunspecified}{dayinmonth}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d15}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{month}{2}
+      \field{title}{Date 15}
+      \field{year}{2000}
+      \field{dateunspecified}{dayinmonth}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d16}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{month}{1}
+      \field{title}{Date 16}
+      \field{year}{1999}
+      \field{dateunspecified}{dayinyear}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d17}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 17}
+      \field{year}{2001}
+      \field{yeardivision}{spring}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d18}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 18}
+      \field{year}{2001}
+      \field{yeardivision}{Q1}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d19}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{endyear}{2003}
+      \field{title}{Date 19}
+      \field{year}{2001}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d20}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{3}
+      \field{endyear}{}
+      \field{month}{2}
+      \field{title}{Date 20}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d21}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{endyear}{}
+      \field{title}{Date 21}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d22}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{endyear}{2003}
+      \field{title}{Date 22}
+      \field{year}{2001}
+      \true{datecirca}
+      \true{enddateuncertain}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d23}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{endyear}{2001}
+      \field{endyeardivision}{autumn}
+      \field{title}{Date 23}
+      \field{year}{2001}
+      \field{yeardivision}{summer}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d24}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{day}{3}
+      \field{endday}{4}
+      \field{endhour}{11}
+      \field{endminute}{0}
+      \field{endmonth}{2}
+      \field{endsecond}{0}
+      \field{endtimezone}{+01\bibtzminsep 00}
+      \field{endyear}{2001}
+      \field{hour}{10}
+      \field{minute}{0}
+      \field{month}{2}
+      \field{second}{0}
+      \field{timezone}{Z}
+      \field{title}{Date 24}
+      \field{year}{2001}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d25}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 25}
+      \field{year}{1990}
+      \field{dateera}{ce}
+      \true{nocite}
+      \warn{\item misc entry 'd25' (test.bltxml): Invalid format 'abc' of date field 'bltx:date' range end - ignoring}
+    \endentry
+    \entry{d26}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{endyear}{2005}
+      \field{title}{Date 26}
+      \field{year}{1990}
+      \field{dateunspecified}{yearindecade}
+      \field{enddateera}{ce}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d27}{misc}{}{}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{title}{Date 27}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d28}{misc}{}{}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labeltitlesource}{title}
+      \field{eventday}{1}
+      \field{eventendday}{3}
+      \field{eventendmonth}{5}
+      \field{eventendyear}{2000}
+      \field{eventmonth}{5}
+      \field{eventyear}{2000}
+      \field{origyear}{1850}
+      \field{title}{Date 28}
+      \field{urlday}{2}
+      \field{urlmonth}{1}
+      \field{urlyear}{2020}
+      \field{year}{2001}
+      \field{dateera}{ce}
+      \field{eventenddateera}{ce}
+      \field{eventdateera}{ce}
+      \field{origdateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+    \endentry
+    \entry{d29}{misc}{}{}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{orig}
+      \field{labeltitlesource}{title}
+      \field{origyear}{1850}
+      \field{title}{Date 29}
+      \field{origdateera}{ce}
+      \true{nocite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

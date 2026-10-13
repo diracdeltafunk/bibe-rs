@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\addbibresource[datatype=biblatexml]{test.bltxml}
+\begin{document}
+\begin{refsection}\nocite{*}\printbibliography\end{refsection}
+\begin{refsection}\cite{c2}\printbibliography\end{refsection}
+\printbibliography
+\end{document}
