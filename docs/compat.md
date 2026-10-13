@@ -33,6 +33,7 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | DC-038 | An invalid user regex in a sourcemap makes Perl die ("Unmatched ( in regex", …) | ERROR naming the map step and the regex, exit 2 | — | implemented (sourcemap) |
 | DC-029 | btparse-level crashes and process exits on malformed input (BB-123, 125, 126, 127, 128): SEGV, abort, exit, mangled error text | An ERROR naming the user's file and line (with the literal offending text), then biber's normal error handling. *Whether parsing continues with the next entry is decided in M2.* | BB-123, 125–128 | implemented (fetch: ERROR naming file and line) |
 | DC-035 | `--isbn10` on a 979-prefix ISBN crashes | ISBN left in its ISBN-13 form, with a WARN | BB-130 | implemented (fetch) |
+| DC-065 | biblatexml input and output crash on: unparseable dates, fields without a biblatexml handler, malformed XML, a namespace not bound to `bltx`, invalid map XPaths or node names, several map steps (`per_type`, `map_notfield`, `map_matches`, `map_null`, `map_entry_null`, `map_entry_clone`), cited keys containing `'`, unresolved range XDATA references in output | Intended behaviour (warning, field ignored, step performed, reference written), or an ERROR naming the file, exit 2 | BB-176…181, 185 | implemented (bltxml) |
 | DC-058 | An unknown `--output-encoding` crashes ("Unknown encoding", empty output, exit 25) | ERROR, exit 2 | BB-165 | implemented (io) |
 | DC-059 | A missing or unparsable `--recodedata` file dies without naming it | ERROR naming the file, exit 2 | BB-167 | implemented (io) |
 | DC-060 | ISO-2022 input with 8-bit bytes or an unknown escape sequence makes biber hang forever | ERROR naming the file | BB-166 | implemented (io) |
@@ -41,7 +42,7 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 
 | Id | biber behaviour | bibers behaviour | Bug | Status |
 |---|---|---|---|---|
-| DC-010 | Tool mode with biblatexml input lacking a known extension overwrites the input file with the generated `.rng` schema | Schema file name always differs from the input | BB-012 | planned (M4) |
+| DC-010 | Tool mode with biblatexml input lacking a known extension overwrites the input file with the generated `.rng` schema | Schema file name always differs from the input | BB-012 | implemented (bltxml) |
 | DC-011 | Tool mode on an input file with no extension overwrites the input with the output; with a dotted directory (`my.dir/refs`) the output lands in the current directory as `my_bibertool.bib` | Output named `<input>_bibertool.bib` next to the input | BB-013, BB-160 | implemented (tool) |
 | DC-012 | The `.bbl` is truncated before processing, so any error leaves a 0-byte `.bbl` | *Undecided:* keep biber's behaviour if latexmk/biblatex rely on it (an empty `.bbl` forces a rerun); otherwise write to a temp file and rename on success. Decide in M2 with the latexmk smoke test. | BB-014 | open |
 
@@ -56,13 +57,14 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-015 | Order of dynamic sets under `\nocite{*}` | `.bcf` declaration order | BB-062 | implemented (fetch) |
 | DC-016 | Order of deferred WARN messages in `.blg`/stdout | Emission order (deterministic) | BB-065 | planned |
 | DC-017 | Which cycle (and in which order its two keys) is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | implemented (resolve) |
-| DC-037 | Order in which entries created by sourcemap `entry_new`/`entry_clone` steps are instantiated (`%newentries` hash order) | Creation order | — | implemented (sourcemap) |
+| DC-037 | Order in which entries created by sourcemap (bibtex and biblatexml) `entry_new`/`entry_clone` steps are instantiated (`%newentries` hash order) | Creation order | — | implemented (sourcemap) |
 | DC-039 | Sort keys of verbatim/URI *list* fields: biber's `_sort_verbatim` stringifies the array reference (`ARRAY(0x…)`, a memory address), so these entries sort arbitrarily | The fixed string `ARRAY` (equal keys, so citation order decides) | BB-135 | implemented (sort) |
 | DC-047 | Order in which entries are created under `\nocite{*}` (hash order in biber) | `.bib` file order | — | implemented (fetch) |
 | DC-048 | When a name list is used as `labeltitle` (e.g. chicago's per-type labeltitlespec), biber's extratitle/extratitleyear/uniquetitle/uniquework keys contain the stringified object address `Biber::Entry::Names=HASH(0x…)` | A fixed fake address per name list: same identity semantics (equal for shared lists, distinct otherwise), deterministic | BB-146 | implemented (entries) |
 | DC-053 | Output for granular XDATA references when an entry lists the same XDATA key twice depends on Perl hash order in biber | One fixed order (bibers' deterministic resolution order); equals one of biber's possible outputs | BB-151 | implemented (resolve) |
 | DC-018 | `$MAPUNIQ` values in sourcemaps (time-based in biber, so the `.bbl` differs on every run) | Deterministic values: the n-th `$MAPUNIQ` of a run is `base62(10^16 + n)` in `suniqid`'s alphabet (`0-9a-zA-Z`, nine characters), so keys are unique within a run and identical across runs. | BB-113 | implemented (sourcemap) |
 | DC-054 | The options in the `OPTIONS` field of tool/bibtex output are in Perl hash order | Sorted by option name | BB-162 | implemented (tool) |
+| DC-066 | The generated biblatexml `.rng` schema and the option attributes of biblatexml output are in Perl hash order | `.rng`: entry types in data-model declaration order, field and data types sorted; option attributes in `.bcf` declaration order, per-entry options sorted | BB-188 | implemented (bltxml) |
 
 ### 1d. Unavoidable representation differences
 
@@ -102,7 +104,7 @@ These are **not** differences by default: bibers reproduces biber's output. Each
 | `workuniq-skipbib-token` | Only the literal `skipbib` token suppresses work uniqueness | `skipbib=true`, `dataonly` and set members respected | BB-027 | implemented |
 | `datefield-helper-mutation` | Custom date fields whose stem ends in `date` lose flags after the first entry | Flags on every entry | BB-028 | implemented |
 | `sort-column-type` | `labelyear`/`labelmonth`/`labelday` columns sort as strings; mixed columns typed by first item | Typed per item | BB-042 | implemented |
-| `zero-is-empty` | Values equal to `0` treated as missing (year 0, `volume={0}`, …) | `0` is a value | BB-055…059 | implemented |
+| `zero-is-empty` | Values equal to `0` treated as missing (year 0, `volume={0}`, …) | `0` is a value | BB-055…059, BB-186 | implemented |
 | `blx-defaults-override-conf` | Hard-coded biblatex defaults overwrite biber.conf values (maxbibnames, useprefix, …) | biber.conf values win | BB-053 | implemented |
 | `conf-labelalphanametemplate-last` | Only the last biber.conf `labelalphanametemplate` survives | All are kept | BB-083 | implemented |
 | `conf-sourcemaps-dropped` | biber.conf sourcemaps are dropped when the `.bcf` has no driver/style maps | They are merged | BB-052 | implemented |
@@ -119,6 +121,17 @@ These are **not** differences by default: bibers reproduces biber's output. Each
 | `clone-endyeardivision` | Related-entry clones lose `endyeardivision` (`clone` lists `yeardivision` twice) | Copied | BB-093 | implemented |
 | `perlio-encoding-split` | Non-UTF-8 `--output-encoding` (single- and multi-byte): multi-byte characters straddling 1024-byte chunk boundaries become `\x{fffd}` (or shift later boundaries) | Each character encoded whole | BB-152 | implemented |
 | `unicode-output-nul-check` | UTF-16/32 and UCS-2 output: every entry is judged unencodable (WARN + full LaTeX recoding) | Only entries with unencodable characters | BB-169 | implemented |
+| `bltxml-eprint-attrs` | biblatexml `eprint` type/class attributes are ignored | Read | BB-050 | implemented |
+| `bltxml-uri-escape` | biblatexml URIs are percent-escaped from NFD text, `urlraw` too | Escaped as for bibtex input | BB-051 | implemented |
+| `bltxml-namepart-initial` | A namepart's `initial` attribute is read from the `name` element | Read from the namepart | BB-170 | implemented |
+| `bltxml-relatedoptions` | `relatedoptions` is always empty (read from a non-existent attribute) | Read from `options` | BB-171 | implemented |
+| `bltxml-smap-matchi` | biblatexml map `matchi`/`notmatchi` without replacement are case-sensitive, `notmatchi` not negated | Case-insensitive, negated | BB-172 | implemented |
+| `bltxml-smap-node-string` | Mapping to a new field stores the serialised XML of the source node | Stores its text | BB-173 | implemented |
+| `bltxml-cited-aliases` | Cited-key mode ignores `<bltx:ids>` aliases ("I didn't find a database entry") | Aliases resolved as in allkeys mode | BB-174 | implemented |
+| `bltxml-smap-new-entry-ns` | Map steps never set fields on `map_entry_new` entries (and an XPath error is printed) | Fields set | BB-175 | implemented |
+| `bltxml-xsv-fields` | biblatexml output omits xsv fields (`keywords`, `related`, …) | Written | BB-182 | implemented |
+| `bltxml-ids-output` | biblatexml output writes aliases as `<ids><list><item>`, which the reader ignores | `<ids><key>`, as the reader expects | BB-183 | implemented |
+| `bltxml-name-annotations` | biblatexml output never writes name/name-part annotations | Written | BB-187 | implemented |
 | `utf16-chunk-surrogate` | A UTF-16 `.bib` with a surrogate pair straddling a 1024-byte read chunk fails to read ("Partial character") | Read normally | BB-168 | implemented |
 | `bibtex-winters-typo` | Tool/bibtex output of `date={2020-32}` loses the season (`'WinterS'` typo) | Season written | BB-047 | implemented |
 | `bibtex-encoding-question-mark` | With a non-UTF-8 output encoding, any literal `?` triggers a "cannot be encoded" warning and full-entry LaTeX recoding | Only unencodable characters do | BB-048 | implemented |
@@ -141,14 +154,12 @@ Some silent biber behaviours are judged to be design decisions rather than bugs 
 | DC-023 | Perl code in sourcemap replacement strings (`@{[ … ]}`, `${\ … }`). biber evaluates these in a Safe compartment. | Not executed. bibers warns, and inserts the stringified regex `(?^u:…)` exactly as biber does when evaluation fails. Plain interpolation (`$1`, `\u`, `\L…\E`, escapes) is fully supported. | implemented (sourcemap) |
 | DC-036 | User regexes (sourcemaps, `noinit`/`nosort`/`nolabel`/`nonamestring`, `xsvsep`) are Perl regexes | Run on PCRE2 behind a Perl-syntax translation layer. A few Perl-only constructs are unsupported and give an ERROR naming the construct: `\N{NAME}` (named characters; `\N{U+…}` works), `\b{gcb}`/`\b{wb}`-style boundaries, `/i` multi-character case folds (ß ↔ ss), `$<`/`$(` in replacements. Verified on 17,933 Perl-vs-PCRE2 differential cases. | implemented (perl-compat) |
 
-## 4. Temporarily unsupported (deferred to milestone M4)
+## 4. Temporarily unsupported
 
-Until implemented, bibers exits with a clear "not yet supported" ERROR (exit 2) instead of silently doing something different. Each row is deleted when the feature lands.
+bibers exits with a clear "not supported" ERROR (exit 2) instead of silently doing something different. Each row is deleted when the feature lands.
 
 | Id | Feature | Status |
 |---|---|---|
-| DC-031 | biblatexml input and output; bltxml schema generation | deferred |
-| DC-033 | `--validate-bltxml` (needs DC-031; `--validate-control` and `--validate-config` are implemented) | deferred |
 | DC-034 | `UTF-7`, `gsm0338` and the `MIME-*` encodings (as input or output encoding; every other encoding Perl Encode supports is implemented, verified over all of Unicode against Encode 3.21) | deferred: ERROR naming the encoding |
 
 ## 5. Cosmetic differences in logs and messages
@@ -163,6 +174,7 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 | DC-043 | `INFO` lines specific to biber internals (PAR cache, Perl modules, …) | Omitted or replaced | planned |
 | DC-044 | `--debug`/`--trace` output (Perl data dumps) | Different content. Also, `--debug` does **not** stop btparse errors being fatal (BB-075). | planned |
 | DC-046 | Error text for undecodable bytes in a data file (Perl's `Encode` message, e.g. `utf8 "\xA6" does not map to Unicode`) | A similar message naming the file, encoding and byte; not byte-identical | implemented (fetch) |
+| DC-067 | Messages for the biblatexml crashes of DC-065 | bibers' own WARN/ERROR texts (biber dies with a Perl or libxml2 error). Also: a `literal` annotation attribute is kept as a flag, so values other than 0/1 are written back as `1` | implemented |
 | DC-064 | Network errors: LWP/IO::Socket::SSL message texts | The OS's text for low-level errors (identical on macOS for refused connections and DNS failures); TLS errors other than "certificate verify failed" and "hostname verification failed" are worded differently. Read-error texts also lack Perl's ` at FILE line N.` (extends DC-046) | implemented |
 | DC-055 | `--tool-config` prints the path of the installed biber-tool.conf | Prints the built-in biber-tool.conf itself, exit 0 (bibers has no data directory) | implemented |
 | DC-056 | Validation messages name the installed schema (`…/Biber/bcf.rng`, a PAR temp path) | Name the built-in one, `(built-in)/bcf.rng` / `(built-in)/config.rng` | implemented |

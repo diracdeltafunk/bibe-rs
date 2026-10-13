@@ -316,7 +316,17 @@ Original M3 scope:
 - Option scoping edge cases, `--validate-datamodel`, encodings.
 - Fuzzing campaign running continuously with the minimiser.
 
-**M4: Secondary features** (deferred by decision, §10). These are tracked here so they aren't forgotten:
+**M4: Secondary features**: *done (2026-10-13).* Guide: `docs/M4.md`. Checked first: none of these features is deprecated upstream (biber 2.22 deprecates only `bblxml`).
+- **Tool mode and bibtex output** (DC-030): `--tool`, the built-in biber-tool.conf, every `--output-*` option, non-tool `--output-format=bibtex`. Swept against biber over 964 TeX Live `.bib` files × 5 option sets and all corpus `.bcf`s.
+- **biblatexml** (DC-031): input (with its own XPath 1.0 evaluator and mutable DOM), output, and `.rng` schema generation.
+- **XML** (DC-033): a RELAX NG validator written from the spec (`crates/relaxng`) for `--validate-control`, `--validate-config`, `--validate-bltxml`; verdicts agree with libxml2 on 54,000 mutated documents (libxml2's interleave bug reproduced as a quirk). `--convert-control` HTML byte-identical to libxslt on every corpus `.bcf`.
+- **I/O** (DC-032, 034, 045): remote `http`/`https`/`ftp` sources (rustls; 36 local-server scenarios identical to biber); a port of Perl Encode 3.21 covering every encoding biber can use (verified over all of Unicode), including the PerlIO chunking quirks; `--recodedata`.
+- **New corpus suites:** `tool/`, `xml/`, `io/`, `bltxml/`. **Corpus: 776/776 pass.**
+- **Biber bugs found:** BB-153…188 (12 new quirk switches; crash fixes DC-058…060, DC-065).
+- **Still unsupported:** UTF-7, gsm0338 and MIME-* encodings (DC-034).
+- **Test infrastructure:** O1's PAR cache now lives in `target/par-cache` (macOS temp cleanup corrupted it, making biber exit 25); corpus cases can declare `requires = ["kpsewhich"]`, skipped where TeX is missing (CI).
+
+Original M4 scope:
 - tool mode (`--tool`, biber-tool.conf) and bibtex output with all `--output-*` formatting options;
 - non-tool `--output-format=bibtex`;
 - biblatexml input and output, and bltxml schema generation;
@@ -384,3 +394,4 @@ Not planned at all: the deprecated `bblxml` and `dot` outputs (with `--dot-inclu
 | 7 | Behaviour differences | Every difference from biber is recorded in **`docs/compat.md`** (DC-NNN ids, referenced from code and from the test-harness allow-list). |
 | 8 | btparse licence (LGPL) | **Spec-first reimplementation** (§9): no translation of btparse C code. |
 | 9 | ISBN range data | **Vendor** the exact `RangeMessage.xml` biber 2.22 bundles (`data/isbn/`), compiled in at build time. No network needed; `ISBN_RANGE_MESSAGE` override supported. |
+| 10 | M4 scope (2026-10-10) | M4 before M5, on the condition that the features are not deprecated upstream: none are (biber 2.22 deprecates only `bblxml`, already dropped). Four parallel packages: tool, bltxml, xml, io (`docs/M4.md`). |

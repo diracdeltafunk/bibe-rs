@@ -186,3 +186,52 @@ fn biblatexml_output() {
     );
     assert!(read(&d.path().join("missing_bibertool.bltxml")).ends_with("biblatexml\">"));
 }
+
+const BLTX_DATA: &str = "@book{k1, ids={alias1,alias2}, author={Doe, John and Roe, Ann}, \
+author+an:default={1=corr; 2:family=fam}, title={T}, keywords={a,b}, \
+date={2001-02-03T00:30:00}}\n";
+
+/// The biblatexml writer quirks (BB-182, 183, 186, 187): reproduced by
+/// default, and the fixed output keeps the data.
+#[test]
+fn biblatexml_writer_quirks() {
+    let d = tempfile::tempdir().unwrap();
+    std::fs::write(d.path().join("t.bib"), BLTX_DATA).unwrap();
+    let out = d.path().join("t_bibertool.bltxml");
+    let lost = [
+        "<bltx:key>alias1</bltx:key>",
+        "<bltx:keywords>a,b</bltx:keywords>",
+        "<bltx:name annotation=\"corr\">",
+        "annotation=\"fam\">Roe</bltx:namepart>",
+        "<bltx:date>2001-02-03T00:30:00</bltx:date>",
+    ];
+    assert_eq!(
+        run(
+            d.path(),
+            &["-q", "--tool", "--output-format=biblatexml", "t.bib"]
+        ),
+        0
+    );
+    let quirky = read(&out);
+    assert!(quirky.contains("<bltx:item>alias1</bltx:item>"), "{quirky}");
+    for l in lost {
+        assert!(!quirky.contains(l), "{l} in\n{quirky}");
+    }
+    assert_eq!(
+        run(
+            d.path(),
+            &[
+                "-q",
+                "--tool",
+                "--output-format=biblatexml",
+                "--fix-quirks=bltxml-xsv-fields,bltxml-ids-output,bltxml-name-annotations,zero-is-empty",
+                "t.bib",
+            ]
+        ),
+        0
+    );
+    let fixed = read(&out);
+    for l in lost {
+        assert!(fixed.contains(l), "{l} missing from\n{fixed}");
+    }
+}

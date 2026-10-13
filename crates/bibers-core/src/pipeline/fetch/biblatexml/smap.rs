@@ -296,7 +296,17 @@ impl Engine<'_, '_> {
                 return Ok(StepResult::Flow(Flow::NextStep));
             };
             debug!(self.ctx.log, "{keyp}Creating new entry with key '{newkey}'");
-            let ne = self.dom.new_element("bltx:entry");
+            // `XML::LibXML::Element->new("bltx:entry")`: a local name with a
+            // colon and no namespace, so XPaths on it fail and `exists`
+            // reports every field as present: map steps never set fields on
+            // it (BB-175). Fixed: a real `bltx:entry` element.
+            let ne = if self.ctx.cfg.quirks.on(Quirk::BltxmlSmapNewEntryNs) {
+                self.dom.new_element("bltx:entry")
+            } else {
+                let e = self.dom.new_element("entry");
+                self.dom.set_namespace(e, super::BLTX_NS, "bltx");
+                e
+            };
             self.dom.set_attribute(ne, "id", &nfc(&newkey));
             self.dom.set_attribute(ne, "entrytype", &nfc(&newtype));
             rkeys.retain(|k| *k != newkey);

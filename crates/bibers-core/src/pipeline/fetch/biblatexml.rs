@@ -347,11 +347,46 @@ pub fn extract_entries(
                     }
                 }
                 rkeys.retain(|k| k != wanted);
+            } else if !ctx.cfg.quirks.on(Quirk::BltxmlCitedAliases)
+                && let Some((entry, key)) = ids_key_alias(&dom, wanted)
+            {
+                // BB-174 fixed: the alias is declared in `<bltx:ids>` (what
+                // allkeys mode reads, biblatexml.pm:156).
+                debug!(
+                    ctx.log,
+                    "Citekey '{wanted}' is an alias for citekey '{key}'"
+                );
+                st.section.citekey_alias.insert(wanted.clone(), key.clone());
+                if !st.section.entries.contains_key(&key) {
+                    st.section.set_keytods(&key, filename);
+                    if create_entry(ctx, st, opts, &src, &mut dom, &key, entry, true, &mut rkeys)? {
+                        st.section.add_citekeys(std::slice::from_ref(&key));
+                    }
+                }
+                rkeys.retain(|k| k != wanted);
             }
             debug!(ctx.log, "Wanted keys now: {}", rkeys.join(", "));
         }
     }
     Ok(rkeys)
+}
+
+/// The entry whose `<bltx:ids>` has a `<bltx:key>` with text `wanted`, and
+/// its id.
+fn ids_key_alias(dom: &Dom, wanted: &str) -> Option<(NodeId, String)> {
+    let xp = XPath::compile("/bltx:entries/bltx:entry[bltx:ids/bltx:key]").expect("valid XPath");
+    let es = eval_nodes(dom, dom.document(), &xp, &xpc_ns(dom)).ok()?;
+    let is = |n: NodeId, local: &str| {
+        dom.name(n)
+            .is_some_and(|q| q.local == local && q.ns.as_deref() == Some(BLTX_NS))
+    };
+    es.into_iter().find_map(|e| {
+        dom.element_children(e)
+            .filter(|c| is(*c, "ids"))
+            .flat_map(|c| dom.element_children(c).collect::<Vec<_>>())
+            .any(|k| is(k, "key") && dom.text_content(k) == wanted)
+            .then(|| (e, dom.get_attribute(e, "id").unwrap_or("").to_string()))
+    })
 }
 
 /// The entry with a `<bltx:id>` child whose text is `wanted`, and its id.

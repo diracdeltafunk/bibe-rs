@@ -831,6 +831,22 @@ impl DataModel {
         v
     }
 
+    /// Fields of `fieldtype` with format `format`, of any datatype (sorted).
+    pub fn get_fields_of_format(&self, ft: &str, format: &str) -> Vec<String> {
+        let mut v: Vec<String> = self
+            .fieldsbytype
+            .get(ft)
+            .into_iter()
+            .flat_map(|m| m.values())
+            .filter_map(|m| m.get(format))
+            .flatten()
+            .cloned()
+            .collect();
+        v.sort();
+        v.dedup();
+        v
+    }
+
     /// `is_fields_of_type`.
     pub fn is_fields_of_type(&self, ft: &str, dt: &str, format: Option<&str>) -> bool {
         let Some(m) = self.fieldsbytype.get(ft).and_then(|m| m.get(dt)) else {

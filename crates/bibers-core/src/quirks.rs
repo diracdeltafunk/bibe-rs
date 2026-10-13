@@ -116,21 +116,43 @@ pub enum Quirk {
     /// BB-051 (`bltxml-uri-escape`): biblatexml URIs are percent-escaped at
     /// input from NFD text (`urlraw` escaped too, `é` as `e%CC%81`).
     BltxmlUriEscape,
-    /// (`bltxml-relatedoptions`, DC-031 report): `relatedoptions` is read
+    /// BB-171 (`bltxml-relatedoptions`): `relatedoptions` is read
     /// from a `relatedoptions` attribute instead of `options`, so it is
     /// always empty.
     BltxmlRelatedoptions,
-    /// (`bltxml-namepart-initial`, DC-031 report): the `initial` attribute
+    /// BB-170 (`bltxml-namepart-initial`): the `initial` attribute
     /// of a simple `namepart` is read from the `name` element instead.
     BltxmlNamepartInitial,
-    /// (`bltxml-smap-matchi`, DC-031 report): biblatexml source maps ignore
+    /// BB-172 (`bltxml-smap-matchi`): biblatexml source maps ignore
     /// `map_matchi`/`map_notmatchi` case-insensitivity for matches without
     /// replacement, and `map_notmatchi` is not negated.
     BltxmlSmapMatchi,
-    /// (`bltxml-smap-node-string`, DC-031 report): mapping a field to a new
+    /// BB-173 (`bltxml-smap-node-string`): mapping a field to a new
     /// (non-name) field, or using an XPath value as a string, stores the
     /// serialised XML of the source node instead of its text.
     BltxmlSmapNodeString,
+    /// BB-182 (`bltxml-xsv-fields`): biblatexml output asks for fields of
+    /// *datatype* `xsv` (it is a format), so xsv fields (`keywords`,
+    /// `entryset`, `related`, …) are never written.
+    BltxmlXsvFields,
+    /// BB-183 (`bltxml-ids-output`): biblatexml output writes aliases as
+    /// `<ids><list><item>`, but the reader expects `<ids><key>`, so they are
+    /// lost on a round trip.
+    BltxmlIdsOutput,
+    /// BB-187 (`bltxml-name-annotations`): biblatexml output looks up name
+    /// and name-part annotations with the name's index as the annotation
+    /// name, so they are never written.
+    BltxmlNameAnnotations,
+    /// BB-174 (`bltxml-cited-aliases`): in cited-key (non-allkeys) mode
+    /// biblatexml aliases (`<bltx:ids><bltx:key>`) are never consulted
+    /// (biber looks for a `<bltx:id>` element), so citing an alias finds no
+    /// entry.
+    BltxmlCitedAliases,
+    /// BB-175 (`bltxml-smap-new-entry-ns`): biblatexml `map_entry_new`
+    /// creates an element named `bltx:entry` without a namespace, so XPaths
+    /// on it fail ("Undefined namespace prefix" on stderr), `exists` is true
+    /// and map steps never set its fields.
+    BltxmlSmapNewEntryNs,
     /// BB-047 (`bibtex-winters-typo`): the bibtex writer's year-division
     /// map has `WinterS` for `winterS`, so that season is lost from dates.
     BibtexWinterSTypo,
@@ -138,32 +160,32 @@ pub enum Quirk {
     /// encoding the bibtex writer tests `encode(...) =~ /\?/`, so a literal
     /// `?` makes it LaTeX-recode the entry and warn.
     BibtexEncodingQuestionMark,
-    /// (`bibtex-unspecified-dates`; new, see the tool package report): the
+    /// BB-153 (`bibtex-unspecified-dates`): the
     /// bibtex writer formats the `XX` of ISO 8601-2 unspecified months and
     /// days with `sprintf('%.2d')`, so `1999-XX` is written as `1999-00`.
     BibtexUnspecifiedDates,
-    /// (`bibtex-literal-annotations`; new): the bibtex writer drops the
+    /// BB-154 (`bibtex-literal-annotations`): the bibtex writer drops the
     /// quotes of literal annotations (`="text"` is written as `=text`).
     BibtexLiteralAnnotations,
-    /// (`tool-comments-last-file`; new): in tool mode only the `@comment`s
+    /// BB-155 (`tool-comments-last-file`): in tool mode only the `@comment`s
     /// of the last data source that has any are output.
     ToolCommentsLastFile,
-    /// (`tool-drops-preambles`; new): tool-mode (and bibtex) output does
+    /// BB-156 (`tool-drops-preambles`): tool-mode (and bibtex) output does
     /// not write the data's `@preamble`s.
     ToolDropsPreambles,
-    /// (`libxml2-interleave`; a libxml2 2.9 bug, no BB id yet): biber
+    /// (`libxml2-interleave`; a libxml2 2.9 bug, see biber-bugs.md "Not bugs"): biber
     /// validates with libxml2, whose interleave implementation rejects some
     /// valid documents when an interleave operand is itself an interleave
     /// (the generated biblatexml schema; `--validate-bltxml`).
     Libxml2Interleave,
-    /// (`unicode-output-nul-check`; M4 io package, no BB id yet): biber
+    /// BB-169 (`unicode-output-nul-check`): biber
     /// tests "can this entry be encoded" with `encode($enc, $s, sub {"\0"})
     /// =~ /\0/`, which is true for nearly every string in UTF-16/UTF-32/UCS-2
     /// (their code units contain NUL bytes), so with such an
     /// `--output-encoding` every entry is recoded into LaTeX macros with a
     /// "cannot be encoded" WARN.
     UnicodeOutputNulCheck,
-    /// (`utf16-chunk-surrogate`; M4 io package, no BB id yet): a UTF-16 data
+    /// BB-168 (`utf16-chunk-surrogate`): a UTF-16 data
     /// source is read through PerlIO in 1024-byte chunks, and Encode::Unicode
     /// croaks "UTF-16:Partial character" when a surrogate pair straddles a
     /// chunk boundary, so the file cannot be read.
@@ -209,6 +231,11 @@ impl Quirk {
         Quirk::BltxmlNamepartInitial,
         Quirk::BltxmlSmapMatchi,
         Quirk::BltxmlSmapNodeString,
+        Quirk::BltxmlXsvFields,
+        Quirk::BltxmlIdsOutput,
+        Quirk::BltxmlNameAnnotations,
+        Quirk::BltxmlCitedAliases,
+        Quirk::BltxmlSmapNewEntryNs,
         Quirk::BibtexWinterSTypo,
         Quirk::BibtexEncodingQuestionMark,
         Quirk::BibtexUnspecifiedDates,
@@ -259,6 +286,11 @@ impl Quirk {
             Quirk::BltxmlNamepartInitial => "bltxml-namepart-initial",
             Quirk::BltxmlSmapMatchi => "bltxml-smap-matchi",
             Quirk::BltxmlSmapNodeString => "bltxml-smap-node-string",
+            Quirk::BltxmlXsvFields => "bltxml-xsv-fields",
+            Quirk::BltxmlIdsOutput => "bltxml-ids-output",
+            Quirk::BltxmlNameAnnotations => "bltxml-name-annotations",
+            Quirk::BltxmlCitedAliases => "bltxml-cited-aliases",
+            Quirk::BltxmlSmapNewEntryNs => "bltxml-smap-new-entry-ns",
             Quirk::BibtexWinterSTypo => "bibtex-winters-typo",
             Quirk::BibtexEncodingQuestionMark => "bibtex-encoding-question-mark",
             Quirk::BibtexUnspecifiedDates => "bibtex-unspecified-dates",

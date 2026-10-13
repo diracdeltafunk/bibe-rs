@@ -20,6 +20,7 @@ use crate::model::{Entry, NameId, Section, SectionState, Value};
 use crate::perlish::{lc, nfc};
 use crate::pipeline::Ctx;
 use crate::pipeline::Processed;
+use crate::quirks::Quirk;
 use crate::xmlwriter::{XName, XmlWriter};
 use serde_json::Value as J;
 
@@ -258,11 +259,19 @@ impl BltxmlWriter {
         ids.sort();
         if !ids.is_empty() {
             w.start_tag(n("ids"), &[]);
-            w.start_tag(n("list"), &[]);
-            for i in ids {
-                w.data_element(n("item"), &nfc(i), &[]);
+            if ctx.cfg.quirks.on(Quirk::BltxmlIdsOutput) {
+                // BB-183: a form the reader does not accept.
+                w.start_tag(n("list"), &[]);
+                for i in ids {
+                    w.data_element(n("item"), &nfc(i), &[]);
+                }
+                w.end_tag();
+            } else {
+                // What the reader reads (biblatexml.pm:156).
+                for i in ids {
+                    w.data_element(n("key"), &nfc(i), &[]);
+                }
             }
-            w.end_tag();
             w.end_tag();
         }
 
@@ -424,6 +433,29 @@ impl BltxmlWriter {
 
         // xsv fields: `get_fields_of_type('field', 'xsv')` asks for a
         // *datatype* `xsv`, which does not exist, so none are written
+        // (BB-182). With the quirk fixed, write them as intended
+        // (Output/biblatexml.pm:292-307).
+        if !ctx.cfg.quirks.on(Quirk::BltxmlXsvFields) {
+            for xf in dm.get_fields_of_format("field", "xsv") {
+                if xf == "ids" || xf == "xdata" {
+                    continue;
+                }
+                let Some(Value::List(l)) = be.get_field(&xf) else {
+                    continue;
+                };
+                if l.is_empty() {
+                    continue;
+                }
+                if (!resolve_xdata || !is_xdata_resolved(be, &xf, None))
+                    && l.len() == 1
+                    && let Some(x) = xdatarefcheck(ctx, Some(&Value::Str(l[0].clone())))
+                {
+                    w.empty_tag(n(&xf), &[("xdata", &nfc(&x))]);
+                    continue;
+                }
+                w.data_element(n(&xf), &nfc(&l.join(",")), &[]);
+            }
+        }
 
         // range fields
         for rf in dm.get_fields_of_datatype(&["range"]) {
@@ -464,7 +496,7 @@ impl BltxmlWriter {
         // date fields
         for df in dm.get_fields_of_datatype(&["date"]) {
             let d = df.strip_suffix("date").unwrap_or(&df).to_string();
-            write_date(w, be, &d);
+            write_date(w, be, &d, ctx.cfg.quirks.on(Quirk::ZeroIsEmpty));
         }
 
         // annotations
@@ -570,19 +602,24 @@ fn name_to_biblatexml(
         attrs.push(("gender".into(), g.to_string()));
     }
     // `get_annotation('item', $key, $namefield, $count)`: the count is
-    // passed as the annotation *name* (so this normally finds nothing)
+    // passed as the annotation *name* (so this normally finds nothing,
+    // BB-187). With the quirk fixed: name `default`, item `$count`.
     let ann = &ctx.run.annotations;
-    let nm = if perl_compat::perl_truthy(&count) {
+    let fixed = !ctx.cfg.quirks.on(Quirk::BltxmlNameAnnotations);
+    let nm = if fixed {
+        "default"
+    } else if perl_compat::perl_truthy(&count) {
         count.as_str()
     } else {
         "default"
     };
+    let item = if fixed { count.as_str() } else { "" };
     if let Some(v) = ann
         .item
         .get(key)
         .and_then(|m| m.get(nf))
         .and_then(|m| m.get(nm))
-        .and_then(|m| m.get(""))
+        .and_then(|m| m.get(item))
         .and_then(|a| a.value.clone())
         .filter(|v| perl_compat::perl_truthy(v))
     {
@@ -613,14 +650,21 @@ fn name_to_biblatexml(
             parts.pop();
         }
         let mut pattrs: Vec<(String, String)> = Vec::new();
-        // `get_annotation('part', $key, $namefield, $count, $npn)`
+        // `get_annotation('part', $key, $namefield, $count, $npn)`: name
+        // `$count`, item `$npn`, no part (BB-187). Fixed: name `default`,
+        // item `$count`, part `$npn`.
+        let (pc, pp) = if fixed {
+            (count.as_str(), np.as_str())
+        } else {
+            (np.as_str(), "")
+        };
         if let Some(v) = ann
             .part
             .get(key)
             .and_then(|m| m.get(nf))
             .and_then(|m| m.get(nm))
-            .and_then(|m| m.get(&np))
-            .and_then(|m| m.get(""))
+            .and_then(|m| m.get(pc))
+            .and_then(|m| m.get(pp))
             .and_then(|a| a.value.clone())
             .filter(|v| perl_compat::perl_truthy(v))
         {
@@ -662,7 +706,9 @@ fn name_to_biblatexml(
 }
 
 /// One date field (Output/biblatexml.pm:375-526).
-fn write_date(w: &mut XmlWriter, be: &Entry, d: &str) {
+/// `zero_is_empty`: biber's `if (my $sh = …)` drops a time whose hour is
+/// `0` (BB-186, quirk `zero-is-empty`).
+fn write_date(w: &mut XmlWriter, be: &Entry, d: &str, zero_is_empty: bool) {
     let g = |f: &str| be.get_field(&format!("{d}{f}")).and_then(Value::as_str);
     let Some(mut sf) = g("year")
         .filter(|y| perl_compat::perl_truthy(y))
@@ -805,7 +851,13 @@ fn write_date(w: &mut XmlWriter, be: &Entry, d: &str) {
     .flatten()
     .collect();
     let time = |h: &str, m: &str, s: &str| -> Option<String> {
-        let hv = gd(h).filter(|x| perl_compat::perl_truthy(x))?;
+        let hv = gd(h).filter(|x| {
+            if zero_is_empty {
+                perl_compat::perl_truthy(x)
+            } else {
+                !x.is_empty()
+            }
+        })?;
         Some(format!(
             "T{}:{}:{}",
             sprintf_2d(hv),

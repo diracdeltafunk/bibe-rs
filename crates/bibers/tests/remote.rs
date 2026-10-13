@@ -373,6 +373,15 @@ fn output_encoding_errors() {
     assert_eq!(r.code, 2);
     assert!(r.messages()[0].contains("is not supported"));
     // A missing --recodedata file (biber: "Couldn't open : No such file").
+    // The lookup goes through kpsewhich, which CI runners lack.
+    if std::process::Command::new("kpsewhich")
+        .arg("--version")
+        .output()
+        .is_err()
+    {
+        eprintln!("skipping the --recodedata part: no kpsewhich");
+        return;
+    }
     let r = run_in(
         dir.path(),
         &["--recodedata=nonexistent-recode.xml", "encoding6.bcf"],
