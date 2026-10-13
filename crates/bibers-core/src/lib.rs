@@ -7,8 +7,8 @@
 //! [`datamodel`], [`log`] (the `.blg`/stdout logger).
 
 pub mod bcf;
-pub mod bltxml_schema;
 pub mod bcfhtml;
+pub mod bltxml_schema;
 pub mod config;
 pub mod datamodel;
 pub mod env;
@@ -19,8 +19,8 @@ pub mod output;
 pub mod perlish;
 pub mod pipeline;
 pub mod quirks;
-pub mod xmldom;
 pub mod xmlcheck;
+pub mod xmldom;
 pub mod xmlin;
 pub mod xmlwriter;
 

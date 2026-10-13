@@ -84,6 +84,17 @@ bltxml/smap-crash-pertype
 bltxml/smap-fixquirks
 bltxml/smap-new-entry
 bltxml/smap-target-new
+bltxml/tool-dates
+bltxml/tool-fields
+bltxml/tool-from-bib
+bltxml/tool-indent
+bltxml/tool-names
+bltxml/tool-validate
+bltxml/tool-validate-ok
+bltxml/tool-xdata
+bltxml/tool-xdata-resolved
+bltxml/validate-input
+bltxml/validate-input-ok
 bltxml/xdata
 bugs/bb-001-uniquelist-final-crash
 bugs/bb-002-multiple-string-macros
@@ -296,6 +307,9 @@ ported/tool-1
 ported/tool-2
 ported/tool-3
 ported/tool-4
+ported/tool-bltxml-1
+ported/tool-bltxml-2
+ported/tool-bltxml-inout-1
 ported/translit-1
 ported/truncation-1
 ported/truncation-2

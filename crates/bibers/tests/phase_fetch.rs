@@ -8,11 +8,10 @@ use std::path::{Path, PathBuf};
 /// Corpus cases whose `fetch_data` deliberately differs from biber, with
 /// the documented reason.
 const EXCLUDED: &[(&str, &str)] = &[
-    // biblatexml in tool mode (DC-030)
-    ("ported/tool-bltxml-1", "DC-031"),
-    ("ported/tool-bltxml-2", "DC-031"),
-    ("ported/tool-bltxml-inout-1", "DC-031"),
-    // tool mode / bibtex output: not modelled by the phase replay
+    // tool mode: not modelled by the phase replay
+    ("ported/tool-bltxml-1", "tool mode"),
+    ("ported/tool-bltxml-2", "tool mode"),
+    ("ported/tool-bltxml-inout-1", "tool mode"),
     ("ported/bibtex-output-1", "tool mode"),
     ("ported/full-bibtex-1", "tool mode"),
     ("ported/tool-1", "tool mode"),

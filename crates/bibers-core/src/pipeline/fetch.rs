@@ -670,7 +670,7 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
             break;
         }
         if ds.datatype.as_deref() == Some("biblatexml") {
-            biblatexml_schema(ctx)?;
+            biblatexml_schema(ctx, ds.name.as_deref().unwrap_or(""))?;
         }
         if !check_datasource(ctx, ds)? {
             continue;
@@ -706,13 +706,14 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     Ok(())
 }
 
-/// Biber.pm:4629-4646: write the bltxml RNG schema next to the `.bcf`
-/// (unless `--no-bltxml-schema`), once per run.
-fn biblatexml_schema(ctx: &mut Ctx) -> Result<(), Fatal> {
-    if ctx.cfg.biber.is_true("no_bltxml_schema") || ctx.run.bltxml.schema_done {
-        return Ok(());
-    }
-    let mut outfile = if ctx.cfg.biber.is_true("tool") {
+/// Biber.pm:4629-4646: write the bltxml RNG schema (unless
+/// `--no-bltxml-schema`, once per run) and, with `--validate-bltxml`,
+/// validate the data source `name` against it (biber validates against the
+/// schema path *before* `--output-directory` is applied, so with an output
+/// directory the schema is not found and validation is skipped with a
+/// warning).
+fn biblatexml_schema(ctx: &mut Ctx, name: &str) -> Result<(), Fatal> {
+    let outfile = if ctx.cfg.biber.is_true("tool") {
         // tool mode: next to the data source (DC-010: never the input itself)
         let dsn = ctx.cfg.biber.get_str("dsn").unwrap_or("");
         crate::output::biblatexml::schema_file_for_dsn(dsn)
@@ -720,6 +721,28 @@ fn biblatexml_schema(ctx: &mut Ctx) -> Result<(), Fatal> {
         let bcf = ctx.cfg.biber.get_str("bcf").unwrap_or("").to_string();
         biblatexml::schema_file(&bcf)
     };
+    if !ctx.cfg.biber.is_true("no_bltxml_schema") {
+        write_bltxml_schema(ctx, &outfile)?;
+    }
+    if ctx.cfg.biber.is_true("validate_bltxml") {
+        crate::xmlcheck::validate_biber_xml(
+            ctx.log,
+            ctx.env,
+            name,
+            crate::xmlcheck::SchemaKind::Bltxml(&outfile),
+            ctx.cfg.quirks,
+        )?;
+    }
+    Ok(())
+}
+
+/// `generate_bltxml_schema($outfile)` (DataModel.pm:1021): written into
+/// `--output-directory` if given, once per run.
+pub fn write_bltxml_schema(ctx: &mut Ctx, outfile: &str) -> Result<(), Fatal> {
+    if ctx.run.bltxml.schema_done {
+        return Ok(());
+    }
+    let mut outfile = outfile.to_string();
     if let Some(outdir) = ctx
         .cfg
         .biber

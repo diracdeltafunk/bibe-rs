@@ -86,22 +86,13 @@ pub fn unsupported(opts: &BTreeMap<String, Val>) -> Option<String> {
     if let Some(m) = msg {
         return Some(m.to_string());
     }
-    if of == "biblatexml" {
+    // DC-033: all RNG validation is implemented except for the dropped
+    // bblxml format.
+    if s("validate_bblxml").is_some_and(|v| !v.is_empty() && v != "0") {
         return Some(
-            "output format 'biblatexml' is not yet supported (docs/compat.md DC-031)".into(),
+            "RNG validation (--validate-bblxml) is not yet supported (docs/compat.md DC-033)"
+                .into(),
         );
-    }
-    // DC-033: --validate-control and --validate-config are implemented;
-    // --validate-bltxml waits for biblatexml input (DC-031).
-    for (k, flag) in [
-        ("validate_bltxml", "--validate-bltxml"),
-        ("validate_bblxml", "--validate-bblxml"),
-    ] {
-        if s(k).is_some_and(|v| !v.is_empty() && v != "0") {
-            return Some(format!(
-                "RNG validation ({flag}) is not yet supported (docs/compat.md DC-033)"
-            ));
-        }
     }
     None
 }
@@ -319,6 +310,18 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
         let _ = biber_error!(log, "Cannot open output file '{outfile}': {e}");
         return Exit(log.display_end());
     }
+    // The biblatexml writer opens its file and writes the document head at
+    // once (Output/biblatexml.pm:52-90), so a later fatal error leaves it.
+    if outfile != "-"
+        && format == bibers_core::output::OutputFormat::Biblatexml
+        && let Err(e) = std::fs::write(
+            env.resolve(&outfile),
+            bibers_core::output::biblatexml::header(&cfg),
+        )
+    {
+        let _ = biber_error!(log, "Cannot open output file '{outfile}': {e}");
+        return Exit(log.display_end());
+    }
 
     let mut doc = if tool {
         // Fake the necessary .bcf parts (bin/biber:400-403).
@@ -411,15 +414,19 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         }
         Err(_) => return log.display_end(),
     };
-    // bbl.pm:676-677, 779 (`-` is stdout; biber logs it by that name too).
-    let enc = bibers_core::output::bbl::output_encoding_name(&ctx);
-    info!(ctx.log, "Writing '{outfile}' with encoding '{enc}'");
-    if ctx.cfg.biber.is_true("output_safechars") {
-        info!(ctx.log, "{}", format.safechars_message());
-    }
-    let bytes = match bibers_core::output::bbl::encode_output(&mut ctx, &text) {
-        Ok(b) => b,
-        Err(_) => return log.display_end(),
+    let bytes = if format.encodes_output() {
+        // bbl.pm:676-677, 779 (`-` is stdout; biber logs it by that name too).
+        let enc = bibers_core::output::bbl::output_encoding_name(&ctx);
+        info!(ctx.log, "Writing '{outfile}' with encoding '{enc}'");
+        if ctx.cfg.biber.is_true("output_safechars") {
+            info!(ctx.log, "{}", format.safechars_message());
+        }
+        match bibers_core::output::bbl::encode_output(&mut ctx, &text) {
+            Ok(b) => b,
+            Err(_) => return log.display_end(),
+        }
+    } else {
+        text.into_bytes()
     };
     if outfile == "-" {
         let mut o = std::io::stdout().lock();
@@ -430,5 +437,8 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         return log.display_end();
     }
     info!(ctx.log, "Output to {outfile}");
+    if format.after_write(&mut ctx, &outfile).is_err() {
+        return log.display_end();
+    }
     log.display_end()
 }
