@@ -284,7 +284,7 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
     if bibers_core::recodedata::load(&mut cfg, &mut log, env).is_err() {
         return Exit(log.display_end());
     }
-    let now = chrono::Local::now().format("%a %b %e, %Y, %H:%M:%S");
+    let now = jiff::Zoned::now().strftime("%a %b %e, %Y, %H:%M:%S");
     log.logfile_info(bibers_core::loc!(), &format!("=== {now}"));
 
     let outfile = match output_file(&cfg) {

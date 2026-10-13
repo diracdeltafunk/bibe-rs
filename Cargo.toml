@@ -35,7 +35,9 @@ memchr = "2"
 serde_json = "1"
 rustc-hash = "2"
 md-5 = "0.10"
-chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+# Local time for the log's "=== <date>" line. Not chrono: its `clock` feature
+# links CoreFoundation on macOS, which costs ~1 ms at every process start.
+jiff = "0.2.15"
 pcre2 = "0.2.11"
 sha2 = "0.10"
 # Remote data sources (DC-032): pure-Rust TLS (ring provider); webpki-roots is
