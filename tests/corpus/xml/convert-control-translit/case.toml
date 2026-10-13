@@ -1,0 +1,5 @@
+description = "--convert-control: translit.bcf as HTML"
+source = "vendor/biber/t/tdata/translit.bcf"
+args = ["--noconf", "--convert-control", "translit.bcf"]
+outputs = ["translit.bbl", "translit.bcf.html"]
+tags = ["suite:xml", "feature:convert-control"]

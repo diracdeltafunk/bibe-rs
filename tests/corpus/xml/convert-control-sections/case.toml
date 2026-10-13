@@ -1,0 +1,5 @@
+description = "--convert-control: sections.bcf as HTML"
+source = "vendor/biber/t/tdata/sections.bcf"
+args = ["--noconf", "--convert-control", "sections.bcf"]
+outputs = ["sections.bbl", "sections.bcf.html"]
+tags = ["suite:xml", "feature:convert-control"]

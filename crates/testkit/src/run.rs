@@ -67,6 +67,14 @@ impl Runner {
         for (k, v) in BASE_ENV {
             cmd.env(k, v);
         }
+        // The PAR-packed O1 unpacks itself into a cache under $TMPDIR, which
+        // macOS temp cleanup can partially delete; biber then dies with
+        // exit 25. Keep its cache in target/ instead.
+        if std::env::var_os("PAR_GLOBAL_TMPDIR").is_none() {
+            let par = crate::repo_root().join("target/par-cache");
+            std::fs::create_dir_all(&par).ok();
+            cmd.env("PAR_GLOBAL_TMPDIR", par);
+        }
         cmd.envs(&case.spec.env);
 
         let start = Instant::now();

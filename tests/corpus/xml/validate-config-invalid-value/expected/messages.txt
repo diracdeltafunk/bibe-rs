@@ -1,0 +1,1 @@
+ERROR - 'biber-test.conf' failed to validate against schema '<SCHEMA>/config.rng'

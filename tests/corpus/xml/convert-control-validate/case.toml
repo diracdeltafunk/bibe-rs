@@ -1,0 +1,5 @@
+description = "--convert-control with --validate-control"
+source = "vendor/biber/t/tdata/general.bcf"
+args = ["--noconf", "--convert-control", "--validate-control", "general.bcf"]
+outputs = ["general.bbl", "general.bcf.html"]
+tags = ["suite:xml", "feature:convert-control", "feature:validate-control"]

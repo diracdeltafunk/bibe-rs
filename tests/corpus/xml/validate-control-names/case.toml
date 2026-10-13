@@ -1,0 +1,5 @@
+description = "--validate-control on a valid .bcf (t/bcfvalidation.t)"
+source = "vendor/biber/t/tdata/names.bcf"
+args = ["--noconf", "--validate-control", "names.bcf"]
+outputs = ["names.bbl"]
+tags = ["suite:xml", "feature:validate-control"]

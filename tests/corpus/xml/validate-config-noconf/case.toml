@@ -1,0 +1,5 @@
+description = "--validate-config with --noconf: there is no config file to validate"
+source = "vendor/biber/t/tdata/general.bcf"
+args = ["--noconf", "--validate-config", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:xml", "feature:validate-config"]

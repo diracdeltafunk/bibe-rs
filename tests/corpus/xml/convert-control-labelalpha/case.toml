@@ -1,0 +1,5 @@
+description = "--convert-control: labelalpha.bcf as HTML"
+source = "vendor/biber/t/tdata/labelalpha.bcf"
+args = ["--noconf", "--convert-control", "labelalpha.bcf"]
+outputs = ["labelalpha.bbl", "labelalpha.bcf.html"]
+tags = ["suite:xml", "feature:convert-control"]

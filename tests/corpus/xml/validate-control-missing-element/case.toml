@@ -1,0 +1,5 @@
+description = "--validate-control: a required element (the biber options) is missing"
+source = "vendor/biber/t/tdata/general.bcf"
+args = ["--noconf", "--validate-control", "general.bcf"]
+outputs = ["general.bbl"]
+tags = ["suite:xml", "feature:validate-control"]

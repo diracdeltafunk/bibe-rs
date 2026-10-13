@@ -108,7 +108,7 @@ fn deferred_features_fail_cleanly() {
         run(d.path(), &["--tool", "--output-format=biblatexml", "x.bib"]),
         2
     );
-    assert_eq!(run(d.path(), &["--validate-control", "x"]), 2);
+    assert_eq!(run(d.path(), &["--validate-bltxml", "x"]), 2);
     assert_eq!(run(d.path(), &["--fix-quirks=bogus", "x"]), 2);
     assert!(!d.path().join("x.blg").exists());
 }

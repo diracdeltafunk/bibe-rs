@@ -1,0 +1,5 @@
+description = "--convert-control: set-dynamic.bcf as HTML"
+source = "vendor/biber/t/tdata/set-dynamic.bcf"
+args = ["--noconf", "--convert-control", "set-dynamic.bcf"]
+outputs = ["set-dynamic.bbl", "set-dynamic.bcf.html"]
+tags = ["suite:xml", "feature:convert-control"]
