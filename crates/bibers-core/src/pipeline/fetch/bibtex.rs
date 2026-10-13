@@ -8,13 +8,15 @@ use super::{SecExt, encoding};
 use crate::config::blx::{OptValue, Scope, expand_option_input};
 use crate::log::Fatal;
 use crate::model::{AnnotationScope, Entry, Name, SectionState, Value};
-use crate::perlish::{fc, lc, nfc, nfd, truthy};
+use crate::perlish::{fc, lc, nfc, nfd, nfd_string, truthy};
 use crate::pipeline::Ctx;
 use crate::pipeline::sourcemap::{self, RawEntry};
 use crate::{biber_error, debug, info};
+use perl_compat::case::fc_eq;
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_digit, is_perl_space};
 use serde_json::{Map, Value as J};
+use std::borrow::Cow;
 use std::collections::{BTreeMap, HashMap};
 use std::sync::Arc;
 
@@ -22,7 +24,7 @@ use std::sync::Arc;
 #[derive(Clone, Debug, Default)]
 pub struct FileData {
     /// Entries by key (pass-2 `Text::BibTeX::Entry` objects).
-    pub entries: HashMap<String, btparse::Entry>,
+    pub entries: HashMap<String, Arc<btparse::Entry>>,
     /// Distinct keys in first-cached order (bibers iterates this where biber
     /// iterates the hash: one of biber's possible orders).
     pub keys: Vec<String>,
@@ -34,7 +36,7 @@ pub struct BibCache {
     /// `{data}{$filename}`; present when Perl's hash ref would be true.
     pub data: HashMap<String, FileData>,
     /// `{data}{GLOBALDS}`: all cached entries of all files.
-    pub globalds: HashMap<String, btparse::Entry>,
+    pub globalds: HashMap<String, Arc<btparse::Entry>>,
     /// `{data}{citekey_aliases}`: alias → key.
     pub citekey_aliases: BTreeMap<String, String>,
     /// `{counts}{$filename}`.
@@ -170,8 +172,34 @@ struct Extract<'a> {
     btlines: Vec<String>,
 }
 
+/// Noncharacters (U+FDD0..U+FDEF, U+xFFFE, U+xFFFF) → U+FFFD.
+fn replace_noncharacters(s: String) -> String {
+    // Their UTF-8 forms start with 0xEF (BMP) or 0xF0..0xF4 (other planes).
+    if !s.bytes().any(|b| b >= 0xEF) {
+        return s;
+    }
+    s.chars()
+        .map(|c| {
+            let v = c as u32;
+            if (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v) {
+                '\u{FFFD}'
+            } else {
+                c
+            }
+        })
+        .collect()
+}
+
 /// `\R` → `\n`.
-fn normalise_newlines(s: &str) -> String {
+fn normalise_newlines(s: &str) -> Cow<'_, str> {
+    // Every `\R` other than `\n` contains one of these bytes (U+0085 is
+    // C2 85, U+2028/U+2029 are E2 80 A8/A9).
+    if !s
+        .bytes()
+        .any(|b| matches!(b, b'\r' | 0x0B | 0x0C | 0xC2 | 0xE2))
+    {
+        return Cow::Borrowed(s);
+    }
     let mut o = String::with_capacity(s.len());
     let mut it = s.chars().peekable();
     while let Some(c) = it.next() {
@@ -186,7 +214,7 @@ fn normalise_newlines(s: &str) -> String {
             c => o.push(c),
         }
     }
-    o
+    Cow::Owned(o)
 }
 
 /// The `RawEntry` a cached Text::BibTeX entry exposes to source maps.
@@ -208,13 +236,19 @@ fn raw_get<'e>(e: &'e RawEntry, f: &str) -> Option<&'e str> {
 
 /// `Text::BibTeX::Entry::print_s` for a regular entry.
 fn print_s(e: &RawEntry, key: &str) -> String {
-    let mut o = format!("@{}{{{},\n", e.entrytype, key);
+    let len: usize = e.fields.iter().map(|(f, v)| f.len() + v.len() + 8).sum();
+    let mut o = String::with_capacity(e.entrytype.len() + key.len() + len + 8);
+    for s in ["@", &e.entrytype, "{", key, ",\n"] {
+        o.push_str(s);
+    }
     for (f, _) in &e.fields {
         let v = raw_get(e, f).unwrap_or("");
-        o.push_str(&format!("  {f} = {{{v}}},\n"));
+        for s in ["  ", f, " = {", v, "},\n"] {
+            o.push_str(s);
+        }
     }
     o.push_str("}\n\n");
-    nfd(&o)
+    nfd_string(o)
 }
 
 /// `extract_entries` (bibtex.pm:109). Returns the keys not found.
@@ -446,7 +480,7 @@ fn cache_data(
     if encoding == "ascii" {
         info!(ctx.log, "Reading ascii input as UTF-8");
     }
-    let buf = nfd(text);
+    let buf = perl_compat::unicode::nfd(text);
     let buf = buf.strip_prefix('\u{feff}').unwrap_or(&buf);
     let buf = normalise_newlines(buf);
 
@@ -457,16 +491,17 @@ fn cache_data(
     let recoder = &opts.recoder;
     let verbs = &opts.verbs;
     let lbuf = btparse::compat::reserialise(&p1.entries, |f, v| {
-        if verbs.iter().any(|vb| *vb == fc(f)) {
-            v.to_string()
+        // (`verbs` are case-folded already)
+        if verbs.iter().any(|vb| fc_eq(vb, f)) {
+            Cow::Borrowed(v)
         } else {
-            let d = recoder.decode(v);
+            let d = recoder.decode_cow(v);
             // DC-003: a decoded value with unbalanced braces (e.g. `\char"7B`
             // → `{`) breaks biber's pass 2 (fatal error, the next entry is
             // swallowed: BB-003). Leave such a value undecoded instead: the
             // macro then reaches the .bbl, where LaTeX typesets it.
             if !btparse::compat::braces_round_trip(&d) && btparse::compat::braces_round_trip(v) {
-                v.to_string()
+                Cow::Borrowed(v)
             } else {
                 d
             }
@@ -475,17 +510,7 @@ fn cache_data(
     // biber writes the decoded buffer to its temp file through PerlIO's
     // :utf8_strict layer (slurp_switchw), which turns noncharacters (e.g.
     // from `\char"FDD0`) into U+FFFD.
-    let lbuf: String = lbuf
-        .chars()
-        .map(|c| {
-            let v = c as u32;
-            if (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v) {
-                '\u{FFFD}'
-            } else {
-                c
-            }
-        })
-        .collect();
+    let lbuf = replace_noncharacters(lbuf);
     if !opts.nostdmacros {
         for (k, v) in btparse::BIBER_MONTHS {
             ctx.run.bt.macros.define(k, v);
@@ -603,7 +628,8 @@ fn cache_data(
             continue;
         }
         let cache = &mut ctx.run.bibcache;
-        cache.globalds.insert(key.clone(), entry.clone());
+        let entry = Arc::new(entry);
+        cache.globalds.insert(key.clone(), Arc::clone(&entry));
         let fd = cache.data.entry(filename.to_string()).or_default();
         if !fd.entries.contains_key(&key) {
             fd.keys.push(key.clone());

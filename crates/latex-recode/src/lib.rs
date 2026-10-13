@@ -62,6 +62,7 @@ mod unicode;
 mod unicode_tables;
 pub mod xmldata;
 
+use std::borrow::Cow;
 use std::sync::{Arc, Mutex, OnceLock};
 
 use unicode_normalization::UnicodeNormalization;
@@ -303,6 +304,20 @@ impl Recoder {
                 }
             }
             n => n.apply(&s),
+        }
+    }
+
+    /// [`decode`](Self::decode), borrowing `text` when the result is `text`
+    /// itself (nothing to decode and already NFD).
+    pub fn decode_cow<'t>(&self, text: &'t str) -> Cow<'t, str> {
+        let unchanged = !decode::needs_work(text)
+            && (text.is_ascii()
+                || unicode_normalization::is_nfd_quick(text.chars())
+                    == unicode_normalization::IsNormalized::Yes);
+        if unchanged {
+            Cow::Borrowed(text)
+        } else {
+            Cow::Owned(self.decode(text))
         }
     }
 

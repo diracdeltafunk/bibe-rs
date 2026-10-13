@@ -48,9 +48,26 @@ const _: () = {
     assert!(unicode_normalization::UNICODE_VERSION.0 == 16);
 };
 
+/// Is `s` already in NFD? Exact: ASCII is NFD, and NFD's quick check has
+/// no `Maybe` answers (every `NFD_QC` value is `Yes` or `No`), so a `Yes`
+/// is authoritative and anything else is normalised.
+#[inline]
+fn is_nfd_fast(s: &str) -> bool {
+    s.is_ascii() || is_nfd_quick(s.chars()) == IsNormalized::Yes
+}
+
+/// Is `s` certainly already in NFC? Exact for `true`: ASCII is NFC, and a
+/// quick-check `Yes` is authoritative. `Maybe` (combining marks that might
+/// compose with what precedes them) counts as `false`: the caller then
+/// normalises, which gives the same string when it was NFC after all.
+#[inline]
+fn is_nfc_fast(s: &str) -> bool {
+    s.is_ascii() || is_nfc_quick(s.chars()) == IsNormalized::Yes
+}
+
 /// `Unicode::Normalize::NFD`.
 pub fn nfd(s: &str) -> Cow<'_, str> {
-    if is_nfd_quick(s.chars()) == IsNormalized::Yes {
+    if is_nfd_fast(s) {
         Cow::Borrowed(s)
     } else {
         Cow::Owned(s.nfd().collect())
@@ -59,10 +76,28 @@ pub fn nfd(s: &str) -> Cow<'_, str> {
 
 /// `Unicode::Normalize::NFC`.
 pub fn nfc(s: &str) -> Cow<'_, str> {
-    if is_nfc_quick(s.chars()) == IsNormalized::Yes {
+    if is_nfc_fast(s) {
         Cow::Borrowed(s)
     } else {
         Cow::Owned(s.nfc().collect())
+    }
+}
+
+/// [`nfd`] of an owned string, reusing it when it is already NFD.
+pub fn nfd_string(s: String) -> String {
+    if is_nfd_fast(&s) {
+        s
+    } else {
+        s.nfd().collect()
+    }
+}
+
+/// [`nfc`] of an owned string, reusing it when it is already NFC.
+pub fn nfc_string(s: String) -> String {
+    if is_nfc_fast(&s) {
+        s
+    } else {
+        s.nfc().collect()
     }
 }
 
