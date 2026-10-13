@@ -178,6 +178,13 @@ io/recodedata-custom-mine
 io/recodedata-custom-mixed
 io/recodedata-custom-noset
 io/recodedata-override-full
+io/tool-out-big5-eten
+io/tool-out-cp936
+io/tool-out-euc-kr
+io/tool-out-iso-2022-jp
+io/tool-out-shiftjis
+io/tool-out-utf-16
+io/tool-out-utf-16le
 io/utf8-noncharacter-decoded
 io/utf8-noncharacter-literal
 ported/annotations-1
