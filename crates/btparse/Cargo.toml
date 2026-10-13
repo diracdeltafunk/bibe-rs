@@ -11,6 +11,9 @@ publish = false
 [lints]
 workspace = true
 
+[dependencies]
+memchr.workspace = true
+
 [dev-dependencies]
 serde_json.workspace = true
 unicode-normalization.workspace = true

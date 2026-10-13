@@ -65,6 +65,8 @@ pub struct FetchOpts {
     pub xnamesep: String,
     pub xdatamarker: String,
     pub xdatasep: String,
+    /// `$xdatamarker$xnamesep`.
+    pub xdata_prefix: String,
     pub others_string: String,
     pub annotation_marker: String,
     pub named_annotation_marker: String,
@@ -115,6 +117,7 @@ impl FetchOpts {
             xnamesep: s("xnamesep"),
             xdatamarker: s("xdatamarker"),
             xdatasep: s("xdatasep"),
+            xdata_prefix: s("xdatamarker") + &s("xnamesep"),
             others_string: s("others_string"),
             annotation_marker: s("annotation_marker"),
             named_annotation_marker: s("named_annotation_marker"),
@@ -989,13 +992,13 @@ pub(super) fn add_xdata_ref(
         return false;
     };
     // m/^$xdatamarker$xnamesep(\S+)$/xi
-    let prefix = format!("{}{}", opts.xdatamarker, opts.xnamesep);
+    let prefix = &opts.xdata_prefix;
     let v = v.strip_suffix('\n').unwrap_or(v);
     if v.len() < prefix.len() || !v.is_char_boundary(prefix.len()) {
         return false;
     }
     let (head, rest) = v.split_at(prefix.len());
-    if fc(head) != fc(&prefix) || rest.is_empty() || rest.chars().any(is_perl_space) {
+    if !fc_eq(head, prefix) || rest.is_empty() || rest.chars().any(is_perl_space) {
         return false;
     }
     // m/^([^-]+)-([^-]+)(?:-(\d+))?$/
@@ -1411,7 +1414,7 @@ fn name_handler(
     let listid = st.section.names.new_list();
     st.section.names.list_mut(listid).type_ = Some(fcf.to_string());
     let mut names: Vec<crate::model::NameId> = Vec::new();
-    let nps = opts.nameparts.clone();
+    let nps = &opts.nameparts;
     for (i, name) in items.iter().enumerate() {
         if add_xdata_ref(ctx, opts, be, field, XRef::Str(name), Some(i), &secnum) {
             let mut n = Name::default();
@@ -1452,7 +1455,7 @@ fn name_handler(
         let cfg = NameCfg {
             noinit: &opts.noinit,
             fixinits: opts.fixinits,
-            nameparts: &nps,
+            nameparts: nps,
             xnamesep: &opts.xnamesep,
             registry: &ctx.cfg.blx.registry,
         };
