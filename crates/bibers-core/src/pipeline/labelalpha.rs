@@ -74,7 +74,18 @@ pub fn process_labelalpha(
     list: usize,
     citekey: &str,
 ) -> Result<(), Fatal> {
-    let cfg: &Config = ctx.cfg;
+    process_labelalpha_in(ctx.cfg, ctx.dm, &mut ctx.run.labelalpha, st, list, citekey)
+}
+
+/// [`process_labelalpha`] with the parts of the context it uses.
+pub(crate) fn process_labelalpha_in(
+    cfg: &Config,
+    dm: &DataModel,
+    run: &mut LabelRunCache,
+    st: &mut SectionState,
+    list: usize,
+    citekey: &str,
+) -> Result<(), Fatal> {
     let secnum = st.section.number.clone();
     let Some(be) = st.section.bibentry(citekey) else {
         return Ok(());
@@ -100,7 +111,7 @@ pub fn process_labelalpha(
     let dl = &mut datalists[list];
     let mut g = Gen {
         cfg,
-        dm: ctx.dm,
+        dm,
         secnum: &secnum,
         entries: &section.entries,
         names: &section.names,
@@ -109,7 +120,7 @@ pub fn process_labelalpha(
         dlstate: &mut dl.state,
         lantname: &dl.labelalphanametemplatename,
         listname: &dl.name,
-        run: &mut ctx.run.labelalpha,
+        run,
         label_final: false,
     };
     let (label, slabel) = g.genlabel(citekey);
@@ -136,7 +147,16 @@ pub fn process_extraalpha(
     list: usize,
     citekey: &str,
 ) -> Result<(), Fatal> {
-    let cfg: &Config = ctx.cfg;
+    process_extraalpha_in(ctx.cfg, st, list, citekey)
+}
+
+/// [`process_extraalpha`] with the parts of the context it uses.
+pub(crate) fn process_extraalpha_in(
+    cfg: &Config,
+    st: &mut SectionState,
+    list: usize,
+    citekey: &str,
+) -> Result<(), Fatal> {
     let secnum = &st.section.number;
     let Some(be) = st.section.bibentry(citekey) else {
         return Ok(());
@@ -191,9 +211,10 @@ fn state_obj(state: &mut Option<PerlData>) -> &mut Map<String, J> {
 
 /// `$m->{k}` as a hash, autovivified.
 fn vivify<'j>(m: &'j mut Map<String, J>, k: &str) -> &'j mut Map<String, J> {
-    let v = m
-        .entry(k.to_string())
-        .or_insert_with(|| J::Object(Map::new()));
+    if !m.contains_key(k) {
+        m.insert(k.to_string(), J::Object(Map::new()));
+    }
+    let v = m.get_mut(k).expect("just inserted");
     if !v.is_object() {
         *v = J::Object(Map::new());
     }

@@ -167,32 +167,33 @@ fn join_removable(items: &[Option<String>]) -> String {
 /// The "dangling comma" cleanup `s/,(?:\n\s+)?\}\}/}}/gxms`
 /// (DataList.pm:2222), applied to a whole instantiated entry (BB-015).
 pub fn dangling_comma_cleanup(s: &str) -> String {
-    let b: Vec<char> = s.chars().collect();
-    let mut out = String::with_capacity(s.len());
-    let mut i = 0;
-    while i < b.len() {
-        if b[i] == ',' {
-            // `\n\s+` then `}}`
-            if b.get(i + 1) == Some(&'\n') {
-                let mut k = i + 2;
-                while k < b.len() && is_perl_space(b[k]) {
-                    k += 1;
-                }
-                if k > i + 2 && b.get(k) == Some(&'}') && b.get(k + 1) == Some(&'}') {
-                    out.push_str("}}");
-                    i = k + 2;
-                    continue;
-                }
-            }
-            if b.get(i + 1) == Some(&'}') && b.get(i + 2) == Some(&'}') {
-                out.push_str("}}");
-                i += 3;
-                continue;
-            }
+    /// The end of a match starting at the `,` at `i`.
+    fn match_at(s: &str, i: usize) -> Option<usize> {
+        let rest = &s[i + 1..];
+        if rest.starts_with("}}") {
+            return Some(i + 3);
         }
-        out.push(b[i]);
-        i += 1;
+        // `\n\s+` then `}}`
+        let after_nl = rest.strip_prefix('\n')?;
+        let tail = after_nl.trim_start_matches(is_perl_space);
+        (tail.len() < after_nl.len() && tail.starts_with("}}")).then(|| s.len() - tail.len() + 2)
     }
+    let mut out = String::with_capacity(s.len());
+    let mut copied = 0;
+    let mut from = 0;
+    while let Some(off) = s[from..].find(',') {
+        let i = from + off;
+        match match_at(s, i) {
+            Some(end) => {
+                out.push_str(&s[copied..i]);
+                out.push_str("}}");
+                copied = end;
+                from = end;
+            }
+            None => from = i + 1,
+        }
+    }
+    out.push_str(&s[copied..]);
     out
 }
 
@@ -1407,7 +1408,31 @@ pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
     } else {
         find_output_encoding(ctx)?
     };
+    // Fast path: lax `utf8` copies; `utf-8-strict` writes valid UTF-8
+    // unchanged except for noncharacters, and a character cut by a buffer
+    // boundary is carried whole into the next buffer (STOP_AT_PARTIAL), so
+    // the chunking is unobservable.
+    if enc.is_utf8() && (enc.name() == "utf8" || !has_noncharacter(text)) {
+        return Ok(text.as_bytes().to_vec());
+    }
     Ok(enc.encode_layer(text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit)))
+}
+
+/// Does `s` contain a Unicode noncharacter (U+FDD0..U+FDEF or U+xFFFE/
+/// U+xFFFF)? Their UTF-8 forms all start with `EF` (BMP) or `F0`..`F4`, so
+/// only those lead bytes are decoded.
+fn has_noncharacter(s: &str) -> bool {
+    let b = s.as_bytes();
+    let mut i = 0;
+    while let Some(off) = b[i..].iter().position(|&x| x == 0xEF || x >= 0xF0) {
+        i += off;
+        let c = s[i..].chars().next().expect("char boundary") as u32;
+        if (c & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&c) {
+            return true;
+        }
+        i += 1;
+    }
+    false
 }
 
 /// The locale of a sorting template (for the sortinit collator).
@@ -1461,7 +1486,13 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
 
     let mut out = String::new();
-    let mut put = |s: &str| out.push_str(&nfc(s));
+    let mut put = |s: &str| {
+        if s.is_ascii() {
+            out.push_str(s); // NFC of ASCII is itself
+        } else {
+            out.push_str(&nfc(s));
+        }
+    };
 
     // create_output_misc: \preamble (global, so the last section's).
     let mut headtext = head();
@@ -1568,6 +1599,27 @@ mod tests {
         assert_eq!(dangling_comma_cleanup("x,\n   }}y"), "x}}y");
         assert_eq!(dangling_comma_cleanup("x,\n}}"), "x,\n}}");
         assert_eq!(dangling_comma_cleanup("x,}y"), "x,}y");
+        assert_eq!(dangling_comma_cleanup("x,\n \n\u{2003}}}y,"), "x}}y,");
+        assert_eq!(dangling_comma_cleanup(",,}},\n}},\n }"), ",}},\n}},\n }");
+        assert_eq!(dangling_comma_cleanup("é,}}ü,"), "é}}ü,");
+    }
+
+    #[test]
+    fn utf8_output_fast_path() {
+        for s in [
+            "abc",
+            "é\u{FDD0}x",
+            "a\u{FFFE}",
+            "\u{1FFFF}z",
+            "\u{FDEF}",
+            "\u{FDF0}\u{FFFD}",
+        ] {
+            let slow = Encoding::UTF8.encode_layer(s, true);
+            assert_eq!(slow == s.as_bytes(), !has_noncharacter(s), "{s:?}");
+        }
+        let long = "é".repeat(3000) + "\u{10FFFF}";
+        assert!(has_noncharacter(&long));
+        assert!(!has_noncharacter(&long[..6000]));
     }
 
     #[test]

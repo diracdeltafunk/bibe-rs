@@ -173,11 +173,7 @@ pub fn generate_contextdata(
     use super::entries::{H, info_slot, ls, uniquename_value};
     use serde_json::Value as J;
     let secnum = st.section.number.clone();
-    let h = H {
-        cfg: ctx.cfg,
-        dm: ctx.dm,
-        secnum: &secnum,
-    };
+    let h = H::new(ctx.cfg, ctx.dm, &secnum);
     let opt_undef = |opt: &str, et: &str, key: &str| {
         h.cfg
             .blx

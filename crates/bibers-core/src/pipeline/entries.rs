@@ -21,13 +21,13 @@ use crate::log::{Fatal, Logger};
 use crate::model::{
     DataList, Entry, Name, NameId, NameListId, PerlData, Section, SectionState, Value,
 };
-use crate::perlish::{fc, lc, nfc, numify, truthy};
+use crate::perlish::{fc, lc, numify, truthy};
 use crate::quirks::Quirk;
 use md5::{Digest, Md5};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
 use serde_json::{Map, Value as J};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
 
 // ---------------------------------------------------------------------------
 // Per-list state access (`Biber::DataList` accessors)
@@ -57,11 +57,11 @@ pub(crate) mod ls {
             if !v.is_object() {
                 *v = J::Object(Map::new());
             }
-            v = v
-                .as_object_mut()
-                .expect("object")
-                .entry(k.to_string())
-                .or_insert_with(|| J::Object(Map::new()));
+            let m = v.as_object_mut().expect("object");
+            if !m.contains_key(*k) {
+                m.insert(k.to_string(), J::Object(Map::new()));
+            }
+            v = m.get_mut(*k).expect("just inserted");
         }
         if !v.is_object() {
             *v = J::Object(Map::new());
@@ -72,11 +72,19 @@ pub(crate) mod ls {
     /// rvalue `$self->{state}{p0}…{pn}`: vivifies `p0…p(n-1)`; `undef` is
     /// `None`.
     pub fn get(dl: &mut DataList, path: &[&str]) -> Option<J> {
+        get_ref(dl, path).cloned()
+    }
+
+    /// [`get`] without the copy.
+    pub fn get_ref<'a>(dl: &'a mut DataList, path: &[&str]) -> Option<&'a J> {
         let (last, parents) = path.split_last().expect("non-empty path");
-        viv(root(dl), parents)
-            .get(*last)
-            .filter(|x| !x.is_null())
-            .cloned()
+        let v: &J = viv(root(dl), parents);
+        v.get(*last).filter(|x| !x.is_null())
+    }
+
+    /// The numeric value of [`get`] (`undef` is 0).
+    pub fn num_at(dl: &mut DataList, path: &[&str]) -> f64 {
+        get_ref(dl, path).map_or(0.0, num)
     }
 
     /// `exists $self->{state}{p0}…{pn}` (vivifies `p0…p(n-1)`).
@@ -90,10 +98,13 @@ pub(crate) mod ls {
     /// `$self->{state}{p0}…{pn} = $v`.
     pub fn set(dl: &mut DataList, path: &[&str], v: J) {
         let (last, parents) = path.split_last().expect("non-empty path");
-        viv(root(dl), parents)
-            .as_object_mut()
-            .expect("object")
-            .insert(last.to_string(), v);
+        let m = viv(root(dl), parents).as_object_mut().expect("object");
+        match m.get_mut(*last) {
+            Some(slot) => *slot = v,
+            None => {
+                m.insert(last.to_string(), v);
+            }
+        }
     }
 
     /// `++$self->{state}{p0}…{pn}`; returns the new value.
@@ -210,19 +221,38 @@ fn opt_true(v: Option<&OptValue>) -> bool {
 
 /// `md5_hex(encode_utf8($s))`.
 pub(crate) fn md5_hex(s: &str) -> String {
-    format!("{:x}", Md5::digest(s.as_bytes()))
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let d = Md5::digest(s.as_bytes());
+    let mut out = String::with_capacity(32);
+    for b in d {
+        out.push(char::from(HEX[usize::from(b >> 4)]));
+        out.push(char::from(HEX[usize::from(b & 0xF)]));
+    }
+    out
 }
 
 /// `md5_hex(encode_utf8(NFC(normalise_string_hash($s))))`, the form of every
 /// name/context hash.
 pub(crate) fn hash_string(s: &str) -> String {
-    md5_hex(&nfc(&normalise_string_hash(s)))
+    let n = normalise_string_hash(s);
+    if n.is_ascii() {
+        md5_hex(&n) // NFC of ASCII is itself
+    } else {
+        md5_hex(&perl_compat::unicode::nfc(&n))
+    }
 }
 
 /// `Biber::Utils::normalise_string_hash` (Utils.pm:736).
 pub(crate) fn normalise_string_hash(s: &str) -> String {
     if !truthy(Some(s)) {
         return String::new();
+    }
+    // Without backslashes only the last substitution can apply.
+    if !s.contains('\\') {
+        return s
+            .chars()
+            .filter(|&c| !matches!(c, '{' | '}' | '~' | '.') && !is_perl_space(c))
+            .collect();
     }
     let is_l = |c: char| Prop::L.contains(c);
     // s/\\(\p{L}+)\s*/$1:/g
@@ -299,44 +329,81 @@ pub(crate) fn strip_nonamestring(cfg: &Config, s: &str, field: Option<&str>) -> 
 }
 
 /// `Name::get_namepart`: `string || ''`.
-fn namepart(n: &Name, np: &str) -> String {
+fn namepart_str<'n>(n: &'n Name, np: &str) -> &'n str {
     n.nameparts
         .get(np)
         .and_then(|p| p.string.as_deref())
         .filter(|s| truthy(Some(s)))
         .unwrap_or("")
-        .to_string()
+}
+
+/// `Name::get_namepart`, owned.
+fn namepart(n: &Name, np: &str) -> String {
+    namepart_str(n, np).to_string()
+}
+
+/// `join('', $n->get_namepart_initial($np)->@*)`, appended to `out`.
+fn push_namepart_initials(out: &mut String, n: &Name, np: &str) {
+    if let Some(inits) = n.nameparts.get(np).and_then(|p| p.initial.as_ref()) {
+        for i in inits {
+            out.push_str(i);
+        }
+    }
 }
 
 /// `join('', $n->get_namepart_initial($np)->@*)`.
 fn namepart_initials(n: &Name, np: &str) -> String {
-    n.nameparts
-        .get(np)
-        .and_then(|p| p.initial.as_ref())
-        .map(|v| v.concat())
-        .unwrap_or_default()
+    let mut s = String::new();
+    push_namepart_initials(&mut s, n, np);
+    s
 }
 
-/// `Name::get_hash_namepart` (Name.pm:137).
-fn hash_namepart(n: &Name, np: &str, nht: &[NamehashPart]) -> String {
-    let fnp = fc(np);
-    for p in nht {
-        if fc(p.namepart.as_deref().unwrap_or("")) != fnp {
-            continue;
-        }
-        let scope = fc(p.hashscope.as_deref().unwrap_or(""));
-        if scope == "init" {
-            return n
-                .nameparts
-                .get(np)
-                .and_then(|x| x.initial.as_ref())
-                .map(|v| v.concat())
-                .unwrap_or_default();
-        } else if scope == "full" {
-            return namepart(n, np);
-        }
+/// What a namehash template hashes of one namepart.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum HashScope {
+    Nothing,
+    Initials,
+    Full,
+}
+
+/// For each of `nameparts`, the scope `Name::get_hash_namepart`
+/// (Name.pm:137) finds in the template: the first template part naming it
+/// (case-folded) with hashscope `init` or `full`.
+fn hash_scopes(nameparts: &[String], nht: &[NamehashPart]) -> Vec<HashScope> {
+    let parts: Vec<(String, String)> = nht
+        .iter()
+        .map(|p| {
+            (
+                fc(p.namepart.as_deref().unwrap_or("")),
+                fc(p.hashscope.as_deref().unwrap_or("")),
+            )
+        })
+        .collect();
+    nameparts
+        .iter()
+        .map(|np| {
+            let fnp = fc(np);
+            parts
+                .iter()
+                .filter(|(n, _)| *n == fnp)
+                .find_map(|(_, scope)| match scope.as_str() {
+                    "init" => Some(HashScope::Initials),
+                    "full" => Some(HashScope::Full),
+                    _ => None,
+                })
+                .unwrap_or(HashScope::Nothing)
+        })
+        .collect()
+}
+
+/// `Name::get_hash_namepart` (Name.pm:137) with the scope from
+/// [`hash_scopes`], appended to `out`.
+fn push_hash_namepart(out: &mut String, n: &Name, np: &str, scope: HashScope) {
+    match scope {
+        HashScope::Nothing => {}
+        HashScope::Initials => push_namepart_initials(out, n, np),
+        HashScope::Full => out.push_str(namepart_str(n, np)),
     }
-    String::new()
 }
 
 /// Read-only processing context shared by the helpers.
@@ -344,6 +411,55 @@ pub(crate) struct H<'a> {
     pub cfg: &'a Config,
     pub dm: &'a DataModel,
     pub secnum: &'a str,
+    /// `$dm->get_constant_value('nameparts')`.
+    nameparts: Vec<String>,
+    /// Namehash template name → [`hash_scopes`].
+    hash_scopes: HashMap<String, Vec<HashScope>>,
+    /// Whether any `nonamestring` patterns are set.
+    nonamestring: bool,
+}
+
+impl<'a> H<'a> {
+    pub fn new(cfg: &'a Config, dm: &'a DataModel, secnum: &'a str) -> Self {
+        let nameparts = dm.get_constant_value("nameparts");
+        let hash_scopes = match cfg.blx.global("namehashtemplate") {
+            Some(OptValue::NamehashTemplates(m)) => m
+                .iter()
+                .map(|(name, t)| (name.clone(), hash_scopes(&nameparts, t)))
+                .collect(),
+            _ => HashMap::new(),
+        };
+        H {
+            cfg,
+            dm,
+            secnum,
+            nameparts,
+            hash_scopes,
+            nonamestring: !cfg.biber.patterns("nonamestring").is_empty(),
+        }
+    }
+
+    /// The hash scopes of the namehash template `name`, or `biber_error`.
+    fn need_nht(&self, log: &mut Logger, name: &str) -> Result<&[HashScope], Fatal> {
+        match self.hash_scopes.get(name) {
+            Some(t) => Ok(t),
+            None => {
+                biber_error!(log, "No namehash template called '{name}'")?;
+                Ok(&[])
+            }
+        }
+    }
+
+    /// `strip_nonamestring($s, $field)` appended to `out`.
+    fn push_stripped(&self, out: &mut String, s: &str, field: Option<&str>) {
+        if !self.nonamestring {
+            if truthy(Some(s)) {
+                out.push_str(s);
+            }
+        } else {
+            out.push_str(&strip_nonamestring(self.cfg, s, field));
+        }
+    }
 }
 
 impl H<'_> {
@@ -362,18 +478,6 @@ impl H<'_> {
 
     fn leak(&self) -> bool {
         self.cfg.quirks.on(Quirk::PerNameOptionLeak)
-    }
-
-    /// `$dm->get_constant_value('nameparts')`.
-    fn nameparts(&self) -> Vec<String> {
-        self.dm.get_constant_value("nameparts")
-    }
-
-    fn namehash_template(&self, name: &str) -> Option<&[NamehashPart]> {
-        match self.cfg.blx.global("namehashtemplate") {
-            Some(OptValue::NamehashTemplates(m)) => m.get(name).map(Vec::as_slice),
-            _ => None,
-        }
     }
 
     fn uniquename_template(&self, name: &str) -> Option<&[UniquenamePart]> {
@@ -410,24 +514,53 @@ fn nohashothers(h: &H, sec: &Section, et: &str, key: &str, nlid: NameListId) -> 
 
 /// The `namehashtemplatename` in force for a list: per-entry, else the
 /// data list's, then the per-namelist override.
-fn namehash_tname(h: &H, sec: &Section, dl: &DataList, key: &str, nlid: NameListId) -> String {
-    let mut t = opt_string(h.opt("namehashtemplatename", None, Some(key)))
-        .unwrap_or_else(|| dl.namehashtemplatename.clone());
-    if let Some(v) = slot_str(&sec.names.list(nlid).slots, "namehashtemplatename") {
-        t = v.to_string();
-    }
-    t
+fn namehash_tname<'x>(
+    h: &'x H,
+    sec: &'x Section,
+    dl: &'x DataList,
+    key: &str,
+    nlid: NameListId,
+) -> &'x str {
+    slot_str(&sec.names.list(nlid).slots, "namehashtemplatename").unwrap_or_else(|| {
+        h.opt("namehashtemplatename", None, Some(key))
+            .and_then(OptValue::as_str)
+            .unwrap_or(&dl.namehashtemplatename)
+    })
 }
 
-/// The namehash template `name`, or `biber_error`.
-fn need_nht<'a>(h: &'a H, log: &mut Logger, name: &str) -> Result<&'a [NamehashPart], Fatal> {
-    match h.namehash_template(name) {
-        Some(t) => Ok(t),
-        None => {
-            biber_error!(log, "No namehash template called '{name}'")?;
-            Ok(&[])
+/// Append the namehash parts of `n` to `hashkey`, under the namehash
+/// template in force, `nhtname` (a per-name template replaces it for the
+/// following names with the `per-name-option-leak` quirk, BB-019). With
+/// `strip`, each part goes through `strip_nonamestring` for that field.
+fn push_name_hashparts<'x>(
+    h: &H,
+    log: &mut Logger,
+    hashkey: &mut String,
+    n: &'x Name,
+    nhtname: &mut &'x str,
+    strip: Option<Option<&str>>,
+) -> Result<(), Fatal> {
+    if let Some(hid) = slot_str(&n.slots, "hashid").filter(|s| truthy(Some(s))) {
+        hashkey.push_str(hid);
+        return Ok(());
+    }
+    let n_nht = slot_str(&n.slots, "namehashtemplatename").unwrap_or(nhtname);
+    if h.leak() {
+        *nhtname = n_nht;
+    }
+    let scopes = h.need_nht(log, n_nht)?;
+    for (i, nt) in h.nameparts.iter().enumerate() {
+        let scope = scopes.get(i).copied().unwrap_or(HashScope::Nothing);
+        match strip {
+            None => push_hash_namepart(hashkey, n, nt, scope),
+            Some(field) => {
+                let mut part = String::new();
+                push_hash_namepart(&mut part, n, nt, scope);
+                h.push_stripped(hashkey, &part, field);
+            }
         }
     }
+    Ok(())
 }
 
 /// `_getnamehash` (Internals.pm:39): namehash (`bib` false) or bibnamehash.
@@ -444,35 +577,20 @@ pub(crate) fn getnamehash(
     let et = sec.bibentry(key).map_or("", Entry::entrytype);
     let names = sec.names.list(nlid);
     let count = names.names.len();
-    let visible = ls::get(
+    let visible = ls::num_at(
         dl,
         &[
             "namelistdata",
             &nlid.key(),
             if bib { "visbib" } else { "viscite" },
         ],
-    )
-    .map_or(0.0, |v| ls::num(&v));
-    let nps = h.nameparts();
+    );
+    let dl: &DataList = dl;
     let mut nhtname = namehash_tname(h, sec, dl, key, nlid);
     let mut hashkey = String::new();
     for nid in names.names.iter().take(first_n(visible, count)) {
         let n = sec.names.name(*nid);
-        if let Some(hid) = slot_str(&n.slots, "hashid").filter(|s| truthy(Some(s))) {
-            hashkey.push_str(hid);
-            continue;
-        }
-        let mut n_nht = nhtname.clone();
-        if let Some(v) = slot_str(&n.slots, "namehashtemplatename") {
-            n_nht = v.to_string();
-        }
-        if h.leak() {
-            nhtname = n_nht.clone();
-        }
-        let nht = need_nht(h, log, &n_nht)?;
-        for nt in &nps {
-            hashkey.push_str(&hash_namepart(n, nt, nht));
-        }
+        push_name_hashparts(h, log, &mut hashkey, n, &mut nhtname, None)?;
     }
     if !nohashothers(h, sec, et, key, nlid)
         && ((visible < count as f64) || truthy(slot_str(&names.slots, "morenames")))
@@ -492,30 +610,12 @@ pub(crate) fn getfullhash(
     nlid: NameListId,
 ) -> Result<String, Fatal> {
     let names = sec.names.list(nlid);
-    let nps = h.nameparts();
     let mut nhtname = namehash_tname(h, sec, dl, key, nlid);
     let mut hashkey = String::new();
     for nid in &names.names {
         let n = sec.names.name(*nid);
-        if let Some(hid) = slot_str(&n.slots, "hashid").filter(|s| truthy(Some(s))) {
-            hashkey.push_str(hid);
-            continue;
-        }
-        let mut n_nht = nhtname.clone();
-        if let Some(v) = slot_str(&n.slots, "namehashtemplatename") {
-            n_nht = v.to_string();
-        }
-        if h.leak() {
-            nhtname = n_nht.clone();
-        }
-        let nht = need_nht(h, log, &n_nht)?;
-        for nt in &nps {
-            hashkey.push_str(&strip_nonamestring(
-                h.cfg,
-                &hash_namepart(n, nt, nht),
-                names.type_.as_deref(),
-            ));
-        }
+        let strip = Some(names.type_.as_deref());
+        push_name_hashparts(h, log, &mut hashkey, n, &mut nhtname, strip)?;
     }
     if truthy(slot_str(&names.slots, "morenames")) {
         hashkey.push('+');
@@ -526,13 +626,12 @@ pub(crate) fn getfullhash(
 /// `_getfullhashraw` (Internals.pm:154).
 pub(crate) fn getfullhashraw(h: &H, sec: &Section, nlid: NameListId) -> String {
     let names = sec.names.list(nlid);
-    let nps = h.nameparts();
     let mut hashkey = String::new();
     for n in sec.names.names_of(nlid) {
-        for nt in &nps {
-            let np = namepart(n, nt);
-            if truthy(Some(&np)) {
-                hashkey.push_str(&strip_nonamestring(h.cfg, &np, names.type_.as_deref()));
+        for nt in &h.nameparts {
+            let np = namepart_str(n, nt);
+            if truthy(Some(np)) {
+                h.push_stripped(&mut hashkey, np, names.type_.as_deref());
             }
         }
     }
@@ -555,41 +654,41 @@ pub(crate) fn getnamehash_u(
     let names = sec.names.list(nlid);
     let count = names.names.len();
     let nlkey = nlid.key();
-    let visible = ls::get(dl, &["namelistdata", &nlkey, "viscite"]).map_or(0.0, |v| ls::num(&v));
-    let mut untname = opt_string(h.opt("uniquenametemplatename", None, Some(key)))
-        .unwrap_or_else(|| dl.uniquenametemplatename.clone());
-    if let Some(v) = slot_str(&names.slots, "uniquenametemplatename") {
-        untname = v.to_string();
-    }
+    let visible = ls::num_at(dl, &["namelistdata", &nlkey, "viscite"]);
+    let mut untname = slot_str(&names.slots, "uniquenametemplatename")
+        .or_else(|| {
+            h.opt("uniquenametemplatename", None, Some(key))
+                .and_then(OptValue::as_str)
+        })
+        .unwrap_or(&dl.uniquenametemplatename)
+        .to_string();
     let mut hashkey = String::new();
     for nid in names.names.iter().take(first_n(visible, count)) {
         let n = sec.names.name(*nid);
-        let mut n_unt = untname.clone();
-        if let Some(v) = slot_str(&n.slots, "uniquenametemplatename") {
-            n_unt = v.to_string();
+        let n_unt = slot_str(&n.slots, "uniquenametemplatename").unwrap_or(&untname);
+        let template = h.uniquename_template(n_unt).unwrap_or(&[]);
+        if h.leak() && n_unt != untname {
+            untname = n_unt.to_string();
         }
-        if h.leak() {
-            untname = n_unt.clone();
-        }
-        for nps in h.uniquename_template(&n_unt).unwrap_or(&[]) {
+        for nps in template {
             if nps.disambiguation.as_deref() == Some("none") {
                 continue;
             }
             let npn = nps.namepart.as_deref().unwrap_or("");
-            let np = namepart(n, npn);
-            if !truthy(Some(&np)) {
+            let np = namepart_str(n, npn);
+            if !truthy(Some(np)) {
                 continue;
             }
             if truthy(nps.base.as_deref()) {
-                hashkey.push_str(&np);
+                hashkey.push_str(np);
             } else {
-                let un = ls::get(dl, &["namelistdata", &nlkey, &nid.key(), "un"]);
+                let un = ls::get_ref(dl, &["namelistdata", &nlkey, &nid.key(), "un"]);
                 if let Some(J::Array(un)) = un
                     && un.first().and_then(J::as_str) != Some("base")
                 {
                     match un.get(1).and_then(J::as_str) {
-                        Some("full" | "fullonly") => hashkey.push_str(&np),
-                        Some("init") => hashkey.push_str(&namepart_initials(n, npn)),
+                        Some("full" | "fullonly") => hashkey.push_str(np),
+                        Some("init") => push_namepart_initials(&mut hashkey, n, npn),
                         _ => {}
                     }
                 }
@@ -618,14 +717,13 @@ pub(crate) fn genpnhash(
     if let Some(hid) = slot_str(&n.slots, "hashid").filter(|s| truthy(Some(s))) {
         return Ok(hash_string(hid));
     }
-    let mut nhtname = namehash_tname(h, sec, dl, key, nlid);
-    if let Some(v) = slot_str(&n.slots, "namehashtemplatename") {
-        nhtname = v.to_string();
-    }
-    let nht = need_nht(h, log, &nhtname)?;
+    let nhtname = slot_str(&n.slots, "namehashtemplatename")
+        .unwrap_or_else(|| namehash_tname(h, sec, dl, key, nlid));
+    let scopes = h.need_nht(log, nhtname)?;
     let mut hashkey = String::new();
-    for nt in h.nameparts() {
-        hashkey.push_str(&hash_namepart(n, &nt, nht));
+    for (i, nt) in h.nameparts.iter().enumerate() {
+        let scope = scopes.get(i).copied().unwrap_or(HashScope::Nothing);
+        push_hash_namepart(&mut hashkey, n, nt, scope);
     }
     Ok(hash_string(&hashkey))
 }
@@ -725,11 +823,7 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
 
 /// `process_labeldate` (Biber.pm:2623).
 fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) {
-    let h = H {
-        cfg: ctx.cfg,
-        dm: ctx.dm,
-        secnum,
-    };
+    let h = H::new(ctx.cfg, ctx.dm, secnum);
     let be = sec.bibentry_mut(key).expect("entry");
     let et = be.entrytype().to_string();
     if !opt_true(h.opt_undef("labeldateparts", Some(&et), Some(key))) {
@@ -1131,11 +1225,7 @@ fn set_namedis(dl: &mut DataList, d: &NameDis) {
 /// `st.datalists[list]`.
 pub fn process_entries_pre(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<(), Fatal> {
     let secnum = st.section.number.clone();
-    let h = H {
-        cfg: ctx.cfg,
-        dm: ctx.dm,
-        secnum: &secnum,
-    };
+    let h = H::new(ctx.cfg, ctx.dm, &secnum);
     let untname = st.datalists[list].uniquenametemplatename.clone();
     for key in &st.section.citekeys {
         let nd = process_namedis(&h, ctx.log, &st.section, &untname, key)?;
@@ -1162,11 +1252,7 @@ pub fn process_visible_names(
     list: usize,
 ) -> Result<(), Fatal> {
     let secnum = st.section.number.clone();
-    let h = H {
-        cfg: ctx.cfg,
-        dm: ctx.dm,
-        secnum: &secnum,
-    };
+    let h = H::new(ctx.cfg, ctx.dm, &secnum);
     let pluralothers = opt_true(h.cfg.blx.global("pluralothers"));
     let dl = &mut st.datalists[list];
     let sec = &st.section;
@@ -1245,26 +1331,23 @@ pub fn process_entries_post(
     list: usize,
 ) -> Result<(), Fatal> {
     let secnum = st.section.number.clone();
+    let h = H::new(ctx.cfg, ctx.dm, &secnum);
+    let (log, run) = (&mut *ctx.log, &mut ctx.run.labelalpha);
     for key in st.section.citekeys.clone() {
         if st.section.bibentry(&key).is_none() {
             continue;
         }
-        process_fullhash(ctx, st, &secnum, list, &key)?;
-        labelalpha::process_labelalpha(ctx, st, list, &key)?;
-        labelalpha::process_extraalpha(ctx, st, list, &key)?;
-        let h = H {
-            cfg: ctx.cfg,
-            dm: ctx.dm,
-            secnum: &secnum,
-        };
+        process_fullhash(&h, log, st, list, &key)?;
+        labelalpha::process_labelalpha_in(h.cfg, h.dm, run, st, list, &key)?;
+        labelalpha::process_extraalpha_in(h.cfg, st, list, &key)?;
         process_extradate(&h, st, list, &key);
         process_extraname(&h, st, list, &key);
         process_extratitle(&h, st, list, &key);
         process_extratitleyear(&h, st, list, &key);
-        process_workuniqueness(&h, ctx.log, st, list, &key)?;
-        process_namehash(&h, ctx.log, st, list, &key)?;
-        process_pername_hashes(&h, ctx.log, st, list, &key)?;
-        process_uniqueprimaryauthor(&h, ctx.log, st, list, &key)?;
+        process_workuniqueness(&h, log, st, list, &key)?;
+        process_namehash(&h, log, st, list, &key)?;
+        process_pername_hashes(&h, log, st, list, &key)?;
+        process_uniqueprimaryauthor(&h, log, st, list, &key)?;
     }
     Ok(())
 }
@@ -1281,41 +1364,36 @@ fn names_field(be: &Entry, f: Option<&str>) -> Option<NameListId> {
 
 /// `process_fullhash` (Biber.pm:2797).
 fn process_fullhash(
-    ctx: &mut Ctx,
+    h: &H,
+    log: &mut Logger,
     st: &mut SectionState,
-    secnum: &str,
     list: usize,
     key: &str,
 ) -> Result<(), Fatal> {
-    let h = H {
-        cfg: ctx.cfg,
-        dm: ctx.dm,
-        secnum,
-    };
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     let be = sec.bibentry(key).expect("entry");
     if let Some(nlid) = names_field(be, info_slot(be, "labelnamefhinfo")) {
-        let fh = getfullhash(&h, ctx.log, sec, dl, key, nlid)?;
+        let fh = getfullhash(h, log, sec, dl, key, nlid)?;
         ls::set_entryfield(dl, key, "fullhash", J::String(fh));
         ls::set_entryfield(
             dl,
             key,
             "fullhashraw",
-            J::String(getfullhashraw(&h, sec, nlid)),
+            J::String(getfullhashraw(h, sec, nlid)),
         );
     }
     for n in &h.dm.helpers.namelistsall {
         let Some(nlid) = names_field(be, Some(n)) else {
             continue;
         };
-        let fh = getfullhash(&h, ctx.log, sec, dl, key, nlid)?;
+        let fh = getfullhash(h, log, sec, dl, key, nlid)?;
         ls::set_entryfield(dl, key, &format!("{n}fullhash"), J::String(fh));
         ls::set_entryfield(
             dl,
             key,
             &format!("{n}fullhashraw"),
-            J::String(getfullhashraw(&h, sec, nlid)),
+            J::String(getfullhashraw(h, sec, nlid)),
         );
     }
     Ok(())
@@ -1703,11 +1781,7 @@ pub fn process_entries_final(
     list: usize,
 ) -> Result<(), Fatal> {
     let secnum = st.section.number.clone();
-    let h = H {
-        cfg: ctx.cfg,
-        dm: ctx.dm,
-        secnum: &secnum,
-    };
+    let h = H::new(ctx.cfg, ctx.dm, &secnum);
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     for key in &sec.citekeys {
