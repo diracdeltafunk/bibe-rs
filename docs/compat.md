@@ -33,6 +33,9 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | DC-038 | An invalid user regex in a sourcemap makes Perl die ("Unmatched ( in regex", …) | ERROR naming the map step and the regex, exit 2 | — | implemented (sourcemap) |
 | DC-029 | btparse-level crashes and process exits on malformed input (BB-123, 125, 126, 127, 128): SEGV, abort, exit, mangled error text | An ERROR naming the user's file and line (with the literal offending text), then biber's normal error handling. *Whether parsing continues with the next entry is decided in M2.* | BB-123, 125–128 | implemented (fetch: ERROR naming file and line) |
 | DC-035 | `--isbn10` on a 979-prefix ISBN crashes | ISBN left in its ISBN-13 form, with a WARN | BB-130 | implemented (fetch) |
+| DC-058 | An unknown `--output-encoding` crashes ("Unknown encoding", empty output, exit 25) | ERROR, exit 2 | BB-165 | implemented (io) |
+| DC-059 | A missing or unparsable `--recodedata` file dies without naming it | ERROR naming the file, exit 2 | BB-167 | implemented (io) |
+| DC-060 | ISO-2022 input with 8-bit bytes or an unknown escape sequence makes biber hang forever | ERROR naming the file | BB-166 | implemented (io) |
 
 ### 1b. Data loss
 
@@ -66,6 +69,9 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | Id | biber behaviour | bibers behaviour | Bug | Status |
 |---|---|---|---|---|
 | DC-019 | `\char` with a surrogate (U+D800–DFFF) or a value above U+10FFFF yields that raw code point (invalid as UTF-8 text) | U+FFFD. Rust strings can't hold these, and biber's output in these cases isn't valid UTF-8 anyway. | — | implemented (latex-recode) |
+| DC-061 | Lax `utf8` input keeps surrogates and values above U+10FFFF as Perl-internal characters | Decoded to U+FFFD (as DC-019) | — | implemented (io) |
+| DC-062 | Remote fetching (LWP) sends `TE`/`Connection: TE` headers and may receive compressed transfers; FTP reads `~/.netrc` | No `TE` headers (only the server can see this); FTP ignores `~/.netrc` | — | implemented (io) |
+| DC-063 | HTTPS trusts biber's bundled Mozilla::CA; with `--ssl-nointernalca`, IO::Socket::SSL's system defaults | `webpki-roots` (Mozilla's list, possibly a slightly different version); with `--ssl-nointernalca`, `SSL_CERT_FILE`, `SSL_CERT_DIR`, then `/etc/ssl/cert.pem` (an approximation of IO::Socket::SSL's defaults) | — | implemented (io) |
 
 ### 1e. CLI and file-handling fixes
 
@@ -111,7 +117,9 @@ These are **not** differences by default: bibers reproduces biber's output. Each
 | `label-global-index-zero` | `substring_width=vf` ignores a computed fixed-width index of 0 | Index 0 honoured | BB-096 | implemented |
 | `dieondatamodel-no-exit` | `--dieondatamodel` logs errors but never stops | Stops at the first data model error | BB-067 | implemented |
 | `clone-endyeardivision` | Related-entry clones lose `endyeardivision` (`clone` lists `yeardivision` twice) | Copied | BB-093 | implemented |
-| `perlio-encoding-split` | Non-UTF-8 `--output-encoding`: multi-byte characters straddling 1024-byte chunk boundaries become `\x{fffd}` (or shift later boundaries) | Each character encoded whole | BB-152 | implemented |
+| `perlio-encoding-split` | Non-UTF-8 `--output-encoding` (single- and multi-byte): multi-byte characters straddling 1024-byte chunk boundaries become `\x{fffd}` (or shift later boundaries) | Each character encoded whole | BB-152 | implemented |
+| `unicode-output-nul-check` | UTF-16/32 and UCS-2 output: every entry is judged unencodable (WARN + full LaTeX recoding) | Only entries with unencodable characters | BB-169 | implemented |
+| `utf16-chunk-surrogate` | A UTF-16 `.bib` with a surrogate pair straddling a 1024-byte read chunk fails to read ("Partial character") | Read normally | BB-168 | implemented |
 | `bibtex-winters-typo` | Tool/bibtex output of `date={2020-32}` loses the season (`'WinterS'` typo) | Season written | BB-047 | implemented |
 | `bibtex-encoding-question-mark` | With a non-UTF-8 output encoding, any literal `?` triggers a "cannot be encoded" warning and full-entry LaTeX recoding | Only unencodable characters do | BB-048 | implemented |
 | `bibtex-unspecified-dates` | `date={1999-XX}` is written as `1999-00` | Written as `1999-XX` | BB-153 | implemented |
@@ -140,10 +148,8 @@ Until implemented, bibers exits with a clear "not yet supported" ERROR (exit 2) 
 | Id | Feature | Status |
 |---|---|---|
 | DC-031 | biblatexml input and output; bltxml schema generation | deferred |
-| DC-032 | Remote (http/https/ftp) data sources | deferred |
 | DC-033 | `--validate-bltxml` (needs DC-031; `--validate-control` and `--validate-config` are implemented) | deferred |
-| DC-034 | Multi-byte `--output-encoding`s other than UTF-8 (single-byte encodings and `--output-safechars` are supported) | deferred |
-| DC-045 | `--recodedata` (a user recode data file for `--output-safechars`/decoding) is not honoured yet: the built-in `recode_data.xml` is used | deferred |
+| DC-034 | `UTF-7`, `gsm0338` and the `MIME-*` encodings (as input or output encoding; every other encoding Perl Encode supports is implemented, verified over all of Unicode against Encode 3.21) | deferred: ERROR naming the encoding |
 
 ## 5. Cosmetic differences in logs and messages
 
@@ -157,6 +163,7 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 | DC-043 | `INFO` lines specific to biber internals (PAR cache, Perl modules, …) | Omitted or replaced | planned |
 | DC-044 | `--debug`/`--trace` output (Perl data dumps) | Different content. Also, `--debug` does **not** stop btparse errors being fatal (BB-075). | planned |
 | DC-046 | Error text for undecodable bytes in a data file (Perl's `Encode` message, e.g. `utf8 "\xA6" does not map to Unicode`) | A similar message naming the file, encoding and byte; not byte-identical | implemented (fetch) |
+| DC-064 | Network errors: LWP/IO::Socket::SSL message texts | The OS's text for low-level errors (identical on macOS for refused connections and DNS failures); TLS errors other than "certificate verify failed" and "hostname verification failed" are worded differently. Read-error texts also lack Perl's ` at FILE line N.` (extends DC-046) | implemented |
 | DC-055 | `--tool-config` prints the path of the installed biber-tool.conf | Prints the built-in biber-tool.conf itself, exit 0 (bibers has no data directory) | implemented |
 | DC-056 | Validation messages name the installed schema (`…/Biber/bcf.rng`, a PAR temp path) | Name the built-in one, `(built-in)/bcf.rng` / `(built-in)/config.rng` | implemented |
 | DC-057 | On a validation failure, `--debug` dumps libxml2's error object as a Perl structure | One DEBUG line per error in xmllint's format (`file:line: element X: Relax-NG validity error : …`) with bibers' own message texts; the INFO/ERROR lines and exit codes are biber's | implemented |
