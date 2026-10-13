@@ -289,6 +289,10 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
         return Exit(log.display_end());
     }
     let mut cfg = init.config;
+    // Biber->new: Biber::LaTeX::Recode->init_sets (DC-045).
+    if bibers_core::recodedata::load(&mut cfg, &mut log, env).is_err() {
+        return Exit(log.display_end());
+    }
     let now = chrono::Local::now().format("%a %b %e, %Y, %H:%M:%S");
     log.logfile_info(bibers_core::loc!(), &format!("=== {now}"));
 
@@ -430,5 +434,21 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         return log.display_end();
     }
     info!(ctx.log, "Output to {outfile}");
+    show_tmp_dir(&mut cfg, &mut log);
     log.display_end()
+}
+
+/// `display_end`'s `--show-tmp-dir` report (Biber.pm:120-127). biber's temp
+/// directory only holds files in bibers when remote sources were fetched.
+fn show_tmp_dir(cfg: &mut config::Config, log: &mut Logger) {
+    if !cfg.biber.is_true("show_tmp_dir") {
+        return;
+    }
+    if cfg.biber.is_true("noremove_tmp_dir") {
+        if let Ok(d) = cfg.remote.tempdir(true) {
+            info!(log, "TEMP DIR: {}", d.display());
+        }
+    } else {
+        log.biber_warn("--noremove-tmp-dir was not set, no temporary directory to show");
+    }
 }

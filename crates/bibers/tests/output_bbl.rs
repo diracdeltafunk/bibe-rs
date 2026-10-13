@@ -139,8 +139,8 @@ fn run_case(case: &Case) -> Outcome {
     };
     // Compare as text, decoded from the output encoding.
     let enc = perl_compat::encoding::find_encoding(&enc_name).expect("known encoding");
-    let expected = enc.decode(&expected).into_bytes();
-    let actual = enc.decode(&bytes).into_bytes();
+    let expected = enc.decode_lossy(&expected).into_bytes();
+    let actual = enc.decode_lossy(&bytes).into_bytes();
     // `-` is the .bbl written to stdout.
     let name = if bbl == "-" {
         "stdout.bbl"

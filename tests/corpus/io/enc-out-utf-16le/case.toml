@@ -1,0 +1,5 @@
+description = "--output-encoding=UTF-16LE (multi-byte output, unencodable entries recoded)"
+source = "tools/corpus/gen_io_enc.pl (bibers M4 io package, DC-034); .bcf from t/tdata/encoding6.bcf"
+args = ["--noconf", "--output-encoding=UTF-16LE", "encoding6.bcf"]
+outputs = ["encoding6.bbl"]
+tags = ["suite:io", "feature:encoding"]

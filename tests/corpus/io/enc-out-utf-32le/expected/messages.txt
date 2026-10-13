@@ -1,0 +1,4 @@
+WARN - The entry 'ascii' has characters which cannot be encoded in 'UTF-32LE'. Recoding problematic characters into macros.
+WARN - The entry 'long' has characters which cannot be encoded in 'UTF-32LE'. Recoding problematic characters into macros.
+WARN - The entry 'mixed' has characters which cannot be encoded in 'UTF-32LE'. Recoding problematic characters into macros.
+WARN - The entry 'nihon' has characters which cannot be encoded in 'UTF-32LE'. Recoding problematic characters into macros.

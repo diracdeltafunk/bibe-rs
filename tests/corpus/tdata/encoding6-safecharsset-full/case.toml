@@ -2,4 +2,4 @@ description = "UTF-8 .bib -> UTF-8 .bbl, --output-safecharsset=full (t/encoding.
 source = "vendor/biber/t/tdata/encoding6.bcf"
 args = ["--noconf", "--output-safechars", "--output-safecharsset=full", "encoding6.bcf"]
 outputs = ["encoding6.bbl"]
-tags = ["suite:tdata", "feature:encoding", "deferred:DC-034"]
+tags = ["suite:tdata", "feature:encoding"]

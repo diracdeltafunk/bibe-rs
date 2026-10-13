@@ -1,0 +1,6 @@
+description = "A literal noncharacter (U+FDD1) in a UTF-8 .bib: read error"
+source = "tools/corpus/gen_io_nonchar.sh"
+args = ["--noconf", "encoding6.bcf"]
+outputs = ["encoding6.bbl"]
+tags = ["suite:io", "feature:encoding"]
+allow = ["DC-046"]

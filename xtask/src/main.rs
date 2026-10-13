@@ -10,6 +10,7 @@ use std::sync::Mutex;
 use std::time::Instant;
 
 mod fuzz;
+mod remote;
 
 const HELP: &str = "\
 cargo xtask <command> [options] [FILTER...]
@@ -28,6 +29,8 @@ Commands:
   bless                Write expected-bibers/ for the given cases from a bibers run (only
                        for cases whose `allow` lists docs/compat.md ids); prints the diff
                        against the oracle's expected/ for review.
+  remote               Remote data source scenarios against local HTTP(S)/FTP servers
+                       (`--impl bibers --ref o3 [-v] [--dns] [FILTER]`; DC-032).
   help                 Show this message (and the fuzz commands).
 
 FILTER: a substring of the case id, or `tag:<tag>`. Several filters are OR-ed.
@@ -98,6 +101,7 @@ fn real_main() -> Result<ExitCode> {
     match cmd.as_str() {
         "fuzz" => return fuzz::fuzz(rest),
         "fuzz-min" => return fuzz::fuzz_min(rest),
+        "remote" => return remote::remote(rest),
         _ => {}
     }
     let opts = parse_opts(rest)?;

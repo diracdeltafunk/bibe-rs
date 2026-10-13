@@ -6,7 +6,6 @@ mod bibtex;
 pub mod dates;
 pub mod encoding;
 pub mod names;
-mod sbcs;
 
 pub use bibtex::{BibCache, FetchOpts};
 pub(crate) use bibtex::{collapse_eq, process_entry_options};
@@ -559,14 +558,13 @@ fn glob_data_file(ctx: &mut Ctx, source: &str, globflag: Option<&str>) -> Vec<St
 
 /// `locate_data_file` (Utils.pm:226). `Ok(None)` after a non-fatal error.
 fn locate(ctx: &mut Ctx, name: &str) -> Result<Option<String>, Fatal> {
-    if crate::files::is_remote(name) {
-        // DC-032
-        biber_error!(
-            ctx.log,
-            "Remote data source '{name}' is not supported yet by bibers (DC-032)"
-        )?;
-        return Ok(None);
-    }
+    let fetched;
+    let name = if let Some(tls) = crate::remote::remote_scheme(name) {
+        fetched = fetch_remote(ctx, name, tls)?;
+        fetched.as_str()
+    } else {
+        name
+    };
     let lookup = crate::files::Lookup {
         input_directory: ctx.cfg.biber.get_str("input_directory"),
         output_directory: ctx.cfg.biber.get_str("output_directory"),
@@ -579,6 +577,11 @@ fn locate(ctx: &mut Ctx, name: &str) -> Result<Option<String>, Fatal> {
             Ok(None)
         }
     }
+}
+
+/// The remote branch of `locate_data_file` (see [`crate::remote::locate`]).
+fn fetch_remote(ctx: &mut Ctx, source: &str, tls: bool) -> Result<String, Fatal> {
+    crate::remote::locate(ctx.cfg, ctx.log, source, tls)
 }
 
 /// Check a data source's type/datatype is supported. `Ok(false)` to skip it.

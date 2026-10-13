@@ -18,7 +18,7 @@ use crate::config::blx::{OptValue, Scope};
 use crate::config::{Config, DfsMember};
 use crate::datamodel::DataModel;
 use crate::env::Env;
-use crate::files::{Lookup, is_remote, locate_data_file};
+use crate::files::{Lookup, locate_data_file};
 use crate::log::{Fatal, Logger};
 use crate::perlish::{nfd, sort_by_order, split_comma, truthy};
 use crate::quirks::Quirk;
@@ -607,15 +607,15 @@ pub fn parse_ctrlfile(
     env: &Env,
     args: &ParseArgs<'_>,
 ) -> Result<Parsed, Fatal> {
-    let ctrl_file = args.ctrl_file;
-    if is_remote(ctrl_file) {
-        // DC-032: remote data sources (and control files) are deferred.
-        biber_error!(
-            log,
-            "Remote control file '{ctrl_file}' is not yet supported by bibers"
-        )?;
-        return Err(Fatal);
-    }
+    let fetched;
+    let ctrl_file = match crate::remote::remote_scheme(args.ctrl_file) {
+        // locate_data_file fetches a remote control file too.
+        Some(tls) => {
+            fetched = crate::remote::locate(cfg, log, args.ctrl_file, tls)?;
+            fetched.as_str()
+        }
+        None => args.ctrl_file,
+    };
     let lookup = Lookup {
         input_directory: cfg.biber.get_str("input_directory"),
         output_directory: cfg.biber.get_str("output_directory"),

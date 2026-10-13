@@ -1,0 +1,1 @@
+WARN - BibTeX subsystem: warning: comma(s) at end of name (removing)

@@ -1,0 +1,6 @@
+description = "tool mode, --output-encoding=shiftjis (bibtex output; BB-048 '?' test)"
+source = "tools/corpus/gen_io_enc.pl (bibers M4 io package, DC-034)"
+args = ["--noconf", "--tool", "--output-encoding=shiftjis", "data.bib"]
+outputs = ["data_bibertool.bib"]
+log = "data.bib.blg"
+tags = ["suite:io", "feature:encoding", "feature:tool"]

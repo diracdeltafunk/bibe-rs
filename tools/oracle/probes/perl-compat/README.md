@@ -13,6 +13,8 @@ the `#[ignore]`d `oracle_live` tests re-run them and compare with the committed 
 | `isbn_vectors.pl` | `tests/data/isbn_vectors.json`: `Business::ISBN`/`ISSN`/`ISMN` |
 | `uri_vectors.pl` | `tests/data/uri_vectors.json`: `URI->new->as_string` |
 | `regex_vectors.pl` (needs `-I…/biber-src/blib/lib`) | `tests/data/regex_vectors.json`: `Biber::Utils::ireplace`/`imatch`, `split`, `s///g` |
+| `gen_encode_tables.pl` | `data/encode_tables.bin`: the enc2xs-compiled tables of every table-driven `Encode` encoding (read from the O3 perl build directory) |
+| `encode_digests.pl [ENC…]` | `tests/data/encode_digests.json`: per encoding, digests of encoding all of Unicode (code-ref CHECK and a chunked PerlIO layer) and of strictly decoding every 1-/2-byte (and EUC 3-byte) sequence; `find_encoding` over ~2,000 names. About 10 minutes; `ENCODE_DUMP=<dir>` writes the decode lines for diffing with `encode_exhaustive.rs` |
 
 The sombok table comes from the Unicode-LineBreak 2019.001 build directory under
 `vendor/perl-build/cpanm-home/work/*/` (pass its `sombok/lib/8.0.0.c` explicitly when

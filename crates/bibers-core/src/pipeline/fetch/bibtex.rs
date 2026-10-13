@@ -105,11 +105,7 @@ impl FetchOpts {
             .global("gregorianstart")
             .and_then(OptValue::as_str)
             .and_then(parse_gs);
-        let recoder = latex_recode::Recoder::builtin(
-            b.get_str("decodecharsset").unwrap_or("base"),
-            b.get_str("output_safecharsset").unwrap_or("base"),
-            latex_recode::RecodeOptions::default(),
-        );
+        let recoder = ctx.cfg.recoder(latex_recode::RecodeOptions::default());
         FetchOpts {
             xsvsep,
             namesep: s("namesep"),
@@ -239,7 +235,8 @@ pub fn extract_entries(
             .biber_warn(format!("Data source '{filename}' is empty, ignoring"));
         return Ok(rkeys);
     }
-    let text = match encoding::decode(&bytes, encoding) {
+    let utf16_chunks = ctx.cfg.quirks.on(crate::quirks::Quirk::Utf16ChunkSurrogate);
+    let text = match encoding::decode(&bytes, encoding, utf16_chunks) {
         Ok(t) => Some(t),
         Err(e) => {
             biber_error!(
@@ -475,6 +472,20 @@ fn cache_data(
             }
         }
     });
+    // biber writes the decoded buffer to its temp file through PerlIO's
+    // :utf8_strict layer (slurp_switchw), which turns noncharacters (e.g.
+    // from `\char"FDD0`) into U+FFFD.
+    let lbuf: String = lbuf
+        .chars()
+        .map(|c| {
+            let v = c as u32;
+            if (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v) {
+                '\u{FFFD}'
+            } else {
+                c
+            }
+        })
+        .collect();
     if !opts.nostdmacros {
         for (k, v) in btparse::BIBER_MONTHS {
             ctx.run.bt.macros.define(k, v);

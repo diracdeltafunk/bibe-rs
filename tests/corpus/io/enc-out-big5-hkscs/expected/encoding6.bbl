@@ -1,0 +1,164 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{ascii}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=06a47edae2e847800cfd78323a0e6be8}{%
+           family={Encalcer},
+           familyi={E\bibinitperiod},
+           given={Edward},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {A press}%
+      }
+      \strng{namehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{fullhash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{fullhashraw}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{bibnamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorbibnamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authornamehash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorfullhash}{06a47edae2e847800cfd78323a0e6be8}
+      \strng{authorfullhashraw}{06a47edae2e847800cfd78323a0e6be8}
+      \field{labelalpha}{Enc99}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{A plain title}
+      \field{year}{1999}
+    \endentry
+    \entry{mixed}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=00162bed44b55cdf8ac11fb4b8242f4c}{%
+           family={M\"{u}ller},
+           familyi={M\bibinitperiod},
+           given={J\"{u}rgen},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5f93000002113556b124d9a976c8a4a8}{%
+           family={«¸»W»U»c»d»W},
+           familyi={«¸\bibinitperiod},
+           given={«¸»W»U»c},
+           giveni={«¸\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=252654e29e5656218f9b24e528dc0bf3}{%
+           family={§˝},
+           familyi={§˝\bibinitperiod},
+           given={§p©˙},
+           giveni={§p\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{fullhash}{783dd26772da689f980ec09c7b69f048}
+      \strng{fullhashraw}{783dd26772da689f980ec09c7b69f048}
+      \strng{bibnamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorbibnamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authornamehash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorfullhash}{783dd26772da689f980ec09c7b69f048}
+      \strng{authorfullhashraw}{783dd26772da689f980ec09c7b69f048}
+      \field{labelalpha}{M«¸§˝10}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{1 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“1 £\£]\textgamma{}. 2 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“2 £\£]\textgamma{}. 3 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“3 £\£]\textgamma{}. 4 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“4 £\£]\textgamma{}. 5 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“5 £\£]\textgamma{}. 6 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“6 £\£]\textgamma{}. 7 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“7 £\£]\textgamma{}. 8 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“8 £\£]\textgamma{}. 9 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“9 £\£]\textgamma{}. 10 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“10 £\£]\textgamma{}. 11 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“11 £\£]\textgamma{}. 12 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“12 £\£]\textgamma{}. 13 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“13 £\£]\textgamma{}. 14 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“14 £\£]\textgamma{}. 15 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“15 £\£]\textgamma{}. 16 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“16 £\£]\textgamma{}. 17 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“17 £\£]\textgamma{}. 18 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“18 £\£]\textgamma{}. 19 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“19 £\£]\textgamma{}. 20 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“20 £\£]\textgamma{}. 21 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“21 £\£]\textgamma{}. 22 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“22 £\£]\textgamma{}. 23 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“23 £\£]\textgamma{}. 24 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“24 £\£]\textgamma{}. 25 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“25 £\£]\textgamma{}. 26 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“26 £\£]\textgamma{}. 27 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“27 £\£]\textgamma{}. 28 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“28 £\£]\textgamma{}. 29 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“29 £\£]\textgamma{}. 30 §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}. \"{U}n\"{\i}c\"{o}d\'{e} --- \textquotedblleft{}quotes\textquotedblright{} »“30 £\£]\textgamma{}.}
+      \field{journaltitle}{§§§ÂâÎ¶“§Â˛Y°A\x{7b80} ^¶r…O¡c≈È¶r°C \x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}.}
+      \field{title}{\^{S}ome \texttstroke{}itle with \x{fb01} ligature, £· and \textonehalf{}}
+      \field{year}{2010}
+    \endentry
+    \entry{long}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d24314ad2a67e742a0684784008666bb}{%
+           family={\x{ae40}},
+           familyi={\x{ae40}\bibinitperiod},
+           given={\x{cca0}\x{c218}},
+           giveni={\x{cca0}\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{fullhash}{d24314ad2a67e742a0684784008666bb}
+      \strng{fullhashraw}{d24314ad2a67e742a0684784008666bb}
+      \strng{bibnamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorbibnamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authornamehash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorfullhash}{d24314ad2a67e742a0684784008666bb}
+      \strng{authorfullhashraw}{d24314ad2a67e742a0684784008666bb}
+      \field{labelalpha}{\x{ae40}20}
+      \field{sortinit}{\x{ae40}}
+      \field{sortinithash}{48bb2f23ca5b8e7a5708a0ef0fdcac85}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{§È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C §È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C}
+      \field{title}{\x{d55c}\x{ad6d}\x{c5b4} \x{cc38}\x{ace0} \x{bb38}\x{d5cc} \x{baa9}\x{b85d}.}
+      \field{year}{2020}
+    \endentry
+    \entry{nihon}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=35c8e9d659d924feeb2afe326c1c06c7}{%
+           family={§s•–},
+           familyi={§s\bibinitperiod},
+           given={§”≠¶},
+           giveni={§”\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cef95e294b1cf0343a0f217fa7b05189}{%
+           family={πa§Ï},
+           familyi={πa\bibinitperiod},
+           given={™·§l},
+           giveni={™·\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {™F® •X™©}%
+      }
+      \strng{namehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{fullhash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{fullhashraw}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{bibnamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorbibnamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authornamehash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorfullhash}{18702bf41b2676ed18cbbbad81f59532}
+      \strng{authorfullhashraw}{18702bf41b2676ed18cbbbad81f59532}
+      \field{labelalpha}{§sπa01}
+      \field{sortinit}{§s}
+      \field{sortinithash}{b521918382d9ffa793432354046408f8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{singletitle}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{§È•ªªy«U§Â˛Y•ÿ\x{9332}°C«ß«ª«ß«∆°B«Y«p∆Ú«Q°B∫~¶r°C•b®§\x{ff76}\x{ff80}\x{ff76}\x{ff85}°C}
+      \field{year}{2001}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

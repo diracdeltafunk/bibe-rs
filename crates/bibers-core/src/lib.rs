@@ -18,6 +18,8 @@ pub mod output;
 pub mod perlish;
 pub mod pipeline;
 pub mod quirks;
+pub mod recodedata;
+pub mod remote;
 pub mod xmlcheck;
 pub mod xmlin;
 

@@ -24,7 +24,7 @@
 use std::collections::{BTreeMap, HashMap};
 
 use md5::{Digest, Md5};
-use perl_compat::encoding::{Encoding, find_encoding};
+use perl_compat::encoding::{Encoding, Lookup, lookup};
 use perl_compat::grapheme::gcstring;
 use perl_compat::textwrap;
 use perl_compat::truth::PerlNum;
@@ -1376,16 +1376,23 @@ pub fn output_encoding_name(ctx: &Ctx) -> String {
         .to_string()
 }
 
-/// The output encoding (DC-034: single-byte encodings and UTF-8 only).
+/// The output encoding (`Encode::find_encoding`). biber dies when the name
+/// is unknown to Encode (a 0-byte `.bbl` and a Perl error); bibers reports an
+/// ERROR instead. `UTF-7`, `gsm0338` and the `MIME-*` encodings are not
+/// supported (docs/compat.md DC-034).
 pub(crate) fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
     let name = output_encoding_name(ctx);
-    match find_encoding(&name) {
-        Some(e) => Ok(e),
-        None => {
+    match lookup(&name) {
+        Lookup::Found(e) => Ok(e),
+        Lookup::Unsupported(canon) => {
             biber_error!(
                 ctx.log,
-                "Output encoding '{name}' is not supported (docs/compat.md DC-034)"
+                "Output encoding '{name}' ('{canon}') is not supported (docs/compat.md DC-034)"
             )?;
+            Ok(Encoding::UTF8)
+        }
+        Lookup::Unknown => {
+            biber_error!(ctx.log, "Unknown output encoding '{name}'")?;
             Ok(Encoding::UTF8)
         }
     }
@@ -1393,17 +1400,14 @@ pub(crate) fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
 
 /// The bytes to write for the rendered `.bbl` text: encoded as a Perl
 /// `:encoding(<output_encoding>)` layer would (unmappable characters as
-/// `\x{XXXX}`).
+/// `\x{XXXX}`; for `UTF-8`, i.e. `utf-8-strict`, noncharacters too).
 pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
-    if output_encoding_name(ctx) == "UTF-8" {
-        return Ok(text.as_bytes().to_vec());
-    }
-    let enc = find_output_encoding(ctx)?;
-    Ok(if ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit) {
-        enc.encode_perlio_layer(text)
+    let enc = if output_encoding_name(ctx) == "UTF-8" {
+        Encoding::UTF8
     } else {
-        enc.encode_perlqq(text)
-    })
+        find_output_encoding(ctx)?
+    };
+    Ok(enc.encode_layer(text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit)))
 }
 
 /// The locale of a sorting template (for the sortinit collator).
@@ -1442,16 +1446,17 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     } else {
         Some(find_output_encoding(ctx)?)
     };
-    let recoder = (safechars || enc.is_some()).then(|| {
-        latex_recode::Recoder::builtin(
-            ctx.cfg.biber.get_str("decodecharsset").unwrap_or("base"),
-            ctx.cfg
-                .biber
-                .get_str("output_safecharsset")
-                .unwrap_or("base"),
-            latex_recode::RecodeOptions::BIBER,
-        )
-    });
+    let recoder =
+        (safechars || enc.is_some()).then(|| ctx.cfg.recoder(latex_recode::RecodeOptions::BIBER));
+    // UnicodeOutputNulCheck: biber's NUL test misfires for UTF-16/32.
+    let nul_check = ctx.cfg.quirks.on(Quirk::UnicodeOutputNulCheck);
+    let unencodable = |e: Encoding, nul: bool, s: &str| {
+        if nul {
+            e.has_unencodable(s)
+        } else {
+            e.has_unencodable_char(s)
+        }
+    };
     let sortdebug = ctx.cfg.biber.is_true("sortdebug");
     let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
 
@@ -1463,7 +1468,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     if let Some(pa) = processed.sections.last().and_then(|s| s.preamble.as_ref()) {
         let mut pa = pa.join("%\n");
         if let Some(r) = &recoder {
-            if safechars || enc.is_some_and(|e| e.has_unencodable(&nfc(&pa))) {
+            if safechars || enc.is_some_and(|e| unencodable(e, nul_check, &nfc(&pa))) {
                 pa = r.encode(&pa);
             }
         }
@@ -1516,7 +1521,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
                     if safechars {
                         es = r.encode(&es);
                     } else if let Some(e) = enc
-                        && e.has_unencodable(&nfc(&es))
+                        && unencodable(e, nul_check, &nfc(&es))
                     {
                         es = r.encode(&es);
                         ctx.log.biber_warn(format!(

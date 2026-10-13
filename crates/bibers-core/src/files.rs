@@ -41,7 +41,7 @@ pub struct Lookup<'a> {
 /// `locate_data_file` for a local source: absolute path, input (else
 /// output) directory, cwd, the control file's directory, then `kpsewhich`.
 /// Returns `None` when not found (biber then reports `Cannot find '<source>'!`).
-/// Remote sources are not handled here (DC-032).
+/// Remote sources are fetched first (`crate::remote::locate`, DC-032).
 pub fn locate_data_file(env: &Env, lookup: &Lookup<'_>, source: &str) -> Option<String> {
     let sourcepath = source;
     let foundfile = if let Some(indir) = lookup

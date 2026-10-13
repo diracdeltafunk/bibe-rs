@@ -1,0 +1,1 @@
+ERROR - Data file 'encoding6.bib' cannot be read in encoding 'UTF-16': UTF-16:Partial character at <PERLSRC> line <N>.

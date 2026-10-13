@@ -988,16 +988,11 @@ impl Writer {
 
     /// The LaTeX recoding of an entry (bibtex.pm:383-397).
     fn recode(&self, ctx: &mut Ctx, key: &str, text: String) -> Result<String, Fatal> {
+        // The user's --recodedata file, if any (DC-045).
+        let recoder = ctx.cfg.recoder(latex_recode::RecodeOptions::BIBER);
         let b = &ctx.cfg.biber;
-        let dset = b.get_str("decodecharsset").unwrap_or("base").to_string();
-        let eset = b
-            .get_str("output_safecharsset")
-            .unwrap_or("base")
-            .to_string();
-        let recoder =
-            || latex_recode::Recoder::builtin(&dset, &eset, latex_recode::RecodeOptions::BIBER);
         if b.is_true("output_safechars") {
-            return Ok(recoder().encode(&text));
+            return Ok(recoder.encode(&text));
         }
         let outenc = b.get_str("output_encoding").unwrap_or("UTF-8").to_string();
         if outenc == "UTF-8" {
@@ -1005,12 +1000,17 @@ impl Writer {
         }
         let enc = crate::output::bbl::find_output_encoding(ctx)?;
         let n = nfc(&text);
-        // BB-048: `encode($outenc, NFC($acc)) =~ /\?/` also matches a
-        // literal `?`.
-        let bad = enc.has_unencodable(&n)
-            || (ctx.cfg.quirks.on(Quirk::BibtexEncodingQuestionMark) && n.contains('?'));
+        // BB-048: biber tests `encode($outenc, NFC($acc)) =~ /\?/` (CHECK 0:
+        // unmappable characters become the substitution character), which
+        // also matches a literal `?` (and, in UTF-16/32, any code unit with
+        // a 0x3F byte). Fixed: test for unencodable characters.
+        let bad = if ctx.cfg.quirks.on(Quirk::BibtexEncodingQuestionMark) {
+            enc.encode_default(&n).contains(&b'?')
+        } else {
+            enc.has_unencodable_char(&n)
+        };
         if bad {
-            let r = recoder().encode(&text);
+            let r = recoder.encode(&text);
             ctx.log.biber_warn(format!(
                 "The entry '{key}' has characters which cannot be encoded in '{outenc}'. Recoding problematic characters into macros."
             ));

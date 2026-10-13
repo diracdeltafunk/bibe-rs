@@ -135,6 +135,18 @@ pub enum Quirk {
     /// valid documents when an interleave operand is itself an interleave
     /// (the generated biblatexml schema; `--validate-bltxml`).
     Libxml2Interleave,
+    /// (`unicode-output-nul-check`; M4 io package, no BB id yet): biber
+    /// tests "can this entry be encoded" with `encode($enc, $s, sub {"\0"})
+    /// =~ /\0/`, which is true for nearly every string in UTF-16/UTF-32/UCS-2
+    /// (their code units contain NUL bytes), so with such an
+    /// `--output-encoding` every entry is recoded into LaTeX macros with a
+    /// "cannot be encoded" WARN.
+    UnicodeOutputNulCheck,
+    /// (`utf16-chunk-surrogate`; M4 io package, no BB id yet): a UTF-16 data
+    /// source is read through PerlIO in 1024-byte chunks, and Encode::Unicode
+    /// croaks "UTF-16:Partial character" when a surrogate pair straddles a
+    /// chunk boundary, so the file cannot be read.
+    Utf16ChunkSurrogate,
 }
 
 impl Quirk {
@@ -177,6 +189,8 @@ impl Quirk {
         Quirk::ToolCommentsLastFile,
         Quirk::ToolDropsPreambles,
         Quirk::Libxml2Interleave,
+        Quirk::UnicodeOutputNulCheck,
+        Quirk::Utf16ChunkSurrogate,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -219,6 +233,8 @@ impl Quirk {
             Quirk::ToolCommentsLastFile => "tool-comments-last-file",
             Quirk::ToolDropsPreambles => "tool-drops-preambles",
             Quirk::Libxml2Interleave => "libxml2-interleave",
+            Quirk::UnicodeOutputNulCheck => "unicode-output-nul-check",
+            Quirk::Utf16ChunkSurrogate => "utf16-chunk-surrogate",
         }
     }
 

@@ -1,0 +1,5 @@
+description = "--recodedata with a custom set name for decoding and encoding"
+source = "bibers M4 io package (DC-045): user recode data file; inputs from t/tdata/encoding6.bcf"
+args = ["--noconf", "--recodedata=myrecode.xml", "--decodecharsset=mine", "--output-safecharsset=mine", "--output-safechars", "encoding6.bcf"]
+outputs = ["encoding6.bbl"]
+tags = ["suite:io", "feature:recodedata"]
