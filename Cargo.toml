@@ -61,3 +61,8 @@ opt-level = 2
 
 [profile.dev.package.sha2]
 opt-level = 3
+
+# `cargo build --profile profiling`: release with debug info, for samply etc.
+[profile.profiling]
+inherits = "release"
+debug = true
