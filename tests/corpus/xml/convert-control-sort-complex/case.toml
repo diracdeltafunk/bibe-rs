@@ -1,0 +1,5 @@
+description = "--convert-control: sort-complex.bcf as HTML"
+source = "vendor/biber/t/tdata/sort-complex.bcf"
+args = ["--noconf", "--convert-control", "sort-complex.bcf"]
+outputs = ["sort-complex.bbl", "sort-complex.bcf.html"]
+tags = ["suite:xml", "feature:convert-control"]

@@ -130,6 +130,11 @@ pub enum Quirk {
     /// (`tool-drops-preambles`; new): tool-mode (and bibtex) output does
     /// not write the data's `@preamble`s.
     ToolDropsPreambles,
+    /// (`libxml2-interleave`; a libxml2 2.9 bug, no BB id yet): biber
+    /// validates with libxml2, whose interleave implementation rejects some
+    /// valid documents when an interleave operand is itself an interleave
+    /// (the generated biblatexml schema; `--validate-bltxml`).
+    Libxml2Interleave,
 }
 
 impl Quirk {
@@ -171,6 +176,7 @@ impl Quirk {
         Quirk::BibtexLiteralAnnotations,
         Quirk::ToolCommentsLastFile,
         Quirk::ToolDropsPreambles,
+        Quirk::Libxml2Interleave,
     ];
 
     /// The `--fix-quirks` switch name.
@@ -212,6 +218,7 @@ impl Quirk {
             Quirk::BibtexLiteralAnnotations => "bibtex-literal-annotations",
             Quirk::ToolCommentsLastFile => "tool-comments-last-file",
             Quirk::ToolDropsPreambles => "tool-drops-preambles",
+            Quirk::Libxml2Interleave => "libxml2-interleave",
         }
     }
 

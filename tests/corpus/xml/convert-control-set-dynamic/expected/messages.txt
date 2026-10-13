@@ -1,0 +1,7 @@
+WARN - Field 'crossref' is no longer needed in set entries in Biber - ignoring in entry 'Elias1955'
+WARN - Field 'entryset' is no longer needed in set member entries in Biber - ignoring in entry 'Elias1955a'
+WARN - Field 'entryset' is no longer needed in set member entries in Biber - ignoring in entry 'Elias1955b'
+WARN - I didn't find a database entry for dynamic set member 'missing1' - ignoring (section 0)
+WARN - I didn't find a database entry for static set member 'missing1' in entry 'Static1' - ignoring (section 0)
+WARN - legacy month field 'Mar.' in entry 'Elias1955b' is not an integer - this will probably not sort properly.
+WARN - legacy month field 'March' in entry 'Elias1955a' is not an integer - this will probably not sort properly.

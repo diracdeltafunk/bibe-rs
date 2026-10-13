@@ -91,9 +91,9 @@ pub fn unsupported(opts: &BTreeMap<String, Val>) -> Option<String> {
             "output format 'biblatexml' is not yet supported (docs/compat.md DC-031)".into(),
         );
     }
+    // DC-033: --validate-control and --validate-config are implemented;
+    // --validate-bltxml waits for biblatexml input (DC-031).
     for (k, flag) in [
-        ("validate_control", "--validate-control"),
-        ("validate_config", "--validate-config"),
         ("validate_bltxml", "--validate-bltxml"),
         ("validate_bblxml", "--validate-bblxml"),
     ] {
@@ -102,9 +102,6 @@ pub fn unsupported(opts: &BTreeMap<String, Val>) -> Option<String> {
                 "RNG validation ({flag}) is not yet supported (docs/compat.md DC-033)"
             ));
         }
-    }
-    if s("convert_control").is_some_and(|v| !v.is_empty() && v != "0") {
-        return Some("--convert-control (XSLT) is not yet supported".into());
     }
     None
 }
@@ -277,6 +274,20 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
     };
     log.set_nodieonerror(b.nodieonerror());
     init.log_startup(&mut log, &banner());
+    // Biber.pm:95-102: validate the config file that was read (DC-033).
+    if init.config.biber.is_true("validate_config")
+        && let Some(cf) = init.configfile.as_deref()
+        && bibers_core::xmlcheck::validate_biber_xml(
+            &mut log,
+            env,
+            cf,
+            bibers_core::xmlcheck::SchemaKind::Config,
+            init.config.quirks,
+        )
+        .is_err()
+    {
+        return Exit(log.display_end());
+    }
     let mut cfg = init.config;
     let now = chrono::Local::now().format("%a %b %e, %Y, %H:%M:%S");
     log.logfile_info(bibers_core::loc!(), &format!("=== {now}"));

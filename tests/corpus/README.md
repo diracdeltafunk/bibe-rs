@@ -29,6 +29,7 @@ tests/corpus/
 | `ported/` | biber's `t/*.t` assertions | (separate) |
 | `tool/` | tool mode (`--tool`) and `--output-format=bibtex` with the `--output-*` options | `gen_tool.py` |
 | `fuzz/` | minimised reproducers of bibers bugs found by differential fuzzing (one `.bcf` template from `styles/`, `fuzz.bib`) | `cargo xtask fuzz` / `cargo xtask fuzz-min` |
+| `xml/` | RELAX NG validation (`--validate-control`, `--validate-config`; valid and invalid inputs) and `--convert-control` (the `.html` is an output) | `gen_xml.py` |
 
 See `tools/corpus/README.md` for tags and regeneration.
 

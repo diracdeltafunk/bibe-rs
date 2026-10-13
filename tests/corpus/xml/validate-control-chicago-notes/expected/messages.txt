@@ -1,0 +1,1 @@
+ERROR - 'chicago-notes.bcf' failed to validate against schema '<SCHEMA>/bcf.rng'

@@ -7,6 +7,7 @@
 //! [`datamodel`], [`log`] (the `.blg`/stdout logger).
 
 pub mod bcf;
+pub mod bcfhtml;
 pub mod config;
 pub mod datamodel;
 pub mod env;
@@ -17,6 +18,7 @@ pub mod output;
 pub mod perlish;
 pub mod pipeline;
 pub mod quirks;
+pub mod xmlcheck;
 pub mod xmlin;
 
 /// The biber version bibers is compatible with.

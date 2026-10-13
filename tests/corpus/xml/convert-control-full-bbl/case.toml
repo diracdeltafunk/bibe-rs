@@ -1,0 +1,5 @@
+description = "--convert-control: full-bbl.bcf as HTML"
+source = "vendor/biber/t/tdata/full-bbl.bcf"
+args = ["--noconf", "--convert-control", "full-bbl.bcf"]
+outputs = ["full-bbl.bbl", "full-bbl.bcf.html"]
+tags = ["suite:xml", "feature:convert-control"]

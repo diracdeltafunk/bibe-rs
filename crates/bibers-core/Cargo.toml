@@ -15,6 +15,7 @@ ucollate.workspace = true
 btparse.workspace = true
 latex-recode.workspace = true
 roxmltree.workspace = true
+relaxng.workspace = true
 unicode-normalization.workspace = true
 serde_json.workspace = true
 regex.workspace = true
