@@ -1,0 +1,7 @@
+description = "tool mode over biblatex-examples.bib "
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "biblatex-examples.bib"]
+outputs = ["biblatex-examples_bibertool.bib"]
+shared = ["biblatex-examples.bib"]
+log = "biblatex-examples.bib.blg"
+tags = ["suite:tool", "feature:tool"]

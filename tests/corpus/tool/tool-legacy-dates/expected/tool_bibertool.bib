@@ -1,0 +1,127 @@
+@STRING{P = "Publisher"}
+
+@UNPUBLISHED{i3Š,
+  OPTIONS = {useprefix=false},
+  ABSTRACT = {Some abstract %50 of which is useless},
+  AUTHOR = {AAA and BBB and CCC and DDD and EEE},
+  LISTA = {list test},
+  LISTB = {late and early},
+  LISTC = {late and early},
+  LOCATION = {one and two},
+  KEYWORDS = {keyword,keyword2,keyword3},
+  TITLE = {Š title},
+  USERB = {test},
+  YEAR = {2003},
+}
+
+@BOOK{xd1,
+  AUTHOR = {Ellington, Edward Paul},
+}
+
+@XDATA{macmillan,
+  IDS = {macmillanalias},
+  YEAR = {2001},
+}
+
+@XDATA{macmillan:pub,
+  PUBLISHER = {Macmillan},
+  IDS = {macmillan:pubALIAS},
+}
+
+@XDATA{macmillan:loc,
+  LOCATION = {New York and London},
+  NOTE = {A Note},
+}
+
+@BOOK{b1,
+  LOCATION = {London and Edinburgh},
+  LOCATION+an:default = {1=ann1;2=ann2},
+  CROSSREF = {mvalias},
+  TITLE = {Booktitle},
+  TITLE+an:default = {=ann1, ann2},
+  YEAR = {1999},
+}
+
+@MVBOOK{mv1,
+  IDS = {mvalias},
+  SUBTITLE = {Mainsubtitle},
+  TITLE = {Maintitle},
+  TITLEADDON = {Maintitleaddon},
+}
+
+@BOOK{dt1,
+  DATE = {2004-04-25T14:34:00/2004-04-05T14:37:06},
+  EVENTDATE = {2004-04-25T14:34:00+05:00/2004-04-05T15:34:00+05:00},
+  ORIGDATE = {2004-04-25T14:34:00Z/2004-04-05T14:34:05Z},
+  URLDATE = {2004-04-25T14:34:00/2004-04-05T15:00:00},
+}
+
+@ARTICLE{m1,
+  JOURNALTITLE = {A Journal},
+  YEAR = {2017},
+}
+
+@BOOK{badcr1,
+  AUTHOR = {Foo},
+  TITLE = {Foo},
+  YEAR = {2019},
+}
+
+@BOOK{badcr2,
+  AUTHOR = {Bar},
+  TITLE = {Bar},
+  YEAR = {2019},
+}
+
+@BOOK{gxd1,
+  AUTHOR = {Smith, Simon and xdata=gxd2-author-1},
+  EDITOR = {xdata=gxd2-editor-2},
+  TRANSLATOR = {xdata=gxd2-author-3},
+  LISTA = {xdata=gxd3-location-5},
+  LOCATION = {xdata=gxd3-location-1 and B},
+  ORGANIZATION = {xdata=gxd2-author-3},
+  PUBLISHER = {xdata=gxd2},
+  ADDENDUM = {xdata=missing},
+  NOTE = {xdata=gxd2-note},
+  TITLE = {xdata=gxd4-title},
+}
+
+@XDATA{gxd2,
+  AUTHOR = {Bloom, Brian and Anderson, Arthur},
+  EDITOR = {Wool, William and xdata=gxd4-editor-1},
+}
+
+@XDATA{gxd3,
+  LOCATION = {A and C},
+}
+
+@XDATA{gxd4,
+  EDITOR = {Frill, Frank},
+  TITLE = {Some title},
+}
+
+@BOOK{bo1,
+  AUTHOR = {Smith, Simon},
+  IDS = {box1,box2},
+}
+
+@BOOK{ld1,
+  AUTHOR = {AAA and BBB and CCC and DDD and EEE},
+  PUBLISHER = P,
+  MONTH = apr,
+  TITLE = {A title},
+  YEAR = {2003},
+}
+
+@COMMENT{Comment 1}
+@COMMENT{Comment 2}
+@COMMENT{jabref-meta: groupstree:
+0 AllEntriesGroup:;
+1 ExplicitGroup:Doktorandkurser\;2\;;
+2 KeywordGroup:Från könsroll till genus\;0\;course\;UCGS Från könsrolltill genus\;0\;0\;;
+2 KeywordGroup:Historiska och filosofiska perspektiv på psykologi\;0\;course\;Historiska och filosofiska perspektiv på psykologi\;0\;0\;;
+2 KeywordGroup:Kurs i introduktion\;0\;course\;Kurs i introduktion\;0\;0\;;
+2 KeywordGroup:Fenomenologi, kön och genus\;0\;course\;UCGS Fenomenologi\;0\;0\;;
+2 KeywordGroup:Quantitative Research Methods\;0\;course\;QMR\;0\;0\;;
+2 KeywordGroup:Multivariate Analysis\;0\;course\;MVA\;1\;0\;;
+}

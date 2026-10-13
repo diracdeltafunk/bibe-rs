@@ -1380,7 +1380,7 @@ pub fn output_encoding_name(ctx: &Ctx) -> String {
 /// is unknown to Encode (a 0-byte `.bbl` and a Perl error); bibers reports an
 /// ERROR instead. `UTF-7`, `gsm0338` and the `MIME-*` encodings are not
 /// supported (docs/compat.md DC-034).
-fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
+pub(crate) fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
     let name = output_encoding_name(ctx);
     match lookup(&name) {
         Lookup::Found(e) => Ok(e),

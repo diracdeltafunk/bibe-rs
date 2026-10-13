@@ -17,6 +17,8 @@ Requirements: Python ≥ 3.12, TeX Live with biblatex (`pdflatex`, `lualatex`, `
 | `gen_styles.py` | `styles/` | `\nocite{*}` (plus a few `\cite`s) over `biblatex-examples.bib` for the 26 standard styles, 15 contributed styles, and an option matrix that varies one option at a time from authoryear/alphabetic/numeric. `--list` prints the cases. |
 | `gen_bugs.py` | `bugs/` | One case per biber bug with an observable effect (`docs/biber-bugs.md`, status V/C). The reproducers are inline in the script. `--list-skipped` lists the bugs without a case and why. |
 | `gen_scale.py` | `scale/`, benchmarks | `corpus` writes the committed `scale/mixed-1000` case. `bench [--out DIR] [SHAPE:N…]` writes larger synthetic inputs (default `target/bench-corpus/`, gitignored). Shapes are documented in the script. |
+| `gen_tool.py` | `tool/` | Tool mode (`--tool`) and `--output-format=bibtex`: every `--output-*` option alone and in combinations, over `t/tdata/tool.bib` and a synthetic `.bib` (dates, seasons, unspecified dates, annotations, macros, comments) inline in the script; several data files, `--output-file` (incl. `-`), config files with source maps and output options, input/output encodings, biber's fixtures, `biblatex-examples.bib`, and `.bcf`-driven bibtex output. `dc-*` cases have reviewed `expected-bibers/`. |
+| `texlive_tool_diff.py` | — | Differential sweep: biber vs bibers in tool mode with five `--output-*` combinations over a list of `.bib` files (e.g. all of TeX Live's). |
 | `bench.sh` | — | Times `$BIBER` (default `biber`) over the benchmark inputs. |
 | `corpuslib.py` | — | Shared helpers. |
 

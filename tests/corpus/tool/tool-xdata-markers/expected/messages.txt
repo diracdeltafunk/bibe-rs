@@ -1,0 +1,7 @@
+WARN - BibTeX subsystem: substring 2, warning: empty substring
+WARN - I didn't find a database entry for crossref 'baz' in entry 'badcr1' - ignoring (section 99999)
+WARN - I didn't find a database entry for crossref 'baz' in entry 'badcr2' - ignoring (section 99999)
+WARN - I didn't find a database entry for xdata entry 'missingxd' in entry 'xd1' - ignoring (section 99999)
+WARN - Name in key 'badname' is empty (probably consecutive 'and'): skipping entry 'badname'
+WARN - book entry 'gxd1' has XDATA reference from field 'addendum' that contains no source field (section 99999)
+WARN - book entry 'gxd1' has XDATA reference from field 'publisher' that contains no source field (section 99999)

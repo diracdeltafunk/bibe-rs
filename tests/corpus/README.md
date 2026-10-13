@@ -27,7 +27,8 @@ tests/corpus/
 | `bugs/` | one reproducer per biber bug (`docs/biber-bugs.md`), recording biber's actual behaviour | `gen_bugs.py` |
 | `scale/` | one 1000-entry synthetic case (bigger inputs: `gen_scale.py bench`) | `gen_scale.py` |
 | `ported/` | biber's `t/*.t` assertions | (separate) |
-| `io/` | encodings (multi-byte `--output-encoding`/`--input-encoding`) and `--recodedata` (M4 io package); remote data sources are tested by `crates/bibers/tests/remote.rs` and `tools/remote/` (they need a local server) | `gen_io_enc.pl`, `gen_io_recodedata.sh`, `gen_io_nonchar.sh` |
+| `tool/` | tool mode (`--tool`) and `--output-format=bibtex` with the `--output-*` options | `gen_tool.py` |
+| `io/` | encodings (multi-byte `--output-encoding`/`--input-encoding`) and `--recodedata` (M4 io package); remote data sources are tested by `crates/bibers/tests/remote.rs` and `cargo xtask remote` (they need local servers) | `gen_io_enc.pl`, `gen_io_recodedata.sh`, `gen_io_nonchar.sh` |
 | `fuzz/` | minimised reproducers of bibers bugs found by differential fuzzing (one `.bcf` template from `styles/`, `fuzz.bib`) | `cargo xtask fuzz` / `cargo xtask fuzz-min` |
 
 See `tools/corpus/README.md` for tags and regeneration.

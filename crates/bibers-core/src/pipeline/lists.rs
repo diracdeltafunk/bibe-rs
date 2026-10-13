@@ -11,12 +11,29 @@ use crate::{log::Fatal, model::SectionState};
 /// section, reset its state, set its keys to the section's citekeys, then run
 /// the per-list phases, the list filters, sorting and context data.
 ///
-/// Tool mode (deferred, DC-030) skips the uniqueness/entry passes; it is not
-/// supported yet, so every phase runs.
+/// In tool mode (also set for `--output-format=bibtex`, Biber.pm:1133) only
+/// `process_visible_names`, filtering and sorting run (Biber.pm:3112-3177).
 pub fn process_lists(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
+    let tool = ctx.cfg.biber.tool();
     for i in 0..st.datalists.len() {
         init_list(st, i);
+        if tool {
+            // `set_unul_changed(1)` is inside `unless tool`.
+            st.datalists[i].slots.remove("unulchanged");
+        }
         for (name, phase) in LIST_PHASES {
+            if tool
+                && matches!(
+                    *name,
+                    "process_entries_pre"
+                        | "uniqueness"
+                        | "process_entries_post"
+                        | "process_entries_final"
+                        | "generate_contextdata"
+                )
+            {
+                continue;
+            }
             if *name == "generate_sortdataschema" {
                 // Filtering must come before sorting/labelling so that there
                 // are no gaps in e.g. extradate (Biber.pm:3134).

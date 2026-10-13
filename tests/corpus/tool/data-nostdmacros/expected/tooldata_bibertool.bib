@@ -1,0 +1,129 @@
+@STRING{JNL = "Journal of Things"}
+@STRING{LOC = "Berlin"}
+@STRING{PUB = "Publisher Name"}
+
+@BOOK{season1,
+  AUTHOR = {Doe, John},
+  PUBLISHER = PUB,
+  TITLE = {Spring book},
+  YEAR = {2020},
+  YEARDIVISION = {spring},
+}
+
+@BOOK{season2,
+  AUTHOR = {Doe, John and von Neumann, Jr., John},
+  LOCATION = LOC,
+  TITLE = {Southern winter?},
+  YEAR = {2020},
+  YEARDIVISION = {winterS},
+}
+
+@BOOK{unspec1,
+  AUTHOR = {Roe, Richard},
+  DATE = {199X},
+  TITLE = {Decade},
+}
+
+@BOOK{unspec2,
+  EDITOR = {{Barnes and Noble}},
+  DATE = {19XX},
+  TITLE = {Century},
+}
+
+@BOOK{unspec3,
+  DATE = {1999-00},
+  TITLE = {Month unspecified},
+}
+
+@BOOK{unspec4,
+  DATE = {1999-01-00},
+  TITLE = {Day unspecified},
+}
+
+@BOOK{unspec5,
+  DATE = {1999-00-00},
+  TITLE = {Day in year},
+}
+
+@BOOK{midnight,
+  DATE = {2020-01-01},
+  EVENTDATE = {2020-01-01T10:20:30+02:00},
+  TITLE = {Midnight},
+}
+
+@BOOK{year0,
+  TITLE = {Year zero},
+}
+
+@BOOK{circa,
+  DATE = {1850~/1860?},
+  ORIGDATE = {1700%},
+  TITLE = {Circa},
+}
+
+@BOOK{era,
+  DATE = {-44-03-15},
+  TITLE = {BCE},
+}
+
+@BOOK{open,
+  PAGES = {10--},
+  TITLE = {Open range},
+  YEAR = {1990},
+}
+
+@BOOK{legacy,
+  MONTH = {3},
+  PAGES = {1--10,20--30},
+  TITLE = {Legacy},
+  YEAR = {1995},
+}
+
+@BOOK{legacy2,
+  MONTH = {11},
+  TITLE = {Legacy numeric month},
+  YEAR = {1996},
+}
+
+@BOOK{legacyday,
+  DATE = {1995-03-04},
+  TITLE = {Legacy with day},
+}
+
+@ARTICLE{ann,
+  AUTHOR = {Alpha, A. and Beta, B. and others},
+  AUTHOR+an:default = {1=corresponding;2:family=Lit},
+  URL = {http://example.org/a?b=c},
+  JOURNALTITLE = JNL,
+  KEYWORDS = {a,b,c},
+  TITLE = {Annotated},
+  TITLE+an:alt = {=alternative},
+}
+
+@ONLINE{verb,
+  URL = {http://example.org/caf\'e},
+  NOTE = {x},
+  TITLE = {Ünïcödé “quotes” – dash ß},
+  URLDATE = {2020-05-06},
+}
+
+@INPROCEEDINGS{opts,
+  OPTIONS = {skipbib=1},
+  AUTHOR = {Ignored, Dup},
+  BOOKTITLE = {Proceedings},
+  CROSSREF = {proc},
+  MONTH = {1},
+  TITLE = {Options and a very long title that will need to be wrapped when the output is wrapped at forty columns},
+  YEAR = {2001},
+}
+
+@PROCEEDINGS{proc,
+  EDITOR = {Epsilon, E.},
+  PUBLISHER = PUB,
+  TITLE = {The Proceedings},
+  YEAR = {2001},
+}
+
+@COMMENT{A plain comment}
+@COMMENT{jabref-meta: databaseType:biblatex;
+}

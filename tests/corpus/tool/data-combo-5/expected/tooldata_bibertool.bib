@@ -1,0 +1,129 @@
+@string{jnl = "Journal of Things"}
+@string{loc = "Berlin"}
+@string{pub = "Publisher Name"}
+
+@book{season1,
+  author       = {Doe, John},
+  publisher    = pub,
+  title        = {Spring book},
+  year         = {2020},
+  yeardivision = {spring},
+}
+
+@book{season2,
+  author       = {Doe, John and von Neumann, Jr., John},
+  location     = loc,
+  title        = {Southern winter?},
+  year         = {2020},
+  yeardivision = {winterS},
+}
+
+@book{unspec1,
+  author = {Roe, Richard},
+  date   = {199X},
+  title  = {Decade},
+}
+
+@book{unspec2,
+  editor = {{Barnes and Noble}},
+  date   = {19XX},
+  title  = {Century},
+}
+
+@book{unspec3,
+  date  = {1999-00},
+  title = {Month unspecified},
+}
+
+@book{unspec4,
+  date  = {1999-01-00},
+  title = {Day unspecified},
+}
+
+@book{unspec5,
+  date  = {1999-00-00},
+  title = {Day in year},
+}
+
+@book{midnight,
+  date      = {2020-01-01},
+  eventdate = {2020-01-01T10:20:30+02:00},
+  title     = {Midnight},
+}
+
+@book{year0,
+  title = {Year zero},
+}
+
+@book{circa,
+  date     = {1850~/1860?},
+  origdate = {1700%},
+  title    = {Circa},
+}
+
+@book{era,
+  date  = {-44-03-15},
+  title = {BCE},
+}
+
+@book{open,
+  pages = {10--},
+  title = {Open range},
+  year  = {1990},
+}
+
+@book{legacy,
+  month = mar,
+  pages = {1--10,20--30},
+  title = {Legacy},
+  year  = {1995},
+}
+
+@book{legacy2,
+  month = nov,
+  title = {Legacy numeric month},
+  year  = {1996},
+}
+
+@book{legacyday,
+  date  = {1995-03-04},
+  title = {Legacy with day},
+}
+
+@article{ann,
+  url               = {http://example.org/a?b=c},
+  author            = {Alpha, A. and Beta, B. and others},
+  author+an:default = {1=corresponding;2:family=Lit},
+  journaltitle      = jnl,
+  keywords          = {a,b,c},
+  title             = {Annotated},
+  title+an:alt      = {=alternative},
+}
+
+@online{verb,
+  url     = {http://example.org/caf\'e},
+  note    = {x},
+  title   = {Ünïcödé “quotes” – dash ß},
+  urldate = {2020-05-06},
+}
+
+@inproceedings{opts,
+  options   = {skipbib=1},
+  author    = {Ignored, Dup},
+  booktitle = {Proceedings},
+  crossref  = {proc},
+  month     = jan,
+  title     = {Options and a very long title that will need to be wrapped when the output is wrapped at forty columns},
+  year      = {2001},
+}
+
+@proceedings{proc,
+  editor    = {Epsilon, E.},
+  publisher = pub,
+  title     = {The Proceedings},
+  year      = {2001},
+}
+
+@comment{A plain comment}
+@comment{jabref-meta: databaseType:biblatex;
+}

@@ -1,0 +1,144 @@
+@string{jnl = "Journal of Things"}
+@string{loc = "Berlin"}
+@string{pub = "Publisher Name"}
+
+@collection{season1,
+   author       = {Doe, John},
+   publisher    = pub,
+   date         = {2020-21},
+   note         = {mapped note},
+   title        = {[Spring] [book]},
+   yeardivision = {spring},
+}
+
+@collection{season2,
+   author       = {Doe, John and von Neumann, Jr., John},
+   location     = loc,
+   date         = {2020},
+   note         = {mapped note},
+   title        = {[Southern] [winter]?},
+   yeardivision = {winterS},
+}
+
+@collection{unspec1,
+   author = {Roe, Richard},
+   date   = {199X},
+   note   = {mapped note},
+   title  = {[Decade]},
+}
+
+@collection{unspec2,
+   editor = {{Barnes and Noble}},
+   date   = {19XX},
+   note   = {mapped note},
+   title  = {[Century]},
+}
+
+@collection{unspec3,
+   date  = {1999-00},
+   note  = {mapped note},
+   title = {[Month] [unspecified]},
+}
+
+@collection{unspec4,
+   date  = {1999-01-00},
+   note  = {mapped note},
+   title = {[Day] [unspecified]},
+}
+
+@collection{unspec5,
+   date  = {1999-00-00},
+   note  = {mapped note},
+   title = {[Day] [in] [year]},
+}
+
+@collection{midnight,
+   date      = {2020-01-01},
+   eventdate = {2020-01-01T10:20:30+02:00},
+   note      = {mapped note},
+   title     = {[Midnight]},
+}
+
+@collection{year0,
+   note  = {mapped note},
+   title = {[Year] [zero]},
+}
+
+@collection{circa,
+   date     = {1850~/1860?},
+   note     = {mapped note},
+   origdate = {1700%},
+   title    = {[Circa]},
+}
+
+@collection{era,
+   date  = {-44-03-15},
+   note  = {mapped note},
+   title = {[BCE]},
+}
+
+@collection{open,
+   date  = {1990/},
+   note  = {mapped note},
+   pages = {10--},
+   title = {[Open] [range]},
+}
+
+@collection{legacy,
+   date  = {1995-03},
+   note  = {mapped note},
+   pages = {1--10,20--30},
+   title = {[Legacy]},
+}
+
+@collection{legacy2,
+   date  = {1996-11},
+   note  = {mapped note},
+   title = {[Legacy] [numeric] [month]},
+}
+
+@collection{legacyday,
+   date  = {1995-03-04},
+   note  = {mapped note},
+   title = {[Legacy] [with] [day]},
+}
+
+@article{ann,
+   author            = {Alpha, A. and Beta, B. and others},
+   author+an:default = {1=corresponding;2:family=Lit},
+   url               = {http://example.org/a?b=c},
+   journaltitle      = jnl,
+   keywords          = {a,b,c},
+   note              = {mapped note},
+   title             = {[Annotated]},
+   title+an:alt      = {=alternative},
+}
+
+@online{verb,
+   url     = {http://example.org/caf\'e},
+   note    = {x},
+   title   = {[Ünïcödé] “[quotes]” – [dash] [ß]},
+   urldate = {2020-05-06},
+}
+
+@inproceedings{opts,
+   options   = {skipbib=1},
+   author    = {Ignored, Dup},
+   booktitle = {Proceedings},
+   crossref  = {proc},
+   date      = {2001-01},
+   note      = {mapped note},
+   title     = {[Options] [and] [a] [very] [long] [title] [that] [will] [need] [to] [be] [wrapped] [when] [the] [output] [is] [wrapped] [at] [forty] [columns]},
+}
+
+@proceedings{proc,
+   editor    = {Epsilon, E.},
+   publisher = pub,
+   date      = {2001},
+   note      = {mapped note},
+   title     = {[The] [Proceedings]},
+}
+
+@comment{A plain comment}
+@comment{jabref-meta: databaseType:biblatex;
+}

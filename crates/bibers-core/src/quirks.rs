@@ -110,6 +110,26 @@ pub enum Quirk {
     /// `\x{fffd}` sequences (unless the encoding can represent a character
     /// starting with the cut-off prefix).
     PerlioEncodingSplit,
+    /// BB-047 (`bibtex-winters-typo`): the bibtex writer's year-division
+    /// map has `WinterS` for `winterS`, so that season is lost from dates.
+    BibtexWinterSTypo,
+    /// BB-048 (`bibtex-encoding-question-mark`): with a non-UTF-8 output
+    /// encoding the bibtex writer tests `encode(...) =~ /\?/`, so a literal
+    /// `?` makes it LaTeX-recode the entry and warn.
+    BibtexEncodingQuestionMark,
+    /// (`bibtex-unspecified-dates`; new, see the tool package report): the
+    /// bibtex writer formats the `XX` of ISO 8601-2 unspecified months and
+    /// days with `sprintf('%.2d')`, so `1999-XX` is written as `1999-00`.
+    BibtexUnspecifiedDates,
+    /// (`bibtex-literal-annotations`; new): the bibtex writer drops the
+    /// quotes of literal annotations (`="text"` is written as `=text`).
+    BibtexLiteralAnnotations,
+    /// (`tool-comments-last-file`; new): in tool mode only the `@comment`s
+    /// of the last data source that has any are output.
+    ToolCommentsLastFile,
+    /// (`tool-drops-preambles`; new): tool-mode (and bibtex) output does
+    /// not write the data's `@preamble`s.
+    ToolDropsPreambles,
     /// (`unicode-output-nul-check`; M4 io package, no BB id yet): biber
     /// tests "can this entry be encoded" with `encode($enc, $s, sub {"\0"})
     /// =~ /\0/`, which is true for nearly every string in UTF-16/UTF-32/UCS-2
@@ -157,6 +177,12 @@ impl Quirk {
         Quirk::DieondatamodelNoExit,
         Quirk::CloneEndyeardivision,
         Quirk::PerlioEncodingSplit,
+        Quirk::BibtexWinterSTypo,
+        Quirk::BibtexEncodingQuestionMark,
+        Quirk::BibtexUnspecifiedDates,
+        Quirk::BibtexLiteralAnnotations,
+        Quirk::ToolCommentsLastFile,
+        Quirk::ToolDropsPreambles,
         Quirk::UnicodeOutputNulCheck,
         Quirk::Utf16ChunkSurrogate,
     ];
@@ -194,6 +220,12 @@ impl Quirk {
             Quirk::DieondatamodelNoExit => "dieondatamodel-no-exit",
             Quirk::CloneEndyeardivision => "clone-endyeardivision",
             Quirk::PerlioEncodingSplit => "perlio-encoding-split",
+            Quirk::BibtexWinterSTypo => "bibtex-winters-typo",
+            Quirk::BibtexEncodingQuestionMark => "bibtex-encoding-question-mark",
+            Quirk::BibtexUnspecifiedDates => "bibtex-unspecified-dates",
+            Quirk::BibtexLiteralAnnotations => "bibtex-literal-annotations",
+            Quirk::ToolCommentsLastFile => "tool-comments-last-file",
+            Quirk::ToolDropsPreambles => "tool-drops-preambles",
             Quirk::UnicodeOutputNulCheck => "unicode-output-nul-check",
             Quirk::Utf16ChunkSurrogate => "utf16-chunk-surrogate",
         }

@@ -1,0 +1,10 @@
+WARN - Date in entry 'baez/online' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'itzhaki' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'jaffe' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'knuth:ct' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'knuth:ct:related' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'kowalik' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'laufenberg' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'markey' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'sorace' has DAY or ENDYEAR, cannot be output in legacy format.
+WARN - Date in entry 'wassenberg' has DAY or ENDYEAR, cannot be output in legacy format.

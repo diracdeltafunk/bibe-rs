@@ -129,4 +129,24 @@ writecase("enc-inout-sjis-eucjp", "--input-encoding=shiftjis --output-encoding=e
 # The same character elsewhere is fine.
 writecase("enc-in-utf-16-astral", "--input-encoding=UTF-16 with characters outside the BMP",
           ['--input-encoding=UTF-16'], encode('UTF-16', "% \x{1F600}\n$bib"));
+# Tool mode (bibtex output) with multi-byte output encodings: its own
+# "can this entry be encoded" test is `encode(...) =~ /\?/` (BB-048).
+for my $e (qw(shiftjis euc-kr cp936 big5-eten UTF-16 UTF-16LE iso-2022-jp)) {
+  (my $n = lc $e) =~ s/[^a-z0-9]+/-/g;
+  my $d = "$dir/tool-out-$n";
+  make_path($d);
+  open my $fh, '>:raw', "$d/data.bib" or die;
+  print $fh $utf8, encode('UTF-8', "\@MISC{q,\n  TITLE = {Why? 日本}\n}\n");
+  close $fh;
+  open my $c, '>:utf8', "$d/case.toml" or die;
+  print $c <<"EOF";
+description = "tool mode, --output-encoding=$e (bibtex output; BB-048 '?' test)"
+source = "tools/corpus/gen_io_enc.pl (bibers M4 io package, DC-034)"
+args = ["--noconf", "--tool", "--output-encoding=$e", "data.bib"]
+outputs = ["data_bibertool.bib"]
+log = "data.bib.blg"
+tags = ["suite:io", "feature:encoding", "feature:tool"]
+EOF
+  close $c;
+}
 print STDERR "done\n";

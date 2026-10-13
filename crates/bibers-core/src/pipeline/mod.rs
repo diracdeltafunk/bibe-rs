@@ -29,6 +29,7 @@ pub mod lists;
 pub mod resolve;
 pub mod sort;
 pub mod sourcemap;
+pub mod tool;
 pub mod uniqueness;
 
 use crate::bcf::Document;

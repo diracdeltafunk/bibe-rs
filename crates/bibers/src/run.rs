@@ -9,7 +9,8 @@ use bibers_core::bcf::{self, ParseArgs, Parsed};
 use bibers_core::config::{self, CliOptions, CliValue};
 use bibers_core::env::{Env, basename, catfile};
 use bibers_core::log::{Level, LogSettings, Logger};
-use bibers_core::pipeline::{self, Ctx};
+use bibers_core::output::OutputFormat;
+use bibers_core::pipeline::{self, Ctx, tool};
 use bibers_core::quirks::Quirks;
 use bibers_core::{biber_error, info};
 
@@ -39,12 +40,12 @@ pub fn banner() -> String {
 pub fn special(s: Special) -> (u8, String, String) {
     match s {
         Special::Version => (0, version_text(), String::new()),
-        // DC-030: tool mode (and its config file) is deferred.
+        // DC-055: bibers has no data directory, so it prints its built-in
+        // biber-tool.conf instead of that file's path.
         Special::ToolConfig => (
-            2,
+            0,
+            bibers_core::config::conf_file::BIBER_TOOL_CONF.to_string(),
             String::new(),
-            "bibers: ERROR - tool mode (--tool, --tool-config) is not yet supported (docs/compat.md DC-030)\n"
-                .into(),
         ),
     }
 }
@@ -85,12 +86,6 @@ pub fn unsupported(opts: &BTreeMap<String, Val>) -> Option<String> {
     if let Some(m) = msg {
         return Some(m.to_string());
     }
-    if opts.contains_key("tool") {
-        return Some("tool mode (--tool) is not yet supported (docs/compat.md DC-030)".into());
-    }
-    if of == "bibtex" {
-        return Some("output format 'bibtex' is not yet supported (docs/compat.md DC-030)".into());
-    }
     if of == "biblatexml" {
         return Some(
             "output format 'biblatexml' is not yet supported (docs/compat.md DC-031)".into(),
@@ -114,13 +109,38 @@ pub fn unsupported(opts: &BTreeMap<String, Val>) -> Option<String> {
     None
 }
 
+/// The tool-mode output name for data source `dsn`: biber's
+/// `s/\.[^.]+$/<suffix>/r` (bin/biber:352-358) when the file name has an
+/// extension. DC-011 (BB-013): without one, biber's substitution either
+/// fails, so the output overwrites the input, or matches a `.` in a
+/// directory name; bibers appends the suffix to the name instead.
+pub fn tool_output_name(dsn: &str, suffix: &str) -> String {
+    let base = basename(dsn);
+    match base.rfind('.') {
+        Some(p) if p + 1 < base.len() => {
+            let cut = dsn.len() - (base.len() - p);
+            format!("{}{suffix}", &dsn[..cut])
+        }
+        _ => format!("{dsn}{suffix}"),
+    }
+}
+
 /// Output file name derivation (bin/biber:353-392), with BB-068 (bibtex
-/// output names) and BB-069 (`-O -` with `--output-directory`) fixed.
+/// output names), BB-013 (tool output names) and BB-069 (`-O -` with
+/// `--output-directory`) fixed.
 pub fn output_file(cfg: &config::Config) -> Result<String, String> {
     let b = &cfg.biber;
     let truthy = |v: Option<&str>| v.is_some_and(|v| !v.is_empty() && v != "0");
     let mut outfile = if truthy(b.get_str("output_file")) {
         b.get_str("output_file").unwrap_or("").to_string()
+    } else if b.tool() {
+        let dsn = b.get_str("dsn").unwrap_or("");
+        let suffix = match b.output_format() {
+            "bibtex" => "_bibertool.bib",
+            "biblatexml" => "_bibertool.bltxml",
+            _ => "_bibertool.json",
+        };
+        tool_output_name(dsn, suffix)
     } else {
         let bcf = b.get_str("bcf").unwrap_or("");
         let stem = bcf.strip_suffix("bcf").unwrap_or(bcf);
@@ -178,6 +198,11 @@ pub struct Setup {
     pub log: Logger,
     /// The output file (`-` for stdout).
     pub outfile: String,
+    /// Tool mode (`--tool` on the command line; `--output-format=bibtex`
+    /// sets the `tool` option without being tool mode, Biber.pm:1133).
+    pub tool: bool,
+    /// The output format.
+    pub format: OutputFormat,
 }
 
 /// Result of [`setup`].
@@ -217,6 +242,8 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
         eprint_flush(&format!("bibers: ERROR - {msg}\n"));
         return Exit(2);
     }
+    // `exists($opts->{tool})` (bin/biber:400, 440).
+    let tool = opts.contains_key("tool");
 
     let mut cli_opts = to_cli(opts);
     let init = match config::initopts(&mut cli_opts, &argv, env, quirks, None) {
@@ -266,33 +293,49 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
             return Exit(2);
         }
     };
-    // The output file is opened (truncated) before the .bcf is read, so an
-    // early failure leaves an empty file (biber behaviour; DC-012 open).
+    let Some(format) = OutputFormat::from_name(cfg.biber.output_format()) else {
+        // Unsupported formats are rejected by `unsupported` above.
+        let _ = biber_error!(
+            log,
+            "Output format '{}' is not supported",
+            cfg.biber.output_format()
+        );
+        return Exit(log.display_end());
+    };
+    // The `.bbl` is opened (truncated) before the .bcf is read, so an early
+    // failure leaves an empty file (biber behaviour; DC-012 open). Data
+    // formats open it only when writing.
     if outfile != "-"
+        && format.opens_output_early()
         && let Err(e) = std::fs::File::create(env.resolve(&outfile))
     {
         let _ = biber_error!(log, "Cannot open output file '{outfile}': {e}");
         return Exit(log.display_end());
     }
 
-    let bcf_path = cfg.biber.get_str("bcf").unwrap_or("").to_string();
-    let parsed = bcf::parse_ctrlfile(
-        &mut cfg,
-        &mut log,
-        env,
-        &ParseArgs {
-            ctrl_file: &bcf_path,
-            output_target: Some(&outfile),
-        },
-    );
-    let mut doc = match parsed {
-        Err(_) => return Exit(log.display_end()),
-        // BB-070: biber exits 0 here without printing its warning.
-        Ok(Parsed::NoDataSources) => {
-            log.flush();
-            return Exit(0);
+    let mut doc = if tool {
+        // Fake the necessary .bcf parts (bin/biber:400-403).
+        tool::tool_mode_setup(&mut cfg, &argv)
+    } else {
+        let bcf_path = cfg.biber.get_str("bcf").unwrap_or("").to_string();
+        let parsed = bcf::parse_ctrlfile(
+            &mut cfg,
+            &mut log,
+            env,
+            &ParseArgs {
+                ctrl_file: &bcf_path,
+                output_target: Some(&outfile),
+            },
+        );
+        match parsed {
+            Err(_) => return Exit(log.display_end()),
+            // BB-070: biber exits 0 here without printing its warning.
+            Ok(Parsed::NoDataSources) => {
+                log.flush();
+                return Exit(0);
+            }
+            Ok(Parsed::Document(d)) => d,
         }
-        Ok(Parsed::Document(d)) => d,
     };
     for e in cfg.postprocess_biber_opts() {
         if biber_error!(log, "{e}").is_err() {
@@ -302,7 +345,13 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
     if cfg.biber.debug() {
         log.set_main_level(Level::Debug);
     }
-    if bcf::process_setup(&mut cfg, &mut log, &mut doc).is_err() {
+    let setup = if tool {
+        // `process_setup_tool`, the first step of `prepare_tool`.
+        tool::process_setup_tool(&mut cfg, &mut log)
+    } else {
+        bcf::process_setup(&mut cfg, &mut log, &mut doc)
+    };
+    if setup.is_err() {
         return Exit(log.display_end());
     }
     SetupResult::Ready(Box::new(Setup {
@@ -310,6 +359,8 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
         doc,
         log,
         outfile,
+        tool,
+        format,
     }))
 }
 
@@ -321,6 +372,8 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         doc,
         mut log,
         outfile,
+        tool,
+        format,
     } = s;
     let dm = cfg.dm.take().expect("process_setup builds the data model");
     let mut ctx = Ctx {
@@ -331,11 +384,16 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         env,
         run: Default::default(),
     };
-    let processed = match pipeline::prepare(&mut ctx) {
+    let prepared = if tool {
+        tool::prepare_tool(&mut ctx)
+    } else {
+        pipeline::prepare(&mut ctx)
+    };
+    let processed = match prepared {
         Ok(p) => p,
         Err(_) => return log.display_end(),
     };
-    let text = match bibers_core::output::bbl::render(&mut ctx, &processed) {
+    let text = match format.render(&mut ctx, &processed) {
         Ok(Some(t)) => t,
         Ok(None) => {
             let _ = biber_error!(
@@ -350,7 +408,7 @@ pub fn process(s: Setup, env: &Env) -> u8 {
     let enc = bibers_core::output::bbl::output_encoding_name(&ctx);
     info!(ctx.log, "Writing '{outfile}' with encoding '{enc}'");
     if ctx.cfg.biber.is_true("output_safechars") {
-        info!(ctx.log, "Converting UTF-8 to TeX macros on output to .bbl");
+        info!(ctx.log, "{}", format.safechars_message());
     }
     let bytes = match bibers_core::output::bbl::encode_output(&mut ctx, &text) {
         Ok(b) => b,

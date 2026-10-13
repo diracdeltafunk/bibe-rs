@@ -20,13 +20,13 @@ const EXCLUDED: &[(&str, &str)] = &[
     ("ported/tool-bltxml-1", "DC-031"),
     ("ported/tool-bltxml-2", "DC-031"),
     ("ported/tool-bltxml-inout-1", "DC-031"),
-    // tool mode / bibtex output (DC-030)
-    ("ported/bibtex-output-1", "DC-030"),
-    ("ported/full-bibtex-1", "DC-030"),
-    ("ported/tool-1", "DC-030"),
-    ("ported/tool-2", "DC-030"),
-    ("ported/tool-3", "DC-030"),
-    ("ported/tool-4", "DC-030"),
+    // tool mode / bibtex output: not modelled by the phase replay
+    ("ported/bibtex-output-1", "tool mode"),
+    ("ported/full-bibtex-1", "tool mode"),
+    ("ported/tool-1", "tool mode"),
+    ("ported/tool-2", "tool mode"),
+    ("ported/tool-3", "tool mode"),
+    ("ported/tool-4", "tool mode"),
     // $MAPUNIQ keys are random in biber (DC-018)
     ("tdata/general-configfile", "DC-018"),
     ("ported/basic-misc-2", "DC-018"),

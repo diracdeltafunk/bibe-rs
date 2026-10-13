@@ -1,0 +1,7 @@
+description = "tool mode on a data file without extension: biber overwrites it (BB-013), bibers writes refs_bibertool.bib (DC-011)"
+source = "tools/corpus/gen_tool.py"
+args = ["--noconf", "--tool", "refs"]
+outputs = ["refs_bibertool.bib", "refs"]
+log = "refs.blg"
+tags = ["suite:tool", "feature:tool"]
+allow = ["DC-011"]
