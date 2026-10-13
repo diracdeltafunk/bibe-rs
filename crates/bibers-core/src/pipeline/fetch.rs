@@ -706,8 +706,14 @@ fn biblatexml_schema(ctx: &mut Ctx) -> Result<(), Fatal> {
     if ctx.cfg.biber.is_true("no_bltxml_schema") || ctx.run.bltxml.schema_done {
         return Ok(());
     }
-    let bcf = ctx.cfg.biber.get_str("bcf").unwrap_or("").to_string();
-    let mut outfile = biblatexml::schema_file(&bcf);
+    let mut outfile = if ctx.cfg.biber.is_true("tool") {
+        // tool mode: next to the data source (DC-010: never the input itself)
+        let dsn = ctx.cfg.biber.get_str("dsn").unwrap_or("");
+        crate::output::biblatexml::schema_file_for_dsn(dsn)
+    } else {
+        let bcf = ctx.cfg.biber.get_str("bcf").unwrap_or("").to_string();
+        biblatexml::schema_file(&bcf)
+    };
     if let Some(outdir) = ctx
         .cfg
         .biber
