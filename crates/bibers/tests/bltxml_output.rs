@@ -1,7 +1,7 @@
-//! The biblatexml writer (`bibers_core::output::biblatexml`), which tool
-//! mode will use (DC-030/DC-031). Until tool mode lands, it is exercised on
-//! the state `fetch_data` builds from a biblatexml corpus case: the output
-//! must be well-formed, read back to the same entries, and be deterministic.
+//! The biblatexml writer (`bibers_core::output::biblatexml`, tool mode;
+//! end to end in the `bltxml/tool-*` and `ported/tool-bltxml-*` corpus
+//! cases), exercised directly on the state `fetch_data` builds from a
+//! document-mode biblatexml case: well-formed and deterministic output.
 
 use bibers::run::{SetupResult, setup};
 use bibers_core::env::Env;

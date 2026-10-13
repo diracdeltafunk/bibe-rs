@@ -151,13 +151,38 @@ fn stdout_and_no_early_truncation() {
 }
 
 #[test]
-fn biblatexml_output_still_deferred() {
+fn biblatexml_output() {
+    // DC-031: biblatexml output in tool mode, with its schema next to the
+    // data source.
     let d = setup();
     assert_eq!(
         run(
             d.path(),
             &["--noconf", "--tool", "--output-format=biblatexml", "d.bib"]
         ),
+        0
+    );
+    let out = read(&d.path().join("d_bibertool.bltxml"));
+    assert!(
+        out.starts_with("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<?xml-model href=\"d.rng\""),
+        "{out}"
+    );
+    assert!(out.ends_with("</bltx:entries>\n"), "{out}");
+    assert!(d.path().join("d.rng").exists());
+    // biber writes the document head when it opens the file: a fatal error
+    // later leaves just the head
+    assert_eq!(
+        run(
+            d.path(),
+            &[
+                "--noconf",
+                "--tool",
+                "--output-format=biblatexml",
+                "--no-bltxml-schema",
+                "missing.bib"
+            ]
+        ),
         2
     );
+    assert!(read(&d.path().join("missing_bibertool.bltxml")).ends_with("biblatexml\">"));
 }
