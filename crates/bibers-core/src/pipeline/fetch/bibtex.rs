@@ -364,6 +364,8 @@ pub fn extract_entries(
                 .entry(filename.to_string())
                 .or_default();
         }
+        // (keys found: removed from `rkeys` once, after the loop)
+        let mut found: std::collections::HashSet<&str> = std::collections::HashSet::new();
         for wanted in keys {
             st.section.set_keytods(wanted, filename);
             let cached = ctx
@@ -383,7 +385,7 @@ pub fn extract_entries(
                         "Entry with key '{wanted}' in section '{secnum}' is cited and found but not created (likely due to sourcemap)"
                     ));
                 }
-                rkeys.retain(|k| k != wanted);
+                found.insert(wanted.as_str());
             } else if let Some(rk) = ctx.run.bibcache.citekey_aliases.get(wanted).cloned() {
                 st.section.citekey_alias.insert(wanted.clone(), rk.clone());
                 if !st.section.entries.contains_key(&rk)
@@ -400,12 +402,15 @@ pub fn extract_entries(
                         st.section.add_citekeys(std::slice::from_ref(&rk));
                     }
                 }
-                rkeys.retain(|k| k != wanted);
+                found.insert(wanted.as_str());
             } else if let Some(okey) = st.section.has_badcasekey(wanted) {
                 ctx.log.biber_warn(format!(
                     "Possible typo (case mismatch) between citation and datasource keys: '{wanted}' and '{okey}' in file '{filename}'"
                 ));
             }
+        }
+        if !found.is_empty() {
+            rkeys.retain(|k| !found.contains(k.as_str()));
         }
     }
 
