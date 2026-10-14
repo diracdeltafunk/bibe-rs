@@ -241,14 +241,14 @@ pub trait SecExt {
 
 impl SecExt for Section {
     fn slot_obj(&mut self, name: &str) -> &mut Map<String, J> {
-        let v = self
-            .slots
-            .entry(name.to_string())
-            .or_insert_with(|| J::Object(Map::new()));
-        if !v.is_object() {
-            *v = J::Object(Map::new());
+        // (no key allocation when the slot exists, the common case)
+        if !self.slots.get(name).is_some_and(J::is_object) {
+            self.slots.insert(name.to_string(), J::Object(Map::new()));
         }
-        v.as_object_mut().expect("object")
+        self.slots
+            .get_mut(name)
+            .and_then(J::as_object_mut)
+            .expect("object")
     }
 
     fn slot_get(&self, name: &str, key: &str) -> Option<&J> {

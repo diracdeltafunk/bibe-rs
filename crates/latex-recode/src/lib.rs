@@ -234,7 +234,11 @@ impl RecodeData {
 #[derive(Clone, Debug)]
 pub struct Recoder {
     decode: tables::DecodeTables,
-    encode: tables::EncodeTables,
+    /// Built on first use for recoders over the built-in data (most runs
+    /// never encode), eagerly otherwise.
+    encode: OnceLock<tables::EncodeTables>,
+    /// The built-in data and encode set `encode` is built from.
+    lazy_encode: Option<(&'static RecodeData, String)>,
     opts: RecodeOptions,
 }
 
@@ -248,9 +252,32 @@ impl Recoder {
     ) -> Recoder {
         Recoder {
             decode: tables::build_decode(&data.raw, decode_set, &opts),
-            encode: tables::build_encode(&data.raw, encode_set),
+            encode: OnceLock::from(tables::build_encode(&data.raw, encode_set)),
+            lazy_encode: None,
             opts,
         }
+    }
+
+    /// [`Recoder::new`] over the built-in data, building the encode tables
+    /// on first use.
+    fn new_builtin(decode_set: &str, encode_set: &str, opts: RecodeOptions) -> Recoder {
+        let data = RecodeData::builtin();
+        Recoder {
+            decode: tables::build_decode(&data.raw, decode_set, &opts),
+            encode: OnceLock::new(),
+            lazy_encode: Some((data, encode_set.to_owned())),
+            opts,
+        }
+    }
+
+    fn encode_tables(&self) -> &tables::EncodeTables {
+        self.encode.get_or_init(|| {
+            let (data, set) = self
+                .lazy_encode
+                .as_ref()
+                .expect("encode tables are built eagerly unless lazy_encode is set");
+            tables::build_encode(&data.raw, set)
+        })
     }
 
     /// A shared recoder over the built-in data (cached per argument tuple).
@@ -265,12 +292,7 @@ impl Recoder {
         {
             return Arc::clone(r);
         }
-        let r = Arc::new(Recoder::new(
-            RecodeData::builtin(),
-            decode_set,
-            encode_set,
-            opts,
-        ));
+        let r = Arc::new(Recoder::new_builtin(decode_set, encode_set, opts));
         c.push((
             (decode_set.to_owned(), encode_set.to_owned(), opts),
             Arc::clone(&r),
@@ -329,6 +351,6 @@ impl Recoder {
 
     /// `latex_encode($text)`: Unicode → LaTeX macros.
     pub fn encode(&self, text: &str) -> String {
-        encode::encode(&self.encode, text)
+        encode::encode(self.encode_tables(), text)
     }
 }

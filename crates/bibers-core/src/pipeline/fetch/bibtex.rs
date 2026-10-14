@@ -894,13 +894,14 @@ fn run_handler(
         annotation(ctx, opts, fcf, value, key);
         return Ok(HRes::None);
     }
-    let ft = ctx.dm.get_fieldtype(fcf).unwrap_or("");
-    let fmt = ctx
-        .dm
-        .get_fieldformat(fcf)
+    // (`get_fieldtype`, `get_fieldformat`, `get_datatype` with one lookup)
+    let def = ctx.dm.field_id(fcf).map(|id| ctx.dm.field(id));
+    let ft = def.and_then(|d| d.fieldtype.as_deref()).unwrap_or("");
+    let fmt = def
+        .map(|d| d.format.as_str())
         .filter(|f| perl_compat::perl_truthy(f))
         .unwrap_or("default");
-    let dt = ctx.dm.get_datatype(fcf).unwrap_or("");
+    let dt = def.and_then(|d| d.datatype.as_deref()).unwrap_or("");
     Ok(match (ft, fmt, dt) {
         ("field", "default", "code" | "datepart" | "entrykey" | "integer" | "key" | "literal") => {
             literal(ctx, opts, x, be, field, fcf, value, key)
