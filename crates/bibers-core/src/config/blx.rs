@@ -95,11 +95,29 @@ pub fn process_backendin(bin: Option<&str>) -> Option<BackendIn> {
     }
 }
 
+/// The captures of an unanchored `m/\s*([^=]+)=(.+)\s*/` search, hand
+/// matched: compiling the regex took a tenth of startup.
 fn backendin_kv(o: &str) -> Option<(String, String)> {
-    static RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
-    let re = RE.get_or_init(|| regex::Regex::new(r"\s*([^=]+)=(.+)\s*").expect("valid regex"));
-    let c = re.captures(o)?;
-    Some((c[1].to_string(), c[2].to_string()))
+    for (start, _) in o.char_indices() {
+        // `\s*` is greedy; `[^=]+` then runs to the first `=`.
+        let ws_end = o.len() - o[start..].trim_start_matches(char::is_whitespace).len();
+        let eq = ws_end + o[ws_end..].find('=')?;
+        let key_start = if ws_end < eq {
+            ws_end
+        } else if let Some((last_ws, _)) = o[start..ws_end].char_indices().next_back() {
+            // `[^=]+` needs a character: `\s*` gives back its last one.
+            start + last_ws
+        } else {
+            continue;
+        };
+        // `.+`: at least one character, up to a newline.
+        let after = &o[eq + 1..];
+        let val = &after[..after.find('\n').unwrap_or(after.len())];
+        if !val.is_empty() {
+            return Some((o[key_start..eq].to_string(), val.to_string()));
+        }
+    }
+    None
 }
 
 /// `lc`, without allocating for the usual already-lowercase ASCII names.
@@ -712,6 +730,28 @@ mod tests {
             r.map_boolean_tonum("other", Some("maybe")).as_deref(),
             Some("maybe")
         );
+    }
+
+    #[test]
+    fn backendin_kv_matches_regex() {
+        let re = regex::Regex::new(r"\s*([^=]+)=(.+)\s*").unwrap();
+        let parts = ["", " ", "\t", "=", "a", "bc", "\n", "\u{2003}", "é", "x y"];
+        let mut cases = Vec::new();
+        for a in parts {
+            for b in parts {
+                for c in parts {
+                    for d in parts {
+                        cases.push(format!("{a}{b}{c}{d}"));
+                    }
+                }
+            }
+        }
+        for o in cases {
+            let want = re
+                .captures(&o)
+                .map(|c| (c[1].to_string(), c[2].to_string()));
+            assert_eq!(backendin_kv(&o), want, "{o:?}");
+        }
     }
 
     #[test]
