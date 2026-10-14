@@ -22,6 +22,7 @@
 //!   (BB-015, [`Quirk::BblCommaCleanup`]).
 
 use std::collections::{BTreeMap, HashMap};
+use std::fmt::Write as _;
 
 use md5::{Digest, Md5};
 use perl_compat::encoding::{Encoding, Lookup, lookup};
@@ -34,7 +35,7 @@ use serde_json::Value as J;
 
 use crate::biber_error;
 use crate::config::blx::{OptValue, Scope, map_boolean_tostring_raw};
-use crate::datamodel::DataModel;
+use crate::datamodel::{DataModel, Helpers};
 use crate::log::Fatal;
 use crate::model::{
     DataList, Entry, Name, NameArena, NameId, NameListId, PerlData, SectionState, Value,
@@ -388,6 +389,8 @@ struct Writer {
     /// `$dmh->{datefields}`, which the date-meta loop mutates in place
     /// (BB-028).
     datefields: Vec<String>,
+    /// The date field stems (`datefields` without the `date` suffix).
+    date_stems: Vec<String>,
     /// The current section's shared list arrays: `(citekey, field)` →
     /// group, and each group's live value (B21).
     shared: HashMap<(String, String), usize>,
@@ -443,9 +446,9 @@ impl Writer {
     }
 }
 
-fn add_names(
+fn add_names<'f>(
     arena: &NameArena,
-    fields: &[String],
+    fields: impl Iterator<Item = &'f String>,
     e: &Entry,
     map: &mut HashMap<NameId, NameListId>,
 ) {
@@ -455,6 +458,158 @@ fn add_names(
                 map.entry(*n).or_insert(*id);
             }
         }
+    }
+}
+
+/// The data model's output field lists (`$dmh`) that `set_output_entry`
+/// walks.
+#[derive(Clone, Copy, Debug)]
+enum Helper {
+    NameLists,
+    NameListsAll,
+    Lists,
+    Fields,
+    Xsv,
+    Ranges,
+    VFields,
+    VLists,
+}
+
+impl Helper {
+    const ALL: [Helper; 8] = [
+        Helper::NameLists,
+        Helper::NameListsAll,
+        Helper::Lists,
+        Helper::Fields,
+        Helper::Xsv,
+        Helper::Ranges,
+        Helper::VFields,
+        Helper::VLists,
+    ];
+
+    fn list(self, dmh: &Helpers) -> &[String] {
+        match self {
+            Helper::NameLists => &dmh.namelists,
+            Helper::NameListsAll => &dmh.namelistsall,
+            Helper::Lists => &dmh.lists,
+            Helper::Fields => &dmh.fields,
+            Helper::Xsv => &dmh.xsv,
+            Helper::Ranges => &dmh.ranges,
+            Helper::VFields => &dmh.vfields,
+            Helper::VLists => &dmh.vlists,
+        }
+    }
+}
+
+/// The names `set_output_entry` builds for each date field stem (`$d` in
+/// bbl.pm:400-440).
+struct DateStem {
+    stem: String,
+    unspecified: String,
+    /// `(source field, output name)` of the `\true` flags.
+    flags: Vec<(String, String)>,
+    endyear: String,
+    endera: String,
+    year: String,
+    datesplit: String,
+    era: String,
+}
+
+impl DateStem {
+    fn new(d: &str) -> Self {
+        let flags = [
+            ("datejulian", "datejulian"),
+            ("enddatejulian", "enddatejulian"),
+            ("dateapproximate", "datecirca"),
+            ("enddateapproximate", "enddatecirca"),
+            ("dateuncertain", "dateuncertain"),
+            ("enddateuncertain", "enddateuncertain"),
+            ("dateunknown", "dateunknown"),
+            ("enddateunknown", "enddateunknown"),
+        ]
+        .iter()
+        .map(|(src, out)| (format!("{d}{src}"), format!("{d}{out}")))
+        .collect();
+        DateStem {
+            stem: d.to_string(),
+            unspecified: format!("{d}dateunspecified"),
+            flags,
+            endyear: format!("{d}endyear"),
+            endera: format!("{d}endera"),
+            year: format!("{d}year"),
+            datesplit: format!("{d}datesplit"),
+            era: format!("{d}era"),
+        }
+    }
+}
+
+/// Lookups computed once per render instead of once per entry.
+struct Prep<'d> {
+    dmh: &'d Helpers,
+    /// Field name → its positions in the [`Helper`] lists.
+    index: HashMap<&'d str, Vec<(Helper, usize)>>,
+    /// `$dm->get_constant_value('nameparts')`.
+    nameparts: Vec<String>,
+    /// The date stems last built (they change under BB-028).
+    date_stems: Vec<DateStem>,
+    /// [`wraplines`].
+    wrap: Option<i64>,
+}
+
+impl<'d> Prep<'d> {
+    fn new(dm: &'d DataModel, wrap: Option<i64>) -> Self {
+        let dmh = &dm.helpers;
+        let mut index: HashMap<&str, Vec<(Helper, usize)>> = HashMap::new();
+        for h in Helper::ALL {
+            for (i, f) in h.list(dmh).iter().enumerate() {
+                index.entry(f.as_str()).or_default().push((h, i));
+            }
+        }
+        Prep {
+            dmh,
+            index,
+            nameparts: dm.get_constant_value("nameparts"),
+            date_stems: Vec::new(),
+            wrap,
+        }
+    }
+
+    /// For each [`Helper`] list, the positions of the fields `e` has (as a
+    /// data or derived field, even `undef`), in list order. Every loop of
+    /// `set_output_entry` over a helper list skips fields the entry lacks,
+    /// so walking just these is the same.
+    fn present(&self, e: &Entry) -> [Vec<usize>; 8] {
+        let mut at: [Vec<usize>; 8] = Default::default();
+        for f in e.datafields.keys().chain(e.derivedfields.keys()) {
+            for &(h, i) in self.index.get(f.as_str()).into_iter().flatten() {
+                at[h as usize].push(i);
+            }
+        }
+        for v in &mut at {
+            v.sort_unstable();
+            v.dedup();
+        }
+        at
+    }
+
+    /// The fields of `h` at the positions `at` (from [`Prep::present`]).
+    fn fields<'a>(
+        &'a self,
+        at: &'a [Vec<usize>; 8],
+        h: Helper,
+    ) -> impl Iterator<Item = &'d String> + 'a {
+        let list = h.list(self.dmh);
+        at[h as usize].iter().map(move |&i| &list[i])
+    }
+
+    /// The date stems for `stems`, rebuilt when they changed.
+    fn date_stems(&mut self, stems: &[String]) -> &[DateStem] {
+        if self.date_stems.len() != stems.len()
+            || self.date_stems.iter().zip(stems).any(|(d, s)| d.stem != *s)
+        {
+            self.date_stems = stems.iter().map(|d| DateStem::new(d)).collect();
+        }
+        &self.date_stems
     }
 }
 
@@ -494,40 +649,38 @@ fn blx_undef_truthy(ctx: &Ctx, secnum: &str, opt: &str, et: &str, key: &str) -> 
 }
 
 /// `name_to_bbl` (Name.pm:421) without the uniquename/hash values.
-fn name_template(ctx: &Ctx, dm: &DataModel, n: &Name, un: bool) -> NameT {
+fn name_template(ctx: &Ctx, nameparts: &[String], n: &Name, un: bool) -> NameT {
     let mut parts = Vec::new();
-    for np in dm.get_constant_value("nameparts") {
-        let part = n.nameparts.get(&np);
-        let s = part.and_then(|p| p.string.clone()).unwrap_or_default();
-        let mut npc = String::new();
-        let mut npci = String::new();
-        if perl_truthy(&s) {
-            npc = if n
-                .strip
-                .get(&np)
-                .and_then(|v| v.as_deref())
-                .is_some_and(perl_truthy)
-            {
-                format!("{{{s}}}")
+    for np in nameparts {
+        let part = n.nameparts.get(np);
+        let s = part.and_then(|p| p.string.as_deref()).unwrap_or("");
+        if !perl_truthy(s) {
+            continue;
+        }
+        let npc = if n
+            .strip
+            .get(np)
+            .and_then(|v| v.as_deref())
+            .is_some_and(perl_truthy)
+        {
+            format!("{{{s}}}")
+        } else {
+            join_name(s)
+        };
+        if !perl_truthy(&npc) {
+            continue;
+        }
+        let inits = part.and_then(|p| p.initial.as_deref()).unwrap_or(&[]);
+        let i = inits.join("\\bibinitperiod\\bibinitdelim ") + "\\bibinitperiod";
+        let mut npci = String::with_capacity(i.len());
+        for c in i.chars() {
+            if Prop::Pd.contains(c) {
+                npci.push_str("\\bibinithyphendelim ");
             } else {
-                join_name(&s)
-            };
-            let inits = part.and_then(|p| p.initial.clone()).unwrap_or_default();
-            let i = inits.join("\\bibinitperiod\\bibinitdelim ") + "\\bibinitperiod";
-            npci = i
-                .chars()
-                .map(|c| {
-                    if Prop::Pd.contains(c) {
-                        "\\bibinithyphendelim ".to_string()
-                    } else {
-                        c.to_string()
-                    }
-                })
-                .collect();
+                npci.push(c);
+            }
         }
-        if perl_truthy(&npc) {
-            parts.push((np, npc, npci));
-        }
+        parts.push((np.clone(), npc, npci));
     }
     let mut opts = Vec::new();
     for no in ctx.cfg.blx.registry.options_in_scope(Scope::Name) {
@@ -554,8 +707,18 @@ fn name_template(ctx: &Ctx, dm: &DataModel, n: &Name, un: bool) -> NameT {
     }
 }
 
+/// The `--wraplines` columns, if set.
+fn wraplines(ctx: &Ctx) -> Option<i64> {
+    ctx.cfg
+        .biber
+        .get_str("wraplines")
+        .filter(|w| perl_truthy(w))
+        .map(|w| PerlNum::parse(w).as_f64() as i64)
+}
+
 /// `_printfield` (bbl.pm:105).
-fn printfield(ctx: &Ctx, dm: &DataModel, e: &Entry, field: &str, s: &str) -> String {
+/// `cols` is the `--wraplines` value ([`wraplines`]).
+fn printfield(cols: Option<i64>, dm: &DataModel, e: &Entry, field: &str, s: &str) -> String {
     let outfield = dm.get_outcase(field).unwrap_or(field);
     if s.is_empty() && !dm.field_is_nullok(field) {
         return String::new();
@@ -577,24 +740,24 @@ fn printfield(ctx: &Ctx, dm: &DataModel, e: &Entry, field: &str, s: &str) -> Str
         }
     }
     // Auto-escape TeX specials in non-BibTeX data.
-    if field_type != "strng" && e.get_str("datatype") != Some("bibtex") {
-        let c: Vec<char> = s.chars().collect();
-        let mut o = String::with_capacity(s.len());
-        for (i, ch) in c.iter().enumerate() {
-            if matches!(ch, '#' | '&' | '%') && !(i >= 1 && c[i - 1] == '\\') {
+    if field_type != "strng"
+        && s.contains(['#', '&', '%'])
+        && e.get_str("datatype") != Some("bibtex")
+    {
+        // s/(?<!\\)([#&%])/\\$1/g (all ASCII, so bytewise)
+        let mut o = String::with_capacity(s.len() + 4);
+        let mut last = 0;
+        for (i, b) in s.bytes().enumerate() {
+            if matches!(b, b'#' | b'&' | b'%') && (i == 0 || s.as_bytes()[i - 1] != b'\\') {
+                o.push_str(&s[last..i]);
                 o.push('\\');
+                last = i;
             }
-            o.push(*ch);
         }
+        o.push_str(&s[last..]);
         s = o;
     }
     // --wraplines: Text::Wrap with `$columns` = the option value.
-    let cols = ctx
-        .cfg
-        .biber
-        .get_str("wraplines")
-        .filter(|w| perl_truthy(w))
-        .map(|w| PerlNum::parse(w).as_f64() as i64);
     if let Some(cols) = cols {
         // 16 is the length of '      \field{}{}' or '      \strng{}{}'
         let len = 16 + gcstring::length(outfield) as i64 + gcstring::length(&s) as i64;
@@ -630,6 +793,7 @@ fn uri_string(ctx: &mut Ctx, s: &str) -> Result<String, Fatal> {
 fn set_output_entry(
     ctx: &mut Ctx,
     w: &mut Writer,
+    p: &mut Prep,
     st: &SectionState,
     key: &str,
 ) -> Result<Option<EntryTemplate>, Fatal> {
@@ -643,7 +807,6 @@ fn set_output_entry(
     };
     let bee = be.entrytype().to_string();
     let outtype = dm.get_outcase(&bee).unwrap_or(&bee).to_string();
-    let dmh = &dm.helpers;
     let blx = &ctx.cfg.blx;
     let mut un =
         opt_string(blx.get(Some(secnum), "uniquename", Some(&bee), Some(key))).unwrap_or_default();
@@ -738,8 +901,10 @@ fn set_output_entry(
         text.push_str(&format!("      \\inset{{{}}}\n", val_string(Some(es))));
     }
 
+    let present = p.present(be);
+
     // Names
-    for namefield in &dmh.namelists {
+    for namefield in p.fields(&present, Helper::NameLists) {
         let Some(Value::Names(nlid)) = be.get_field(namefield) else {
             continue;
         };
@@ -785,7 +950,9 @@ fn set_output_entry(
             }
         }
         for n in arena.names_of(*nlid) {
-            block.names.push(name_template(ctx, dm, n, un != "false"));
+            block
+                .names
+                .push(name_template(ctx, &p.nameparts, n, un != "false"));
         }
         flush(&mut text, &mut items);
         items.push(Item::Names(block));
@@ -798,7 +965,7 @@ fn set_output_entry(
         .get_str("others_string")
         .unwrap_or("others")
         .to_string();
-    for listfield in &dmh.lists {
+    for listfield in p.fields(&present, Helper::Lists) {
         let Some(Value::List(lf)) = be.get_field(listfield) else {
             continue;
         };
@@ -816,7 +983,7 @@ fn set_output_entry(
     for h in ["namehash", "fullhash", "fullhashraw", "bibnamehash"] {
         slot(&mut text, &mut items, Slot::Hash(h.into()));
     }
-    for namefield in &dmh.namelists {
+    for namefield in p.fields(&present, Helper::NameLists) {
         if !val_truthy(be.get_field(namefield)) {
             continue;
         }
@@ -896,9 +1063,10 @@ fn set_output_entry(
     }
 
     // Plain fields
-    for field in &dmh.fields {
+    for field in p.fields(&present, Helper::Fields) {
         let val = be.get_field(field);
-        let has = !val_string(val).is_empty() && val.is_some();
+        let s = val_string(val);
+        let has = !s.is_empty() && val.is_some();
         if has || (dm.field_is_nullok(field) && be.field_exists(field)) {
             if field == "crossref" || field == "xref" {
                 let target = val_string(be.get_field(field));
@@ -906,78 +1074,71 @@ fn set_output_entry(
                     continue;
                 }
             }
-            text.push_str(&printfield(ctx, dm, be, field, &val_string(val)));
+            text.push_str(&printfield(p.wrap, dm, be, field, &s));
         }
     }
 
     // Date meta-information. BB-028: the loop variable aliases the shared
     // helper list, so `s/date$//` strips it in place for later entries.
-    let stems: Vec<String> = if ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation) {
+    let stems: &[String] = if ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation) {
         for d in &mut w.datefields {
             if let Some(s) = d.strip_suffix("date") {
                 *d = s.to_string();
             }
         }
-        w.datefields.clone()
+        &w.datefields
     } else {
-        dmh.datefields
-            .iter()
-            .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
-            .collect()
+        &w.date_stems
     };
-    for d in &stems {
-        let unspec = be.get_field(&format!("{d}dateunspecified"));
+    for d in p.date_stems(stems) {
+        let stem = &d.stem;
+        let unspec = be.get_field(&d.unspecified);
         if val_truthy(unspec) {
-            text.push_str(&format!(
-                "      \\field{{{d}dateunspecified}}{{{}}}\n",
+            let _ = writeln!(
+                text,
+                "      \\field{{{}}}{{{}}}",
+                d.unspecified,
                 val_string(unspec)
-            ));
+            );
         }
-        for (src, out) in [
-            ("datejulian", "datejulian"),
-            ("enddatejulian", "enddatejulian"),
-            ("dateapproximate", "datecirca"),
-            ("enddateapproximate", "enddatecirca"),
-            ("dateuncertain", "dateuncertain"),
-            ("enddateuncertain", "enddateuncertain"),
-            ("dateunknown", "dateunknown"),
-            ("enddateunknown", "enddateunknown"),
-        ] {
-            if val_truthy(be.get_field(&format!("{d}{src}"))) {
-                text.push_str(&format!("      \\true{{{d}{out}}}\n"));
+        for (src, out) in &d.flags {
+            if val_truthy(be.get_field(src)) {
+                let _ = writeln!(text, "      \\true{{{out}}}");
             }
         }
-        if be.field_exists(&format!("{d}endyear")) {
-            let era = be.get_field(&format!("{d}endera"));
+        if be.field_exists(&d.endyear) {
+            let era = be.get_field(&d.endera);
             if val_truthy(era) {
-                text.push_str(&format!(
-                    "      \\field{{{d}enddateera}}{{{}}}\n",
+                let _ = writeln!(
+                    text,
+                    "      \\field{{{stem}enddateera}}{{{}}}",
                     val_string(era)
-                ));
+                );
             }
         }
-        if be.field_exists(&format!("{d}year")) {
-            if !val_truthy(be.get_field(&format!("{d}datesplit"))) {
+        if be.field_exists(&d.year) {
+            if !val_truthy(be.get_field(&d.datesplit)) {
                 continue;
             }
-            let era = be.get_field(&format!("{d}era"));
+            let era = be.get_field(&d.era);
             if val_truthy(era) {
-                text.push_str(&format!(
-                    "      \\field{{{d}dateera}}{{{}}}\n",
+                let _ = writeln!(
+                    text,
+                    "      \\field{{{stem}dateera}}{{{}}}",
                     val_string(era)
-                ));
+                );
             }
         }
     }
 
     // XSV fields
-    for field in &dmh.xsv {
+    for field in p.fields(&present, Helper::Xsv) {
         if field == "keywords" {
             continue;
         }
         let f = be.get_field(field);
         if val_truthy(f) {
-            text.push_str(&printfield(ctx, dm, be, field, &val_string(f)));
+            text.push_str(&printfield(p.wrap, dm, be, field, &val_string(f)));
         }
     }
 
@@ -987,7 +1148,7 @@ fn set_output_entry(
 
     // Ranges
     let zero_quirk = ctx.cfg.quirks.on(Quirk::RangelenZeroDigit);
-    for rfield in &dmh.ranges {
+    for rfield in p.fields(&present, Helper::Ranges) {
         let Some(Value::Ranges(rf)) = be.get_field(rfield) else {
             continue;
         };
@@ -1019,7 +1180,7 @@ fn set_output_entry(
     }
 
     // Verbatim fields
-    for vfield in &dmh.vfields {
+    for vfield in p.fields(&present, Helper::VFields) {
         let v = be.get_field(vfield);
         if !val_truthy(v) {
             continue;
@@ -1035,7 +1196,7 @@ fn set_output_entry(
     }
 
     // Verbatim lists
-    for vlist in &dmh.vlists {
+    for vlist in p.fields(&present, Helper::VLists) {
         let Some(Value::List(vlf)) = be.get_field(vlist) else {
             continue;
         };
@@ -1141,9 +1302,19 @@ fn set_output_entry(
     flush(&mut text, &mut items);
 
     let mut un_src = HashMap::new();
-    add_names(arena, &dmh.namelists, be, &mut un_src);
+    add_names(
+        arena,
+        p.fields(&present, Helper::NameLists),
+        be,
+        &mut un_src,
+    );
     let mut hash_src = HashMap::new();
-    add_names(arena, &dmh.namelistsall, be, &mut hash_src);
+    add_names(
+        arena,
+        p.fields(&present, Helper::NameListsAll),
+        be,
+        &mut hash_src,
+    );
     Ok(Some(EntryTemplate {
         items,
         un_src,
@@ -1446,8 +1617,12 @@ fn template_locale(ctx: &Ctx, name: &str) -> Option<String> {
 /// Render the whole `.bbl` (header, `\preamble`, one `\refsection` per
 /// section with output entries, `\endinput`).
 pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fatal> {
+    let mut prep = Prep::new(ctx.dm, wraplines(ctx));
     let mut w = Writer {
         datefields: ctx.dm.helpers.datefields.clone(),
+        date_stems: (ctx.dm.helpers.datefields.iter())
+            .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
+            .collect(),
         shared: HashMap::new(),
         shared_vals: Vec::new(),
     };
@@ -1457,7 +1632,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
         w.start_section(st);
         let mut entries = HashMap::new();
         for k in &st.section.citekeys {
-            if let Some(t) = set_output_entry(ctx, &mut w, st, k)? {
+            if let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? {
                 entries.insert(k.clone(), t);
             }
         }
