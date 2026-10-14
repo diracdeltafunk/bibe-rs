@@ -27,6 +27,7 @@ use md5::{Digest, Md5};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
 use serde_json::{Map, Value as J};
+use std::cell::OnceCell;
 use std::collections::{BTreeMap, HashMap};
 
 // ---------------------------------------------------------------------------
@@ -439,6 +440,12 @@ pub(crate) struct H<'a> {
     pub cfg: &'a Config,
     pub dm: &'a DataModel,
     pub secnum: &'a str,
+    /// What the name hashes need, computed on first use.
+    hashing: OnceCell<Hashing>,
+}
+
+/// Lookups the name hashes need, computed once per phase.
+struct Hashing {
     /// `$dm->get_constant_value('nameparts')`.
     nameparts: Vec<String>,
     /// Namehash template name → [`hash_scopes`].
@@ -449,27 +456,40 @@ pub(crate) struct H<'a> {
 
 impl<'a> H<'a> {
     pub fn new(cfg: &'a Config, dm: &'a DataModel, secnum: &'a str) -> Self {
-        let nameparts = dm.get_constant_value("nameparts");
-        let hash_scopes = match cfg.blx.global("namehashtemplate") {
-            Some(OptValue::NamehashTemplates(m)) => m
-                .iter()
-                .map(|(name, t)| (name.clone(), hash_scopes(&nameparts, t)))
-                .collect(),
-            _ => HashMap::new(),
-        };
         H {
             cfg,
             dm,
             secnum,
-            nameparts,
-            hash_scopes,
-            nonamestring: !cfg.biber.patterns("nonamestring").is_empty(),
+            hashing: OnceCell::new(),
         }
+    }
+
+    fn hashing(&self) -> &Hashing {
+        self.hashing.get_or_init(|| {
+            let nameparts = self.dm.get_constant_value("nameparts");
+            let hash_scopes = match self.cfg.blx.global("namehashtemplate") {
+                Some(OptValue::NamehashTemplates(m)) => m
+                    .iter()
+                    .map(|(name, t)| (name.clone(), hash_scopes(&nameparts, t)))
+                    .collect(),
+                _ => HashMap::new(),
+            };
+            Hashing {
+                nameparts,
+                hash_scopes,
+                nonamestring: !self.cfg.biber.patterns("nonamestring").is_empty(),
+            }
+        })
+    }
+
+    /// `$dm->get_constant_value('nameparts')`.
+    fn nameparts(&self) -> &[String] {
+        &self.hashing().nameparts
     }
 
     /// The hash scopes of the namehash template `name`, or `biber_error`.
     fn need_nht(&self, log: &mut Logger, name: &str) -> Result<&[HashScope], Fatal> {
-        match self.hash_scopes.get(name) {
+        match self.hashing().hash_scopes.get(name) {
             Some(t) => Ok(t),
             None => {
                 biber_error!(log, "No namehash template called '{name}'")?;
@@ -480,7 +500,7 @@ impl<'a> H<'a> {
 
     /// `strip_nonamestring($s, $field)` appended to `out`.
     fn push_stripped(&self, out: &mut String, s: &str, field: Option<&str>) {
-        if !self.nonamestring {
+        if !self.hashing().nonamestring {
             if truthy(Some(s)) {
                 out.push_str(s);
             }
@@ -577,7 +597,7 @@ fn push_name_hashparts<'x>(
         *nhtname = n_nht;
     }
     let scopes = h.need_nht(log, n_nht)?;
-    for (i, nt) in h.nameparts.iter().enumerate() {
+    for (i, nt) in h.nameparts().iter().enumerate() {
         let scope = scopes.get(i).copied().unwrap_or(HashScope::Nothing);
         match strip {
             None => push_hash_namepart(hashkey, n, nt, scope),
@@ -656,7 +676,7 @@ pub(crate) fn getfullhashraw(h: &H, sec: &Section, nlid: NameListId) -> String {
     let names = sec.names.list(nlid);
     let mut hashkey = String::new();
     for n in sec.names.names_of(nlid) {
-        for nt in &h.nameparts {
+        for nt in h.nameparts() {
             let np = namepart_str(n, nt);
             if truthy(Some(np)) {
                 h.push_stripped(&mut hashkey, np, names.type_.as_deref());
@@ -749,7 +769,7 @@ pub(crate) fn genpnhash(
         .unwrap_or_else(|| namehash_tname(h, sec, dl, key, nlid));
     let scopes = h.need_nht(log, nhtname)?;
     let mut hashkey = String::new();
-    for (i, nt) in h.nameparts.iter().enumerate() {
+    for (i, nt) in h.nameparts().iter().enumerate() {
         let scope = scopes.get(i).copied().unwrap_or(HashScope::Nothing);
         push_hash_namepart(&mut hashkey, n, nt, scope);
     }

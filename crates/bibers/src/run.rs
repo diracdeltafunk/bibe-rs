@@ -445,6 +445,9 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         return log.display_end();
     }
     show_tmp_dir(&mut cfg, &mut log);
+    // The process is about to exit: freeing the processed sections entry by
+    // entry would cost several percent of a large run.
+    std::mem::forget(processed);
     log.display_end()
 }
 
