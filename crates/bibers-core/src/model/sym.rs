@@ -25,6 +25,7 @@ use std::borrow::Cow;
 use std::cmp::Ordering;
 use std::fmt;
 use std::hash::{Hash, Hasher};
+use std::sync::atomic::{AtomicBool, Ordering as AtomicOrdering};
 use std::sync::{LazyLock, RwLock};
 
 /// The interned record behind a [`Sym`].
@@ -74,14 +75,19 @@ impl Sym {
         let name: &'static str = Box::leak(s.into());
         let sym = Sym(Box::leak(Box::new(SymData::new(name))));
         dynamic.insert(name, sym);
+        DYNAMIC_USED.store(true, AtomicOrdering::Release);
         sym
     }
 
     /// The symbol of `s` if it has been interned. A name that was never
     /// interned cannot be a key of any [`super::SymMap`].
+    #[inline]
     pub fn lookup(s: &str) -> Option<Sym> {
         if let Some(sym) = WELL_KNOWN.get(s) {
-            return Some(*sym);
+            return Some(sym);
+        }
+        if !DYNAMIC_USED.load(AtomicOrdering::Acquire) {
+            return None;
         }
         DYNAMIC
             .read()
@@ -601,17 +607,89 @@ well_known! {
 }
 
 /// The start-up table, read without locking.
-static WELL_KNOWN: LazyLock<FxHashMap<&'static str, Sym>> = LazyLock::new(|| {
-    let mut m = FxHashMap::default();
-    for s in NAMED {
-        m.insert(s.as_str(), **s);
-    }
+static WELL_KNOWN: LazyLock<StaticTable> = LazyLock::new(|| {
+    let mut syms: Vec<Sym> = NAMED.iter().map(|s| **s).collect();
     for name in PRESEEDED {
-        m.entry(*name)
-            .or_insert_with(|| Sym(Box::leak(Box::new(SymData::new(name)))));
+        if !syms.iter().any(|s| s.as_str() == *name) {
+            syms.push(Sym(Box::leak(Box::new(SymData::new(name)))));
+        }
     }
-    m
+    StaticTable::new(&syms)
 });
+
+/// An immutable open-addressing table for the start-up names. Names of up
+/// to 15 bytes (nearly all) are compared as one packed `u128` (bytes and
+/// length) instead of with `memcmp`; longer ones go to a hash map.
+struct StaticTable {
+    slots: Box<[(u128, Option<Sym>)]>,
+    mask: usize,
+    long: FxHashMap<&'static str, Sym>,
+}
+
+impl StaticTable {
+    fn new(syms: &[Sym]) -> StaticTable {
+        let cap = (syms.len() * 4).next_power_of_two();
+        let mut t = StaticTable {
+            slots: vec![(0, None); cap].into_boxed_slice(),
+            mask: cap - 1,
+            long: FxHashMap::default(),
+        };
+        for sym in syms {
+            match pack(sym.as_str()) {
+                Some(k) => {
+                    let mut i = slot_of(k) & t.mask;
+                    while t.slots[i].1.is_some() {
+                        i = (i + 1) & t.mask;
+                    }
+                    t.slots[i] = (k, Some(*sym));
+                }
+                None => {
+                    t.long.insert(sym.as_str(), *sym);
+                }
+            }
+        }
+        t
+    }
+
+    #[inline]
+    fn get(&self, s: &str) -> Option<Sym> {
+        let Some(k) = pack(s) else {
+            return self.long.get(s).copied();
+        };
+        let mut i = slot_of(k) & self.mask;
+        loop {
+            match self.slots[i] {
+                (kk, Some(sym)) if kk == k => return Some(sym),
+                (_, None) => return None,
+                _ => i = (i + 1) & self.mask,
+            }
+        }
+    }
+}
+
+/// A name of at most 15 bytes as a `u128`: the bytes, zero-padded, and the
+/// length in the last byte (so equal keys mean equal names).
+#[inline]
+fn pack(s: &str) -> Option<u128> {
+    let b = s.as_bytes();
+    if b.len() > 15 {
+        return None;
+    }
+    let mut a = [0u8; 16];
+    a[..b.len()].copy_from_slice(b);
+    a[15] = b.len() as u8;
+    Some(u128::from_le_bytes(a))
+}
+
+#[inline]
+fn slot_of(k: u128) -> usize {
+    let x = (k as u64) ^ ((k >> 64) as u64).rotate_left(29);
+    (x.wrapping_mul(0x9e37_79b9_7f4a_7c15) >> 32) as usize
+}
+
+/// Whether any name has been interned in [`DYNAMIC`] (lets lookups of
+/// unknown names skip the lock while it is empty).
+static DYNAMIC_USED: AtomicBool = AtomicBool::new(false);
 
 /// Names interned later.
 static DYNAMIC: LazyLock<RwLock<FxHashMap<&'static str, Sym>>> =
@@ -629,6 +707,16 @@ mod tests {
         assert_eq!(Sym::lookup("a-name-only-this-test-uses"), Some(a));
         assert_eq!(Sym::lookup("a-name-nobody-interned"), None);
         assert_ne!(Sym::new("title"), Sym::new("titleaddon"));
+        let long = "a-rather-long-name-of-more-than-fifteen-bytes";
+        assert_eq!(Sym::new(long).as_str(), long);
+        assert_eq!(
+            Sym::lookup("journalsubtitle").unwrap().as_str(),
+            "journalsubtitle"
+        );
+        assert_eq!(
+            Sym::lookup("eventendyeardivision").unwrap().as_str(),
+            "eventendyeardivision"
+        );
     }
 
     #[test]

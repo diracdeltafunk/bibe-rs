@@ -63,6 +63,11 @@ impl<V> SymMap<V> {
         self.items.clear();
     }
 
+    /// The number of entries the map can hold without reallocating.
+    pub fn capacity(&self) -> usize {
+        self.items.capacity()
+    }
+
     /// Release unused capacity.
     pub fn shrink_to_fit(&mut self) {
         self.items.shrink_to_fit();
@@ -78,6 +83,17 @@ impl<V> SymMap<V> {
     #[inline]
     fn search(&self, k: Sym) -> Result<usize, usize> {
         self.items.binary_search_by(|(s, _)| s.cmp(&k))
+    }
+
+    /// Insert at position `i`, growing by half the length (at least 4)
+    /// rather than doubling: these maps are many and small, and they are
+    /// rarely grown after they are built.
+    fn insert_at(&mut self, i: usize, k: Sym, v: V) {
+        let len = self.items.len();
+        if len == self.items.capacity() {
+            self.items.reserve_exact((len / 2).max(4));
+        }
+        self.items.insert(i, (k, v));
     }
 
     /// The value of `k` (by symbol: no lookup of the name).
@@ -117,7 +133,7 @@ impl<V> SymMap<V> {
         match self.search(k) {
             Ok(i) => Some(std::mem::replace(&mut self.items[i].1, v)),
             Err(i) => {
-                self.items.insert(i, (k, v));
+                self.insert_at(i, k, v);
                 None
             }
         }
@@ -382,7 +398,7 @@ impl<'a, V> VacantEntry<'a, V> {
         &self.key
     }
     pub fn insert(self, v: V) -> &'a mut V {
-        self.map.items.insert(self.i, (self.key, v));
+        self.map.insert_at(self.i, self.key, v);
         &mut self.map.items[self.i].1
     }
 }
