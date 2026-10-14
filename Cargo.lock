@@ -102,6 +102,7 @@ dependencies = [
 name = "btparse"
 version = "0.0.0"
 dependencies = [
+ "memchr",
  "serde_json",
  "unicode-normalization",
 ]
