@@ -138,7 +138,7 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         quirks,
         names,
         entries,
-        nld: NameListData(&mut state),
+        nld: NameListData::take(&mut state),
         changed,
         unc: None,
         unc_all: None,
@@ -152,8 +152,10 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         unc,
         unc_all,
         ulc,
+        nld,
         ..
     } = u;
+    nld.finish(&mut state);
     if let Some(c) = unc {
         state.insert("uniquenamecount".into(), c.to_json());
     }
@@ -178,7 +180,15 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
 /// `$dlist->{state}{namelistdata}`, accessed like biber's accessors: reading
 /// `{nlid}{nid}{x}` autovivifies `{nlid}{nid}`, reading `{nlid}{ul}`
 /// autovivifies `{nlid}`.
-struct NameListData<'s>(&'s mut Map<String, J>);
+///
+/// The name lists the passes touch are taken out of the (large, string
+/// keyed) `namelistdata` hash into a map by id while the passes run, and put
+/// back by [`NameListData::finish`].
+struct NameListData {
+    /// `namelistdata` as found (`None` if absent), minus the lists taken.
+    orig: Option<J>,
+    lists: HashMap<NameListId, Map<String, J>>,
+}
 
 fn obj_entry<'m>(m: &'m mut Map<String, J>, k: &str) -> &'m mut Map<String, J> {
     if !matches!(m.get(k), Some(J::Object(_))) {
@@ -204,17 +214,53 @@ fn s_or_empty(v: Option<&J>) -> String {
     }
 }
 
-impl NameListData<'_> {
-    fn nl(&mut self, nlid: &str) -> &mut Map<String, J> {
-        obj_entry(obj_entry(self.0, "namelistdata"), nlid)
+impl NameListData {
+    /// Take `namelistdata` out of the list state `state`.
+    fn take(state: &mut Map<String, J>) -> Self {
+        NameListData {
+            orig: state.remove("namelistdata"),
+            lists: HashMap::new(),
+        }
     }
 
-    fn nd(&mut self, nlid: &str, nid: &str) -> &mut Map<String, J> {
+    /// Put `namelistdata` back into `state`, with everything accessed
+    /// vivified as biber's accessors do.
+    fn finish(self, state: &mut Map<String, J>) {
+        if self.lists.is_empty() {
+            if let Some(o) = self.orig {
+                state.insert("namelistdata".into(), o);
+            }
+            return;
+        }
+        let mut m = match self.orig {
+            Some(J::Object(m)) => m,
+            _ => Map::new(),
+        };
+        for (id, l) in self.lists {
+            m.insert(id.key(), J::Object(l));
+        }
+        state.insert("namelistdata".into(), J::Object(m));
+    }
+
+    fn nl(&mut self, nlid: NameListId) -> &mut Map<String, J> {
+        let orig = &mut self.orig;
+        self.lists.entry(nlid).or_insert_with(|| {
+            match orig.as_mut().and_then(|o| o.as_object_mut()) {
+                Some(m) => match m.remove(&nlid.key()) {
+                    Some(J::Object(l)) => l,
+                    _ => Map::new(),
+                },
+                None => Map::new(),
+            }
+        })
+    }
+
+    fn nd(&mut self, nlid: NameListId, nid: &str) -> &mut Map<String, J> {
         obj_entry(self.nl(nlid), nid)
     }
 
     /// `get_uniquelist($nlid)`.
-    fn ul(&mut self, nlid: &str) -> Option<String> {
+    fn ul(&mut self, nlid: NameListId) -> Option<String> {
         defined(self.nl(nlid).get("ul")).map(|v| s_or_empty(Some(v)))
     }
 }
@@ -710,11 +756,11 @@ impl Trie {
 // The passes
 // ---------------------------------------------------------------------------
 
-struct Uniq<'a, 's> {
+struct Uniq<'a> {
     quirks: Quirks,
     names: &'a NameArena,
     entries: &'a [EntryInfo],
-    nld: NameListData<'s>,
+    nld: NameListData,
     /// The data list's `unulchanged` flag.
     changed: bool,
     unc: Option<NameCount>,
@@ -745,7 +791,7 @@ struct NameRef {
     uniquename: Option<String>,
 }
 
-impl<'a> Uniq<'a, '_> {
+impl<'a> Uniq<'a> {
     fn leak(&self) -> bool {
         self.quirks.on(Quirk::PerNameOptionLeak)
     }
@@ -772,7 +818,7 @@ impl<'a> Uniq<'a, '_> {
 
     /// A name's data (autovivifies `namelistdata.{nlid}.{nid}`, as reading
     /// any of it does in biber).
-    fn data(&mut self, nlid: &str, n: &NameRef) -> NameData {
+    fn data(&mut self, nlid: NameListId, n: &NameRef) -> NameData {
         let d = self.nld.nd(nlid, &n.nid);
         let unall = defined(d.get("unall")).cloned();
         let st = match self.statics.get(&n.id) {
@@ -849,12 +895,12 @@ impl<'a> Uniq<'a, '_> {
         let minyear_visible = self.quirks.on(Quirk::UniquenameMinyearVisibility);
         'main: for e in self.entries {
             let list = self.names.list(e.nl);
-            let nlid = e.nl.key();
+            let nlid = e.nl;
             let mut base_un = e.uniquename.clone();
             if let Some(v) = slot(&list.slots, "uniquename") {
                 base_un = Some(v);
             }
-            let ul = self.nld.ul(&nlid);
+            let ul = self.nld.ul(nlid);
             let ul_n = ul.as_deref().filter(|u| truthy(Some(u))).map(numify);
             let names = self.names_of(e.nl);
             let num_names = names.len() as f64;
@@ -886,7 +932,7 @@ impl<'a> Uniq<'a, '_> {
                 if visible {
                     trunc[i] = true;
                     if is_min(un) {
-                        let d = self.data(&nlid, n);
+                        let d = self.data(nlid, n);
                         basenames.push(d.basename.clone().unwrap_or_default());
                         allnames.push(d.namestring.clone().unwrap_or_default());
                     }
@@ -913,21 +959,21 @@ impl<'a> Uniq<'a, '_> {
                     continue;
                 }
                 let un = if leak { &final_un } else { &uns[i] };
-                let d = self.data(&nlid, n);
+                let d = self.data(nlid, n);
                 let (scope, key) = match un.as_deref().unwrap_or("") {
                     "init" | "full" | "allinit" | "allfull" => {
                         ("global".to_string(), d.joined.clone())
                     }
                     "mininit" | "minfull" => {
                         self.nld
-                            .nd(&nlid, &n.nid)
+                            .nd(nlid, &n.nid)
                             .insert("unmininfo".into(), J::from(min_basename.clone()));
                         (min_basename.clone(), min_namestring.clone())
                     }
                     "minyearinit" | "minyearfull" => {
                         let s = format!("{min_basename}{lyear}");
                         self.nld
-                            .nd(&nlid, &n.nid)
+                            .nd(nlid, &n.nid)
                             .insert("unmininfo".into(), J::from(s.clone()));
                         (s, format!("{min_namestring}{lyear}"))
                     }
@@ -950,7 +996,7 @@ impl<'a> Uniq<'a, '_> {
     }
 
     /// `set_uniquename`: flags a change.
-    fn set_uniquename(&mut self, nlid: &str, nid: &str, v: J) {
+    fn set_uniquename(&mut self, nlid: NameListId, nid: &str, v: J) {
         let d = self.nld.nd(nlid, nid);
         match defined(d.get("un")) {
             Some(cur) if *cur == v => {}
@@ -967,12 +1013,12 @@ impl<'a> Uniq<'a, '_> {
         let mut unc_all = self.unc_all.take().unwrap_or_default();
         'main: for e in self.entries {
             let list = self.names.list(e.nl);
-            let nlid = e.nl.key();
+            let nlid = e.nl;
             let mut base_un = e.uniquename.clone();
             if let Some(v) = slot(&list.slots, "uniquename") {
                 base_un = Some(v);
             }
-            let ul = self.nld.ul(&nlid);
+            let ul = self.nld.ul(nlid);
             let ul_n = ul.as_deref().filter(|u| truthy(Some(u))).map(numify);
             let names = self.names_of(e.nl);
             let num_names = names.len() as f64;
@@ -1004,7 +1050,7 @@ impl<'a> Uniq<'a, '_> {
                     trunc[i] = true;
                 } else {
                     // `reset_uniquename`: no change flag.
-                    let d = self.nld.nd(&nlid, &n.nid);
+                    let d = self.nld.nd(nlid, &n.nid);
                     let parts = d.get("basenamestringparts").cloned().unwrap_or(J::Null);
                     d.insert("un".into(), J::Array(vec![J::from("base"), parts]));
                 }
@@ -1022,9 +1068,9 @@ impl<'a> Uniq<'a, '_> {
                     continue;
                 }
                 let un = if leak { &final_un } else { &uns[i] };
-                let d = self.data(&nlid, n);
+                let d = self.data(nlid, n);
                 let scope = if is_min(un.as_deref().unwrap_or("")) {
-                    s_or_empty(self.nld.nd(&nlid, &n.nid).get("unmininfo"))
+                    s_or_empty(self.nld.nd(nlid, &n.nid).get("unmininfo"))
                 } else {
                     "global".to_string()
                 };
@@ -1032,25 +1078,25 @@ impl<'a> Uniq<'a, '_> {
                 if trunc[i] {
                     for (j, ns) in d.namestrings.iter().enumerate() {
                         if unc.num(ns.as_deref().unwrap_or(""), &scope) == 1 {
-                            self.set_uniquename(&nlid, &n.nid, nss(j));
+                            self.set_uniquename(nlid, &n.nid, nss(j));
                             break;
                         }
                     }
                     // Nothing disambiguates: base, unless already defined
                     // (possibly by an earlier pass).
-                    if defined(self.nld.nd(&nlid, &n.nid).get("un")).is_none() {
-                        self.set_uniquename(&nlid, &n.nid, nss(0));
+                    if defined(self.nld.nd(nlid, &n.nid).get("un")).is_none() {
+                        self.set_uniquename(nlid, &n.nid, nss(0));
                     }
                 }
                 if eul_on {
                     // `set_uniquename_all`: no change flag.
                     for (j, ns) in d.namestrings.iter().enumerate() {
                         if unc_all.num(ns.as_deref().unwrap_or(""), &scope) == 1 {
-                            self.nld.nd(&nlid, &n.nid).insert("unall".into(), nss(j));
+                            self.nld.nd(nlid, &n.nid).insert("unall".into(), nss(j));
                             break;
                         }
                     }
-                    let nd = self.nld.nd(&nlid, &n.nid);
+                    let nd = self.nld.nd(nlid, &n.nid);
                     if defined(nd.get("unall")).is_none() {
                         nd.insert("unall".into(), nss(0));
                     }
@@ -1077,14 +1123,14 @@ impl<'a> Uniq<'a, '_> {
             if ul == "false" {
                 continue;
             }
-            let nlid = e.nl.key();
+            let nlid = e.nl;
             let names = self.names_of(e.nl);
             let num_names = names.len() as f64;
             let mut namelist: Vec<String> = Vec::new();
             let mut joined = String::new();
             let mut minyear_list: Vec<Option<String>> = Vec::new();
             for n in names.iter() {
-                let d = self.data(&nlid, n);
+                let d = self.data(nlid, n);
                 let flag = ul == "minyear" && num_names > e.maxcn && n.index <= e.mincn;
                 for s in d.ul_strings() {
                     if flag {
@@ -1127,14 +1173,14 @@ impl<'a> Uniq<'a, '_> {
             if ul == "false" {
                 continue;
             }
-            let nlid = e.nl.key();
+            let nlid = e.nl;
             let names = self.names_of(e.nl);
             let num_names = names.len() as f64;
             let year = e.labelyear.as_deref();
             let mut namelist: Vec<String> = Vec::new();
             let mut joined = String::new();
             for n in names.iter() {
-                let d = self.data(&nlid, n);
+                let d = self.data(nlid, n);
                 for s in d.ul_strings().into_iter().flatten() {
                     if !namelist.is_empty() {
                         joined.push(SEP);
@@ -1155,7 +1201,7 @@ impl<'a> Uniq<'a, '_> {
                     break;
                 }
             }
-            self.set_uniquelist(&mut ulc, e, &nlid, &namelist, &joined, ul);
+            self.set_uniquelist(&mut ulc, e, nlid, &namelist, &joined, ul);
         }
         self.ulc = Some(ulc);
     }
@@ -1165,7 +1211,7 @@ impl<'a> Uniq<'a, '_> {
         &mut self,
         ulc: &mut ListCount,
         e: &EntryInfo,
-        nlid: &str,
+        nlid: NameListId,
         namelist: &[String],
         joined: &str,
         ul: &str,
