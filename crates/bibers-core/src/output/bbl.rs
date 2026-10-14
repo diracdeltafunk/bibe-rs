@@ -1346,8 +1346,9 @@ struct ListView<'a> {
 }
 
 impl<'a> ListView<'a> {
-    fn entryfield(&self, key: &str, f: &str) -> Option<&'a PerlData> {
-        pd_path(self.state, &["fields", key, f])
+    /// `$self->{state}{fields}{$key}`.
+    fn entryfields(&self, key: &str) -> Option<&'a PerlData> {
+        pd_path(self.state, &["fields", key])
     }
     fn data(&self, slot: &str, key: &str) -> Option<&'a PerlData> {
         pd_path(self.state, &[slot, key])
@@ -1357,25 +1358,6 @@ impl<'a> ListView<'a> {
     }
     fn nd(&self, nlid: NameListId, nid: NameId) -> Option<&'a PerlData> {
         pd_path(self.nld(nlid), &[&nid.key()])
-    }
-    /// `get_unsummary` (DataList.pm:408).
-    fn unsummary(&self, nlid: NameListId, nid: NameId) -> Option<&'static str> {
-        let un = pd_path(self.nd(nlid, nid), &["un"])?;
-        if un.is_null() {
-            return None;
-        }
-        let a = un.as_array();
-        let get = |i: usize| a.and_then(|a| a.get(i)).map(|v| pd_string(Some(v)));
-        let (p, l) = (get(0).unwrap_or_default(), get(1).unwrap_or_default());
-        Some(if l == "none" || p == "base" {
-            "0"
-        } else if l == "init" {
-            "1"
-        } else if l == "full" || l == "fullonly" {
-            "2"
-        } else {
-            "0"
-        })
     }
     fn sortinit(&self, key: &str) -> Option<String> {
         let v = pd_path(self.dl.slots.get("sortinitdata"), &[key, "init"])?;
@@ -1387,129 +1369,179 @@ impl<'a> ListView<'a> {
     }
 }
 
+/// `get_unsummary` (DataList.pm:408) of a name's data `nd`.
+fn unsummary(nd: Option<&PerlData>) -> Option<&'static str> {
+    let un = pd_path(nd, &["un"])?;
+    if un.is_null() {
+        return None;
+    }
+    let a = un.as_array();
+    let get = |i: usize| a.and_then(|a| a.get(i)).map(|v| pd_string(Some(v)));
+    let (p, l) = (get(0).unwrap_or_default(), get(1).unwrap_or_default());
+    Some(if l == "none" || p == "base" {
+        "0"
+    } else if l == "init" {
+        "1"
+    } else if l == "full" || l == "fullonly" {
+        "2"
+    } else {
+        "0"
+    })
+}
+
 fn instantiate_entry(lv: &ListView, t: &EntryTemplate, key: &str) -> String {
-    let mut s = String::new();
+    let mut s = String::with_capacity(1024);
+    // `$self->{state}{fields}{$key}`, looked up once.
+    let fields = lv.entryfields(key);
+    let field = |f: &str| pd_path(fields, &[f]);
     for item in &t.items {
         match item {
             Item::Text(x) => s.push_str(x),
-            Item::Slot(slot) => {
-                let line = match slot {
-                    Slot::EntrySet => match lv.entryfield(key, "entryset") {
-                        Some(J::Array(a)) => Some(format!(
-                            "\\set{{{}}}",
-                            a.iter()
-                                .map(|v| pd_string(Some(v)))
-                                .collect::<Vec<_>>()
-                                .join(",")
-                        )),
-                        v if pd_truthy(v) => Some(format!("\\set{{{}}}", pd_string(v))),
-                        _ => None,
-                    },
-                    Slot::True(f) => {
-                        pd_truthy(lv.entryfield(key, f)).then(|| format!("\\true{{{f}}}"))
-                    }
-                    Slot::Hash(f) => {
-                        let v = lv.entryfield(key, f);
-                        pd_truthy(v).then(|| format!("\\strng{{{f}}}{{{}}}", pd_string(v)))
-                    }
-                    Slot::LabelAlpha
-                    | Slot::ExtraAlpha
-                    | Slot::ExtraName
-                    | Slot::ExtraDate
-                    | Slot::ExtraTitle
-                    | Slot::ExtraTitleYear => {
-                        let (data, name) = match slot {
-                            Slot::LabelAlpha => ("labelalphadata", "labelalpha"),
-                            Slot::ExtraAlpha => ("extraalphadata", "extraalpha"),
-                            Slot::ExtraName => ("extranamedata", "extraname"),
-                            Slot::ExtraDate => ("extradatedata", "extradate"),
-                            Slot::ExtraTitle => ("extratitledata", "extratitle"),
-                            _ => ("extratitleyeardata", "extratitleyear"),
-                        };
-                        let v = lv.data(data, key);
-                        pd_truthy(v).then(|| format!("\\field{{{name}}}{{{}}}", pd_string(v)))
-                    }
-                    Slot::SortInit => lv
-                        .sortinit(key)
-                        .map(|si| format!("\\field{{sortinit}}{{{si}}}")),
-                    Slot::SortInitHash => lv
-                        .sortinit(key)
-                        .map(|si| format!("\\field{{sortinithash}}{{{}}}", (lv.sortinithash)(&si))),
-                    Slot::LabelPrefix => perl_truthy(&lv.dl.labelprefix)
-                        .then(|| format!("\\field{{labelprefix}}{{{}}}", lv.dl.labelprefix)),
-                };
-                if let Some(l) = line {
-                    s.push_str("      ");
-                    s.push_str(&l);
-                    s.push('\n');
-                }
-            }
-            Item::Names(b) => {
-                let ul = if b.ul {
-                    let v = pd_path(lv.nld(b.nlid), &["ul"]).filter(|v| !v.is_null());
-                    vec![v.map(|v| format!("ul={}", pd_string(Some(v))))]
-                } else {
-                    vec![]
-                };
-                let mut nlopts = ul;
-                nlopts.extend(b.nlopts.iter().cloned().map(Some));
-                s.push_str(&format!(
-                    "      \\name{{{}}}{{{}}}{{{}}}{{%\n",
-                    b.field,
-                    b.total,
-                    join_removable(&nlopts)
-                ));
-                for n in &b.names {
-                    let un_nl = t.un_src.get(&n.nid).copied().unwrap_or(b.nlid);
-                    let uns = lv.unsummary(un_nl, n.nid);
-                    let mut pno: Vec<Option<String>> = Vec::new();
-                    if n.un {
-                        match uns {
-                            Some(u) => {
-                                pno.push(Some(format!("un={u}")));
-                                let part = pd_string(
-                                    pd_path(lv.nd(un_nl, n.nid), &["un"]).and_then(|v| v.get(0)),
-                                );
-                                pno.push(Some(format!("uniquepart={part}")));
+            Item::Slot(slot) => match slot {
+                Slot::EntrySet => match field("entryset") {
+                    Some(J::Array(a)) => {
+                        s.push_str("      \\set{");
+                        for (i, v) in a.iter().enumerate() {
+                            if i > 0 {
+                                s.push(',');
                             }
-                            None => {
-                                pno.push(None);
-                                pno.push(None);
-                            }
+                            s.push_str(&pd_string(Some(v)));
                         }
+                        s.push_str("}\n");
                     }
-                    pno.extend(n.opts.iter().cloned().map(Some));
-                    let h_nl = t.hash_src.get(&n.nid).copied().unwrap_or(b.nlid);
-                    let h = pd_path(lv.nd(h_nl, n.nid), &["hash"]);
-                    pno.push(pd_truthy(h).then(|| format!("hash={}", pd_string(h))));
-                    let mut lines = Vec::new();
-                    for (np, v, i) in &n.parts {
-                        lines.push(format!("           {np}={{{v}}}"));
-                        lines.push(format!("           {np}i={{{i}}}"));
-                        if n.un && uns.is_some() {
-                            let nd = lv.nd(un_nl, n.nid);
-                            let base = pd_path(nd, &["basenamestringparts"])
-                                .and_then(J::as_array)
-                                .is_some_and(|a| a.iter().any(|x| x.as_str() == Some(np)));
-                            if !base {
-                                lines.push(format!(
-                                    "           {np}un={}",
-                                    pd_string(pd_path(nd, &["unparts", np]))
-                                ));
-                            }
-                        }
+                    v if pd_truthy(v) => {
+                        let _ = writeln!(s, "      \\set{{{}}}", pd_string(v));
                     }
-                    s.push_str(&format!(
-                        "        {{{{{}}}{{%\n{}}}}}%\n",
-                        join_removable(&pno),
-                        lines.join(",\n")
-                    ));
+                    _ => {}
+                },
+                Slot::True(f) => {
+                    if pd_truthy(field(f)) {
+                        let _ = writeln!(s, "      \\true{{{f}}}");
+                    }
                 }
-                s.push_str("      }\n");
-            }
+                Slot::Hash(f) => {
+                    let v = field(f);
+                    if pd_truthy(v) {
+                        let _ = writeln!(s, "      \\strng{{{f}}}{{{}}}", pd_string(v));
+                    }
+                }
+                Slot::LabelAlpha
+                | Slot::ExtraAlpha
+                | Slot::ExtraName
+                | Slot::ExtraDate
+                | Slot::ExtraTitle
+                | Slot::ExtraTitleYear => {
+                    let (data, name) = match slot {
+                        Slot::LabelAlpha => ("labelalphadata", "labelalpha"),
+                        Slot::ExtraAlpha => ("extraalphadata", "extraalpha"),
+                        Slot::ExtraName => ("extranamedata", "extraname"),
+                        Slot::ExtraDate => ("extradatedata", "extradate"),
+                        Slot::ExtraTitle => ("extratitledata", "extratitle"),
+                        _ => ("extratitleyeardata", "extratitleyear"),
+                    };
+                    let v = lv.data(data, key);
+                    if pd_truthy(v) {
+                        let _ = writeln!(s, "      \\field{{{name}}}{{{}}}", pd_string(v));
+                    }
+                }
+                Slot::SortInit => {
+                    if let Some(si) = lv.sortinit(key) {
+                        let _ = writeln!(s, "      \\field{{sortinit}}{{{si}}}");
+                    }
+                }
+                Slot::SortInitHash => {
+                    if let Some(si) = lv.sortinit(key) {
+                        let h = (lv.sortinithash)(&si);
+                        let _ = writeln!(s, "      \\field{{sortinithash}}{{{h}}}");
+                    }
+                }
+                Slot::LabelPrefix => {
+                    if perl_truthy(&lv.dl.labelprefix) {
+                        let _ =
+                            writeln!(s, "      \\field{{labelprefix}}{{{}}}", lv.dl.labelprefix);
+                    }
+                }
+            },
+            Item::Names(b) => instantiate_names(&mut s, lv, t, b),
         }
     }
     s
+}
+
+/// One `\name` block of [`instantiate_entry`].
+fn instantiate_names(s: &mut String, lv: &ListView, t: &EntryTemplate, b: &NameBlockT) {
+    let nld = lv.nld(b.nlid);
+    let mut nlopts: Vec<Option<String>> = Vec::with_capacity(b.nlopts.len() + 1);
+    if b.ul {
+        let v = pd_path(nld, &["ul"]).filter(|v| !v.is_null());
+        nlopts.push(v.map(|v| format!("ul={}", pd_string(Some(v)))));
+    }
+    nlopts.extend(b.nlopts.iter().cloned().map(Some));
+    let _ = writeln!(
+        s,
+        "      \\name{{{}}}{{{}}}{{{}}}{{%",
+        b.field,
+        b.total,
+        join_removable(&nlopts)
+    );
+    // The name data of `nid` in the name list `nl` (usually this block's).
+    let nd = |nl: NameListId, nid: NameId| {
+        if nl == b.nlid {
+            pd_path(nld, &[&nid.key()])
+        } else {
+            lv.nd(nl, nid)
+        }
+    };
+    for n in &b.names {
+        let un_nl = t.un_src.get(&n.nid).copied().unwrap_or(b.nlid);
+        let un_nd = nd(un_nl, n.nid);
+        let uns = unsummary(un_nd);
+        let mut pno: Vec<Option<String>> = Vec::with_capacity(n.opts.len() + 3);
+        if n.un {
+            match uns {
+                Some(u) => {
+                    pno.push(Some(format!("un={u}")));
+                    let part = pd_string(pd_path(un_nd, &["un"]).and_then(|v| v.get(0)));
+                    pno.push(Some(format!("uniquepart={part}")));
+                }
+                None => {
+                    pno.push(None);
+                    pno.push(None);
+                }
+            }
+        }
+        pno.extend(n.opts.iter().cloned().map(Some));
+        let h_nl = t.hash_src.get(&n.nid).copied().unwrap_or(b.nlid);
+        let h = pd_path(
+            if h_nl == un_nl {
+                un_nd
+            } else {
+                nd(h_nl, n.nid)
+            },
+            &["hash"],
+        );
+        pno.push(pd_truthy(h).then(|| format!("hash={}", pd_string(h))));
+        let _ = write!(s, "        {{{{{}}}{{%\n", join_removable(&pno));
+        let base_parts = pd_path(un_nd, &["basenamestringparts"]).and_then(J::as_array);
+        for (k, (np, v, i)) in n.parts.iter().enumerate() {
+            if k > 0 {
+                s.push_str(",\n");
+            }
+            let _ = write!(s, "           {np}={{{v}}},\n           {np}i={{{i}}}");
+            if n.un && uns.is_some() {
+                let base = base_parts.is_some_and(|a| a.iter().any(|x| x.as_str() == Some(np)));
+                if !base {
+                    let _ = write!(
+                        s,
+                        ",\n           {np}un={}",
+                        pd_string(pd_path(un_nd, &["unparts", np]))
+                    );
+                }
+            }
+        }
+        s.push_str("}}%\n");
+    }
+    s.push_str("      }\n");
 }
 
 // ---------------------------------------------------------------------------
