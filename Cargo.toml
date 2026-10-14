@@ -4,7 +4,7 @@ members = ["crates/*", "xtask"]
 default-members = ["crates/*"]
 
 [workspace.package]
-version = "0.0.0"
+version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
 license = "Artistic-2.0"
@@ -63,6 +63,11 @@ opt-level = 2
 
 [profile.dev.package.sha2]
 opt-level = 3
+
+# `cargo build --profile dist`: the release binaries (.github/workflows/release.yml).
+[profile.dist]
+inherits = "release"
+strip = true
 
 # `cargo build --profile profiling`: release with debug info, for samply etc.
 [profile.profiling]

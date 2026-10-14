@@ -19,7 +19,7 @@ checksum = "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
 
 [[package]]
 name = "bibers"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "bibers-core",
  "bibers-testkit",
@@ -33,7 +33,7 @@ dependencies = [
 
 [[package]]
 name = "bibers-core"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "bibers-testkit",
  "btparse",
@@ -55,7 +55,7 @@ dependencies = [
 
 [[package]]
 name = "bibers-testkit"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "regex",
@@ -92,7 +92,7 @@ dependencies = [
 
 [[package]]
 name = "btparse"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "serde_json",
  "unicode-normalization",
@@ -324,7 +324,7 @@ dependencies = [
 
 [[package]]
 name = "latex-recode"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "memchr",
  "roxmltree",
@@ -396,7 +396,7 @@ dependencies = [
 
 [[package]]
 name = "perl-compat"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "pcre2",
  "regex",
@@ -481,7 +481,7 @@ checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
 
 [[package]]
 name = "relaxng"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "regex",
  "roxmltree",
@@ -752,7 +752,7 @@ checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
 
 [[package]]
 name = "ucollate"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "md-5",
  "rustc-hash",
@@ -912,7 +912,7 @@ checksum = "23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81"
 
 [[package]]
 name = "xtask"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "bibers-testkit",
