@@ -153,6 +153,23 @@ pub fn output_file(cfg: &config::Config) -> Result<String, String> {
     Ok(outfile)
 }
 
+/// The local time, for the log's `=== <date>` line (`localtime`).
+///
+/// Without `$TZ`, a Unix system's zone is `/etc/localtime`, read directly:
+/// `jiff::Zoned::now()` first indexes the whole time zone database, which
+/// took ~1 ms, a third of startup.
+fn local_now() -> jiff::Zoned {
+    let now = jiff::Timestamp::now();
+    if cfg!(unix)
+        && std::env::var_os("TZ").is_none()
+        && let Ok(data) = std::fs::read("/etc/localtime")
+        && let Ok(tz) = jiff::tz::TimeZone::tzif("localtime", &data)
+    {
+        return now.to_zoned(tz);
+    }
+    jiff::Zoned::now()
+}
+
 fn eprint_flush(s: &str) {
     if !s.is_empty() {
         let mut e = std::io::stderr().lock();
@@ -300,7 +317,7 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
     if bibers_core::recodedata::load(&mut cfg, &mut log, env).is_err() {
         return Exit(log.display_end());
     }
-    let now = jiff::Zoned::now().strftime("%a %b %e, %Y, %H:%M:%S");
+    let now = local_now().strftime("%a %b %e, %Y, %H:%M:%S");
     log.logfile_info(bibers_core::loc!(), &format!("=== {now}"));
 
     let outfile = match output_file(&cfg) {
