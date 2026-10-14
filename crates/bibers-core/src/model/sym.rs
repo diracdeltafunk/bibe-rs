@@ -33,6 +33,9 @@ use std::sync::{LazyLock, RwLock};
 pub struct SymData {
     name: &'static str,
     hash: u64,
+    /// The first 8 bytes, zero-padded, big-endian: comparing prefixes gives
+    /// the byte order of the names unless they are equal.
+    prefix: u64,
 }
 
 impl SymData {
@@ -40,8 +43,20 @@ impl SymData {
         SymData {
             name,
             hash: fnv1a(name),
+            prefix: prefix(name),
         }
     }
+}
+
+const fn prefix(s: &str) -> u64 {
+    let b = s.as_bytes();
+    let mut p: u64 = 0;
+    let mut i = 0;
+    while i < 8 {
+        p = (p << 8) | if i < b.len() { b[i] as u64 } else { 0 };
+        i += 1;
+    }
+    p
 }
 
 /// FNV-1a over the bytes of `s` (a `const fn`, so the well-known symbols'
@@ -116,7 +131,10 @@ impl Ord for Sym {
         if self == other {
             Ordering::Equal
         } else {
-            self.0.name.cmp(other.0.name)
+            match self.0.prefix.cmp(&other.0.prefix) {
+                Ordering::Equal => self.0.name.cmp(other.0.name),
+                o => o,
+            }
         }
     }
 }
@@ -308,6 +326,16 @@ impl IntoSym for Cow<'_, str> {
     fn into_sym(self) -> Sym {
         Sym::new(&self)
     }
+}
+
+/// The [`Sym`] of a string literal, interned once per call site and then
+/// read with one atomic load: `be.get_field_sym(sym!("title"))`.
+#[macro_export]
+macro_rules! sym {
+    ($s:literal) => {{
+        static SYM: ::std::sync::OnceLock<$crate::model::Sym> = ::std::sync::OnceLock::new();
+        *SYM.get_or_init(|| $crate::model::Sym::new($s))
+    }};
 }
 
 /// Names interned at start-up, without a constant of their own: biblatex's
@@ -721,16 +749,35 @@ mod tests {
 
     #[test]
     fn order_is_byte_order() {
-        let mut v: Vec<Sym> = ["year", "Zeta", "author", "", "authortype", "é", "aa"]
-            .into_iter()
-            .map(Sym::new)
-            .collect();
+        let mut v: Vec<Sym> = [
+            "year",
+            "Zeta",
+            "author",
+            "",
+            "authortype",
+            "é",
+            "aa",
+            "authortypf",
+            "a\0",
+            "a",
+            "eventendyeardivision",
+            "eventendyear",
+            "eventendyearb",
+        ]
+        .into_iter()
+        .map(Sym::new)
+        .collect();
         v.sort();
         let names: Vec<&str> = v.iter().map(|s| s.as_str()).collect();
-        assert_eq!(
-            names,
-            ["", "Zeta", "aa", "author", "authortype", "year", "é"]
-        );
+        let mut want = names.clone();
+        want.sort();
+        assert_eq!(names, want);
+    }
+
+    #[test]
+    fn sym_macro() {
+        assert_eq!(crate::sym!("title"), Sym::new("title"));
+        assert_eq!(crate::sym!("x-macro-only"), Sym::new("x-macro-only"));
     }
 
     #[test]
