@@ -57,7 +57,7 @@ pub fn propagate(sec: &mut Section) {
                     .get_mut(&k)
                     .expect("entry")
                     .slots
-                    .insert("xdatarefs".into(), v);
+                    .insert("xdatarefs", v);
             }
         }
     }
@@ -105,7 +105,7 @@ pub fn resolve_ref_aliases(st: &mut SectionState, key: &str) {
         .get_mut(&o)
         .expect("entry")
         .slots
-        .insert("xdatarefs".into(), J::Array(refs));
+        .insert("xdatarefs", J::Array(refs));
 }
 
 struct Xd {
@@ -240,7 +240,7 @@ fn resolve_entry(ctx: &mut Ctx, st: &mut SectionState, x: &mut Xd, key: &str) ->
                     let fields: Vec<String> = st.section.entries[&xkey]
                         .datafields
                         .keys()
-                        .cloned()
+                        .map(|k| k.to_string())
                         .collect();
                     for f in fields {
                         if f == "ids" {

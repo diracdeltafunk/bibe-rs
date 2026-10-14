@@ -71,7 +71,7 @@ pub fn set_inherit_from(
     let fields: Vec<String> = st.section.entries[parent]
         .datafields
         .keys()
-        .cloned()
+        .map(|k| k.to_string())
         .collect();
     for f in fields {
         if st.section.entries[key].field_exists(&f) {
@@ -298,7 +298,7 @@ fn inherit_from(
         let fields: Vec<String> = st.section.entries[parent]
             .datafields
             .keys()
-            .cloned()
+            .map(|k| k.to_string())
             .collect();
         let quirk = ctx.cfg.quirks.on(Quirk::CrossrefDateMeta);
         let mut filtered = Vec::new();

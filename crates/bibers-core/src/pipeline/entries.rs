@@ -18,16 +18,13 @@ use crate::biber_error;
 use crate::config::{Config, OptValue};
 use crate::datamodel::DataModel;
 use crate::log::{Fatal, Logger};
-use crate::model::{
-    DataList, Entry, Name, NameId, NameListId, PerlData, Section, SectionState, Value,
-};
+use crate::model::{DataList, Entry, Name, NameId, NameListId, Section, SectionState, Value};
 use crate::perlish::{fc, lc, nfc, numify, truthy};
 use crate::quirks::Quirk;
 use md5::{Digest, Md5};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
 use serde_json::{Map, Value as J};
-use std::collections::BTreeMap;
 
 // ---------------------------------------------------------------------------
 // Per-list state access (`Biber::DataList` accessors)
@@ -195,7 +192,7 @@ pub(crate) fn perl_str(v: Option<&Value>) -> String {
 }
 
 /// A defined scalar slot (`undef` → `None`).
-fn slot_str<'a>(slots: &'a BTreeMap<String, PerlData>, k: &str) -> Option<&'a str> {
+fn slot_str<'a>(slots: &'a crate::model::Slots, k: &str) -> Option<&'a str> {
     slots.get(k).and_then(J::as_str)
 }
 
@@ -716,10 +713,10 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
     }
     let be = sec.bibentry_mut(key).expect("entry");
     if let Some(l) = lni {
-        be.slots.insert("labelnameinfo".into(), J::String(l));
+        be.slots.insert("labelnameinfo", J::String(l));
     }
     if let Some(l) = lnfhi {
-        be.slots.insert("labelnamefhinfo".into(), J::String(l));
+        be.slots.insert("labelnamefhinfo", J::String(l));
     }
 }
 
@@ -794,13 +791,13 @@ fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
                 );
                 let mut o = Map::new();
                 o.insert("field".into(), J::Object(f));
-                be.slots.insert("labeldateinfo".into(), J::Object(o));
+                be.slots.insert("labeldateinfo", J::Object(o));
                 break;
             }
         } else if ty == "string" {
             let mut o = Map::new();
             o.insert("string".into(), J::String(ld.clone()));
-            be.slots.insert("labeldateinfo".into(), J::Object(o));
+            be.slots.insert("labeldateinfo", J::Object(o));
             break;
         }
     }
@@ -887,7 +884,7 @@ fn process_labeltitle(ctx: &mut Ctx, sec: &mut Section, key: &str) {
     };
     for ltn in spec {
         if let Some(lt) = be.get_field(&ltn).filter(|v| value_true(Some(v))).cloned() {
-            be.slots.insert("labeltitleinfo".into(), J::String(ltn));
+            be.slots.insert("labeltitleinfo", J::String(ltn));
             be.set_field("labeltitle", Some(lt));
             break;
         }
@@ -1629,7 +1626,7 @@ fn process_pername_hashes(
                 .names
                 .name_mut(nid)
                 .slots
-                .insert("hash".into(), J::String(hash.clone()));
+                .insert("hash", J::String(hash.clone()));
             ls::set(
                 &mut st.datalists[list],
                 &["namelistdata", &nlid.key(), &nid.key(), "hash"],

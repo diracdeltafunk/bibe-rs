@@ -65,8 +65,7 @@ pub fn init_list(st: &mut SectionState, i: usize) {
     }
     dl.keys = Some(citekeys);
     // `set_unul_changed(1)`: starts the uniqueness iteration.
-    dl.slots
-        .insert("unulchanged".into(), serde_json::Value::from("1"));
+    dl.slots.insert("unulchanged", serde_json::Value::from("1"));
 }
 
 /// The list filtering block of `process_lists` (Biber.pm:3134-3168),
@@ -340,8 +339,8 @@ pub fn generate_contextdata(
                     }
                 }
                 for np in sec.names.name(*nid).nameparts.keys() {
-                    let v =
-                        uniquename_value(pnun.get(np).map_or("none", String::as_str)).unwrap_or(0);
+                    let v = uniquename_value(pnun.get(np.as_str()).map_or("none", String::as_str))
+                        .unwrap_or(0);
                     ls::set(
                         dl,
                         &["namelistdata", &nlk, &nk, "unparts", np],

@@ -294,7 +294,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
                 labelprefix: g("labelprefix"),
                 keys: d.get("keys").map(|k| strings(Some(k))),
                 state: d.get("state").map(|v| l.internalise(v)),
-                slots: BTreeMap::new(),
+                slots: Slots::new(),
             };
             for (k, v) in d {
                 if !DATALIST_TYPED.contains(&k.as_str()) {
@@ -458,7 +458,7 @@ impl Dumper<'_> {
                     None => J::Null,
                 },
             );
-            np.insert(part.clone(), J::Object(po));
+            np.insert(part.to_string(), J::Object(po));
         }
         if !n.nameparts.is_empty() {
             o.insert("nameparts".into(), J::Object(np));
@@ -469,7 +469,7 @@ impl Dumper<'_> {
                 J::Object(
                     n.strip
                         .iter()
-                        .map(|(k, v)| (k.clone(), opt_str(v)))
+                        .map(|(k, v)| (k.to_string(), opt_str(v)))
                         .collect(),
                 ),
             );
@@ -478,7 +478,7 @@ impl Dumper<'_> {
             o.insert("rawstring".into(), J::from(r.clone()));
         }
         for (k, v) in &n.slots {
-            o.insert(k.clone(), self.canon(v));
+            o.insert(k.to_string(), self.canon(v));
         }
         J::Object(o)
     }
@@ -496,7 +496,7 @@ impl Dumper<'_> {
             o.insert("type".into(), J::from(t.clone()));
         }
         for (k, v) in &l.slots {
-            o.insert(k.clone(), self.canon(v));
+            o.insert(k.to_string(), self.canon(v));
         }
         J::Object(o)
     }
@@ -517,7 +517,11 @@ impl Dumper<'_> {
     }
 
     fn fields(&self, m: &FieldMap) -> J {
-        J::Object(m.iter().map(|(k, v)| (k.clone(), self.value(v))).collect())
+        J::Object(
+            m.iter()
+                .map(|(k, v)| (k.to_string(), self.value(v)))
+                .collect(),
+        )
     }
 
     fn entry(&self, e: &Entry) -> J {
@@ -526,7 +530,7 @@ impl Dumper<'_> {
         o.insert("datafields".into(), self.fields(&e.datafields));
         o.insert("derivedfields".into(), self.fields(&e.derivedfields));
         for (k, v) in &e.slots {
-            o.insert(k.clone(), self.canon(v));
+            o.insert(k.to_string(), self.canon(v));
         }
         J::Object(o)
     }
@@ -595,7 +599,7 @@ pub fn dump_state(st: &SectionState) -> J {
     so.insert("cite_citekeys".into(), key_hash(&sec.cite_citekeys));
     so.insert("nocite_citekeys".into(), key_hash(&sec.nocite_citekeys));
     for (k, v) in &sec.slots {
-        so.insert(k.clone(), d.canon(v));
+        so.insert(k.to_string(), d.canon(v));
     }
 
     let lists = st
@@ -624,7 +628,7 @@ pub fn dump_state(st: &SectionState) -> J {
                 o.insert("state".into(), d.canon(st));
             }
             for (k, v) in &dl.slots {
-                o.insert(k.clone(), d.canon(v));
+                o.insert(k.to_string(), d.canon(v));
             }
             J::Object(o)
         })

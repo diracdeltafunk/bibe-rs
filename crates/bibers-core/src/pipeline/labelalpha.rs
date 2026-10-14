@@ -430,7 +430,7 @@ struct Gen<'a> {
     names: &'a NameArena,
     citekeys: &'a [String],
     /// Section slots (`labelcache_v`, `labelcache_l`).
-    slots: &'a mut BTreeMap<String, PerlData>,
+    slots: &'a mut crate::model::Slots,
     /// The data list's `state`.
     dlstate: &'a mut Option<PerlData>,
     /// The data list's labelalphanametemplate name.

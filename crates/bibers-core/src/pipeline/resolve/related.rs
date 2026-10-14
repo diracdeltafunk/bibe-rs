@@ -179,7 +179,7 @@ fn clone(ctx: &mut Ctx, st: &mut SectionState, sh: &mut SharedLists, src: &str, 
         .get_mut(src)
         .expect("entry")
         .slots
-        .entry("origfields".into())
+        .entry("origfields")
         .or_insert_with(|| J::Object(Default::default()));
     let s = &st.section.entries[src];
     let mut new = crate::model::Entry {
@@ -189,10 +189,10 @@ fn clone(ctx: &mut Ctx, st: &mut SectionState, sh: &mut SharedLists, src: &str, 
     if let Some(J::Object(o)) = s.slots.get("origfields")
         && !o.is_empty()
     {
-        new.slots.insert("origfields".into(), J::Object(o.clone()));
+        new.slots.insert("origfields", J::Object(o.clone()));
     }
     new.slots.insert(
-        "xdatarefs".into(),
+        "xdatarefs",
         s.slots.get("xdatarefs").cloned().unwrap_or(J::Null),
     );
     for df in &stems {
@@ -219,20 +219,20 @@ fn clone(ctx: &mut Ctx, st: &mut SectionState, sh: &mut SharedLists, src: &str, 
     }
     for f in ["entrytype", "datatype"] {
         new.derivedfields
-            .insert(f.into(), s.derivedfields.get(f).cloned().flatten());
+            .insert(f, s.derivedfields.get(f).cloned().flatten());
     }
     if perl_truthy(newkey) {
         new.derivedfields
-            .insert("citekey".into(), Some(Value::Str(newkey.into())));
+            .insert("citekey", Some(Value::Str(newkey.into())));
     }
     let srckey = s.get_field("citekey").cloned();
     let srccite = s.citekey().to_string();
-    new.derivedfields.insert("clonesourcekey".into(), srckey);
+    new.derivedfields.insert("clonesourcekey", srckey);
     let shared_fields: Vec<String> = new
         .datafields
         .iter()
         .filter(|(_, v)| v.as_ref().is_some_and(shared::is_array))
-        .map(|(k, _)| k.clone())
+        .map(|(k, _)| k.to_string())
         .collect();
     ctx.run.annotations.copy_annotations(&srccite, newkey);
     if let Some(old) = st.section.entries.insert(newkey.to_string(), new) {

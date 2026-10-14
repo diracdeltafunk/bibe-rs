@@ -137,9 +137,9 @@ pub fn generate_sortdataschema(
         Some(t) => linked_template_json(t),
         None => J::Object(Map::new()),
     };
-    dl.slots.insert("sortingtemplate".into(), tj);
+    dl.slots.insert("sortingtemplate", tj);
     dl.slots.insert(
-        "sortdataschema".into(),
+        "sortdataschema",
         if ds.is_empty() { J::Null } else { J::Array(ds) },
     );
     Ok(())
@@ -208,10 +208,10 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
     }
     // The hashes only exist once something was stored in them.
     if !sd.is_empty() || had_sd {
-        dl.slots.insert("sortdata".into(), J::Object(sd));
+        dl.slots.insert("sortdata", J::Object(sd));
     }
     if !si.is_empty() || had_si {
-        dl.slots.insert("sortinitdata".into(), J::Object(si));
+        dl.slots.insert("sortinitdata", J::Object(si));
     }
     Ok(())
 }
@@ -300,10 +300,7 @@ fn value_true(v: Option<&Value>) -> bool {
 }
 
 /// A defined scalar from a slot (`undef` → `None`).
-fn slot_str<'a>(
-    slots: &'a std::collections::BTreeMap<String, PerlData>,
-    k: &str,
-) -> Option<&'a str> {
+fn slot_str<'a>(slots: &'a crate::model::Slots, k: &str) -> Option<&'a str> {
     slots.get(k).and_then(J::as_str)
 }
 

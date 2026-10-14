@@ -74,7 +74,7 @@ fn warn_entry(ctx: &mut Ctx, st: &mut SectionState, key: &str, msg: String) {
     if let Some(e) = st.section.entries.get_mut(key) {
         let w = e
             .derivedfields
-            .entry("warnings".into())
+            .entry("warnings")
             .or_insert_with(|| Some(Value::List(Vec::new())));
         match w {
             Some(Value::List(l)) => l.push(msg.clone()),

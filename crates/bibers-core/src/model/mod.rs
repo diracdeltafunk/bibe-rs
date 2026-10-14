@@ -20,8 +20,12 @@
 
 pub mod annotation;
 pub mod dump;
+pub mod sym;
+pub mod symmap;
 
 pub use annotation::{Annotation, AnnotationScope, Annotations};
+pub use sym::{IntoSym, Sym, SymKey};
+pub use symmap::SymMap;
 
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -77,7 +81,11 @@ impl Value {
 /// Field name → value (`None` = Perl `undef`, which differs from absence:
 /// biber's `field_exists` is true for an undef field). Sorted, like biber's
 /// `sort keys` over field names.
-pub type FieldMap = BTreeMap<String, Option<Value>>;
+pub type FieldMap = SymMap<Option<Value>>;
+
+/// Slot name → untyped value (the per-object slots biber keeps on its
+/// hashes), iterated in name order.
+pub type Slots = SymMap<PerlData>;
 
 /// `Biber::Entry`.
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -92,54 +100,66 @@ pub struct Entry {
     /// `labeldateinfo`, `xdatarefs`, `origfields`, `warnings`,
     /// `inherited_fields`, …), as dumped. Typed accessors can be added as
     /// phases are ported.
-    pub slots: BTreeMap<String, PerlData>,
+    pub slots: Slots,
 }
 
 impl Entry {
     /// `get_field`: data field first, then derived field (`//`: an undef
-    /// data field falls through to the derived one).
-    pub fn get_field(&self, f: &str) -> Option<&Value> {
+    /// data field falls through to the derived one). `f` is a `&str`, a
+    /// `&String` or a `&Sym`; [`Entry::get_field_sym`] skips the name lookup.
+    #[inline]
+    pub fn get_field<K: SymKey + ?Sized>(&self, f: &K) -> Option<&Value> {
+        self.get_field_sym(f.to_sym()?)
+    }
+
+    /// [`Entry::get_field`] by symbol.
+    #[inline]
+    pub fn get_field_sym(&self, f: Sym) -> Option<&Value> {
         self.datafields
-            .get(f)
+            .get_sym(f)
             .and_then(Option::as_ref)
-            .or_else(|| self.derivedfields.get(f).and_then(Option::as_ref))
+            .or_else(|| self.derivedfields.get_sym(f).and_then(Option::as_ref))
     }
 
     /// `get_field` as a string, if it is a scalar.
-    pub fn get_str(&self, f: &str) -> Option<&str> {
+    pub fn get_str<K: SymKey + ?Sized>(&self, f: &K) -> Option<&str> {
         self.get_field(f).and_then(Value::as_str)
     }
 
     /// `get_datafield`.
-    pub fn get_datafield(&self, f: &str) -> Option<&Value> {
+    pub fn get_datafield<K: SymKey + ?Sized>(&self, f: &K) -> Option<&Value> {
         self.datafields.get(f).and_then(Option::as_ref)
     }
 
     /// `set_field` (derived).
-    pub fn set_field(&mut self, f: impl Into<String>, v: Option<Value>) {
-        self.derivedfields.insert(f.into(), v);
+    pub fn set_field(&mut self, f: impl IntoSym, v: Option<Value>) {
+        self.derivedfields.insert(f, v);
     }
 
     /// `set_datafield`.
-    pub fn set_datafield(&mut self, f: impl Into<String>, v: Option<Value>) {
-        self.datafields.insert(f.into(), v);
+    pub fn set_datafield(&mut self, f: impl IntoSym, v: Option<Value>) {
+        self.datafields.insert(f, v);
     }
 
     /// `del_field`: removes from both maps.
-    pub fn del_field(&mut self, f: &str) {
-        self.datafields.remove(f);
-        self.derivedfields.remove(f);
+    pub fn del_field<K: SymKey + ?Sized>(&mut self, f: &K) {
+        if let Some(f) = f.to_sym() {
+            self.datafields.remove(&f);
+            self.derivedfields.remove(&f);
+        }
     }
 
     /// `field_exists` (true even for undef values).
-    pub fn field_exists(&self, f: &str) -> bool {
-        self.datafields.contains_key(f) || self.derivedfields.contains_key(f)
+    pub fn field_exists<K: SymKey + ?Sized>(&self, f: &K) -> bool {
+        f.to_sym().is_some_and(|f| {
+            self.datafields.contains_key(&f) || self.derivedfields.contains_key(&f)
+        })
     }
 
     /// The entry's citekey (`derivedfields.citekey`).
     pub fn citekey(&self) -> &str {
         self.derivedfields
-            .get("citekey")
+            .get_sym(sym::CITEKEY)
             .and_then(|v| v.as_ref())
             .and_then(Value::as_str)
             .unwrap_or("")
@@ -148,7 +168,7 @@ impl Entry {
     /// The entry type (`derivedfields.entrytype`).
     pub fn entrytype(&self) -> &str {
         self.derivedfields
-            .get("entrytype")
+            .get_sym(sym::ENTRYTYPE)
             .and_then(|v| v.as_ref())
             .and_then(Value::as_str)
             .unwrap_or("")
@@ -178,15 +198,15 @@ pub struct Name {
     pub index: Option<String>,
     /// Name parts by part name (`family`, `given`, `prefix`, `suffix`, and
     /// any data-model-defined parts).
-    pub nameparts: BTreeMap<String, NamePart>,
+    pub nameparts: SymMap<NamePart>,
     /// Per-part "outer braces were stripped" flags.
-    pub strip: BTreeMap<String, Option<String>>,
+    pub strip: SymMap<Option<String>>,
     /// `rawstring` (joined in Perl hash order upstream: nondeterministic,
     /// only used for the "others" test).
     pub rawstring: Option<String>,
     /// Other slots: per-name biblatex options (`useprefix`, `uniquename`,
     /// …), `gender`, `hashid`, `xdata`, ….
-    pub slots: BTreeMap<String, PerlData>,
+    pub slots: Slots,
 }
 
 /// `Biber::Entry::Names`.
@@ -198,7 +218,7 @@ pub struct NameList {
     /// The field this list was parsed for (`type`).
     pub type_: Option<String>,
     /// Other slots: `morenames`, per-namelist biblatex options, `xdata`, ….
-    pub slots: BTreeMap<String, PerlData>,
+    pub slots: Slots,
 }
 
 /// Arena of name lists and names for one section.
@@ -279,7 +299,7 @@ pub struct Section {
     /// `everykey_lc`, `static_keys`, `namepartlengths`, `labelcache_l`,
     /// `labelcache_v`, `bcfkeycache`, `seenkeys`, `citecount`, `datasources`,
     /// `state`, …), as dumped.
-    pub slots: BTreeMap<String, PerlData>,
+    pub slots: Slots,
 }
 
 impl Section {
@@ -322,7 +342,7 @@ pub struct DataList {
     pub state: Option<PerlData>,
     /// Other slots (`sortdata`, `sortinitdata`, `sortdataschema`,
     /// `sortingtemplate`, `unulchanged`, `filters`, …), as dumped.
-    pub slots: BTreeMap<String, PerlData>,
+    pub slots: Slots,
 }
 
 /// The per-section processing state the pipeline phases read and write,
