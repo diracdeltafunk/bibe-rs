@@ -109,9 +109,19 @@ pub(crate) mod ls {
 
     /// `++$self->{state}{p0}…{pn}`; returns the new value.
     pub fn incr(dl: &mut DataList, path: &[&str]) -> i64 {
-        let n = get(dl, path).map_or(0.0, |v| num(&v)) as i64 + 1;
-        set(dl, path, J::String(n.to_string()));
-        n
+        let (last, parents) = path.split_last().expect("non-empty path");
+        let m = viv(root(dl), parents).as_object_mut().expect("object");
+        match m.get_mut(*last) {
+            Some(v) => {
+                let n = if v.is_null() { 0 } else { num(v) as i64 } + 1;
+                *v = J::String(n.to_string());
+                n
+            }
+            None => {
+                m.insert(last.to_string(), J::String("1".into()));
+                1
+            }
+        }
     }
 
     /// Perl numeric value of a state scalar.
@@ -133,6 +143,19 @@ pub(crate) mod ls {
         set(dl, &["fields", key, f], v);
     }
 
+    /// `set_entryfield($citekey, $f, $v)` for each `(f, v)`, in order.
+    pub fn set_entryfields(dl: &mut DataList, key: &str, fv: Vec<(String, J)>) {
+        if fv.is_empty() {
+            return;
+        }
+        let m = viv(root(dl), &["fields", key])
+            .as_object_mut()
+            .expect("object");
+        for (f, v) in fv {
+            m.insert(f, v);
+        }
+    }
+
     /// A state scalar as a string (`undef` → `None`).
     pub fn str_of(v: &Option<J>) -> Option<String> {
         match v {
@@ -144,6 +167,11 @@ pub(crate) mod ls {
 
     /// Perl truthiness of a state value.
     pub fn truthy(v: &Option<J>) -> bool {
+        truthy_ref(v.as_ref())
+    }
+
+    /// [`truthy`] of a borrowed value.
+    pub fn truthy_ref(v: Option<&J>) -> bool {
         match v {
             None | Some(J::Null) => false,
             Some(J::String(s)) => crate::perlish::truthy(Some(s)),
@@ -1373,29 +1401,23 @@ fn process_fullhash(
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     let be = sec.bibentry(key).expect("entry");
+    let mut out = Vec::new();
     if let Some(nlid) = names_field(be, info_slot(be, "labelnamefhinfo")) {
         let fh = getfullhash(h, log, sec, dl, key, nlid)?;
-        ls::set_entryfield(dl, key, "fullhash", J::String(fh));
-        ls::set_entryfield(
-            dl,
-            key,
-            "fullhashraw",
-            J::String(getfullhashraw(h, sec, nlid)),
-        );
+        out.push(("fullhash".to_string(), J::String(fh)));
+        let fhr = getfullhashraw(h, sec, nlid);
+        out.push(("fullhashraw".to_string(), J::String(fhr)));
     }
     for n in &h.dm.helpers.namelistsall {
         let Some(nlid) = names_field(be, Some(n)) else {
             continue;
         };
         let fh = getfullhash(h, log, sec, dl, key, nlid)?;
-        ls::set_entryfield(dl, key, &format!("{n}fullhash"), J::String(fh));
-        ls::set_entryfield(
-            dl,
-            key,
-            &format!("{n}fullhashraw"),
-            J::String(getfullhashraw(h, sec, nlid)),
-        );
+        out.push((format!("{n}fullhash"), J::String(fh)));
+        let fhr = getfullhashraw(h, sec, nlid);
+        out.push((format!("{n}fullhashraw"), J::String(fhr)));
     }
+    ls::set_entryfields(dl, key, out);
     Ok(())
 }
 
@@ -1666,21 +1688,23 @@ fn process_namehash(
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     let be = sec.bibentry(key).expect("entry");
+    let mut out = Vec::new();
     if let Some(nlid) = names_field(be, info_slot(be, "labelnameinfo")) {
         let nh = getnamehash(h, log, sec, dl, key, nlid, false)?;
-        ls::set_entryfield(dl, key, "namehash", J::String(nh));
+        out.push(("namehash".to_string(), J::String(nh)));
         let bnh = getnamehash(h, log, sec, dl, key, nlid, true)?;
-        ls::set_entryfield(dl, key, "bibnamehash", J::String(bnh));
+        out.push(("bibnamehash".to_string(), J::String(bnh)));
     }
     for n in &h.dm.helpers.namelistsall {
         let Some(nlid) = names_field(be, Some(n)) else {
             continue;
         };
         let nh = getnamehash(h, log, sec, dl, key, nlid, false)?;
-        ls::set_entryfield(dl, key, &format!("{n}namehash"), J::String(nh));
+        out.push((format!("{n}namehash"), J::String(nh)));
         let bnh = getnamehash(h, log, sec, dl, key, nlid, true)?;
-        ls::set_entryfield(dl, key, &format!("{n}bibnamehash"), J::String(bnh));
+        out.push((format!("{n}bibnamehash"), J::String(bnh)));
     }
+    ls::set_entryfields(dl, key, out);
     Ok(())
 }
 
@@ -1802,7 +1826,7 @@ pub fn process_entries_final(
                 continue;
             };
             let id = ls::str_of(&Some(id)).unwrap_or_default();
-            if ls::get(dl, &[seen, &id]).map_or(0.0, |v| ls::num(&v)) < 2.0 {
+            if ls::num_at(dl, &[seen, &id]) < 2.0 {
                 ls::set_entryfield(dl, key, out, J::String("1".into()));
             }
         }
@@ -1829,7 +1853,7 @@ pub fn process_entries_final(
                     .and_then(|v| v.as_object().map(Map::len))
                     .unwrap_or(0) as f64
             } else {
-                ls::get(dl, &[seen, &id]).map_or(0.0, |v| ls::num(&v))
+                ls::num_at(dl, &[seen, &id])
             };
             if n < 2.0 {
                 ls::set_entryfield(dl, key, out, J::String("1".into()));

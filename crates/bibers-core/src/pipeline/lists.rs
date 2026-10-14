@@ -241,7 +241,7 @@ pub fn generate_contextdata(
             let lnh = ls::entryfield(dl, key, "labelnamehash");
             if ls::truthy(&lnh) {
                 let lnh = ls::str_of(&lnh).unwrap_or_default();
-                if ls::get(dl, &["seen_labelname", &lnh]).map_or(0.0, |v| ls::num(&v)) > 1.0 {
+                if ls::num_at(dl, &["seen_labelname", &lnh]) > 1.0 {
                     let v = ls::incr(dl, &["seen_extraname", &lnh]);
                     ls::set(dl, &["extranamedata", key], J::String(v.to_string()));
                 }
@@ -273,7 +273,7 @@ pub fn generate_contextdata(
                     continue;
                 }
                 let v = ls::str_of(&ls::entryfield(dl, key, field)).unwrap_or_default();
-                if ls::get(dl, &[seen, &v]).map_or(0.0, |x| ls::num(&x)) > 1.0 {
+                if ls::num_at(dl, &[seen, &v]) > 1.0 {
                     let n = ls::incr(dl, &[extra, &v]);
                     ls::set(dl, &[data, key], J::String(n.to_string()));
                 }
@@ -282,7 +282,7 @@ pub fn generate_contextdata(
                 let la = ls::entryfield(dl, key, "labelalpha");
                 ls::set(dl, &["labelalphadata", key], la.clone().unwrap_or(J::Null));
                 let la = ls::str_of(&la).unwrap_or_default();
-                if ls::get(dl, &["ladisambiguation", &la]).map_or(0.0, |x| ls::num(&x)) > 1.0 {
+                if ls::num_at(dl, &["ladisambiguation", &la]) > 1.0 {
                     let n = ls::incr(dl, &["seen_extraalpha", &la]);
                     ls::set(dl, &["extraalphadata", key], J::String(n.to_string()));
                 }
@@ -300,17 +300,20 @@ pub fn generate_contextdata(
             let nlk = nlid.key();
             for nid in &sec.names.list(*nlid).names {
                 let nk = nid.key();
-                let un = ls::get(dl, &["namelistdata", &nlk, &nk, "un"]);
-                if !ls::truthy(&un) {
+                // `$self->{state}{namelistdata}{$nlid}{$nid}` (vivified by
+                // the `un` fetch).
+                let nd = ls::viv(ls::root(dl), &["namelistdata", &nlk, &nk]);
+                let un = nd.get("un").filter(|v| !v.is_null());
+                if !ls::truthy_ref(un) {
                     continue;
                 }
-                let schema = ls::get(dl, &["namelistdata", &nlk, &nk, "namedisschema"]);
-                let schema: Vec<J> = schema
-                    .and_then(|s| s.as_array().cloned())
-                    .unwrap_or_default();
-                let mut pnun: std::collections::BTreeMap<String, String> = Default::default();
+                let schema: &[J] = nd
+                    .get("namedisschema")
+                    .and_then(J::as_array)
+                    .map_or(&[], Vec::as_slice);
+                let mut pnun: std::collections::BTreeMap<&str, &str> = Default::default();
                 for (i, nss) in schema.iter().enumerate() {
-                    if Some(nss) == un.as_ref() {
+                    if Some(nss) == un {
                         let mut dis: Vec<&J> = schema
                             .get(1..i.max(1))
                             .unwrap_or(&[])
@@ -326,23 +329,28 @@ pub fn generate_contextdata(
                             .filter_map(|e| {
                                 let np = e.get(0).and_then(J::as_str)?;
                                 let v = e.get(1).and_then(J::as_str).unwrap_or("");
-                                Some((
-                                    np.to_string(),
-                                    if v == "fullonly" { "full" } else { v }.to_string(),
-                                ))
+                                Some((np, if v == "fullonly" { "full" } else { v }))
                             })
                             .collect();
                         break;
                     }
                 }
-                for np in sec.names.name(*nid).nameparts.keys() {
-                    let v =
-                        uniquename_value(pnun.get(np).map_or("none", String::as_str)).unwrap_or(0);
-                    ls::set(
-                        dl,
-                        &["namelistdata", &nlk, &nk, "unparts", np],
-                        J::String(v.to_string()),
-                    );
+                let values: Vec<(&String, i64)> = sec
+                    .names
+                    .name(*nid)
+                    .nameparts
+                    .keys()
+                    .map(|np| {
+                        let v = pnun.get(np.as_str()).copied().unwrap_or("none");
+                        (np, uniquename_value(v).unwrap_or(0))
+                    })
+                    .collect();
+                if values.is_empty() {
+                    continue;
+                }
+                let unparts = ls::viv(nd, &["unparts"]).as_object_mut().expect("object");
+                for (np, v) in values {
+                    unparts.insert(np.clone(), J::String(v.to_string()));
                 }
             }
         }
