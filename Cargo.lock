@@ -43,6 +43,7 @@ dependencies = [
  "regex",
  "relaxng",
  "roxmltree",
+ "rustc-hash",
  "rustls",
  "rustls-pki-types",
  "serde_json",

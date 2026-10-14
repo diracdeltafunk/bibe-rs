@@ -4,8 +4,9 @@
 //! tool mode, user) data models. Field and entry type names are case-folded
 //! and interned.
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::BTreeMap;
 
+use rustc_hash::{FxHashMap, FxHashSet};
 use serde_json::{Map, Value};
 
 use crate::perlish::fc;
@@ -102,7 +103,8 @@ impl RawDm {
         let Some(dm) = v.as_hash() else {
             return RawDm::default();
         };
-        let sub = |k: &str| dm.hash(k).cloned().unwrap_or_default();
+        static EMPTY: XHash = XHash(Vec::new());
+        let sub = |k: &str| dm.hash(k).unwrap_or(&EMPTY);
         let constants = sub("constants")
             .list("constant")
             .hashes()
@@ -140,7 +142,7 @@ impl RawDm {
                 fields: contents(ef, "field"),
             })
             .collect();
-        let multiscriptfields = contents(&sub("multiscriptfields"), "field");
+        let multiscriptfields = contents(sub("multiscriptfields"), "field");
         let constraints = dm
             .list("constraints")
             .hashes()
@@ -151,8 +153,8 @@ impl RawDm {
                     .hashes()
                     .map(|c| {
                         let quant = |k: &str| {
-                            let h = c.hash(k).cloned().unwrap_or_default();
-                            (s(&h, "quant"), contents(&h, "field"))
+                            let h = c.hash(k).unwrap_or(&EMPTY);
+                            (s(h, "quant"), contents(h, "field"))
                         };
                         RawConstraint {
                             type_: s(c, "type"),
@@ -329,8 +331,11 @@ pub struct EntryTypeDef {
     pub name: String,
     /// `skip_output`.
     pub skipout: bool,
-    /// Legal fields (as written in `<entryfields>`, not case-folded).
-    pub legal_fields: HashSet<String>,
+    /// The `<entryfields>` blocks that apply to this type (indices into
+    /// the data model's legal field sets): the legal fields are their
+    /// union. Shared rather than copied per type, which made building the
+    /// data model a tenth of startup.
+    legal_field_sets: Vec<usize>,
     /// Constraints.
     pub constraints: Constraints,
 }
@@ -372,19 +377,22 @@ pub struct Helpers {
 #[derive(Clone, Debug, Default)]
 pub struct DataModel {
     fields: Vec<FieldDef>,
-    field_ids: HashMap<String, FieldId>,
+    field_ids: FxHashMap<String, FieldId>,
     fieldsbytype: BTreeMap<String, BTreeMap<String, BTreeMap<String, Vec<String>>>>,
     fieldsbyfieldtype: BTreeMap<String, Vec<String>>,
     fieldsbydatatype: BTreeMap<String, Vec<String>>,
     fieldsbyformat: BTreeMap<String, Vec<String>>,
     entrytypes: Vec<EntryTypeDef>,
-    type_ids: HashMap<String, TypeId>,
+    type_ids: FxHashMap<String, TypeId>,
+    /// One set per `<entryfields>` block: its fields as written (not
+    /// case-folded).
+    legal_fields: Vec<FxHashSet<String>>,
     constants: BTreeMap<String, (Option<String>, Option<String>)>,
-    foldtoorig: HashMap<String, String>,
+    foldtoorig: FxHashMap<String, String>,
     multiscriptfields: Vec<String>,
     /// The helper lists.
     pub helpers: Helpers,
-    integer_set: HashSet<String>,
+    integer_set: FxHashSet<String>,
 }
 
 /// An error building the data model (`biber_error`).
@@ -440,7 +448,7 @@ impl DataModel {
         }
         model.multiscriptfields = dm.multiscriptfields.iter().flatten().cloned().collect();
 
-        let mut byname: HashMap<String, usize> = HashMap::new();
+        let mut byname: FxHashMap<String, usize> = FxHashMap::default();
         for f in &dm.fields {
             let ft = f.fieldtype.clone().unwrap_or_default();
             let dt = f.datatype.clone().unwrap_or_default();
@@ -525,6 +533,16 @@ impl DataModel {
             );
         }
 
+        model.legal_fields = dm
+            .entryfields
+            .iter()
+            .map(|ef| {
+                ef.fields
+                    .iter()
+                    .map(|f| f.clone().unwrap_or_default())
+                    .collect()
+            })
+            .collect();
         for et in &dm.entrytypes {
             let es = et.content.clone();
             let idx = match model.type_ids.get(&es) {
@@ -547,11 +565,9 @@ impl DataModel {
                 None => true,
                 Some(v) => v.iter().any(|x| x.as_deref().unwrap_or("") == es),
             };
-            for ef in &dm.entryfields {
-                if applies(&ef.entrytypes) {
-                    for f in &ef.fields {
-                        def.legal_fields.insert(f.clone().unwrap_or_default());
-                    }
+            for (i, ef) in dm.entryfields.iter().enumerate() {
+                if applies(&ef.entrytypes) && !def.legal_field_sets.contains(&i) {
+                    def.legal_field_sets.push(i);
                 }
             }
             for cd in &dm.constraints {
@@ -777,8 +793,12 @@ impl DataModel {
 
     /// `is_field_for_entrytype`.
     pub fn is_field_for_entrytype(&self, t: &str, field: &str) -> bool {
-        self.type_id(t)
-            .is_some_and(|id| self.entrytype(id).legal_fields.contains(field))
+        self.type_id(t).is_some_and(|id| {
+            self.entrytype(id)
+                .legal_field_sets
+                .iter()
+                .any(|&i| self.legal_fields[i].contains(field))
+        })
     }
 
     /// `entrytype_is_skipout`.
@@ -973,9 +993,14 @@ impl DataModel {
             if et.skipout {
                 o.insert("skipout".into(), "1".into());
             }
-            if !et.legal_fields.is_empty() {
-                let mut lf: Vec<&String> = et.legal_fields.iter().collect();
+            let mut lf: Vec<&String> = et
+                .legal_field_sets
+                .iter()
+                .flat_map(|&i| &self.legal_fields[i])
+                .collect();
+            if !lf.is_empty() {
                 lf.sort();
+                lf.dedup();
                 o.insert(
                     "legal_fields".into(),
                     Value::Object(

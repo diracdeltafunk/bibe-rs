@@ -4,8 +4,10 @@
 //! option store (`$CONFIG->{options}{biblatex}`) with `setblxoption` /
 //! `getblxoption` semantics (Config.pm:930-1021).
 
-use std::collections::{BTreeMap, BTreeSet, HashMap};
+use std::borrow::Cow;
+use std::collections::{BTreeMap, BTreeSet};
 
+use rustc_hash::FxHashMap;
 use serde_json::{Map, Value};
 
 use crate::bcf::templates::{
@@ -100,6 +102,15 @@ fn backendin_kv(o: &str) -> Option<(String, String)> {
     Some((c[1].to_string(), c[2].to_string()))
 }
 
+/// `lc`, without allocating for the usual already-lowercase ASCII names.
+fn lc_cow(s: &str) -> Cow<'_, str> {
+    if s.bytes().all(|b| b.is_ascii() && !b.is_ascii_uppercase()) {
+        Cow::Borrowed(s)
+    } else {
+        Cow::Owned(lc(s))
+    }
+}
+
 /// What `<optionscope>` declares for one option at one scope
 /// (`%CONFIG_BIBLATEX_OPTIONS{scope}{opt}`).
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -111,15 +122,19 @@ pub struct ScopeDecl {
 }
 
 /// The option registry.
+///
+/// The hash maps here and in [`BlxOptions`] are only looked up, never
+/// iterated in an observable order (the JSON dumps sort), so they use the
+/// fast `FxHash`.
 #[derive(Clone, Debug, Default)]
 pub struct Registry {
     /// opt → scope → declaration.
-    decls: HashMap<String, [Option<ScopeDecl>; 5]>,
+    decls: FxHashMap<String, [Option<ScopeDecl>; 5]>,
     /// Declaration order per scope (`%CONFIG_SCOPEOPT_BIBLATEX`; we keep
     /// first-declaration order, DC-013).
     scope_order: [Vec<String>; 5],
     /// `%CONFIG_OPTTYPE_BIBLATEX` (lowercased datatype).
-    types: HashMap<String, String>,
+    types: FxHashMap<String, String>,
     /// Options that `setblxoption`/`addtoblxoption` looked up without being
     /// declared: Perl autovivifies `$CONFIG_OPTSCOPE_BIBLATEX{$opt}` to `{}`,
     /// which makes them "known" to `setconfigfileoption`.
@@ -144,10 +159,11 @@ impl Registry {
             _ => "0".to_string(),
         };
         let input = process_backendin(backendin);
-        let entry = self
-            .decls
-            .entry(opt.to_string())
-            .or_insert_with(|| [None, None, None, None, None]);
+        if !self.decls.contains_key(opt) {
+            self.decls
+                .insert(opt.to_string(), [None, None, None, None, None]);
+        }
+        let entry = self.decls.get_mut(opt).expect("inserted above");
         if entry[scope.idx()].is_none() {
             self.scope_order[scope.idx()].push(opt.to_string());
         }
@@ -403,9 +419,12 @@ pub type SecNum = String;
 pub struct BlxOptions {
     /// The scope registry.
     pub registry: Registry,
-    global: HashMap<String, OptValue>,
-    entrytype: HashMap<String, HashMap<String, OptValue>>,
-    entry: HashMap<(String, SecNum), HashMap<String, OptValue>>,
+    global: FxHashMap<String, OptValue>,
+    /// entry type → option → value.
+    entrytype: FxHashMap<String, FxHashMap<String, OptValue>>,
+    /// section → citekey → option → value (nested so that lookups by
+    /// `&str` need no allocation).
+    entry: FxHashMap<SecNum, FxHashMap<String, FxHashMap<String, OptValue>>>,
 }
 
 impl BlxOptions {
@@ -457,7 +476,9 @@ impl BlxOptions {
         let val = self.map_boolean(opt, val);
         if self.registry.has_scope(opt, Scope::Entry) {
             self.entry
-                .entry((citekey.to_string(), secnum.to_string()))
+                .entry(secnum.to_string())
+                .or_default()
+                .entry(citekey.to_string())
                 .or_default()
                 .insert(opt.to_string(), val);
         }
@@ -493,24 +514,29 @@ impl BlxOptions {
         entrytype: Option<&str>,
         citekey: Option<&str>,
     ) -> Option<&OptValue> {
+        // An option never declared has no scope (and no value).
+        let scopes = self.registry.decls.get(opt)?;
+        let has_scope = |s: Scope| scopes[s.idx()].is_some();
         if let (Some(sec), Some(key)) = (secnum, citekey)
-            && self.registry.has_scope(opt, Scope::Entry)
+            && has_scope(Scope::Entry)
             && let Some(v) = self
                 .entry
-                .get(&(key.to_string(), sec.to_string()))
+                .get(sec)
+                .and_then(|m| m.get(key))
                 .and_then(|m| m.get(opt))
             && v.is_defined()
         {
             return Some(v);
         }
         if let Some(et) = entrytype
-            && self.registry.has_scope(opt, Scope::EntryType)
-            && let Some(v) = self.entrytype.get(&lc(et)).and_then(|m| m.get(opt))
+            && has_scope(Scope::EntryType)
+            && !self.entrytype.is_empty()
+            && let Some(v) = self.entrytype.get(&*lc_cow(et)).and_then(|m| m.get(opt))
             && v.is_defined()
         {
             return Some(v);
         }
-        if self.registry.has_scope(opt, Scope::Global) {
+        if has_scope(Scope::Global) {
             return self.global.get(opt);
         }
         None
@@ -549,7 +575,8 @@ impl BlxOptions {
     pub fn entry_options(&self, secnum: &str, citekey: &str) -> Vec<&str> {
         let mut v: Vec<&str> = self
             .entry
-            .get(&(citekey.to_string(), secnum.to_string()))
+            .get(secnum)
+            .and_then(|m| m.get(citekey))
             .map(|m| m.keys().map(String::as_str).collect())
             .unwrap_or_default();
         v.sort_unstable();
@@ -562,9 +589,10 @@ impl BlxOptions {
         secnum: &str,
     ) -> BTreeMap<String, BTreeMap<String, OptValue>> {
         self.entry
-            .iter()
-            .filter(|((_, s), _)| s == secnum)
-            .map(|((k, _), m)| {
+            .get(secnum)
+            .into_iter()
+            .flatten()
+            .map(|(k, m)| {
                 (
                     k.clone(),
                     m.iter().map(|(o, v)| (o.clone(), v.clone())).collect(),
@@ -581,16 +609,18 @@ impl BlxOptions {
         secnum: &str,
         opts: BTreeMap<String, BTreeMap<String, OptValue>>,
     ) {
-        self.entry.retain(|(_, s), _| s != secnum);
+        self.entry.remove(secnum);
         for (k, m) in opts {
             self.entry
-                .insert((k, secnum.to_string()), m.into_iter().collect());
+                .entry(secnum.to_string())
+                .or_default()
+                .insert(k, m.into_iter().collect());
         }
     }
 
     /// JSON dump (`GLOBAL`, `ENTRYTYPE`, `ENTRY`).
     pub fn to_json(&self) -> Value {
-        let sorted = |m: &HashMap<String, OptValue>| {
+        let sorted = |m: &FxHashMap<String, OptValue>| {
             let mut o = Map::new();
             let mut ks: Vec<&String> = m.keys().collect();
             ks.sort();
@@ -606,12 +636,14 @@ impl BlxOptions {
             et.insert(t.clone(), sorted(&self.entrytype[t]));
         }
         let mut en = Map::new();
-        for ((key, sec), opts) in &self.entry {
-            let e = en
-                .entry(key.clone())
-                .or_insert_with(|| Value::Object(Map::new()));
-            if let Value::Object(m) = e {
-                m.insert(sec.clone(), sorted(opts));
+        for (sec, keys) in &self.entry {
+            for (key, opts) in keys {
+                let e = en
+                    .entry(key.clone())
+                    .or_insert_with(|| Value::Object(Map::new()));
+                if let Value::Object(m) = e {
+                    m.insert(sec.clone(), sorted(opts));
+                }
             }
         }
         let mut m = Map::new();
