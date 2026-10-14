@@ -20,10 +20,12 @@
 
 pub mod annotation;
 pub mod dump;
+pub mod entrymap;
 pub mod sym;
 pub mod symmap;
 
 pub use annotation::{Annotation, AnnotationScope, Annotations};
+pub use entrymap::EntryMap;
 pub use sym::{IntoSym, Sym, SymKey};
 pub use symmap::SymMap;
 
@@ -97,10 +99,135 @@ pub struct Entry {
     pub derivedfields: FieldMap,
     /// Other per-entry slots biber keeps directly on the entry hash
     /// (`labelnameinfo`, `labelnamefhinfo`, `labeltitleinfo`,
-    /// `labeldateinfo`, `xdatarefs`, `origfields`, `warnings`,
-    /// `inherited_fields`, …), as dumped. Typed accessors can be added as
-    /// phases are ported.
+    /// `xdatarefs`, `origfields`, `warnings`, `inherited_fields`, …), as
+    /// dumped. Typed accessors can be added as phases are ported.
     pub slots: Slots,
+    /// The `labeldateinfo` slot (typed: it is set on every entry and is
+    /// large as [`PerlData`]).
+    pub labeldateinfo: Option<LabelDateInfo>,
+}
+
+/// An entry's `labeldateinfo` (`set_labeldate_info`, Biber.pm:2623): where
+/// its label date comes from.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum LabelDateInfo {
+    /// `{field => {year => …, month => …, …}}`: the label date fields.
+    Field(LabelDateFields),
+    /// `{string => …}`: a literal label date.
+    String(Option<String>),
+}
+
+/// The `field` hash of [`LabelDateInfo::Field`]: field *names* (`undef`
+/// is `None`).
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct LabelDateFields {
+    pub year: Option<String>,
+    pub month: Option<String>,
+    pub day: Option<String>,
+    pub hour: Option<String>,
+    pub minute: Option<String>,
+    pub second: Option<String>,
+    pub timezone: Option<String>,
+    /// `"1"` or `undef`.
+    pub pseudodate: Option<String>,
+    pub source: Option<String>,
+}
+
+impl LabelDateFields {
+    /// The hash keys, in dump (sorted) order.
+    pub const KEYS: [&'static str; 9] = [
+        "day",
+        "hour",
+        "minute",
+        "month",
+        "pseudodate",
+        "second",
+        "source",
+        "timezone",
+        "year",
+    ];
+
+    /// `$info->{field}{$k}` (`None` for `undef` and unknown keys).
+    pub fn get(&self, k: &str) -> Option<&str> {
+        self.slot(k).and_then(|v| v.as_deref())
+    }
+
+    fn slot(&self, k: &str) -> Option<&Option<String>> {
+        Some(match k {
+            "year" => &self.year,
+            "month" => &self.month,
+            "day" => &self.day,
+            "hour" => &self.hour,
+            "minute" => &self.minute,
+            "second" => &self.second,
+            "timezone" => &self.timezone,
+            "pseudodate" => &self.pseudodate,
+            "source" => &self.source,
+            _ => return None,
+        })
+    }
+
+    fn slot_mut(&mut self, k: &str) -> Option<&mut Option<String>> {
+        Some(match k {
+            "year" => &mut self.year,
+            "month" => &mut self.month,
+            "day" => &mut self.day,
+            "hour" => &mut self.hour,
+            "minute" => &mut self.minute,
+            "second" => &mut self.second,
+            "timezone" => &mut self.timezone,
+            "pseudodate" => &mut self.pseudodate,
+            "source" => &mut self.source,
+            _ => return None,
+        })
+    }
+}
+
+impl LabelDateInfo {
+    /// The dump's shape.
+    pub fn to_json(&self) -> PerlData {
+        let s = |v: &Option<String>| v.clone().map_or(PerlData::Null, PerlData::String);
+        let mut o = serde_json::Map::new();
+        match self {
+            LabelDateInfo::Field(f) => {
+                let fo = LabelDateFields::KEYS
+                    .iter()
+                    .map(|k| (k.to_string(), s(f.slot(k).expect("key"))))
+                    .collect();
+                o.insert("field".into(), PerlData::Object(fo));
+            }
+            LabelDateInfo::String(v) => {
+                o.insert("string".into(), s(v));
+            }
+        }
+        PerlData::Object(o)
+    }
+
+    /// From the dump's shape; `None` if it has any other shape.
+    pub fn from_json(v: &PerlData) -> Option<LabelDateInfo> {
+        let o = v.as_object()?;
+        if o.len() != 1 {
+            return None;
+        }
+        let opt = |v: &PerlData| match v {
+            PerlData::Null => Some(None),
+            PerlData::String(s) => Some(Some(s.clone())),
+            _ => None,
+        };
+        if let Some(f) = o.get("field") {
+            let fo = f.as_object()?;
+            let mut out = LabelDateFields::default();
+            if fo.len() != LabelDateFields::KEYS.len() {
+                return None;
+            }
+            for (k, v) in fo {
+                *out.slot_mut(k)? = opt(v)?;
+            }
+            Some(LabelDateInfo::Field(out))
+        } else {
+            Some(LabelDateInfo::String(opt(o.get("string")?)?))
+        }
+    }
 }
 
 impl Entry {
@@ -272,7 +399,7 @@ pub struct Section {
     /// Section number (`number`).
     pub number: String,
     /// `bibentries`: citekey → entry.
-    pub entries: BTreeMap<String, Entry>,
+    pub entries: EntryMap,
     /// Name lists of this section's entries.
     pub names: NameArena,
     /// `citekeys`: the ordered list of keys being processed.

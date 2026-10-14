@@ -179,6 +179,12 @@ impl Loader {
         };
         for (k, v) in o {
             if !matches!(k.as_str(), "__class" | "datafields" | "derivedfields") {
+                if k == "labeldateinfo"
+                    && let Some(ldi) = LabelDateInfo::from_json(v)
+                {
+                    e.labeldateinfo = Some(ldi);
+                    continue;
+                }
                 e.slots.insert(k.clone(), v.clone());
             }
         }
@@ -238,7 +244,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
         names: HashMap::new(),
     };
     // Load entries in sorted key order (the dumper's traversal order).
-    let mut entries = BTreeMap::new();
+    let mut entries = EntryMap::new();
     if let Some(J::Object(be)) = sec.get("bibentries") {
         for (k, ev) in be {
             if k != "__class" {
@@ -272,7 +278,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
         }
     }
     // Entry and name slots may mention name ids too.
-    for e in section.entries.values_mut() {
+    for e in section.entries.values_mut_unordered() {
         for v in e.slots.values_mut() {
             *v = l.internalise(v);
         }
@@ -396,7 +402,7 @@ impl Dumper<'_> {
     /// Assign canonical ids in the Perl dumper's traversal order: entries by
     /// sorted key, entry hash keys sorted (`datafields`, `derivedfields`,
     /// then slots), fields sorted; a list gets its id before its names.
-    fn collect_entries(&mut self, entries: &BTreeMap<String, Entry>) {
+    fn collect_entries(&mut self, entries: &EntryMap) {
         for e in entries.values() {
             for map in [&e.datafields, &e.derivedfields] {
                 for v in map.values().flatten() {
@@ -531,6 +537,9 @@ impl Dumper<'_> {
         o.insert("derivedfields".into(), self.fields(&e.derivedfields));
         for (k, v) in &e.slots {
             o.insert(k.to_string(), self.canon(v));
+        }
+        if let Some(ldi) = &e.labeldateinfo {
+            o.insert("labeldateinfo".into(), ldi.to_json());
         }
         J::Object(o)
     }

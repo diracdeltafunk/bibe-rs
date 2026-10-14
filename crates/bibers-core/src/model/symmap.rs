@@ -85,13 +85,15 @@ impl<V> SymMap<V> {
         self.items.binary_search_by(|(s, _)| s.cmp(&k))
     }
 
-    /// Insert at position `i`, growing by half the length (at least 4)
-    /// rather than doubling: these maps are many and small, and they are
-    /// rarely grown after they are built.
+    /// Insert at position `i`, growing by half the length (at least 3;
+    /// the first allocation holds one entry) rather than doubling: these
+    /// maps are many and small (a name's slots often hold just its `hash`),
+    /// and they are rarely grown after they are built.
     fn insert_at(&mut self, i: usize, k: Sym, v: V) {
         let len = self.items.len();
         if len == self.items.capacity() {
-            self.items.reserve_exact((len / 2).max(4));
+            self.items
+                .reserve_exact(if len == 0 { 1 } else { (len / 2).max(3) });
         }
         self.items.insert(i, (k, v));
     }
