@@ -21,7 +21,8 @@
 //!   (DataList.pm:2222) runs over the whole entry, user data included
 //!   (BB-015, [`Quirk::BblCommaCleanup`]).
 
-use std::collections::{BTreeMap, HashMap};
+use rustc_hash::FxHashMap as HashMap;
+use std::collections::BTreeMap;
 use std::fmt::Write as _;
 
 use md5::{Digest, Md5};
@@ -559,7 +560,7 @@ struct Prep<'d> {
 impl<'d> Prep<'d> {
     fn new(dm: &'d DataModel, wrap: Option<i64>) -> Self {
         let dmh = &dm.helpers;
-        let mut index: HashMap<&str, Vec<(Helper, usize)>> = HashMap::new();
+        let mut index: HashMap<&str, Vec<(Helper, usize)>> = HashMap::default();
         for h in Helper::ALL {
             for (i, f) in h.list(dmh).iter().enumerate() {
                 index.entry(f.as_str()).or_default().push((h, i));
@@ -893,8 +894,8 @@ fn set_output_entry(
         flush(&mut text, &mut items);
         return Ok(Some(EntryTemplate {
             items,
-            un_src: HashMap::new(),
-            hash_src: HashMap::new(),
+            un_src: HashMap::default(),
+            hash_src: HashMap::default(),
         }));
     }
     if let Some(es) = be.get_field("entryset").filter(|v| val_truthy(Some(v))) {
@@ -1301,14 +1302,14 @@ fn set_output_entry(
     text.push_str("    \\endentry\n");
     flush(&mut text, &mut items);
 
-    let mut un_src = HashMap::new();
+    let mut un_src = HashMap::default();
     add_names(
         arena,
         p.fields(&present, Helper::NameLists),
         be,
         &mut un_src,
     );
-    let mut hash_src = HashMap::new();
+    let mut hash_src = HashMap::default();
     add_names(
         arena,
         p.fields(&present, Helper::NameListsAll),
@@ -1655,14 +1656,14 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
         date_stems: (ctx.dm.helpers.datefields.iter())
             .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
             .collect(),
-        shared: HashMap::new(),
+        shared: HashMap::default(),
         shared_vals: Vec::new(),
     };
     // create_output_section, per section in processing order.
     let mut sections: Vec<SectionOut> = Vec::new();
     for st in &processed.sections {
         w.start_section(st);
-        let mut entries = HashMap::new();
+        let mut entries = HashMap::default();
         for k in &st.section.citekeys {
             if let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? {
                 entries.insert(k.clone(), t);

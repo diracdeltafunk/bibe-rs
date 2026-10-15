@@ -32,8 +32,8 @@ use crate::model::{DataList, NameArena, NameListId, Section, SectionState, Value
 use crate::perlish::{numify, truthy};
 use crate::quirks::{Quirk, Quirks};
 use crate::{log::Fatal, model::PerlData};
+use rustc_hash::FxHashMap as HashMap;
 use serde_json::{Map, Value as J};
-use std::collections::HashMap;
 use std::rc::Rc;
 
 /// The separator biber joins namestrings and name lists with.
@@ -143,8 +143,8 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         unc: None,
         unc_all: None,
         ulc: None,
-        statics: HashMap::new(),
-        lists: HashMap::new(),
+        statics: HashMap::default(),
+        lists: HashMap::default(),
     };
     let converged = u.iterate();
     let Uniq {
@@ -219,7 +219,7 @@ impl NameListData {
     fn take(state: &mut Map<String, J>) -> Self {
         NameListData {
             orig: state.remove("namelistdata"),
-            lists: HashMap::new(),
+            lists: HashMap::default(),
         }
     }
 
@@ -367,11 +367,11 @@ impl NameCount {
     /// The scope hash `{ns}{scope}`, created if missing.
     fn scope(&mut self, ns: &str, scope: &str) -> &mut HashMap<String, u64> {
         if !self.0.contains_key(ns) {
-            self.0.insert(ns.to_string(), HashMap::new());
+            self.0.insert(ns.to_string(), HashMap::default());
         }
         let scopes = self.0.get_mut(ns).unwrap();
         if !scopes.contains_key(scope) {
-            scopes.insert(scope.to_string(), HashMap::new());
+            scopes.insert(scope.to_string(), HashMap::default());
         }
         scopes.get_mut(scope).unwrap()
     }
