@@ -4,7 +4,7 @@ members = ["crates/*", "xtask"]
 default-members = ["crates/*"]
 
 [workspace.package]
-version = "0.0.0"
+version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
 license = "Artistic-2.0"
@@ -35,7 +35,9 @@ memchr = "2"
 serde_json = "1"
 rustc-hash = "2"
 md-5 = "0.10"
-chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+# Local time for the log's "=== <date>" line. Not chrono: its `clock` feature
+# links CoreFoundation on macOS, which costs ~1 ms at every process start.
+jiff = "0.2.15"
 pcre2 = "0.2.11"
 sha2 = "0.10"
 # Remote data sources (DC-032): pure-Rust TLS (ring provider); webpki-roots is
@@ -61,6 +63,11 @@ opt-level = 2
 
 [profile.dev.package.sha2]
 opt-level = 3
+
+# `cargo build --profile dist`: the release binaries (.github/workflows/release.yml).
+[profile.dist]
+inherits = "release"
+strip = true
 
 # `cargo build --profile profiling`: release with debug info, for samply etc.
 [profile.profiling]
