@@ -1685,6 +1685,30 @@ fn has_noncharacter(s: &str) -> bool {
     false
 }
 
+/// Append `NFC(s)` to `out`, normalising only the non-ASCII stretches. An
+/// ASCII character never combines with what precedes it (no primary
+/// composite has an ASCII second character) and is a starter, so the text
+/// can be split before every ASCII character; a non-ASCII stretch is
+/// normalised together with the ASCII character before it, which it may
+/// combine with (`e` + U+0301).
+fn push_nfc(out: &mut String, s: &str) {
+    let b = s.as_bytes();
+    let mut copied = 0;
+    let mut i = 0;
+    while let Some(off) = b[i..].iter().position(|c| !c.is_ascii()) {
+        let start = (i + off).saturating_sub(1).max(copied);
+        let end = b[i + off..]
+            .iter()
+            .position(u8::is_ascii)
+            .map_or(b.len(), |e| i + off + e);
+        out.push_str(&s[copied..start]);
+        out.push_str(&nfc(&s[start..end]));
+        copied = end;
+        i = end;
+    }
+    out.push_str(&s[copied..]);
+}
+
 /// The locale of a sorting template (for the sortinit collator).
 fn template_locale(ctx: &Ctx, name: &str) -> Option<String> {
     match ctx.cfg.blx.global("sortingtemplate") {
@@ -1751,13 +1775,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
         })
         .sum();
     let mut out = String::with_capacity(estimate + 4096);
-    let mut put = |s: &str| {
-        if s.is_ascii() {
-            out.push_str(s); // NFC of ASCII is itself
-        } else {
-            out.push_str(&nfc(s));
-        }
-    };
+    let mut put = |s: &str| push_nfc(&mut out, s);
 
     // create_output_misc: \preamble (global, so the last section's).
     let mut headtext = head();
@@ -1867,6 +1885,46 @@ mod tests {
         assert_eq!(dangling_comma_cleanup("x,\n \n\u{2003}}}y,"), "x}}y,");
         assert_eq!(dangling_comma_cleanup(",,}},\n}},\n }"), ",}},\n}},\n }");
         assert_eq!(dangling_comma_cleanup("é,}}ü,"), "é}}ü,");
+    }
+
+    #[test]
+    fn piecewise_nfc() {
+        for s in [
+            "",
+            "abc",
+            "e\u{301}",
+            "xe\u{301}y",
+            "\u{301}a",
+            "a\u{301}\u{316}b\u{1100}\u{1161}\u{11A8} c\u{327}\u{301}",
+            "Mu\u{308}ller, J.\u{30C} {\u{C5}}sa\u{30A}",
+            "\u{AC00}\u{11A8}x\u{1100}\u{1161}",
+            "é\u{301}a\u{301}",
+        ] {
+            let mut out = String::from("<");
+            push_nfc(&mut out, s);
+            assert_eq!(out, format!("<{}", nfc(s)), "{s:?}");
+        }
+        // Pseudo-random strings over ASCII, marks, Hangul jamo and
+        // precomposed letters.
+        let alphabet: Vec<char> = "aeAoU .,{}\\~\u{301}\u{308}\u{316}\u{327}\u{30A}\u{1100}\u{1161}\u{11A8}\u{AC00}\u{C5}\u{E9}\u{212B}\u{F900}\u{0344}\u{0F73}"
+            .chars()
+            .collect();
+        let mut x: u64 = 1;
+        for _ in 0..20_000 {
+            let mut s = String::new();
+            for _ in 0..(x % 9) {
+                x = x
+                    .wrapping_mul(6364136223846793005)
+                    .wrapping_add(1442695040888963407);
+                s.push(alphabet[(x >> 33) as usize % alphabet.len()]);
+            }
+            x = x
+                .wrapping_mul(6364136223846793005)
+                .wrapping_add(1442695040888963407);
+            let mut out = String::new();
+            push_nfc(&mut out, &s);
+            assert_eq!(out, nfc(&s), "{s:?}");
+        }
     }
 
     #[test]
