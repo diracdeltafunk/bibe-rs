@@ -1358,10 +1358,13 @@ pub fn process_visible_names(
             } else {
                 cnt.clone()
             };
-            ls::set(dl, &["namelistdata", &nlk, "viscite"], vis_cite.1);
-            ls::set(dl, &["namelistdata", &nlk, "visbib"], vis_bib.1);
-            ls::set(dl, &["namelistdata", &nlk, "vissort"], vis_sort.1);
-            ls::set(dl, &["namelistdata", &nlk, "visalpha"], vis_alpha.1);
+            let m = ls::viv(ls::root(dl), &["namelistdata", &nlk])
+                .as_object_mut()
+                .expect("object");
+            m.insert("viscite".into(), vis_cite.1);
+            m.insert("visbib".into(), vis_bib.1);
+            m.insert("vissort".into(), vis_sort.1);
+            m.insert("visalpha".into(), vis_alpha.1);
         }
     }
     Ok(())
