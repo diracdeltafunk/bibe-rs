@@ -696,17 +696,29 @@ impl StaticTable {
 }
 
 /// A name of at most 15 bytes as a `u128`: the bytes, zero-padded, and the
-/// length in the last byte (so equal keys mean equal names).
+/// length in the last byte (so equal keys mean equal names). Built from
+/// two (possibly overlapping) 8-byte loads rather than a variable-length
+/// copy, which would call `memmove`.
 #[inline]
 fn pack(s: &str) -> Option<u128> {
     let b = s.as_bytes();
-    if b.len() > 15 {
+    let n = b.len();
+    if n > 15 {
         return None;
     }
-    let mut a = [0u8; 16];
-    a[..b.len()].copy_from_slice(b);
-    a[15] = b.len() as u8;
-    Some(u128::from_le_bytes(a))
+    let (lo, rest) = if n >= 8 {
+        let lo = u64::from_le_bytes(b[..8].try_into().expect("8 bytes"));
+        // `b[8..n]` are the top `n - 8` bytes of the last 8 bytes.
+        let last = u64::from_le_bytes(b[n - 8..].try_into().expect("8 bytes"));
+        (lo, if n == 8 { 0 } else { last >> (8 * (16 - n)) })
+    } else {
+        let mut lo = 0u64;
+        for (i, c) in b.iter().enumerate() {
+            lo |= u64::from(*c) << (8 * i);
+        }
+        (lo, 0)
+    };
+    Some(u128::from(lo) | (u128::from(rest) << 64) | ((n as u128) << 120))
 }
 
 #[inline]
@@ -772,6 +784,32 @@ mod tests {
         let mut want = names.clone();
         want.sort();
         assert_eq!(names, want);
+    }
+
+    #[test]
+    fn pack_is_injective_and_matches_bytes() {
+        let names = [
+            "",
+            "a",
+            "ab",
+            "abcdefg",
+            "abcdefgh",
+            "abcdefghi",
+            "abcdefghijklmno",
+            "abcdefgh\0",
+            "abcdefg\0",
+            "\0",
+            "é",
+            "year",
+            "yeardivision",
+        ];
+        for n in names {
+            let mut a = [0u8; 16];
+            a[..n.len()].copy_from_slice(n.as_bytes());
+            a[15] = n.len() as u8;
+            assert_eq!(pack(n), Some(u128::from_le_bytes(a)), "{n:?}");
+        }
+        assert_eq!(pack("abcdefghijklmnop"), None);
     }
 
     #[test]
