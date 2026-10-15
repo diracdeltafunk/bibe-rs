@@ -151,7 +151,15 @@ pub fn normalise_string(s: &str) -> String {
     let s = strip_macros(&s);
     let s: String = s
         .chars()
-        .filter(|&c| !(Prop::P.contains(c) || Prop::S.contains(c) || Prop::C.contains(c)))
+        .filter(|&c| {
+            if c.is_ascii() {
+                // Every ASCII punctuation character is in \p{P} or \p{S};
+                // \p{C} has the controls.
+                !(c.is_ascii_punctuation() || c.is_ascii_control())
+            } else {
+                !(Prop::P.contains(c) || Prop::S.contains(c) || Prop::C.contains(c))
+            }
+        })
         .collect();
     trim_collapse(&s)
 }
@@ -234,6 +242,18 @@ pub fn pad_namepart(s: &str, width: f64) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn ascii_punctuation_matches_unicode_classes() {
+        for c in (0u8..128).map(char::from) {
+            let slow = Prop::P.contains(c) || Prop::S.contains(c) || Prop::C.contains(c);
+            assert_eq!(
+                c.is_ascii_punctuation() || c.is_ascii_control(),
+                slow,
+                "{c:?}"
+            );
+        }
+    }
 
     #[test]
     fn ties_and_macros() {
