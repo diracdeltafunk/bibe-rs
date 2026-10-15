@@ -39,7 +39,7 @@ use crate::config::blx::{OptValue, Scope, map_boolean_tostring_raw};
 use crate::datamodel::{DataModel, Helpers};
 use crate::log::Fatal;
 use crate::model::{
-    DataList, Entry, Name, NameArena, NameId, NameListId, PerlData, SectionState, Value,
+    DataList, Entry, Name, NameArena, NameId, NameListId, PerlData, SectionState, Sym, Value,
 };
 use crate::pipeline::{Ctx, Processed};
 use crate::quirks::Quirk;
@@ -468,14 +468,14 @@ impl Writer {
     }
 }
 
-fn add_names<'f>(
+fn add_names(
     arena: &NameArena,
-    fields: impl Iterator<Item = &'f String>,
+    fields: impl Iterator<Item = Sym>,
     e: &Entry,
     map: &mut HashMap<NameId, NameListId>,
 ) {
     for f in fields {
-        if let Some(Value::Names(id)) = e.get_field(f) {
+        if let Some(Value::Names(id)) = e.get_field_sym(f) {
             for n in &arena.list(*id).names {
                 map.entry(*n).or_insert(*id);
             }
@@ -566,10 +566,11 @@ impl DateStem {
 }
 
 /// Lookups computed once per render instead of once per entry.
-struct Prep<'d> {
-    dmh: &'d Helpers,
+struct Prep {
+    /// The [`Helper`] lists, interned.
+    lists: [Vec<Sym>; 8],
     /// Field name → its positions in the [`Helper`] lists.
-    index: HashMap<&'d str, Vec<(Helper, usize)>>,
+    index: HashMap<Sym, Vec<(Helper, usize)>>,
     /// `$dm->get_constant_value('nameparts')`.
     nameparts: Vec<String>,
     /// The date stems last built (they change under BB-028).
@@ -578,17 +579,19 @@ struct Prep<'d> {
     wrap: Option<i64>,
 }
 
-impl<'d> Prep<'d> {
-    fn new(dm: &'d DataModel, wrap: Option<i64>) -> Self {
+impl Prep {
+    fn new(dm: &DataModel, wrap: Option<i64>) -> Self {
         let dmh = &dm.helpers;
-        let mut index: HashMap<&str, Vec<(Helper, usize)>> = HashMap::default();
+        let lists: [Vec<Sym>; 8] =
+            Helper::ALL.map(|h| h.list(dmh).iter().map(|f| Sym::new(f)).collect());
+        let mut index: HashMap<Sym, Vec<(Helper, usize)>> = HashMap::default();
         for h in Helper::ALL {
-            for (i, f) in h.list(dmh).iter().enumerate() {
-                index.entry(f.as_str()).or_default().push((h, i));
+            for (i, f) in lists[h as usize].iter().enumerate() {
+                index.entry(*f).or_default().push((h, i));
             }
         }
         Prep {
-            dmh,
+            lists,
             index,
             nameparts: dm.get_constant_value("nameparts"),
             date_stems: Vec::new(),
@@ -603,7 +606,7 @@ impl<'d> Prep<'d> {
     fn present(&self, e: &Entry) -> [Vec<usize>; 8] {
         let mut at: [Vec<usize>; 8] = Default::default();
         for f in e.datafields.keys().chain(e.derivedfields.keys()) {
-            for &(h, i) in self.index.get(f.as_str()).into_iter().flatten() {
+            for &(h, i) in self.index.get(f).into_iter().flatten() {
                 at[h as usize].push(i);
             }
         }
@@ -615,13 +618,9 @@ impl<'d> Prep<'d> {
     }
 
     /// The fields of `h` at the positions `at` (from [`Prep::present`]).
-    fn fields<'a>(
-        &'a self,
-        at: &'a [Vec<usize>; 8],
-        h: Helper,
-    ) -> impl Iterator<Item = &'d String> + 'a {
-        let list = h.list(self.dmh);
-        at[h as usize].iter().map(move |&i| &list[i])
+    fn fields<'a>(&'a self, at: &'a [Vec<usize>; 8], h: Helper) -> impl Iterator<Item = Sym> + 'a {
+        let list = &self.lists[h as usize];
+        at[h as usize].iter().map(move |&i| list[i])
     }
 
     /// The date stems for `stems`, rebuilt when they changed.
@@ -926,12 +925,13 @@ fn set_output_entry(
     let present = p.present(be);
 
     // Names
-    for namefield in p.fields(&present, Helper::NameLists) {
-        let Some(Value::Names(nlid)) = be.get_field(namefield) else {
+    for namefield_sym in p.fields(&present, Helper::NameLists) {
+        let namefield = namefield_sym.as_str();
+        let Some(Value::Names(nlid)) = be.get_field_sym(namefield_sym) else {
             continue;
         };
         let nf = arena.list(*nlid);
-        let is_lni = lni.as_deref() == Some(namefield.as_str());
+        let is_lni = lni.as_deref() == Some(namefield);
         if pd_truthy(nf.slots.get("morenames")) {
             text.push_str(&format!("      \\true{{more{namefield}}}\n"));
             if is_lni {
@@ -944,7 +944,7 @@ fn set_output_entry(
             un = pd_string(nf.slots.get("uniquename"));
         }
         let mut block = NameBlockT {
-            field: namefield.clone(),
+            field: namefield.to_string(),
             nlid: *nlid,
             total: nf.names.len(),
             ul: false,
@@ -987,8 +987,9 @@ fn set_output_entry(
         .get_str("others_string")
         .unwrap_or("others")
         .to_string();
-    for listfield in p.fields(&present, Helper::Lists) {
-        let Some(Value::List(lf)) = be.get_field(listfield) else {
+    for listfield_sym in p.fields(&present, Helper::Lists) {
+        let listfield = listfield_sym.as_str();
+        let Some(Value::List(lf)) = be.get_field_sym(listfield_sym) else {
             continue;
         };
         let (popped, lf) = w.pop_others(key, listfield, lf, &others);
@@ -1005,8 +1006,9 @@ fn set_output_entry(
     for h in ["namehash", "fullhash", "fullhashraw", "bibnamehash"] {
         slot(&mut text, &mut items, Slot::Hash(h.into()));
     }
-    for namefield in p.fields(&present, Helper::NameLists) {
-        if !val_truthy(be.get_field(namefield)) {
+    for namefield_sym in p.fields(&present, Helper::NameLists) {
+        let namefield = namefield_sym.as_str();
+        if !val_truthy(be.get_field_sym(namefield_sym)) {
             continue;
         }
         for h in ["bibnamehash", "namehash", "fullhash", "fullhashraw"] {
@@ -1085,13 +1087,14 @@ fn set_output_entry(
     }
 
     // Plain fields
-    for field in p.fields(&present, Helper::Fields) {
-        let val = be.get_field(field);
+    for field_sym in p.fields(&present, Helper::Fields) {
+        let field = field_sym.as_str();
+        let val = be.get_field_sym(field_sym);
         let s = val_string(val);
         let has = !s.is_empty() && val.is_some();
-        if has || (dm.field_is_nullok(field) && be.field_exists(field)) {
+        if has || (dm.field_is_nullok(field) && be.field_exists(&field_sym)) {
             if field == "crossref" || field == "xref" {
-                let target = val_string(be.get_field(field));
+                let target = val_string(be.get_field_sym(field_sym));
                 if !has_citekey(st, &target) {
                     continue;
                 }
@@ -1154,11 +1157,12 @@ fn set_output_entry(
     }
 
     // XSV fields
-    for field in p.fields(&present, Helper::Xsv) {
+    for field_sym in p.fields(&present, Helper::Xsv) {
+        let field = field_sym.as_str();
         if field == "keywords" {
             continue;
         }
-        let f = be.get_field(field);
+        let f = be.get_field_sym(field_sym);
         if val_truthy(f) {
             text.push_str(&printfield(p.wrap, dm, be, field, &val_string(f)));
         }
@@ -1170,8 +1174,9 @@ fn set_output_entry(
 
     // Ranges
     let zero_quirk = ctx.cfg.quirks.on(Quirk::RangelenZeroDigit);
-    for rfield in p.fields(&present, Helper::Ranges) {
-        let Some(Value::Ranges(rf)) = be.get_field(rfield) else {
+    for rfield_sym in p.fields(&present, Helper::Ranges) {
+        let rfield = rfield_sym.as_str();
+        let Some(Value::Ranges(rf)) = be.get_field_sym(rfield_sym) else {
             continue;
         };
         let pr: Vec<String> = rf
@@ -1202,8 +1207,9 @@ fn set_output_entry(
     }
 
     // Verbatim fields
-    for vfield in p.fields(&present, Helper::VFields) {
-        let v = be.get_field(vfield);
+    for vfield_sym in p.fields(&present, Helper::VFields) {
+        let vfield = vfield_sym.as_str();
+        let v = be.get_field_sym(vfield_sym);
         if !val_truthy(v) {
             continue;
         }
@@ -1218,8 +1224,9 @@ fn set_output_entry(
     }
 
     // Verbatim lists
-    for vlist in p.fields(&present, Helper::VLists) {
-        let Some(Value::List(vlf)) = be.get_field(vlist) else {
+    for vlist_sym in p.fields(&present, Helper::VLists) {
+        let vlist = vlist_sym.as_str();
+        let Some(Value::List(vlf)) = be.get_field_sym(vlist_sym) else {
             continue;
         };
         let (popped, vlf) = w.pop_others(key, vlist, vlf, &others);
