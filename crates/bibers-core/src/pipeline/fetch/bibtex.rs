@@ -740,7 +740,7 @@ enum HRes {
 pub(super) fn warn_entry(ctx: &mut Ctx, be: &mut Entry, msg: String) {
     let w = be
         .derivedfields
-        .entry("warnings".into())
+        .entry("warnings")
         .or_insert_with(|| Some(Value::List(Vec::new())));
     if let Some(Value::List(l)) = w {
         l.push(msg.clone());
@@ -974,7 +974,7 @@ pub(super) fn add_xdata_ref(
     let push = |be: &mut Entry, o: J| {
         let refs = be
             .slots
-            .entry("xdatarefs".into())
+            .entry("xdatarefs")
             .or_insert_with(|| J::Array(Vec::new()));
         if let J::Array(a) = refs {
             a.push(o);
@@ -1424,7 +1424,7 @@ fn name_handler(
     for (i, name) in items.iter().enumerate() {
         if add_xdata_ref(ctx, opts, be, field, XRef::Str(name), Some(i), &secnum) {
             let mut n = Name::default();
-            n.slots.insert("xdata".into(), J::from(name.clone()));
+            n.slots.insert("xdata", J::from(name.clone()));
             n.index = Some((names.len() + 1).to_string());
             names.push(st.section.names.new_name(n));
             continue;
@@ -1517,7 +1517,7 @@ fn name_handler(
                 .names
                 .list_mut(listid)
                 .slots
-                .insert("morenames".into(), J::from("1"));
+                .insert("morenames", J::from("1"));
         } else {
             let mut n = n;
             n.index = Some((names.len() + 1).to_string());

@@ -19,7 +19,8 @@ use crate::config::{Config, OptValue};
 use crate::datamodel::DataModel;
 use crate::log::{Fatal, Logger};
 use crate::model::{
-    DataList, Entry, Name, NameId, NameListId, PerlData, Section, SectionState, Value,
+    DataList, Entry, LabelDateFields, LabelDateInfo, Name, NameId, NameListId, Section,
+    SectionState, Sym, Value,
 };
 use crate::perlish::{fc, lc, nfc, numify, truthy};
 use crate::quirks::Quirk;
@@ -27,7 +28,6 @@ use md5::{Digest, Md5};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
 use serde_json::{Map, Value as J};
-use std::collections::BTreeMap;
 
 // ---------------------------------------------------------------------------
 // Per-list state access (`Biber::DataList` accessors)
@@ -195,7 +195,7 @@ pub(crate) fn perl_str(v: Option<&Value>) -> String {
 }
 
 /// A defined scalar slot (`undef` → `None`).
-fn slot_str<'a>(slots: &'a BTreeMap<String, PerlData>, k: &str) -> Option<&'a str> {
+fn slot_str<'a>(slots: &'a crate::model::Slots, k: &str) -> Option<&'a str> {
     slots.get(k).and_then(J::as_str)
 }
 
@@ -716,10 +716,10 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
     }
     let be = sec.bibentry_mut(key).expect("entry");
     if let Some(l) = lni {
-        be.slots.insert("labelnameinfo".into(), J::String(l));
+        be.slots.insert("labelnameinfo", J::String(l));
     }
     if let Some(l) = lnfhi {
-        be.slots.insert("labelnamefhinfo".into(), J::String(l));
+        be.slots.insert("labelnamefhinfo", J::String(l));
     }
 }
 
@@ -771,51 +771,35 @@ fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
                 (ld.clone(), Default::default(), true, String::new())
             };
             if defined(be, Some(&ldy)) || defined(be, rest[0].as_deref()) {
-                let s = |x: &Option<String>| x.clone().map_or(J::Null, J::String);
-                let mut f = Map::new();
-                f.insert("year".into(), J::String(ldy.clone()));
-                f.insert("month".into(), s(&rest[1]));
-                f.insert("day".into(), s(&rest[2]));
-                f.insert("hour".into(), s(&rest[3]));
-                f.insert("minute".into(), s(&rest[4]));
-                f.insert("second".into(), s(&rest[5]));
-                f.insert("timezone".into(), s(&rest[6]));
-                f.insert(
-                    "pseudodate".into(),
-                    if pseudodate {
-                        J::String("1".into())
-                    } else {
-                        J::Null
-                    },
-                );
-                f.insert(
-                    "source".into(),
-                    J::String(if pseudodate { ldy.clone() } else { datetype }),
-                );
-                let mut o = Map::new();
-                o.insert("field".into(), J::Object(f));
-                be.slots.insert("labeldateinfo".into(), J::Object(o));
+                let [_, month, day, hour, minute, second, timezone] = rest;
+                let sym = |f: Option<String>| f.map(Sym::from);
+                be.labeldateinfo = Some(LabelDateInfo::Field(LabelDateFields {
+                    year: Some(Sym::new(&ldy)),
+                    month: sym(month),
+                    day: sym(day),
+                    hour: sym(hour),
+                    minute: sym(minute),
+                    second: sym(second),
+                    timezone: sym(timezone),
+                    pseudodate: pseudodate.then(|| Sym::new("1")),
+                    source: Some(Sym::new(if pseudodate { &ldy } else { &datetype })),
+                }));
                 break;
             }
         } else if ty == "string" {
-            let mut o = Map::new();
-            o.insert("string".into(), J::String(ld.clone()));
-            be.slots.insert("labeldateinfo".into(), J::Object(o));
+            be.labeldateinfo = Some(LabelDateInfo::String(Some(ld.clone())));
             break;
         }
     }
 
-    let Some(J::Object(ldi)) = be.slots.get("labeldateinfo").cloned() else {
+    let Some(ldi) = be.labeldateinfo.clone() else {
         return;
     };
     let field_str =
         |be: &Entry, f: &str| be.get_field(f).and_then(Value::as_str).map(str::to_string);
-    if let Some(J::Object(df)) = ldi.get("field") {
-        let g = |k: &str| df.get(k).and_then(J::as_str).map(str::to_string);
-        let pseudodate = df
-            .get("pseudodate")
-            .and_then(J::as_str)
-            .is_some_and(|s| truthy(Some(s)));
+    if let LabelDateInfo::Field(df) = &ldi {
+        let g = |k: &str| df.get(k).map(str::to_string);
+        let pseudodate = df.get("pseudodate").is_some_and(|s| truthy(Some(s)));
         let year = g("year").unwrap_or_default();
         let yv = be.get_field(&year).cloned();
         be.set_field("labelyear", yv);
@@ -865,10 +849,8 @@ fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
                 }
             }
         }
-    } else if let Some(ys) = ldi
-        .get("string")
-        .and_then(J::as_str)
-        .filter(|s| truthy(Some(s)))
+    } else if let LabelDateInfo::String(Some(ys)) = &ldi
+        && truthy(Some(ys))
     {
         be.set_field("labeldatesource", Some(Value::Str(ys.to_string())));
     }
@@ -887,7 +869,7 @@ fn process_labeltitle(ctx: &mut Ctx, sec: &mut Section, key: &str) {
     };
     for ltn in spec {
         if let Some(lt) = be.get_field(&ltn).filter(|v| value_true(Some(v))).cloned() {
-            be.slots.insert("labeltitleinfo".into(), J::String(ltn));
+            be.slots.insert("labeltitleinfo", J::String(ltn));
             be.set_field("labeltitle", Some(lt));
             break;
         }
@@ -1629,7 +1611,7 @@ fn process_pername_hashes(
                 .names
                 .name_mut(nid)
                 .slots
-                .insert("hash".into(), J::String(hash.clone()));
+                .insert("hash", J::String(hash.clone()));
             ls::set(
                 &mut st.datalists[list],
                 &["namelistdata", &nlid.key(), &nid.key(), "hash"],

@@ -1038,7 +1038,7 @@ fn name(
             let xdatav = xdata_ref(opts, x);
             if add_xdata_ref(ctx, opts, be, nf, XRef::Str(&xdatav), Some(i), src.secnum) {
                 let mut n = Name::default();
-                n.slots.insert("xdata".into(), J::from(xdatav));
+                n.slots.insert("xdata", J::from(xdatav));
                 n.index = Some((ids.len() + 1).to_string());
                 ids.push(st.section.names.new_name(n));
                 continue;
@@ -1053,7 +1053,7 @@ fn name(
             .names
             .list_mut(listid)
             .slots
-            .insert("morenames".into(), J::from("1"));
+            .insert("morenames", J::from("1"));
     }
     st.section.names.list_mut(listid).names = ids;
     be.set_datafield(nf, Some(Value::Names(listid)));
@@ -1133,11 +1133,11 @@ fn parsename(
         name.nameparts.insert(np.clone(), part);
     }
     name.slots.insert(
-        "gender".into(),
+        "gender",
         dom.get_attribute(node, "gender").map_or(J::Null, J::from),
     );
     if let Some(h) = truthy_attr(dom, node, "id") {
-        name.slots.insert("hashid".into(), J::from(h));
+        name.slots.insert("hashid", J::from(h));
     }
     name.rawstring = Some(
         ["family", "given", "prefix", "suffix"]

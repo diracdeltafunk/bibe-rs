@@ -598,7 +598,7 @@ pub fn parsename_x(cfg: &NameCfg, namestr: &str, fieldname: &str, key: &str) -> 
         name.nameparts.insert(np.clone(), part);
     }
     if let Some(h) = hashid.filter(|h| perl_compat::perl_truthy(h)) {
-        name.slots.insert("hashid".into(), J::from(h));
+        name.slots.insert("hashid", J::from(h));
     }
     let name_opts = cfg.registry.options_in_scope(Scope::Name);
     for (o, v) in pernameopts {

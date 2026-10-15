@@ -179,6 +179,12 @@ impl Loader {
         };
         for (k, v) in o {
             if !matches!(k.as_str(), "__class" | "datafields" | "derivedfields") {
+                if k == "labeldateinfo"
+                    && let Some(ldi) = LabelDateInfo::from_json(v)
+                {
+                    e.labeldateinfo = Some(ldi);
+                    continue;
+                }
                 e.slots.insert(k.clone(), v.clone());
             }
         }
@@ -238,7 +244,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
         names: HashMap::new(),
     };
     // Load entries in sorted key order (the dumper's traversal order).
-    let mut entries = BTreeMap::new();
+    let mut entries = EntryMap::new();
     if let Some(J::Object(be)) = sec.get("bibentries") {
         for (k, ev) in be {
             if k != "__class" {
@@ -272,7 +278,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
         }
     }
     // Entry and name slots may mention name ids too.
-    for e in section.entries.values_mut() {
+    for e in section.entries.values_mut_unordered() {
         for v in e.slots.values_mut() {
             *v = l.internalise(v);
         }
@@ -294,7 +300,7 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
                 labelprefix: g("labelprefix"),
                 keys: d.get("keys").map(|k| strings(Some(k))),
                 state: d.get("state").map(|v| l.internalise(v)),
-                slots: BTreeMap::new(),
+                slots: Slots::new(),
             };
             for (k, v) in d {
                 if !DATALIST_TYPED.contains(&k.as_str()) {
@@ -396,7 +402,7 @@ impl Dumper<'_> {
     /// Assign canonical ids in the Perl dumper's traversal order: entries by
     /// sorted key, entry hash keys sorted (`datafields`, `derivedfields`,
     /// then slots), fields sorted; a list gets its id before its names.
-    fn collect_entries(&mut self, entries: &BTreeMap<String, Entry>) {
+    fn collect_entries(&mut self, entries: &EntryMap) {
         for e in entries.values() {
             for map in [&e.datafields, &e.derivedfields] {
                 for v in map.values().flatten() {
@@ -458,7 +464,7 @@ impl Dumper<'_> {
                     None => J::Null,
                 },
             );
-            np.insert(part.clone(), J::Object(po));
+            np.insert(part.to_string(), J::Object(po));
         }
         if !n.nameparts.is_empty() {
             o.insert("nameparts".into(), J::Object(np));
@@ -469,7 +475,7 @@ impl Dumper<'_> {
                 J::Object(
                     n.strip
                         .iter()
-                        .map(|(k, v)| (k.clone(), opt_str(v)))
+                        .map(|(k, v)| (k.to_string(), opt_str(v)))
                         .collect(),
                 ),
             );
@@ -478,7 +484,7 @@ impl Dumper<'_> {
             o.insert("rawstring".into(), J::from(r.clone()));
         }
         for (k, v) in &n.slots {
-            o.insert(k.clone(), self.canon(v));
+            o.insert(k.to_string(), self.canon(v));
         }
         J::Object(o)
     }
@@ -496,7 +502,7 @@ impl Dumper<'_> {
             o.insert("type".into(), J::from(t.clone()));
         }
         for (k, v) in &l.slots {
-            o.insert(k.clone(), self.canon(v));
+            o.insert(k.to_string(), self.canon(v));
         }
         J::Object(o)
     }
@@ -517,7 +523,11 @@ impl Dumper<'_> {
     }
 
     fn fields(&self, m: &FieldMap) -> J {
-        J::Object(m.iter().map(|(k, v)| (k.clone(), self.value(v))).collect())
+        J::Object(
+            m.iter()
+                .map(|(k, v)| (k.to_string(), self.value(v)))
+                .collect(),
+        )
     }
 
     fn entry(&self, e: &Entry) -> J {
@@ -526,7 +536,10 @@ impl Dumper<'_> {
         o.insert("datafields".into(), self.fields(&e.datafields));
         o.insert("derivedfields".into(), self.fields(&e.derivedfields));
         for (k, v) in &e.slots {
-            o.insert(k.clone(), self.canon(v));
+            o.insert(k.to_string(), self.canon(v));
+        }
+        if let Some(ldi) = &e.labeldateinfo {
+            o.insert("labeldateinfo".into(), ldi.to_json());
         }
         J::Object(o)
     }
@@ -595,7 +608,7 @@ pub fn dump_state(st: &SectionState) -> J {
     so.insert("cite_citekeys".into(), key_hash(&sec.cite_citekeys));
     so.insert("nocite_citekeys".into(), key_hash(&sec.nocite_citekeys));
     for (k, v) in &sec.slots {
-        so.insert(k.clone(), d.canon(v));
+        so.insert(k.to_string(), d.canon(v));
     }
 
     let lists = st
@@ -624,7 +637,7 @@ pub fn dump_state(st: &SectionState) -> J {
                 o.insert("state".into(), d.canon(st));
             }
             for (k, v) in &dl.slots {
-                o.insert(k.clone(), d.canon(v));
+                o.insert(k.to_string(), d.canon(v));
             }
             J::Object(o)
         })

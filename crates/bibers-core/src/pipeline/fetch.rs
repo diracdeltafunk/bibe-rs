@@ -52,10 +52,10 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         "state",
         "static_keys",
     ] {
-        section.slots.insert(k.into(), empty());
+        section.slots.insert(k, empty());
     }
     section.slots.insert(
-        "dkeys".into(),
+        "dkeys",
         J::Object(
             bs.dynamic_sets
                 .iter()
@@ -64,7 +64,7 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         ),
     );
     section.slots.insert(
-        "citecount".into(),
+        "citecount",
         J::Object(
             bs.citecount
                 .iter()
@@ -73,7 +73,7 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         ),
     );
     section.slots.insert(
-        "seenkeys".into(),
+        "seenkeys",
         J::Object(
             bs.seenkeys
                 .iter()
@@ -83,7 +83,7 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
     );
     if let Some(ds) = &bs.datasources {
         section.slots.insert(
-            "datasources".into(),
+            "datasources",
             J::Array(
                 ds.iter()
                     .map(|d| {
@@ -151,12 +151,12 @@ fn datalist_from_bcf(d: &crate::bcf::DataList) -> DataList {
                 }
             })
             .collect();
-        dl.slots.insert("filters".into(), J::Array(f));
+        dl.slots.insert("filters", J::Array(f));
     }
     if d.sortinit_locale.is_some() {
         // An opaque Unicode::Collate::Locale object in biber's dump.
         dl.slots.insert(
-            "sortinitcollator".into(),
+            "sortinitcollator",
             json!({"__class": "Unicode::Collate::Locale"}),
         );
     }
@@ -665,7 +665,7 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
                 J::Object(o)
             })
             .collect();
-        st.section.slots.insert("datasources".into(), J::Array(arr));
+        st.section.slots.insert("datasources", J::Array(arr));
     }
 
     for ds in &dss {
