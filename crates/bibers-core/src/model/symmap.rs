@@ -228,7 +228,7 @@ impl<V, K: IntoSym> FromIterator<(K, V)> for SymMap<V> {
         let mut items: Vec<(Sym, V)> = iter.into_iter().map(|(k, v)| (k.into_sym(), v)).collect();
         // Stable sort, then keep the *last* of equal keys (`BTreeMap`'s
         // collect overwrites earlier values).
-        items.sort_by(|a, b| a.0.cmp(&b.0));
+        items.sort_by_key(|a| a.0);
         let mut out: Vec<(Sym, V)> = Vec::with_capacity(items.len());
         for (k, v) in items {
             match out.last_mut() {
