@@ -385,6 +385,27 @@ struct EntryTemplate {
     hash_src: HashMap<NameId, NameListId>,
 }
 
+impl EntryTemplate {
+    /// Roughly the length of the entry's text once instantiated.
+    fn size_hint(&self) -> usize {
+        let name = |n: &NameT| {
+            64 + n
+                .parts
+                .iter()
+                .map(|(p, v, i)| 40 + 2 * p.len() + v.len() + i.len())
+                .sum::<usize>()
+        };
+        self.items
+            .iter()
+            .map(|i| match i {
+                Item::Text(t) => t.len(),
+                Item::Slot(_) => 40,
+                Item::Names(b) => 64 + b.names.iter().map(name).sum::<usize>(),
+            })
+            .sum()
+    }
+}
+
 /// Mutable writer state that lives across sections.
 struct Writer {
     /// `$dmh->{datefields}`, which the date-meta loop mutates in place
@@ -1607,6 +1628,24 @@ pub(crate) fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
 /// `:encoding(<output_encoding>)` layer would (unmappable characters as
 /// `\x{XXXX}`; for `UTF-8`, i.e. `utf-8-strict`, noncharacters too).
 pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
+    match utf8_output(ctx, text)? {
+        Ok(()) => Ok(text.as_bytes().to_vec()),
+        Err(enc) => Ok(enc.encode_layer(text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit))),
+    }
+}
+
+/// [`encode_output`] taking the text by value, which UTF-8 output then
+/// reuses instead of copying.
+pub fn encode_output_owned(ctx: &mut Ctx, text: String) -> Result<Vec<u8>, Fatal> {
+    match utf8_output(ctx, &text)? {
+        Ok(()) => Ok(text.into_bytes()),
+        Err(enc) => Ok(enc.encode_layer(&text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit))),
+    }
+}
+
+/// `Ok(Ok(()))` if the output encoding writes `text` unchanged, else the
+/// encoding to use.
+fn utf8_output(ctx: &mut Ctx, text: &str) -> Result<Result<(), Encoding>, Fatal> {
     let enc = if output_encoding_name(ctx) == "UTF-8" {
         Encoding::UTF8
     } else {
@@ -1617,9 +1656,9 @@ pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
     // boundary is carried whole into the next buffer (STOP_AT_PARTIAL), so
     // the chunking is unobservable.
     if enc.is_utf8() && (enc.name() == "utf8" || !has_noncharacter(text)) {
-        return Ok(text.as_bytes().to_vec());
+        return Ok(Ok(()));
     }
-    Ok(enc.encode_layer(text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit)))
+    Ok(Err(enc))
 }
 
 /// Does `s` contain a Unicode noncharacter (U+FDD0..U+FDEF or U+xFFFE/
@@ -1693,7 +1732,18 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     let sortdebug = ctx.cfg.biber.is_true("sortdebug");
     let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
 
-    let mut out = String::new();
+    // A size estimate, so that a large `.bbl` isn't built by doubling.
+    let estimate: usize = sections
+        .iter()
+        .flat_map(|so| {
+            so.st.datalists.iter().flat_map(move |dl| {
+                let keys = dl.keys.as_deref().unwrap_or(&[]);
+                keys.iter()
+                    .filter_map(|k| so.entries.get(k).map(EntryTemplate::size_hint))
+            })
+        })
+        .sum();
+    let mut out = String::with_capacity(estimate + 4096);
     let mut put = |s: &str| {
         if s.is_ascii() {
             out.push_str(s); // NFC of ASCII is itself
