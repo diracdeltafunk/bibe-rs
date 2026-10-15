@@ -25,7 +25,9 @@ use crate::quirks::Quirk;
 use perl_compat::grapheme::gcstring;
 use perl_compat::regex::PerlRegex;
 use serde_json::{Map, Value as J};
-use strings::{normalise_string, normalise_string_sort, process_sort_attributes};
+use strings::{
+    normalise_string, normalise_string_sort_with, nosort_patterns, process_sort_attributes,
+};
 
 /// The sort separator joining the columns of a sort string
 /// (`$sorting_sep`, Internals.pm:1103).
@@ -169,6 +171,7 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
             snk: sortingnamekey_templates(ctx.cfg),
             warnings: Vec::new(),
             viv: Default::default(),
+            nosort: Default::default(),
         };
         for k in &keys {
             results.push((k.clone(), g.sortinfo(k, tmpl)));
@@ -238,6 +241,8 @@ struct Gen<'a> {
     warnings: Vec<String>,
     /// Hash entries Perl autovivifies while reading (applied afterwards).
     viv: std::cell::RefCell<Vec<Viv>>,
+    /// Field → the `nosort` patterns that apply to it.
+    nosort: std::cell::RefCell<rustc_hash::FxHashMap<String, std::rc::Rc<[usize]>>>,
 }
 
 /// A hash entry biber autovivifies by reading through it.
@@ -318,6 +323,19 @@ fn fmt_num(x: f64) -> String {
 }
 
 impl<'a> Gen<'a> {
+    /// `normalise_string_sort($s, $field)`.
+    fn sort_norm(&self, s: &str, field: &str) -> String {
+        let cached = self.nosort.borrow().get(field).cloned();
+        let pats = cached.unwrap_or_else(|| {
+            let p: std::rc::Rc<[usize]> = nosort_patterns(self.cfg, field).into();
+            self.nosort
+                .borrow_mut()
+                .insert(field.to_string(), p.clone());
+            p
+        });
+        normalise_string_sort_with(self.cfg, s, &pats)
+    }
+
     fn quirk(&self, q: Quirk) -> bool {
         self.cfg.quirks.on(q)
     }
@@ -665,7 +683,7 @@ impl<'a> Gen<'a> {
         if !self.present(v) {
             return String::new();
         }
-        let s = normalise_string_sort(self.cfg, v.and_then(Value::as_str).unwrap_or(""), field);
+        let s = self.sort_norm(v.and_then(Value::as_str).unwrap_or(""), field);
         let s = process_sort_attributes(&s, a);
         translit::translit(self.cfg, field, be, s, &mut self.warnings)
     }
@@ -682,7 +700,7 @@ impl<'a> Gen<'a> {
             // address, so biber's order is arbitrary); use a fixed string.
             _ => "ARRAY".to_string(),
         };
-        let s = normalise_string_sort(self.cfg, &raw, field);
+        let s = self.sort_norm(&raw, field);
         process_sort_attributes(&s, a)
     }
 
@@ -835,10 +853,10 @@ impl<'a> Gen<'a> {
                             let nps = if truthy(inits.as_ref().and_then(|i| i.as_deref())) {
                                 let inits: String =
                                     np_data.initial.as_deref().unwrap_or(&[]).concat();
-                                let s = normalise_string_sort(self.cfg, &inits, field);
+                                let s = self.sort_norm(&inits, field);
                                 strings::pad_namepart(&s, self.np_length(&format!("{part}-i")))
                             } else {
-                                let s = normalise_string_sort(self.cfg, npstring, field);
+                                let s = self.sort_norm(npstring, field);
                                 strings::pad_namepart(&s, self.np_length(part))
                             };
                             kps.push_str(&nps);
@@ -882,10 +900,7 @@ impl<'a> Gen<'a> {
             };
             items = &items[..n];
         }
-        let parts: Vec<String> = items
-            .iter()
-            .map(|i| normalise_string_sort(self.cfg, i, field))
-            .collect();
+        let parts: Vec<String> = items.iter().map(|i| self.sort_norm(i, field)).collect();
         let mut s = parts.join("!");
         let trimmed = s
             .trim_end_matches(perl_compat::unicode::is_perl_space)
