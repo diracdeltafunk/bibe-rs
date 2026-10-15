@@ -22,7 +22,7 @@ use crate::config::Config;
 use crate::config::blx::OptValue;
 use crate::datamodel::DataModel;
 use crate::log::Fatal;
-use crate::model::{Entry, NameArena, NameListId, PerlData, SectionState, Value};
+use crate::model::{NameArena, NameListId, PerlData, SectionState, Value};
 use crate::perlish::{numify, sort_by_order, truthy};
 use crate::quirks::Quirk;
 use crate::xmlin::{XHash, XVal};
@@ -447,11 +447,11 @@ struct Gen<'a> {
     cfg: &'a Config,
     dm: &'a DataModel,
     secnum: &'a str,
-    entries: &'a BTreeMap<String, Entry>,
+    entries: &'a crate::model::EntryMap,
     names: &'a NameArena,
     citekeys: &'a [String],
     /// Section slots (`labelcache_v`, `labelcache_l`).
-    slots: &'a mut BTreeMap<String, PerlData>,
+    slots: &'a mut crate::model::Slots,
     /// The data list's `state`.
     dlstate: &'a mut Option<PerlData>,
     /// The data list's labelalphanametemplate name.

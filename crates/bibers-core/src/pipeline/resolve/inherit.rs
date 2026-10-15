@@ -71,7 +71,7 @@ pub fn set_inherit_from(
     let fields: Vec<String> = st.section.entries[parent]
         .datafields
         .keys()
-        .cloned()
+        .map(|k| k.to_string())
         .collect();
     for f in fields {
         if st.section.entries[key].field_exists(&f) {
@@ -302,7 +302,7 @@ fn inherit_from(
         let fields: Vec<String> = st.section.entries[parent]
             .datafields
             .keys()
-            .cloned()
+            .map(|k| k.to_string())
             .collect();
         let quirk = ctx.cfg.quirks.on(Quirk::CrossrefDateMeta);
         let mut filtered = Vec::new();
@@ -349,7 +349,7 @@ fn inherit_from(
             })
             .map(|d| d.strip_suffix("date").unwrap_or(d))
             .collect();
-        let copies: Vec<(String, crate::model::Value)> = st.section.entries[parent]
+        let copies: Vec<(crate::model::Sym, crate::model::Value)> = st.section.entries[parent]
             .derivedfields
             .iter()
             .filter_map(|(f, v)| {
@@ -358,7 +358,7 @@ fn inherit_from(
                     f.strip_prefix(df)
                         .is_some_and(|dsf| INHERIT_DATE_META.contains(&dsf))
                 });
-                meta.then(|| (f.clone(), v.clone()))
+                meta.then(|| (*f, v.clone()))
             })
             .collect();
         let child = st.section.entries.get_mut(key).expect("entry");

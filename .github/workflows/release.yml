@@ -1,0 +1,189 @@
+name: Release
+
+# On a `v*` tag: test and build bibers for every release platform, package
+# the binaries with LICENSE, README.md and docs/compat.md, and upload them
+# with SHA-256 checksums to a *draft* GitHub release (published by hand).
+#
+# Run it by hand (Actions > Release > Run workflow) for a dry run: the same
+# tests, builds and archives, kept as workflow artifacts, without a release.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  # Linux: static musl binaries. cc-rs (PCRE2, ring) compiles C with musl-gcc.
+  CC_x86_64_unknown_linux_musl: musl-gcc
+  CC_aarch64_unknown_linux_musl: musl-gcc
+
+jobs:
+  version:
+    name: Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - id: v
+        name: Read the version and check it against the tag
+        run: |
+          version=$(cargo metadata --format-version 1 --no-deps --locked \
+            | jq -r '.packages[] | select(.name == "bibers") | .version')
+          echo "bibers $version"
+          if [[ $GITHUB_REF == refs/tags/* && $GITHUB_REF_NAME != "v$version" ]]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match the crate version $version"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: ${{ matrix.platform }}
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+          - platform: aarch64-unknown-linux-musl
+            os: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-musl
+          # Universal binary: the aarch64 build (tested natively) and an
+          # x86_64 build, joined with lipo.
+          - platform: universal-apple-darwin
+            os: macos-latest
+            target: aarch64-apple-darwin
+            extra-target: x86_64-apple-darwin
+          - platform: x86_64-pc-windows-msvc
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            exe: .exe
+            # Link the C runtime statically (no VC++ redistributable needed).
+            rustflags: -C target-feature=+crt-static
+    runs-on: ${{ matrix.os }}
+    env:
+      # With --target, RUSTFLAGS applies to the target's code only (not to
+      # build scripts or proc macros).
+      RUSTFLAGS: ${{ matrix.rustflags }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}${{ matrix.extra-target && format(',{0}', matrix.extra-target) || '' }}
+      - name: Install musl-gcc
+        if: contains(matrix.target, 'musl')
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+
+      # The test suite needs no TeX or biber (goldens are committed).
+      - name: Test
+        run: cargo test --workspace --locked --target ${{ matrix.target }}
+
+      - name: Build
+        run: cargo build --locked --profile dist -p bibers --target ${{ matrix.target }}
+      - name: Build the x86_64 slice
+        if: matrix.extra-target
+        run: cargo build --locked --profile dist -p bibers --target ${{ matrix.extra-target }}
+      - name: Make the universal binary
+        if: matrix.extra-target
+        run: |
+          mkdir -p target/universal
+          lipo -create -output target/universal/bibers \
+            target/${{ matrix.target }}/dist/bibers \
+            target/${{ matrix.extra-target }}/dist/bibers
+          lipo -info target/universal/bibers
+
+      - name: Check the binary
+        run: |
+          if [[ -n "${{ matrix.extra-target }}" ]]; then
+            bin=target/universal/bibers
+          else
+            bin=target/${{ matrix.target }}/dist/bibers${{ matrix.exe }}
+          fi
+          file "$bin" || true
+          if [[ "${{ matrix.target }}" == *musl ]]; then
+            # A static binary has no program interpreter.
+            if readelf -l "$bin" | grep -q 'INTERP'; then
+              echo "::error::$bin is dynamically linked"
+              exit 1
+            fi
+          fi
+          out=$("$bin" --version)
+          echo "$out"
+          expected="bibers version: ${{ needs.version.outputs.version }} (biber "
+          if [[ $out != "$expected"* ]]; then
+            echo "::error::unexpected --version output"
+            exit 1
+          fi
+          echo "BIN=$bin" >> "$GITHUB_ENV"
+
+      - name: Package
+        run: |
+          archive=$(tools/release/package.sh "${{ needs.version.outputs.version }}" \
+            "${{ matrix.platform }}" "$BIN" dist)
+          ls -l "$archive"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bibers-${{ matrix.platform }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    name: Checksums and draft release
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: bibers-*
+          merge-multiple: true
+      - name: Checksums
+        working-directory: dist
+        run: |
+          for f in bibers-*; do sha256sum "$f" > "$f.sha256"; done
+          sha256sum bibers-*.tar.gz bibers-*.zip > SHA256SUMS
+          cat SHA256SUMS
+      - name: Keep the checksums (dry run)
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: checksums
+          path: |
+            dist/SHA256SUMS
+            dist/*.sha256
+      - name: Upload to a draft release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          cat > notes.md <<EOF
+          bibers $VERSION: a fast, byte-compatible Rust port of biber 2.22.
+
+          Install: download the archive for your platform, check it against
+          \`SHA256SUMS\`, and put \`bibers\` on your PATH (see README.md for
+          latexmk, arara and editor setup). Differences from biber are listed in
+          docs/compat.md.
+
+          bibers is a modified version of biber, distributed under the Artistic
+          License 2.0. The corresponding source code is the \`$GITHUB_REF_NAME\`
+          tag of $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.
+          EOF
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" --draft --verify-tag \
+              --title "bibers $VERSION" --notes-file notes.md
+          fi
+          gh release upload "$GITHUB_REF_NAME" --clobber dist/*

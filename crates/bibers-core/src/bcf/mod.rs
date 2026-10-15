@@ -9,6 +9,7 @@
 pub mod sourcemap;
 pub mod templates;
 
+use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 
 use serde_json::{Map, Value};
@@ -22,7 +23,7 @@ use crate::files::{Lookup, locate_data_file};
 use crate::log::{Fatal, Logger};
 use crate::perlish::{nfd, sort_by_order, split_comma, truthy};
 use crate::quirks::Quirk;
-use crate::xmlin::{XHash, XVal, check_well_formed, xmlin};
+use crate::xmlin::{XHash, XVal, parse_document, xmlin_document};
 use crate::{biber_error, debug, info};
 use sourcemap::SourceMaps;
 use templates::{
@@ -524,7 +525,12 @@ fn read_ctrlfile(env: &Env, path: &str, log: &mut Logger) -> Result<String, Fata
 
 /// NFD every line except those naming a data source
 /// (`m/<bcf:datasource.+>([^<]+)/`), normalising line breaks to `\n`.
-fn nfd_except_datasources(buf: &str) -> String {
+fn nfd_except_datasources(buf: &str) -> Cow<'_, str> {
+    // Nothing to change in ASCII text with `\n` line ends (`\R` also
+    // matches U+0085, U+2028 and U+2029, which are not ASCII).
+    if buf.is_ascii() && !buf.bytes().any(|b| matches!(b, b'\r' | b'\x0b' | b'\x0c')) {
+        return Cow::Borrowed(buf);
+    }
     let mut out = String::with_capacity(buf.len());
     let mut first = true;
     for line in split_lines_r(buf) {
@@ -538,17 +544,15 @@ fn nfd_except_datasources(buf: &str) -> String {
             out.push_str(&nfd(line));
         }
     }
-    out
+    Cow::Owned(out)
 }
 
 /// `split(/\R/, $buf, -1)`.
 fn split_lines_r(buf: &str) -> Vec<&str> {
     let mut v = Vec::new();
     let mut start = 0;
-    let b: Vec<(usize, char)> = buf.char_indices().collect();
-    let mut i = 0;
-    while i < b.len() {
-        let (pos, c) = b[i];
+    let mut chars = buf.char_indices().peekable();
+    while let Some((pos, c)) = chars.next() {
         let is_break = matches!(
             c,
             '\n' | '\x0b' | '\x0c' | '\r' | '\u{85}' | '\u{2028}' | '\u{2029}'
@@ -556,13 +560,11 @@ fn split_lines_r(buf: &str) -> Vec<&str> {
         if is_break {
             v.push(&buf[start..pos]);
             let mut end = pos + c.len_utf8();
-            if c == '\r' && i + 1 < b.len() && b[i + 1].1 == '\n' {
+            if c == '\r' && chars.next_if(|&(_, n)| n == '\n').is_some() {
                 end += 1;
-                i += 1;
             }
             start = end;
         }
-        i += 1;
     }
     v.push(&buf[start..]);
     v
@@ -639,7 +641,17 @@ pub fn parse_ctrlfile(
     cfg.ctrlfile_path = Some(path.clone());
 
     let raw = read_ctrlfile(env, &path, log)?;
-    if let Err(e) = check_well_formed(&nfd(&raw)) {
+    // biber checks the NFD of the whole file, then reads a copy where data
+    // source lines are not normalised. The two texts are usually the same
+    // (ASCII or already-NFD data source names, `\n` line ends), and then
+    // one parse serves both.
+    let checked = if raw.is_ascii() {
+        Cow::Borrowed(raw.as_str())
+    } else {
+        perl_compat::unicode::nfd(&raw)
+    };
+    let wf_doc = parse_document(&checked);
+    if let Err(e) = &wf_doc {
         let output = args.output_target.unwrap_or("");
         if output != "-" && !output.is_empty() {
             let _ = std::fs::remove_file(env.resolve(output));
@@ -669,23 +681,34 @@ pub fn parse_ctrlfile(
 
     info!(log, "Reading '{path}'");
     let buf = nfd_except_datasources(&raw);
-    let root = match xmlin(&buf, bcf_force_array) {
-        Ok(XVal::Hash(h)) => h,
-        Ok(_) => XHash::default(),
-        Err(e) => {
-            biber_error!(log, "{path} is malformed: {e}")?;
-            return Err(Fatal);
+    let reparsed;
+    let doc = match wf_doc {
+        Ok(ref d) if *checked == *buf => d,
+        _ => {
+            reparsed = parse_document(&buf);
+            match &reparsed {
+                Ok(d) => d,
+                Err(e) => {
+                    biber_error!(log, "{path} is malformed: {e}")?;
+                    return Err(Fatal);
+                }
+            }
         }
     };
-    apply_bcf(cfg, log, &root, &path)
+    let root = match xmlin_document(doc, bcf_force_array) {
+        XVal::Hash(h) => h,
+        _ => XHash::default(),
+    };
+    apply_bcf(cfg, log, root, &path)
 }
 
 /// Interpret a parsed `.bcf` tree (everything after `XMLin` in
-/// `parse_ctrlfile`).
+/// `parse_ctrlfile`). The raw subtrees that are stored as options (data
+/// model, inheritance) are moved out of `bcf`.
 pub fn apply_bcf(
     cfg: &mut Config,
     log: &mut Logger,
-    bcf: &XHash,
+    mut bcf: XHash,
     ctrl_file_path: &str,
 ) -> Result<Parsed, Fatal> {
     let controlversion = bcf.str("version").unwrap_or("").to_string();
@@ -878,8 +901,7 @@ pub fn apply_bcf(
     // Inheritance (raw)
     cfg.blx.set_global(
         "inheritance",
-        bcf.get("inheritance")
-            .cloned()
+        bcf.remove("inheritance")
             .map_or(OptValue::Undef, OptValue::Xml),
     );
 
@@ -1047,8 +1069,7 @@ pub fn apply_bcf(
     cfg.blx
         .set_global("datamodel", OptValue::Datamodel(Vec::new()));
     cfg.blx.add_datamodel(
-        bcf.get("datamodel")
-            .cloned()
+        bcf.remove("datamodel")
             .unwrap_or(XVal::Hash(XHash::default())),
     );
 
@@ -1364,10 +1385,10 @@ pub fn process_setup(cfg: &mut Config, log: &mut Logger, doc: &mut Document) -> 
 /// datafield sets, force `output_safechars` for ASCII output.
 pub fn setup_datamodel(cfg: &mut Config, log: &mut Logger) -> Result<(), Fatal> {
     let dms = match cfg.blx.global("datamodel") {
-        Some(OptValue::Datamodel(v)) => v.clone(),
-        _ => Vec::new(),
+        Some(OptValue::Datamodel(v)) => v.as_slice(),
+        _ => &[],
     };
-    let (dm, errors) = DataModel::new(&dms, cfg.biber.is_true("no_default_datamodel"));
+    let (dm, errors) = DataModel::new(dms, cfg.biber.is_true("no_default_datamodel"));
     for e in errors {
         biber_error!(log, "{}", e.0)?;
     }

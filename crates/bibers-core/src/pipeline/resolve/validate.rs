@@ -307,7 +307,7 @@ fn check_datatypes(
         .datafields
         .keys()
         .chain(e.derivedfields.keys())
-        .cloned()
+        .map(|k| k.to_string())
         .collect();
     fields.sort();
     fields.dedup();

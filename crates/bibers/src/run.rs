@@ -153,6 +153,23 @@ pub fn output_file(cfg: &config::Config) -> Result<String, String> {
     Ok(outfile)
 }
 
+/// The local time, for the log's `=== <date>` line (`localtime`).
+///
+/// Without `$TZ`, a Unix system's zone is `/etc/localtime`, read directly:
+/// `jiff::Zoned::now()` first indexes the whole time zone database, which
+/// took ~1 ms, a third of startup.
+fn local_now() -> jiff::Zoned {
+    let now = jiff::Timestamp::now();
+    if cfg!(unix)
+        && std::env::var_os("TZ").is_none()
+        && let Ok(data) = std::fs::read("/etc/localtime")
+        && let Ok(tz) = jiff::tz::TimeZone::tzif("localtime", &data)
+    {
+        return now.to_zoned(tz);
+    }
+    jiff::Zoned::now()
+}
+
 fn eprint_flush(s: &str) {
     if !s.is_empty() {
         let mut e = std::io::stderr().lock();
@@ -171,10 +188,24 @@ fn print_flush(s: &str) {
 
 /// Run bibers with `args` (without the program name). Returns the exit code.
 pub fn main(args: &[String], env: &Env) -> u8 {
+    run(args, env, false)
+}
+
+/// [`main`] for a process that exits as soon as it returns: the run's
+/// state (entries, data model, control file) is left for the OS to reclaim
+/// instead of being freed piece by piece, which is a few percent of a run.
+pub fn main_then_exit(args: &[String], env: &Env) -> u8 {
+    run(args, env, true)
+}
+
+fn run(args: &[String], env: &Env, exiting: bool) -> u8 {
     bibers_core::log::mark_program_start();
     match setup(args, env) {
         SetupResult::Exit(code) => code,
-        SetupResult::Ready(s) => process(*s, env),
+        SetupResult::Ready(mut s) => {
+            s.exiting = exiting;
+            process(*s, env)
+        }
     }
 }
 
@@ -191,6 +222,8 @@ pub struct Setup {
     pub tool: bool,
     /// The output format.
     pub format: OutputFormat,
+    /// The process exits after [`process`]: don't free the run's state.
+    pub exiting: bool,
 }
 
 /// Result of [`setup`].
@@ -284,7 +317,7 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
     if bibers_core::recodedata::load(&mut cfg, &mut log, env).is_err() {
         return Exit(log.display_end());
     }
-    let now = chrono::Local::now().format("%a %b %e, %Y, %H:%M:%S");
+    let now = local_now().strftime("%a %b %e, %Y, %H:%M:%S");
     log.logfile_info(bibers_core::loc!(), &format!("=== {now}"));
 
     let outfile = match output_file(&cfg) {
@@ -375,6 +408,7 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
         outfile,
         tool,
         format,
+        exiting: false,
     }))
 }
 
@@ -388,6 +422,7 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         outfile,
         tool,
         format,
+        exiting,
     } = s;
     let dm = cfg.dm.take().expect("process_setup builds the data model");
     let mut ctx = Ctx {
@@ -444,10 +479,12 @@ pub fn process(s: Setup, env: &Env) -> u8 {
     if format.after_write(&mut ctx, &outfile).is_err() {
         return log.display_end();
     }
+    if exiting {
+        // Everything but the configuration, whose remote-source temporary
+        // directory is removed on drop.
+        std::mem::forget((ctx.run, processed, dm, doc));
+    }
     show_tmp_dir(&mut cfg, &mut log);
-    // The process is about to exit: freeing the processed sections entry by
-    // entry would cost several percent of a large run.
-    std::mem::forget(processed);
     log.display_end()
 }
 

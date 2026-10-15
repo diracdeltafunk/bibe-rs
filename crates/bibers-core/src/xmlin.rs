@@ -215,9 +215,19 @@ fn parse_opts<'a>() -> roxmltree::ParsingOptions<'a> {
 
 /// Check that `text` is well-formed XML (`XML::LibXML->load_xml`).
 pub fn check_well_formed(text: &str) -> Result<(), XmlError> {
+    parse_document(text).map(|_| ())
+}
+
+/// Parse `text` as XML the way [`check_well_formed`] and [`xmlin`] do, for
+/// callers that check a text and then read it (see [`xmlin_document`]).
+pub fn parse_document(text: &str) -> Result<roxmltree::Document<'_>, XmlError> {
     roxmltree::Document::parse_with_options(strip_bom(text), parse_opts())
-        .map(|_| ())
         .map_err(|e| XmlError(e.to_string()))
+}
+
+/// [`xmlin`] on an already parsed document.
+pub fn xmlin_document(doc: &roxmltree::Document<'_>, force_array: ForceArray) -> XVal {
+    collapse(doc.root_element(), force_array)
 }
 
 fn strip_bom(text: &str) -> &str {
@@ -227,9 +237,7 @@ fn strip_bom(text: &str) -> &str {
 /// `XMLin($text, ForceContent => 1, NsStrip => 1, KeyAttr => [], ForceArray => …)`.
 /// Returns the collapsed root element.
 pub fn xmlin(text: &str, force_array: ForceArray) -> Result<XVal, XmlError> {
-    let doc = roxmltree::Document::parse_with_options(strip_bom(text), parse_opts())
-        .map_err(|e| XmlError(e.to_string()))?;
-    Ok(collapse(doc.root_element(), force_array))
+    Ok(xmlin_document(&parse_document(text)?, force_array))
 }
 
 fn add_kv(data: &mut XHash, k: &str, v: XVal, force_array: ForceArray) {
@@ -261,16 +269,21 @@ fn collapse(node: roxmltree::Node<'_, '_>, force_array: ForceArray) -> XVal {
     }
     let nr_attrs = data.len();
     let mut nr_elems = 0usize;
+    // Text is only kept for elements without child elements, so stop
+    // collecting it at the first child element.
     let mut text: Option<String> = None;
     for child in node.children() {
         if child.is_text() {
-            text.get_or_insert_with(String::new)
-                .push_str(child.text().unwrap_or(""));
+            if nr_elems == 0 {
+                text.get_or_insert_with(String::new)
+                    .push_str(child.text().unwrap_or(""));
+            }
             continue;
         }
         if !child.is_element() {
             continue;
         }
+        text = None;
         nr_elems += 1;
         let v = collapse(child, force_array);
         add_kv(&mut data, child.tag_name().name(), v, force_array);

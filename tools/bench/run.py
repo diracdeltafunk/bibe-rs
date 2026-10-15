@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Benchmark bibers on the workloads of tools/bench/gen_workloads.py.
 
-    tools/bench/run.py [--golden] [--runs N] [--bin PATH] [WORKLOAD...]
+    tools/bench/run.py [--golden] [--runs N] [--bin PATH] [--markdown] [WORKLOAD...]
 
 For each workload in target/bench/: runs bibers N times (default 5) in a
 fresh copy of the inputs and reports the best and median wall time and the
 peak RSS; checks the `.bbl` against biber's (`expected.bbl`, made once with
 `--golden`, which also records biber's time in `biber.txt`). A differing
 `.bbl` is reported as FAIL: an optimisation must never change output.
+`--markdown` also prints the results as a Markdown table (the README's speed
+table).
 
 Build first: `cargo build --release -p bibers`. Workloads are read from
 $BIBERS_BENCH_DIR (default target/bench).
@@ -77,12 +79,14 @@ def main():
     ap.add_argument("--golden", action="store_true")
     ap.add_argument("--runs", type=int, default=5)
     ap.add_argument("--bin", default=str(ROOT / "target/release/bibers"))
+    ap.add_argument("--markdown", action="store_true", help="also print a Markdown table")
     args = ap.parse_args()
     names = args.workloads or sorted(p.name for p in BENCH.iterdir() if (p / "doc.bcf").exists())
     if not names:
         sys.exit("no workloads: run tools/bench/gen_workloads.py first")
     print(f"{'workload':<18} {'best':>8} {'median':>8} {'RSS':>7}  {'biber':>8} {'speedup':>8}  output")
     failed = False
+    rows = []
     for name in names:
         src = BENCH / name
         if args.golden:
@@ -112,7 +116,41 @@ def main():
             + (f"{biber:7.2f}s {biber / best:7.0f}×" if biber else f"{'':>8} {'':>8}")
             + f"  {status}"
         )
+        rows.append((name, entries(src), biber, best, rss_max, status))
+    if args.markdown and rows:
+        print()
+        print(markdown(rows))
     sys.exit(1 if failed else 0)
+
+
+def entries(src):
+    """Entries in biber's `.bbl` (the cited entries), if there is one."""
+    exp = src / "expected.bbl"
+    return exp.read_bytes().count(b"\\entry{") if exp.exists() else None
+
+
+def secs(t):
+    return f"{t * 1000:.0f} ms" if t < 1 else f"{t:.2f} s" if t < 10 else f"{t:.1f} s"
+
+
+def markdown(rows):
+    """The results as a Markdown table, with the machine and date below it."""
+    out = [
+        "| Workload | Entries | biber 2.22 | bibers | Speedup | bibers peak RSS |",
+        "|---|--:|--:|--:|--:|--:|",
+    ]
+    for name, n, biber, best, rss, status in rows:
+        out.append(
+            f"| `{name}` | {n if n is not None else '—'} | {secs(biber) if biber else '—'}"
+            f" | {secs(best)}{'' if status == 'ok' else f' ({status})'}"
+            f" | {f'{biber / best:.0f}×' if biber else '—'} | {rss / 2**20:.0f} MB |"
+        )
+    out.append("")
+    out.append(
+        f"*{platform.system()} {platform.machine()}, {time.strftime('%Y-%m-%d')}; bibers: best of"
+        " the runs; biber: one run (`tools/bench/run.py --markdown`).*"
+    )
+    return "\n".join(out)
 
 
 if __name__ == "__main__":

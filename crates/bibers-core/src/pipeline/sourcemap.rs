@@ -51,6 +51,7 @@
 //! output ([`mapuniq_id`], DC-018).
 
 use std::cmp::Ordering;
+use std::fmt;
 
 use super::Ctx;
 use crate::bcf::sourcemap::{MapStep, SourceMap, SourceMaps};
@@ -59,6 +60,7 @@ use crate::debug;
 use crate::log::{Fatal, Logger};
 use crate::model::{Section, SectionState};
 use crate::quirks::Quirk;
+use perl_compat::case::fc_eq;
 use perl_compat::regex::{CaptureDigits, expand_imatches, imatch, ireplace, split_default_xsvsep};
 use perl_compat::truth::{num_cmp_str, perl_truthy};
 use perl_compat::unicode::{nfc, nfd};
@@ -270,6 +272,23 @@ pub fn apply_maps_in(
     res
 }
 
+/// The `"Source mapping (type=$level, key=$key): "` prefix of biber's
+/// messages, formatted only when a message is actually emitted.
+struct MapPrefix<'a> {
+    level: &'a str,
+    key: &'a str,
+}
+
+impl fmt::Display for MapPrefix<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Source mapping (type={}, key={}): ",
+            self.level, self.key
+        )
+    }
+}
+
 /// A created entry: the citekey it is created under and the
 /// Text::BibTeX entry (whose own `key` is the original's for clones).
 struct NewEntry {
@@ -366,19 +385,18 @@ impl Engine<'_> {
                         continue;
                     }
                 }
-                let etype = fc(&entry.entrytype);
                 if !map.per_type.is_empty()
                     && !map
                         .per_type
                         .iter()
-                        .any(|t| fc(t.as_deref().unwrap_or("")) == etype)
+                        .any(|t| fc_eq(t.as_deref().unwrap_or(""), &entry.entrytype))
                 {
                     continue;
                 }
                 if map
                     .per_nottype
                     .iter()
-                    .any(|t| fc(t.as_deref().unwrap_or("")) == etype)
+                    .any(|t| fc_eq(t.as_deref().unwrap_or(""), &entry.entrytype))
                 {
                     continue;
                 }
@@ -465,11 +483,12 @@ impl Engine<'_> {
 
     /// A failed condition: `map_final` → `next MAP`, else `next` (step),
     /// with biber's two debug messages.
-    fn fail(&mut self, step: &MapStep, prefix: &str, msg_final: &str, msg: &str) -> StepResult {
+    /// (`msg` is only formatted when debug logging is on.)
+    fn fail(&mut self, step: &MapStep, prefix: &MapPrefix, msg: fmt::Arguments) -> StepResult {
         if perl_truthy_opt(step.get("map_final")) {
             debug!(
                 self.log,
-                "{prefix}{msg_final} and step has 'final' set, skipping rest of map ..."
+                "{prefix}{msg} and step has 'final' set, skipping rest of map ..."
             );
             StepResult::Flow(Flow::NextMap)
         } else {
@@ -496,7 +515,7 @@ impl Engine<'_> {
         imatches: &mut Vec<Option<String>>,
     ) -> Result<StepResult, Fatal> {
         let truthy = |a: &str| perl_truthy_opt(step.get(a));
-        let keyp = format!("Source mapping (type={level}, key={key}): ");
+        let keyp = MapPrefix { level, key };
 
         // entry deletion
         if truthy("map_entry_null") {
@@ -581,7 +600,10 @@ impl Engine<'_> {
             }
             None => (Target::Main, key.to_string()),
         };
-        let tp = format!("Source mapping (type={level}, key={etargetkey}): ");
+        let tp = MapPrefix {
+            level,
+            key: &etargetkey,
+        };
 
         // entry type map
         if let Some(ts) = self
@@ -594,8 +616,7 @@ impl Engine<'_> {
                 return Ok(self.fail(
                     step,
                     &tp,
-                    &format!("Entry type is '{cur}' but map wants '{ts}'"),
-                    &format!("Entry type is '{cur}' but map wants '{ts}'"),
+                    format_args!("Entry type is '{cur}' but map wants '{ts}'"),
                 ));
             }
             *last_type = cur;
@@ -618,12 +639,7 @@ impl Engine<'_> {
         {
             let nf = fc(&nf);
             if target(entry, news, tgt).exists(&nf) {
-                return Ok(self.fail(
-                    step,
-                    &tp,
-                    &format!("Field '{nf}' exists"),
-                    &format!("Field '{nf}' exists"),
-                ));
+                return Ok(self.fail(step, &tp, format_args!("Field '{nf}' exists")));
             }
             fieldcontinue = true;
         }
@@ -636,23 +652,17 @@ impl Engine<'_> {
             return Ok(self.fail(
                 step,
                 &keyp,
-                "Key is neither \\cited nor \\nocited",
-                "Key is neither \\cited nor \\nocited",
+                format_args!("Key is neither \\cited nor \\nocited"),
             ));
         }
         if truthy("map_entrykey_cited") && !is_cite {
-            return Ok(self.fail(step, &keyp, "Key is not \\cited", "Key is not \\cited"));
+            return Ok(self.fail(step, &keyp, format_args!("Key is not \\cited")));
         }
         if truthy("map_entrykey_nocited") && (is_cite || (!is_nocite && !allnocite)) {
-            return Ok(self.fail(step, &keyp, "Key is not \\nocited", "Key is not \\nocited"));
+            return Ok(self.fail(step, &keyp, format_args!("Key is not \\nocited")));
         }
         if truthy("map_entrykey_allnocited") && !allnocite {
-            return Ok(self.fail(
-                step,
-                &keyp,
-                "Key is not \\nocite{*}'ed",
-                "Key is not \\nocite{*}'ed",
-            ));
+            return Ok(self.fail(step, &keyp, format_args!("Key is not \\nocite{{*}}'ed")));
         }
         // BB-031: without \nocite{*} this applies to every entry.
         let not_starnocited = if self.cfg.quirks.on(Quirk::SmapStarnocited) {
@@ -662,7 +672,7 @@ impl Engine<'_> {
         };
         if truthy("map_entrykey_starnocited") && not_starnocited {
             let m = "Key is \\nocite{*}'ed but also either \\cite'd or explicitly \\nocited";
-            return Ok(self.fail(step, &keyp, m, m));
+            return Ok(self.fail(step, &keyp, format_args!("{m}")));
         }
 
         // field map
@@ -672,12 +682,7 @@ impl Engine<'_> {
         {
             let fs = fc(&fs);
             if !(fs == "entrykey" || target(entry, news, tgt).exists(&fs)) {
-                return Ok(self.fail(
-                    step,
-                    &tp,
-                    &format!("No field '{fs}'"),
-                    &format!("No field '{fs}'"),
-                ));
+                return Ok(self.fail(step, &tp, format_args!("No field '{fs}'")));
             }
             fieldsource = fs;
             fieldcontinue = true;
@@ -781,8 +786,7 @@ impl Engine<'_> {
                         return Ok(self.fail(
                             step,
                             &tp,
-                            &format!("Field '{fieldsource}' does not match '{m}'"),
-                            &format!("Field '{fieldsource}' does not match '{m}'"),
+                            format_args!("Field '{fieldsource}' does not match '{m}'"),
                         ));
                     }
                 }

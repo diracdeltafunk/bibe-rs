@@ -65,8 +65,7 @@ pub fn init_list(st: &mut SectionState, i: usize) {
     }
     dl.keys = Some(citekeys);
     // `set_unul_changed(1)`: starts the uniqueness iteration.
-    dl.slots
-        .insert("unulchanged".into(), serde_json::Value::from("1"));
+    dl.slots.insert("unulchanged", serde_json::Value::from("1"));
 }
 
 /// The list filtering block of `process_lists` (Biber.pm:3134-3168),
@@ -346,14 +345,14 @@ pub fn generate_contextdata(
                         break;
                     }
                 }
-                let values: Vec<(&String, i64)> = sec
+                let values: Vec<(String, i64)> = sec
                     .names
                     .name(*nid)
                     .nameparts
                     .keys()
                     .map(|np| {
-                        let v = pnun.get(np.as_str()).copied().unwrap_or("none");
-                        (np, uniquename_value(v).unwrap_or(0))
+                        let v = pnun.get(&**np).copied().unwrap_or("none");
+                        (np.to_string(), uniquename_value(v).unwrap_or(0))
                     })
                     .collect();
                 if values.is_empty() {
@@ -361,7 +360,7 @@ pub fn generate_contextdata(
                 }
                 let unparts = ls::viv(nd, &["unparts"]).as_object_mut().expect("object");
                 for (np, v) in values {
-                    unparts.insert(np.clone(), J::String(v.to_string()));
+                    unparts.insert(np, J::String(v.to_string()));
                 }
             }
         }

@@ -28,10 +28,10 @@
 //! - The iteration is capped (biber has no bound; see [`MAX_PASSES`]).
 
 use super::Ctx;
+use crate::log::Fatal;
 use crate::model::{DataList, NameArena, NameListId, Section, SectionState, Value};
 use crate::perlish::{numify, truthy};
 use crate::quirks::{Quirk, Quirks};
-use crate::{log::Fatal, model::PerlData};
 use rustc_hash::FxHashMap as HashMap;
 use serde_json::{Map, Value as J};
 use std::rc::Rc;
@@ -166,10 +166,8 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         state.insert("uniquelistcount".into(), c.to_json());
     }
     dl.state = Some(J::Object(state));
-    dl.slots.insert(
-        "unulchanged".into(),
-        J::from(if changed { "1" } else { "0" }),
-    );
+    dl.slots
+        .insert("unulchanged", J::from(if changed { "1" } else { "0" }));
     converged
 }
 
@@ -744,7 +742,7 @@ fn is_min(un: &str) -> bool {
 }
 
 /// A name slot as a defined string (`$n->get_uniquename` etc.).
-fn slot(slots: &std::collections::BTreeMap<String, PerlData>, k: &str) -> Option<String> {
+fn slot(slots: &crate::model::Slots, k: &str) -> Option<String> {
     defined(slots.get(k)).map(|v| s_or_empty(Some(v)))
 }
 
@@ -1366,7 +1364,7 @@ mod tests {
                     ..Name::default()
                 };
                 name.nameparts.insert(
-                    "family".into(),
+                    "family",
                     NamePart {
                         string: Some(f.clone()),
                         initial: None,
@@ -1401,7 +1399,7 @@ mod tests {
             state: Some(J::Object(state)),
             ..DataList::default()
         };
-        dl.slots.insert("unulchanged".into(), J::from("1"));
+        dl.slots.insert("unulchanged", J::from("1"));
         let t = std::time::Instant::now();
         run(Quirks::default(), &arena, &entries, &mut dl);
         let elapsed = t.elapsed();

@@ -52,10 +52,10 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         "state",
         "static_keys",
     ] {
-        section.slots.insert(k.into(), empty());
+        section.slots.insert(k, empty());
     }
     section.slots.insert(
-        "dkeys".into(),
+        "dkeys",
         J::Object(
             bs.dynamic_sets
                 .iter()
@@ -64,7 +64,7 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         ),
     );
     section.slots.insert(
-        "citecount".into(),
+        "citecount",
         J::Object(
             bs.citecount
                 .iter()
@@ -73,7 +73,7 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
         ),
     );
     section.slots.insert(
-        "seenkeys".into(),
+        "seenkeys",
         J::Object(
             bs.seenkeys
                 .iter()
@@ -83,7 +83,7 @@ pub fn init_section(ctx: &mut Ctx, secnum: &str) -> Result<SectionState, Fatal> 
     );
     if let Some(ds) = &bs.datasources {
         section.slots.insert(
-            "datasources".into(),
+            "datasources",
             J::Array(
                 ds.iter()
                     .map(|d| {
@@ -151,12 +151,12 @@ fn datalist_from_bcf(d: &crate::bcf::DataList) -> DataList {
                 }
             })
             .collect();
-        dl.slots.insert("filters".into(), J::Array(f));
+        dl.slots.insert("filters", J::Array(f));
     }
     if d.sortinit_locale.is_some() {
         // An opaque Unicode::Collate::Locale object in biber's dump.
         dl.slots.insert(
-            "sortinitcollator".into(),
+            "sortinitcollator",
             json!({"__class": "Unicode::Collate::Locale"}),
         );
     }
@@ -241,14 +241,14 @@ pub trait SecExt {
 
 impl SecExt for Section {
     fn slot_obj(&mut self, name: &str) -> &mut Map<String, J> {
-        let v = self
-            .slots
-            .entry(name.to_string())
-            .or_insert_with(|| J::Object(Map::new()));
-        if !v.is_object() {
-            *v = J::Object(Map::new());
+        // (no key allocation when the slot exists, the common case)
+        if !self.slots.get(name).is_some_and(J::is_object) {
+            self.slots.insert(name.to_string(), J::Object(Map::new()));
         }
-        v.as_object_mut().expect("object")
+        self.slots
+            .get_mut(name)
+            .and_then(J::as_object_mut)
+            .expect("object")
     }
 
     fn slot_get(&self, name: &str, key: &str) -> Option<&J> {
@@ -665,7 +665,7 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
                 J::Object(o)
             })
             .collect();
-        st.section.slots.insert("datasources".into(), J::Array(arr));
+        st.section.slots.insert("datasources", J::Array(arr));
     }
 
     for ds in &dss {
@@ -703,7 +703,7 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     }
 
     let keys = st.section.citekeys.clone();
-    let mut kwd = Vec::new();
+    let mut kwd = OrderedKeys::default();
     get_dependents(ctx, st, &opts, &dss, keys, &mut kwd)?;
     super::sync_annotations(ctx, st);
     Ok(())
@@ -769,9 +769,20 @@ pub fn write_bltxml_schema(ctx: &mut Ctx, outfile: &str) -> Result<(), Fatal> {
     Ok(())
 }
 
-fn push_uniq(v: &mut Vec<String>, k: &str) {
-    if !v.iter().any(|x| x == k) {
-        v.push(k.to_string());
+/// `@keyswithdeps`: keys in first-insertion order without duplicates (biber
+/// greps the array before each push; a set makes that O(1)).
+#[derive(Default)]
+struct OrderedKeys {
+    keys: Vec<String>,
+    seen: std::collections::HashSet<String>,
+}
+
+impl OrderedKeys {
+    fn push(&mut self, k: &str) {
+        if !self.seen.contains(k) {
+            self.seen.insert(k.to_string());
+            self.keys.push(k.to_string());
+        }
     }
 }
 
@@ -790,7 +801,7 @@ fn get_dependents(
     opts: &FetchOpts,
     dss: &[Datasource],
     keys: Vec<String>,
-    keyswithdeps: &mut Vec<String>,
+    keyswithdeps: &mut OrderedKeys,
 ) -> Result<(), Fatal> {
     let mut new_deps: Vec<String> = Vec::new();
     let sec = &mut st.section;
@@ -802,7 +813,7 @@ fn get_dependents(
             .cloned()
         {
             new_deps.push(real.clone());
-            push_uniq(keyswithdeps, &real);
+            keyswithdeps.push(&real);
             continue;
         }
         let dmems = sec.get_dynamic_set(citekey);
@@ -810,7 +821,7 @@ fn get_dependents(
             for dm in &dmems {
                 if !sec.entries.contains_key(dm) {
                     new_deps.push(dm.clone());
-                    push_uniq(keyswithdeps, citekey);
+                    keyswithdeps.push(citekey);
                 }
             }
             continue;
@@ -826,7 +837,7 @@ fn get_dependents(
                         if !sec.entries.contains_key(x) {
                             new_deps.push(x.to_string());
                         }
-                        push_uniq(keyswithdeps, citekey);
+                        keyswithdeps.push(citekey);
                     }
                 }
             }
@@ -836,7 +847,7 @@ fn get_dependents(
                 if !sec.entries.contains_key(r) {
                     new_deps.push(r.to_string());
                 }
-                push_uniq(keyswithdeps, citekey);
+                keyswithdeps.push(citekey);
             }
         }
         let mut related_new = Vec::new();
@@ -844,7 +855,7 @@ fn get_dependents(
             for sm in field_list(be, "entryset").unwrap_or_default() {
                 if !sec.has_citekey_alias(&sm) {
                     new_deps.push(sm);
-                    push_uniq(keyswithdeps, citekey);
+                    keyswithdeps.push(citekey);
                 }
             }
         }
@@ -855,7 +866,7 @@ fn get_dependents(
                     related_new.push(rm.clone());
                     new_deps.push(rm);
                 }
-                push_uniq(keyswithdeps, citekey);
+                keyswithdeps.push(citekey);
             }
         }
         for rm in related_new {
@@ -891,7 +902,7 @@ fn get_dependents(
     if !new_deps.is_empty() {
         get_dependents(ctx, st, opts, dss, new_deps, keyswithdeps)?;
     }
-    for kwd in keyswithdeps.clone() {
+    for kwd in keyswithdeps.keys.clone() {
         for mk in &missing {
             remove_undef_dependent(ctx, st, &kwd, mk);
         }

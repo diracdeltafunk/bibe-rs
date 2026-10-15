@@ -19,7 +19,7 @@ use crate::bcf::templates::{
 use crate::config::{Config, OptValue};
 use crate::datamodel::DataModel;
 use crate::log::Fatal;
-use crate::model::{DataList, Entry, PerlData, Section, SectionState, Value};
+use crate::model::{DataList, Entry, LabelDateInfo, PerlData, Section, SectionState, Value};
 use crate::perlish::{numify, truthy};
 use crate::quirks::Quirk;
 use perl_compat::grapheme::gcstring;
@@ -139,9 +139,9 @@ pub fn generate_sortdataschema(
         Some(t) => linked_template_json(t),
         None => J::Object(Map::new()),
     };
-    dl.slots.insert("sortingtemplate".into(), tj);
+    dl.slots.insert("sortingtemplate", tj);
     dl.slots.insert(
-        "sortdataschema".into(),
+        "sortdataschema",
         if ds.is_empty() { J::Null } else { J::Array(ds) },
     );
     Ok(())
@@ -212,10 +212,10 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
     }
     // The hashes only exist once something was stored in them.
     if !sd.is_empty() || had_sd {
-        dl.slots.insert("sortdata".into(), J::Object(sd));
+        dl.slots.insert("sortdata", J::Object(sd));
     }
     if !si.is_empty() || had_si {
-        dl.slots.insert("sortinitdata".into(), J::Object(si));
+        dl.slots.insert("sortinitdata", J::Object(si));
     }
     Ok(())
 }
@@ -309,10 +309,7 @@ fn value_true(v: Option<&Value>) -> bool {
 }
 
 /// A defined scalar from a slot (`undef` → `None`).
-fn slot_str<'a>(
-    slots: &'a std::collections::BTreeMap<String, PerlData>,
-    k: &str,
-) -> Option<&'a str> {
+fn slot_str<'a>(slots: &'a crate::model::Slots, k: &str) -> Option<&'a str> {
     slots.get(k).and_then(J::as_str)
 }
 
@@ -528,22 +525,18 @@ impl<'a> Gen<'a> {
             }
             "labelyear" | "labelmonth" | "labelday" => {
                 let ldc = &field[5..];
-                let Some(ldi) = be.slots.get("labeldateinfo").filter(|v| !v.is_null()) else {
+                let Some(ldi) = &be.labeldateinfo else {
                     return Some(String::new());
                 };
-                if let Some(f) = ldi
-                    .get("field")
-                    .and_then(|f| f.get(ldc))
-                    .and_then(J::as_str)
-                    .filter(|s| truthy(Some(s)))
-                {
-                    let f = f.to_string();
-                    return self.dispatch(&f, key, be, a);
-                }
-                return if ldi.get("string").is_some() {
-                    Some(String::new())
-                } else {
-                    None
+                return match ldi {
+                    LabelDateInfo::Field(df) => match df.get(ldc).filter(|s| truthy(Some(s))) {
+                        Some(f) => {
+                            let f = f.to_string();
+                            self.dispatch(&f, key, be, a)
+                        }
+                        None => None,
+                    },
+                    LabelDateInfo::String(_) => Some(String::new()),
                 };
             }
             "presort" => {
