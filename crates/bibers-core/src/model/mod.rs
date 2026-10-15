@@ -21,11 +21,13 @@
 pub mod annotation;
 pub mod dump;
 pub mod entrymap;
+pub mod liststate;
 pub mod sym;
 pub mod symmap;
 
 pub use annotation::{Annotation, AnnotationScope, Annotations};
 pub use entrymap::EntryMap;
+pub use liststate::{Level1, ListState};
 pub use sym::{IntoSym, Sym, SymKey};
 pub use symmap::SymMap;
 
@@ -470,7 +472,7 @@ pub struct DataList {
     /// `state` (per-list processing state: name hashes, uniqueness data,
     /// extra* counters, …), as dumped; `None` until first set. To be typed as
     /// phases are ported.
-    pub state: Option<PerlData>,
+    pub state: Option<ListState>,
     /// Other slots (`sortdata`, `sortinitdata`, `sortdataschema`,
     /// `sortingtemplate`, `unulchanged`, `filters`, …), as dumped.
     pub slots: Slots,

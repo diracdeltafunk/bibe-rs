@@ -281,14 +281,14 @@ fn apply_viv(st: &mut SectionState, list: usize, viv: Vec<Viv>) {
             Viv::ListField(k) => {
                 let s = st.datalists[list]
                     .state
-                    .get_or_insert_with(|| J::Object(Map::new()));
-                vivify(vivify(s, "fields"), &k);
+                    .get_or_insert_with(Default::default);
+                s.level1("fields").hash(&k);
             }
             Viv::NameListData(k) => {
                 let s = st.datalists[list]
                     .state
-                    .get_or_insert_with(|| J::Object(Map::new()));
-                vivify(vivify(s, "namelistdata"), &k);
+                    .get_or_insert_with(Default::default);
+                s.level1("namelistdata").hash(&k);
             }
         }
     }
@@ -502,8 +502,7 @@ impl<'a> Gen<'a> {
                     .dl
                     .state
                     .as_ref()
-                    .and_then(|st| st.get("fields"))
-                    .and_then(|f| f.get(key))
+                    .and_then(|st| st.peek2("fields", key))
                     .and_then(|f| f.get("sortlabelalpha"))
                     .and_then(J::as_str)
                     .unwrap_or("");
@@ -789,8 +788,7 @@ impl<'a> Gen<'a> {
             .dl
             .state
             .as_ref()
-            .and_then(|s| s.get("namelistdata"))
-            .and_then(|m| m.get(nlid.key()));
+            .and_then(|s| s.peek2("namelistdata", &nlid.key()));
         let vis_key = if tmpsnk.is_some_and(|t| t.visibility.as_deref() == Some("cite")) {
             "viscite"
         } else {

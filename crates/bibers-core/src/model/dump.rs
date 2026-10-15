@@ -299,7 +299,9 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
                 namehashtemplatename: g("namehashtemplatename"),
                 labelprefix: g("labelprefix"),
                 keys: d.get("keys").map(|k| strings(Some(k))),
-                state: d.get("state").map(|v| l.internalise(v)),
+                state: d
+                    .get("state")
+                    .map(|v| ListState::from_json(l.internalise(v))),
                 slots: Slots::new(),
             };
             for (k, v) in d {
@@ -634,7 +636,7 @@ pub fn dump_state(st: &SectionState) -> J {
                 o.insert("keys".into(), str_array(k));
             }
             if let Some(st) = &dl.state {
-                o.insert("state".into(), d.canon(st));
+                o.insert("state".into(), d.canon(&st.to_json()));
             }
             for (k, v) in &dl.slots {
                 o.insert(k.to_string(), d.canon(v));

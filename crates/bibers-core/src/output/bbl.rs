@@ -1370,20 +1370,20 @@ fn has_citekey(st: &SectionState, key: &str) -> bool {
 /// Per-list lookups (`Biber::DataList` getters).
 struct ListView<'a> {
     dl: &'a DataList,
-    state: Option<&'a PerlData>,
+    state: Option<&'a crate::model::ListState>,
     sortinithash: &'a dyn Fn(&str) -> String,
 }
 
 impl<'a> ListView<'a> {
     /// `$self->{state}{fields}{$key}`.
     fn entryfields(&self, key: &str) -> Option<&'a PerlData> {
-        pd_path(self.state, &["fields", key])
+        self.state?.peek2("fields", key)
     }
     fn data(&self, slot: &str, key: &str) -> Option<&'a PerlData> {
-        pd_path(self.state, &[slot, key])
+        self.state?.peek2(slot, key)
     }
     fn nld(&self, nlid: NameListId) -> Option<&'a PerlData> {
-        pd_path(self.state, &["namelistdata", &nlid.key()])
+        self.state?.peek2("namelistdata", &nlid.key())
     }
     fn nd(&self, nlid: NameListId, nid: NameId) -> Option<&'a PerlData> {
         pd_path(self.nld(nlid), &[&nid.key()])

@@ -52,7 +52,7 @@ pub fn init_list(st: &mut SectionState, i: usize) {
     let citekeys = st.section.citekeys.clone();
     let dl = &mut st.datalists[i];
     // `reset_state`: essential when a section is processed again.
-    dl.state = Some(serde_json::Value::Object(Default::default()));
+    dl.state = Some(crate::model::ListState::default());
     for t in [
         &mut dl.sortingnamekeytemplatename,
         &mut dl.uniquenametemplatename,
@@ -312,7 +312,7 @@ pub fn generate_contextdata(
                 let nk = nid.key();
                 // `$self->{state}{namelistdata}{$nlid}{$nid}` (vivified by
                 // the `un` fetch).
-                let nd = ls::viv(ls::root(dl), &["namelistdata", &nlk, &nk]);
+                let nd = ls::viv(dl, &["namelistdata", &nlk, &nk]);
                 let un = nd.get("un").filter(|v| !v.is_null());
                 if !ls::truthy_ref(un) {
                     continue;
@@ -358,7 +358,9 @@ pub fn generate_contextdata(
                 if values.is_empty() {
                     continue;
                 }
-                let unparts = ls::viv(nd, &["unparts"]).as_object_mut().expect("object");
+                let unparts = ls::viv_in(nd, &["unparts"])
+                    .as_object_mut()
+                    .expect("object");
                 for (np, v) in values {
                     unparts.insert(np, J::String(v.to_string()));
                 }

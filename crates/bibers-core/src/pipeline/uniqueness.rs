@@ -29,7 +29,7 @@
 
 use super::Ctx;
 use crate::log::Fatal;
-use crate::model::{DataList, NameArena, NameListId, Section, SectionState, Value};
+use crate::model::{DataList, ListState, NameArena, NameListId, Section, SectionState, Value};
 use crate::perlish::{numify, truthy};
 use crate::quirks::{Quirk, Quirks};
 use rustc_hash::FxHashMap as HashMap;
@@ -130,10 +130,7 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         .slots
         .get("unulchanged")
         .is_some_and(|v| truthy(v.as_str()));
-    let mut state = match dl.state.take() {
-        Some(J::Object(m)) => m,
-        _ => Map::new(),
-    };
+    let mut state = dl.state.take().unwrap_or_default();
     let mut u = Uniq {
         quirks,
         names,
@@ -157,15 +154,15 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
     } = u;
     nld.finish(&mut state);
     if let Some(c) = unc {
-        state.insert("uniquenamecount".into(), c.to_json());
+        state.insert("uniquenamecount", c.to_json());
     }
     if let Some(c) = unc_all {
-        state.insert("uniquenamecount_all".into(), c.to_json());
+        state.insert("uniquenamecount_all", c.to_json());
     }
     if let Some(c) = ulc {
-        state.insert("uniquelistcount".into(), c.to_json());
+        state.insert("uniquelistcount", c.to_json());
     }
-    dl.state = Some(J::Object(state));
+    dl.state = Some(state);
     dl.slots
         .insert("unulchanged", J::from(if changed { "1" } else { "0" }));
     converged
@@ -184,7 +181,7 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
 /// back by [`NameListData::finish`].
 struct NameListData {
     /// `namelistdata` as found (`None` if absent), minus the lists taken.
-    orig: Option<J>,
+    orig: Option<HashMap<String, J>>,
     lists: HashMap<NameListId, Map<String, J>>,
 }
 
@@ -214,43 +211,40 @@ fn s_or_empty(v: Option<&J>) -> String {
 
 impl NameListData {
     /// Take `namelistdata` out of the list state `state`.
-    fn take(state: &mut Map<String, J>) -> Self {
+    fn take(state: &mut ListState) -> Self {
         NameListData {
-            orig: state.remove("namelistdata"),
+            orig: state.take_namelistdata(),
             lists: HashMap::default(),
         }
     }
 
     /// Put `namelistdata` back into `state`, with everything accessed
     /// vivified as biber's accessors do.
-    fn finish(self, state: &mut Map<String, J>) {
+    fn finish(self, state: &mut ListState) {
         if self.lists.is_empty() {
-            if let Some(o) = self.orig {
-                state.insert("namelistdata".into(), o);
+            if self.orig.is_some() {
+                state.set_namelistdata(self.orig);
             }
             return;
         }
-        let mut m = match self.orig {
-            Some(J::Object(m)) => m,
-            _ => Map::new(),
-        };
+        let mut m = self.orig.unwrap_or_default();
         for (id, l) in self.lists {
             m.insert(id.key(), J::Object(l));
         }
-        state.insert("namelistdata".into(), J::Object(m));
+        state.set_namelistdata(Some(m));
     }
 
     fn nl(&mut self, nlid: NameListId) -> &mut Map<String, J> {
         let orig = &mut self.orig;
-        self.lists.entry(nlid).or_insert_with(|| {
-            match orig.as_mut().and_then(|o| o.as_object_mut()) {
+        self.lists
+            .entry(nlid)
+            .or_insert_with(|| match orig.as_mut() {
                 Some(m) => match m.remove(&nlid.key()) {
                     Some(J::Object(l)) => l,
                     _ => Map::new(),
                 },
                 None => Map::new(),
-            }
-        })
+            })
     }
 
     fn nd(&mut self, nlid: NameListId, nid: &str) -> &mut Map<String, J> {
@@ -1396,14 +1390,14 @@ mod tests {
         let mut state = Map::new();
         state.insert("namelistdata".into(), J::Object(nld));
         let mut dl = DataList {
-            state: Some(J::Object(state)),
+            state: Some(ListState::from_json(J::Object(state))),
             ..DataList::default()
         };
         dl.slots.insert("unulchanged", J::from("1"));
         let t = std::time::Instant::now();
         run(Quirks::default(), &arena, &entries, &mut dl);
         let elapsed = t.elapsed();
-        let st = dl.state.unwrap();
+        let st = dl.state.unwrap().to_json();
         // Every list differs from the others at the 4th name.
         for l in st["namelistdata"].as_object().unwrap().values() {
             assert_eq!(l["ul"], "4");

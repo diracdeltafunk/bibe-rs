@@ -40,21 +40,17 @@ use std::collections::HashMap;
 /// `a.b` (DataList.pm has no `no autovivification`), and those empty hashes
 /// show in biber's dumps.
 pub(crate) mod ls {
-    use crate::model::DataList;
+    use crate::model::{DataList, ListState};
     use serde_json::{Map, Value as J};
 
     /// `$self->{state}` (created if needed).
-    pub fn root(dl: &mut DataList) -> &mut J {
-        let s = dl.state.get_or_insert_with(|| J::Object(Map::new()));
-        if !s.is_object() {
-            *s = J::Object(Map::new());
-        }
-        s
+    pub fn root(dl: &mut DataList) -> &mut ListState {
+        dl.state.get_or_insert_with(ListState::default)
     }
 
-    /// Walk `path`, creating hashes on the way; returns the (hash) value at
-    /// the end of the path.
-    pub fn viv<'a>(mut v: &'a mut J, path: &[&str]) -> &'a mut J {
+    /// Walk `path` from `v`, creating hashes on the way; returns the (hash)
+    /// value at the end of the path.
+    pub fn viv_in<'a>(mut v: &'a mut J, path: &[&str]) -> &'a mut J {
         for k in path {
             if !v.is_object() {
                 *v = J::Object(Map::new());
@@ -71,6 +67,18 @@ pub(crate) mod ls {
         v
     }
 
+    /// `$self->{state}{p0}{p1}…{pn}` as a hash, creating hashes on the way
+    /// (at least two keys).
+    pub fn viv<'a>(dl: &'a mut DataList, path: &[&str]) -> &'a mut J {
+        let v = root(dl).level1(path[0]).hash(path[1]);
+        viv_in(v, &path[2..])
+    }
+
+    /// `viv(…)` as a map.
+    pub fn viv_map<'a>(dl: &'a mut DataList, path: &[&str]) -> &'a mut Map<String, J> {
+        viv(dl, path).as_object_mut().expect("object")
+    }
+
     /// rvalue `$self->{state}{p0}…{pn}`: vivifies `p0…p(n-1)`; `undef` is
     /// `None`.
     pub fn get(dl: &mut DataList, path: &[&str]) -> Option<J> {
@@ -80,8 +88,14 @@ pub(crate) mod ls {
     /// [`get`] without the copy.
     pub fn get_ref<'a>(dl: &'a mut DataList, path: &[&str]) -> Option<&'a J> {
         let (last, parents) = path.split_last().expect("non-empty path");
-        let v: &J = viv(root(dl), parents);
-        v.get(*last).filter(|x| !x.is_null())
+        let v = match parents {
+            [k0] => root(dl).level1(k0).into_get(last),
+            _ => {
+                let v: &J = viv(dl, parents);
+                v.get(*last)
+            }
+        };
+        v.filter(|x| !x.is_null())
     }
 
     /// The numeric value of [`get`] (`undef` is 0).
@@ -92,38 +106,34 @@ pub(crate) mod ls {
     /// `exists $self->{state}{p0}…{pn}` (vivifies `p0…p(n-1)`).
     pub fn exists(dl: &mut DataList, path: &[&str]) -> bool {
         let (last, parents) = path.split_last().expect("non-empty path");
-        viv(root(dl), parents)
-            .as_object()
-            .is_some_and(|o| o.contains_key(*last))
+        match parents {
+            [k0] => root(dl).level1(k0).contains_key(last),
+            _ => viv_map(dl, parents).contains_key(*last),
+        }
     }
 
     /// `$self->{state}{p0}…{pn} = $v`.
     pub fn set(dl: &mut DataList, path: &[&str], v: J) {
         let (last, parents) = path.split_last().expect("non-empty path");
-        let m = viv(root(dl), parents).as_object_mut().expect("object");
-        match m.get_mut(*last) {
-            Some(slot) => *slot = v,
-            None => {
-                m.insert(last.to_string(), v);
+        match parents {
+            [k0] => root(dl).level1(k0).insert(last, v),
+            _ => {
+                let m = viv_map(dl, parents);
+                match m.get_mut(*last) {
+                    Some(slot) => *slot = v,
+                    None => {
+                        m.insert(last.to_string(), v);
+                    }
+                }
             }
         }
     }
 
     /// `++$self->{state}{p0}…{pn}`; returns the new value.
     pub fn incr(dl: &mut DataList, path: &[&str]) -> i64 {
-        let (last, parents) = path.split_last().expect("non-empty path");
-        let m = viv(root(dl), parents).as_object_mut().expect("object");
-        match m.get_mut(*last) {
-            Some(v) => {
-                let n = if v.is_null() { 0 } else { num(v) as i64 } + 1;
-                *v = J::String(n.to_string());
-                n
-            }
-            None => {
-                m.insert(last.to_string(), J::String("1".into()));
-                1
-            }
-        }
+        let n = get_ref(dl, path).map_or(0.0, num) as i64 + 1;
+        set(dl, path, J::String(n.to_string()));
+        n
     }
 
     /// Perl numeric value of a state scalar.
@@ -150,9 +160,7 @@ pub(crate) mod ls {
         if fv.is_empty() {
             return;
         }
-        let m = viv(root(dl), &["fields", key])
-            .as_object_mut()
-            .expect("object");
+        let m = viv_map(dl, &["fields", key]);
         for (f, v) in fv {
             m.insert(f, v);
         }
@@ -1223,7 +1231,7 @@ pub(crate) fn process_namedis(
 /// `DataList::set_namedis` (DataList.pm:305).
 fn set_namedis(dl: &mut DataList, d: &NameDis) {
     let (nlk, nk) = (d.nlid.key(), d.nid.key());
-    let o = ls::viv(ls::root(dl), &["namelistdata", &nlk, &nk])
+    let o = ls::viv(dl, &["namelistdata", &nlk, &nk])
         .as_object_mut()
         .expect("object");
     o.insert("namestring".into(), J::String(d.namestring.clone()));
@@ -1341,7 +1349,7 @@ pub fn process_visible_names(
             } else {
                 cnt.clone()
             };
-            let m = ls::viv(ls::root(dl), &["namelistdata", &nlk])
+            let m = ls::viv(dl, &["namelistdata", &nlk])
                 .as_object_mut()
                 .expect("object");
             m.insert("viscite".into(), vis_cite.1);
