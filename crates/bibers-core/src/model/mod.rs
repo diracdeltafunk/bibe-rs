@@ -118,19 +118,20 @@ pub enum LabelDateInfo {
 }
 
 /// The `field` hash of [`LabelDateInfo::Field`]: field *names* (`undef`
-/// is `None`).
+/// is `None`), interned (bounded by the data model, no allocation per
+/// entry).
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct LabelDateFields {
-    pub year: Option<String>,
-    pub month: Option<String>,
-    pub day: Option<String>,
-    pub hour: Option<String>,
-    pub minute: Option<String>,
-    pub second: Option<String>,
-    pub timezone: Option<String>,
+    pub year: Option<Sym>,
+    pub month: Option<Sym>,
+    pub day: Option<Sym>,
+    pub hour: Option<Sym>,
+    pub minute: Option<Sym>,
+    pub second: Option<Sym>,
+    pub timezone: Option<Sym>,
     /// `"1"` or `undef`.
-    pub pseudodate: Option<String>,
-    pub source: Option<String>,
+    pub pseudodate: Option<Sym>,
+    pub source: Option<Sym>,
 }
 
 impl LabelDateFields {
@@ -149,10 +150,10 @@ impl LabelDateFields {
 
     /// `$info->{field}{$k}` (`None` for `undef` and unknown keys).
     pub fn get(&self, k: &str) -> Option<&str> {
-        self.slot(k).and_then(|v| v.as_deref())
+        self.slot(k).and_then(|v| v.map(Sym::as_str))
     }
 
-    fn slot(&self, k: &str) -> Option<&Option<String>> {
+    fn slot(&self, k: &str) -> Option<&Option<Sym>> {
         Some(match k {
             "year" => &self.year,
             "month" => &self.month,
@@ -167,7 +168,7 @@ impl LabelDateFields {
         })
     }
 
-    fn slot_mut(&mut self, k: &str) -> Option<&mut Option<String>> {
+    fn slot_mut(&mut self, k: &str) -> Option<&mut Option<Sym>> {
         Some(match k {
             "year" => &mut self.year,
             "month" => &mut self.month,
@@ -192,7 +193,10 @@ impl LabelDateInfo {
             LabelDateInfo::Field(f) => {
                 let fo = LabelDateFields::KEYS
                     .iter()
-                    .map(|k| (k.to_string(), s(f.slot(k).expect("key"))))
+                    .map(|k| {
+                        let v = f.slot(k).expect("key").map(|v| v.to_string());
+                        (k.to_string(), s(&v))
+                    })
                     .collect();
                 o.insert("field".into(), PerlData::Object(fo));
             }
@@ -221,7 +225,7 @@ impl LabelDateInfo {
                 return None;
             }
             for (k, v) in fo {
-                *out.slot_mut(k)? = opt(v)?;
+                *out.slot_mut(k)? = opt(v)?.map(Sym::from);
             }
             Some(LabelDateInfo::Field(out))
         } else {

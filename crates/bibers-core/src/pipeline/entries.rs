@@ -20,7 +20,7 @@ use crate::datamodel::DataModel;
 use crate::log::{Fatal, Logger};
 use crate::model::{
     DataList, Entry, LabelDateFields, LabelDateInfo, Name, NameId, NameListId, Section,
-    SectionState, Value,
+    SectionState, Sym, Value,
 };
 use crate::perlish::{fc, lc, nfc, numify, truthy};
 use crate::quirks::Quirk;
@@ -772,16 +772,17 @@ fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
             };
             if defined(be, Some(&ldy)) || defined(be, rest[0].as_deref()) {
                 let [_, month, day, hour, minute, second, timezone] = rest;
+                let sym = |f: Option<String>| f.map(Sym::from);
                 be.labeldateinfo = Some(LabelDateInfo::Field(LabelDateFields {
-                    year: Some(ldy.clone()),
-                    month,
-                    day,
-                    hour,
-                    minute,
-                    second,
-                    timezone,
-                    pseudodate: pseudodate.then(|| "1".to_string()),
-                    source: Some(if pseudodate { ldy.clone() } else { datetype }),
+                    year: Some(Sym::new(&ldy)),
+                    month: sym(month),
+                    day: sym(day),
+                    hour: sym(hour),
+                    minute: sym(minute),
+                    second: sym(second),
+                    timezone: sym(timezone),
+                    pseudodate: pseudodate.then(|| Sym::new("1")),
+                    source: Some(Sym::new(if pseudodate { &ldy } else { &datetype })),
                 }));
                 break;
             }
