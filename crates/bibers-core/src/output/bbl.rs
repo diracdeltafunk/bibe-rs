@@ -1543,7 +1543,7 @@ fn instantiate_names(s: &mut String, lv: &ListView, t: &EntryTemplate, b: &NameB
             &["hash"],
         );
         pno.push(pd_truthy(h).then(|| format!("hash={}", pd_string(h))));
-        let _ = write!(s, "        {{{{{}}}{{%\n", join_removable(&pno));
+        let _ = writeln!(s, "        {{{{{}}}{{%", join_removable(&pno));
         let base_parts = pd_path(un_nd, &["basenamestringparts"]).and_then(J::as_array);
         for (k, (np, v, i)) in n.parts.iter().enumerate() {
             if k > 0 {
