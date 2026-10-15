@@ -10,7 +10,7 @@
 //! `state.ladisambiguation{label}`; the `v`/`l` width disambiguation caches
 //! live in the section (`labelcache_v`/`labelcache_l`, keyed by field name
 //! only, so shared by all data lists and label parts of the section: BB-094).
-//! All of these keep biber's dump shapes (they are [`PerlData`]).
+//! All of these keep biber's dump shapes (they are [`crate::model::PerlData`]).
 
 use std::collections::{BTreeMap, HashMap};
 
@@ -22,7 +22,7 @@ use crate::config::Config;
 use crate::config::blx::OptValue;
 use crate::datamodel::DataModel;
 use crate::log::Fatal;
-use crate::model::{NameArena, NameListId, PerlData, SectionState, Value};
+use crate::model::{ListState, NameArena, NameListId, SectionState, Value};
 use crate::perlish::{numify, sort_by_order, truthy};
 use crate::quirks::Quirk;
 use crate::xmlin::{XHash, XVal};
@@ -74,7 +74,18 @@ pub fn process_labelalpha(
     list: usize,
     citekey: &str,
 ) -> Result<(), Fatal> {
-    let cfg: &Config = ctx.cfg;
+    process_labelalpha_in(ctx.cfg, ctx.dm, &mut ctx.run.labelalpha, st, list, citekey)
+}
+
+/// [`process_labelalpha`] with the parts of the context it uses.
+pub(crate) fn process_labelalpha_in(
+    cfg: &Config,
+    dm: &DataModel,
+    run: &mut LabelRunCache,
+    st: &mut SectionState,
+    list: usize,
+    citekey: &str,
+) -> Result<(), Fatal> {
     let secnum = st.section.number.clone();
     let Some(be) = st.section.bibentry(citekey) else {
         return Ok(());
@@ -100,7 +111,7 @@ pub fn process_labelalpha(
     let dl = &mut datalists[list];
     let mut g = Gen {
         cfg,
-        dm: ctx.dm,
+        dm,
         secnum: &secnum,
         entries: &section.entries,
         names: &section.names,
@@ -109,7 +120,7 @@ pub fn process_labelalpha(
         dlstate: &mut dl.state,
         lantname: &dl.labelalphanametemplatename,
         listname: &dl.name,
-        run: &mut ctx.run.labelalpha,
+        run,
         label_final: false,
     };
     let (label, slabel) = g.genlabel(citekey);
@@ -136,7 +147,16 @@ pub fn process_extraalpha(
     list: usize,
     citekey: &str,
 ) -> Result<(), Fatal> {
-    let cfg: &Config = ctx.cfg;
+    process_extraalpha_in(ctx.cfg, st, list, citekey)
+}
+
+/// [`process_extraalpha`] with the parts of the context it uses.
+pub(crate) fn process_extraalpha_in(
+    cfg: &Config,
+    st: &mut SectionState,
+    list: usize,
+    citekey: &str,
+) -> Result<(), Fatal> {
     let secnum = &st.section.number;
     let Some(be) = st.section.bibentry(citekey) else {
         return Ok(());
@@ -150,16 +170,16 @@ pub fn process_extraalpha(
     }
     let state = &mut st.datalists[list].state;
     // get_entryfield autovivifies state.fields{citekey}
-    let label = vivify(vivify(state_obj(state), "fields"), citekey)
+    let label = hash2(state, "fields", citekey)
         .get("labelalpha")
         .and_then(J::as_str)
         .filter(|s| truthy(Some(s)))
         .map(str::to_string);
     if let Some(la) = label {
         // incr_la_disambiguation
-        let m = vivify(state_obj(state), "ladisambiguation");
+        let m = state_obj(state).level1("ladisambiguation");
         let n = m.get(&la).and_then(J::as_str).map_or(0.0, numify);
-        m.insert(la, J::from(perl_compat::truth::format_nv(n + 1.0)));
+        m.insert(&la, J::from(perl_compat::truth::format_nv(n + 1.0)));
     }
     Ok(())
 }
@@ -177,41 +197,28 @@ fn opt_str(v: Option<&OptValue>) -> Option<&str> {
     v.and_then(OptValue::as_str)
 }
 
-/// The data list state as a hash (autovivified).
-fn state_obj(state: &mut Option<PerlData>) -> &mut Map<String, J> {
-    let s = state.get_or_insert_with(|| J::Object(Map::new()));
-    if !s.is_object() {
-        *s = J::Object(Map::new());
-    }
-    match s {
-        J::Object(o) => o,
-        _ => unreachable!(),
-    }
+/// The data list state (autovivified).
+fn state_obj(state: &mut Option<ListState>) -> &mut ListState {
+    state.get_or_insert_with(ListState::default)
 }
 
-/// `$m->{k}` as a hash, autovivified.
-fn vivify<'j>(m: &'j mut Map<String, J>, k: &str) -> &'j mut Map<String, J> {
-    let v = m
-        .entry(k.to_string())
-        .or_insert_with(|| J::Object(Map::new()));
-    if !v.is_object() {
-        *v = J::Object(Map::new());
-    }
-    match v {
+/// `$state->{k0}{k1}` as a hash, autovivified.
+fn hash2<'j>(state: &'j mut Option<ListState>, k0: &str, k1: &str) -> &'j mut Map<String, J> {
+    match state_obj(state).level1(k0).hash(k1) {
         J::Object(o) => o,
         _ => unreachable!(),
     }
 }
 
 /// `$dlist->set_entryfield($citekey, $f, $v)`.
-fn set_entryfield(state: &mut Option<PerlData>, citekey: &str, f: &str, v: J) {
-    vivify(vivify(state_obj(state), "fields"), citekey).insert(f.to_string(), v);
+fn set_entryfield(state: &mut Option<ListState>, citekey: &str, f: &str, v: J) {
+    hash2(state, "fields", citekey).insert(f.to_string(), v);
 }
 
 /// `$dlist->get_visible_alpha($nlid)` (autovivifies
 /// `state.namelistdata{nlid}`).
-fn visible_alpha(state: &mut Option<PerlData>, nlid: NameListId) -> Option<String> {
-    vivify(vivify(state_obj(state), "namelistdata"), &nlid.key())
+fn visible_alpha(state: &mut Option<ListState>, nlid: NameListId) -> Option<String> {
+    hash2(state, "namelistdata", &nlid.key())
         .get("visalpha")
         .and_then(J::as_str)
         .map(str::to_string)
@@ -432,7 +439,7 @@ struct Gen<'a> {
     /// Section slots (`labelcache_v`, `labelcache_l`).
     slots: &'a mut crate::model::Slots,
     /// The data list's `state`.
-    dlstate: &'a mut Option<PerlData>,
+    dlstate: &'a mut Option<ListState>,
     /// The data list's labelalphanametemplate name.
     lantname: &'a str,
     /// The data list's name.

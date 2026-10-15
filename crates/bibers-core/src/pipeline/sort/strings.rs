@@ -78,24 +78,40 @@ pub fn trim_collapse(s: &str) -> String {
 /// `Biber::Utils::strip_nosort` (Utils.pm:559): apply the `nosort` regexes
 /// for `field` (by field name or datafield set).
 pub fn strip_nosort(cfg: &Config, s: &str, field: &str) -> String {
-    if !truthy(Some(s)) {
-        return String::new();
-    }
+    strip_nosort_with(cfg, s, &nosort_patterns(cfg, field))
+}
+
+/// The positions of the `nosort` patterns that apply to `field` (by field
+/// name or datafield set), for [`strip_nosort_with`].
+pub fn nosort_patterns(cfg: &Config, field: &str) -> Vec<usize> {
     let pats = cfg.biber.patterns("nosort");
     if pats.is_empty() {
-        return s.to_string();
+        return Vec::new();
     }
     let ffield = fc(field);
-    let mut out = s.to_string();
-    for p in pats {
+    let mut out = Vec::new();
+    for (i, p) in pats.iter().enumerate() {
         let name = p.name.as_deref().unwrap_or("");
         let applies = fc(name) == ffield
             || cfg
                 .datafield_set(&lc(name))
                 .is_some_and(|set| set.iter().any(|f| fc(f) == ffield));
-        if !applies {
-            continue;
+        if applies {
+            out.push(i);
         }
+    }
+    out
+}
+
+/// [`strip_nosort`] with the patterns that apply (from [`nosort_patterns`]).
+pub fn strip_nosort_with(cfg: &Config, s: &str, applicable: &[usize]) -> String {
+    if !truthy(Some(s)) {
+        return String::new();
+    }
+    let pats = cfg.biber.patterns("nosort");
+    let mut out = s.to_string();
+    for &i in applicable {
+        let p = &pats[i];
         // `qr/$re/` compiled once (Biber.pm:4433); an invalid pattern would
         // have died there.
         if let Ok(re) = PerlRegex::cached(p.value.as_deref().unwrap_or(""), false)
@@ -109,10 +125,16 @@ pub fn strip_nosort(cfg: &Config, s: &str, field: &str) -> String {
 
 /// `Biber::Utils::normalise_string_sort` (Utils.pm:659).
 pub fn normalise_string_sort(cfg: &Config, s: &str, field: &str) -> String {
+    normalise_string_sort_with(cfg, s, &nosort_patterns(cfg, field))
+}
+
+/// [`normalise_string_sort`] with the `nosort` patterns that apply (from
+/// [`nosort_patterns`]).
+pub fn normalise_string_sort_with(cfg: &Config, s: &str, nosort: &[usize]) -> String {
     if !truthy(Some(s)) {
         return String::new();
     }
-    let s = strip_nosort(cfg, s, field);
+    let s = strip_nosort_with(cfg, s, nosort);
     let s = replace_ties(&s);
     let s = strip_macros(&s);
     let s: String = s.chars().filter(|c| *c != '{' && *c != '}').collect();
@@ -129,7 +151,15 @@ pub fn normalise_string(s: &str) -> String {
     let s = strip_macros(&s);
     let s: String = s
         .chars()
-        .filter(|&c| !(Prop::P.contains(c) || Prop::S.contains(c) || Prop::C.contains(c)))
+        .filter(|&c| {
+            if c.is_ascii() {
+                // Every ASCII punctuation character is in \p{P} or \p{S};
+                // \p{C} has the controls.
+                !(c.is_ascii_punctuation() || c.is_ascii_control())
+            } else {
+                !(Prop::P.contains(c) || Prop::S.contains(c) || Prop::C.contains(c))
+            }
+        })
         .collect();
     trim_collapse(&s)
 }
@@ -212,6 +242,18 @@ pub fn pad_namepart(s: &str, width: f64) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn ascii_punctuation_matches_unicode_classes() {
+        for c in (0u8..128).map(char::from) {
+            let slow = Prop::P.contains(c) || Prop::S.contains(c) || Prop::C.contains(c);
+            assert_eq!(
+                c.is_ascii_punctuation() || c.is_ascii_control(),
+                slow,
+                "{c:?}"
+            );
+        }
+    }
 
     #[test]
     fn ties_and_macros() {

@@ -21,7 +21,9 @@
 //!   (DataList.pm:2222) runs over the whole entry, user data included
 //!   (BB-015, [`Quirk::BblCommaCleanup`]).
 
-use std::collections::{BTreeMap, HashMap};
+use rustc_hash::FxHashMap as HashMap;
+use std::collections::BTreeMap;
+use std::fmt::Write as _;
 
 use md5::{Digest, Md5};
 use perl_compat::encoding::{Encoding, Lookup, lookup};
@@ -34,10 +36,10 @@ use serde_json::Value as J;
 
 use crate::biber_error;
 use crate::config::blx::{OptValue, Scope, map_boolean_tostring_raw};
-use crate::datamodel::DataModel;
+use crate::datamodel::{DataModel, Helpers};
 use crate::log::Fatal;
 use crate::model::{
-    DataList, Entry, Name, NameArena, NameId, NameListId, PerlData, SectionState, Value,
+    DataList, Entry, Name, NameArena, NameId, NameListId, PerlData, SectionState, Sym, Value,
 };
 use crate::pipeline::{Ctx, Processed};
 use crate::quirks::Quirk;
@@ -167,32 +169,33 @@ fn join_removable(items: &[Option<String>]) -> String {
 /// The "dangling comma" cleanup `s/,(?:\n\s+)?\}\}/}}/gxms`
 /// (DataList.pm:2222), applied to a whole instantiated entry (BB-015).
 pub fn dangling_comma_cleanup(s: &str) -> String {
-    let b: Vec<char> = s.chars().collect();
-    let mut out = String::with_capacity(s.len());
-    let mut i = 0;
-    while i < b.len() {
-        if b[i] == ',' {
-            // `\n\s+` then `}}`
-            if b.get(i + 1) == Some(&'\n') {
-                let mut k = i + 2;
-                while k < b.len() && is_perl_space(b[k]) {
-                    k += 1;
-                }
-                if k > i + 2 && b.get(k) == Some(&'}') && b.get(k + 1) == Some(&'}') {
-                    out.push_str("}}");
-                    i = k + 2;
-                    continue;
-                }
-            }
-            if b.get(i + 1) == Some(&'}') && b.get(i + 2) == Some(&'}') {
-                out.push_str("}}");
-                i += 3;
-                continue;
-            }
+    /// The end of a match starting at the `,` at `i`.
+    fn match_at(s: &str, i: usize) -> Option<usize> {
+        let rest = &s[i + 1..];
+        if rest.starts_with("}}") {
+            return Some(i + 3);
         }
-        out.push(b[i]);
-        i += 1;
+        // `\n\s+` then `}}`
+        let after_nl = rest.strip_prefix('\n')?;
+        let tail = after_nl.trim_start_matches(is_perl_space);
+        (tail.len() < after_nl.len() && tail.starts_with("}}")).then(|| s.len() - tail.len() + 2)
     }
+    let mut out = String::with_capacity(s.len());
+    let mut copied = 0;
+    let mut from = 0;
+    while let Some(off) = s[from..].find(',') {
+        let i = from + off;
+        match match_at(s, i) {
+            Some(end) => {
+                out.push_str(&s[copied..i]);
+                out.push_str("}}");
+                copied = end;
+                from = end;
+            }
+            None => from = i + 1,
+        }
+    }
+    out.push_str(&s[copied..]);
     out
 }
 
@@ -382,11 +385,34 @@ struct EntryTemplate {
     hash_src: HashMap<NameId, NameListId>,
 }
 
+impl EntryTemplate {
+    /// Roughly the length of the entry's text once instantiated.
+    fn size_hint(&self) -> usize {
+        let name = |n: &NameT| {
+            64 + n
+                .parts
+                .iter()
+                .map(|(p, v, i)| 40 + 2 * p.len() + v.len() + i.len())
+                .sum::<usize>()
+        };
+        self.items
+            .iter()
+            .map(|i| match i {
+                Item::Text(t) => t.len(),
+                Item::Slot(_) => 40,
+                Item::Names(b) => 64 + b.names.iter().map(name).sum::<usize>(),
+            })
+            .sum()
+    }
+}
+
 /// Mutable writer state that lives across sections.
 struct Writer {
     /// `$dmh->{datefields}`, which the date-meta loop mutates in place
     /// (BB-028).
     datefields: Vec<String>,
+    /// The date field stems (`datefields` without the `date` suffix).
+    date_stems: Vec<String>,
     /// The current section's shared list arrays: `(citekey, field)` →
     /// group, and each group's live value (B21).
     shared: HashMap<(String, String), usize>,
@@ -444,16 +470,167 @@ impl Writer {
 
 fn add_names(
     arena: &NameArena,
-    fields: &[String],
+    fields: impl Iterator<Item = Sym>,
     e: &Entry,
     map: &mut HashMap<NameId, NameListId>,
 ) {
     for f in fields {
-        if let Some(Value::Names(id)) = e.get_field(f) {
+        if let Some(Value::Names(id)) = e.get_field_sym(f) {
             for n in &arena.list(*id).names {
                 map.entry(*n).or_insert(*id);
             }
         }
+    }
+}
+
+/// The data model's output field lists (`$dmh`) that `set_output_entry`
+/// walks.
+#[derive(Clone, Copy, Debug)]
+enum Helper {
+    NameLists,
+    NameListsAll,
+    Lists,
+    Fields,
+    Xsv,
+    Ranges,
+    VFields,
+    VLists,
+}
+
+impl Helper {
+    const ALL: [Helper; 8] = [
+        Helper::NameLists,
+        Helper::NameListsAll,
+        Helper::Lists,
+        Helper::Fields,
+        Helper::Xsv,
+        Helper::Ranges,
+        Helper::VFields,
+        Helper::VLists,
+    ];
+
+    fn list(self, dmh: &Helpers) -> &[String] {
+        match self {
+            Helper::NameLists => &dmh.namelists,
+            Helper::NameListsAll => &dmh.namelistsall,
+            Helper::Lists => &dmh.lists,
+            Helper::Fields => &dmh.fields,
+            Helper::Xsv => &dmh.xsv,
+            Helper::Ranges => &dmh.ranges,
+            Helper::VFields => &dmh.vfields,
+            Helper::VLists => &dmh.vlists,
+        }
+    }
+}
+
+/// The names `set_output_entry` builds for each date field stem (`$d` in
+/// bbl.pm:400-440).
+struct DateStem {
+    stem: String,
+    unspecified: String,
+    /// `(source field, output name)` of the `\true` flags.
+    flags: Vec<(String, String)>,
+    endyear: String,
+    endera: String,
+    year: String,
+    datesplit: String,
+    era: String,
+}
+
+impl DateStem {
+    fn new(d: &str) -> Self {
+        let flags = [
+            ("datejulian", "datejulian"),
+            ("enddatejulian", "enddatejulian"),
+            ("dateapproximate", "datecirca"),
+            ("enddateapproximate", "enddatecirca"),
+            ("dateuncertain", "dateuncertain"),
+            ("enddateuncertain", "enddateuncertain"),
+            ("dateunknown", "dateunknown"),
+            ("enddateunknown", "enddateunknown"),
+        ]
+        .iter()
+        .map(|(src, out)| (format!("{d}{src}"), format!("{d}{out}")))
+        .collect();
+        DateStem {
+            stem: d.to_string(),
+            unspecified: format!("{d}dateunspecified"),
+            flags,
+            endyear: format!("{d}endyear"),
+            endera: format!("{d}endera"),
+            year: format!("{d}year"),
+            datesplit: format!("{d}datesplit"),
+            era: format!("{d}era"),
+        }
+    }
+}
+
+/// Lookups computed once per render instead of once per entry.
+struct Prep {
+    /// The [`Helper`] lists, interned.
+    lists: [Vec<Sym>; 8],
+    /// Field name → its positions in the [`Helper`] lists.
+    index: HashMap<Sym, Vec<(Helper, usize)>>,
+    /// `$dm->get_constant_value('nameparts')`.
+    nameparts: Vec<String>,
+    /// The date stems last built (they change under BB-028).
+    date_stems: Vec<DateStem>,
+    /// [`wraplines`].
+    wrap: Option<i64>,
+}
+
+impl Prep {
+    fn new(dm: &DataModel, wrap: Option<i64>) -> Self {
+        let dmh = &dm.helpers;
+        let lists: [Vec<Sym>; 8] =
+            Helper::ALL.map(|h| h.list(dmh).iter().map(|f| Sym::new(f)).collect());
+        let mut index: HashMap<Sym, Vec<(Helper, usize)>> = HashMap::default();
+        for h in Helper::ALL {
+            for (i, f) in lists[h as usize].iter().enumerate() {
+                index.entry(*f).or_default().push((h, i));
+            }
+        }
+        Prep {
+            lists,
+            index,
+            nameparts: dm.get_constant_value("nameparts"),
+            date_stems: Vec::new(),
+            wrap,
+        }
+    }
+
+    /// For each [`Helper`] list, the positions of the fields `e` has (as a
+    /// data or derived field, even `undef`), in list order. Every loop of
+    /// `set_output_entry` over a helper list skips fields the entry lacks,
+    /// so walking just these is the same.
+    fn present(&self, e: &Entry) -> [Vec<usize>; 8] {
+        let mut at: [Vec<usize>; 8] = Default::default();
+        for f in e.datafields.keys().chain(e.derivedfields.keys()) {
+            for &(h, i) in self.index.get(f).into_iter().flatten() {
+                at[h as usize].push(i);
+            }
+        }
+        for v in &mut at {
+            v.sort_unstable();
+            v.dedup();
+        }
+        at
+    }
+
+    /// The fields of `h` at the positions `at` (from [`Prep::present`]).
+    fn fields<'a>(&'a self, at: &'a [Vec<usize>; 8], h: Helper) -> impl Iterator<Item = Sym> + 'a {
+        let list = &self.lists[h as usize];
+        at[h as usize].iter().map(move |&i| list[i])
+    }
+
+    /// The date stems for `stems`, rebuilt when they changed.
+    fn date_stems(&mut self, stems: &[String]) -> &[DateStem] {
+        if self.date_stems.len() != stems.len()
+            || self.date_stems.iter().zip(stems).any(|(d, s)| d.stem != *s)
+        {
+            self.date_stems = stems.iter().map(|d| DateStem::new(d)).collect();
+        }
+        &self.date_stems
     }
 }
 
@@ -493,40 +670,38 @@ fn blx_undef_truthy(ctx: &Ctx, secnum: &str, opt: &str, et: &str, key: &str) -> 
 }
 
 /// `name_to_bbl` (Name.pm:421) without the uniquename/hash values.
-fn name_template(ctx: &Ctx, dm: &DataModel, n: &Name, un: bool) -> NameT {
+fn name_template(ctx: &Ctx, nameparts: &[String], n: &Name, un: bool) -> NameT {
     let mut parts = Vec::new();
-    for np in dm.get_constant_value("nameparts") {
-        let part = n.nameparts.get(&np);
-        let s = part.and_then(|p| p.string.clone()).unwrap_or_default();
-        let mut npc = String::new();
-        let mut npci = String::new();
-        if perl_truthy(&s) {
-            npc = if n
-                .strip
-                .get(&np)
-                .and_then(|v| v.as_deref())
-                .is_some_and(perl_truthy)
-            {
-                format!("{{{s}}}")
+    for np in nameparts {
+        let part = n.nameparts.get(np);
+        let s = part.and_then(|p| p.string.as_deref()).unwrap_or("");
+        if !perl_truthy(s) {
+            continue;
+        }
+        let npc = if n
+            .strip
+            .get(np)
+            .and_then(|v| v.as_deref())
+            .is_some_and(perl_truthy)
+        {
+            format!("{{{s}}}")
+        } else {
+            join_name(s)
+        };
+        if !perl_truthy(&npc) {
+            continue;
+        }
+        let inits = part.and_then(|p| p.initial.as_deref()).unwrap_or(&[]);
+        let i = inits.join("\\bibinitperiod\\bibinitdelim ") + "\\bibinitperiod";
+        let mut npci = String::with_capacity(i.len());
+        for c in i.chars() {
+            if Prop::Pd.contains(c) {
+                npci.push_str("\\bibinithyphendelim ");
             } else {
-                join_name(&s)
-            };
-            let inits = part.and_then(|p| p.initial.clone()).unwrap_or_default();
-            let i = inits.join("\\bibinitperiod\\bibinitdelim ") + "\\bibinitperiod";
-            npci = i
-                .chars()
-                .map(|c| {
-                    if Prop::Pd.contains(c) {
-                        "\\bibinithyphendelim ".to_string()
-                    } else {
-                        c.to_string()
-                    }
-                })
-                .collect();
+                npci.push(c);
+            }
         }
-        if perl_truthy(&npc) {
-            parts.push((np, npc, npci));
-        }
+        parts.push((np.clone(), npc, npci));
     }
     let mut opts = Vec::new();
     for no in ctx.cfg.blx.registry.options_in_scope(Scope::Name) {
@@ -553,8 +728,18 @@ fn name_template(ctx: &Ctx, dm: &DataModel, n: &Name, un: bool) -> NameT {
     }
 }
 
+/// The `--wraplines` columns, if set.
+fn wraplines(ctx: &Ctx) -> Option<i64> {
+    ctx.cfg
+        .biber
+        .get_str("wraplines")
+        .filter(|w| perl_truthy(w))
+        .map(|w| PerlNum::parse(w).as_f64() as i64)
+}
+
 /// `_printfield` (bbl.pm:105).
-fn printfield(ctx: &Ctx, dm: &DataModel, e: &Entry, field: &str, s: &str) -> String {
+/// `cols` is the `--wraplines` value ([`wraplines`]).
+fn printfield(cols: Option<i64>, dm: &DataModel, e: &Entry, field: &str, s: &str) -> String {
     let outfield = dm.get_outcase(field).unwrap_or(field);
     if s.is_empty() && !dm.field_is_nullok(field) {
         return String::new();
@@ -576,24 +761,24 @@ fn printfield(ctx: &Ctx, dm: &DataModel, e: &Entry, field: &str, s: &str) -> Str
         }
     }
     // Auto-escape TeX specials in non-BibTeX data.
-    if field_type != "strng" && e.get_str("datatype") != Some("bibtex") {
-        let c: Vec<char> = s.chars().collect();
-        let mut o = String::with_capacity(s.len());
-        for (i, ch) in c.iter().enumerate() {
-            if matches!(ch, '#' | '&' | '%') && !(i >= 1 && c[i - 1] == '\\') {
+    if field_type != "strng"
+        && s.contains(['#', '&', '%'])
+        && e.get_str("datatype") != Some("bibtex")
+    {
+        // s/(?<!\\)([#&%])/\\$1/g (all ASCII, so bytewise)
+        let mut o = String::with_capacity(s.len() + 4);
+        let mut last = 0;
+        for (i, b) in s.bytes().enumerate() {
+            if matches!(b, b'#' | b'&' | b'%') && (i == 0 || s.as_bytes()[i - 1] != b'\\') {
+                o.push_str(&s[last..i]);
                 o.push('\\');
+                last = i;
             }
-            o.push(*ch);
         }
+        o.push_str(&s[last..]);
         s = o;
     }
     // --wraplines: Text::Wrap with `$columns` = the option value.
-    let cols = ctx
-        .cfg
-        .biber
-        .get_str("wraplines")
-        .filter(|w| perl_truthy(w))
-        .map(|w| PerlNum::parse(w).as_f64() as i64);
     if let Some(cols) = cols {
         // 16 is the length of '      \field{}{}' or '      \strng{}{}'
         let len = 16 + gcstring::length(outfield) as i64 + gcstring::length(&s) as i64;
@@ -629,6 +814,7 @@ fn uri_string(ctx: &mut Ctx, s: &str) -> Result<String, Fatal> {
 fn set_output_entry(
     ctx: &mut Ctx,
     w: &mut Writer,
+    p: &mut Prep,
     st: &SectionState,
     key: &str,
 ) -> Result<Option<EntryTemplate>, Fatal> {
@@ -642,7 +828,6 @@ fn set_output_entry(
     };
     let bee = be.entrytype().to_string();
     let outtype = dm.get_outcase(&bee).unwrap_or(&bee).to_string();
-    let dmh = &dm.helpers;
     let blx = &ctx.cfg.blx;
     let mut un =
         opt_string(blx.get(Some(secnum), "uniquename", Some(&bee), Some(key))).unwrap_or_default();
@@ -729,21 +914,24 @@ fn set_output_entry(
         flush(&mut text, &mut items);
         return Ok(Some(EntryTemplate {
             items,
-            un_src: HashMap::new(),
-            hash_src: HashMap::new(),
+            un_src: HashMap::default(),
+            hash_src: HashMap::default(),
         }));
     }
     if let Some(es) = be.get_field("entryset").filter(|v| val_truthy(Some(v))) {
         text.push_str(&format!("      \\inset{{{}}}\n", val_string(Some(es))));
     }
 
+    let present = p.present(be);
+
     // Names
-    for namefield in &dmh.namelists {
-        let Some(Value::Names(nlid)) = be.get_field(namefield) else {
+    for namefield_sym in p.fields(&present, Helper::NameLists) {
+        let namefield = namefield_sym.as_str();
+        let Some(Value::Names(nlid)) = be.get_field_sym(namefield_sym) else {
             continue;
         };
         let nf = arena.list(*nlid);
-        let is_lni = lni.as_deref() == Some(namefield.as_str());
+        let is_lni = lni.as_deref() == Some(namefield);
         if pd_truthy(nf.slots.get("morenames")) {
             text.push_str(&format!("      \\true{{more{namefield}}}\n"));
             if is_lni {
@@ -756,7 +944,7 @@ fn set_output_entry(
             un = pd_string(nf.slots.get("uniquename"));
         }
         let mut block = NameBlockT {
-            field: namefield.clone(),
+            field: namefield.to_string(),
             nlid: *nlid,
             total: nf.names.len(),
             ul: false,
@@ -784,7 +972,9 @@ fn set_output_entry(
             }
         }
         for n in arena.names_of(*nlid) {
-            block.names.push(name_template(ctx, dm, n, un != "false"));
+            block
+                .names
+                .push(name_template(ctx, &p.nameparts, n, un != "false"));
         }
         flush(&mut text, &mut items);
         items.push(Item::Names(block));
@@ -797,8 +987,9 @@ fn set_output_entry(
         .get_str("others_string")
         .unwrap_or("others")
         .to_string();
-    for listfield in &dmh.lists {
-        let Some(Value::List(lf)) = be.get_field(listfield) else {
+    for listfield_sym in p.fields(&present, Helper::Lists) {
+        let listfield = listfield_sym.as_str();
+        let Some(Value::List(lf)) = be.get_field_sym(listfield_sym) else {
             continue;
         };
         let (popped, lf) = w.pop_others(key, listfield, lf, &others);
@@ -815,8 +1006,9 @@ fn set_output_entry(
     for h in ["namehash", "fullhash", "fullhashraw", "bibnamehash"] {
         slot(&mut text, &mut items, Slot::Hash(h.into()));
     }
-    for namefield in &dmh.namelists {
-        if !val_truthy(be.get_field(namefield)) {
+    for namefield_sym in p.fields(&present, Helper::NameLists) {
+        let namefield = namefield_sym.as_str();
+        if !val_truthy(be.get_field_sym(namefield_sym)) {
             continue;
         }
         for h in ["bibnamehash", "namehash", "fullhash", "fullhashraw"] {
@@ -895,88 +1087,84 @@ fn set_output_entry(
     }
 
     // Plain fields
-    for field in &dmh.fields {
-        let val = be.get_field(field);
-        let has = !val_string(val).is_empty() && val.is_some();
-        if has || (dm.field_is_nullok(field) && be.field_exists(field)) {
+    for field_sym in p.fields(&present, Helper::Fields) {
+        let field = field_sym.as_str();
+        let val = be.get_field_sym(field_sym);
+        let s = val_string(val);
+        let has = !s.is_empty() && val.is_some();
+        if has || (dm.field_is_nullok(field) && be.field_exists(&field_sym)) {
             if field == "crossref" || field == "xref" {
-                let target = val_string(be.get_field(field));
+                let target = val_string(be.get_field_sym(field_sym));
                 if !has_citekey(st, &target) {
                     continue;
                 }
             }
-            text.push_str(&printfield(ctx, dm, be, field, &val_string(val)));
+            text.push_str(&printfield(p.wrap, dm, be, field, &s));
         }
     }
 
     // Date meta-information. BB-028: the loop variable aliases the shared
     // helper list, so `s/date$//` strips it in place for later entries.
-    let stems: Vec<String> = if ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation) {
+    let stems: &[String] = if ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation) {
         for d in &mut w.datefields {
             if let Some(s) = d.strip_suffix("date") {
                 *d = s.to_string();
             }
         }
-        w.datefields.clone()
+        &w.datefields
     } else {
-        dmh.datefields
-            .iter()
-            .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
-            .collect()
+        &w.date_stems
     };
-    for d in &stems {
-        let unspec = be.get_field(&format!("{d}dateunspecified"));
+    for d in p.date_stems(stems) {
+        let stem = &d.stem;
+        let unspec = be.get_field(&d.unspecified);
         if val_truthy(unspec) {
-            text.push_str(&format!(
-                "      \\field{{{d}dateunspecified}}{{{}}}\n",
+            let _ = writeln!(
+                text,
+                "      \\field{{{}}}{{{}}}",
+                d.unspecified,
                 val_string(unspec)
-            ));
+            );
         }
-        for (src, out) in [
-            ("datejulian", "datejulian"),
-            ("enddatejulian", "enddatejulian"),
-            ("dateapproximate", "datecirca"),
-            ("enddateapproximate", "enddatecirca"),
-            ("dateuncertain", "dateuncertain"),
-            ("enddateuncertain", "enddateuncertain"),
-            ("dateunknown", "dateunknown"),
-            ("enddateunknown", "enddateunknown"),
-        ] {
-            if val_truthy(be.get_field(&format!("{d}{src}"))) {
-                text.push_str(&format!("      \\true{{{d}{out}}}\n"));
+        for (src, out) in &d.flags {
+            if val_truthy(be.get_field(src)) {
+                let _ = writeln!(text, "      \\true{{{out}}}");
             }
         }
-        if be.field_exists(&format!("{d}endyear")) {
-            let era = be.get_field(&format!("{d}endera"));
+        if be.field_exists(&d.endyear) {
+            let era = be.get_field(&d.endera);
             if val_truthy(era) {
-                text.push_str(&format!(
-                    "      \\field{{{d}enddateera}}{{{}}}\n",
+                let _ = writeln!(
+                    text,
+                    "      \\field{{{stem}enddateera}}{{{}}}",
                     val_string(era)
-                ));
+                );
             }
         }
-        if be.field_exists(&format!("{d}year")) {
-            if !val_truthy(be.get_field(&format!("{d}datesplit"))) {
+        if be.field_exists(&d.year) {
+            if !val_truthy(be.get_field(&d.datesplit)) {
                 continue;
             }
-            let era = be.get_field(&format!("{d}era"));
+            let era = be.get_field(&d.era);
             if val_truthy(era) {
-                text.push_str(&format!(
-                    "      \\field{{{d}dateera}}{{{}}}\n",
+                let _ = writeln!(
+                    text,
+                    "      \\field{{{stem}dateera}}{{{}}}",
                     val_string(era)
-                ));
+                );
             }
         }
     }
 
     // XSV fields
-    for field in &dmh.xsv {
+    for field_sym in p.fields(&present, Helper::Xsv) {
+        let field = field_sym.as_str();
         if field == "keywords" {
             continue;
         }
-        let f = be.get_field(field);
+        let f = be.get_field_sym(field_sym);
         if val_truthy(f) {
-            text.push_str(&printfield(ctx, dm, be, field, &val_string(f)));
+            text.push_str(&printfield(p.wrap, dm, be, field, &val_string(f)));
         }
     }
 
@@ -986,8 +1174,9 @@ fn set_output_entry(
 
     // Ranges
     let zero_quirk = ctx.cfg.quirks.on(Quirk::RangelenZeroDigit);
-    for rfield in &dmh.ranges {
-        let Some(Value::Ranges(rf)) = be.get_field(rfield) else {
+    for rfield_sym in p.fields(&present, Helper::Ranges) {
+        let rfield = rfield_sym.as_str();
+        let Some(Value::Ranges(rf)) = be.get_field_sym(rfield_sym) else {
             continue;
         };
         let pr: Vec<String> = rf
@@ -1018,8 +1207,9 @@ fn set_output_entry(
     }
 
     // Verbatim fields
-    for vfield in &dmh.vfields {
-        let v = be.get_field(vfield);
+    for vfield_sym in p.fields(&present, Helper::VFields) {
+        let vfield = vfield_sym.as_str();
+        let v = be.get_field_sym(vfield_sym);
         if !val_truthy(v) {
             continue;
         }
@@ -1034,8 +1224,9 @@ fn set_output_entry(
     }
 
     // Verbatim lists
-    for vlist in &dmh.vlists {
-        let Some(Value::List(vlf)) = be.get_field(vlist) else {
+    for vlist_sym in p.fields(&present, Helper::VLists) {
+        let vlist = vlist_sym.as_str();
+        let Some(Value::List(vlf)) = be.get_field_sym(vlist_sym) else {
             continue;
         };
         let (popped, vlf) = w.pop_others(key, vlist, vlf, &others);
@@ -1139,10 +1330,20 @@ fn set_output_entry(
     text.push_str("    \\endentry\n");
     flush(&mut text, &mut items);
 
-    let mut un_src = HashMap::new();
-    add_names(arena, &dmh.namelists, be, &mut un_src);
-    let mut hash_src = HashMap::new();
-    add_names(arena, &dmh.namelistsall, be, &mut hash_src);
+    let mut un_src = HashMap::default();
+    add_names(
+        arena,
+        p.fields(&present, Helper::NameLists),
+        be,
+        &mut un_src,
+    );
+    let mut hash_src = HashMap::default();
+    add_names(
+        arena,
+        p.fields(&present, Helper::NameListsAll),
+        be,
+        &mut hash_src,
+    );
     Ok(Some(EntryTemplate {
         items,
         un_src,
@@ -1169,41 +1370,23 @@ fn has_citekey(st: &SectionState, key: &str) -> bool {
 /// Per-list lookups (`Biber::DataList` getters).
 struct ListView<'a> {
     dl: &'a DataList,
-    state: Option<&'a PerlData>,
+    state: Option<&'a crate::model::ListState>,
     sortinithash: &'a dyn Fn(&str) -> String,
 }
 
 impl<'a> ListView<'a> {
-    fn entryfield(&self, key: &str, f: &str) -> Option<&'a PerlData> {
-        pd_path(self.state, &["fields", key, f])
+    /// `$self->{state}{fields}{$key}`.
+    fn entryfields(&self, key: &str) -> Option<&'a PerlData> {
+        self.state?.peek2("fields", key)
     }
     fn data(&self, slot: &str, key: &str) -> Option<&'a PerlData> {
-        pd_path(self.state, &[slot, key])
+        self.state?.peek2(slot, key)
     }
     fn nld(&self, nlid: NameListId) -> Option<&'a PerlData> {
-        pd_path(self.state, &["namelistdata", &nlid.key()])
+        self.state?.peek2("namelistdata", &nlid.key())
     }
     fn nd(&self, nlid: NameListId, nid: NameId) -> Option<&'a PerlData> {
         pd_path(self.nld(nlid), &[&nid.key()])
-    }
-    /// `get_unsummary` (DataList.pm:408).
-    fn unsummary(&self, nlid: NameListId, nid: NameId) -> Option<&'static str> {
-        let un = pd_path(self.nd(nlid, nid), &["un"])?;
-        if un.is_null() {
-            return None;
-        }
-        let a = un.as_array();
-        let get = |i: usize| a.and_then(|a| a.get(i)).map(|v| pd_string(Some(v)));
-        let (p, l) = (get(0).unwrap_or_default(), get(1).unwrap_or_default());
-        Some(if l == "none" || p == "base" {
-            "0"
-        } else if l == "init" {
-            "1"
-        } else if l == "full" || l == "fullonly" {
-            "2"
-        } else {
-            "0"
-        })
     }
     fn sortinit(&self, key: &str) -> Option<String> {
         let v = pd_path(self.dl.slots.get("sortinitdata"), &[key, "init"])?;
@@ -1215,129 +1398,179 @@ impl<'a> ListView<'a> {
     }
 }
 
+/// `get_unsummary` (DataList.pm:408) of a name's data `nd`.
+fn unsummary(nd: Option<&PerlData>) -> Option<&'static str> {
+    let un = pd_path(nd, &["un"])?;
+    if un.is_null() {
+        return None;
+    }
+    let a = un.as_array();
+    let get = |i: usize| a.and_then(|a| a.get(i)).map(|v| pd_string(Some(v)));
+    let (p, l) = (get(0).unwrap_or_default(), get(1).unwrap_or_default());
+    Some(if l == "none" || p == "base" {
+        "0"
+    } else if l == "init" {
+        "1"
+    } else if l == "full" || l == "fullonly" {
+        "2"
+    } else {
+        "0"
+    })
+}
+
 fn instantiate_entry(lv: &ListView, t: &EntryTemplate, key: &str) -> String {
-    let mut s = String::new();
+    let mut s = String::with_capacity(1024);
+    // `$self->{state}{fields}{$key}`, looked up once.
+    let fields = lv.entryfields(key);
+    let field = |f: &str| pd_path(fields, &[f]);
     for item in &t.items {
         match item {
             Item::Text(x) => s.push_str(x),
-            Item::Slot(slot) => {
-                let line = match slot {
-                    Slot::EntrySet => match lv.entryfield(key, "entryset") {
-                        Some(J::Array(a)) => Some(format!(
-                            "\\set{{{}}}",
-                            a.iter()
-                                .map(|v| pd_string(Some(v)))
-                                .collect::<Vec<_>>()
-                                .join(",")
-                        )),
-                        v if pd_truthy(v) => Some(format!("\\set{{{}}}", pd_string(v))),
-                        _ => None,
-                    },
-                    Slot::True(f) => {
-                        pd_truthy(lv.entryfield(key, f)).then(|| format!("\\true{{{f}}}"))
-                    }
-                    Slot::Hash(f) => {
-                        let v = lv.entryfield(key, f);
-                        pd_truthy(v).then(|| format!("\\strng{{{f}}}{{{}}}", pd_string(v)))
-                    }
-                    Slot::LabelAlpha
-                    | Slot::ExtraAlpha
-                    | Slot::ExtraName
-                    | Slot::ExtraDate
-                    | Slot::ExtraTitle
-                    | Slot::ExtraTitleYear => {
-                        let (data, name) = match slot {
-                            Slot::LabelAlpha => ("labelalphadata", "labelalpha"),
-                            Slot::ExtraAlpha => ("extraalphadata", "extraalpha"),
-                            Slot::ExtraName => ("extranamedata", "extraname"),
-                            Slot::ExtraDate => ("extradatedata", "extradate"),
-                            Slot::ExtraTitle => ("extratitledata", "extratitle"),
-                            _ => ("extratitleyeardata", "extratitleyear"),
-                        };
-                        let v = lv.data(data, key);
-                        pd_truthy(v).then(|| format!("\\field{{{name}}}{{{}}}", pd_string(v)))
-                    }
-                    Slot::SortInit => lv
-                        .sortinit(key)
-                        .map(|si| format!("\\field{{sortinit}}{{{si}}}")),
-                    Slot::SortInitHash => lv
-                        .sortinit(key)
-                        .map(|si| format!("\\field{{sortinithash}}{{{}}}", (lv.sortinithash)(&si))),
-                    Slot::LabelPrefix => perl_truthy(&lv.dl.labelprefix)
-                        .then(|| format!("\\field{{labelprefix}}{{{}}}", lv.dl.labelprefix)),
-                };
-                if let Some(l) = line {
-                    s.push_str("      ");
-                    s.push_str(&l);
-                    s.push('\n');
-                }
-            }
-            Item::Names(b) => {
-                let ul = if b.ul {
-                    let v = pd_path(lv.nld(b.nlid), &["ul"]).filter(|v| !v.is_null());
-                    vec![v.map(|v| format!("ul={}", pd_string(Some(v))))]
-                } else {
-                    vec![]
-                };
-                let mut nlopts = ul;
-                nlopts.extend(b.nlopts.iter().cloned().map(Some));
-                s.push_str(&format!(
-                    "      \\name{{{}}}{{{}}}{{{}}}{{%\n",
-                    b.field,
-                    b.total,
-                    join_removable(&nlopts)
-                ));
-                for n in &b.names {
-                    let un_nl = t.un_src.get(&n.nid).copied().unwrap_or(b.nlid);
-                    let uns = lv.unsummary(un_nl, n.nid);
-                    let mut pno: Vec<Option<String>> = Vec::new();
-                    if n.un {
-                        match uns {
-                            Some(u) => {
-                                pno.push(Some(format!("un={u}")));
-                                let part = pd_string(
-                                    pd_path(lv.nd(un_nl, n.nid), &["un"]).and_then(|v| v.get(0)),
-                                );
-                                pno.push(Some(format!("uniquepart={part}")));
+            Item::Slot(slot) => match slot {
+                Slot::EntrySet => match field("entryset") {
+                    Some(J::Array(a)) => {
+                        s.push_str("      \\set{");
+                        for (i, v) in a.iter().enumerate() {
+                            if i > 0 {
+                                s.push(',');
                             }
-                            None => {
-                                pno.push(None);
-                                pno.push(None);
-                            }
+                            s.push_str(&pd_string(Some(v)));
                         }
+                        s.push_str("}\n");
                     }
-                    pno.extend(n.opts.iter().cloned().map(Some));
-                    let h_nl = t.hash_src.get(&n.nid).copied().unwrap_or(b.nlid);
-                    let h = pd_path(lv.nd(h_nl, n.nid), &["hash"]);
-                    pno.push(pd_truthy(h).then(|| format!("hash={}", pd_string(h))));
-                    let mut lines = Vec::new();
-                    for (np, v, i) in &n.parts {
-                        lines.push(format!("           {np}={{{v}}}"));
-                        lines.push(format!("           {np}i={{{i}}}"));
-                        if n.un && uns.is_some() {
-                            let nd = lv.nd(un_nl, n.nid);
-                            let base = pd_path(nd, &["basenamestringparts"])
-                                .and_then(J::as_array)
-                                .is_some_and(|a| a.iter().any(|x| x.as_str() == Some(np)));
-                            if !base {
-                                lines.push(format!(
-                                    "           {np}un={}",
-                                    pd_string(pd_path(nd, &["unparts", np]))
-                                ));
-                            }
-                        }
+                    v if pd_truthy(v) => {
+                        let _ = writeln!(s, "      \\set{{{}}}", pd_string(v));
                     }
-                    s.push_str(&format!(
-                        "        {{{{{}}}{{%\n{}}}}}%\n",
-                        join_removable(&pno),
-                        lines.join(",\n")
-                    ));
+                    _ => {}
+                },
+                Slot::True(f) => {
+                    if pd_truthy(field(f)) {
+                        let _ = writeln!(s, "      \\true{{{f}}}");
+                    }
                 }
-                s.push_str("      }\n");
-            }
+                Slot::Hash(f) => {
+                    let v = field(f);
+                    if pd_truthy(v) {
+                        let _ = writeln!(s, "      \\strng{{{f}}}{{{}}}", pd_string(v));
+                    }
+                }
+                Slot::LabelAlpha
+                | Slot::ExtraAlpha
+                | Slot::ExtraName
+                | Slot::ExtraDate
+                | Slot::ExtraTitle
+                | Slot::ExtraTitleYear => {
+                    let (data, name) = match slot {
+                        Slot::LabelAlpha => ("labelalphadata", "labelalpha"),
+                        Slot::ExtraAlpha => ("extraalphadata", "extraalpha"),
+                        Slot::ExtraName => ("extranamedata", "extraname"),
+                        Slot::ExtraDate => ("extradatedata", "extradate"),
+                        Slot::ExtraTitle => ("extratitledata", "extratitle"),
+                        _ => ("extratitleyeardata", "extratitleyear"),
+                    };
+                    let v = lv.data(data, key);
+                    if pd_truthy(v) {
+                        let _ = writeln!(s, "      \\field{{{name}}}{{{}}}", pd_string(v));
+                    }
+                }
+                Slot::SortInit => {
+                    if let Some(si) = lv.sortinit(key) {
+                        let _ = writeln!(s, "      \\field{{sortinit}}{{{si}}}");
+                    }
+                }
+                Slot::SortInitHash => {
+                    if let Some(si) = lv.sortinit(key) {
+                        let h = (lv.sortinithash)(&si);
+                        let _ = writeln!(s, "      \\field{{sortinithash}}{{{h}}}");
+                    }
+                }
+                Slot::LabelPrefix => {
+                    if perl_truthy(&lv.dl.labelprefix) {
+                        let _ =
+                            writeln!(s, "      \\field{{labelprefix}}{{{}}}", lv.dl.labelprefix);
+                    }
+                }
+            },
+            Item::Names(b) => instantiate_names(&mut s, lv, t, b),
         }
     }
     s
+}
+
+/// One `\name` block of [`instantiate_entry`].
+fn instantiate_names(s: &mut String, lv: &ListView, t: &EntryTemplate, b: &NameBlockT) {
+    let nld = lv.nld(b.nlid);
+    let mut nlopts: Vec<Option<String>> = Vec::with_capacity(b.nlopts.len() + 1);
+    if b.ul {
+        let v = pd_path(nld, &["ul"]).filter(|v| !v.is_null());
+        nlopts.push(v.map(|v| format!("ul={}", pd_string(Some(v)))));
+    }
+    nlopts.extend(b.nlopts.iter().cloned().map(Some));
+    let _ = writeln!(
+        s,
+        "      \\name{{{}}}{{{}}}{{{}}}{{%",
+        b.field,
+        b.total,
+        join_removable(&nlopts)
+    );
+    // The name data of `nid` in the name list `nl` (usually this block's).
+    let nd = |nl: NameListId, nid: NameId| {
+        if nl == b.nlid {
+            pd_path(nld, &[&nid.key()])
+        } else {
+            lv.nd(nl, nid)
+        }
+    };
+    for n in &b.names {
+        let un_nl = t.un_src.get(&n.nid).copied().unwrap_or(b.nlid);
+        let un_nd = nd(un_nl, n.nid);
+        let uns = unsummary(un_nd);
+        let mut pno: Vec<Option<String>> = Vec::with_capacity(n.opts.len() + 3);
+        if n.un {
+            match uns {
+                Some(u) => {
+                    pno.push(Some(format!("un={u}")));
+                    let part = pd_string(pd_path(un_nd, &["un"]).and_then(|v| v.get(0)));
+                    pno.push(Some(format!("uniquepart={part}")));
+                }
+                None => {
+                    pno.push(None);
+                    pno.push(None);
+                }
+            }
+        }
+        pno.extend(n.opts.iter().cloned().map(Some));
+        let h_nl = t.hash_src.get(&n.nid).copied().unwrap_or(b.nlid);
+        let h = pd_path(
+            if h_nl == un_nl {
+                un_nd
+            } else {
+                nd(h_nl, n.nid)
+            },
+            &["hash"],
+        );
+        pno.push(pd_truthy(h).then(|| format!("hash={}", pd_string(h))));
+        let _ = writeln!(s, "        {{{{{}}}{{%", join_removable(&pno));
+        let base_parts = pd_path(un_nd, &["basenamestringparts"]).and_then(J::as_array);
+        for (k, (np, v, i)) in n.parts.iter().enumerate() {
+            if k > 0 {
+                s.push_str(",\n");
+            }
+            let _ = write!(s, "           {np}={{{v}}},\n           {np}i={{{i}}}");
+            if n.un && uns.is_some() {
+                let base = base_parts.is_some_and(|a| a.iter().any(|x| x.as_str() == Some(np)));
+                if !base {
+                    let _ = write!(
+                        s,
+                        ",\n           {np}un={}",
+                        pd_string(pd_path(un_nd, &["unparts", np]))
+                    );
+                }
+            }
+        }
+        s.push_str("}}%\n");
+    }
+    s.push_str("      }\n");
 }
 
 // ---------------------------------------------------------------------------
@@ -1402,12 +1635,78 @@ pub(crate) fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
 /// `:encoding(<output_encoding>)` layer would (unmappable characters as
 /// `\x{XXXX}`; for `UTF-8`, i.e. `utf-8-strict`, noncharacters too).
 pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
+    match utf8_output(ctx, text)? {
+        Ok(()) => Ok(text.as_bytes().to_vec()),
+        Err(enc) => Ok(enc.encode_layer(text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit))),
+    }
+}
+
+/// [`encode_output`] taking the text by value, which UTF-8 output then
+/// reuses instead of copying.
+pub fn encode_output_owned(ctx: &mut Ctx, text: String) -> Result<Vec<u8>, Fatal> {
+    match utf8_output(ctx, &text)? {
+        Ok(()) => Ok(text.into_bytes()),
+        Err(enc) => Ok(enc.encode_layer(&text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit))),
+    }
+}
+
+/// `Ok(Ok(()))` if the output encoding writes `text` unchanged, else the
+/// encoding to use.
+fn utf8_output(ctx: &mut Ctx, text: &str) -> Result<Result<(), Encoding>, Fatal> {
     let enc = if output_encoding_name(ctx) == "UTF-8" {
         Encoding::UTF8
     } else {
         find_output_encoding(ctx)?
     };
-    Ok(enc.encode_layer(text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit)))
+    // Fast path: lax `utf8` copies; `utf-8-strict` writes valid UTF-8
+    // unchanged except for noncharacters, and a character cut by a buffer
+    // boundary is carried whole into the next buffer (STOP_AT_PARTIAL), so
+    // the chunking is unobservable.
+    if enc.is_utf8() && (enc.name() == "utf8" || !has_noncharacter(text)) {
+        return Ok(Ok(()));
+    }
+    Ok(Err(enc))
+}
+
+/// Does `s` contain a Unicode noncharacter (U+FDD0..U+FDEF or U+xFFFE/
+/// U+xFFFF)? Their UTF-8 forms all start with `EF` (BMP) or `F0`..`F4`, so
+/// only those lead bytes are decoded.
+fn has_noncharacter(s: &str) -> bool {
+    let b = s.as_bytes();
+    let mut i = 0;
+    while let Some(off) = b[i..].iter().position(|&x| x == 0xEF || x >= 0xF0) {
+        i += off;
+        let c = s[i..].chars().next().expect("char boundary") as u32;
+        if (c & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&c) {
+            return true;
+        }
+        i += 1;
+    }
+    false
+}
+
+/// Append `NFC(s)` to `out`, normalising only the non-ASCII stretches. An
+/// ASCII character never combines with what precedes it (no primary
+/// composite has an ASCII second character) and is a starter, so the text
+/// can be split before every ASCII character; a non-ASCII stretch is
+/// normalised together with the ASCII character before it, which it may
+/// combine with (`e` + U+0301).
+fn push_nfc(out: &mut String, s: &str) {
+    let b = s.as_bytes();
+    let mut copied = 0;
+    let mut i = 0;
+    while let Some(off) = b[i..].iter().position(|c| !c.is_ascii()) {
+        let start = (i + off).saturating_sub(1).max(copied);
+        let end = b[i + off..]
+            .iter()
+            .position(u8::is_ascii)
+            .map_or(b.len(), |e| i + off + e);
+        out.push_str(&s[copied..start]);
+        out.push_str(&nfc(&s[start..end]));
+        copied = end;
+        i = end;
+    }
+    out.push_str(&s[copied..]);
 }
 
 /// The locale of a sorting template (for the sortinit collator).
@@ -1421,18 +1720,22 @@ fn template_locale(ctx: &Ctx, name: &str) -> Option<String> {
 /// Render the whole `.bbl` (header, `\preamble`, one `\refsection` per
 /// section with output entries, `\endinput`).
 pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fatal> {
+    let mut prep = Prep::new(ctx.dm, wraplines(ctx));
     let mut w = Writer {
         datefields: ctx.dm.helpers.datefields.clone(),
-        shared: HashMap::new(),
+        date_stems: (ctx.dm.helpers.datefields.iter())
+            .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
+            .collect(),
+        shared: HashMap::default(),
         shared_vals: Vec::new(),
     };
     // create_output_section, per section in processing order.
     let mut sections: Vec<SectionOut> = Vec::new();
     for st in &processed.sections {
         w.start_section(st);
-        let mut entries = HashMap::new();
+        let mut entries = HashMap::default();
         for k in &st.section.citekeys {
-            if let Some(t) = set_output_entry(ctx, &mut w, st, k)? {
+            if let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? {
                 entries.insert(k.clone(), t);
             }
         }
@@ -1460,8 +1763,19 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     let sortdebug = ctx.cfg.biber.is_true("sortdebug");
     let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
 
-    let mut out = String::new();
-    let mut put = |s: &str| out.push_str(&nfc(s));
+    // A size estimate, so that a large `.bbl` isn't built by doubling.
+    let estimate: usize = sections
+        .iter()
+        .flat_map(|so| {
+            so.st.datalists.iter().flat_map(move |dl| {
+                let keys = dl.keys.as_deref().unwrap_or(&[]);
+                keys.iter()
+                    .filter_map(|k| so.entries.get(k).map(EntryTemplate::size_hint))
+            })
+        })
+        .sum();
+    let mut out = String::with_capacity(estimate + 4096);
+    let mut put = |s: &str| push_nfc(&mut out, s);
 
     // create_output_misc: \preamble (global, so the last section's).
     let mut headtext = head();
@@ -1568,6 +1882,67 @@ mod tests {
         assert_eq!(dangling_comma_cleanup("x,\n   }}y"), "x}}y");
         assert_eq!(dangling_comma_cleanup("x,\n}}"), "x,\n}}");
         assert_eq!(dangling_comma_cleanup("x,}y"), "x,}y");
+        assert_eq!(dangling_comma_cleanup("x,\n \n\u{2003}}}y,"), "x}}y,");
+        assert_eq!(dangling_comma_cleanup(",,}},\n}},\n }"), ",}},\n}},\n }");
+        assert_eq!(dangling_comma_cleanup("é,}}ü,"), "é}}ü,");
+    }
+
+    #[test]
+    fn piecewise_nfc() {
+        for s in [
+            "",
+            "abc",
+            "e\u{301}",
+            "xe\u{301}y",
+            "\u{301}a",
+            "a\u{301}\u{316}b\u{1100}\u{1161}\u{11A8} c\u{327}\u{301}",
+            "Mu\u{308}ller, J.\u{30C} {\u{C5}}sa\u{30A}",
+            "\u{AC00}\u{11A8}x\u{1100}\u{1161}",
+            "é\u{301}a\u{301}",
+        ] {
+            let mut out = String::from("<");
+            push_nfc(&mut out, s);
+            assert_eq!(out, format!("<{}", nfc(s)), "{s:?}");
+        }
+        // Pseudo-random strings over ASCII, marks, Hangul jamo and
+        // precomposed letters.
+        let alphabet: Vec<char> = "aeAoU .,{}\\~\u{301}\u{308}\u{316}\u{327}\u{30A}\u{1100}\u{1161}\u{11A8}\u{AC00}\u{C5}\u{E9}\u{212B}\u{F900}\u{0344}\u{0F73}"
+            .chars()
+            .collect();
+        let mut x: u64 = 1;
+        for _ in 0..20_000 {
+            let mut s = String::new();
+            for _ in 0..(x % 9) {
+                x = x
+                    .wrapping_mul(6364136223846793005)
+                    .wrapping_add(1442695040888963407);
+                s.push(alphabet[(x >> 33) as usize % alphabet.len()]);
+            }
+            x = x
+                .wrapping_mul(6364136223846793005)
+                .wrapping_add(1442695040888963407);
+            let mut out = String::new();
+            push_nfc(&mut out, &s);
+            assert_eq!(out, nfc(&s), "{s:?}");
+        }
+    }
+
+    #[test]
+    fn utf8_output_fast_path() {
+        for s in [
+            "abc",
+            "é\u{FDD0}x",
+            "a\u{FFFE}",
+            "\u{1FFFF}z",
+            "\u{FDEF}",
+            "\u{FDF0}\u{FFFD}",
+        ] {
+            let slow = Encoding::UTF8.encode_layer(s, true);
+            assert_eq!(slow == s.as_bytes(), !has_noncharacter(s), "{s:?}");
+        }
+        let long = "é".repeat(3000) + "\u{10FFFF}";
+        assert!(has_noncharacter(&long));
+        assert!(!has_noncharacter(&long[..6000]));
     }
 
     #[test]

@@ -460,7 +460,7 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         if ctx.cfg.biber.is_true("output_safechars") {
             info!(ctx.log, "{}", format.safechars_message());
         }
-        match bibers_core::output::bbl::encode_output(&mut ctx, &text) {
+        match bibers_core::output::bbl::encode_output_owned(&mut ctx, text) {
             Ok(b) => b,
             Err(_) => return log.display_end(),
         }

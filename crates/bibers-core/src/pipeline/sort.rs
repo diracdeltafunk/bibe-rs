@@ -25,7 +25,9 @@ use crate::quirks::Quirk;
 use perl_compat::grapheme::gcstring;
 use perl_compat::regex::PerlRegex;
 use serde_json::{Map, Value as J};
-use strings::{normalise_string, normalise_string_sort, process_sort_attributes};
+use strings::{
+    normalise_string, normalise_string_sort_with, nosort_patterns, process_sort_attributes,
+};
 
 /// The sort separator joining the columns of a sort string
 /// (`$sorting_sep`, Internals.pm:1103).
@@ -169,6 +171,8 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
             snk: sortingnamekey_templates(ctx.cfg),
             warnings: Vec::new(),
             viv: Default::default(),
+            nosort: Default::default(),
+            citeorder: Default::default(),
         };
         for k in &keys {
             results.push((k.clone(), g.sortinfo(k, tmpl)));
@@ -238,6 +242,11 @@ struct Gen<'a> {
     warnings: Vec<String>,
     /// Hash entries Perl autovivifies while reading (applied afterwards).
     viv: std::cell::RefCell<Vec<Viv>>,
+    /// Field → the `nosort` patterns that apply to it.
+    nosort: std::cell::RefCell<rustc_hash::FxHashMap<String, std::rc::Rc<[usize]>>>,
+    /// `_sort_citeorder` with `allkeys`: the largest key order and the
+    /// first position of each key in `orig_order_citekeys`.
+    citeorder: std::cell::OnceCell<(f64, rustc_hash::FxHashMap<&'a str, usize>)>,
 }
 
 /// A hash entry biber autovivifies by reading through it.
@@ -272,14 +281,14 @@ fn apply_viv(st: &mut SectionState, list: usize, viv: Vec<Viv>) {
             Viv::ListField(k) => {
                 let s = st.datalists[list]
                     .state
-                    .get_or_insert_with(|| J::Object(Map::new()));
-                vivify(vivify(s, "fields"), &k);
+                    .get_or_insert_with(Default::default);
+                s.level1("fields").hash(&k);
             }
             Viv::NameListData(k) => {
                 let s = st.datalists[list]
                     .state
-                    .get_or_insert_with(|| J::Object(Map::new()));
-                vivify(vivify(s, "namelistdata"), &k);
+                    .get_or_insert_with(Default::default);
+                s.level1("namelistdata").hash(&k);
             }
         }
     }
@@ -315,6 +324,19 @@ fn fmt_num(x: f64) -> String {
 }
 
 impl<'a> Gen<'a> {
+    /// `normalise_string_sort($s, $field)`.
+    fn sort_norm(&self, s: &str, field: &str) -> String {
+        let cached = self.nosort.borrow().get(field).cloned();
+        let pats = cached.unwrap_or_else(|| {
+            let p: std::rc::Rc<[usize]> = nosort_patterns(self.cfg, field).into();
+            self.nosort
+                .borrow_mut()
+                .insert(field.to_string(), p.clone());
+            p
+        });
+        normalise_string_sort_with(self.cfg, s, &pats)
+    }
+
     fn quirk(&self, q: Quirk) -> bool {
         self.cfg.quirks.on(q)
     }
@@ -480,8 +502,7 @@ impl<'a> Gen<'a> {
                     .dl
                     .state
                     .as_ref()
-                    .and_then(|st| st.get("fields"))
-                    .and_then(|f| f.get(key))
+                    .and_then(|st| st.peek2("fields", key))
                     .and_then(|f| f.get("sortlabelalpha"))
                     .and_then(J::as_str)
                     .unwrap_or("");
@@ -566,22 +587,28 @@ impl<'a> Gen<'a> {
             .and_then(|m| m.get(self.secnum));
         let ko = ko_map.and_then(|m| m.get(key)).and_then(J::as_str);
         if self.sec.allkeys {
-            let max = ko_map
-                .and_then(J::as_object)
-                .map(|m| {
-                    m.values()
-                        .filter_map(J::as_str)
-                        .map(numify)
-                        .fold(None, |a: Option<f64>, v| Some(a.map_or(v, |a| a.max(v))))
-                })
-                .unwrap_or(None)
-                .unwrap_or(0.0);
-            let idx = self
-                .sec
-                .orig_order_citekeys
-                .iter()
-                .position(|k| k == key)
-                .map_or(-1.0, |i| i as f64);
+            // The largest key order and each key's first position in the
+            // original order, computed once per list (a scan per key would
+            // be quadratic for `\nocite{*}`).
+            let (max, first) = self.citeorder.get_or_init(|| {
+                let max = ko_map
+                    .and_then(J::as_object)
+                    .map(|m| {
+                        m.values()
+                            .filter_map(J::as_str)
+                            .map(numify)
+                            .fold(None, |a: Option<f64>, v| Some(a.map_or(v, |a| a.max(v))))
+                    })
+                    .unwrap_or(None)
+                    .unwrap_or(0.0);
+                let mut first = rustc_hash::FxHashMap::default();
+                for (i, k) in self.sec.orig_order_citekeys.iter().enumerate() {
+                    first.entry(k.as_str()).or_insert(i);
+                }
+                (max, first)
+            });
+            let max = *max;
+            let idx = first.get(key).map_or(-1.0, |&i| i as f64);
             let biborder = fmt_num(max + idx + 1.0);
             let ako = ko_map.and_then(|m| m.get("*")).and_then(J::as_str);
             if let (Some(ko), Some(ako)) = (ko, ako)
@@ -658,7 +685,7 @@ impl<'a> Gen<'a> {
         if !self.present(v) {
             return String::new();
         }
-        let s = normalise_string_sort(self.cfg, v.and_then(Value::as_str).unwrap_or(""), field);
+        let s = self.sort_norm(v.and_then(Value::as_str).unwrap_or(""), field);
         let s = process_sort_attributes(&s, a);
         translit::translit(self.cfg, field, be, s, &mut self.warnings)
     }
@@ -675,7 +702,7 @@ impl<'a> Gen<'a> {
             // address, so biber's order is arbitrary); use a fixed string.
             _ => "ARRAY".to_string(),
         };
-        let s = normalise_string_sort(self.cfg, &raw, field);
+        let s = self.sort_norm(&raw, field);
         process_sort_attributes(&s, a)
     }
 
@@ -761,8 +788,7 @@ impl<'a> Gen<'a> {
             .dl
             .state
             .as_ref()
-            .and_then(|s| s.get("namelistdata"))
-            .and_then(|m| m.get(nlid.key()));
+            .and_then(|s| s.peek2("namelistdata", &nlid.key()));
         let vis_key = if tmpsnk.is_some_and(|t| t.visibility.as_deref() == Some("cite")) {
             "viscite"
         } else {
@@ -828,10 +854,10 @@ impl<'a> Gen<'a> {
                             let nps = if truthy(inits.as_ref().and_then(|i| i.as_deref())) {
                                 let inits: String =
                                     np_data.initial.as_deref().unwrap_or(&[]).concat();
-                                let s = normalise_string_sort(self.cfg, &inits, field);
+                                let s = self.sort_norm(&inits, field);
                                 strings::pad_namepart(&s, self.np_length(&format!("{part}-i")))
                             } else {
-                                let s = normalise_string_sort(self.cfg, npstring, field);
+                                let s = self.sort_norm(npstring, field);
                                 strings::pad_namepart(&s, self.np_length(part))
                             };
                             kps.push_str(&nps);
@@ -875,10 +901,7 @@ impl<'a> Gen<'a> {
             };
             items = &items[..n];
         }
-        let parts: Vec<String> = items
-            .iter()
-            .map(|i| normalise_string_sort(self.cfg, i, field))
-            .collect();
+        let parts: Vec<String> = items.iter().map(|i| self.sort_norm(i, field)).collect();
         let mut s = parts.join("!");
         let trimmed = s
             .trim_end_matches(perl_compat::unicode::is_perl_space)

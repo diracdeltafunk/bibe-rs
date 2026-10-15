@@ -99,10 +99,13 @@ struct Inh<'a> {
     g: InhGraph,
     sh: SharedLists,
     rules: &'a Inheritance,
+    /// `$dmh->{dateparts}`.
+    dateparts: HashSet<&'a str>,
 }
 
 /// `Biber::process_interentry` (without the tool-mode guard).
 pub fn process_interentry(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
+    let dm = ctx.dm;
     let rules = match ctx.cfg.blx.global("inheritance") {
         Some(OptValue::Xml(XVal::Hash(h))) => Inheritance::from_xval(h),
         _ => Inheritance::default(),
@@ -111,6 +114,7 @@ pub fn process_interentry(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fa
         g: InhGraph::load(st, "crossref"),
         sh: SharedLists::load(st),
         rules: &rules,
+        dateparts: dm.helpers.dateparts.iter().map(String::as_str).collect(),
     };
     let mut res = Ok(());
     for citekey in st.section.citekeys.clone() {
@@ -304,7 +308,7 @@ fn inherit_from(
         let mut filtered = Vec::new();
         let mut removed: Vec<String> = Vec::new();
         for f in fields {
-            if ctx.dm.helpers.dateparts.contains(&f) {
+            if inh.dateparts.contains(f.as_str()) {
                 // BB-023: only the main date's datesplit is checked.
                 let ds = if quirk {
                     "datesplit".to_string()
@@ -327,33 +331,39 @@ fn inherit_from(
             }
             filtered.push(f);
         }
-        // Derived date fields are technically data.
-        for datefield in datefields_now(ctx) {
-            let df = datefield.strip_suffix("date").unwrap_or(&datefield);
-            // BB-022: compares date field names with datepart names, so
-            // never skips.
-            let skip = if quirk {
-                removed.contains(&datefield)
-            } else {
-                removed.iter().any(|r| date_stem(r) == df)
-            };
-            if skip {
-                continue;
-            }
-            for dsf in INHERIT_DATE_META {
-                let f = format!("{df}{dsf}");
-                if let Some(Some(v)) = st.section.entries[parent].derivedfields.get(&f)
-                    && truthy(Some(v))
-                {
-                    let v = v.clone();
-                    st.section
-                        .entries
-                        .get_mut(key)
-                        .expect("entry")
-                        .derivedfields
-                        .insert(f, Some(v));
-                }
-            }
+        // Derived date fields are technically data: the parent's true
+        // `<df><meta>` fields for the date fields not skipped.
+        let datefields = datefields_now(ctx);
+        let stems: Vec<&str> = datefields
+            .iter()
+            .filter(|datefield| {
+                let df = datefield.strip_suffix("date").unwrap_or(datefield);
+                // BB-022: compares date field names with datepart names, so
+                // never skips.
+                let skip = if quirk {
+                    removed.contains(datefield)
+                } else {
+                    removed.iter().any(|r| date_stem(r) == df)
+                };
+                !skip
+            })
+            .map(|d| d.strip_suffix("date").unwrap_or(d))
+            .collect();
+        let copies: Vec<(crate::model::Sym, crate::model::Value)> = st.section.entries[parent]
+            .derivedfields
+            .iter()
+            .filter_map(|(f, v)| {
+                let v = v.as_ref().filter(|v| truthy(Some(v)))?;
+                let meta = stems.iter().any(|df| {
+                    f.strip_prefix(df)
+                        .is_some_and(|dsf| INHERIT_DATE_META.contains(&dsf))
+                });
+                meta.then(|| (*f, v.clone()))
+            })
+            .collect();
+        let child = st.section.entries.get_mut(key).expect("entry");
+        for (f, v) in copies {
+            child.derivedfields.insert(f, Some(v));
         }
         for f in filtered {
             if noinherit(&f) || processed.contains(&f) {
