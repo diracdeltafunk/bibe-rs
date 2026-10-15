@@ -172,6 +172,7 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
             warnings: Vec::new(),
             viv: Default::default(),
             nosort: Default::default(),
+            citeorder: Default::default(),
         };
         for k in &keys {
             results.push((k.clone(), g.sortinfo(k, tmpl)));
@@ -243,6 +244,9 @@ struct Gen<'a> {
     viv: std::cell::RefCell<Vec<Viv>>,
     /// Field → the `nosort` patterns that apply to it.
     nosort: std::cell::RefCell<rustc_hash::FxHashMap<String, std::rc::Rc<[usize]>>>,
+    /// `_sort_citeorder` with `allkeys`: the largest key order and the
+    /// first position of each key in `orig_order_citekeys`.
+    citeorder: std::cell::OnceCell<(f64, rustc_hash::FxHashMap<&'a str, usize>)>,
 }
 
 /// A hash entry biber autovivifies by reading through it.
@@ -591,22 +595,28 @@ impl<'a> Gen<'a> {
             .and_then(|m| m.get(self.secnum));
         let ko = ko_map.and_then(|m| m.get(key)).and_then(J::as_str);
         if self.sec.allkeys {
-            let max = ko_map
-                .and_then(J::as_object)
-                .map(|m| {
-                    m.values()
-                        .filter_map(J::as_str)
-                        .map(numify)
-                        .fold(None, |a: Option<f64>, v| Some(a.map_or(v, |a| a.max(v))))
-                })
-                .unwrap_or(None)
-                .unwrap_or(0.0);
-            let idx = self
-                .sec
-                .orig_order_citekeys
-                .iter()
-                .position(|k| k == key)
-                .map_or(-1.0, |i| i as f64);
+            // The largest key order and each key's first position in the
+            // original order, computed once per list (a scan per key would
+            // be quadratic for `\nocite{*}`).
+            let (max, first) = self.citeorder.get_or_init(|| {
+                let max = ko_map
+                    .and_then(J::as_object)
+                    .map(|m| {
+                        m.values()
+                            .filter_map(J::as_str)
+                            .map(numify)
+                            .fold(None, |a: Option<f64>, v| Some(a.map_or(v, |a| a.max(v))))
+                    })
+                    .unwrap_or(None)
+                    .unwrap_or(0.0);
+                let mut first = rustc_hash::FxHashMap::default();
+                for (i, k) in self.sec.orig_order_citekeys.iter().enumerate() {
+                    first.entry(k.as_str()).or_insert(i);
+                }
+                (max, first)
+            });
+            let max = *max;
+            let idx = first.get(key).map_or(-1.0, |&i| i as f64);
             let biborder = fmt_num(max + idx + 1.0);
             let ako = ko_map.and_then(|m| m.get("*")).and_then(J::as_str);
             if let (Some(ko), Some(ako)) = (ko, ako)

@@ -189,6 +189,8 @@ pub fn generate_contextdata(
     let dl = &mut st.datalists[list];
     let keys = dl.keys.clone().unwrap_or_default();
     let jstr = |s: &str| J::String(s.to_string());
+    // `first_index` over the keys, built on first use.
+    let mut key_index: Option<rustc_hash::FxHashMap<String, usize>> = None;
     for key in &keys {
         let Some(be) = sec.bibentry(key) else {
             continue;
@@ -207,7 +209,16 @@ pub fn generate_contextdata(
                 // slice then takes the last key.
                 let mut idx: Vec<i64> = members
                     .iter()
-                    .map(|m| keys.iter().position(|k| k == m).map_or(-1, |i| i as i64))
+                    .map(|m| {
+                        let first = key_index.get_or_insert_with(|| {
+                            let mut f = rustc_hash::FxHashMap::default();
+                            for (i, k) in keys.iter().enumerate() {
+                                f.entry(k.clone()).or_insert(i);
+                            }
+                            f
+                        });
+                        first.get(m).map_or(-1, |&i| i as i64)
+                    })
                     .collect();
                 idx.sort_unstable();
                 idx.iter()
