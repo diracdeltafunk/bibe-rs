@@ -8,13 +8,15 @@ use super::{SecExt, encoding};
 use crate::config::blx::{OptValue, Scope, expand_option_input};
 use crate::log::Fatal;
 use crate::model::{AnnotationScope, Entry, Name, SectionState, Value};
-use crate::perlish::{fc, lc, nfc, nfd, truthy};
+use crate::perlish::{fc, lc, nfc, nfd, nfd_string, truthy};
 use crate::pipeline::Ctx;
 use crate::pipeline::sourcemap::{self, RawEntry};
 use crate::{biber_error, debug, info};
+use perl_compat::case::fc_eq;
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_digit, is_perl_space};
 use serde_json::{Map, Value as J};
+use std::borrow::Cow;
 use std::collections::{BTreeMap, HashMap};
 use std::sync::Arc;
 
@@ -22,7 +24,7 @@ use std::sync::Arc;
 #[derive(Clone, Debug, Default)]
 pub struct FileData {
     /// Entries by key (pass-2 `Text::BibTeX::Entry` objects).
-    pub entries: HashMap<String, btparse::Entry>,
+    pub entries: HashMap<String, Arc<btparse::Entry>>,
     /// Distinct keys in first-cached order (bibers iterates this where biber
     /// iterates the hash: one of biber's possible orders).
     pub keys: Vec<String>,
@@ -34,7 +36,7 @@ pub struct BibCache {
     /// `{data}{$filename}`; present when Perl's hash ref would be true.
     pub data: HashMap<String, FileData>,
     /// `{data}{GLOBALDS}`: all cached entries of all files.
-    pub globalds: HashMap<String, btparse::Entry>,
+    pub globalds: HashMap<String, Arc<btparse::Entry>>,
     /// `{data}{citekey_aliases}`: alias → key.
     pub citekey_aliases: BTreeMap<String, String>,
     /// `{counts}{$filename}`.
@@ -63,6 +65,8 @@ pub struct FetchOpts {
     pub xnamesep: String,
     pub xdatamarker: String,
     pub xdatasep: String,
+    /// `$xdatamarker$xnamesep`.
+    pub xdata_prefix: String,
     pub others_string: String,
     pub annotation_marker: String,
     pub named_annotation_marker: String,
@@ -113,6 +117,7 @@ impl FetchOpts {
             xnamesep: s("xnamesep"),
             xdatamarker: s("xdatamarker"),
             xdatasep: s("xdatasep"),
+            xdata_prefix: s("xdatamarker") + &s("xnamesep"),
             others_string: s("others_string"),
             annotation_marker: s("annotation_marker"),
             named_annotation_marker: s("named_annotation_marker"),
@@ -170,8 +175,34 @@ struct Extract<'a> {
     btlines: Vec<String>,
 }
 
+/// Noncharacters (U+FDD0..U+FDEF, U+xFFFE, U+xFFFF) → U+FFFD.
+fn replace_noncharacters(s: String) -> String {
+    // Their UTF-8 forms start with 0xEF (BMP) or 0xF0..0xF4 (other planes).
+    if !s.bytes().any(|b| b >= 0xEF) {
+        return s;
+    }
+    s.chars()
+        .map(|c| {
+            let v = c as u32;
+            if (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v) {
+                '\u{FFFD}'
+            } else {
+                c
+            }
+        })
+        .collect()
+}
+
 /// `\R` → `\n`.
-fn normalise_newlines(s: &str) -> String {
+fn normalise_newlines(s: &str) -> Cow<'_, str> {
+    // Every `\R` other than `\n` contains one of these bytes (U+0085 is
+    // C2 85, U+2028/U+2029 are E2 80 A8/A9).
+    if !s
+        .bytes()
+        .any(|b| matches!(b, b'\r' | 0x0B | 0x0C | 0xC2 | 0xE2))
+    {
+        return Cow::Borrowed(s);
+    }
     let mut o = String::with_capacity(s.len());
     let mut it = s.chars().peekable();
     while let Some(c) = it.next() {
@@ -186,7 +217,7 @@ fn normalise_newlines(s: &str) -> String {
             c => o.push(c),
         }
     }
-    o
+    Cow::Owned(o)
 }
 
 /// The `RawEntry` a cached Text::BibTeX entry exposes to source maps.
@@ -208,13 +239,19 @@ fn raw_get<'e>(e: &'e RawEntry, f: &str) -> Option<&'e str> {
 
 /// `Text::BibTeX::Entry::print_s` for a regular entry.
 fn print_s(e: &RawEntry, key: &str) -> String {
-    let mut o = format!("@{}{{{},\n", e.entrytype, key);
+    let len: usize = e.fields.iter().map(|(f, v)| f.len() + v.len() + 8).sum();
+    let mut o = String::with_capacity(e.entrytype.len() + key.len() + len + 8);
+    for s in ["@", &e.entrytype, "{", key, ",\n"] {
+        o.push_str(s);
+    }
     for (f, _) in &e.fields {
         let v = raw_get(e, f).unwrap_or("");
-        o.push_str(&format!("  {f} = {{{v}}},\n"));
+        for s in ["  ", f, " = {", v, "},\n"] {
+            o.push_str(s);
+        }
     }
     o.push_str("}\n\n");
-    nfd(&o)
+    nfd_string(o)
 }
 
 /// `extract_entries` (bibtex.pm:109). Returns the keys not found.
@@ -327,6 +364,8 @@ pub fn extract_entries(
                 .entry(filename.to_string())
                 .or_default();
         }
+        // (keys found: removed from `rkeys` once, after the loop)
+        let mut found: std::collections::HashSet<&str> = std::collections::HashSet::new();
         for wanted in keys {
             st.section.set_keytods(wanted, filename);
             let cached = ctx
@@ -346,7 +385,7 @@ pub fn extract_entries(
                         "Entry with key '{wanted}' in section '{secnum}' is cited and found but not created (likely due to sourcemap)"
                     ));
                 }
-                rkeys.retain(|k| k != wanted);
+                found.insert(wanted.as_str());
             } else if let Some(rk) = ctx.run.bibcache.citekey_aliases.get(wanted).cloned() {
                 st.section.citekey_alias.insert(wanted.clone(), rk.clone());
                 if !st.section.entries.contains_key(&rk)
@@ -363,12 +402,15 @@ pub fn extract_entries(
                         st.section.add_citekeys(std::slice::from_ref(&rk));
                     }
                 }
-                rkeys.retain(|k| k != wanted);
+                found.insert(wanted.as_str());
             } else if let Some(okey) = st.section.has_badcasekey(wanted) {
                 ctx.log.biber_warn(format!(
                     "Possible typo (case mismatch) between citation and datasource keys: '{wanted}' and '{okey}' in file '{filename}'"
                 ));
             }
+        }
+        if !found.is_empty() {
+            rkeys.retain(|k| !found.contains(k.as_str()));
         }
     }
 
@@ -446,7 +488,7 @@ fn cache_data(
     if encoding == "ascii" {
         info!(ctx.log, "Reading ascii input as UTF-8");
     }
-    let buf = nfd(text);
+    let buf = perl_compat::unicode::nfd(text);
     let buf = buf.strip_prefix('\u{feff}').unwrap_or(&buf);
     let buf = normalise_newlines(buf);
 
@@ -457,16 +499,17 @@ fn cache_data(
     let recoder = &opts.recoder;
     let verbs = &opts.verbs;
     let lbuf = btparse::compat::reserialise(&p1.entries, |f, v| {
-        if verbs.iter().any(|vb| *vb == fc(f)) {
-            v.to_string()
+        // (`verbs` are case-folded already)
+        if verbs.iter().any(|vb| fc_eq(vb, f)) {
+            Cow::Borrowed(v)
         } else {
-            let d = recoder.decode(v);
+            let d = recoder.decode_cow(v);
             // DC-003: a decoded value with unbalanced braces (e.g. `\char"7B`
             // → `{`) breaks biber's pass 2 (fatal error, the next entry is
             // swallowed: BB-003). Leave such a value undecoded instead: the
             // macro then reaches the .bbl, where LaTeX typesets it.
             if !btparse::compat::braces_round_trip(&d) && btparse::compat::braces_round_trip(v) {
-                v.to_string()
+                Cow::Borrowed(v)
             } else {
                 d
             }
@@ -475,17 +518,7 @@ fn cache_data(
     // biber writes the decoded buffer to its temp file through PerlIO's
     // :utf8_strict layer (slurp_switchw), which turns noncharacters (e.g.
     // from `\char"FDD0`) into U+FFFD.
-    let lbuf: String = lbuf
-        .chars()
-        .map(|c| {
-            let v = c as u32;
-            if (v & 0xFFFE) == 0xFFFE || (0xFDD0..=0xFDEF).contains(&v) {
-                '\u{FFFD}'
-            } else {
-                c
-            }
-        })
-        .collect();
+    let lbuf = replace_noncharacters(lbuf);
     if !opts.nostdmacros {
         for (k, v) in btparse::BIBER_MONTHS {
             ctx.run.bt.macros.define(k, v);
@@ -603,7 +636,8 @@ fn cache_data(
             continue;
         }
         let cache = &mut ctx.run.bibcache;
-        cache.globalds.insert(key.clone(), entry.clone());
+        let entry = Arc::new(entry);
+        cache.globalds.insert(key.clone(), Arc::clone(&entry));
         let fd = cache.data.entry(filename.to_string()).or_default();
         if !fd.entries.contains_key(&key) {
             fd.keys.push(key.clone());
@@ -865,13 +899,14 @@ fn run_handler(
         annotation(ctx, opts, fcf, value, key);
         return Ok(HRes::None);
     }
-    let ft = ctx.dm.get_fieldtype(fcf).unwrap_or("");
-    let fmt = ctx
-        .dm
-        .get_fieldformat(fcf)
+    // (`get_fieldtype`, `get_fieldformat`, `get_datatype` with one lookup)
+    let def = ctx.dm.field_id(fcf).map(|id| ctx.dm.field(id));
+    let ft = def.and_then(|d| d.fieldtype.as_deref()).unwrap_or("");
+    let fmt = def
+        .map(|d| d.format.as_str())
         .filter(|f| perl_compat::perl_truthy(f))
         .unwrap_or("default");
-    let dt = ctx.dm.get_datatype(fcf).unwrap_or("");
+    let dt = def.and_then(|d| d.datatype.as_deref()).unwrap_or("");
     Ok(match (ft, fmt, dt) {
         ("field", "default", "code" | "datepart" | "entrykey" | "integer" | "key" | "literal") => {
             literal(ctx, opts, x, be, field, fcf, value, key)
@@ -963,13 +998,13 @@ pub(super) fn add_xdata_ref(
         return false;
     };
     // m/^$xdatamarker$xnamesep(\S+)$/xi
-    let prefix = format!("{}{}", opts.xdatamarker, opts.xnamesep);
+    let prefix = &opts.xdata_prefix;
     let v = v.strip_suffix('\n').unwrap_or(v);
     if v.len() < prefix.len() || !v.is_char_boundary(prefix.len()) {
         return false;
     }
     let (head, rest) = v.split_at(prefix.len());
-    if fc(head) != fc(&prefix) || rest.is_empty() || rest.chars().any(is_perl_space) {
+    if !fc_eq(head, prefix) || rest.is_empty() || rest.chars().any(is_perl_space) {
         return false;
     }
     // m/^([^-]+)-([^-]+)(?:-(\d+))?$/
@@ -1385,7 +1420,7 @@ fn name_handler(
     let listid = st.section.names.new_list();
     st.section.names.list_mut(listid).type_ = Some(fcf.to_string());
     let mut names: Vec<crate::model::NameId> = Vec::new();
-    let nps = opts.nameparts.clone();
+    let nps = &opts.nameparts;
     for (i, name) in items.iter().enumerate() {
         if add_xdata_ref(ctx, opts, be, field, XRef::Str(name), Some(i), &secnum) {
             let mut n = Name::default();
@@ -1426,7 +1461,7 @@ fn name_handler(
         let cfg = NameCfg {
             noinit: &opts.noinit,
             fixinits: opts.fixinits,
-            nameparts: &nps,
+            nameparts: nps,
             xnamesep: &opts.xnamesep,
             registry: &ctx.cfg.blx.registry,
         };

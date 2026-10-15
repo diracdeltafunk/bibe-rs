@@ -48,7 +48,11 @@ const ALL_TYPES: [Ty; 9] = [
 ];
 
 pub(crate) fn nfd(s: &str) -> String {
-    s.nfd().collect()
+    if s.is_ascii() {
+        s.to_owned()
+    } else {
+        s.nfd().collect()
+    }
 }
 
 /// The keys of one type's map, as an alternation matcher.

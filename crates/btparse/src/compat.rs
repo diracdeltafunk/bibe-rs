@@ -11,16 +11,18 @@
 //! here, and the caller leaves values undecoded when decoding would unbalance
 //! their braces.
 
+use std::borrow::Cow;
+
 use crate::bib::{Entry, Metatype};
 
 /// Append biber's pass-1 re-serialisation of `entry` to `out`
 /// (`Biber::Input::file::bibtex::parse_decode`). `decode(field, value)` is
 /// applied to each regular-entry field value (biber: `latex_decode` unless the
 /// field is a verbatim field); `undef` values are written as empty.
-pub fn reserialise_entry(
-    entry: &Entry,
+pub fn reserialise_entry<'e>(
+    entry: &'e Entry,
     out: &mut String,
-    mut decode: impl FnMut(&str, &str) -> String,
+    mut decode: impl FnMut(&'e str, &'e str) -> Cow<'e, str>,
 ) {
     match entry.metatype {
         Metatype::Regular => {
@@ -70,7 +72,10 @@ pub fn reserialise_entry(
 }
 
 /// Pass-1 text for a whole file.
-pub fn reserialise(entries: &[Entry], mut decode: impl FnMut(&str, &str) -> String) -> String {
+pub fn reserialise<'e>(
+    entries: &'e [Entry],
+    mut decode: impl FnMut(&'e str, &'e str) -> Cow<'e, str>,
+) -> String {
     let mut out = String::new();
     for e in entries {
         reserialise_entry(e, &mut out, &mut decode);

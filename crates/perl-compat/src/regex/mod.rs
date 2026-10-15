@@ -37,6 +37,7 @@ mod translate;
 pub use interp::{InterpError, MatchCtx, Template, quotemeta};
 pub use translate::translate;
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex, OnceLock};
 
@@ -163,9 +164,15 @@ impl PerlRegex {
         self.re.captures_len() - 1
     }
 
-    fn find_at(&self, re: &Regex, s: &str, pos: usize) -> Result<Option<Groups>, RegexError> {
-        let mut locs: CaptureLocations = re.capture_locations();
-        match re.captures_read_at(&mut locs, s.as_bytes(), pos) {
+    /// The groups of the first match of `re` at or after `pos`; `locs` is
+    /// `re`'s reusable match data.
+    fn find_at(
+        re: &Regex,
+        locs: &mut CaptureLocations,
+        s: &str,
+        pos: usize,
+    ) -> Result<Option<Groups>, RegexError> {
+        match re.captures_read_at(locs, s.as_bytes(), pos) {
             Ok(Some(_)) => Ok(Some((0..locs.len()).map(|i| locs.get(i)).collect())),
             Ok(None) => Ok(None),
             Err(e) => Err(RegexError::Match(e.to_string())),
@@ -184,13 +191,19 @@ impl PerlRegex {
         let mut out = Vec::new();
         let mut pos = 0;
         let mut prev_empty = false;
+        let mut locs = self.re.capture_locations();
+        let mut locs_noempty: Option<CaptureLocations> = None;
         while pos <= s.len() {
-            let re = if prev_empty {
-                self.noempty()?
+            let (re, locs) = if prev_empty {
+                let re = self.noempty()?;
+                (
+                    re,
+                    locs_noempty.get_or_insert_with(|| re.capture_locations()),
+                )
             } else {
-                &self.re
+                (&self.re, &mut locs)
             };
-            let Some(g) = self.find_at(re, s, pos)? else {
+            let Some(g) = Self::find_at(re, locs, s, pos)? else {
                 break;
             };
             let (st, en) = g[0].unwrap_or((pos, pos));
@@ -218,19 +231,43 @@ impl PerlRegex {
     /// `$s =~ s/$re//g` (the `nosort`/`noinit`/`nolabel`/`nonamestring`
     /// stripping).
     pub fn remove_all(&self, s: &str) -> Result<String, RegexError> {
-        let ms = self.matches(s)?;
-        if ms.is_empty() {
-            return Ok(s.to_string());
-        }
-        let mut out = String::with_capacity(s.len());
+        Ok(self.remove_all_cow(s)?.into_owned())
+    }
+
+    /// [`remove_all`](Self::remove_all), borrowing `s` when nothing matches.
+    pub fn remove_all_cow<'s>(&self, s: &'s str) -> Result<Cow<'s, str>, RegexError> {
+        // The match loop of `matches`, on whole-match spans only (which PCRE2
+        // finds with pooled match data, no allocation per attempt).
+        let mut out: Option<String> = None;
         let mut last = 0;
-        for g in ms {
-            let (a, b) = g[0].unwrap_or((last, last));
-            out.push_str(&s[last..a]);
+        let mut pos = 0;
+        let mut prev_empty = false;
+        while pos <= s.len() {
+            let re = if prev_empty {
+                self.noempty()?
+            } else {
+                &self.re
+            };
+            let Some(m) = re
+                .find_at(s.as_bytes(), pos)
+                .map_err(|e| RegexError::Match(e.to_string()))?
+            else {
+                break;
+            };
+            let (a, b) = (m.start(), m.end());
+            prev_empty = a == b;
+            pos = b;
+            out.get_or_insert_with(|| String::with_capacity(s.len()))
+                .push_str(&s[last..a]);
             last = b;
         }
-        out.push_str(&s[last..]);
-        Ok(out)
+        Ok(match out {
+            None => Cow::Borrowed(s),
+            Some(mut o) => {
+                o.push_str(&s[last..]);
+                Cow::Owned(o)
+            }
+        })
     }
 
     /// `$s =~ s/$re/REPL/g` where the replacement for each match is computed
@@ -265,8 +302,9 @@ impl PerlRegex {
         };
         let mut out: Vec<Option<String>> = Vec::new();
         let mut pos = 0;
+        let mut locs = re.capture_locations();
         while pos < s.len() {
-            let Some(g) = self.find_at(re, s, pos)? else {
+            let Some(g) = Self::find_at(re, &mut locs, s, pos)? else {
                 break;
             };
             let (a, b) = g[0].unwrap_or((pos, pos));

@@ -5,11 +5,12 @@
 
 use crate::config::blx::{Registry, Scope, expand_option_input};
 use crate::model::{Name, NamePart};
-use crate::perlish::{lc, nfc, nfd};
+use crate::perlish::{lc, nfc_string, nfd_string};
 use perl_compat::grapheme::{gcstring, perl};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
 use serde_json::Value as J;
+use std::borrow::Cow;
 use std::sync::Arc;
 
 /// Settings name parsing needs.
@@ -80,13 +81,25 @@ pub fn strip_noinit(s: &str, noinit: &[Arc<PerlRegex>]) -> String {
     if !perl_compat::perl_truthy(s) {
         return String::new();
     }
-    let mut s = s.to_string();
+    let mut s = Cow::Borrowed(s);
     for re in noinit {
-        if let Ok(r) = re.remove_all(&s) {
-            s = r;
+        let stripped = match re.remove_all_cow(&s) {
+            Ok(Cow::Owned(r)) => Some(r),
+            _ => None,
+        };
+        if let Some(r) = stripped {
+            s = Cow::Owned(r);
         }
     }
     // s{\\[A-Za-z]+\s*(\{([^\}]*)?\})?}{defined($2)?$2:q{}}eg
+    if !s.contains('\\') {
+        let out = s.into_owned();
+        return if out == "{}" || out == "{}\n" {
+            String::new()
+        } else {
+            out
+        };
+    }
     let c: Vec<char> = s.chars().collect();
     let mut out = String::with_capacity(s.len());
     let mut i = 0;
@@ -135,12 +148,16 @@ fn split_dash(s: &str) -> Vec<String> {
 pub fn gen_initials(strings: &[String]) -> Vec<String> {
     let mut out = Vec::new();
     for s in strings {
-        let c: Vec<char> = s.chars().collect();
-        let wholly_braced =
-            c.len() >= 3 && c[0] == '{' && *c.last().unwrap() == '}' && !s.contains('\n');
-        let hyphenated = c
-            .windows(3)
-            .any(|w| w[0] != '{' && Prop::Dash.contains(w[1]) && w[2] != '}');
+        let wholly_braced = s.chars().nth(2).is_some()
+            && s.starts_with('{')
+            && s.ends_with('}')
+            && !s.contains('\n');
+        // (three consecutive characters: not `{`, a dash, not `}`)
+        let hyphenated = s
+            .chars()
+            .zip(s.chars().skip(1))
+            .zip(s.chars().skip(2))
+            .any(|((a, b), c)| a != '{' && Prop::Dash.contains(b) && c != '}');
         if !wholly_braced && hyphenated {
             out.push(gen_initials(&split_dash(s)).join("-"));
         } else {
@@ -357,21 +374,16 @@ pub fn parsename(cfg: &NameCfg, namestr: &str) -> ParsedName {
     let mut s = namestr.trim_start_matches(is_perl_space).to_string();
     // s/\s+|\\\s/ /g
     {
-        let c: Vec<char> = s.chars().collect();
         let mut o = String::with_capacity(s.len());
-        let mut i = 0;
-        while i < c.len() {
-            if is_perl_space(c[i]) {
-                while i < c.len() && is_perl_space(c[i]) {
-                    i += 1;
-                }
+        let mut it = s.chars().peekable();
+        while let Some(c) = it.next() {
+            if is_perl_space(c) {
+                while it.next_if(|&n| is_perl_space(n)).is_some() {}
                 o.push(' ');
-            } else if c[i] == '\\' && i + 1 < c.len() && is_perl_space(c[i + 1]) {
+            } else if c == '\\' && it.next_if(|&n| is_perl_space(n)).is_some() {
                 o.push(' ');
-                i += 2;
             } else {
-                o.push(c[i]);
-                i += 1;
+                o.push(c);
             }
         }
         s = o;
@@ -406,16 +418,16 @@ pub fn parsename(cfg: &NameCfg, namestr: &str) -> ParsedName {
         }
         s = o;
     }
-    let nfcs = nfc(&s);
+    let nfcs = nfc_string(s);
     let sp = btparse::split_name(&nfcs);
     let btlines: Vec<String> = sp.diags.iter().map(|d| d.render("")).collect();
     let crash = sp.anomaly == Some(btparse::NameAnomaly::Crash);
     use btparse::NamePart as P;
     let parts = [
-        ("prefix", nfd(&sp.parts.format(P::Von))),
-        ("family", nfd(&sp.parts.format(P::Last))),
-        ("given", nfd(&sp.parts.format(P::First))),
-        ("suffix", nfd(&sp.parts.format(P::Jr))),
+        ("prefix", nfd_string(sp.parts.format(P::Von))),
+        ("family", nfd_string(sp.parts.format(P::Last))),
+        ("given", nfd_string(sp.parts.format(P::First))),
+        ("suffix", nfd_string(sp.parts.format(P::Jr))),
     ];
     let mut name = Name::default();
     let mut lengths = Vec::new();

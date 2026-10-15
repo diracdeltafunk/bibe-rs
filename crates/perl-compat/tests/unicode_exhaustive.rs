@@ -136,6 +136,42 @@ fn normalization() {
     check(&committed(), &["nfd", "nfc", "nfkd", "nfkc"]);
 }
 
+/// The ASCII and quick-check fast paths of `nfd`/`nfc` (and their
+/// owned-string forms) agree with full normalisation for every code point,
+/// alone and next to starters, combining marks of various classes and
+/// Hangul jamo (composition partners, reordering, quick-check `Maybe`).
+#[test]
+fn normalization_fast_paths() {
+    use perl_compat::unicode::{nfc_string, nfd_string};
+    use unicode_normalization::UnicodeNormalization;
+    const CTX: &[&str] = &[
+        "", "a", "e\u{301}", "\u{301}", "\u{327}", "\u{316}", "\u{1100}", "\u{1161}", "\u{11A8}",
+        "\u{AC00}", "\u{3099}", "\u{CE5}",
+    ];
+    let mut combos: Vec<(&str, &str)> = CTX.iter().map(|p| (*p, "")).collect();
+    combos.extend(CTX[1..].iter().map(|q| ("", *q)));
+    combos.extend([
+        ("a", "\u{301}"),
+        ("\u{301}", "\u{316}"),
+        ("\u{1100}", "\u{11A8}"),
+    ]);
+    let mut s = String::new();
+    for c in chars() {
+        for (pre, post) in &combos {
+            s.clear();
+            s.push_str(pre);
+            s.push(c);
+            s.push_str(post);
+            let d: String = s.nfd().collect();
+            let k: String = s.nfc().collect();
+            assert_eq!(nfd(&s), d, "nfd {}", hexes(&s));
+            assert_eq!(nfc(&s), k, "nfc {}", hexes(&s));
+            assert_eq!(nfd_string(s.clone()), d, "nfd_string {}", hexes(&s));
+            assert_eq!(nfc_string(s.clone()), k, "nfc_string {}", hexes(&s));
+        }
+    }
+}
+
 #[test]
 fn properties_and_num() {
     let exp = committed();

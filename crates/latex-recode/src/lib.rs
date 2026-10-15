@@ -62,6 +62,7 @@ mod unicode;
 mod unicode_tables;
 pub mod xmldata;
 
+use std::borrow::Cow;
 use std::sync::{Arc, Mutex, OnceLock};
 
 use unicode_normalization::UnicodeNormalization;
@@ -233,7 +234,11 @@ impl RecodeData {
 #[derive(Clone, Debug)]
 pub struct Recoder {
     decode: tables::DecodeTables,
-    encode: tables::EncodeTables,
+    /// Built on first use for recoders over the built-in data (most runs
+    /// never encode), eagerly otherwise.
+    encode: OnceLock<tables::EncodeTables>,
+    /// The built-in data and encode set `encode` is built from.
+    lazy_encode: Option<(&'static RecodeData, String)>,
     opts: RecodeOptions,
 }
 
@@ -247,9 +252,32 @@ impl Recoder {
     ) -> Recoder {
         Recoder {
             decode: tables::build_decode(&data.raw, decode_set, &opts),
-            encode: tables::build_encode(&data.raw, encode_set),
+            encode: OnceLock::from(tables::build_encode(&data.raw, encode_set)),
+            lazy_encode: None,
             opts,
         }
+    }
+
+    /// [`Recoder::new`] over the built-in data, building the encode tables
+    /// on first use.
+    fn new_builtin(decode_set: &str, encode_set: &str, opts: RecodeOptions) -> Recoder {
+        let data = RecodeData::builtin();
+        Recoder {
+            decode: tables::build_decode(&data.raw, decode_set, &opts),
+            encode: OnceLock::new(),
+            lazy_encode: Some((data, encode_set.to_owned())),
+            opts,
+        }
+    }
+
+    fn encode_tables(&self) -> &tables::EncodeTables {
+        self.encode.get_or_init(|| {
+            let (data, set) = self
+                .lazy_encode
+                .as_ref()
+                .expect("encode tables are built eagerly unless lazy_encode is set");
+            tables::build_encode(&data.raw, set)
+        })
     }
 
     /// A shared recoder over the built-in data (cached per argument tuple).
@@ -264,12 +292,7 @@ impl Recoder {
         {
             return Arc::clone(r);
         }
-        let r = Arc::new(Recoder::new(
-            RecodeData::builtin(),
-            decode_set,
-            encode_set,
-            opts,
-        ));
+        let r = Arc::new(Recoder::new_builtin(decode_set, encode_set, opts));
         c.push((
             (decode_set.to_owned(), encode_set.to_owned(), opts),
             Arc::clone(&r),
@@ -306,6 +329,20 @@ impl Recoder {
         }
     }
 
+    /// [`decode`](Self::decode), borrowing `text` when the result is `text`
+    /// itself (nothing to decode and already NFD).
+    pub fn decode_cow<'t>(&self, text: &'t str) -> Cow<'t, str> {
+        let unchanged = !decode::needs_work(text)
+            && (text.is_ascii()
+                || unicode_normalization::is_nfd_quick(text.chars())
+                    == unicode_normalization::IsNormalized::Yes);
+        if unchanged {
+            Cow::Borrowed(text)
+        } else {
+            Cow::Owned(self.decode(text))
+        }
+    }
+
     /// Whether [`decode`](Self::decode) can change `text` other than by
     /// normalisation (a cheap pre-check).
     pub fn decode_may_change(&self, text: &str) -> bool {
@@ -314,6 +351,6 @@ impl Recoder {
 
     /// `latex_encode($text)`: Unicode → LaTeX macros.
     pub fn encode(&self, text: &str) -> String {
-        encode::encode(&self.encode, text)
+        encode::encode(self.encode_tables(), text)
     }
 }

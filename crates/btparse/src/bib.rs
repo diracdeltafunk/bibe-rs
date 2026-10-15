@@ -324,6 +324,18 @@ fn is_name_byte(b: u8) -> bool {
         ))
 }
 
+/// Bytes of string text that [`Lexer::read_string`] and
+/// [`Lexer::piece_char`] copy unchanged without any other effect than ending
+/// the start of a piece (everything but delimiters, braces, NUL and the bytes
+/// with special piece handling).
+#[inline]
+fn is_plain_string_byte(b: u8) -> bool {
+    !matches!(
+        b,
+        b'{' | b'}' | b'"' | b'(' | b')' | b'\\' | b'\n' | b'\r' | b'\t' | 0x0b | 0x0c | 0
+    )
+}
+
 /// Characters that are invalid tokens (reported, then skipped together with
 /// the following byte).
 #[inline]
@@ -433,12 +445,23 @@ impl<'s> Lexer<'s> {
     fn read_string(&mut self, out: &mut Vec<Diag>) -> Option<Token> {
         let delim = self.src[self.pos];
         self.pos += 1;
-        let mut text = Vec::new();
+        // (capacity: up to the first possible closing delimiter)
+        let close = if delim == b'{' { b'}' } else { delim };
+        let guess = memchr::memchr(close, &self.src[self.pos..]).unwrap_or(0);
+        let mut text = Vec::with_capacity(guess);
         let mut depth: usize = if delim == b'{' { 1 } else { 0 };
         let mut ps = Pieces::new();
         let start_line = self.line;
         let mut runaway_warned = false;
         while self.pos < self.src.len() {
+            // Fast path: a run of bytes that `piece_char` just copies.
+            let run = self.plain_run();
+            if run > 0 {
+                text.extend_from_slice(&self.src[self.pos..self.pos + run]);
+                self.pos += run;
+                ps.at_start = false;
+                continue;
+            }
             let b = self.src[self.pos];
             self.pos += 1;
             if b == b'\n' && !runaway_warned && self.looks_like_field(self.pos) {
@@ -519,6 +542,15 @@ impl<'s> Lexer<'s> {
             i += 1;
         }
         i < s.len() && s[i] == b'='
+    }
+
+    /// The length of the run of [`is_plain_string_byte`]s at `pos`.
+    #[inline]
+    fn plain_run(&self) -> usize {
+        let rest = &self.src[self.pos..];
+        rest.iter()
+            .position(|&b| !is_plain_string_byte(b))
+            .unwrap_or(rest.len())
     }
 
     /// One character of string text other than a brace or the closing
@@ -1057,9 +1089,28 @@ impl<'s, 'st> Parser<'s, 'st> {
             return None;
         }
         if collapse {
-            out = collapse_spaces(&out);
+            collapse_spaces_in_place(&mut out);
         }
-        Some(String::from_utf8_lossy(&out).into_owned())
+        Some(bytes_to_string(out))
+    }
+
+    /// [`expand`](Self::expand) consuming the pieces: a single string or
+    /// number piece becomes the value without a copy.
+    fn expand_owned(
+        &mut self,
+        mut pieces: Vec<Piece>,
+        collapse: bool,
+        diags: &mut Vec<Diag>,
+    ) -> Option<String> {
+        if let [Piece::Str(_) | Piece::Num(_)] = pieces.as_slice()
+            && let Some(Piece::Str(mut out) | Piece::Num(mut out)) = pieces.pop()
+        {
+            if collapse {
+                collapse_spaces_in_place(&mut out);
+            }
+            return Some(bytes_to_string(out));
+        }
+        self.expand(&pieces, collapse, diags)
     }
 
     fn parse_entry(&mut self) -> Item {
@@ -1135,7 +1186,7 @@ impl<'s, 'st> Parser<'s, 'st> {
                     Tk::Name | Tk::Number | Tk::EntryClose | Tk::Str => match metatype {
                         Metatype::Regular if matches!(la, Tk::Name | Tk::Number) => {
                             let t = self.consume();
-                            key = Some(String::from_utf8_lossy(&t.text).into_owned());
+                            key = Some(bytes_to_string(t.text));
                             if self.lk() == Tk::Comma {
                                 self.consume();
                                 self.fields(&mut fields);
@@ -1183,14 +1234,24 @@ impl<'s, 'st> Parser<'s, 'st> {
         let mut raw_pieces: Vec<Option<Vec<Piece>>> = Vec::with_capacity(fields.len());
         for f in fields {
             let name = String::from_utf8_lossy(&f.name).to_ascii_lowercase();
+            if metatype != Metatype::MacroDef {
+                let value = f
+                    .pieces
+                    .and_then(|p| self.expand_owned(p, true, &mut diags));
+                out_fields.push(Field {
+                    name,
+                    value,
+                    line: f.line,
+                });
+                continue;
+            }
             let value = match &f.pieces {
-                Some(p) => self.expand(p, metatype != Metatype::MacroDef, &mut diags),
+                Some(p) => self.expand(p, false, &mut diags),
                 None => None,
             };
             let pieces = f.pieces;
             // a definition whose value failed to parse defines nothing
-            if metatype == Metatype::MacroDef
-                && pieces.as_ref().is_some_and(|p| !p.is_empty())
+            if pieces.as_ref().is_some_and(|p| !p.is_empty())
                 && self.st.macros.define(&name, value.as_deref().unwrap_or(""))
             {
                 diags.push(Diag::new(
@@ -1290,6 +1351,33 @@ impl Iterator for Parser<'_, '_> {
         }
         Some(item)
     }
+}
+
+/// `String::from_utf8_lossy(&v).into_owned()`, without a copy when `v` is
+/// valid UTF-8.
+fn bytes_to_string(v: Vec<u8>) -> String {
+    String::from_utf8(v).unwrap_or_else(|e| String::from_utf8_lossy(e.as_bytes()).into_owned())
+}
+
+/// [`collapse_spaces`] in place.
+fn collapse_spaces_in_place(s: &mut Vec<u8>) {
+    let mut w = 0;
+    let mut pending_space = false;
+    for r in 0..s.len() {
+        let b = s[r];
+        if b == b' ' {
+            pending_space = w > 0;
+        } else {
+            if pending_space {
+                s[w] = b' ';
+                w += 1;
+                pending_space = false;
+            }
+            s[w] = b;
+            w += 1;
+        }
+    }
+    s.truncate(w);
 }
 
 /// btparse's whitespace collapsing: runs of ASCII spaces become one space,

@@ -47,6 +47,16 @@ pub fn nfc(s: &str) -> String {
     perl_compat::unicode::nfc(s).into_owned()
 }
 
+/// [`nfd`] of an owned string (no copy when it is already NFD).
+pub fn nfd_string(s: String) -> String {
+    perl_compat::unicode::nfd_string(s)
+}
+
+/// [`nfc`] of an owned string (no copy when it is already NFC).
+pub fn nfc_string(s: String) -> String {
+    perl_compat::unicode::nfc_string(s)
+}
+
 /// Split on Perl's `/\s*,\s*/`, dropping trailing empty fields (Perl `split`
 /// semantics with no limit).
 pub fn split_comma(s: &str) -> Vec<String> {
