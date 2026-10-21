@@ -34,6 +34,8 @@ roxmltree = "0.21"
 memchr = "2"
 serde_json = "1"
 rustc-hash = "2"
+# Data parallelism for the per-entry loops (bibers_core::par, DC-068).
+rayon = "1.11"
 md-5 = "0.10"
 # Local time for the log's "=== <date>" line. Not chrono: its `clock` feature
 # links CoreFoundation on macOS, which costs ~1 ms at every process start.

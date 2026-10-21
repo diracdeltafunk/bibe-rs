@@ -8,7 +8,8 @@ Record with symbols (build with `cargo build --profile profiling`):
     tools/bench/profile_report.py prof.json.gz [--top 40] [--filter REGEX]
 
 Samples are attributed to real (non-inlined) functions: the sidecar's inline
-information is per symbol, not per address. `--filter` restricts the inclusive table to matching names.
+information is per symbol, not per address. `--filter` restricts the inclusive table to matching names; `--within` counts
+only the samples under a matching function (a callee breakdown).
 """
 
 import argparse
@@ -66,12 +67,18 @@ def main():
     ap.add_argument("--top", type=int, default=40)
     ap.add_argument("--filter")
     ap.add_argument("--callers", help="regex: show who calls matching functions")
+    ap.add_argument(
+        "--within",
+        help="regex: only count samples whose stack contains a matching function "
+        "(percentages stay relative to all samples)",
+    )
     args = ap.parse_args()
     prof, syms = load(args.profile)
     frames = symbolicator(prof, syms)
     self_t = collections.Counter()
     callers = collections.Counter()
     crx = re.compile(args.callers) if args.callers else None
+    wrx = re.compile(args.within) if args.within else None
     incl_t = collections.Counter()
     total = 0
     for th in prof["threads"]:
@@ -106,6 +113,8 @@ def main():
             w = w or 1
             names = [short(n) for n in stack_names(s)]
             total += w
+            if wrx and not any(wrx.search(n) for n in names):
+                continue
             if names:
                 self_t[names[-1]] += w
             for n in set(names):

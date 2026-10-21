@@ -111,9 +111,9 @@ pub const SPECS: &[&str] = &[
     "xsvsep=s",
 ];
 
-/// bibers-only options (DC-050). They match only when spelt out in full, so
-/// they never make one of biber's abbreviations ambiguous.
-pub const EXTENSION_SPECS: &[&str] = &["fix_quirks|fix-quirks=s"];
+/// bibers-only options (DC-050, DC-068). They match only when spelt out in
+/// full, so they never make one of biber's abbreviations ambiguous.
+pub const EXTENSION_SPECS: &[&str] = &["fix_quirks|fix-quirks=s", "threads=i"];
 
 /// The full `--help` text (biber's POD rendered by `pod2usage -verbose 2`).
 pub const HELP: &str = include_str!("help.txt");
