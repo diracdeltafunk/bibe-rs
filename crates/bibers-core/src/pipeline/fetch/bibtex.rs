@@ -283,7 +283,10 @@ pub fn extract_entries(
     }
     let utf16_chunks = ctx.cfg.quirks.on(crate::quirks::Quirk::Utf16ChunkSurrogate);
     let text = match encoding::decode(&bytes, encoding, utf16_chunks) {
-        Ok(t) => Some(t),
+        Ok(t) => {
+            drop(bytes);
+            Some(t)
+        }
         Err(e) => {
             biber_error!(
                 ctx.log,
@@ -317,6 +320,7 @@ pub fn extract_entries(
         );
         cache_data(ctx, st, opts, &mut x, filename, encoding, &text)?;
     }
+    drop(text);
 
     if st.section.allkeys {
         let fkeys = ctx
@@ -497,8 +501,8 @@ fn cache_data(
     if encoding == "ascii" {
         info!(ctx.log, "Reading ascii input as UTF-8");
     }
-    let buf = perl_compat::unicode::nfd(text);
-    let buf = buf.strip_prefix('\u{feff}').unwrap_or(&buf);
+    let nfd_text = perl_compat::unicode::nfd(text);
+    let buf = nfd_text.strip_prefix('\u{feff}').unwrap_or(&nfd_text);
     let buf = normalise_newlines(buf);
 
     // Pass 1 (parse_decode)
@@ -524,6 +528,12 @@ fn cache_data(
             }
         }
     });
+    // Pass 1's entries and the input text are done with: free them before
+    // pass 2 builds the cache (a large file is three copies otherwise).
+    drop(p1);
+    drop(buf);
+    drop(nfd_text);
+
     // biber writes the decoded buffer to its temp file through PerlIO's
     // :utf8_strict layer (slurp_switchw), which turns noncharacters (e.g.
     // from `\char"FDD0`) into U+FFFD.
