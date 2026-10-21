@@ -40,6 +40,8 @@ rustc-hash = "2"
 mimalloc = { version = "0.1.48", default-features = false, features = ["v2"] }
 # Short strings stored inline (the generic list state, `model::PV`).
 compact_str = "0.9"
+# Heap profiling of the bibers binary (feature `dhat-heap`, docs/M5.md).
+dhat = "0.3"
 # Vectors one pointer wide (the generic list state, `model::PV`).
 thin-vec = "0.2"
 md-5 = "0.10"
