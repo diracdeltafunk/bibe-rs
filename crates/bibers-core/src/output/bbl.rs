@@ -385,27 +385,6 @@ struct EntryTemplate {
     hash_src: HashMap<NameId, NameListId>,
 }
 
-impl EntryTemplate {
-    /// Roughly the length of the entry's text once instantiated.
-    fn size_hint(&self) -> usize {
-        let name = |n: &NameT| {
-            64 + n
-                .parts
-                .iter()
-                .map(|(p, v, i)| 40 + 2 * p.len() + v.len() + i.len())
-                .sum::<usize>()
-        };
-        self.items
-            .iter()
-            .map(|i| match i {
-                Item::Text(t) => t.len(),
-                Item::Slot(_) => 40,
-                Item::Names(b) => 64 + b.names.iter().map(name).sum::<usize>(),
-            })
-            .sum()
-    }
-}
-
 /// Mutable writer state that lives across sections.
 struct Writer {
     /// `$dmh->{datefields}`, which the date-meta loop mutates in place
@@ -1371,7 +1350,8 @@ fn has_citekey(st: &SectionState, key: &str) -> bool {
 struct ListView<'a> {
     dl: &'a DataList,
     state: Option<&'a crate::model::ListState>,
-    sortinithash: &'a dyn Fn(&str) -> String,
+    /// The collator of the list's sorting locale, for `sortinithash`.
+    collator: &'a ucollate::Collator,
 }
 
 impl<'a> ListView<'a> {
@@ -1480,7 +1460,10 @@ fn instantiate_entry(lv: &ListView, t: &EntryTemplate, key: &str) -> String {
                 }
                 Slot::SortInitHash => {
                     if let Some(si) = lv.sortinit(key) {
-                        let h = (lv.sortinithash)(&si);
+                        let h = format!(
+                            "{:x}",
+                            Md5::digest(lv.collator.view_sort_key(&si).as_bytes())
+                        );
                         let _ = writeln!(s, "      \\field{{sortinithash}}{{{h}}}");
                     }
                 }
@@ -1577,10 +1560,16 @@ fn instantiate_names(s: &mut String, lv: &ListView, t: &EntryTemplate, b: &NameB
 // Output
 // ---------------------------------------------------------------------------
 
-/// What `create_output_section` records for one section.
+/// What `create_output_section` records for one section: the text of
+/// each of its output lists' entries, instantiated as soon as the entry's
+/// template is built (so templates are never all alive at once).
 struct SectionOut<'a> {
     st: &'a SectionState,
-    entries: HashMap<String, EntryTemplate>,
+    /// Some entry has output (biber's `{output_data}{ENTRIES}{$secnum}`).
+    has_entries: bool,
+    /// The output lists in `.bbl` order, each with its entries' text in
+    /// list order (empty for keys without output).
+    lists: Vec<(&'a DataList, Vec<String>)>,
 }
 
 /// The output lists of a section in `.bbl` order (bbl.pm:689-707).
@@ -1729,17 +1718,73 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
         shared: HashMap::default(),
         shared_vals: Vec::new(),
     };
-    // create_output_section, per section in processing order.
+    let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
+
+    // The sortinit collators, one per sorting locale of a data list.
+    let mut collators: BTreeMap<Option<String>, ucollate::Collator> = BTreeMap::new();
+    for st in &processed.sections {
+        for dl in &st.datalists {
+            let loc = template_locale(ctx, &dl.sortingtemplatename);
+            if !collators.contains_key(&loc) {
+                let c = ucollate::Collator::new(
+                    loc.as_deref(),
+                    &ucollate::CollateOptions::biber_sortinit(),
+                )
+                .or_else(|_| {
+                    ucollate::Collator::new(None, &ucollate::CollateOptions::biber_sortinit())
+                })
+                .expect("root collator");
+                collators.insert(loc, c);
+            }
+        }
+    }
+
+    // create_output_section, per section in processing order. Templates
+    // are built in citekey order (their side effects on shared state are
+    // order-dependent: BB-028, 05-B21) and instantiated for every output
+    // list right away: an instantiation only depends on the template and
+    // the list's final state, and the templates are never all alive at once.
     let mut sections: Vec<SectionOut> = Vec::new();
     for st in &processed.sections {
         w.start_section(st);
-        let mut entries = HashMap::default();
+        let lists = output_lists(ctx, st);
+        let views: Vec<ListView> = lists
+            .iter()
+            .map(|dl| ListView {
+                dl,
+                state: dl.state.as_ref(),
+                collator: &collators[&template_locale(ctx, &dl.sortingtemplatename)],
+            })
+            .collect();
+        // Key → (list, position) of each of its places in the lists.
+        let mut places: HashMap<&str, Vec<(usize, usize)>> = HashMap::default();
+        let mut texts: Vec<Vec<String>> = Vec::with_capacity(lists.len());
+        for (li, dl) in lists.iter().enumerate() {
+            let keys = dl.keys.as_deref().unwrap_or(&[]);
+            for (pos, k) in keys.iter().enumerate() {
+                places.entry(k.as_str()).or_default().push((li, pos));
+            }
+            texts.push(vec![String::new(); keys.len()]);
+        }
+        let mut has_entries = false;
         for k in &st.section.citekeys {
-            if let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? {
-                entries.insert(k.clone(), t);
+            let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? else {
+                continue;
+            };
+            has_entries = true;
+            for &(li, pos) in places.get(k.as_str()).into_iter().flatten() {
+                let mut es = instantiate_entry(&views[li], &t, k);
+                if comma_quirk {
+                    es = dangling_comma_cleanup(&es);
+                }
+                texts[li][pos] = es;
             }
         }
-        sections.push(SectionOut { st, entries });
+        sections.push(SectionOut {
+            st,
+            has_entries,
+            lists: lists.into_iter().zip(texts).collect(),
+        });
     }
 
     let safechars = ctx.cfg.biber.is_true("output_safechars");
@@ -1761,20 +1806,14 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
         }
     };
     let sortdebug = ctx.cfg.biber.is_true("sortdebug");
-    let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
 
-    // A size estimate, so that a large `.bbl` isn't built by doubling.
-    let estimate: usize = sections
-        .iter()
-        .flat_map(|so| {
-            so.st.datalists.iter().flat_map(move |dl| {
-                let keys = dl.keys.as_deref().unwrap_or(&[]);
-                keys.iter()
-                    .filter_map(|k| so.entries.get(k).map(EntryTemplate::size_hint))
-            })
-        })
+    // The entries' text plus room for the rest, so that a large `.bbl`
+    // isn't built by doubling.
+    let estimate: usize = (sections.iter())
+        .flat_map(|so| so.lists.iter())
+        .flat_map(|(_, texts)| texts.iter().map(String::len))
         .sum();
-    let mut out = String::with_capacity(estimate + 4096);
+    let mut out = String::with_capacity(estimate + estimate / 64 + 4096);
     let mut put = |s: &str| push_nfc(&mut out, s);
 
     // create_output_misc: \preamble (global, so the last section's).
@@ -1791,46 +1830,19 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     put(&headtext);
 
     // Sections with output entries, in string order of their numbers.
-    let mut order: Vec<&SectionOut> = sections.iter().filter(|s| !s.entries.is_empty()).collect();
+    let mut order: Vec<SectionOut> = sections.into_iter().filter(|s| s.has_entries).collect();
     order.sort_by(|a, b| a.st.section.number.cmp(&b.st.section.number));
-    let mut collators: BTreeMap<Option<String>, ucollate::Collator> = BTreeMap::new();
     for so in order {
         let st = so.st;
         let secnum = &st.section.number;
         put(&format!("\n\\refsection{{{secnum}}}\n"));
-        for dl in output_lists(ctx, st) {
+        for (dl, texts) in so.lists {
             let keys = dl.keys.as_deref().unwrap_or(&[]);
             if keys.is_empty() {
                 continue;
             }
             put(&format!("  \\datalist[{}]{{{}}}\n", dl.type_, dl.name));
-            let loc = template_locale(ctx, &dl.sortingtemplatename);
-            if !collators.contains_key(&loc) {
-                let c = ucollate::Collator::new(
-                    loc.as_deref(),
-                    &ucollate::CollateOptions::biber_sortinit(),
-                )
-                .or_else(|_| {
-                    ucollate::Collator::new(None, &ucollate::CollateOptions::biber_sortinit())
-                })
-                .expect("root collator");
-                collators.insert(loc.clone(), c);
-            }
-            let coll = &collators[&loc];
-            let hash = |si: &str| format!("{:x}", Md5::digest(coll.view_sort_key(si).as_bytes()));
-            let lv = ListView {
-                dl,
-                state: dl.state.as_ref(),
-                sortinithash: &hash,
-            };
-            for k in keys {
-                let mut es = match (so.entries.get(k), st.section.bibentry(k)) {
-                    (Some(t), Some(_)) => instantiate_entry(&lv, t, k),
-                    _ => String::new(),
-                };
-                if comma_quirk {
-                    es = dangling_comma_cleanup(&es);
-                }
+            for (k, mut es) in keys.iter().zip(texts) {
                 if let Some(r) = &recoder {
                     if safechars {
                         es = r.encode(&es);
