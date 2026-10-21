@@ -210,6 +210,14 @@ impl ListState {
         self.namelistdata.take()
     }
 
+    /// `$state->{namelistdata}` by name list id, if it is a hash.
+    pub fn namelistdata_mut(&mut self) -> Option<&mut FxHashMap<String, J>> {
+        if self.rest.contains_key(NAMELISTDATA) {
+            return None;
+        }
+        self.namelistdata.as_mut()
+    }
+
     /// Set `$state->{namelistdata}` (`None`: absent).
     pub fn set_namelistdata(&mut self, h: Option<FxHashMap<String, J>>) {
         if self.raw.take().is_some() {

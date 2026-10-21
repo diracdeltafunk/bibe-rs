@@ -116,15 +116,39 @@ fn rawdata_unread(ctx: &Ctx) -> bool {
     !(ctx.cfg.biber.tool() || ctx.cfg.names_rawdata || ctx.dm.get_fieldtype("rawdata").is_some())
 }
 
-/// Free what nothing reads once a section is processed: the entries'
-/// `rawdata` (the source text of each entry; only biber's state dumps show
-/// it, and the writers output data model fields only).
+/// Free what nothing reads once a section is processed (the output
+/// writers read the entries and part of the lists' state):
+/// - the entries' `rawdata` (their source text; only biber's state dumps
+///   show it, and the writers output data model fields only);
+/// - the per-name and per-name-list data that only the per-list phases
+///   read: the disambiguation strings and schema, `unall`, `unmininfo` and
+///   the visible name counts.
 fn release_processed(ctx: &Ctx, st: &mut SectionState) {
-    if ctx.dm.get_fieldtype("rawdata").is_some() {
-        return;
+    if ctx.dm.get_fieldtype("rawdata").is_none() {
+        for e in st.section.entries.values_mut_unordered() {
+            e.derivedfields.remove(&crate::model::sym::RAWDATA);
+        }
     }
-    for e in st.section.entries.values_mut_unordered() {
-        e.derivedfields.remove(&crate::model::sym::RAWDATA);
+    const NAME_KEYS: [&str; 6] = [
+        "basenamestring",
+        "namedisschema",
+        "namestring",
+        "namestrings",
+        "unall",
+        "unmininfo",
+    ];
+    const LIST_KEYS: [&str; 4] = ["visalpha", "visbib", "viscite", "vissort"];
+    for dl in &mut st.datalists {
+        let Some(state) = &mut dl.state else { continue };
+        for nl in state.namelistdata_mut().into_iter().flat_map(|m| m.values_mut()) {
+            let Some(nl) = nl.as_object_mut() else { continue };
+            nl.retain(|k, v| {
+                if let Some(n) = v.as_object_mut().filter(|_| k.starts_with("#n")) {
+                    n.retain(|k, _| !NAME_KEYS.contains(&k));
+                }
+                !LIST_KEYS.contains(&k)
+            });
+        }
     }
 }
 
