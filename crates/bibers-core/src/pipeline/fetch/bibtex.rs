@@ -706,11 +706,19 @@ fn parse_pieces(
     let mut line = 1u32;
     for (i, piece) in pieces.iter().enumerate() {
         let pf = parsed[i].take().unwrap_or_else(|| bt.parse(piece));
+        // (An `@string` parsed in order redefines pass 1's macros: btparse
+        // warns, and the caller drops the warning.)
+        let harmless = |d: &btparse::Diag| {
+            !regular(i)
+                && d.kind == btparse::DiagKind::Warning
+                && d.message
+                    .starts_with("overriding existing definition of macro")
+        };
         let clean = pf.stop.is_none()
             && pf.trailing_diags.is_empty()
             && pf.entries.len() == 1
             && pf.entries[0].parse_ok
-            && pf.entries[0].diags.is_empty()
+            && pf.entries[0].diags.iter().all(harmless)
             && pf.entries[0].metatype == p1[i].metatype;
         if !clean {
             *bt = saved;
@@ -718,6 +726,9 @@ fn parse_pieces(
         }
         let mut e = pf.entries.into_iter().next().expect("one entry");
         e.line += line - 1;
+        for d in &mut e.diags {
+            d.line += line - 1;
+        }
         entries.push(e);
         line += piece.bytes().filter(|&b| b == b'\n').count() as u32;
     }
