@@ -517,10 +517,10 @@ fn cache_data(
     push_diags(x, &p1);
     let recoder = &opts.recoder;
     let verbs = &opts.verbs;
-    let lbuf = btparse::compat::reserialise(&p1.entries, |f, v| {
+    let decode = |f: &str, v: &str| -> String {
         // (`verbs` are case-folded already)
         if verbs.iter().any(|vb| fc_eq(vb, f)) {
-            Cow::Borrowed(v)
+            v.to_string()
         } else {
             let d = recoder.decode_cow(v);
             // DC-003: a decoded value with unbalanced braces (e.g. `\char"7B`
@@ -528,16 +528,21 @@ fn cache_data(
             // swallowed: BB-003). Leave such a value undecoded instead: the
             // macro then reaches the .bbl, where LaTeX typesets it.
             if !btparse::compat::braces_round_trip(&d) && btparse::compat::braces_round_trip(v) {
-                Cow::Borrowed(v)
+                v.to_string()
             } else {
-                d
+                d.into_owned()
             }
         }
-    });
-    // biber writes the decoded buffer to its temp file through PerlIO's
+    };
+    // The pass-1 text, one piece per entry, decoded in parallel. biber
+    // writes the decoded buffer to its temp file through PerlIO's
     // :utf8_strict layer (slurp_switchw), which turns noncharacters (e.g.
     // from `\char"FDD0`) into U+FFFD.
-    let lbuf = replace_noncharacters(lbuf);
+    let pieces: Vec<String> = par::map(&p1.entries, |e| {
+        let mut out = String::new();
+        btparse::compat::reserialise_entry(e, &mut out, |f, v| Cow::Owned(decode(f, v)));
+        replace_noncharacters(out)
+    });
     if !opts.nostdmacros {
         for (k, v) in btparse::BIBER_MONTHS {
             ctx.run.bt.macros.define(k, v);
@@ -545,7 +550,7 @@ fn cache_data(
     }
 
     // Pass 2 (cache_data proper)
-    let p2 = ctx.run.bt.parse(&lbuf);
+    let p2 = parse_pieces(&mut ctx.run.bt, &p1.entries, &pieces);
     push_diags(x, &p2);
     info!(ctx.log, "Found BibTeX data source '{filename}'");
 
@@ -669,6 +674,58 @@ fn cache_data(
             .push(key);
     }
     Ok(())
+}
+
+/// `BtState::parse` of the concatenation of `pieces`, the pass-1 texts of
+/// the entries `p1` (one each).
+///
+/// Pass 2 reads text bibers wrote itself, so it normally parses cleanly,
+/// one entry per piece. A regular entry's piece has only braced values (no
+/// macros) and, if it parses cleanly on its own, parses the same way within
+/// the whole text, where the parser is back at the top level after each
+/// entry: so the regular pieces are parsed in parallel, each on its own,
+/// and the others (`@string`s, which define macros, `@preamble`s and
+/// `@comment`s) in order with the real state. If any piece does not parse
+/// as exactly one clean entry of its type, the whole text is parsed
+/// instead, from the state before.
+fn parse_pieces(
+    bt: &mut btparse::BtState,
+    p1: &[btparse::Entry],
+    pieces: &[String],
+) -> btparse::ParsedFile {
+    if !par::is_parallel(pieces.len()) {
+        return bt.parse(&pieces.concat());
+    }
+    let regular = |i: usize| p1[i].metatype == btparse::Metatype::Regular;
+    let idx: Vec<usize> = (0..pieces.len()).collect();
+    let mut parsed: Vec<Option<btparse::ParsedFile>> = par::map(&idx, |&i| {
+        regular(i).then(|| btparse::BtState::new(btparse::MacroTable::default()).parse(&pieces[i]))
+    });
+    let saved = bt.clone();
+    let mut entries = Vec::with_capacity(pieces.len());
+    let mut line = 1u32;
+    for (i, piece) in pieces.iter().enumerate() {
+        let pf = parsed[i].take().unwrap_or_else(|| bt.parse(piece));
+        let clean = pf.stop.is_none()
+            && pf.trailing_diags.is_empty()
+            && pf.entries.len() == 1
+            && pf.entries[0].parse_ok
+            && pf.entries[0].diags.is_empty()
+            && pf.entries[0].metatype == p1[i].metatype;
+        if !clean {
+            *bt = saved;
+            return bt.parse(&pieces.concat());
+        }
+        let mut e = pf.entries.into_iter().next().expect("one entry");
+        e.line += line - 1;
+        entries.push(e);
+        line += piece.bytes().filter(|&b| b == b'\n').count() as u32;
+    }
+    btparse::ParsedFile {
+        entries,
+        stop: None,
+        trailing_diags: Vec::new(),
+    }
 }
 
 /// `process_comment` (Utils.pm:1586): re-instate the line breaks of
