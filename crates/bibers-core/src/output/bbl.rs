@@ -1487,7 +1487,7 @@ fn instantiate_entry(lv: &ListView, t: &EntryTemplate, key: &str) -> String {
                     if let Some(si) = lv.sortinit(key) {
                         let h = format!(
                             "{:x}",
-                            Md5::digest(lv.collator.view_sort_key(&si).as_bytes())
+                            Md5::digest(lv.collator.view_sort_key(si).as_bytes())
                         );
                         let _ = writeln!(s, "      \\field{{sortinithash}}{{{h}}}");
                     }
@@ -1682,7 +1682,11 @@ pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
 pub fn encode_output_text(ctx: &mut Ctx, text: Text) -> Result<Vec<Vec<u8>>, Fatal> {
     let pieces: Vec<&str> = text.pieces().iter().map(String::as_str).collect();
     Ok(match utf8_output(ctx, &pieces)? {
-        Ok(()) => text.into_pieces().into_iter().map(String::into_bytes).collect(),
+        Ok(()) => text
+            .into_pieces()
+            .into_iter()
+            .map(String::into_bytes)
+            .collect(),
         Err(e) => vec![e.encode_layer(
             &text.into_string(),
             ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit),
@@ -1794,17 +1798,13 @@ pub fn render_text(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Te
     for st in &processed.sections {
         for dl in &st.datalists {
             let loc = template_locale(ctx, &dl.sortingtemplatename);
-            if !collators.contains_key(&loc) {
-                let c = ucollate::Collator::new(
-                    loc.as_deref(),
-                    &ucollate::CollateOptions::biber_sortinit(),
-                )
-                .or_else(|_| {
-                    ucollate::Collator::new(None, &ucollate::CollateOptions::biber_sortinit())
-                })
-                .expect("root collator");
-                collators.insert(loc, c);
-            }
+            collators.entry(loc).or_insert_with_key(|loc| {
+                ucollate::Collator::new(loc.as_deref(), &ucollate::CollateOptions::biber_sortinit())
+                    .or_else(|_| {
+                        ucollate::Collator::new(None, &ucollate::CollateOptions::biber_sortinit())
+                    })
+                    .expect("root collator")
+            });
         }
     }
 

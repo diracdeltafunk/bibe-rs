@@ -22,12 +22,12 @@ use crate::model::{
     DataList, Entry, LabelDateFields, LabelDateInfo, Name, NameId, NameListId, Section,
     SectionState, Sym, Value,
 };
+use crate::model::{PMap as Map, PV as J};
 use crate::perlish::{fc, lc, numify, truthy};
 use crate::quirks::Quirk;
 use md5::{Digest, Md5};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
-use crate::model::{PMap as Map, PV as J};
 use serde_json::Value as SJ;
 use std::cell::OnceCell;
 use std::collections::HashMap;
@@ -57,10 +57,10 @@ pub(crate) mod ls {
                 *v = J::Object(Map::new());
             }
             let m = v.as_object_mut().expect("object");
-            if !m.contains_key(*k) {
+            if !m.contains_key(k) {
                 m.insert(k.to_string(), J::Object(Map::new()));
             }
-            v = m.get_mut(*k).expect("just inserted");
+            v = m.get_mut(k).expect("just inserted");
         }
         if !v.is_object() {
             *v = J::Object(Map::new());
@@ -109,7 +109,7 @@ pub(crate) mod ls {
         let (last, parents) = path.split_last().expect("non-empty path");
         match parents {
             [k0] => root(dl).level1(k0).contains_key(last),
-            _ => viv_map(dl, parents).contains_key(*last),
+            _ => viv_map(dl, parents).contains_key(last),
         }
     }
 
@@ -120,7 +120,7 @@ pub(crate) mod ls {
             [k0] => root(dl).level1(k0).insert(last, v),
             _ => {
                 let m = viv_map(dl, parents);
-                match m.get_mut(*last) {
+                match m.get_mut(last) {
                     Some(slot) => *slot = v,
                     None => {
                         m.insert(last.to_string(), v);
@@ -1244,9 +1244,7 @@ fn set_namedis(dl: &mut DataList, d: &NameDis) {
         if let DisPart::Base(parts) = se {
             o.insert(
                 "basenamestring".into(),
-                d.namestrings
-                    .get(i)
-                    .map_or(J::Null, |s| J::from(s.clone())),
+                d.namestrings.get(i).map_or(J::Null, |s| J::from(s.clone())),
             );
             o.insert(
                 "basenamestringparts".into(),
@@ -1653,12 +1651,7 @@ fn process_workuniqueness(
         if !ignored("uniquetitle", lti) {
             ls::incr(dl, &["seentitle", &id]);
         }
-        ls::set_entryfield(
-            dl,
-            key,
-            "seentitle",
-            title.clone().map_or(J::Null, J::from),
-        );
+        ls::set_entryfield(dl, key, "seentitle", title.clone().map_or(J::Null, J::from));
     }
     if lti.is_some()
         && lni.is_none()

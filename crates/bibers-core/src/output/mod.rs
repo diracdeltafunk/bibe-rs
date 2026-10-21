@@ -117,9 +117,7 @@ impl OutputFormat {
         match self {
             OutputFormat::Bbl => bbl::render_text(ctx, processed),
             OutputFormat::Bibtex => bibtex::render(ctx, processed).map(|t| Some(t.into())),
-            OutputFormat::Biblatexml => {
-                biblatexml::render(ctx, processed).map(|t| Some(t.into()))
-            }
+            OutputFormat::Biblatexml => biblatexml::render(ctx, processed).map(|t| Some(t.into())),
         }
     }
 

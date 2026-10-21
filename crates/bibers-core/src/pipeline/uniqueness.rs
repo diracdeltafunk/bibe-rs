@@ -30,10 +30,10 @@
 use super::Ctx;
 use crate::log::Fatal;
 use crate::model::{DataList, ListState, NameArena, NameListId, Section, SectionState, Value};
+use crate::model::{PMap as Map, PV as J};
 use crate::perlish::{numify, truthy};
 use crate::quirks::{Quirk, Quirks};
 use rustc_hash::FxHashMap as HashMap;
-use crate::model::{PMap as Map, PV as J};
 use serde_json::Value as SJ;
 use std::rc::Rc;
 

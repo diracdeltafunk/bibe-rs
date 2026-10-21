@@ -3,10 +3,10 @@
 //! `strip_noinit`, `gen_initials`, `join_name_parts`, `split_xsv`) and
 //! `_split_initials` (bibtex.pm:2008).
 
-use compact_str::CompactString;
 use crate::config::blx::{Registry, Scope, expand_option_input};
 use crate::model::{Name, NamePart};
 use crate::perlish::{lc, nfc_string, nfd_string};
+use compact_str::CompactString;
 use perl_compat::grapheme::{gcstring, perl};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};

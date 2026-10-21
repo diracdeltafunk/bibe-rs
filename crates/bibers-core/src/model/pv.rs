@@ -216,6 +216,8 @@ pub struct PMap(Repr);
 enum Repr {
     /// Sorted by key.
     Small(Vec<(Key, PV)>),
+    /// (boxed: keeps a [`PV`] at 32 bytes; large maps are few)
+    #[allow(clippy::box_collection)]
     Large(Box<BTreeMap<Box<str>, PV>>),
 }
 
@@ -324,10 +326,7 @@ impl PMap {
     /// The pairs in key order, values mutable.
     pub fn iter_mut(&mut self) -> impl Iterator<Item = (&str, &mut PV)> {
         let (small, large) = match &mut self.0 {
-            Repr::Small(v) => (
-                Some(v.iter_mut().map(|(k, v)| (k.as_str(), v))),
-                None,
-            ),
+            Repr::Small(v) => (Some(v.iter_mut().map(|(k, v)| (k.as_str(), v))), None),
             Repr::Large(m) => (None, Some(m.iter_mut().map(|(k, v)| (&**k, v)))),
         };
         small
@@ -365,7 +364,9 @@ impl PMap {
 
     /// The dumped shape.
     pub fn to_json(&self) -> Map<String, J> {
-        self.iter().map(|(k, v)| (k.to_string(), v.to_json())).collect()
+        self.iter()
+            .map(|(k, v)| (k.to_string(), v.to_json()))
+            .collect()
     }
 }
 
@@ -428,10 +429,7 @@ impl IntoIterator for PMap {
     type IntoIter = Box<dyn Iterator<Item = (String, PV)>>;
     fn into_iter(self) -> Self::IntoIter {
         match self.0 {
-            Repr::Small(v) => Box::new(
-                v.into_iter()
-                    .map(|(k, v)| (k.as_str().to_string(), v)),
-            ),
+            Repr::Small(v) => Box::new(v.into_iter().map(|(k, v)| (k.as_str().to_string(), v))),
             Repr::Large(m) => Box::new(m.into_iter().map(|(k, v)| (k.into_string(), v))),
         }
     }
@@ -441,6 +439,14 @@ impl IntoIterator for PMap {
 mod tests {
     use super::*;
     use serde_json::json;
+
+    #[test]
+    fn sizes() {
+        // The list state holds about a million of these.
+        assert_eq!(std::mem::size_of::<PV>(), 32);
+        // (an unboxed BTreeMap would make it 32, and a PV 40)
+        assert_eq!(std::mem::size_of::<PMap>(), 24);
+    }
 
     #[test]
     fn json_round_trip_and_order() {
@@ -462,7 +468,11 @@ mod tests {
             m.insert(k.clone(), PV::from(i.to_string()));
             b.insert(k, PV::from(i.to_string()));
             assert_eq!(m.len(), b.len());
-            assert!(m.iter().map(|(k, v)| (k.to_string(), v.clone())).eq(b.clone()));
+            assert!(
+                m.iter()
+                    .map(|(k, v)| (k.to_string(), v.clone()))
+                    .eq(b.clone())
+            );
         }
         assert_eq!(m.remove("k5"), b.remove("k5"));
         assert_eq!(m.get("k6"), b.get("k6"));

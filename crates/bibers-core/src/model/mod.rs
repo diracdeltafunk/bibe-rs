@@ -505,7 +505,12 @@ impl SortData {
     pub fn to_json(&self) -> PerlData {
         PerlData::Array(vec![
             PerlData::from(self.string()),
-            PerlData::Array(self.obj.iter().map(|s| PerlData::from(s.as_str())).collect()),
+            PerlData::Array(
+                self.obj
+                    .iter()
+                    .map(|s| PerlData::from(s.as_str()))
+                    .collect(),
+            ),
         ])
     }
 
@@ -552,7 +557,8 @@ impl DataList {
         let o = v.as_object().ok_or("sortdata: not a hash")?;
         let mut m = FxHashMap::default();
         for (k, d) in o {
-            let d = SortData::from_json(d).ok_or_else(|| format!("sortdata.{k}: unexpected shape"))?;
+            let d =
+                SortData::from_json(d).ok_or_else(|| format!("sortdata.{k}: unexpected shape"))?;
             m.insert(k.clone(), d);
         }
         self.sortdata = Some(m);

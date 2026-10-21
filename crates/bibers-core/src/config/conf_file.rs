@@ -145,7 +145,8 @@ pub fn mentions(h: &XHash, needle: &str) -> bool {
             XVal::Array(a) => a.iter().any(|v| val(v, needle)),
         }
     }
-    h.0.iter().any(|(k, v)| k.contains(needle) || val(v, needle))
+    h.0.iter()
+        .any(|(k, v)| k.contains(needle) || val(v, needle))
 }
 
 /// Parse config file text (`path` names it in errors).

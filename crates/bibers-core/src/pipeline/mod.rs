@@ -183,8 +183,14 @@ pub(crate) fn release_uniqueness_data(dl: &mut DataList) {
 /// and `namelistdata.{nlid}`), optionally releasing the maps' spare room.
 fn release_name_data(dl: &mut DataList, name_keys: &[&str], list_keys: &[&str], shrink: bool) {
     let Some(state) = &mut dl.state else { return };
-    for nl in state.namelistdata_mut().into_iter().flat_map(|m| m.values_mut()) {
-        let Some(nl) = nl.as_object_mut() else { continue };
+    for nl in state
+        .namelistdata_mut()
+        .into_iter()
+        .flat_map(|m| m.values_mut())
+    {
+        let Some(nl) = nl.as_object_mut() else {
+            continue;
+        };
         nl.retain(|k, v| {
             if let Some(n) = v.as_object_mut().filter(|_| k.starts_with("#n")) {
                 n.retain(|k, _| !name_keys.contains(&k));

@@ -465,7 +465,10 @@ pub fn process(s: Setup, env: &Env) -> u8 {
             Err(_) => return log.display_end(),
         }
     } else {
-        text.into_pieces().into_iter().map(String::into_bytes).collect()
+        text.into_pieces()
+            .into_iter()
+            .map(String::into_bytes)
+            .collect()
     };
     if outfile == "-" {
         let mut o = std::io::stdout().lock();

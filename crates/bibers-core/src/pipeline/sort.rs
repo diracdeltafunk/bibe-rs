@@ -407,10 +407,7 @@ impl<'a> Gen<'a> {
         } else {
             None
         };
-        Some(SortInfo {
-            obj,
-            init,
-        })
+        Some(SortInfo { obj, init })
     }
 
     /// `_sortset` (Internals.pm:1275): the first true value among the
@@ -784,7 +781,9 @@ impl<'a> Gen<'a> {
         } else {
             "vissort"
         };
-        let visible = num(nld.and_then(|d| d.get(vis_key)).and_then(crate::model::PV::as_str));
+        let visible = num(nld
+            .and_then(|d| d.get(vis_key))
+            .and_then(crate::model::PV::as_str));
         if let Some(u) = slot_str(&names.slots, "useprefix") {
             useprefix = Some(u.to_string());
         }
