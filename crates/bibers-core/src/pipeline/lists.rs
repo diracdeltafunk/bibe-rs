@@ -39,7 +39,7 @@ pub fn process_lists(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> 
                 // are no gaps in e.g. extradate (Biber.pm:3134).
                 filter_list(ctx, st, i)?;
             }
-            phase(ctx, st, i)?;
+            crate::par::timed(name, || phase(ctx, st, i))?;
         }
     }
     Ok(())

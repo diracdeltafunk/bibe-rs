@@ -306,7 +306,9 @@ pub fn extract_entries(
             ctx.log,
             "Caching data for BibTeX format file '{filename}' for section {secnum}"
         );
-        cache_data(ctx, st, opts, &mut x, filename, encoding, &text)?;
+        crate::par::timed("cache_data", || {
+            cache_data(ctx, st, opts, &mut x, filename, encoding, &text)
+        })?;
     }
 
     if st.section.allkeys {

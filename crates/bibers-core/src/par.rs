@@ -180,14 +180,19 @@ where
     (results, Ok(()))
 }
 
-/// `items` split into the contiguous chunks [`map_chunks`] would use (one
-/// chunk when the loop would run serially), for a [`map`] over chunks whose
-/// per-chunk state need not be `Send`.
-pub fn split<T>(items: &[T]) -> Vec<&[T]> {
-    if pool_for(items.len()).is_none() {
-        return vec![items];
+/// `f` over the contiguous chunks of `items` that [`map_chunks`] would use
+/// (one chunk, `items`, when the loop runs serially), in parallel; the
+/// results are in chunk order. For per-chunk state that need not be `Send`.
+pub fn map_slices<T, R, F>(items: &[T], f: F) -> Vec<R>
+where
+    T: Sync,
+    R: Send,
+    F: Fn(&[T]) -> R + Sync + Send,
+{
+    match pool_for(items.len()) {
+        None => vec![f(items)],
+        Some(pool) => pool.install(|| items.par_chunks(chunk_len(items.len())).map(f).collect()),
     }
-    items.chunks(chunk_len(items.len())).collect()
 }
 
 /// One chunk's output from [`map_chunks`].
@@ -212,6 +217,19 @@ where
         None => (a(), b()),
         Some(pool) => pool.join(a, b),
     }
+}
+
+/// Run `f`; with `$BIBERS_TIMINGS` set, print its wall time to stderr under
+/// `name` (a development aid for finding the serial parts of a run).
+pub fn timed<R>(name: &str, f: impl FnOnce() -> R) -> R {
+    static ON: OnceLock<bool> = OnceLock::new();
+    if !*ON.get_or_init(|| std::env::var_os("BIBERS_TIMINGS").is_some()) {
+        return f();
+    }
+    let t = std::time::Instant::now();
+    let r = f();
+    eprintln!("{:>9.2} ms  {name}", t.elapsed().as_secs_f64() * 1e3);
+    r
 }
 
 #[cfg(test)]

@@ -110,8 +110,8 @@ pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
 /// The per-section phase sequence of `Biber::prepare` (after
 /// `fetch::init_section`). Phase tests run individual steps of this.
 pub fn prepare_section(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
-    for (_, phase) in SECTION_PHASES {
-        phase(ctx, st)?;
+    for (name, phase) in SECTION_PHASES {
+        crate::par::timed(name, || phase(ctx, st))?;
     }
     Ok(())
 }

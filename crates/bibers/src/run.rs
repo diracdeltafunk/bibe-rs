@@ -453,7 +453,7 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         Ok(p) => p,
         Err(_) => return log.display_end(),
     };
-    let text = match format.render(&mut ctx, &processed) {
+    let text = match bibers_core::par::timed("render", || format.render(&mut ctx, &processed)) {
         Ok(Some(t)) => t,
         Ok(None) => {
             let _ = biber_error!(

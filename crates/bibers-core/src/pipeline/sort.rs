@@ -168,7 +168,7 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
         let (cfg, dm, sec, config_state) = (&*ctx.cfg, ctx.dm, &st.section, &st.config_state);
         // The keys' sort objects in parallel chunks; each chunk's warnings
         // and autovivifications are merged in key order.
-        let chunks = par::map(&par::split(&keys), |chunk| {
+        let chunks = par::map_slices(&keys, |chunk| {
             let mut g = Gen {
                 cfg,
                 dm,
