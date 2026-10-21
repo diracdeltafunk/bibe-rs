@@ -9,7 +9,9 @@
 //! sorted `Vec` of its pairs while it is small and a `BTreeMap` once it
 //! grows large; both iterate in key byte order, like `serde_json::Map`
 //! (biber's `sort keys`). Strings and small-map keys of up to 24 bytes (most
-//! of them: name parts, `un` levels, counts, name ids) are stored inline.
+//! of them: name parts, `un` levels, counts, name ids) are stored inline,
+//! and arrays and small maps are one pointer wide (`ThinVec`), which makes
+//! a value 24 bytes instead of 32.
 //!
 //! The API mirrors the parts of `serde_json`'s that the pipeline uses, so
 //! code ported against `serde_json::Value` reads the same.
@@ -18,6 +20,7 @@ use compact_str::CompactString;
 use serde_json::{Map, Number, Value as J};
 use std::collections::BTreeMap;
 use std::fmt;
+use thin_vec::ThinVec;
 
 /// A Perl value in the dumped shape (scalars are strings; `undef` is
 /// `Null`). See the [module docs](self).
@@ -29,7 +32,7 @@ pub enum PV {
     Number(Number),
     /// A string; up to 24 bytes are stored inline.
     String(CompactString),
-    Array(Vec<PV>),
+    Array(ThinVec<PV>),
     Object(PMap),
 }
 
@@ -57,14 +60,14 @@ impl PV {
         }
     }
 
-    pub fn as_array(&self) -> Option<&Vec<PV>> {
+    pub fn as_array(&self) -> Option<&ThinVec<PV>> {
         match self {
             PV::Array(a) => Some(a),
             _ => None,
         }
     }
 
-    pub fn as_array_mut(&mut self) -> Option<&mut Vec<PV>> {
+    pub fn as_array_mut(&mut self) -> Option<&mut ThinVec<PV>> {
         match self {
             PV::Array(a) => Some(a),
             _ => None,
@@ -154,7 +157,7 @@ impl From<&str> for PV {
 
 impl From<Vec<PV>> for PV {
     fn from(a: Vec<PV>) -> PV {
-        PV::Array(a)
+        PV::Array(a.into())
     }
 }
 
@@ -215,7 +218,7 @@ pub struct PMap(Repr);
 #[derive(Clone)]
 enum Repr {
     /// Sorted by key.
-    Small(Vec<(Key, PV)>),
+    Small(ThinVec<(Key, PV)>),
     /// (boxed: keeps a [`PV`] at 32 bytes; large maps are few)
     #[allow(clippy::box_collection)]
     Large(Box<BTreeMap<Box<str>, PV>>),
@@ -223,7 +226,7 @@ enum Repr {
 
 impl Default for Repr {
     fn default() -> Self {
-        Repr::Small(Vec::new())
+        Repr::Small(ThinVec::new())
     }
 }
 
@@ -443,9 +446,8 @@ mod tests {
     #[test]
     fn sizes() {
         // The list state holds about a million of these.
-        assert_eq!(std::mem::size_of::<PV>(), 32);
-        // (an unboxed BTreeMap would make it 32, and a PV 40)
-        assert_eq!(std::mem::size_of::<PMap>(), 24);
+        assert_eq!(std::mem::size_of::<PV>(), 24);
+        assert_eq!(std::mem::size_of::<PMap>(), 16);
     }
 
     #[test]

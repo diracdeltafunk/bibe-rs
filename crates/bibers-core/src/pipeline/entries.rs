@@ -1056,11 +1056,11 @@ pub(crate) enum DisPart {
 impl DisPart {
     fn to_json(&self) -> J {
         match self {
-            DisPart::Base(p) => J::Array(vec![
+            DisPart::Base(p) => J::from(vec![
                 J::String("base".into()),
                 J::Array(p.iter().map(|x| J::from(x.clone())).collect()),
             ]),
-            DisPart::Part(np, l) => J::Array(vec![J::from(np.clone()), J::from(*l)]),
+            DisPart::Part(np, l) => J::from(vec![J::from(np.clone()), J::from(*l)]),
         }
     }
 }

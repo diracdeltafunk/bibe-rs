@@ -323,7 +323,7 @@ pub fn generate_contextdata(
                 let schema: &[J] = nd
                     .get("namedisschema")
                     .and_then(J::as_array)
-                    .map_or(&[], Vec::as_slice);
+                    .map_or(&[], |a| a.as_slice());
                 let mut pnun: std::collections::BTreeMap<&str, &str> = Default::default();
                 for (i, nss) in schema.iter().enumerate() {
                     if Some(nss) == un {

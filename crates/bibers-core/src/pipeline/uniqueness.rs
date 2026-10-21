@@ -1067,7 +1067,7 @@ impl<'a> Uniq<'a> {
                     // `reset_uniquename`: no change flag.
                     let d = self.nld.nd(nlid, &n.nid);
                     let parts = d.get("basenamestringparts").cloned().unwrap_or(J::Null);
-                    d.insert("un".into(), J::Array(vec![J::from("base"), parts]));
+                    d.insert("un".into(), J::from(vec![J::from("base"), parts]));
                 }
             }
 

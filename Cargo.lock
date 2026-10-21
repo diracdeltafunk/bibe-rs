@@ -50,6 +50,7 @@ dependencies = [
  "rustls-pki-types",
  "serde_json",
  "tempfile",
+ "thin-vec",
  "ucollate",
  "unicode-normalization",
  "webpki-roots",
@@ -740,6 +741,12 @@ dependencies = [
  "rustix",
  "windows-sys 0.61.2",
 ]
+
+[[package]]
+name = "thin-vec"
+version = "0.2.21"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d6a4b9ba8738cb4a4f399d37e266becfd475e75eb73425b87a05a2f2039ba63e"
 
 [[package]]
 name = "thiserror"
