@@ -106,6 +106,19 @@ where
     }
 }
 
+/// [`map`] with mutable access to the items.
+pub fn map_mut<T, R, F>(items: &mut [T], f: F) -> Vec<R>
+where
+    T: Send,
+    R: Send,
+    F: Fn(&mut T) -> R + Sync + Send,
+{
+    match pool_for(items.len()) {
+        None => items.iter_mut().map(f).collect(),
+        Some(pool) => pool.install(|| items.par_iter_mut().map(f).collect()),
+    }
+}
+
 /// [`map`] consuming `items`.
 pub fn map_owned<T, R, F>(items: Vec<T>, f: F) -> Vec<R>
 where

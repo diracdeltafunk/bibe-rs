@@ -29,7 +29,7 @@ use md5::{Digest, Md5};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
 use serde_json::{Map, Value as J};
-use std::collections::HashMap;
+use std::collections::{BTreeSet, HashMap};
 use std::sync::OnceLock;
 
 // ---------------------------------------------------------------------------
@@ -817,35 +817,105 @@ pub(crate) fn genpnhash(
 
 /// `Biber::process_entries_static` (Biber.pm:1966): nocite, labelname,
 /// labeldate, labeltitle and presort for every citekey.
+///
+/// Each step changes only the entry itself, so the entries are processed in
+/// parallel; warnings and the `presort` options are applied in citekey
+/// order afterwards.
 pub fn process_entries_static(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     let secnum = st.section.number.clone();
-    for key in st.section.citekeys.clone() {
-        if st.section.bibentry(&key).is_none() {
-            continue;
+    let h = H::new(ctx.cfg, ctx.dm, &secnum);
+    let Section {
+        entries,
+        citekeys,
+        cite_citekeys,
+        nocite_citekeys,
+        allkeys_nocite,
+        ..
+    } = &mut st.section;
+    let pos: rustc_hash::FxHashMap<&str, usize> = citekeys
+        .iter()
+        .enumerate()
+        .map(|(i, k)| (k.as_str(), i))
+        .collect();
+    if pos.len() != citekeys.len() {
+        // A citekey twice (it would be processed twice): one at a time.
+        let mut out = Vec::new();
+        for (i, key) in citekeys.iter().enumerate() {
+            if let Some(be) = entries.get_mut(key.as_str()) {
+                let mut log = ctx.log.fork();
+                let nocite = (&*cite_citekeys, &*nocite_citekeys, *allkeys_nocite);
+                let presort = process_static_entry(&h, &mut log, nocite, key, be);
+                out.push((i, log, presort));
+            }
         }
-        process_nocite(&mut st.section, &key);
-        process_labelname(ctx, &mut st.section, &secnum, &key);
-        process_labeldate(ctx, &mut st.section, &secnum, &key);
-        process_labeltitle(ctx, &mut st.section, &key);
-        process_presort(ctx, &st.section, &secnum, &key);
+        return apply_static(ctx, &secnum, citekeys, out);
+    }
+    // The citekeys' entries, in citekey order.
+    let mut todo: Vec<(usize, &mut Entry)> = entries
+        .iter_mut()
+        .filter_map(|(k, e)| pos.get(k.as_str()).map(|&i| (i, e)))
+        .collect();
+    todo.sort_unstable_by_key(|(i, _)| *i);
+    let parent = &*ctx.log;
+    let nocite = (&*cite_citekeys, &*nocite_citekeys, *allkeys_nocite);
+    let citekeys = &*citekeys;
+    let out = par::map_mut(&mut todo, |(i, be)| {
+        let mut log = parent.fork();
+        let presort = process_static_entry(&h, &mut log, nocite, &citekeys[*i], be);
+        (*i, log, presort)
+    });
+    apply_static(ctx, &secnum, citekeys, out)
+}
+
+/// The cite/nocite citekey sets and `allkeys_nocite`, for `process_nocite`.
+type NociteSets<'a> = (&'a BTreeSet<String>, &'a BTreeSet<String>, bool);
+
+/// The per-entry steps of `process_entries_static`. Returns the entry's
+/// `presort` value to set as an option.
+fn process_static_entry(
+    h: &H,
+    log: &mut Logger,
+    nocite: NociteSets,
+    key: &str,
+    be: &mut Entry,
+) -> Option<String> {
+    process_nocite(nocite, key, be);
+    process_labelname(h, log, key, be);
+    process_labeldate(h, key, be);
+    process_labeltitle(h, be);
+    process_presort(be)
+}
+
+/// Apply the messages and `presort` options of `process_static_entry` in
+/// citekey order.
+fn apply_static(
+    ctx: &mut Ctx,
+    secnum: &str,
+    citekeys: &[String],
+    out: Vec<(usize, Logger, Option<String>)>,
+) -> Result<(), Fatal> {
+    for (i, log, presort) in out {
+        ctx.log.join(log);
+        if let Some(ps) = presort {
+            ctx.cfg
+                .blx
+                .set_entry(secnum, &citekeys[i], "presort", OptValue::Str(ps));
+        }
     }
     Ok(())
 }
 
 /// `process_nocite` (Biber.pm:2530).
-fn process_nocite(sec: &mut Section, key: &str) {
-    let specific = sec.cite_citekeys.contains(key) || sec.nocite_citekeys.contains(key);
-    if sec.nocite_citekeys.contains(key) || (sec.allkeys_nocite && !specific) {
-        if let Some(be) = sec.bibentry_mut(key) {
-            be.set_field("nocite", Some(Value::Str("1".into())));
-        }
+fn process_nocite((cite, nocite, allkeys_nocite): NociteSets, key: &str, be: &mut Entry) {
+    let specific = cite.contains(key) || nocite.contains(key);
+    if nocite.contains(key) || (allkeys_nocite && !specific) {
+        be.set_field("nocite", Some(Value::Str("1".into())));
     }
 }
 
 /// `process_labelname` (Biber.pm:2549).
-fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) {
-    let cfg = &*ctx.cfg;
-    let be = sec.bibentry(key).expect("entry");
+fn process_labelname(h: &H, log: &mut Logger, key: &str, be: &mut Entry) {
+    let (cfg, secnum) = (h.cfg, h.secnum);
     let et = be.entrytype().to_string();
     let spec: Vec<String> = match cfg.blx.get(None, "labelnamespec", Some(&et), None) {
         Some(OptValue::Multi(v)) => v
@@ -854,7 +924,7 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
             .collect(),
         _ => Vec::new(),
     };
-    let namelistsall = &ctx.dm.helpers.namelistsall;
+    let namelistsall = &h.dm.helpers.namelistsall;
     let use_ok = |opt: &str| {
         !cfg.blx.registry.is_declared(&format!("use{opt}"))
             || opt_true(
@@ -869,7 +939,7 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
             .filter(|r| !r.is_empty())
             .unwrap_or(ln);
         if !namelistsall.iter().any(|n| n == ln) {
-            ctx.log.biber_warn(format!(
+            log.biber_warn(format!(
                 "Labelname candidate '{ln}' is not a name field - skipping"
             ));
             continue;
@@ -895,7 +965,6 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
             break;
         }
     }
-    let be = sec.bibentry_mut(key).expect("entry");
     if let Some(l) = lni {
         be.slots.insert("labelnameinfo", J::String(l));
     }
@@ -905,9 +974,7 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
 }
 
 /// `process_labeldate` (Biber.pm:2623).
-fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) {
-    let h = H::new(ctx.cfg, ctx.dm, secnum);
-    let be = sec.bibentry_mut(key).expect("entry");
+fn process_labeldate(h: &H, key: &str, be: &mut Entry) {
     let et = be.entrytype().to_string();
     if !opt_true(h.opt_undef("labeldateparts", Some(&et), Some(key))) {
         return;
@@ -1034,10 +1101,9 @@ fn process_labeldate(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
 }
 
 /// `process_labeltitle` (Biber.pm:2771).
-fn process_labeltitle(ctx: &mut Ctx, sec: &mut Section, key: &str) {
-    let be = sec.bibentry_mut(key).expect("entry");
+fn process_labeltitle(h: &H, be: &mut Entry) {
     let et = be.entrytype().to_string();
-    let spec: Vec<String> = match ctx.cfg.blx.get(None, "labeltitlespec", Some(&et), None) {
+    let spec: Vec<String> = match h.cfg.blx.get(None, "labeltitlespec", Some(&et), None) {
         Some(OptValue::Multi(v)) => v
             .iter()
             .map(|h| h.content().unwrap_or("").to_string())
@@ -1053,15 +1119,12 @@ fn process_labeltitle(ctx: &mut Ctx, sec: &mut Section, key: &str) {
     }
 }
 
-/// `process_presort` (Biber.pm:3066).
-fn process_presort(ctx: &mut Ctx, sec: &Section, secnum: &str, key: &str) {
-    let be = sec.bibentry(key).expect("entry");
-    if let Some(Value::Str(ps)) = be.get_field("presort")
-        && truthy(Some(ps))
-    {
-        ctx.cfg
-            .blx
-            .set_entry(secnum, key, "presort", OptValue::Str(ps.clone()));
+/// `process_presort` (Biber.pm:3066): the value to set as the entry's
+/// `presort` option.
+fn process_presort(be: &Entry) -> Option<String> {
+    match be.get_field("presort") {
+        Some(Value::Str(ps)) if truthy(Some(ps)) => Some(ps.clone()),
+        _ => None,
     }
 }
 
