@@ -133,7 +133,7 @@ pub(crate) mod ls {
     /// `++$self->{state}{p0}…{pn}`; returns the new value.
     pub fn incr(dl: &mut DataList, path: &[&str]) -> i64 {
         let n = get_ref(dl, path).map_or(0.0, num) as i64 + 1;
-        set(dl, path, J::String(n.to_string()));
+        set(dl, path, J::from(n.to_string()));
         n
     }
 
@@ -170,7 +170,7 @@ pub(crate) mod ls {
     /// A state scalar as a string (`undef` → `None`).
     pub fn str_of(v: &Option<J>) -> Option<String> {
         match v {
-            Some(J::String(s)) => Some(s.clone()),
+            Some(J::String(s)) => Some(s.to_string()),
             Some(J::Number(n)) => Some(n.to_string()),
             _ => None,
         }
@@ -1058,9 +1058,9 @@ impl DisPart {
         match self {
             DisPart::Base(p) => J::Array(vec![
                 J::String("base".into()),
-                J::Array(p.iter().map(|x| J::String(x.clone())).collect()),
+                J::Array(p.iter().map(|x| J::from(x.clone())).collect()),
             ]),
-            DisPart::Part(np, l) => J::Array(vec![J::String(np.clone()), J::String((*l).into())]),
+            DisPart::Part(np, l) => J::Array(vec![J::from(np.clone()), J::from(*l)]),
         }
     }
 }
@@ -1235,10 +1235,10 @@ fn set_namedis(dl: &mut DataList, d: &NameDis) {
     let o = ls::viv(dl, &["namelistdata", &nlk, &nk])
         .as_object_mut()
         .expect("object");
-    o.insert("namestring".into(), J::String(d.namestring.clone()));
+    o.insert("namestring".into(), J::from(d.namestring.clone()));
     o.insert(
         "namestrings".into(),
-        J::Array(d.namestrings.iter().map(|s| J::String(s.clone())).collect()),
+        J::Array(d.namestrings.iter().map(|s| J::from(s.clone())).collect()),
     );
     for (i, se) in d.schema.iter().enumerate() {
         if let DisPart::Base(parts) = se {
@@ -1246,11 +1246,11 @@ fn set_namedis(dl: &mut DataList, d: &NameDis) {
                 "basenamestring".into(),
                 d.namestrings
                     .get(i)
-                    .map_or(J::Null, |s| J::String(s.clone())),
+                    .map_or(J::Null, |s| J::from(s.clone())),
             );
             o.insert(
                 "basenamestringparts".into(),
-                J::Array(parts.iter().map(|s| J::String(s.clone())).collect()),
+                J::Array(parts.iter().map(|s| J::from(s.clone())).collect()),
             );
             break;
         }
@@ -1304,7 +1304,7 @@ pub fn process_visible_names(
         // Option values keep their string form (biber stores the scalar).
         let o = |name: &str| -> (f64, J) {
             match opt_string(h.opt(name, Some(et), Some(key))) {
-                Some(s) => (numify(&s), J::String(s)),
+                Some(s) => (numify(&s), J::from(s)),
                 None => (0.0, J::Null),
             }
         };
@@ -1322,7 +1322,7 @@ pub fn process_visible_names(
             };
             let nlk = nlid.key();
             let count = sec.names.list(*nlid).names.len();
-            let cnt = (count as f64, J::String(count.to_string()));
+            let cnt = (count as f64, J::from(count.to_string()));
             let cap = |m: &(f64, J)| if cnt.0 < m.0 { cnt.clone() } else { m.clone() };
             let (l_mincn, l_minbn, l_minsn, l_minan) =
                 (cap(&mincn), cap(&minbn), cap(&minsn), cap(&minan));
@@ -1419,18 +1419,18 @@ fn process_fullhash(
     let mut out = Vec::new();
     if let Some(nlid) = names_field(be, info_slot(be, "labelnamefhinfo")) {
         let fh = getfullhash(h, log, sec, dl, key, nlid)?;
-        out.push(("fullhash".to_string(), J::String(fh)));
+        out.push(("fullhash".to_string(), J::from(fh)));
         let fhr = getfullhashraw(h, sec, nlid);
-        out.push(("fullhashraw".to_string(), J::String(fhr)));
+        out.push(("fullhashraw".to_string(), J::from(fhr)));
     }
     for n in &h.dm.helpers.namelistsall {
         let Some(nlid) = names_field(be, Some(n)) else {
             continue;
         };
         let fh = getfullhash(h, log, sec, dl, key, nlid)?;
-        out.push((format!("{n}fullhash"), J::String(fh)));
+        out.push((format!("{n}fullhash"), J::from(fh)));
         let fhr = getfullhashraw(h, sec, nlid);
-        out.push((format!("{n}fullhashraw"), J::String(fhr)));
+        out.push((format!("{n}fullhashraw"), J::from(fhr)));
     }
     ls::set_entryfields(dl, key, out);
     Ok(())
@@ -1505,7 +1505,7 @@ fn process_extradate(h: &H, st: &mut SectionState, list: usize, key: &str) {
     let tracking = format!("{contexthash},{datestring}");
     let be = st.section.bibentry_mut(key).expect("entry");
     be.set_field("extradatescope", edscope.map(Value::Str));
-    ls::set_entryfield(dl, key, "nametitledateparts", J::String(tracking.clone()));
+    ls::set_entryfield(dl, key, "nametitledateparts", J::from(tracking.clone()));
     // incr_seen_nametitledateparts
     let path = ["seen_nametitledateparts", tracking.as_str()];
     if !ls::exists(dl, &path) || truthy(Some(&contexthash)) {
@@ -1525,7 +1525,7 @@ fn process_extraname(h: &H, st: &mut SectionState, list: usize, key: &str) {
     // `$be->get_field($lni)` must be a name list here.
     if let Some(nlid) = names_field(be, lni) {
         let nh = getnamehash_u(h, sec, dl, key, nlid);
-        ls::set_entryfield(dl, key, "labelnamehash", J::String(nh.clone()));
+        ls::set_entryfield(dl, key, "labelnamehash", J::from(nh.clone()));
         ls::incr(dl, &["seen_labelname", &nh]);
     }
 }
@@ -1549,7 +1549,7 @@ fn process_extratitle(h: &H, st: &mut SectionState, list: usize, key: &str) {
         .unwrap_or_default();
     let title = perl_str(info_slot(be, "labeltitleinfo").and_then(|f| be.get_field(f)));
     let nt = format!("{namehash},{title}");
-    ls::set_entryfield(dl, key, "nametitle", J::String(nt.clone()));
+    ls::set_entryfield(dl, key, "nametitle", J::from(nt.clone()));
     let path = ["seen_nametitle", nt.as_str()];
     if !ls::truthy(&ls::get(dl, &path)) || truthy(Some(&title)) {
         ls::incr(dl, &path);
@@ -1575,7 +1575,7 @@ fn process_extratitleyear(h: &H, st: &mut SectionState, list: usize, key: &str) 
         .unwrap_or("")
         .to_string();
     let ty = format!("{title},{year}");
-    ls::set_entryfield(dl, key, "titleyear", J::String(ty.clone()));
+    ls::set_entryfield(dl, key, "titleyear", J::from(ty.clone()));
     let path = ["seen_titleyear", ty.as_str()];
     if !ls::truthy(&ls::get(dl, &path)) || truthy(Some(&title)) {
         ls::incr(dl, &path);
@@ -1645,7 +1645,7 @@ fn process_workuniqueness(
         if !(ignored("singletitle", lni) && lti.is_some() && ignored("singletitle", lti)) {
             ls::incr(dl, &["seenname", &id]);
         }
-        ls::set_entryfield(dl, key, "seenname", J::String(id));
+        ls::set_entryfield(dl, key, "seenname", J::from(id));
     }
     let title = lti.and_then(|f| be.get_field(f)).map(|v| perl_str(Some(v)));
     if lti.is_some() && opt_true(h.opt_undef("uniquetitle", Some(et), Some(key))) {
@@ -1657,7 +1657,7 @@ fn process_workuniqueness(
             dl,
             key,
             "seentitle",
-            title.clone().map_or(J::Null, J::String),
+            title.clone().map_or(J::Null, J::from),
         );
     }
     if lti.is_some()
@@ -1672,7 +1672,7 @@ fn process_workuniqueness(
             dl,
             key,
             "seenbaretitle",
-            title.clone().map_or(J::Null, J::String),
+            title.clone().map_or(J::Null, J::from),
         );
     }
     if let Some(ln) = lni
@@ -1687,7 +1687,7 @@ fn process_workuniqueness(
         if !(ignored("uniquework", lni) && ignored("uniquework", lti)) {
             ls::incr(dl, &["seenwork", &id]);
         }
-        ls::set_entryfield(dl, key, "seenwork", J::String(id));
+        ls::set_entryfield(dl, key, "seenwork", J::from(id));
     }
     Ok(())
 }
@@ -1706,18 +1706,18 @@ fn process_namehash(
     let mut out = Vec::new();
     if let Some(nlid) = names_field(be, info_slot(be, "labelnameinfo")) {
         let nh = getnamehash(h, log, sec, dl, key, nlid, false)?;
-        out.push(("namehash".to_string(), J::String(nh)));
+        out.push(("namehash".to_string(), J::from(nh)));
         let bnh = getnamehash(h, log, sec, dl, key, nlid, true)?;
-        out.push(("bibnamehash".to_string(), J::String(bnh)));
+        out.push(("bibnamehash".to_string(), J::from(bnh)));
     }
     for n in &h.dm.helpers.namelistsall {
         let Some(nlid) = names_field(be, Some(n)) else {
             continue;
         };
         let nh = getnamehash(h, log, sec, dl, key, nlid, false)?;
-        out.push((format!("{n}namehash"), J::String(nh)));
+        out.push((format!("{n}namehash"), J::from(nh)));
         let bnh = getnamehash(h, log, sec, dl, key, nlid, true)?;
-        out.push((format!("{n}bibnamehash"), J::String(bnh)));
+        out.push((format!("{n}bibnamehash"), J::from(bnh)));
     }
     ls::set_entryfields(dl, key, out);
     Ok(())
@@ -1750,7 +1750,7 @@ fn process_pername_hashes(
             ls::set(
                 &mut st.datalists[list],
                 &["namelistdata", &nlid.key(), &nid.key(), "hash"],
-                J::String(hash),
+                J::from(hash),
             );
         }
     }
@@ -1797,7 +1797,7 @@ fn process_uniqueprimaryauthor(
         dl,
         key,
         "seenprimaryauthor",
-        pabase.clone().map_or(J::Null, J::String),
+        pabase.clone().map_or(J::Null, J::from),
     );
     ls::set(
         dl,

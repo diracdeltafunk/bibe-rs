@@ -204,7 +204,7 @@ fn defined(v: Option<&J>) -> Option<&J> {
 /// A scalar as Perl would stringify it (`undef` → `""`).
 fn s_or_empty(v: Option<&J>) -> String {
     match v {
-        Some(J::String(s)) => s.clone(),
+        Some(J::String(s)) => s.to_string(),
         Some(J::Null) | None => String::new(),
         Some(other) => other.to_string(),
     }

@@ -187,7 +187,7 @@ pub fn generate_contextdata(
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     let keys = dl.keys.clone().unwrap_or_default();
-    let jstr = |s: &str| J::String(s.to_string());
+    let jstr = |s: &str| J::from(s.to_string());
     // `first_index` over the keys, built on first use.
     let mut key_index: Option<rustc_hash::FxHashMap<String, usize>> = None;
     for key in &keys {
@@ -253,7 +253,7 @@ pub fn generate_contextdata(
                 let lnh = ls::str_of(&lnh).unwrap_or_default();
                 if ls::num_at(dl, &["seen_labelname", &lnh]) > 1.0 {
                     let v = ls::incr(dl, &["seen_extraname", &lnh]);
-                    ls::set(dl, &["extranamedata", key], J::String(v.to_string()));
+                    ls::set(dl, &["extranamedata", key], J::from(v.to_string()));
                 }
             }
             for (opt, field, seen, extra, data) in [
@@ -285,7 +285,7 @@ pub fn generate_contextdata(
                 let v = ls::str_of(&ls::entryfield(dl, key, field)).unwrap_or_default();
                 if ls::num_at(dl, &[seen, &v]) > 1.0 {
                     let n = ls::incr(dl, &[extra, &v]);
-                    ls::set(dl, &[data, key], J::String(n.to_string()));
+                    ls::set(dl, &[data, key], J::from(n.to_string()));
                 }
             }
             if opt_undef("labelalpha", et, key) {
@@ -294,7 +294,7 @@ pub fn generate_contextdata(
                 let la = ls::str_of(&la).unwrap_or_default();
                 if ls::num_at(dl, &["ladisambiguation", &la]) > 1.0 {
                     let n = ls::incr(dl, &["seen_extraalpha", &la]);
-                    ls::set(dl, &["extraalphadata", key], J::String(n.to_string()));
+                    ls::set(dl, &["extraalphadata", key], J::from(n.to_string()));
                 }
             }
         }
@@ -362,7 +362,7 @@ pub fn generate_contextdata(
                     .as_object_mut()
                     .expect("object");
                 for (np, v) in values {
-                    unparts.insert(np.to_string(), J::String(v.to_string()));
+                    unparts.insert(np.to_string(), J::from(v.to_string()));
                 }
             }
         }

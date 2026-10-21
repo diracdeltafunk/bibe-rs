@@ -143,7 +143,7 @@ fn pv_truthy(v: Option<&PV>) -> bool {
 fn pv_string(v: Option<&PV>) -> String {
     match v {
         None | Some(PV::Null) => String::new(),
-        Some(PV::String(s)) => s.clone(),
+        Some(PV::String(s)) => s.to_string(),
         Some(other) => other.to_string(),
     }
 }

@@ -6,15 +6,15 @@
 //! node per map however few keys it has, plus one allocation per key; the
 //! list state has a few small hashes per entry and per name (130,000 of them
 //! for 17,000 entries), so that was most of its memory. A [`PMap`] is a
-//! sorted `Vec` of its pairs while it is small, with keys that are names
-//! the program already knows (field and name-part names, `un`, `hash`, …)
-//! stored as [`Sym`]s, and a `BTreeMap` once it grows large. Both iterate in
-//! key byte order, like `serde_json::Map` (biber's `sort keys`).
+//! sorted `Vec` of its pairs while it is small and a `BTreeMap` once it
+//! grows large; both iterate in key byte order, like `serde_json::Map`
+//! (biber's `sort keys`). Strings and small-map keys of up to 24 bytes (most
+//! of them: name parts, `un` levels, counts, name ids) are stored inline.
 //!
 //! The API mirrors the parts of `serde_json`'s that the pipeline uses, so
 //! code ported against `serde_json::Value` reads the same.
 
-use super::sym::Sym;
+use compact_str::CompactString;
 use serde_json::{Map, Number, Value as J};
 use std::collections::BTreeMap;
 use std::fmt;
@@ -27,7 +27,8 @@ pub enum PV {
     Null,
     Bool(bool),
     Number(Number),
-    String(String),
+    /// A string; up to 24 bytes are stored inline.
+    String(CompactString),
     Array(Vec<PV>),
     Object(PMap),
 }
@@ -107,7 +108,7 @@ impl PV {
             J::Null => PV::Null,
             J::Bool(b) => PV::Bool(b),
             J::Number(n) => PV::Number(n),
-            J::String(s) => PV::String(s),
+            J::String(s) => PV::String(s.into()),
             J::Array(a) => PV::Array(a.into_iter().map(PV::from_json).collect()),
             J::Object(m) => PV::Object(m.into_iter().map(|(k, v)| (k, PV::from_json(v))).collect()),
         }
@@ -119,7 +120,7 @@ impl PV {
             PV::Null => J::Null,
             PV::Bool(b) => J::Bool(*b),
             PV::Number(n) => J::Number(n.clone()),
-            PV::String(s) => J::String(s.clone()),
+            PV::String(s) => J::String(s.to_string()),
             PV::Array(a) => J::Array(a.iter().map(PV::to_json).collect()),
             PV::Object(m) => J::Object(m.to_json()),
         }
@@ -135,19 +136,19 @@ impl fmt::Display for PV {
 
 impl From<String> for PV {
     fn from(s: String) -> PV {
-        PV::String(s)
+        PV::String(s.into())
     }
 }
 
 impl From<&String> for PV {
     fn from(s: &String) -> PV {
-        PV::String(s.clone())
+        PV::String(s.as_str().into())
     }
 }
 
 impl From<&str> for PV {
     fn from(s: &str) -> PV {
-        PV::String(s.to_string())
+        PV::String(s.into())
     }
 }
 
@@ -204,29 +205,8 @@ impl std::ops::Index<usize> for PV {
     }
 }
 
-/// A key of a small [`PMap`]: a known name (no allocation) or an owned
-/// string.
-#[derive(Clone, Debug)]
-enum Key {
-    Sym(Sym),
-    Owned(Box<str>),
-}
-
-impl Key {
-    fn new(k: String) -> Key {
-        match Sym::lookup(&k) {
-            Some(s) => Key::Sym(s),
-            None => Key::Owned(k.into_boxed_str()),
-        }
-    }
-
-    fn as_str(&self) -> &str {
-        match self {
-            Key::Sym(s) => s.as_str(),
-            Key::Owned(s) => s,
-        }
-    }
-}
+/// A key of a small [`PMap`].
+type Key = CompactString;
 
 /// A hash of [`PV`]s, iterated in key order. See the [module docs](self).
 #[derive(Clone, Default)]
@@ -298,7 +278,7 @@ impl PMap {
                             // Grow by half (these maps are many and small).
                             items.reserve_exact((len / 2).max(2));
                         }
-                        items.insert(i, (Key::new(k), v));
+                        items.insert(i, (Key::from(k), v));
                     } else {
                         let mut m: BTreeMap<Box<str>, PV> = std::mem::take(items)
                             .into_iter()
