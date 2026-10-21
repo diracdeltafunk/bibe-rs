@@ -1398,13 +1398,8 @@ impl<'a> ListView<'a> {
     fn nd(&self, nlid: NameListId, nid: NameId) -> Option<&'a PV> {
         pv_path(self.nld(nlid), &[&nid.key()])
     }
-    fn sortinit(&self, key: &str) -> Option<String> {
-        let v = pd_path(self.dl.slots.get("sortinitdata"), &[key, "init"])?;
-        if v.is_null() {
-            None
-        } else {
-            Some(pd_string(Some(v)))
-        }
+    fn sortinit(&self, key: &str) -> Option<&'a str> {
+        self.dl.sortinitdata.as_ref()?.get(key).map(String::as_str)
     }
 }
 
@@ -1901,10 +1896,9 @@ pub fn render_text(ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>,
                     }
                 }
                 if sortdebug {
-                    let sk = pd_path(dl.slots.get("sortdata"), &[k])
-                        .and_then(|v| v.get(0))
-                        .map(|v| pd_string(Some(v)))
-                        .unwrap_or_default();
+                    let sk = (dl.sortdata.as_ref())
+                        .and_then(|m| m.get(k))
+                        .map_or("", |d| d.string.as_str());
                     es = format!("    % sorting key for '{k}':\n    % {sk}\n{es}");
                 }
                 put(es);

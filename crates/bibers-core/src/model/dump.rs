@@ -302,11 +302,18 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
                 state: d
                     .get("state")
                     .map(|v| ListState::from_json(l.internalise(v))),
+                sortdata: None,
+                sortinitdata: None,
                 slots: Slots::new(),
             };
             for (k, v) in d {
-                if !DATALIST_TYPED.contains(&k.as_str()) {
-                    dl.slots.insert(k.clone(), l.internalise(v));
+                match k.as_str() {
+                    "sortdata" => dl.set_sortdata_json(&l.internalise(v))?,
+                    "sortinitdata" => dl.set_sortinitdata_json(&l.internalise(v))?,
+                    k if DATALIST_TYPED.contains(&k) => {}
+                    _ => {
+                        dl.slots.insert(k.to_string(), l.internalise(v));
+                    }
                 }
             }
             datalists.push(dl);
@@ -640,6 +647,12 @@ pub fn dump_state(st: &SectionState) -> J {
             }
             for (k, v) in &dl.slots {
                 o.insert(k.to_string(), d.canon(v));
+            }
+            if let Some(v) = dl.sortdata_json() {
+                o.insert("sortdata".into(), d.canon(&v));
+            }
+            if let Some(v) = dl.sortinitdata_json() {
+                o.insert("sortinitdata".into(), d.canon(&v));
             }
             J::Object(o)
         })

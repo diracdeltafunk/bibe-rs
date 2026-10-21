@@ -33,6 +33,7 @@ pub use pv::{PMap, PV};
 pub use sym::{IntoSym, Sym, SymKey};
 pub use symmap::SymMap;
 
+use rustc_hash::FxHashMap;
 use std::collections::{BTreeMap, BTreeSet};
 
 /// Untyped data in the shape of biber's state dump (scalars are strings,
@@ -475,9 +476,97 @@ pub struct DataList {
     /// extra* counters, …), as dumped; `None` until first set. To be typed as
     /// phases are ported.
     pub state: Option<ListState>,
-    /// Other slots (`sortdata`, `sortinitdata`, `sortdataschema`,
-    /// `sortingtemplate`, `unulchanged`, `filters`, …), as dumped.
+    /// `sortdata` (`None` while absent): citekey → its sort data.
+    pub sortdata: Option<FxHashMap<String, SortData>>,
+    /// `sortinitdata` (`None` while absent): citekey → `{init => …}`.
+    pub sortinitdata: Option<FxHashMap<String, String>>,
+    /// Other slots (`sortdataschema`, `sortingtemplate`, `unulchanged`,
+    /// `filters`, …), as dumped.
     pub slots: Slots,
+}
+
+/// One key's `sortdata`: `[sort string, [one value per sort set]]`.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct SortData {
+    /// The sort string (`join(',', @sortobj)`).
+    pub string: String,
+    /// One value per sort set.
+    pub obj: Vec<String>,
+}
+
+impl SortData {
+    /// The dump's shape.
+    pub fn to_json(&self) -> PerlData {
+        PerlData::Array(vec![
+            PerlData::from(self.string.as_str()),
+            PerlData::Array(self.obj.iter().map(|s| PerlData::from(s.as_str())).collect()),
+        ])
+    }
+
+    /// From the dump's shape; `None` if it has any other shape.
+    pub fn from_json(v: &PerlData) -> Option<SortData> {
+        let [string, obj] = v.as_array()?.as_slice() else {
+            return None;
+        };
+        Some(SortData {
+            string: string.as_str()?.to_string(),
+            obj: (obj.as_array()?.iter())
+                .map(|s| s.as_str().map(str::to_string))
+                .collect::<Option<_>>()?,
+        })
+    }
+}
+
+impl DataList {
+    /// The `sortdata` hash in the dump's shape.
+    pub fn sortdata_json(&self) -> Option<PerlData> {
+        let m = self.sortdata.as_ref()?;
+        Some(PerlData::Object(
+            m.iter().map(|(k, d)| (k.clone(), d.to_json())).collect(),
+        ))
+    }
+
+    /// The `sortinitdata` hash in the dump's shape.
+    pub fn sortinitdata_json(&self) -> Option<PerlData> {
+        let m = self.sortinitdata.as_ref()?;
+        Some(PerlData::Object(
+            m.iter()
+                .map(|(k, i)| {
+                    let mut o = serde_json::Map::new();
+                    o.insert("init".into(), PerlData::from(i.as_str()));
+                    (k.clone(), PerlData::Object(o))
+                })
+                .collect(),
+        ))
+    }
+
+    /// Set `sortdata` from the dump's shape (`Err` for another shape).
+    pub fn set_sortdata_json(&mut self, v: &PerlData) -> Result<(), String> {
+        let o = v.as_object().ok_or("sortdata: not a hash")?;
+        let mut m = FxHashMap::default();
+        for (k, d) in o {
+            let d = SortData::from_json(d).ok_or_else(|| format!("sortdata.{k}: unexpected shape"))?;
+            m.insert(k.clone(), d);
+        }
+        self.sortdata = Some(m);
+        Ok(())
+    }
+
+    /// Set `sortinitdata` from the dump's shape (`Err` for another shape).
+    pub fn set_sortinitdata_json(&mut self, v: &PerlData) -> Result<(), String> {
+        let o = v.as_object().ok_or("sortinitdata: not a hash")?;
+        let mut m = FxHashMap::default();
+        for (k, d) in o {
+            let init = (d.as_object())
+                .filter(|o| o.len() == 1)
+                .and_then(|o| o.get("init"))
+                .and_then(PerlData::as_str)
+                .ok_or_else(|| format!("sortinitdata.{k}: unexpected shape"))?;
+            m.insert(k.clone(), init.to_string());
+        }
+        self.sortinitdata = Some(m);
+        Ok(())
+    }
 }
 
 /// The per-section processing state the pipeline phases read and write,
