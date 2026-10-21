@@ -320,11 +320,13 @@ pub fn extract_entries(
             .keys
             .clone();
         let mut stage = Stage::default();
-        for key in &fkeys {
+        let mut premapped = premap(ctx, st, filename, &fkeys);
+        for (i, key) in fkeys.iter().enumerate() {
             st.section.set_keytods(key, filename);
             let entry = ctx.run.bibcache.data[filename].entries[key].clone();
+            let pre = premapped.as_mut().and_then(|p| p[i].take());
             let created = create_entry(
-                ctx, st, opts, &mut x, &mut stage, key, &entry, filename, &mut rkeys,
+                ctx, st, opts, &mut x, &mut stage, pre, key, &entry, filename, &mut rkeys,
             )?;
             if !created {
                 prune_orig_order(ctx, filename, key);
@@ -386,7 +388,8 @@ pub fn extract_entries(
                 if !st.section.entries.contains_key(wanted)
                     && !stage.has(wanted)
                     && !create_entry(
-                        ctx, st, opts, &mut x, &mut stage, wanted, &entry, filename, &mut rkeys,
+                        ctx, st, opts, &mut x, &mut stage, None, wanted, &entry, filename,
+                        &mut rkeys,
                     )?
                 {
                     st.section.del_citekey(wanted);
@@ -403,7 +406,7 @@ pub fn extract_entries(
                     && let Some(entry) = ctx.run.bibcache.globalds.get(&rk).cloned()
                 {
                     let created = create_entry(
-                        ctx, st, opts, &mut x, &mut stage, &rk, &entry, filename, &mut rkeys,
+                        ctx, st, opts, &mut x, &mut stage, None, &rk, &entry, filename, &mut rkeys,
                     )?;
                     if !created {
                         st.section.del_citekey(wanted);
@@ -779,6 +782,7 @@ fn create_entry(
     opts: &FetchOpts,
     x: &mut Extract,
     stage: &mut Stage,
+    premapped: Option<Premapped>,
     key: &str,
     entry: &btparse::Entry,
     datasource: &str,
@@ -787,11 +791,17 @@ fn create_entry(
     if entry.metatype != btparse::Metatype::Regular {
         return Ok(true);
     }
-    let mut raw = to_raw(entry);
-    raw.key = key.to_string();
-    let mut map_log = ctx.log.fork();
-    let outcome =
-        sourcemap::apply_maps_logged(ctx.cfg, &mut map_log, st, "bibtex", datasource, &mut raw);
+    let (raw, map_log, outcome) = match premapped {
+        Some(p) => (p.raw, p.log, p.outcome),
+        None => {
+            let mut raw = to_raw(entry);
+            raw.key = key.to_string();
+            let mut log = ctx.log.fork();
+            let outcome =
+                sourcemap::apply_maps_logged(ctx.cfg, &mut log, st, "bibtex", datasource, &mut raw);
+            (raw, log, outcome)
+        }
+    };
     let outcome = match outcome {
         Ok(o) => o,
         Err(e) => {
@@ -842,6 +852,47 @@ fn create_entry(
     stage.keys.extend(jobs.iter().map(|j| j.key.clone()));
     stage.items.push((map_log, jobs));
     Ok(true)
+}
+
+/// An entry's source maps, run ahead of [`create_entry`] by [`premap`].
+struct Premapped {
+    log: Logger,
+    outcome: Result<sourcemap::MapOutcome, Fatal>,
+    raw: RawEntry,
+}
+
+/// Run the source maps of the entries `keys` of the data source `filename`
+/// ahead, in parallel, when they are pure ([`sourcemap::maps_are_pure`]):
+/// they then depend on nothing the creation of other entries changes.
+/// `None` when they are to run in [`create_entry`].
+fn premap(
+    ctx: &Ctx,
+    st: &SectionState,
+    filename: &str,
+    keys: &[String],
+) -> Option<Vec<Option<Premapped>>> {
+    if !par::is_parallel(keys.len()) || !sourcemap::maps_are_pure(ctx.cfg) {
+        return None;
+    }
+    let data = ctx.run.bibcache.data.get(filename)?;
+    Some(par::map(keys, |k| {
+        let e = data.entries.get(k)?;
+        if e.metatype != btparse::Metatype::Regular {
+            return None;
+        }
+        let mut raw = to_raw(e);
+        raw.key = k.clone();
+        let mut log = ctx.log.fork();
+        let outcome = sourcemap::apply_maps_pure(
+            ctx.cfg,
+            &mut log,
+            &st.section,
+            "bibtex",
+            filename,
+            &mut raw,
+        );
+        Some(Premapped { log, outcome, raw })
+    }))
 }
 
 /// Whether creating `e` could skip it (the name handler's empty-name and

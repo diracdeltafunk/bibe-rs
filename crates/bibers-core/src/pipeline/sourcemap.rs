@@ -276,7 +276,7 @@ pub fn apply_maps_logged(
             cfg,
             log,
             run: &mut run,
-            sec: &mut st.section,
+            sec: SecRef::Mut(&mut st.section),
         };
         eng.apply(datatype, datasource, entry)
     };
@@ -301,6 +301,48 @@ impl fmt::Display for MapPrefix<'_> {
     }
 }
 
+/// Whether the source maps change nothing but the entry they map: no step
+/// creates or clones an entry (which changes the section's citekeys, read
+/// by later maps) and none uses `$MAPUNIQ` (a run-wide counter). Such maps
+/// can run for many entries in any order ([`apply_maps_pure`]).
+pub fn maps_are_pure(cfg: &Config) -> bool {
+    cfg.biber.sourcemap().iter().all(|sms| {
+        sms.maps.iter().all(|m| {
+            !m.map_foreach
+                .as_deref()
+                .is_some_and(|f| f.contains("$MAPUNIQ"))
+                && m.steps.iter().all(|step| {
+                    !step.attrs.contains_key("map_entry_new")
+                        && !step.attrs.contains_key("map_entry_clone")
+                        && !step.attrs.values().any(|v| v.contains("$MAPUNIQ"))
+                        && !format!("{:?}", step.extra).contains("$MAPUNIQ")
+                })
+        })
+    })
+}
+
+/// [`apply_maps_in`] for [`maps_are_pure`] maps: changes nothing but the
+/// entry (and logs to `log`), so it can run for many entries in parallel.
+pub fn apply_maps_pure(
+    cfg: &Config,
+    log: &mut Logger,
+    sec: &Section,
+    datatype: &str,
+    datasource: &str,
+    entry: &mut RawEntry,
+) -> Result<MapOutcome, Fatal> {
+    let mut run = cfg.sourcemap_run.clone();
+    let mut eng = Engine {
+        cfg,
+        log,
+        run: &mut run,
+        sec: SecRef::Shared(sec),
+    };
+    let out = eng.apply(datatype, datasource, entry);
+    debug_assert_eq!(run, cfg.sourcemap_run, "pure maps change no run state");
+    out
+}
+
 /// A created entry: the citekey it is created under and the
 /// Text::BibTeX entry (whose own `key` is the original's for clones).
 struct NewEntry {
@@ -318,7 +360,32 @@ struct Engine<'a> {
     cfg: &'a Config,
     log: &'a mut Logger,
     run: &'a mut MapRunState,
-    sec: &'a mut Section,
+    sec: SecRef<'a>,
+}
+
+/// The section a source map engine works on: read-only for maps that
+/// create no entries ([`maps_are_pure`]).
+enum SecRef<'a> {
+    Mut(&'a mut Section),
+    Shared(&'a Section),
+}
+
+impl SecRef<'_> {
+    fn get(&self) -> &Section {
+        match self {
+            SecRef::Mut(s) => s,
+            SecRef::Shared(s) => s,
+        }
+    }
+
+    fn get_mut(&mut self) -> &mut Section {
+        match self {
+            SecRef::Mut(s) => s,
+            SecRef::Shared(_) => {
+                unreachable!("maps without entry_new/entry_clone change no section")
+            }
+        }
+    }
 }
 
 /// `$section->add_citekeys($key)` (Section.pm:707).
@@ -378,7 +445,7 @@ impl Engine<'_> {
     ) -> Result<MapOutcome, Fatal> {
         let cfg = self.cfg;
         let key = entry.key.clone();
-        let secnum = self.sec.number.clone();
+        let secnum = self.sec.get().number.clone();
         let mut news: Vec<NewEntry> = Vec::new();
         let mut created_keys: Vec<String> = Vec::new();
 
@@ -562,11 +629,12 @@ impl Engine<'_> {
             );
             created_keys.push(newkey.clone());
             if truthy("map_entry_nocite") {
-                self.sec.nocite_citekeys.insert(newkey.clone());
-                add_citekey(self.sec, &newkey);
+                let sec = self.sec.get_mut();
+                sec.nocite_citekeys.insert(newkey.clone());
+                add_citekey(sec, &newkey);
             }
-            if self.sec.allkeys {
-                add_citekey(self.sec, &newkey);
+            if self.sec.get().allkeys {
+                add_citekey(self.sec.get_mut(), &newkey);
             }
             insert_new(news, newkey, ne);
         }
@@ -584,11 +652,12 @@ impl Engine<'_> {
             );
             created_keys.push(clonekey.clone());
             if truthy("map_entry_nocite") {
-                self.sec.nocite_citekeys.insert(clonekey.clone());
-                add_citekey(self.sec, &clonekey);
+                let sec = self.sec.get_mut();
+                sec.nocite_citekeys.insert(clonekey.clone());
+                add_citekey(sec, &clonekey);
             }
-            if self.sec.allkeys {
-                add_citekey(self.sec, &clonekey);
+            if self.sec.get().allkeys {
+                add_citekey(self.sec.get_mut(), &clonekey);
             }
             insert_new(news, clonekey, entry.clone());
         }
@@ -657,9 +726,10 @@ impl Engine<'_> {
         }
 
         // cited/nocited conditions (always on the original key)
-        let is_cite = self.sec.cite_citekeys.contains(key);
-        let is_nocite = self.sec.nocite_citekeys.contains(key);
-        let allnocite = self.sec.allkeys_nocite;
+        let sec = self.sec.get();
+        let is_cite = sec.cite_citekeys.contains(key);
+        let is_nocite = sec.nocite_citekeys.contains(key);
+        let allnocite = sec.allkeys_nocite;
         if truthy("map_entrykey_citedornocited") && !(is_cite || is_nocite) {
             return Ok(self.fail(
                 step,
