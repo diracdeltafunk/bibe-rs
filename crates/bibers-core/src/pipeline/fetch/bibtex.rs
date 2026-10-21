@@ -546,6 +546,7 @@ fn cache_data(
 
     // Pass 2 (cache_data proper)
     let p2 = ctx.run.bt.parse(&lbuf);
+    drop(lbuf);
     push_diags(x, &p2);
     info!(ctx.log, "Found BibTeX data source '{filename}'");
 
