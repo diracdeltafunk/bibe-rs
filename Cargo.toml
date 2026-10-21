@@ -35,8 +35,9 @@ memchr = "2"
 serde_json = "1"
 rustc-hash = "2"
 # The global allocator of the bibers binary: less memory than the system
-# allocators (fragmentation) and faster.
-mimalloc = { version = "0.1.48", default-features = false }
+# allocators (fragmentation) and faster. mimalloc 2 rather than 3: 5-15%
+# lower peak RSS on the benchmarks at the same speed.
+mimalloc = { version = "0.1.48", default-features = false, features = ["v2"] }
 # Short strings stored inline (the generic list state, `model::PV`).
 compact_str = "0.9"
 md-5 = "0.10"
