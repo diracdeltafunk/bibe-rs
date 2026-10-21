@@ -10,6 +10,62 @@ pub mod bibtex;
 use crate::log::Fatal;
 use crate::pipeline::{Ctx, Processed};
 
+/// Output text in pieces: the output is their concatenation. A large
+/// `.bbl` is rendered entry by entry, and keeping the entries' pieces
+/// instead of copying them into one string halves its memory.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct Text {
+    pieces: Vec<String>,
+}
+
+impl Text {
+    /// Append a piece.
+    pub fn push(&mut self, s: String) {
+        if !s.is_empty() {
+            self.pieces.push(s);
+        }
+    }
+
+    /// The pieces, in order.
+    pub fn pieces(&self) -> &[String] {
+        &self.pieces
+    }
+
+    /// The pieces, in order.
+    pub fn into_pieces(self) -> Vec<String> {
+        self.pieces
+    }
+
+    /// The length in bytes.
+    pub fn len(&self) -> usize {
+        self.pieces.iter().map(String::len).sum()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.pieces.is_empty()
+    }
+
+    /// The whole text as one string.
+    pub fn into_string(self) -> String {
+        if self.pieces.len() == 1 {
+            return self.pieces.into_iter().next().expect("one piece");
+        }
+        let mut s = String::with_capacity(self.len());
+        for p in self.pieces {
+            s.push_str(&p);
+        }
+        s
+    }
+}
+
+impl From<String> for Text {
+    fn from(s: String) -> Text {
+        let mut t = Text::default();
+        t.push(s);
+        t
+    }
+}
+
 /// An output format (`--output-format`) bibers can write. Data formats
 /// (written in tool mode) render the `99999` pseudo-section.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -55,11 +111,13 @@ impl OutputFormat {
 
     /// Render the processed sections in this format, before encoding.
     /// `Ok(None)` if the writer cannot produce output.
-    pub fn render(self, ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fatal> {
+    pub fn render(self, ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>, Fatal> {
         match self {
-            OutputFormat::Bbl => bbl::render(ctx, processed),
-            OutputFormat::Bibtex => bibtex::render(ctx, processed).map(Some),
-            OutputFormat::Biblatexml => biblatexml::render(ctx, processed).map(Some),
+            OutputFormat::Bbl => bbl::render_text(ctx, processed),
+            OutputFormat::Bibtex => bibtex::render(ctx, processed).map(|t| Some(t.into())),
+            OutputFormat::Biblatexml => {
+                biblatexml::render(ctx, processed).map(|t| Some(t.into()))
+            }
         }
     }
 

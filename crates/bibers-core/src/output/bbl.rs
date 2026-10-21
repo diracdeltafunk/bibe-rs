@@ -41,6 +41,7 @@ use crate::log::Fatal;
 use crate::model::{
     DataList, Entry, Name, NameArena, NameId, NameListId, PerlData, SectionState, Sym, Value,
 };
+use crate::output::Text;
 use crate::pipeline::{Ctx, Processed};
 use crate::quirks::Quirk;
 
@@ -1624,24 +1625,29 @@ pub(crate) fn find_output_encoding(ctx: &mut Ctx) -> Result<Encoding, Fatal> {
 /// `:encoding(<output_encoding>)` layer would (unmappable characters as
 /// `\x{XXXX}`; for `UTF-8`, i.e. `utf-8-strict`, noncharacters too).
 pub fn encode_output(ctx: &mut Ctx, text: &str) -> Result<Vec<u8>, Fatal> {
-    match utf8_output(ctx, text)? {
+    match utf8_output(ctx, &[text])? {
         Ok(()) => Ok(text.as_bytes().to_vec()),
         Err(enc) => Ok(enc.encode_layer(text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit))),
     }
 }
 
-/// [`encode_output`] taking the text by value, which UTF-8 output then
-/// reuses instead of copying.
-pub fn encode_output_owned(ctx: &mut Ctx, text: String) -> Result<Vec<u8>, Fatal> {
-    match utf8_output(ctx, &text)? {
-        Ok(()) => Ok(text.into_bytes()),
-        Err(enc) => Ok(enc.encode_layer(&text, ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit))),
-    }
+/// [`encode_output`] of a text in pieces: the bytes to write, in pieces.
+/// UTF-8 output reuses the pieces instead of copying; other encodings encode the whole text
+/// (the encoding layer's buffering is observable, [`Quirk::PerlioEncodingSplit`]).
+pub fn encode_output_text(ctx: &mut Ctx, text: Text) -> Result<Vec<Vec<u8>>, Fatal> {
+    let pieces: Vec<&str> = text.pieces().iter().map(String::as_str).collect();
+    Ok(match utf8_output(ctx, &pieces)? {
+        Ok(()) => text.into_pieces().into_iter().map(String::into_bytes).collect(),
+        Err(e) => vec![e.encode_layer(
+            &text.into_string(),
+            ctx.cfg.quirks.on(Quirk::PerlioEncodingSplit),
+        )],
+    })
 }
 
 /// `Ok(Ok(()))` if the output encoding writes `text` unchanged, else the
 /// encoding to use.
-fn utf8_output(ctx: &mut Ctx, text: &str) -> Result<Result<(), Encoding>, Fatal> {
+fn utf8_output(ctx: &mut Ctx, text: &[&str]) -> Result<Result<(), Encoding>, Fatal> {
     let enc = if output_encoding_name(ctx) == "UTF-8" {
         Encoding::UTF8
     } else {
@@ -1651,7 +1657,7 @@ fn utf8_output(ctx: &mut Ctx, text: &str) -> Result<Result<(), Encoding>, Fatal>
     // unchanged except for noncharacters, and a character cut by a buffer
     // boundary is carried whole into the next buffer (STOP_AT_PARTIAL), so
     // the chunking is unobservable.
-    if enc.is_utf8() && (enc.name() == "utf8" || !has_noncharacter(text)) {
+    if enc.is_utf8() && (enc.name() == "utf8" || !text.iter().any(|t| has_noncharacter(t))) {
         return Ok(Ok(()));
     }
     Ok(Err(enc))
@@ -1706,9 +1712,25 @@ fn template_locale(ctx: &Ctx, name: &str) -> Option<String> {
     }
 }
 
+/// `NFC(s)`, reusing `s` when it is ASCII.
+fn nfc_owned(s: String) -> String {
+    if s.is_ascii() {
+        return s;
+    }
+    let mut out = String::with_capacity(s.len());
+    push_nfc(&mut out, &s);
+    out
+}
+
 /// Render the whole `.bbl` (header, `\preamble`, one `\refsection` per
 /// section with output entries, `\endinput`).
 pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fatal> {
+    Ok(render_text(ctx, processed)?.map(Text::into_string))
+}
+
+/// [`render`] in pieces (one per entry and per header line), each
+/// normalised to NFC.
+pub fn render_text(ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>, Fatal> {
     let mut prep = Prep::new(ctx.dm, wraplines(ctx));
     let mut w = Writer {
         datefields: ctx.dm.helpers.datefields.clone(),
@@ -1807,14 +1829,8 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     };
     let sortdebug = ctx.cfg.biber.is_true("sortdebug");
 
-    // The entries' text plus room for the rest, so that a large `.bbl`
-    // isn't built by doubling.
-    let estimate: usize = (sections.iter())
-        .flat_map(|so| so.lists.iter())
-        .flat_map(|(_, texts)| texts.iter().map(String::len))
-        .sum();
-    let mut out = String::with_capacity(estimate + estimate / 64 + 4096);
-    let mut put = |s: &str| push_nfc(&mut out, s);
+    let mut out = Text::default();
+    let mut put = |s: String| out.push(nfc_owned(s));
 
     // create_output_misc: \preamble (global, so the last section's).
     let mut headtext = head();
@@ -1827,7 +1843,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
         }
         headtext.push_str(&format!("\\preamble{{%\n{pa}%\n}}\n\n"));
     }
-    put(&headtext);
+    put(headtext);
 
     // Sections with output entries, in string order of their numbers.
     let mut order: Vec<SectionOut> = sections.into_iter().filter(|s| s.has_entries).collect();
@@ -1835,13 +1851,13 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     for so in order {
         let st = so.st;
         let secnum = &st.section.number;
-        put(&format!("\n\\refsection{{{secnum}}}\n"));
+        put(format!("\n\\refsection{{{secnum}}}\n"));
         for (dl, texts) in so.lists {
             let keys = dl.keys.as_deref().unwrap_or(&[]);
             if keys.is_empty() {
                 continue;
             }
-            put(&format!("  \\datalist[{}]{{{}}}\n", dl.type_, dl.name));
+            put(format!("  \\datalist[{}]{{{}}}\n", dl.type_, dl.name));
             for (k, mut es) in keys.iter().zip(texts) {
                 if let Some(r) = &recoder {
                     if safechars {
@@ -1862,24 +1878,24 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
                         .unwrap_or_default();
                     es = format!("    % sorting key for '{k}':\n    % {sk}\n{es}");
                 }
-                put(&es);
+                put(es);
             }
-            put("  \\enddatalist\n");
+            put("  \\enddatalist\n".into());
         }
         let mut aliases: Vec<(&String, &String)> = st.section.citekey_alias.iter().collect();
         aliases.sort();
         for (a, k) in aliases {
-            put(&format!("  \\keyalias{{{a}}}{{{k}}}\n"));
+            put(format!("  \\keyalias{{{a}}}{{{k}}}\n"));
         }
         let mut missing: Vec<&String> = st.section.undef_citekeys.iter().collect();
         missing.sort();
         missing.dedup();
         for k in missing {
-            put(&format!("  \\missing{{{k}}}\n"));
+            put(format!("  \\missing{{{k}}}\n"));
         }
-        put("\\endrefsection\n");
+        put("\\endrefsection\n".into());
     }
-    put("\\endinput\n\n");
+    put("\\endinput\n\n".into());
     Ok(Some(out))
 }
 
