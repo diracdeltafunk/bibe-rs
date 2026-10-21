@@ -202,6 +202,22 @@ impl ListState {
         }
     }
 
+    /// `delete $state->{k0}{k1}` (nothing is vivified).
+    pub fn remove2(&mut self, k0: &str, k1: &str) -> Option<J> {
+        if self.raw.is_some() {
+            return None;
+        }
+        let keyed = match k0 {
+            FIELDS => Some(&mut self.fields),
+            NAMELISTDATA => Some(&mut self.namelistdata),
+            _ => None,
+        };
+        match keyed {
+            Some(h) if !self.rest.contains_key(k0) => h.as_mut()?.remove(k1),
+            _ => self.rest.get_mut(k0)?.as_object_mut()?.remove(k1),
+        }
+    }
+
     /// Take `$state->{namelistdata}` out (if it is a hash).
     pub fn take_namelistdata(&mut self) -> Option<FxHashMap<String, J>> {
         if self.rest.contains_key(NAMELISTDATA) {

@@ -1597,21 +1597,42 @@ struct SectionOut<'a> {
     lists: Vec<(&'a DataList, Vec<String>)>,
 }
 
-/// The output lists of a section in `.bbl` order (bbl.pm:689-707).
-fn output_lists<'a>(ctx: &Ctx, datalists: &'a [DataList]) -> Vec<&'a DataList> {
+/// The output lists of a section in `.bbl` order (bbl.pm:689-707), as
+/// indices into `datalists`.
+fn output_list_indices(ctx: &Ctx, datalists: &[DataList]) -> Vec<usize> {
     let global = opt_string(ctx.cfg.blx.global("sortingtemplatename")).unwrap_or_default();
-    let mut lists: Vec<&DataList> = datalists.iter().collect();
-    lists.sort_by(|a, b| a.sortingtemplatename.cmp(&b.sortingtemplatename));
-    let mut out: Vec<&DataList> = lists
-        .into_iter()
-        .filter(|l| !(l.sortingtemplatename == global && l.type_ == "entry"))
+    let is_global = |l: &DataList| l.sortingtemplatename == global && l.type_ == "entry";
+    let mut lists: Vec<usize> = (0..datalists.len()).collect();
+    // (a stable sort, like Perl's)
+    lists.sort_by(|&a, &b| {
+        (datalists[a].sortingtemplatename).cmp(&datalists[b].sortingtemplatename)
+    });
+    let mut out: Vec<usize> = (lists.into_iter())
+        .filter(|&l| !is_global(&datalists[l]))
         .collect();
-    out.extend(
-        datalists
-            .iter()
-            .filter(|l| l.sortingtemplatename == global && l.type_ == "entry"),
-    );
+    out.extend((0..datalists.len()).filter(|&l| is_global(&datalists[l])));
     out
+}
+
+/// Free the per-entry data of `key` in the list `dl` that only the
+/// entry's own text reads (its `.bbl` text has been made).
+fn forget_entry(dl: &mut DataList, key: &str) {
+    if let Some(state) = &mut dl.state {
+        state.remove2("fields", key);
+        for data in [
+            "labelalphadata",
+            "extraalphadata",
+            "extranamedata",
+            "extradatedata",
+            "extratitledata",
+            "extratitleyeardata",
+        ] {
+            state.remove2(data, key);
+        }
+    }
+    if let Some(si) = &mut dl.sortinitdata {
+        si.remove(key);
+    }
 }
 
 /// The `output_encoding` option as given (`UTF-8` after `normalise_utf8`).
@@ -1795,54 +1816,61 @@ pub fn render_text(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Te
     let mut sections: Vec<SectionOut> = Vec::new();
     for st in processed.sections.iter_mut() {
         w.start_section(st);
-        let lists = output_lists(ctx, &st.datalists);
-        let views: Vec<ListView> = lists
-            .iter()
-            .map(|dl| ListView {
-                dl,
-                state: dl.state.as_ref(),
-                collator: &collators[&template_locale(ctx, &dl.sortingtemplatename)],
-            })
+        let lists = output_list_indices(ctx, &st.datalists);
+        let colls: Vec<&ucollate::Collator> = (lists.iter())
+            .map(|&l| &collators[&template_locale(ctx, &st.datalists[l].sortingtemplatename)])
             .collect();
         // Key → (list, position) of each of its places in the lists.
-        let mut places: HashMap<&str, Vec<(usize, usize)>> = HashMap::default();
+        let mut places: HashMap<String, Vec<(usize, usize)>> = HashMap::default();
         let mut texts: Vec<Vec<String>> = Vec::with_capacity(lists.len());
-        for (li, dl) in lists.iter().enumerate() {
-            let keys = dl.keys.as_deref().unwrap_or(&[]);
+        for (li, &l) in lists.iter().enumerate() {
+            let keys = st.datalists[l].keys.as_deref().unwrap_or(&[]);
             for (pos, k) in keys.iter().enumerate() {
-                places.entry(k.as_str()).or_default().push((li, pos));
+                places.entry(k.clone()).or_default().push((li, pos));
             }
             texts.push(vec![String::new(); keys.len()]);
         }
         // The last time each key is output.
-        let citekeys = &st.section.citekeys;
-        let last: HashMap<&str, usize> = (citekeys.iter().enumerate())
+        let last: HashMap<&str, usize> = (st.section.citekeys.iter().enumerate())
             .map(|(i, k)| (k.as_str(), i))
             .collect();
         let mut has_entries = false;
-        for (i, k) in citekeys.iter().enumerate() {
+        for (i, k) in st.section.citekeys.iter().enumerate() {
             let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? else {
                 continue;
             };
             has_entries = true;
             for &(li, pos) in places.get(k.as_str()).into_iter().flatten() {
-                let mut es = instantiate_entry(&views[li], &t, k);
+                let dl = &st.datalists[lists[li]];
+                let lv = ListView {
+                    dl,
+                    state: dl.state.as_ref(),
+                    collator: colls[li],
+                };
+                let mut es = instantiate_entry(&lv, &t, k);
                 if comma_quirk {
                     es = dangling_comma_cleanup(&es);
                 }
                 texts[li][pos] = es;
             }
-            if last[k.as_str()] == i
-                && let Some(e) = st.section.entries.get_mut(k)
-            {
-                *e = Entry::default();
+            if last[k.as_str()] == i {
+                // Only the text is needed from now on.
+                if let Some(e) = st.section.entries.get_mut(k) {
+                    *e = Entry::default();
+                }
+                for &l in &lists {
+                    forget_entry(&mut st.datalists[l], k);
+                }
             }
         }
         let st: &SectionState = st;
         sections.push(SectionOut {
             st,
             has_entries,
-            lists: output_lists(ctx, &st.datalists).into_iter().zip(texts).collect(),
+            lists: (lists.into_iter())
+                .map(|l| &st.datalists[l])
+                .zip(texts)
+                .collect(),
         });
     }
 
