@@ -27,7 +27,8 @@ use crate::quirks::Quirk;
 use md5::{Digest, Md5};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
-use serde_json::{Map, Value as J};
+use crate::model::{PMap as Map, PV as J};
+use serde_json::Value as SJ;
 use std::cell::OnceCell;
 use std::collections::HashMap;
 
@@ -41,7 +42,7 @@ use std::collections::HashMap;
 /// show in biber's dumps.
 pub(crate) mod ls {
     use crate::model::{DataList, ListState};
-    use serde_json::{Map, Value as J};
+    use crate::model::{PMap as Map, PV as J};
 
     /// `$self->{state}` (created if needed).
     pub fn root(dl: &mut DataList) -> &mut ListState {
@@ -75,7 +76,7 @@ pub(crate) mod ls {
     }
 
     /// `viv(…)` as a map.
-    pub fn viv_map<'a>(dl: &'a mut DataList, path: &[&str]) -> &'a mut Map<String, J> {
+    pub fn viv_map<'a>(dl: &'a mut DataList, path: &[&str]) -> &'a mut Map {
         viv(dl, path).as_object_mut().expect("object")
     }
 
@@ -245,7 +246,7 @@ pub(crate) fn perl_str(v: Option<&Value>) -> String {
 
 /// A defined scalar slot (`undef` → `None`).
 fn slot_str<'a>(slots: &'a crate::model::Slots, k: &str) -> Option<&'a str> {
-    slots.get(k).and_then(J::as_str)
+    slots.get(k).and_then(SJ::as_str)
 }
 
 /// The string value of an option (`undef`/reference → `None`).
@@ -871,10 +872,10 @@ fn process_labelname(ctx: &mut Ctx, sec: &mut Section, secnum: &str, key: &str) 
     }
     let be = sec.bibentry_mut(key).expect("entry");
     if let Some(l) = lni {
-        be.slots.insert("labelnameinfo", J::String(l));
+        be.slots.insert("labelnameinfo", SJ::String(l));
     }
     if let Some(l) = lnfhi {
-        be.slots.insert("labelnamefhinfo", J::String(l));
+        be.slots.insert("labelnamefhinfo", SJ::String(l));
     }
 }
 
@@ -1020,7 +1021,7 @@ fn process_labeltitle(ctx: &mut Ctx, sec: &mut Section, key: &str) {
     };
     for ltn in spec {
         if let Some(lt) = be.get_field(&ltn).filter(|v| value_true(Some(v))).cloned() {
-            be.slots.insert("labeltitleinfo", J::String(ltn));
+            be.slots.insert("labeltitleinfo", SJ::String(ltn));
             be.set_field("labeltitle", Some(lt));
             break;
         }
@@ -1396,7 +1397,7 @@ pub fn process_entries_post(
 
 /// The entry's `labelnameinfo`/`labelnamefhinfo`/`labeltitleinfo` slot.
 pub(crate) fn info_slot<'a>(be: &'a Entry, slot: &str) -> Option<&'a str> {
-    be.slots.get(slot).and_then(J::as_str)
+    be.slots.get(slot).and_then(SJ::as_str)
 }
 
 /// The name list of field `f` of `be`, if it is a (true) name list.
@@ -1602,7 +1603,7 @@ fn process_workuniqueness(
         .get_mut("uniqignore")
         .and_then(|u| u.get_mut(key))
         .filter(|i| i.is_object());
-    let mut ignore: Option<&mut J> = ignore;
+    let mut ignore: Option<&mut SJ> = ignore;
     let mut ignored = |kind: &str, f: Option<&str>| -> bool {
         let Some(i) = ignore.as_deref_mut() else {
             return false;
@@ -1611,11 +1612,11 @@ fn process_workuniqueness(
             .as_object_mut()
             .expect("object")
             .entry(kind.to_string())
-            .or_insert_with(|| J::Array(Vec::new()));
+            .or_insert_with(|| SJ::Array(Vec::new()));
         let Some(f) = f else { return false };
         a.as_array().is_some_and(|a| {
             a.iter()
-                .filter_map(J::as_str)
+                .filter_map(SJ::as_str)
                 .any(|x| fc(x) == fc(f) && truthy(Some(x)))
         })
     };
@@ -1745,7 +1746,7 @@ fn process_pername_hashes(
                 .names
                 .name_mut(nid)
                 .slots
-                .insert("hash", J::String(hash.clone()));
+                .insert("hash", SJ::String(hash.clone()));
             ls::set(
                 &mut st.datalists[list],
                 &["namelistdata", &nlid.key(), &nid.key(), "hash"],

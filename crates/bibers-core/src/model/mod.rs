@@ -22,12 +22,14 @@ pub mod annotation;
 pub mod dump;
 pub mod entrymap;
 pub mod liststate;
+pub mod pv;
 pub mod sym;
 pub mod symmap;
 
 pub use annotation::{Annotation, AnnotationScope, Annotations};
 pub use entrymap::EntryMap;
 pub use liststate::{Level1, ListState};
+pub use pv::{PMap, PV};
 pub use sym::{IntoSym, Sym, SymKey};
 pub use symmap::SymMap;
 

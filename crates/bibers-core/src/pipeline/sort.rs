@@ -504,7 +504,7 @@ impl<'a> Gen<'a> {
                     .as_ref()
                     .and_then(|st| st.peek2("fields", key))
                     .and_then(|f| f.get("sortlabelalpha"))
-                    .and_then(J::as_str)
+                    .and_then(crate::model::PV::as_str)
                     .unwrap_or("");
                 return Some(process_sort_attributes(s, a));
             }
@@ -794,7 +794,7 @@ impl<'a> Gen<'a> {
         } else {
             "vissort"
         };
-        let visible = num(nld.and_then(|d| d.get(vis_key)).and_then(J::as_str));
+        let visible = num(nld.and_then(|d| d.get(vis_key)).and_then(crate::model::PV::as_str));
         if let Some(u) = slot_str(&names.slots, "useprefix") {
             useprefix = Some(u.to_string());
         }

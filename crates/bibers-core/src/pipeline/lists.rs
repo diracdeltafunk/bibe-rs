@@ -170,7 +170,7 @@ pub fn generate_contextdata(
     list: usize,
 ) -> Result<(), Fatal> {
     use super::entries::{H, info_slot, ls, uniquename_value};
-    use serde_json::Value as J;
+    use crate::model::PV as J;
     let secnum = st.section.number.clone();
     let h = H::new(ctx.cfg, ctx.dm, &secnum);
     let opt_undef = |opt: &str, et: &str, key: &str| {
@@ -362,7 +362,7 @@ pub fn generate_contextdata(
                     .as_object_mut()
                     .expect("object");
                 for (np, v) in values {
-                    unparts.insert(np, J::String(v.to_string()));
+                    unparts.insert(np.to_string(), J::String(v.to_string()));
                 }
             }
         }
