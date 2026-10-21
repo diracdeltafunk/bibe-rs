@@ -1317,36 +1317,46 @@ pub(crate) fn process_namedis(
     Ok(out)
 }
 
-/// `DataList::set_namedis` (DataList.pm:305).
-fn set_namedis(dl: &mut DataList, d: &NameDis) {
-    let (nlk, nk) = (d.nlid.key(), d.nid.key());
-    let o = ls::viv(dl, &["namelistdata", &nlk, &nk])
-        .as_object_mut()
-        .expect("object");
-    o.insert("namestring".into(), J::String(d.namestring.clone()));
-    o.insert(
-        "namestrings".into(),
+/// The values `DataList::set_namedis` (DataList.pm:305) sets for a name.
+fn namedis_fields(d: &NameDis) -> Vec<(&'static str, J)> {
+    let mut out = Vec::with_capacity(5);
+    out.push(("namestring", J::String(d.namestring.clone())));
+    out.push((
+        "namestrings",
         J::Array(d.namestrings.iter().map(|s| J::String(s.clone())).collect()),
-    );
+    ));
     for (i, se) in d.schema.iter().enumerate() {
         if let DisPart::Base(parts) = se {
-            o.insert(
-                "basenamestring".into(),
+            out.push((
+                "basenamestring",
                 d.namestrings
                     .get(i)
                     .map_or(J::Null, |s| J::String(s.clone())),
-            );
-            o.insert(
-                "basenamestringparts".into(),
+            ));
+            out.push((
+                "basenamestringparts",
                 J::Array(parts.iter().map(|s| J::String(s.clone())).collect()),
-            );
+            ));
             break;
         }
     }
-    o.insert(
-        "namedisschema".into(),
+    out.push((
+        "namedisschema",
         J::Array(d.schema.iter().map(DisPart::to_json).collect()),
-    );
+    ));
+    out
+}
+
+/// `DataList::set_namedis` (DataList.pm:305) with the values of
+/// [`namedis_fields`].
+fn set_namedis(dl: &mut DataList, nlid: NameListId, nid: NameId, fields: Vec<(&str, J)>) {
+    let (nlk, nk) = (nlid.key(), nid.key());
+    let o = ls::viv(dl, &["namelistdata", &nlk, &nk])
+        .as_object_mut()
+        .expect("object");
+    for (k, v) in fields {
+        o.insert(k.to_string(), v);
+    }
 }
 
 /// `Biber::process_entries_pre` (Biber.pm:2000), for the data list
@@ -1357,15 +1367,21 @@ pub fn process_entries_pre(ctx: &mut Ctx, st: &mut SectionState, list: usize) ->
     let untname = st.datalists[list].uniquenametemplatename.clone();
     // The name strings in parallel, stored in citekey order.
     let sec = &st.section;
+    // (and the values to set, without the names whose uniquename and
+    // uniquelist are both false)
     let (nds, res) = par::map_logged(ctx.log, &sec.citekeys, |log, key| {
-        process_namedis(&h, log, sec, &untname, key)
+        let nd = process_namedis(&h, log, sec, &untname, key)?;
+        Ok(nd
+            .iter()
+            .filter(|d| {
+                !(d.nameun.as_deref() == Some("false") && d.namelistul.as_deref() == Some("false"))
+            })
+            .map(|d| (d.nlid, d.nid, namedis_fields(d)))
+            .collect::<Vec<_>>())
     });
     for nd in nds {
-        for d in &nd {
-            if d.nameun.as_deref() == Some("false") && d.namelistul.as_deref() == Some("false") {
-                continue;
-            }
-            set_namedis(&mut st.datalists[list], d);
+        for (nlid, nid, fields) in nd {
+            set_namedis(&mut st.datalists[list], nlid, nid, fields);
         }
     }
     res
