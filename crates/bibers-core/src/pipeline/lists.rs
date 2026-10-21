@@ -40,7 +40,7 @@ pub fn process_lists(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> 
                 filter_list(ctx, st, i)?;
             }
             phase(ctx, st, i)?;
-            if *name == "uniqueness" {
+            if *name == "uniqueness" && ctx.run.free_dead_state {
                 super::release_uniqueness_data(&mut st.datalists[i]);
             }
         }

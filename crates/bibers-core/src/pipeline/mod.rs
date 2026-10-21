@@ -77,6 +77,10 @@ pub struct RunState {
     /// [`prepare`] when nothing can read it ([`rawdata_unread`]). Phases run
     /// on their own (the phase tests) keep it, as biber's dumps show it.
     pub skip_rawdata: bool,
+    /// Free state as soon as no later phase reads it (set by [`prepare`]):
+    /// a phase run on its own (the phase tests) leaves the whole state for
+    /// biber's dump.
+    pub free_dead_state: bool,
     /// biber's shared `$dmh->{datefields}` once a `foreach … s/date$//`
     /// loop has mutated it in place (BB-028); `None` while pristine. See
     /// [`resolve::datefield_stems`].
@@ -94,6 +98,7 @@ pub struct Processed {
 pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
     let mut out = Processed::default();
     ctx.run.skip_rawdata = rawdata_unread(ctx);
+    ctx.run.free_dead_state = true;
     for secnum in sections_to_process(ctx.doc) {
         info!(ctx.log, "Processing section {secnum}");
         let mut st = fetch::init_section(ctx, &secnum)?;
