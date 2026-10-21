@@ -1939,7 +1939,7 @@ pub fn render_text(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Te
                 if sortdebug {
                     let sk = (dl.sortdata.as_ref())
                         .and_then(|m| m.get(k))
-                        .map_or("", |d| d.string.as_str());
+                        .map_or_else(String::new, |d| d.string());
                     es = format!("    % sorting key for '{k}':\n    % {sk}\n{es}");
                 }
                 put(es);

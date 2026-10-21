@@ -33,6 +33,7 @@ pub use pv::{PMap, PV};
 pub use sym::{IntoSym, Sym, SymKey};
 pub use symmap::SymMap;
 
+use compact_str::CompactString;
 use rustc_hash::FxHashMap;
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -485,35 +486,40 @@ pub struct DataList {
     pub slots: Slots,
 }
 
-/// One key's `sortdata`: `[sort string, [one value per sort set]]`.
+/// One key's `sortdata`: `[sort string, [one value per sort set]]`, where
+/// the sort string is the values joined with `,` (Biber.pm:4291).
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct SortData {
-    /// The sort string (`join(',', @sortobj)`).
-    pub string: String,
     /// One value per sort set.
-    pub obj: Vec<String>,
+    pub obj: Box<[CompactString]>,
 }
 
 impl SortData {
+    /// The sort string (`join(',', @sortobj)`).
+    pub fn string(&self) -> String {
+        self.obj.join(",")
+    }
+
     /// The dump's shape.
     pub fn to_json(&self) -> PerlData {
         PerlData::Array(vec![
-            PerlData::from(self.string.as_str()),
+            PerlData::from(self.string()),
             PerlData::Array(self.obj.iter().map(|s| PerlData::from(s.as_str())).collect()),
         ])
     }
 
-    /// From the dump's shape; `None` if it has any other shape.
+    /// From the dump's shape; `None` if it has any other shape (or the
+    /// string is not the values joined).
     pub fn from_json(v: &PerlData) -> Option<SortData> {
         let [string, obj] = v.as_array()?.as_slice() else {
             return None;
         };
-        Some(SortData {
-            string: string.as_str()?.to_string(),
+        let d = SortData {
             obj: (obj.as_array()?.iter())
-                .map(|s| s.as_str().map(str::to_string))
+                .map(|s| s.as_str().map(CompactString::from))
                 .collect::<Option<_>>()?,
-        })
+        };
+        (string.as_str()? == d.string()).then_some(d)
     }
 }
 

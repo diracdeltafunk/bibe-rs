@@ -199,8 +199,7 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
         sd.insert(
             k,
             SortData {
-                string: info.string,
-                obj: info.obj,
+                obj: info.obj.into_iter().map(Into::into).collect(),
             },
         );
     }
@@ -216,8 +215,6 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
 
 /// The sort information of one key.
 struct SortInfo {
-    /// The sort string (`join(',', @sortobj)`).
-    string: String,
     /// One value per sort set.
     obj: Vec<String>,
     /// sortinit, if the sort string is non-empty.
@@ -411,7 +408,6 @@ impl<'a> Gen<'a> {
             None
         };
         Some(SortInfo {
-            string: ss,
             obj,
             init,
         })

@@ -385,7 +385,7 @@ pub fn sort_list(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<()
     for k in &keys {
         let obj: Vec<&str> = sortdata
             .and_then(|m| m.get(k))
-            .map(|d| d.obj.iter().map(String::as_str).collect())
+            .map(|d| d.obj.iter().map(|s| s.as_str()).collect())
             .unwrap_or_default();
         let mut row = Vec::with_capacity(obj.len());
         for (i, v) in obj.iter().enumerate() {
