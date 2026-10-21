@@ -22,14 +22,15 @@ use crate::model::{
     DataList, Entry, LabelDateFields, LabelDateInfo, Name, NameId, NameListId, Section,
     SectionState, Sym, Value,
 };
+use crate::par;
 use crate::perlish::{fc, lc, numify, truthy};
 use crate::quirks::Quirk;
 use md5::{Digest, Md5};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
 use serde_json::{Map, Value as J};
-use std::cell::OnceCell;
 use std::collections::HashMap;
+use std::sync::OnceLock;
 
 // ---------------------------------------------------------------------------
 // Per-list state access (`Biber::DataList` accessors)
@@ -450,7 +451,7 @@ pub(crate) struct H<'a> {
     pub dm: &'a DataModel,
     pub secnum: &'a str,
     /// What the name hashes need, computed on first use.
-    hashing: OnceCell<Hashing>,
+    hashing: OnceLock<Hashing>,
 }
 
 /// Lookups the name hashes need, computed once per phase.
@@ -469,7 +470,7 @@ impl<'a> H<'a> {
             cfg,
             dm,
             secnum,
-            hashing: OnceCell::new(),
+            hashing: OnceLock::new(),
         }
     }
 
@@ -622,11 +623,14 @@ fn push_name_hashparts<'x>(
 
 /// `_getnamehash` (Internals.pm:39): namehash (`bib` false) or bibnamehash.
 /// A per-name `namehashtemplatename` leaks to the following names (BB-019).
+///
+/// Reading the visibility autovivifies `{namelistdata}{$nlid}` in biber: the
+/// caller does that ([`viv_namelistdata`]), so that this can run in parallel.
 pub(crate) fn getnamehash(
     h: &H,
     log: &mut Logger,
     sec: &Section,
-    dl: &mut DataList,
+    dl: &DataList,
     key: &str,
     nlid: NameListId,
     bib: bool,
@@ -634,15 +638,8 @@ pub(crate) fn getnamehash(
     let et = sec.bibentry(key).map_or("", Entry::entrytype);
     let names = sec.names.list(nlid);
     let count = names.names.len();
-    let visible = ls::num_at(
-        dl,
-        &[
-            "namelistdata",
-            &nlid.key(),
-            if bib { "visbib" } else { "viscite" },
-        ],
-    );
-    let dl: &DataList = dl;
+    let nlk = nlid.key();
+    let visible = nld_num(dl, &nlk, if bib { "visbib" } else { "viscite" });
     let mut nhtname = namehash_tname(h, sec, dl, key, nlid);
     let mut hashkey = String::new();
     for nid in names.names.iter().take(first_n(visible, count)) {
@@ -698,20 +695,48 @@ pub(crate) fn getfullhashraw(h: &H, sec: &Section, nlid: NameListId) -> String {
     hash_string(&hashkey)
 }
 
+/// `{namelistdata}{$nlk}` without autovivification.
+fn nld_peek<'d>(dl: &'d DataList, nlk: &str) -> Option<&'d J> {
+    dl.state.as_ref()?.peek2("namelistdata", nlk)
+}
+
+/// The numeric value of `{namelistdata}{$nlk}{$f}` (`undef` is 0), without
+/// autovivification.
+fn nld_num(dl: &DataList, nlk: &str, f: &str) -> f64 {
+    nld_peek(dl, nlk)
+        .and_then(|m| m.get(f))
+        .filter(|v| !v.is_null())
+        .map_or(0.0, ls::num)
+}
+
+/// The autovivification of `{namelistdata}{$nlk}` (and of
+/// `{namelistdata}{$nlk}{$nid}` for each of `names`) that biber's reads in
+/// [`getnamehash`] and [`getnamehash_u`] cause.
+fn viv_namelistdata(dl: &mut DataList, nlid: NameListId, names: &[NameId]) {
+    let nlk = nlid.key();
+    ls::viv(dl, &["namelistdata", &nlk]);
+    for nid in names {
+        ls::viv(dl, &["namelistdata", &nlk, &nid.key()]);
+    }
+}
+
 /// `_getnamehash_u` (Internals.pm:180): the namehash under the uniquename
-/// template, for extra* tracking.
+/// template, for extra* tracking. Also returns the names whose `un` it read:
+/// biber's reads autovivify their data ([`viv_namelistdata`]).
 pub(crate) fn getnamehash_u(
     h: &H,
     sec: &Section,
-    dl: &mut DataList,
+    dl: &DataList,
     key: &str,
     nlid: NameListId,
-) -> String {
+) -> (String, Vec<NameId>) {
     let et = sec.bibentry(key).map_or("", Entry::entrytype);
     let names = sec.names.list(nlid);
     let count = names.names.len();
     let nlkey = nlid.key();
-    let visible = ls::num_at(dl, &["namelistdata", &nlkey, "viscite"]);
+    let nld = nld_peek(dl, &nlkey);
+    let visible = nld_num(dl, &nlkey, "viscite");
+    let mut read = Vec::new();
     let mut untname = slot_str(&names.slots, "uniquenametemplatename")
         .or_else(|| {
             h.opt("uniquenametemplatename", None, Some(key))
@@ -739,7 +764,8 @@ pub(crate) fn getnamehash_u(
             if truthy(nps.base.as_deref()) {
                 hashkey.push_str(np);
             } else {
-                let un = ls::get_ref(dl, &["namelistdata", &nlkey, &nid.key(), "un"]);
+                read.push(*nid);
+                let un = nld.and_then(|m| m.get(nid.key())).and_then(|m| m.get("un"));
                 if let Some(J::Array(un)) = un
                     && un.first().and_then(J::as_str) != Some("base")
                 {
@@ -757,7 +783,7 @@ pub(crate) fn getnamehash_u(
     {
         hashkey.push('+');
     }
-    hash_string(&hashkey)
+    (hash_string(&hashkey), read)
 }
 
 /// `_genpnhash` (Internals.pm:256): the per-name hash.
@@ -1266,8 +1292,12 @@ pub fn process_entries_pre(ctx: &mut Ctx, st: &mut SectionState, list: usize) ->
     let secnum = st.section.number.clone();
     let h = H::new(ctx.cfg, ctx.dm, &secnum);
     let untname = st.datalists[list].uniquenametemplatename.clone();
-    for key in &st.section.citekeys {
-        let nd = process_namedis(&h, ctx.log, &st.section, &untname, key)?;
+    // The name strings in parallel, stored in citekey order.
+    let sec = &st.section;
+    let (nds, res) = par::map_logged(ctx.log, &sec.citekeys, |log, key| {
+        process_namedis(&h, log, sec, &untname, key)
+    });
+    for nd in nds {
         for d in &nd {
             if d.nameun.as_deref() == Some("false") && d.namelistul.as_deref() == Some("false") {
                 continue;
@@ -1275,7 +1305,7 @@ pub fn process_entries_pre(ctx: &mut Ctx, st: &mut SectionState, list: usize) ->
             set_namedis(&mut st.datalists[list], d);
         }
     }
-    Ok(())
+    res
 }
 
 // ---------------------------------------------------------------------------
@@ -1374,24 +1404,196 @@ pub fn process_entries_post(
 ) -> Result<(), Fatal> {
     let secnum = st.section.number.clone();
     let h = H::new(ctx.cfg, ctx.dm, &secnum);
+    // The name hashes first, for all entries in parallel: they only read
+    // state from earlier phases.
+    let hashes: Vec<Option<PostHashes>> = {
+        let (sec, dl, parent) = (&st.section, &st.datalists[list], &*ctx.log);
+        par::map(&sec.citekeys, |key| {
+            sec.bibentry(key)
+                .map(|_| PostHashes::new(&h, parent, sec, dl, key))
+        })
+    };
     let (log, run) = (&mut *ctx.log, &mut ctx.run.labelalpha);
-    for key in st.section.citekeys.clone() {
-        if st.section.bibentry(&key).is_none() {
-            continue;
-        }
-        process_fullhash(&h, log, st, list, &key)?;
-        labelalpha::process_labelalpha_in(h.cfg, h.dm, run, st, list, &key)?;
-        labelalpha::process_extraalpha_in(h.cfg, st, list, &key)?;
-        process_extradate(&h, st, list, &key);
-        process_extraname(&h, st, list, &key);
-        process_extratitle(&h, st, list, &key);
-        process_extratitleyear(&h, st, list, &key);
-        process_workuniqueness(&h, log, st, list, &key)?;
-        process_namehash(&h, log, st, list, &key)?;
-        process_pername_hashes(&h, log, st, list, &key)?;
-        process_uniqueprimaryauthor(&h, log, st, list, &key)?;
+    let keys = st.section.citekeys.clone();
+    for (key, ph) in keys.iter().zip(hashes) {
+        let Some(mut ph) = ph else { continue };
+        let key = key.as_str();
+        process_fullhash(log, st, list, key, ph.fullhash)?;
+        labelalpha::process_labelalpha_in(h.cfg, h.dm, run, st, list, key)?;
+        labelalpha::process_extraalpha_in(h.cfg, st, list, key)?;
+        process_extradate(&h, st, list, key, &ph.namehash_u);
+        process_extraname(&h, st, list, key, &ph.namehash_u);
+        process_extratitle(&h, st, list, key, &ph.namehash_u);
+        process_extratitleyear(&h, st, list, key);
+        let (stf, uwf) = (ph.singletitle_fh.take(), ph.uniquework_fh.take());
+        process_workuniqueness(&h, log, st, list, key, stf, uwf)?;
+        process_namehash(log, st, list, key, ph.namehash)?;
+        process_pername_hashes(log, st, list, ph.pername)?;
+        process_uniqueprimaryauthor(&h, log, st, list, key, ph.upa_namedis)?;
     }
     Ok(())
+}
+
+/// A value computed ahead of time with the messages its computation logged,
+/// replayed where the serial code would have computed it.
+struct Logged<T> {
+    log: Logger,
+    value: Result<T, Fatal>,
+}
+
+impl<T> Logged<T> {
+    fn run(parent: &Logger, f: impl FnOnce(&mut Logger) -> Result<T, Fatal>) -> Self {
+        let mut log = parent.fork();
+        let value = f(&mut log);
+        Logged { log, value }
+    }
+
+    /// Emit the messages and return the value.
+    fn take(self, log: &mut Logger) -> Result<T, Fatal> {
+        log.join(self.log);
+        self.value
+    }
+}
+
+/// [`getnamehash_u`] of each name list of an entry.
+type NamehashU = Vec<(NameListId, String, Vec<NameId>)>;
+
+/// The hashes `process_entries_post` computes for one entry. They depend
+/// only on the state of earlier phases (and the entry's own name data), so
+/// they are computed for all entries in parallel before the serial loop,
+/// which applies them in citekey order. Each part that can log carries its
+/// messages ([`Logged`]).
+struct PostHashes {
+    /// `process_fullhash`'s entry fields.
+    fullhash: Logged<Vec<(String, J)>>,
+    /// The labelname's full hash for singletitle / uniquework
+    /// (`process_workuniqueness`), when the option is on.
+    singletitle_fh: Option<Logged<String>>,
+    uniquework_fh: Option<Logged<String>>,
+    /// `process_namehash`'s entry fields, and the name lists whose data it
+    /// read.
+    namehash: Logged<(Vec<(String, J)>, Vec<NameListId>)>,
+    /// `process_pername_hashes`: each name's hash.
+    pername: Logged<Vec<(NameListId, NameId, String)>>,
+    /// [`getnamehash_u`] of each name list (extradate/extraname/extratitle).
+    namehash_u: NamehashU,
+    /// `process_uniqueprimaryauthor`'s `process_namedis`, when it runs.
+    upa_namedis: Option<Logged<Vec<NameDis>>>,
+}
+
+impl PostHashes {
+    fn new(h: &H, parent: &Logger, sec: &Section, dl: &DataList, key: &str) -> Self {
+        let be = sec.bibentry(key).expect("entry");
+        let et = be.entrytype();
+        let namelists = || {
+            h.dm.helpers
+                .namelistsall
+                .iter()
+                .filter_map(|n| names_field(be, Some(n)).map(|nlid| (n, nlid)))
+        };
+        // process_fullhash (Biber.pm:2797)
+        let fullhash = Logged::run(parent, |log| {
+            let mut out = Vec::new();
+            if let Some(nlid) = names_field(be, info_slot(be, "labelnamefhinfo")) {
+                let fh = getfullhash(h, log, sec, dl, key, nlid)?;
+                out.push(("fullhash".to_string(), J::String(fh)));
+                let fhr = getfullhashraw(h, sec, nlid);
+                out.push(("fullhashraw".to_string(), J::String(fhr)));
+            }
+            for (n, nlid) in namelists() {
+                let fh = getfullhash(h, log, sec, dl, key, nlid)?;
+                out.push((format!("{n}fullhash"), J::String(fh)));
+                let fhr = getfullhashraw(h, sec, nlid);
+                out.push((format!("{n}fullhashraw"), J::String(fhr)));
+            }
+            Ok(out)
+        });
+        // process_workuniqueness (Biber.pm:2180)
+        let lni = info_slot(be, "labelnameinfo").filter(|s| truthy(Some(s)));
+        let lni_fh = |opt: &str| {
+            (lni.is_some() && opt_true(h.opt_undef(opt, Some(et), Some(key)))).then(|| {
+                Logged::run(parent, |log| match names_field(be, lni) {
+                    Some(nlid) => getfullhash(h, log, sec, dl, key, nlid),
+                    None => Ok(String::new()),
+                })
+            })
+        };
+        let singletitle_fh = lni_fh("singletitle");
+        let uniquework_fh = lni_fh("uniquework");
+        // process_namehash (Biber.pm:2829)
+        let namehash = Logged::run(parent, |log| {
+            let mut out = Vec::new();
+            let mut read = Vec::new();
+            if let Some(nlid) = names_field(be, info_slot(be, "labelnameinfo")) {
+                read.push(nlid);
+                let nh = getnamehash(h, log, sec, dl, key, nlid, false)?;
+                out.push(("namehash".to_string(), J::String(nh)));
+                let bnh = getnamehash(h, log, sec, dl, key, nlid, true)?;
+                out.push(("bibnamehash".to_string(), J::String(bnh)));
+            }
+            for (n, nlid) in namelists() {
+                read.push(nlid);
+                let nh = getnamehash(h, log, sec, dl, key, nlid, false)?;
+                out.push((format!("{n}namehash"), J::String(nh)));
+                let bnh = getnamehash(h, log, sec, dl, key, nlid, true)?;
+                out.push((format!("{n}bibnamehash"), J::String(bnh)));
+            }
+            Ok((out, read))
+        });
+        // process_pername_hashes (Biber.pm:2861)
+        let pername = Logged::run(parent, |log| {
+            let mut out = Vec::new();
+            for (_, nlid) in namelists() {
+                for nid in &sec.names.list(nlid).names {
+                    let hash = genpnhash(h, log, sec, dl, key, nlid, *nid)?;
+                    out.push((nlid, *nid, hash));
+                }
+            }
+            Ok(out)
+        });
+        let namehash_u = namelists()
+            .map(|(_, nlid)| {
+                let (s, read) = getnamehash_u(h, sec, dl, key, nlid);
+                (nlid, s, read)
+            })
+            .collect();
+        // process_uniqueprimaryauthor (Biber.pm:2142)
+        let upa = lni.is_some()
+            && opt_true(h.opt_undef("uniqueprimaryauthor", Some(et), Some(key)))
+            && names_field(be, lni).is_some_and(|nlid| !sec.names.list(nlid).names.is_empty());
+        let upa_namedis = upa.then(|| {
+            Logged::run(parent, |log| {
+                process_namedis(h, log, sec, &dl.uniquenametemplatename, key)
+            })
+        });
+        PostHashes {
+            fullhash,
+            singletitle_fh,
+            uniquework_fh,
+            namehash,
+            pername,
+            namehash_u,
+            upa_namedis,
+        }
+    }
+}
+
+/// [`getnamehash_u`] of `nlid` from `pre` (computed with the entry's other
+/// hashes) or now, with its autovivification.
+fn namehash_u(
+    h: &H,
+    sec: &Section,
+    dl: &mut DataList,
+    key: &str,
+    nlid: NameListId,
+    pre: &NamehashU,
+) -> String {
+    let (s, read) = match pre.iter().find(|(id, _, _)| *id == nlid) {
+        Some((_, s, read)) => (s.clone(), read.clone()),
+        None => getnamehash_u(h, sec, dl, key, nlid),
+    };
+    viv_namelistdata(dl, nlid, &read);
+    s
 }
 
 /// The entry's `labelnameinfo`/`labelnamefhinfo`/`labeltitleinfo` slot.
@@ -1404,34 +1606,17 @@ fn names_field(be: &Entry, f: Option<&str>) -> Option<NameListId> {
     f.and_then(|f| be.get_field(f)).and_then(Value::as_names)
 }
 
-/// `process_fullhash` (Biber.pm:2797).
+/// `process_fullhash` (Biber.pm:2797), with the hashes computed by
+/// [`PostHashes::new`].
 fn process_fullhash(
-    h: &H,
     log: &mut Logger,
     st: &mut SectionState,
     list: usize,
     key: &str,
+    fullhash: Logged<Vec<(String, J)>>,
 ) -> Result<(), Fatal> {
-    let sec = &st.section;
-    let dl = &mut st.datalists[list];
-    let be = sec.bibentry(key).expect("entry");
-    let mut out = Vec::new();
-    if let Some(nlid) = names_field(be, info_slot(be, "labelnamefhinfo")) {
-        let fh = getfullhash(h, log, sec, dl, key, nlid)?;
-        out.push(("fullhash".to_string(), J::String(fh)));
-        let fhr = getfullhashraw(h, sec, nlid);
-        out.push(("fullhashraw".to_string(), J::String(fhr)));
-    }
-    for n in &h.dm.helpers.namelistsall {
-        let Some(nlid) = names_field(be, Some(n)) else {
-            continue;
-        };
-        let fh = getfullhash(h, log, sec, dl, key, nlid)?;
-        out.push((format!("{n}fullhash"), J::String(fh)));
-        let fhr = getfullhashraw(h, sec, nlid);
-        out.push((format!("{n}fullhashraw"), J::String(fhr)));
-    }
-    ls::set_entryfields(dl, key, out);
+    let out = fullhash.take(log)?;
+    ls::set_entryfields(&mut st.datalists[list], key, out);
     Ok(())
 }
 
@@ -1447,7 +1632,7 @@ fn label_info(be: &Entry, f: &str) -> Option<String> {
 }
 
 /// `process_extradate` (Biber.pm:2272).
-fn process_extradate(h: &H, st: &mut SectionState, list: usize, key: &str) {
+fn process_extradate(h: &H, st: &mut SectionState, list: usize, key: &str, pre: &NamehashU) {
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     let be = sec.bibentry(key).expect("entry");
@@ -1477,7 +1662,7 @@ fn process_extradate(h: &H, st: &mut SectionState, list: usize, key: &str) {
             let fv = fv.expect("value");
             if h.dm.field_is_datatype("name", &fieldc) {
                 if let Value::Names(nlid) = fv {
-                    contexthash = getnamehash_u(h, sec, dl, key, *nlid);
+                    contexthash = namehash_u(h, sec, dl, key, *nlid, pre);
                 }
             } else if h.dm.field_is_fieldtype("list", &fieldc) {
                 let joined = fv.as_list().map(|l| l.concat()).unwrap_or_default();
@@ -1513,7 +1698,7 @@ fn process_extradate(h: &H, st: &mut SectionState, list: usize, key: &str) {
 }
 
 /// `process_extraname` (Biber.pm:2358).
-fn process_extraname(h: &H, st: &mut SectionState, list: usize, key: &str) {
+fn process_extraname(h: &H, st: &mut SectionState, list: usize, key: &str, pre: &NamehashU) {
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     let be = sec.bibentry(key).expect("entry");
@@ -1523,7 +1708,7 @@ fn process_extraname(h: &H, st: &mut SectionState, list: usize, key: &str) {
     let lni = info_slot(be, "labelnameinfo").filter(|s| truthy(Some(s)));
     // `$be->get_field($lni)` must be a name list here.
     if let Some(nlid) = names_field(be, lni) {
-        let nh = getnamehash_u(h, sec, dl, key, nlid);
+        let nh = namehash_u(h, sec, dl, key, nlid, pre);
         ls::set_entryfield(dl, key, "labelnamehash", J::String(nh.clone()));
         ls::incr(dl, &["seen_labelname", &nh]);
     }
@@ -1531,7 +1716,7 @@ fn process_extraname(h: &H, st: &mut SectionState, list: usize, key: &str) {
 
 /// `process_extratitle` (Biber.pm:2393). biber looks the `labeltitle`
 /// option up without the citekey; per-entry values are ignored (BB-021).
-fn process_extratitle(h: &H, st: &mut SectionState, list: usize, key: &str) {
+fn process_extratitle(h: &H, st: &mut SectionState, list: usize, key: &str, pre: &NamehashU) {
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     let be = sec.bibentry(key).expect("entry");
@@ -1544,7 +1729,7 @@ fn process_extratitle(h: &H, st: &mut SectionState, list: usize, key: &str) {
     }
     let lni = info_slot(be, "labelnameinfo").filter(|s| truthy(Some(s)));
     let namehash = names_field(be, lni)
-        .map(|nlid| getnamehash_u(h, sec, dl, key, nlid))
+        .map(|nlid| namehash_u(h, sec, dl, key, nlid, pre))
         .unwrap_or_default();
     let title = perl_str(info_slot(be, "labeltitleinfo").and_then(|f| be.get_field(f)));
     let nt = format!("{namehash},{title}");
@@ -1588,6 +1773,8 @@ fn process_workuniqueness(
     st: &mut SectionState,
     list: usize,
     key: &str,
+    singletitle_fh: Option<Logged<String>>,
+    uniquework_fh: Option<Logged<String>>,
 ) -> Result<(), Fatal> {
     let sec = &st.section;
     let dl = &mut st.datalists[list];
@@ -1634,13 +1821,9 @@ fn process_workuniqueness(
         return Ok(());
     }
 
-    if let Some(ln) = lni
-        && opt_true(h.opt_undef("singletitle", Some(et), Some(key)))
-    {
-        let id = match names_field(be, Some(ln)) {
-            Some(nlid) => getfullhash(h, log, sec, dl, key, nlid)?,
-            None => String::new(),
-        };
+    if lni.is_some() && opt_true(h.opt_undef("singletitle", Some(et), Some(key))) {
+        // (`getfullhash` of the labelname, or "")
+        let id = singletitle_fh.expect("computed").take(log)?;
         if !(ignored("singletitle", lni) && lti.is_some() && ignored("singletitle", lti)) {
             ls::incr(dl, &["seenname", &id]);
         }
@@ -1674,14 +1857,8 @@ fn process_workuniqueness(
             title.clone().map_or(J::Null, J::String),
         );
     }
-    if let Some(ln) = lni
-        && lti.is_some()
-        && opt_true(h.opt_undef("uniquework", Some(et), Some(key)))
-    {
-        let fh = match names_field(be, Some(ln)) {
-            Some(nlid) => getfullhash(h, log, sec, dl, key, nlid)?,
-            None => String::new(),
-        };
+    if lni.is_some() && lti.is_some() && opt_true(h.opt_undef("uniquework", Some(et), Some(key))) {
+        let fh = uniquework_fh.expect("computed").take(log)?;
         let id = format!("{fh}{}", title.clone().unwrap_or_default());
         if !(ignored("uniquework", lni) && ignored("uniquework", lti)) {
             ls::incr(dl, &["seenwork", &id]);
@@ -1691,32 +1868,19 @@ fn process_workuniqueness(
     Ok(())
 }
 
-/// `process_namehash` (Biber.pm:2829).
+/// `process_namehash` (Biber.pm:2829), with the hashes computed by
+/// [`PostHashes::new`].
 fn process_namehash(
-    h: &H,
     log: &mut Logger,
     st: &mut SectionState,
     list: usize,
     key: &str,
+    namehash: Logged<(Vec<(String, J)>, Vec<NameListId>)>,
 ) -> Result<(), Fatal> {
-    let sec = &st.section;
     let dl = &mut st.datalists[list];
-    let be = sec.bibentry(key).expect("entry");
-    let mut out = Vec::new();
-    if let Some(nlid) = names_field(be, info_slot(be, "labelnameinfo")) {
-        let nh = getnamehash(h, log, sec, dl, key, nlid, false)?;
-        out.push(("namehash".to_string(), J::String(nh)));
-        let bnh = getnamehash(h, log, sec, dl, key, nlid, true)?;
-        out.push(("bibnamehash".to_string(), J::String(bnh)));
-    }
-    for n in &h.dm.helpers.namelistsall {
-        let Some(nlid) = names_field(be, Some(n)) else {
-            continue;
-        };
-        let nh = getnamehash(h, log, sec, dl, key, nlid, false)?;
-        out.push((format!("{n}namehash"), J::String(nh)));
-        let bnh = getnamehash(h, log, sec, dl, key, nlid, true)?;
-        out.push((format!("{n}bibnamehash"), J::String(bnh)));
+    let (out, read) = namehash.take(log)?;
+    for nlid in read {
+        viv_namelistdata(dl, nlid, &[]);
     }
     ls::set_entryfields(dl, key, out);
     Ok(())
@@ -1725,33 +1889,22 @@ fn process_namehash(
 /// `process_pername_hashes` (Biber.pm:2861): sets each name's `hash` (on
 /// the shared `Name` object) and the list's per-name hash.
 fn process_pername_hashes(
-    h: &H,
     log: &mut Logger,
     st: &mut SectionState,
     list: usize,
-    key: &str,
+    pername: Logged<Vec<(NameListId, NameId, String)>>,
 ) -> Result<(), Fatal> {
-    let be = st.section.bibentry(key).expect("entry");
-    let lists: Vec<NameListId> =
-        h.dm.helpers
-            .namelistsall
-            .iter()
-            .filter_map(|n| names_field(be, Some(n)))
-            .collect();
-    for nlid in lists {
-        for nid in st.section.names.list(nlid).names.clone() {
-            let hash = genpnhash(h, log, &st.section, &st.datalists[list], key, nlid, nid)?;
-            st.section
-                .names
-                .name_mut(nid)
-                .slots
-                .insert("hash", J::String(hash.clone()));
-            ls::set(
-                &mut st.datalists[list],
-                &["namelistdata", &nlid.key(), &nid.key(), "hash"],
-                J::String(hash),
-            );
-        }
+    for (nlid, nid, hash) in pername.take(log)? {
+        st.section
+            .names
+            .name_mut(nid)
+            .slots
+            .insert("hash", J::String(hash.clone()));
+        ls::set(
+            &mut st.datalists[list],
+            &["namelistdata", &nlid.key(), &nid.key(), "hash"],
+            J::String(hash),
+        );
     }
     Ok(())
 }
@@ -1763,6 +1916,7 @@ fn process_uniqueprimaryauthor(
     st: &mut SectionState,
     list: usize,
     key: &str,
+    namedis: Option<Logged<Vec<NameDis>>>,
 ) -> Result<(), Fatal> {
     let sec = &st.section;
     let be = sec.bibentry(key).expect("entry");
@@ -1778,8 +1932,13 @@ fn process_uniqueprimaryauthor(
     let Some(first) = sec.names.list(nlid).names.first().copied() else {
         return Ok(());
     };
-    let untname = st.datalists[list].uniquenametemplatename.clone();
-    let nd = process_namedis(h, log, sec, &untname, key)?;
+    let nd = match namedis {
+        Some(nd) => nd.take(log)?,
+        None => {
+            let untname = st.datalists[list].uniquenametemplatename.clone();
+            process_namedis(h, log, sec, &untname, key)?
+        }
+    };
     let mut pabase: Option<String> = None;
     if let Some(d) = nd.iter().rev().find(|d| d.nlid == nlid && d.nid == first) {
         for (i, se) in d.schema.iter().enumerate() {

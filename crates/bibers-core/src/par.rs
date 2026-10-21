@@ -19,6 +19,7 @@
 //! or raises the threshold (tests set it to 1 so that the corpus's small
 //! inputs exercise the parallel paths).
 
+use crate::log::{Fatal, Logger};
 use rayon::prelude::*;
 use std::sync::OnceLock;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -153,6 +154,40 @@ where
             pool.install(|| items.par_chunks(len).map(run).collect())
         }
     }
+}
+
+/// [`map`] for a fallible per-item computation that logs: each chunk logs to
+/// a fork of `log`, and the forks are joined in order. Returns the results
+/// up to the first error and that error, exactly as a serial loop with `?`
+/// would have logged them (the caller applies the results, then returns the
+/// error).
+pub fn map_logged<T, R, F>(log: &mut Logger, items: &[T], f: F) -> (Vec<R>, Result<(), Fatal>)
+where
+    T: Sync,
+    R: Send,
+    F: Fn(&mut Logger, &T) -> Result<R, Fatal> + Sync + Send,
+{
+    let parent: &Logger = log;
+    let chunks = map_chunks(items, || parent.fork(), &f);
+    let mut results = Vec::with_capacity(items.len());
+    for c in chunks {
+        log.join(c.state);
+        results.extend(c.results);
+        if let Some(e) = c.error {
+            return (results, Err(e));
+        }
+    }
+    (results, Ok(()))
+}
+
+/// `items` split into the contiguous chunks [`map_chunks`] would use (one
+/// chunk when the loop would run serially), for a [`map`] over chunks whose
+/// per-chunk state need not be `Send`.
+pub fn split<T>(items: &[T]) -> Vec<&[T]> {
+    if pool_for(items.len()).is_none() {
+        return vec![items];
+    }
+    items.chunks(chunk_len(items.len())).collect()
 }
 
 /// One chunk's output from [`map_chunks`].
