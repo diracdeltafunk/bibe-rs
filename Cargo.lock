@@ -40,6 +40,7 @@ dependencies = [
  "btparse",
  "latex-recode",
  "md-5",
+ "memchr",
  "perl-compat",
  "rayon",
  "regex",
