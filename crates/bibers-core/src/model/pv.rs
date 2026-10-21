@@ -356,6 +356,13 @@ impl PMap {
         }
     }
 
+    /// Release unused capacity.
+    pub fn shrink_to_fit(&mut self) {
+        if let Repr::Small(v) = &mut self.0 {
+            v.shrink_to_fit();
+        }
+    }
+
     /// The dumped shape.
     pub fn to_json(&self) -> Map<String, J> {
         self.iter().map(|(k, v)| (k.to_string(), v.to_json())).collect()

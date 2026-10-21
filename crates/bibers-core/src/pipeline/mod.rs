@@ -145,9 +145,11 @@ fn release_processed(ctx: &Ctx, st: &mut SectionState) {
             nl.retain(|k, v| {
                 if let Some(n) = v.as_object_mut().filter(|_| k.starts_with("#n")) {
                     n.retain(|k, _| !NAME_KEYS.contains(&k));
+                    n.shrink_to_fit();
                 }
                 !LIST_KEYS.contains(&k)
             });
+            nl.shrink_to_fit();
         }
     }
 }
