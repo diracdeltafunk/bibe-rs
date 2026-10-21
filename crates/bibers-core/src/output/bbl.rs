@@ -409,15 +409,19 @@ impl EntryTemplate {
 }
 
 /// The current section's shared list arrays (05-B21), which
-/// `set_output_entry` changes in place: entries using them are processed in
-/// citekey order, the others (with an empty `SharedLists`) in any order.
+/// `set_output_entry` changes in place: the entries sharing lists (a
+/// connected component of entries linked by shared lists) are processed in
+/// citekey order with their part of the `SharedLists`
+/// ([`SharedLists::components`]); other entries, with an empty one, in any
+/// order.
 #[derive(Default)]
 struct SharedLists {
-    /// `(citekey, field)` → group, and each group's live value.
+    /// `(citekey, field)` → group.
     shared: HashMap<(String, String), usize>,
-    shared_vals: Vec<Option<Vec<String>>>,
-    /// The citekeys with a shared list.
-    keys: rustc_hash::FxHashSet<String>,
+    /// Each group's live value, once changed or read.
+    vals: HashMap<usize, Vec<String>>,
+    /// The citekeys with a shared list, and their groups.
+    keys: HashMap<String, Vec<usize>>,
 }
 
 impl SharedLists {
@@ -425,23 +429,67 @@ impl SharedLists {
         let mut sl = SharedLists::default();
         for (i, g) in st.shared_lists.iter().flatten().enumerate() {
             for m in g {
-                sl.keys.insert(m.0.clone());
+                sl.keys.entry(m.0.clone()).or_default().push(i);
                 sl.shared.insert(m.clone(), i);
             }
-            sl.shared_vals.push(None);
         }
         sl
     }
 
     /// Whether `key` has a shared list.
     fn has_key(&self, key: &str) -> bool {
-        self.keys.contains(key)
+        self.keys.contains_key(key)
+    }
+
+    /// The positions in `keys` of the entries with shared lists, grouped
+    /// into the connected components of "shares a list with", each in
+    /// `keys` order, with the lists of each component's entries.
+    fn components(&self, keys: &[String]) -> Vec<(Vec<usize>, SharedLists)> {
+        // Union-find over the groups.
+        let n = self.shared.values().copied().max().map_or(0, |m| m + 1);
+        let mut parent: Vec<usize> = (0..n).collect();
+        fn find(p: &mut [usize], mut x: usize) -> usize {
+            while p[x] != x {
+                p[x] = p[p[x]];
+                x = p[x];
+            }
+            x
+        }
+        for gs in self.keys.values() {
+            for w in gs.windows(2) {
+                let (a, b) = (find(&mut parent, w[0]), find(&mut parent, w[1]));
+                parent[a] = b;
+            }
+        }
+        let mut index: HashMap<usize, usize> = HashMap::default();
+        let mut out: Vec<(Vec<usize>, SharedLists)> = Vec::new();
+        for (i, k) in keys.iter().enumerate() {
+            let Some(gs) = self.keys.get(k) else { continue };
+            let root = find(&mut parent, gs[0]);
+            let c = *index.entry(root).or_insert_with(|| {
+                out.push((Vec::new(), SharedLists::default()));
+                out.len() - 1
+            });
+            let (members, sl) = &mut out[c];
+            members.push(i);
+            sl.keys.insert(k.clone(), gs.clone());
+        }
+        for (key, field) in self.shared.keys() {
+            if let Some(gs) = self.keys.get(key) {
+                let c = index[&find(&mut parent, gs[0])];
+                out[c].1.shared.insert(
+                    (key.clone(), field.clone()),
+                    self.shared[&(key.clone(), field.clone())],
+                );
+            }
+        }
+        out
     }
 
     /// Replace the live value of a shared list.
     fn set_live(&mut self, key: &str, field: &str, v: Vec<String>) {
         if let Some(&g) = self.shared.get(&(key.to_string(), field.to_string())) {
-            self.shared_vals[g] = Some(v);
+            self.vals.insert(g, v);
         }
     }
 
@@ -459,7 +507,7 @@ impl SharedLists {
         let is_others = |l: &[String]| l.last().map(|x| lc(x)).unwrap_or_default() == others;
         match self.shared.get(&(key.to_string(), field.to_string())) {
             Some(&g) => {
-                let live = self.shared_vals[g].get_or_insert_with(|| orig.to_vec());
+                let live = self.vals.entry(g).or_insert_with(|| orig.to_vec());
                 let popped = is_others(live);
                 if popped {
                     live.pop();
@@ -1789,7 +1837,7 @@ fn section_templates(
     st: &SectionState,
 ) -> Result<HashMap<String, EntryTemplate>, Fatal> {
     let keys = &st.section.citekeys;
-    let mut shared = SharedLists::new(st);
+    let shared = SharedLists::new(st);
     // (date-loop call number, uses a shared list) per citekey
     let jobs: Vec<(usize, bool)> = keys
         .iter()
@@ -1800,7 +1848,7 @@ fn section_templates(
             (*date_calls, shared.has_key(k))
         })
         .collect();
-    let done = {
+    let mut done = {
         let c: &Ctx = ctx;
         let idx: Vec<usize> = (0..keys.len()).collect();
         par::map(&idx, |&i| {
@@ -1822,24 +1870,40 @@ fn section_templates(
             Some((t, log))
         })
     };
-    let mut entries = HashMap::default();
-    for (i, d) in done.into_iter().enumerate() {
-        let (t, log) = match d {
-            Some(d) => d,
-            None => {
-                let mut log = ctx.log.fork();
+    // The entries with shared lists: each component in order, the
+    // components in parallel. (A component's entries after one that fails
+    // are not needed: the merge below stops there.)
+    if !shared.keys.is_empty() {
+        let c: &Ctx = ctx;
+        let comps = par::map_owned(shared.components(keys), |(members, mut sl)| {
+            let mut out = Vec::with_capacity(members.len());
+            for i in members {
+                let mut log = c.log.fork();
                 let t = set_output_entry(
-                    ctx,
+                    c,
                     &mut log,
-                    &mut shared,
+                    &mut sl,
                     prep,
                     stems.for_call(jobs[i].0),
                     st,
                     &keys[i],
                 );
-                (t, log)
+                let failed = t.is_err();
+                out.push((i, t, log));
+                if failed {
+                    break;
+                }
             }
-        };
+            out
+        });
+        for (i, t, log) in comps.into_iter().flatten() {
+            done[i] = Some((t, log));
+        }
+    }
+    let mut entries = HashMap::default();
+    for (i, d) in done.into_iter().enumerate() {
+        // (`None` only after a failed entry of the same component)
+        let (t, log) = d.expect("the merge stops at a failed entry");
         ctx.log.join(log);
         if let Some(t) = t? {
             entries.insert(keys[i].clone(), t);

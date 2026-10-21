@@ -106,6 +106,19 @@ where
     }
 }
 
+/// [`map`] consuming `items`.
+pub fn map_owned<T, R, F>(items: Vec<T>, f: F) -> Vec<R>
+where
+    T: Send,
+    R: Send,
+    F: Fn(T) -> R + Sync + Send,
+{
+    match pool_for(items.len()) {
+        None => items.into_iter().map(f).collect(),
+        Some(pool) => pool.install(|| items.into_par_iter().map(f).collect()),
+    }
+}
+
 /// The chunk length for `len` items: a few chunks per thread, so that
 /// uneven items still balance.
 fn chunk_len(len: usize) -> usize {
