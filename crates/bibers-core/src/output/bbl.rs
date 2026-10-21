@@ -38,9 +38,11 @@ use crate::biber_error;
 use crate::config::blx::{OptValue, Scope, map_boolean_tostring_raw};
 use crate::datamodel::{DataModel, Helpers};
 use crate::log::Fatal;
+use crate::log::Logger;
 use crate::model::{
     DataList, Entry, Name, NameArena, NameId, NameListId, PerlData, SectionState, Sym, Value,
 };
+use crate::par;
 use crate::pipeline::{Ctx, Processed};
 use crate::quirks::Quirk;
 
@@ -406,29 +408,34 @@ impl EntryTemplate {
     }
 }
 
-/// Mutable writer state that lives across sections.
-struct Writer {
-    /// `$dmh->{datefields}`, which the date-meta loop mutates in place
-    /// (BB-028).
-    datefields: Vec<String>,
-    /// The date field stems (`datefields` without the `date` suffix).
-    date_stems: Vec<String>,
-    /// The current section's shared list arrays: `(citekey, field)` →
-    /// group, and each group's live value (B21).
+/// The current section's shared list arrays (05-B21), which
+/// `set_output_entry` changes in place: entries using them are processed in
+/// citekey order, the others (with an empty `SharedLists`) in any order.
+#[derive(Default)]
+struct SharedLists {
+    /// `(citekey, field)` → group, and each group's live value.
     shared: HashMap<(String, String), usize>,
     shared_vals: Vec<Option<Vec<String>>>,
+    /// The citekeys with a shared list.
+    keys: rustc_hash::FxHashSet<String>,
 }
 
-impl Writer {
-    fn start_section(&mut self, st: &SectionState) {
-        self.shared.clear();
-        self.shared_vals.clear();
+impl SharedLists {
+    fn new(st: &SectionState) -> Self {
+        let mut sl = SharedLists::default();
         for (i, g) in st.shared_lists.iter().flatten().enumerate() {
             for m in g {
-                self.shared.insert(m.clone(), i);
+                sl.keys.insert(m.0.clone());
+                sl.shared.insert(m.clone(), i);
             }
-            self.shared_vals.push(None);
+            sl.shared_vals.push(None);
         }
+        sl
+    }
+
+    /// Whether `key` has a shared list.
+    fn has_key(&self, key: &str) -> bool {
+        self.keys.contains(key)
     }
 
     /// Replace the live value of a shared list.
@@ -573,8 +580,6 @@ struct Prep {
     index: HashMap<Sym, Vec<(Helper, usize)>>,
     /// `$dm->get_constant_value('nameparts')`.
     nameparts: Vec<String>,
-    /// The date stems last built (they change under BB-028).
-    date_stems: Vec<DateStem>,
     /// [`wraplines`].
     wrap: Option<i64>,
 }
@@ -594,7 +599,6 @@ impl Prep {
             lists,
             index,
             nameparts: dm.get_constant_value("nameparts"),
-            date_stems: Vec::new(),
             wrap,
         }
     }
@@ -622,15 +626,54 @@ impl Prep {
         let list = &self.lists[h as usize];
         at[h as usize].iter().map(move |&i| list[i])
     }
+}
 
-    /// The date stems for `stems`, rebuilt when they changed.
-    fn date_stems(&mut self, stems: &[String]) -> &[DateStem] {
-        if self.date_stems.len() != stems.len()
-            || self.date_stems.iter().zip(stems).any(|(d, s)| d.stem != *s)
-        {
-            self.date_stems = stems.iter().map(|d| DateStem::new(d)).collect();
+/// The date field stems each `set_output_entry` call sees.
+///
+/// BB-028: the date-meta loop's variable aliases the shared helper list
+/// `$dmh->{datefields}`, so `s/date$//` strips it in place: the n-th entry
+/// that reaches the loop (counted across sections) sees the list stripped n
+/// times. The lists only change until no name ends in `date` any more, so
+/// they are computed up front: `states[min(n, last)]`.
+struct DateStems {
+    states: Vec<Vec<DateStem>>,
+    /// The quirk is on (otherwise `states` has one list, the plain stems).
+    mutating: bool,
+}
+
+impl DateStems {
+    fn new(datefields: &[String], mutating: bool) -> Self {
+        let build = |l: &[String]| l.iter().map(|d| DateStem::new(d)).collect::<Vec<_>>();
+        if !mutating {
+            let stems: Vec<String> = datefields
+                .iter()
+                .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
+                .collect();
+            return DateStems {
+                states: vec![build(&stems)],
+                mutating,
+            };
         }
-        &self.date_stems
+        let mut cur = datefields.to_vec();
+        let mut states = vec![build(&cur)];
+        loop {
+            let next: Vec<String> = cur
+                .iter()
+                .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
+                .collect();
+            if next == cur {
+                break;
+            }
+            states.push(build(&next));
+            cur = next;
+        }
+        DateStems { states, mutating }
+    }
+
+    /// The stems for the `n`-th entry (1-based) to reach the date loop.
+    fn for_call(&self, n: usize) -> &[DateStem] {
+        let i = if self.mutating { n } else { 0 };
+        &self.states[i.min(self.states.len() - 1)]
     }
 }
 
@@ -799,22 +842,33 @@ fn printfield(cols: Option<i64>, dm: &DataModel, e: &Entry, field: &str, s: &str
     format!("      \\{field_type}{{{outfield}}}{{{s}}}\n")
 }
 
-fn uri_string(ctx: &mut Ctx, s: &str) -> Result<String, Fatal> {
+fn uri_string(log: &mut Logger, s: &str) -> Result<String, Fatal> {
     match perl_compat::uri::uri_as_string(&nfc(s)) {
         Ok(u) => Ok(u),
         Err(e) => {
-            biber_error!(ctx.log, "{e}")?;
+            biber_error!(log, "{e}")?;
             Ok(String::new())
         }
     }
 }
 
+/// Whether `set_output_entry` reaches the date-meta loop for `key` (BB-028).
+fn reaches_date_loop(dm: &DataModel, st: &SectionState, key: &str) -> bool {
+    st.section.bibentry(key).is_some_and(|be| {
+        let et = be.entrytype();
+        et != "set" && !dm.entrytype_is_skipout(et)
+    })
+}
+
 /// `set_output_entry` (bbl.pm:196): the template of one entry, or `None`
-/// for entry types the data model skips.
+/// for entry types the data model skips. `stems` are the date field stems
+/// this call sees ([`DateStems`]).
 fn set_output_entry(
-    ctx: &mut Ctx,
-    w: &mut Writer,
-    p: &mut Prep,
+    ctx: &Ctx,
+    log: &mut Logger,
+    w: &mut SharedLists,
+    p: &Prep,
+    stems: &[DateStem],
     st: &SectionState,
     key: &str,
 ) -> Result<Option<EntryTemplate>, Fatal> {
@@ -823,7 +877,7 @@ fn set_output_entry(
     let secnum = section.number.as_str();
     let arena = &section.names;
     let Some(be) = section.bibentry(key) else {
-        biber_error!(ctx.log, "Cannot find entry with key '{key}' to output")?;
+        biber_error!(log, "Cannot find entry with key '{key}' to output")?;
         return Ok(None);
     };
     let bee = be.entrytype().to_string();
@@ -1104,18 +1158,9 @@ fn set_output_entry(
     }
 
     // Date meta-information. BB-028: the loop variable aliases the shared
-    // helper list, so `s/date$//` strips it in place for later entries.
-    let stems: &[String] = if ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation) {
-        for d in &mut w.datefields {
-            if let Some(s) = d.strip_suffix("date") {
-                *d = s.to_string();
-            }
-        }
-        &w.datefields
-    } else {
-        &w.date_stems
-    };
-    for d in p.date_stems(stems) {
+    // helper list, so `s/date$//` strips it in place for later entries
+    // (`stems`, see [`DateStems`]).
+    for d in stems {
         let stem = &d.stem;
         let unspec = be.get_field(&d.unspecified);
         if val_truthy(unspec) {
@@ -1217,7 +1262,7 @@ fn set_output_entry(
         if dm.get_datatype(vfield) == Some("uri") {
             text.push_str(&format!("      \\verb{{{vfield}raw}}\n"));
             text.push_str(&format!("      \\verb {vf}\n      \\endverb\n"));
-            vf = uri_string(ctx, &vf)?;
+            vf = uri_string(log, &vf)?;
         }
         text.push_str(&format!("      \\verb{{{vfield}}}\n"));
         text.push_str(&format!("      \\verb {vf}\n      \\endverb\n"));
@@ -1246,7 +1291,7 @@ fn set_output_entry(
         let mut enc = Vec::with_capacity(vlf.len());
         for f in &vlf {
             let f = if is_uri {
-                uri_string(ctx, f)?
+                uri_string(log, f)?
             } else {
                 f.clone()
             };
@@ -1371,7 +1416,7 @@ fn has_citekey(st: &SectionState, key: &str) -> bool {
 struct ListView<'a> {
     dl: &'a DataList,
     state: Option<&'a crate::model::ListState>,
-    sortinithash: &'a dyn Fn(&str) -> String,
+    sortinithash: &'a (dyn Fn(&str) -> String + Sync),
 }
 
 impl<'a> ListView<'a> {
@@ -1691,6 +1736,20 @@ fn has_noncharacter(s: &str) -> bool {
 /// can be split before every ASCII character; a non-ASCII stretch is
 /// normalised together with the ASCII character before it, which it may
 /// combine with (`e` + U+0301).
+/// The number of entries instantiated in parallel before their texts are
+/// appended to the output.
+const RENDER_BLOCK: usize = 2048;
+
+/// `s` with its non-ASCII stretches NFC-normalised ([`push_nfc`]).
+fn nfc_pieces(s: String) -> String {
+    if s.is_ascii() {
+        return s;
+    }
+    let mut o = String::with_capacity(s.len());
+    push_nfc(&mut o, &s);
+    o
+}
+
 fn push_nfc(out: &mut String, s: &str) {
     let b = s.as_bytes();
     let mut copied = 0;
@@ -1717,28 +1776,91 @@ fn template_locale(ctx: &Ctx, name: &str) -> Option<String> {
     }
 }
 
+/// `create_output_section`'s `set_output_entry` loop over one section's
+/// citekeys. Entries are independent except for the BB-028 date stems (each
+/// call's are known in advance, [`DateStems`]) and shared list arrays (B21):
+/// entries with a shared list run in citekey order while the rest run in
+/// parallel, and messages are emitted in citekey order.
+fn section_templates(
+    ctx: &mut Ctx,
+    prep: &Prep,
+    stems: &DateStems,
+    date_calls: &mut usize,
+    st: &SectionState,
+) -> Result<HashMap<String, EntryTemplate>, Fatal> {
+    let keys = &st.section.citekeys;
+    let mut shared = SharedLists::new(st);
+    // (date-loop call number, uses a shared list) per citekey
+    let jobs: Vec<(usize, bool)> = keys
+        .iter()
+        .map(|k| {
+            if reaches_date_loop(ctx.dm, st, k) {
+                *date_calls += 1;
+            }
+            (*date_calls, shared.has_key(k))
+        })
+        .collect();
+    let done = {
+        let c: &Ctx = ctx;
+        let idx: Vec<usize> = (0..keys.len()).collect();
+        par::map(&idx, |&i| {
+            let (n, is_shared) = jobs[i];
+            if is_shared {
+                return None;
+            }
+            let mut log = c.log.fork();
+            let mut no_shared = SharedLists::default();
+            let t = set_output_entry(
+                c,
+                &mut log,
+                &mut no_shared,
+                prep,
+                stems.for_call(n),
+                st,
+                &keys[i],
+            );
+            Some((t, log))
+        })
+    };
+    let mut entries = HashMap::default();
+    for (i, d) in done.into_iter().enumerate() {
+        let (t, log) = match d {
+            Some(d) => d,
+            None => {
+                let mut log = ctx.log.fork();
+                let t = set_output_entry(
+                    ctx,
+                    &mut log,
+                    &mut shared,
+                    prep,
+                    stems.for_call(jobs[i].0),
+                    st,
+                    &keys[i],
+                );
+                (t, log)
+            }
+        };
+        ctx.log.join(log);
+        if let Some(t) = t? {
+            entries.insert(keys[i].clone(), t);
+        }
+    }
+    Ok(entries)
+}
+
 /// Render the whole `.bbl` (header, `\preamble`, one `\refsection` per
 /// section with output entries, `\endinput`).
 pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fatal> {
-    let mut prep = Prep::new(ctx.dm, wraplines(ctx));
-    let mut w = Writer {
-        datefields: ctx.dm.helpers.datefields.clone(),
-        date_stems: (ctx.dm.helpers.datefields.iter())
-            .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
-            .collect(),
-        shared: HashMap::default(),
-        shared_vals: Vec::new(),
-    };
+    let prep = Prep::new(ctx.dm, wraplines(ctx));
+    let stems = DateStems::new(
+        &ctx.dm.helpers.datefields,
+        ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation),
+    );
+    let mut date_calls = 0;
     // create_output_section, per section in processing order.
     let mut sections: Vec<SectionOut> = Vec::new();
     for st in &processed.sections {
-        w.start_section(st);
-        let mut entries = HashMap::default();
-        for k in &st.section.citekeys {
-            if let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? {
-                entries.insert(k.clone(), t);
-            }
-        }
+        let entries = section_templates(ctx, &prep, &stems, &mut date_calls, st)?;
         sections.push(SectionOut { st, entries });
     }
 
@@ -1775,7 +1897,11 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
         })
         .sum();
     let mut out = String::with_capacity(estimate + 4096);
-    let mut put = |s: &str| push_nfc(&mut out, s);
+    macro_rules! put {
+        ($s:expr) => {
+            push_nfc(&mut out, $s)
+        };
+    }
 
     // create_output_misc: \preamble (global, so the last section's).
     let mut headtext = head();
@@ -1788,7 +1914,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
         }
         headtext.push_str(&format!("\\preamble{{%\n{pa}%\n}}\n\n"));
     }
-    put(&headtext);
+    put!(&headtext);
 
     // Sections with output entries, in string order of their numbers.
     let mut order: Vec<&SectionOut> = sections.iter().filter(|s| !s.entries.is_empty()).collect();
@@ -1797,13 +1923,13 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
     for so in order {
         let st = so.st;
         let secnum = &st.section.number;
-        put(&format!("\n\\refsection{{{secnum}}}\n"));
+        put!(&format!("\n\\refsection{{{secnum}}}\n"));
         for dl in output_lists(ctx, st) {
             let keys = dl.keys.as_deref().unwrap_or(&[]);
             if keys.is_empty() {
                 continue;
             }
-            put(&format!("  \\datalist[{}]{{{}}}\n", dl.type_, dl.name));
+            put!(&format!("  \\datalist[{}]{{{}}}\n", dl.type_, dl.name));
             let loc = template_locale(ctx, &dl.sortingtemplatename);
             if !collators.contains_key(&loc) {
                 let c = ucollate::Collator::new(
@@ -1823,7 +1949,8 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
                 state: dl.state.as_ref(),
                 sortinithash: &hash,
             };
-            for k in keys {
+            // One entry's text (NFC) and whether it needed recoding.
+            let one = |k: &String| -> (String, bool) {
                 let mut es = match (so.entries.get(k), st.section.bibentry(k)) {
                     (Some(t), Some(_)) => instantiate_entry(&lv, t, k),
                     _ => String::new(),
@@ -1831,6 +1958,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
                 if comma_quirk {
                     es = dangling_comma_cleanup(&es);
                 }
+                let mut recoded = false;
                 if let Some(r) = &recoder {
                     if safechars {
                         es = r.encode(&es);
@@ -1838,9 +1966,7 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
                         && unencodable(e, nul_check, &nfc(&es))
                     {
                         es = r.encode(&es);
-                        ctx.log.biber_warn(format!(
-                            "The entry '{k}' has characters which cannot be encoded in '{outenc}'. Recoding problematic characters into macros."
-                        ));
+                        recoded = true;
                     }
                 }
                 if sortdebug {
@@ -1850,24 +1976,35 @@ pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fa
                         .unwrap_or_default();
                     es = format!("    % sorting key for '{k}':\n    % {sk}\n{es}");
                 }
-                put(&es);
+                (nfc_pieces(es), recoded)
+            };
+            // In blocks, so that only one block's texts exist twice.
+            for block in keys.chunks(RENDER_BLOCK) {
+                for (k, (es, recoded)) in block.iter().zip(par::map(block, one)) {
+                    if recoded {
+                        ctx.log.biber_warn(format!(
+                            "The entry '{k}' has characters which cannot be encoded in '{outenc}'. Recoding problematic characters into macros."
+                        ));
+                    }
+                    out.push_str(&es);
+                }
             }
-            put("  \\enddatalist\n");
+            put!("  \\enddatalist\n");
         }
         let mut aliases: Vec<(&String, &String)> = st.section.citekey_alias.iter().collect();
         aliases.sort();
         for (a, k) in aliases {
-            put(&format!("  \\keyalias{{{a}}}{{{k}}}\n"));
+            put!(&format!("  \\keyalias{{{a}}}{{{k}}}\n"));
         }
         let mut missing: Vec<&String> = st.section.undef_citekeys.iter().collect();
         missing.sort();
         missing.dedup();
         for k in missing {
-            put(&format!("  \\missing{{{k}}}\n"));
+            put!(&format!("  \\missing{{{k}}}\n"));
         }
-        put("\\endrefsection\n");
+        put!("\\endrefsection\n");
     }
-    put("\\endinput\n\n");
+    put!("\\endinput\n\n");
     Ok(Some(out))
 }
 

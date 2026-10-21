@@ -28,6 +28,7 @@ dependencies = [
  "relaxng",
  "roxmltree",
  "serde_json",
+ "similar",
  "tempfile",
 ]
 

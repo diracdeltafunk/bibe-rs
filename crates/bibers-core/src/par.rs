@@ -34,7 +34,10 @@ static POOL: OnceLock<Option<rayon::ThreadPool>> = OnceLock::new();
 /// Set the number of threads (`--threads`; 0 = the default). Call before the
 /// first parallel loop: the thread pool is built once, on first use.
 pub fn set_threads(n: usize) {
-    THREADS.store(if n == 0 { default_threads() } else { n }, Ordering::Relaxed);
+    THREADS.store(
+        if n == 0 { default_threads() } else { n },
+        Ordering::Relaxed,
+    );
 }
 
 fn default_threads() -> usize {
@@ -190,14 +193,10 @@ mod tests {
     #[test]
     fn chunks_stop_at_errors() {
         let v: Vec<u32> = (0..1000).collect();
-        let out = map_chunks(
-            &v,
-            Vec::new,
-            |seen: &mut Vec<u32>, &x| {
-                seen.push(x);
-                if x == 500 { Err(x) } else { Ok(x) }
-            },
-        );
+        let out = map_chunks(&v, Vec::new, |seen: &mut Vec<u32>, &x| {
+            seen.push(x);
+            if x == 500 { Err(x) } else { Ok(x) }
+        });
         let mut all = Vec::new();
         for c in out {
             all.extend(c.results);
