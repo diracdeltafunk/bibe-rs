@@ -57,6 +57,15 @@ pub struct BibCache {
     pub rstrings: HashMap<String, String>,
 }
 
+impl BibCache {
+    /// Free the cached entries (once no data source will be read again);
+    /// what the output writers use (`rstrings`, `master_comments`) stays.
+    pub fn release_entries(&mut self) {
+        self.data = HashMap::new();
+        self.globalds = HashMap::new();
+    }
+}
+
 /// Option values used while reading data, looked up once per `fetch_data`.
 pub struct FetchOpts {
     pub xsvsep: Option<Arc<PerlRegex>>,

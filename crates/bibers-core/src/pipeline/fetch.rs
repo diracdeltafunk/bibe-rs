@@ -706,6 +706,14 @@ pub fn fetch_data(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     let mut kwd = OrderedKeys::default();
     get_dependents(ctx, st, &opts, &dss, keys, &mut kwd)?;
     super::sync_annotations(ctx, st);
+    // The parsed data files are only read again by later sections: after
+    // the last one's fetch they are dead weight (the parsed .bib of
+    // examples-x184 is 25 MB).
+    if !ctx.cfg.biber.tool()
+        && super::sections_to_process(ctx.doc).last() == Some(&secnum)
+    {
+        ctx.run.bibcache.release_entries();
+    }
     Ok(())
 }
 

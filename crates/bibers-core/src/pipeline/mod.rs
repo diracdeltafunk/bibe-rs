@@ -89,14 +89,7 @@ pub struct Processed {
 /// `Biber::prepare`: process every section with citations.
 pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
     let mut out = Processed::default();
-    let numbers: Vec<String> = ctx
-        .doc
-        .sorted_sections()
-        .iter()
-        .filter(|s| !s.citekeys.is_empty() || s.allkeys)
-        .map(|s| s.number.clone())
-        .collect();
-    for secnum in numbers {
+    for secnum in sections_to_process(ctx.doc) {
         info!(ctx.log, "Processing section {secnum}");
         let mut st = fetch::init_section(ctx, &secnum)?;
         // biber's preamble list is global: carry it across sections.
@@ -105,6 +98,16 @@ pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
         out.sections.push(st);
     }
     Ok(out)
+}
+
+/// The numbers of the sections [`prepare`] processes (those with
+/// citations), in processing order.
+pub fn sections_to_process(doc: &Document) -> Vec<String> {
+    doc.sorted_sections()
+        .iter()
+        .filter(|s| !s.citekeys.is_empty() || s.allkeys)
+        .map(|s| s.number.clone())
+        .collect()
 }
 
 /// The per-section phase sequence of `Biber::prepare` (after
