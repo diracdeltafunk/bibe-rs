@@ -1402,11 +1402,14 @@ pub fn process_visible_names(
     let secnum = st.section.number.clone();
     let h = H::new(ctx.cfg, ctx.dm, &secnum);
     let pluralothers = opt_true(h.cfg.blx.global("pluralothers"));
-    let dl = &mut st.datalists[list];
     let sec = &st.section;
-    for key in &sec.citekeys {
+    let dl = &st.datalists[list];
+    // The values in parallel (they only read the uniquelist values), stored
+    // in citekey order.
+    let vis = par::map(&sec.citekeys, |key| {
+        let mut out: Vec<(String, [J; 4])> = Vec::new();
         let Some(be) = sec.bibentry(key) else {
-            continue;
+            return out;
         };
         let et = be.entrytype();
         // Option values keep their string form (biber stores the scalar).
@@ -1435,11 +1438,15 @@ pub fn process_visible_names(
             let (l_mincn, l_minbn, l_minsn, l_minan) =
                 (cap(&mincn), cap(&minbn), cap(&minsn), cap(&minan));
             let vis_alpha = if cnt.0 > maxan { l_minan } else { cnt.clone() };
-            let ul_or =
-                |dl: &mut DataList, d: (f64, J)| match ls::get(dl, &["namelistdata", &nlk, "ul"]) {
-                    Some(v) => (ls::num(&v), v),
-                    None => d,
-                };
+            // (`{namelistdata}{$nlid}{ul}`: the read's autovivification is
+            // done by the store below)
+            let ul_or = |dl: &DataList, d: (f64, J)| match nld_peek(dl, &nlk)
+                .and_then(|m| m.get("ul"))
+                .filter(|v| !v.is_null())
+            {
+                Some(v) => (ls::num(v), v.clone()),
+                None => d,
+            };
             let mut vis_cite = if cnt.0 > maxcn {
                 ul_or(dl, l_mincn)
             } else {
@@ -1458,14 +1465,19 @@ pub fn process_visible_names(
             } else {
                 cnt.clone()
             };
-            let m = ls::viv(dl, &["namelistdata", &nlk])
-                .as_object_mut()
-                .expect("object");
-            m.insert("viscite".into(), vis_cite.1);
-            m.insert("visbib".into(), vis_bib.1);
-            m.insert("vissort".into(), vis_sort.1);
-            m.insert("visalpha".into(), vis_alpha.1);
+            out.push((nlk, [vis_cite.1, vis_bib.1, vis_sort.1, vis_alpha.1]));
         }
+        out
+    });
+    let dl = &mut st.datalists[list];
+    for (nlk, [cite, bib, sort, alpha]) in vis.into_iter().flatten() {
+        let m = ls::viv(dl, &["namelistdata", &nlk])
+            .as_object_mut()
+            .expect("object");
+        m.insert("viscite".into(), cite);
+        m.insert("visbib".into(), bib);
+        m.insert("vissort".into(), sort);
+        m.insert("visalpha".into(), alpha);
     }
     Ok(())
 }

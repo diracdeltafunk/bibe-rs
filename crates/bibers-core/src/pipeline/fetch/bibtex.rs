@@ -513,7 +513,7 @@ fn cache_data(
 
     // Pass 1 (parse_decode)
     info!(ctx.log, "LaTeX decoding ...");
-    let p1 = ctx.run.bt.parse(&buf);
+    let p1 = parse_pass1(&mut ctx.run.bt, &buf);
     push_diags(x, &p1);
     let recoder = &opts.recoder;
     let verbs = &opts.verbs;
@@ -674,6 +674,154 @@ fn cache_data(
             .push(key);
     }
     Ok(())
+}
+
+/// `BtState::parse` of the data file's text `buf` (pass 1), in parallel
+/// when it splits cleanly into entries.
+///
+/// The text is cut before every line that starts with `@` (after blanks).
+/// `@string`, `@comment` and `@preamble` pieces are parsed in order with
+/// (a copy of) the real state; each regular entry's piece is parsed on its
+/// own, in parallel, with a copy of the macros defined before it. When
+/// every piece parses as exactly one entry of the expected type without
+/// any diagnostic ([`parse_piece`]), this is what the parse of the whole
+/// text gives (entries do not change the parser state; `@string`s only add
+/// macros); otherwise the whole text is parsed.
+fn parse_pass1(bt: &mut btparse::BtState, buf: &str) -> btparse::ParsedFile {
+    use btparse::Metatype;
+    // Piece starts: the starts of lines whose first non-blank is `@`.
+    let mut starts = Vec::new();
+    let b = buf.as_bytes();
+    let mut line = 0;
+    while line < b.len() {
+        let mut i = line;
+        while i < b.len() && (b[i] == b' ' || b[i] == b'\t') {
+            i += 1;
+        }
+        if i < b.len() && b[i] == b'@' {
+            starts.push(line);
+        }
+        match memchr::memchr(b'\n', &b[line..]) {
+            Some(n) => line += n + 1,
+            None => break,
+        }
+    }
+    if starts.is_empty() || !par::is_parallel(starts.len()) {
+        return bt.parse(buf);
+    }
+    // (text before the first entry goes with it)
+    starts[0] = 0;
+    starts.push(b.len());
+    let pieces: Vec<&str> = starts.windows(2).map(|w| &buf[w[0]..w[1]]).collect();
+    let last = pieces.len() - 1;
+    let kind = |p: &str| {
+        let t = p.trim_start_matches(|c: char| c != '@')[1..].trim_start();
+        let name: String = t
+            .chars()
+            .take_while(|c| c.is_ascii_alphanumeric() || *c == '_')
+            .collect();
+        if name.eq_ignore_ascii_case("string") {
+            Metatype::MacroDef
+        } else if name.eq_ignore_ascii_case("comment") {
+            Metatype::Comment
+        } else if name.eq_ignore_ascii_case("preamble") {
+            Metatype::Preamble
+        } else {
+            Metatype::Regular
+        }
+    };
+    let kinds: Vec<Metatype> = pieces.iter().map(|p| kind(p)).collect();
+    // The other pieces in order, with a copy of the state; the macros each
+    // regular piece sees.
+    let mut state = bt.clone();
+    let mut snapshots: Vec<btparse::MacroTable> = Vec::new();
+    let mut changed = true;
+    let mut parsed: Vec<Option<btparse::Entry>> = Vec::with_capacity(pieces.len());
+    let mut snapshot_of = vec![0usize; pieces.len()];
+    for (i, p) in pieces.iter().enumerate() {
+        if kinds[i] == Metatype::Regular {
+            if changed {
+                if snapshots.len() == 64 {
+                    // (@strings and entries alternate: not worth it)
+                    return bt.parse(buf);
+                }
+                snapshots.push(state.macros.clone());
+                changed = false;
+            }
+            snapshot_of[i] = snapshots.len() - 1;
+            parsed.push(None);
+        } else {
+            let Some(e) = parse_piece(&mut state, p, i < last, kinds[i]) else {
+                return bt.parse(buf);
+            };
+            changed |= kinds[i] == Metatype::MacroDef;
+            parsed.push(Some(e));
+        }
+    }
+    // The regular pieces, in parallel.
+    let regular: Vec<usize> = (0..pieces.len())
+        .filter(|&i| kinds[i] == Metatype::Regular)
+        .collect();
+    let done: Vec<Vec<(usize, Option<btparse::Entry>)>> = par::map_slices(&regular, |slice| {
+        let mut st: Option<(usize, btparse::BtState)> = None;
+        slice
+            .iter()
+            .map(|&i| {
+                let g = snapshot_of[i];
+                if st.as_ref().is_none_or(|(sg, _)| *sg != g) {
+                    st = Some((g, btparse::BtState::new(snapshots[g].clone())));
+                }
+                let (_, s) = st.as_mut().expect("set");
+                (i, parse_piece(s, pieces[i], i < last, Metatype::Regular))
+            })
+            .collect()
+    });
+    for (i, e) in done.into_iter().flatten() {
+        let Some(e) = e else {
+            return bt.parse(buf);
+        };
+        parsed[i] = Some(e);
+    }
+    let mut entries = Vec::with_capacity(pieces.len());
+    let mut line = 1u32;
+    for (i, e) in parsed.into_iter().enumerate() {
+        let mut e = e.expect("every piece parsed");
+        e.line += line - 1;
+        entries.push(e);
+        line += pieces[i].bytes().filter(|&b| b == b'\n').count() as u32;
+    }
+    *bt = state;
+    btparse::ParsedFile {
+        entries,
+        stop: None,
+        trailing_diags: Vec::new(),
+    }
+}
+
+/// Parse one piece of [`parse_pass1`]: its entry, if it is exactly one
+/// entry of type `kind` without any diagnostic. A piece `followed` by
+/// another is parsed with an `@comment{}` after it, so that junk after its
+/// entry is reported as it would be before the next piece's `@`.
+fn parse_piece(
+    st: &mut btparse::BtState,
+    piece: &str,
+    followed: bool,
+    kind: btparse::Metatype,
+) -> Option<btparse::Entry> {
+    let pf = if followed {
+        st.parse(&format!("{piece}@comment{{}}"))
+    } else {
+        st.parse(piece)
+    };
+    let n = 1 + usize::from(followed);
+    let clean = pf.stop.is_none()
+        && pf.trailing_diags.is_empty()
+        && pf.entries.len() == n
+        && pf.entries.iter().all(|e| e.diags.is_empty())
+        && pf.entries[0].parse_ok
+        && pf.entries[0].metatype == kind
+        && (!followed || pf.entries[1].metatype == btparse::Metatype::Comment);
+    clean.then(|| pf.entries.into_iter().next().expect("one entry"))
 }
 
 /// `BtState::parse` of the concatenation of `pieces`, the pass-1 texts of
