@@ -1447,7 +1447,7 @@ fn name_handler(
         if add_xdata_ref(ctx, opts, be, field, XRef::Str(name), Some(i), &secnum) {
             let mut n = Name::default();
             n.slots.insert("xdata", J::from(name.clone()));
-            n.index = Some((names.len() + 1).to_string());
+            n.index = Some((names.len() + 1).to_string().into());
             names.push(st.section.names.new_name(n));
             continue;
         }
@@ -1542,7 +1542,7 @@ fn name_handler(
                 .insert("morenames", J::from("1"));
         } else {
             let mut n = n;
-            n.index = Some((names.len() + 1).to_string());
+            n.index = Some((names.len() + 1).to_string().into());
             names.push(st.section.names.new_name(n));
         }
     }

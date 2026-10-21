@@ -72,7 +72,7 @@ impl Loader {
             return Ok(*id);
         }
         let mut n = Name {
-            index: o.get("index").and_then(s),
+            index: o.get("index").and_then(s).map(Into::into),
             rawstring: o.get("rawstring").and_then(s),
             ..Name::default()
         };
@@ -80,13 +80,13 @@ impl Loader {
             for (part, pv) in np {
                 let po = obj(pv)?;
                 let initial = match po.get("initial") {
-                    Some(J::Array(a)) => Some(a.iter().filter_map(s).collect()),
+                    Some(J::Array(a)) => Some(a.iter().filter_map(s).map(Into::into).collect()),
                     _ => None,
                 };
                 n.nameparts.insert(
                     part.clone(),
                     NamePart {
-                        string: po.get("string").and_then(s),
+                        string: po.get("string").and_then(s).map(Into::into),
                         initial,
                     },
                 );
@@ -94,7 +94,7 @@ impl Loader {
         }
         if let Some(st) = o.get("strip").and_then(J::as_object) {
             for (k, v) in st {
-                n.strip.insert(k.clone(), s(v));
+                n.strip.insert(k.clone(), s(v).map(Into::into));
             }
         }
         for (k, v) in o {
@@ -460,16 +460,16 @@ impl Dumper<'_> {
         o.insert("__class".into(), J::from(NAME_CLASS));
         o.insert("id".into(), J::from(self.ids[&id.key()].clone()));
         if let Some(i) = &n.index {
-            o.insert("index".into(), J::from(i.clone()));
+            o.insert("index".into(), J::from(i.as_str()));
         }
         let mut np = Map::new();
         for (part, p) in &n.nameparts {
             let mut po = Map::new();
-            po.insert("string".into(), opt_str(&p.string));
+            po.insert("string".into(), opt_cstr(&p.string));
             po.insert(
                 "initial".into(),
                 match &p.initial {
-                    Some(v) => J::Array(v.iter().map(|x| J::from(x.clone())).collect()),
+                    Some(v) => J::Array(v.iter().map(|x| J::from(x.as_str())).collect()),
                     None => J::Null,
                 },
             );
@@ -484,7 +484,7 @@ impl Dumper<'_> {
                 J::Object(
                     n.strip
                         .iter()
-                        .map(|(k, v)| (k.to_string(), opt_str(v)))
+                        .map(|(k, v)| (k.to_string(), opt_cstr(v)))
                         .collect(),
                 ),
             );
@@ -552,6 +552,10 @@ impl Dumper<'_> {
         }
         J::Object(o)
     }
+}
+
+fn opt_cstr(v: &Option<compact_str::CompactString>) -> J {
+    v.as_deref().map_or(J::Null, J::from)
 }
 
 fn opt_str(v: &Option<String>) -> J {

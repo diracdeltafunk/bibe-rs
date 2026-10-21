@@ -1381,13 +1381,13 @@ mod tests {
             let mut lj = Map::new();
             for (i, f) in fams.iter().enumerate() {
                 let mut name = Name {
-                    index: Some((i + 1).to_string()),
+                    index: Some((i + 1).to_string().into()),
                     ..Name::default()
                 };
                 name.nameparts.insert(
                     "family",
                     NamePart {
-                        string: Some(f.clone()),
+                        string: Some(f.into()),
                         initial: None,
                     },
                 );

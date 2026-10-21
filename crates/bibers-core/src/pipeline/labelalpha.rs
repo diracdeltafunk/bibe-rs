@@ -1098,7 +1098,7 @@ impl<'a> Gen<'a> {
                         })
                         .collect();
                     let k = normalise_string_label(self.cfg, &s);
-                    indices.insert(k, n.index.clone().map_or(J::Null, J::from));
+                    indices.insert(k, n.index.as_deref().map_or(J::Null, J::from));
                 }
             } else if let Some(v) = f {
                 indices.insert(value_string(v), J::from("0"));

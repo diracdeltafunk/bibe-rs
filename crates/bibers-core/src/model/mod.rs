@@ -320,11 +320,12 @@ pub struct NameListId(pub u32);
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct NameId(pub u32);
 
-/// One name part (`{string, initial}` in biber).
+/// One name part (`{string, initial}` in biber). Short strings (most
+/// name parts, every initial) are stored inline.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct NamePart {
-    pub string: Option<String>,
-    pub initial: Option<Vec<String>>,
+    pub string: Option<CompactString>,
+    pub initial: Option<Vec<CompactString>>,
 }
 
 /// `Biber::Entry::Name`.
@@ -332,12 +333,12 @@ pub struct NamePart {
 pub struct Name {
     pub id: NameId,
     /// Position in its list (biber's `index`, normally 1-based; see BB-024).
-    pub index: Option<String>,
+    pub index: Option<CompactString>,
     /// Name parts by part name (`family`, `given`, `prefix`, `suffix`, and
     /// any data-model-defined parts).
     pub nameparts: SymMap<NamePart>,
     /// Per-part "outer braces were stripped" flags.
-    pub strip: SymMap<Option<String>>,
+    pub strip: SymMap<Option<CompactString>>,
     /// `rawstring` (joined in Perl hash order upstream: nondeterministic,
     /// only used for the "others" test).
     pub rawstring: Option<String>,
