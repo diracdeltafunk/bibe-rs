@@ -215,6 +215,12 @@ pub fn sections_to_process(doc: &Document) -> Vec<String> {
 pub fn prepare_section(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     for (_, phase) in SECTION_PHASES {
         phase(ctx, st)?;
+        if *n == "validate_datamodel" && ctx.run.free_dead_state {
+            // Read by data source reading and validation only.
+            for slot in ["everykey", "everykey_lc", "keytods"] {
+                st.section.slots.remove(slot);
+            }
+        }
     }
     Ok(())
 }
