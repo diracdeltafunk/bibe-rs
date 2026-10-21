@@ -124,10 +124,14 @@ fn rawdata_unread(ctx: &Ctx) -> bool {
 ///   read: the disambiguation strings and schema, `unall`, `unmininfo` and
 ///   the visible name counts.
 fn release_processed(ctx: &Ctx, st: &mut SectionState) {
-    if ctx.dm.get_fieldtype("rawdata").is_none() {
-        for e in st.section.entries.values_mut_unordered() {
+    let rawdata = ctx.dm.get_fieldtype("rawdata").is_some();
+    for e in st.section.entries.values_mut_unordered() {
+        if !rawdata {
             e.derivedfields.remove(&crate::model::sym::RAWDATA);
         }
+        // Done growing: the field maps' spare room goes too.
+        e.datafields.shrink_to_fit();
+        e.derivedfields.shrink_to_fit();
     }
     const NAME_KEYS: [&str; 6] = [
         "basenamestring",
@@ -140,6 +144,11 @@ fn release_processed(ctx: &Ctx, st: &mut SectionState) {
     const LIST_KEYS: [&str; 4] = ["visalpha", "visbib", "viscite", "vissort"];
     for dl in &mut st.datalists {
         let Some(state) = &mut dl.state else { continue };
+        for f in state.fields_mut().into_iter().flat_map(|m| m.values_mut()) {
+            if let Some(f) = f.as_object_mut() {
+                f.shrink_to_fit();
+            }
+        }
         for nl in state.namelistdata_mut().into_iter().flat_map(|m| m.values_mut()) {
             let Some(nl) = nl.as_object_mut() else { continue };
             nl.retain(|k, v| {

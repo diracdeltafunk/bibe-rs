@@ -210,6 +210,14 @@ impl ListState {
         self.namelistdata.take()
     }
 
+    /// `$state->{fields}` by citekey, if it is a hash.
+    pub fn fields_mut(&mut self) -> Option<&mut FxHashMap<String, J>> {
+        if self.rest.contains_key(FIELDS) {
+            return None;
+        }
+        self.fields.as_mut()
+    }
+
     /// `$state->{namelistdata}` by name list id, if it is a hash.
     pub fn namelistdata_mut(&mut self) -> Option<&mut FxHashMap<String, J>> {
         if self.rest.contains_key(NAMELISTDATA) {
