@@ -1598,16 +1598,16 @@ struct SectionOut<'a> {
 }
 
 /// The output lists of a section in `.bbl` order (bbl.pm:689-707).
-fn output_lists<'a>(ctx: &Ctx, st: &'a SectionState) -> Vec<&'a DataList> {
+fn output_lists<'a>(ctx: &Ctx, datalists: &'a [DataList]) -> Vec<&'a DataList> {
     let global = opt_string(ctx.cfg.blx.global("sortingtemplatename")).unwrap_or_default();
-    let mut lists: Vec<&DataList> = st.datalists.iter().collect();
+    let mut lists: Vec<&DataList> = datalists.iter().collect();
     lists.sort_by(|a, b| a.sortingtemplatename.cmp(&b.sortingtemplatename));
     let mut out: Vec<&DataList> = lists
         .into_iter()
         .filter(|l| !(l.sortingtemplatename == global && l.type_ == "entry"))
         .collect();
     out.extend(
-        st.datalists
+        datalists
             .iter()
             .filter(|l| l.sortingtemplatename == global && l.type_ == "entry"),
     );
@@ -1748,13 +1748,15 @@ fn nfc_owned(s: String) -> String {
 
 /// Render the whole `.bbl` (header, `\preamble`, one `\refsection` per
 /// section with output entries, `\endinput`).
-pub fn render(ctx: &mut Ctx, processed: &Processed) -> Result<Option<String>, Fatal> {
+pub fn render(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<String>, Fatal> {
     Ok(render_text(ctx, processed)?.map(Text::into_string))
 }
 
 /// [`render`] in pieces (one per entry and per header line), each
-/// normalised to NFC.
-pub fn render_text(ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>, Fatal> {
+/// normalised to NFC. Each entry's data is freed once its text is made
+/// (only its text is needed after that), so that the text takes the place
+/// of the entries in memory.
+pub fn render_text(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Text>, Fatal> {
     let mut prep = Prep::new(ctx.dm, wraplines(ctx));
     let mut w = Writer {
         datefields: ctx.dm.helpers.datefields.clone(),
@@ -1791,9 +1793,9 @@ pub fn render_text(ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>,
     // list right away: an instantiation only depends on the template and
     // the list's final state, and the templates are never all alive at once.
     let mut sections: Vec<SectionOut> = Vec::new();
-    for st in &processed.sections {
+    for st in processed.sections.iter_mut() {
         w.start_section(st);
-        let lists = output_lists(ctx, st);
+        let lists = output_lists(ctx, &st.datalists);
         let views: Vec<ListView> = lists
             .iter()
             .map(|dl| ListView {
@@ -1812,8 +1814,13 @@ pub fn render_text(ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>,
             }
             texts.push(vec![String::new(); keys.len()]);
         }
+        // The last time each key is output.
+        let citekeys = &st.section.citekeys;
+        let last: HashMap<&str, usize> = (citekeys.iter().enumerate())
+            .map(|(i, k)| (k.as_str(), i))
+            .collect();
         let mut has_entries = false;
-        for k in &st.section.citekeys {
+        for (i, k) in citekeys.iter().enumerate() {
             let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? else {
                 continue;
             };
@@ -1825,11 +1832,17 @@ pub fn render_text(ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>,
                 }
                 texts[li][pos] = es;
             }
+            if last[k.as_str()] == i
+                && let Some(e) = st.section.entries.get_mut(k)
+            {
+                *e = Entry::default();
+            }
         }
+        let st: &SectionState = st;
         sections.push(SectionOut {
             st,
             has_entries,
-            lists: lists.into_iter().zip(texts).collect(),
+            lists: output_lists(ctx, &st.datalists).into_iter().zip(texts).collect(),
         });
     }
 
@@ -1858,7 +1871,7 @@ pub fn render_text(ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>,
 
     // create_output_misc: \preamble (global, so the last section's).
     let mut headtext = head();
-    if let Some(pa) = processed.sections.last().and_then(|s| s.preamble.as_ref()) {
+    if let Some(pa) = sections.last().and_then(|s| s.st.preamble.as_ref()) {
         let mut pa = pa.join("%\n");
         if let Some(r) = &recoder {
             if safechars || enc.is_some_and(|e| unencodable(e, nul_check, &nfc(&pa))) {

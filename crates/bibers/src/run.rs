@@ -438,11 +438,11 @@ pub fn process(s: Setup, env: &Env) -> u8 {
     } else {
         pipeline::prepare(&mut ctx)
     };
-    let processed = match prepared {
+    let mut processed = match prepared {
         Ok(p) => p,
         Err(_) => return log.display_end(),
     };
-    let text = match format.render(&mut ctx, &processed) {
+    let text = match format.render(&mut ctx, &mut processed) {
         Ok(Some(t)) => t,
         Ok(None) => {
             let _ = biber_error!(

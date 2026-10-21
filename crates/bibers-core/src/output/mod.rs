@@ -111,7 +111,9 @@ impl OutputFormat {
 
     /// Render the processed sections in this format, before encoding.
     /// `Ok(None)` if the writer cannot produce output.
-    pub fn render(self, ctx: &mut Ctx, processed: &Processed) -> Result<Option<Text>, Fatal> {
+    /// The `.bbl` writer frees the entries it has written: `processed` is
+    /// only good for writing after this.
+    pub fn render(self, ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Text>, Fatal> {
         match self {
             OutputFormat::Bbl => bbl::render_text(ctx, processed),
             OutputFormat::Bibtex => bibtex::render(ctx, processed).map(|t| Some(t.into())),
