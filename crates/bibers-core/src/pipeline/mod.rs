@@ -95,9 +95,22 @@ pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
         // biber's preamble list is global: carry it across sections.
         st.preamble = out.sections.last().and_then(|p| p.preamble.clone());
         prepare_section(ctx, &mut st)?;
+        release_processed(ctx, &mut st);
         out.sections.push(st);
     }
     Ok(out)
+}
+
+/// Free what nothing reads once a section is processed: the entries'
+/// `rawdata` (the source text of each entry; only biber's state dumps show
+/// it, and the writers output data model fields only).
+fn release_processed(ctx: &Ctx, st: &mut SectionState) {
+    if ctx.dm.get_fieldtype("rawdata").is_some() {
+        return;
+    }
+    for e in st.section.entries.values_mut_unordered() {
+        e.derivedfields.remove(&crate::model::sym::RAWDATA);
+    }
 }
 
 /// The numbers of the sections [`prepare`] processes (those with
