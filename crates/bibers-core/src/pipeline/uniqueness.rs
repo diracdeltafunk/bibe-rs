@@ -52,11 +52,13 @@ pub fn uniqueness(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<(
         section, datalists, ..
     } = st;
     let entries = entry_infos(ctx, section);
-    let converged = run(
+    let converged = run_counting(
         ctx.cfg.quirks,
         &section.names,
         &entries,
         &mut datalists[list],
+        // Only biber's dumps show the counters after this phase.
+        !ctx.run.free_dead_state,
     );
     if !converged {
         // biber never terminates here (BB-149); bibers stops (DC-052).
@@ -127,6 +129,18 @@ fn entry_infos(ctx: &Ctx, section: &Section) -> Vec<EntryInfo> {
 /// [`uniqueness`] that doesn't need the option store).
 /// Returns `false` if the iteration was stopped at [`MAX_PASSES`].
 pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut DataList) -> bool {
+    run_counting(quirks, names, entries, dl, true)
+}
+
+/// [`run`], leaving the counters (`uniquenamecount`, `uniquenamecount_all`,
+/// `uniquelistcount`) in the state only if `keep_counts`.
+fn run_counting(
+    quirks: Quirks,
+    names: &NameArena,
+    entries: &[EntryInfo],
+    dl: &mut DataList,
+    keep_counts: bool,
+) -> bool {
     let changed = dl
         .slots
         .get("unulchanged")
@@ -151,9 +165,17 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         unc_all,
         ulc,
         nld,
+        statics,
+        lists,
         ..
     } = u;
+    drop((statics, lists));
     nld.finish(&mut state);
+    let (unc, unc_all, ulc) = if keep_counts {
+        (unc, unc_all, ulc)
+    } else {
+        (None, None, None)
+    };
     if let Some(c) = unc {
         state.insert("uniquenamecount", c.to_json());
     }
