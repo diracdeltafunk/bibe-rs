@@ -320,11 +320,16 @@ pub fn extract_entries(
             .keys
             .clone();
         let mut stage = Stage::default();
-        let mut premapped = premap(ctx, st, filename, &fkeys);
+        let mut premapped = None;
         for (i, key) in fkeys.iter().enumerate() {
+            // (in windows, so that only a window's mapped copies exist)
+            if i % STAGE_WINDOW == 0 {
+                let end = fkeys.len().min(i + STAGE_WINDOW);
+                premapped = premap(ctx, st, filename, &fkeys[i..end]);
+            }
             st.section.set_keytods(key, filename);
             let entry = ctx.run.bibcache.data[filename].entries[key].clone();
-            let pre = premapped.as_mut().and_then(|p| p[i].take());
+            let pre = premapped.as_mut().and_then(|p| p[i % STAGE_WINDOW].take());
             let created = create_entry(
                 ctx, st, opts, &mut x, &mut stage, pre, key, &entry, filename, &mut rkeys,
             )?;
@@ -949,7 +954,14 @@ struct Stage {
     /// The keys of the entries in `items` (`exists $bibentries{$key}` must
     /// see them).
     keys: rustc_hash::FxHashSet<String>,
+    /// The number of entries in `items`.
+    jobs: usize,
 }
+
+/// The number of entries staged (and source-mapped ahead) at a time: enough
+/// for the parallel loops, few enough that the copies of the entries they
+/// hold stay small.
+const STAGE_WINDOW: usize = 2048;
 
 impl Stage {
     fn has(&self, key: &str) -> bool {
@@ -968,6 +980,7 @@ impl Stage {
             return Ok(());
         }
         self.keys.clear();
+        self.jobs = 0;
         let items = std::mem::take(&mut self.items);
         let secnum = st.section.number.clone();
         let jobs: Vec<&CreateJob> = items.iter().flat_map(|(_, j)| j).collect();
@@ -1066,7 +1079,11 @@ fn create_entry(
         return Ok(crret);
     }
     stage.keys.extend(jobs.iter().map(|j| j.key.clone()));
+    stage.jobs += jobs.len();
     stage.items.push((map_log, jobs));
+    if stage.jobs >= STAGE_WINDOW {
+        stage.flush(ctx, st, opts, x)?;
+    }
     Ok(true)
 }
 

@@ -1497,33 +1497,40 @@ pub fn process_entries_post(
     let h = H::new(ctx.cfg, ctx.dm, &secnum);
     // The name hashes first, for all entries in parallel: they only read
     // state from earlier phases.
-    let hashes: Vec<Option<PostHashes>> = {
-        let (sec, dl, parent) = (&st.section, &st.datalists[list], &*ctx.log);
-        par::map(&sec.citekeys, |key| {
-            sec.bibentry(key)
-                .map(|_| PostHashes::new(&h, parent, sec, dl, key))
-        })
-    };
-    let (log, run) = (&mut *ctx.log, &mut ctx.run.labelalpha);
+    // (A window of entries at a time, so that only a window's hashes exist
+    // at once.)
     let keys = st.section.citekeys.clone();
-    for (key, ph) in keys.iter().zip(hashes) {
-        let Some(mut ph) = ph else { continue };
-        let key = key.as_str();
-        process_fullhash(log, st, list, key, ph.fullhash)?;
-        labelalpha::process_labelalpha_in(h.cfg, h.dm, run, st, list, key)?;
-        labelalpha::process_extraalpha_in(h.cfg, st, list, key)?;
-        process_extradate(&h, st, list, key, &ph.namehash_u);
-        process_extraname(&h, st, list, key, &ph.namehash_u);
-        process_extratitle(&h, st, list, key, &ph.namehash_u);
-        process_extratitleyear(&h, st, list, key);
-        let (stf, uwf) = (ph.singletitle_fh.take(), ph.uniquework_fh.take());
-        process_workuniqueness(&h, log, st, list, key, stf, uwf)?;
-        process_namehash(log, st, list, key, ph.namehash)?;
-        process_pername_hashes(log, st, list, ph.pername)?;
-        process_uniqueprimaryauthor(&h, log, st, list, key, ph.upa_namedis)?;
+    for window in keys.chunks(POST_WINDOW) {
+        let hashes: Vec<Option<PostHashes>> = {
+            let (sec, dl, parent) = (&st.section, &st.datalists[list], &*ctx.log);
+            par::map(window, |key| {
+                sec.bibentry(key)
+                    .map(|_| PostHashes::new(&h, parent, sec, dl, key))
+            })
+        };
+        let (log, run) = (&mut *ctx.log, &mut ctx.run.labelalpha);
+        for (key, ph) in window.iter().zip(hashes) {
+            let Some(mut ph) = ph else { continue };
+            let key = key.as_str();
+            process_fullhash(log, st, list, key, ph.fullhash)?;
+            labelalpha::process_labelalpha_in(h.cfg, h.dm, run, st, list, key)?;
+            labelalpha::process_extraalpha_in(h.cfg, st, list, key)?;
+            process_extradate(&h, st, list, key, &ph.namehash_u);
+            process_extraname(&h, st, list, key, &ph.namehash_u);
+            process_extratitle(&h, st, list, key, &ph.namehash_u);
+            process_extratitleyear(&h, st, list, key);
+            let (stf, uwf) = (ph.singletitle_fh.take(), ph.uniquework_fh.take());
+            process_workuniqueness(&h, log, st, list, key, stf, uwf)?;
+            process_namehash(log, st, list, key, ph.namehash)?;
+            process_pername_hashes(log, st, list, ph.pername)?;
+            process_uniqueprimaryauthor(&h, log, st, list, key, ph.upa_namedis)?;
+        }
     }
     Ok(())
 }
+
+/// The number of entries whose [`PostHashes`] are computed at a time.
+const POST_WINDOW: usize = 4096;
 
 /// A value computed ahead of time with the messages its computation logged,
 /// replayed where the serial code would have computed it.
