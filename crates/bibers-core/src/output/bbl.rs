@@ -373,6 +373,18 @@ enum Item {
     Text(String),
     Slot(Slot),
     Names(NameBlockT),
+    /// A list whose array may be shared with other entries (05-B21), output
+    /// by [`resolve_shared`] in citekey order.
+    Shared(SharedListT),
+}
+
+/// A list field of an [`Item::Shared`]: its field name, its value in the
+/// entry, and whether it is a verbatim list.
+#[derive(Clone, Debug)]
+struct SharedListT {
+    field: String,
+    list: Vec<String>,
+    verbatim: bool,
 }
 
 /// The per-section part of an entry's output (biber's placeholder string).
@@ -403,17 +415,16 @@ impl EntryTemplate {
                 Item::Text(t) => t.len(),
                 Item::Slot(_) => 40,
                 Item::Names(b) => 64 + b.names.iter().map(name).sum::<usize>(),
+                Item::Shared(l) => 64 + l.list.iter().map(|x| 20 + x.len()).sum::<usize>(),
             })
             .sum()
     }
 }
 
 /// The current section's shared list arrays (05-B21), which
-/// `set_output_entry` changes in place: the entries sharing lists (a
-/// connected component of entries linked by shared lists) are processed in
-/// citekey order with their part of the `SharedLists`
-/// ([`SharedLists::components`]); other entries, with an empty one, in any
-/// order.
+/// `set_output_entry` changes in place: their output is left to
+/// [`resolve_shared`], which runs in citekey order, while the rest of the
+/// entries' templates are built in any order.
 #[derive(Default)]
 struct SharedLists {
     /// `(citekey, field)` → group.
@@ -441,49 +452,12 @@ impl SharedLists {
         self.keys.contains_key(key)
     }
 
-    /// The positions in `keys` of the entries with shared lists, grouped
-    /// into the connected components of "shares a list with", each in
-    /// `keys` order, with the lists of each component's entries.
-    fn components(&self, keys: &[String]) -> Vec<(Vec<usize>, SharedLists)> {
-        // Union-find over the groups.
-        let n = self.shared.values().copied().max().map_or(0, |m| m + 1);
-        let mut parent: Vec<usize> = (0..n).collect();
-        fn find(p: &mut [usize], mut x: usize) -> usize {
-            while p[x] != x {
-                p[x] = p[p[x]];
-                x = p[x];
-            }
-            x
-        }
-        for gs in self.keys.values() {
-            for w in gs.windows(2) {
-                let (a, b) = (find(&mut parent, w[0]), find(&mut parent, w[1]));
-                parent[a] = b;
-            }
-        }
-        let mut index: HashMap<usize, usize> = HashMap::default();
-        let mut out: Vec<(Vec<usize>, SharedLists)> = Vec::new();
-        for (i, k) in keys.iter().enumerate() {
-            let Some(gs) = self.keys.get(k) else { continue };
-            let root = find(&mut parent, gs[0]);
-            let c = *index.entry(root).or_insert_with(|| {
-                out.push((Vec::new(), SharedLists::default()));
-                out.len() - 1
-            });
-            let (members, sl) = &mut out[c];
-            members.push(i);
-            sl.keys.insert(k.clone(), gs.clone());
-        }
-        for (key, field) in self.shared.keys() {
-            if let Some(gs) = self.keys.get(key) {
-                let c = index[&find(&mut parent, gs[0])];
-                out[c].1.shared.insert(
-                    (key.clone(), field.clone()),
-                    self.shared[&(key.clone(), field.clone())],
-                );
-            }
-        }
-        out
+    /// Whether `key`'s `field` is a shared list.
+    fn is_shared(&self, key: &str, field: &str) -> bool {
+        self.keys.contains_key(key)
+            && self
+                .shared
+                .contains_key(&(key.to_string(), field.to_string()))
     }
 
     /// Replace the live value of a shared list.
@@ -514,13 +488,93 @@ impl SharedLists {
                 }
                 (popped, live.clone())
             }
-            None => {
-                let popped = is_others(orig);
-                let n = orig.len() - usize::from(popped);
-                (popped, orig[..n].to_vec())
-            }
+            None => pop_plain(orig, others),
         }
     }
+}
+
+/// biber's `pop` of a trailing `others` on a list that is not shared.
+fn pop_plain(orig: &[String], others: &str) -> (bool, Vec<String>) {
+    let popped = orig.last().map(|x| lc(x)).unwrap_or_default() == others;
+    let n = orig.len() - usize::from(popped);
+    (popped, orig[..n].to_vec())
+}
+
+/// The output of a list field (bbl.pm:335), after the `pop` of `others`.
+fn list_text(text: &mut String, listfield: &str, popped: bool, lf: &[String]) {
+    if popped {
+        text.push_str(&format!("      \\true{{more{listfield}}}\n"));
+    }
+    text.push_str(&format!("      \\list{{{listfield}}}{{{}}}{{%\n", lf.len()));
+    for f in lf {
+        text.push_str(&format!("        {{{f}}}%\n"));
+    }
+    text.push_str("      }\n");
+}
+
+/// The output of a verbatim list field (bbl.pm:567), after the `pop` of
+/// `others`. Returns the URI-encoded list of a URI list (the loop variable
+/// aliases the live array, so the encoded values stay in it).
+fn vlist_text(
+    text: &mut String,
+    log: &mut Logger,
+    vlist: &str,
+    is_uri: bool,
+    popped: bool,
+    vlf: &[String],
+) -> Result<Option<Vec<String>>, Fatal> {
+    if popped {
+        text.push_str(&format!("      \\true{{more{vlist}}}\n"));
+    }
+    let total = vlf.len();
+    if is_uri {
+        text.push_str(&format!("      \\lverb{{{vlist}raw}}{{{total}}}\n"));
+        for f in vlf {
+            text.push_str(&format!("      \\lverb {f}\n"));
+        }
+        text.push_str("      \\endlverb\n");
+    }
+    text.push_str(&format!("      \\lverb{{{vlist}}}{{{total}}}\n"));
+    let mut enc = Vec::with_capacity(vlf.len());
+    for f in vlf {
+        let f = if is_uri {
+            uri_string(log, f)?
+        } else {
+            f.clone()
+        };
+        text.push_str(&format!("      \\lverb {f}\n"));
+        enc.push(f);
+    }
+    text.push_str("      \\endlverb\n");
+    Ok(is_uri.then_some(enc))
+}
+
+/// Output the [`Item::Shared`] lists of `key`'s template (in citekey order
+/// over the section's entries): `pop` the trailing `others` off the live
+/// arrays, and keep URI-encoded values in them.
+fn resolve_shared(
+    t: &mut EntryTemplate,
+    dm: &DataModel,
+    log: &mut Logger,
+    sl: &mut SharedLists,
+    key: &str,
+    others: &str,
+) -> Result<(), Fatal> {
+    for item in &mut t.items {
+        let Item::Shared(s) = item else { continue };
+        let (popped, lf) = sl.pop_others(key, &s.field, &s.list, others);
+        let mut text = String::new();
+        if s.verbatim {
+            let is_uri = dm.get_datatype(&s.field) == Some("uri");
+            if let Some(enc) = vlist_text(&mut text, log, &s.field, is_uri, popped, &lf)? {
+                sl.set_live(key, &s.field, enc);
+            }
+        } else {
+            list_text(&mut text, &s.field, popped, &lf);
+        }
+        *item = Item::Text(text);
+    }
+    Ok(())
 }
 
 fn add_names(
@@ -914,7 +968,7 @@ fn reaches_date_loop(dm: &DataModel, st: &SectionState, key: &str) -> bool {
 fn set_output_entry(
     ctx: &Ctx,
     log: &mut Logger,
-    w: &mut SharedLists,
+    w: &SharedLists,
     p: &Prep,
     stems: &[DateStem],
     st: &SectionState,
@@ -1094,15 +1148,17 @@ fn set_output_entry(
         let Some(Value::List(lf)) = be.get_field_sym(listfield_sym) else {
             continue;
         };
-        let (popped, lf) = w.pop_others(key, listfield, lf, &others);
-        if popped {
-            text.push_str(&format!("      \\true{{more{listfield}}}\n"));
+        if w.is_shared(key, listfield) {
+            flush(&mut text, &mut items);
+            items.push(Item::Shared(SharedListT {
+                field: listfield.to_string(),
+                list: lf.clone(),
+                verbatim: false,
+            }));
+            continue;
         }
-        text.push_str(&format!("      \\list{{{listfield}}}{{{}}}{{%\n", lf.len()));
-        for f in &lf {
-            text.push_str(&format!("        {{{f}}}%\n"));
-        }
-        text.push_str("      }\n");
+        let (popped, lf) = pop_plain(lf, &others);
+        list_text(&mut text, listfield, popped, &lf);
     }
 
     for h in ["namehash", "fullhash", "fullhashraw", "bibnamehash"] {
@@ -1316,41 +1372,27 @@ fn set_output_entry(
         text.push_str(&format!("      \\verb {vf}\n      \\endverb\n"));
     }
 
-    // Verbatim lists
+    // Verbatim lists. After a shared one, all are left to
+    // `resolve_shared`, so that their URI errors are logged in order.
+    let mut defer = false;
     for vlist_sym in p.fields(&present, Helper::VLists) {
         let vlist = vlist_sym.as_str();
         let Some(Value::List(vlf)) = be.get_field_sym(vlist_sym) else {
             continue;
         };
-        let (popped, vlf) = w.pop_others(key, vlist, vlf, &others);
-        if popped {
-            text.push_str(&format!("      \\true{{more{vlist}}}\n"));
+        if defer || w.is_shared(key, vlist) {
+            defer = true;
+            flush(&mut text, &mut items);
+            items.push(Item::Shared(SharedListT {
+                field: vlist.to_string(),
+                list: vlf.clone(),
+                verbatim: true,
+            }));
+            continue;
         }
-        let total = vlf.len();
+        let (popped, vlf) = pop_plain(vlf, &others);
         let is_uri = dm.get_datatype(vlist) == Some("uri");
-        if is_uri {
-            text.push_str(&format!("      \\lverb{{{vlist}raw}}{{{total}}}\n"));
-            for f in &vlf {
-                text.push_str(&format!("      \\lverb {f}\n"));
-            }
-            text.push_str("      \\endlverb\n");
-        }
-        text.push_str(&format!("      \\lverb{{{vlist}}}{{{total}}}\n"));
-        let mut enc = Vec::with_capacity(vlf.len());
-        for f in &vlf {
-            let f = if is_uri {
-                uri_string(log, f)?
-            } else {
-                f.clone()
-            };
-            text.push_str(&format!("      \\lverb {f}\n"));
-            enc.push(f);
-        }
-        text.push_str("      \\endlverb\n");
-        // The loop variable aliases the live array: URIs stay encoded.
-        if is_uri {
-            w.set_live(key, vlist, enc);
-        }
+        vlist_text(&mut text, log, vlist, is_uri, popped, &vlf)?;
     }
 
     if val_truthy(be.get_field("keywords")) {
@@ -1519,6 +1561,7 @@ fn instantiate_entry(lv: &ListView, t: &EntryTemplate, key: &str) -> String {
     for item in &t.items {
         match item {
             Item::Text(x) => s.push_str(x),
+            Item::Shared(_) => unreachable!("resolved by resolve_shared"),
             Item::Slot(slot) => match slot {
                 Slot::EntrySet => match field("entryset") {
                     Some(J::Array(a)) => {
@@ -1837,73 +1880,50 @@ fn section_templates(
     st: &SectionState,
 ) -> Result<HashMap<String, EntryTemplate>, Fatal> {
     let keys = &st.section.citekeys;
-    let shared = SharedLists::new(st);
-    // (date-loop call number, uses a shared list) per citekey
-    let jobs: Vec<(usize, bool)> = keys
+    let mut shared = SharedLists::new(st);
+    // The date-loop call number of each citekey's entry.
+    let calls: Vec<usize> = keys
         .iter()
         .map(|k| {
             if reaches_date_loop(ctx.dm, st, k) {
                 *date_calls += 1;
             }
-            (*date_calls, shared.has_key(k))
+            *date_calls
         })
         .collect();
-    let mut done = {
+    let done = {
         let c: &Ctx = ctx;
+        let shared = &shared;
         let idx: Vec<usize> = (0..keys.len()).collect();
         par::map(&idx, |&i| {
-            let (n, is_shared) = jobs[i];
-            if is_shared {
-                return None;
-            }
             let mut log = c.log.fork();
-            let mut no_shared = SharedLists::default();
             let t = set_output_entry(
                 c,
                 &mut log,
-                &mut no_shared,
+                shared,
                 prep,
-                stems.for_call(n),
+                stems.for_call(calls[i]),
                 st,
                 &keys[i],
             );
-            Some((t, log))
+            (t, log)
         })
     };
-    // The entries with shared lists: each component in order, the
-    // components in parallel. (A component's entries after one that fails
-    // are not needed: the merge below stops there.)
-    if !shared.keys.is_empty() {
-        let c: &Ctx = ctx;
-        let comps = par::map_owned(shared.components(keys), |(members, mut sl)| {
-            let mut out = Vec::with_capacity(members.len());
-            for i in members {
-                let mut log = c.log.fork();
-                let t = set_output_entry(
-                    c,
-                    &mut log,
-                    &mut sl,
-                    prep,
-                    stems.for_call(jobs[i].0),
-                    st,
-                    &keys[i],
-                );
-                let failed = t.is_err();
-                out.push((i, t, log));
-                if failed {
-                    break;
-                }
-            }
-            out
-        });
-        for (i, t, log) in comps.into_iter().flatten() {
-            done[i] = Some((t, log));
-        }
-    }
+    let others = ctx
+        .cfg
+        .biber
+        .get_str("others_string")
+        .unwrap_or("others")
+        .to_string();
     let mut entries = HashMap::default();
-    for (i, d) in done.into_iter().enumerate() {
-        // (`None` only after a failed entry of the same component)
-        let (t, log) = d.expect("the merge stops at a failed entry");
+    for (i, (t, mut log)) in done.into_iter().enumerate() {
+        let t = match t {
+            Ok(Some(mut t)) if shared.has_key(&keys[i]) => {
+                resolve_shared(&mut t, ctx.dm, &mut log, &mut shared, &keys[i], &others)
+                    .map(|()| Some(t))
+            }
+            t => t,
+        };
         ctx.log.join(log);
         if let Some(t) = t? {
             entries.insert(keys[i].clone(), t);
