@@ -69,6 +69,10 @@ pub struct Config {
     /// Remote data sources and control files: `%REMOTE_MAP`, biber's temp
     /// directory and the `%ENV` changes biber makes for HTTPS (DC-032).
     pub remote: crate::remote::RemoteState,
+    /// The control file or config file mentions `rawdata` (an entry field
+    /// biber never reads itself, so only they can name it; see
+    /// `pipeline::RunState::skip_rawdata`).
+    pub names_rawdata: bool,
 }
 
 /// A command-line option value after `GetOptions` and bin/biber's
@@ -393,6 +397,7 @@ pub fn initopts(
     }
     if let Some(cf) = &configfile {
         let conf = conf_file::read_conf(env, cf)?;
+        cfg.names_rawdata |= conf_file::mentions(&conf, "rawdata");
         notes.extend(conf_file::apply_conf(&mut cfg, &conf));
     }
     // BB-053: biber applies the biblatex defaults after the config file.

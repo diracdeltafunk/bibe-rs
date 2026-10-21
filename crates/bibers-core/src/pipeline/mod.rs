@@ -73,6 +73,10 @@ pub struct RunState {
     pub annotations: crate::model::Annotations,
     /// Label generation helper state (citekey index map).
     pub labelalpha: labelalpha::LabelRunCache,
+    /// Don't set the entries' `rawdata` field (their source text): set by
+    /// [`prepare`] when nothing can read it ([`rawdata_unread`]). Phases run
+    /// on their own (the phase tests) keep it, as biber's dumps show it.
+    pub skip_rawdata: bool,
     /// biber's shared `$dmh->{datefields}` once a `foreach … s/date$//`
     /// loop has mutated it in place (BB-028); `None` while pristine. See
     /// [`resolve::datefield_stems`].
@@ -89,6 +93,7 @@ pub struct Processed {
 /// `Biber::prepare`: process every section with citations.
 pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
     let mut out = Processed::default();
+    ctx.run.skip_rawdata = rawdata_unread(ctx);
     for secnum in sections_to_process(ctx.doc) {
         info!(ctx.log, "Processing section {secnum}");
         let mut st = fetch::init_section(ctx, &secnum)?;
@@ -99,6 +104,16 @@ pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
         out.sections.push(st);
     }
     Ok(out)
+}
+
+/// Whether nothing can read the entries' `rawdata` field. biber sets it on
+/// every entry (bibtex.pm:955) and never reads it itself: it can only be
+/// reached by name, from the control file or config file (a sorting or
+/// label template, a list filter, a data model field, …). If neither
+/// mentions it (and not in tool mode, which writes data back), the field is
+/// unobservable and isn't made: 20 MB for 17,000 entries.
+fn rawdata_unread(ctx: &Ctx) -> bool {
+    !(ctx.cfg.biber.tool() || ctx.cfg.names_rawdata || ctx.dm.get_fieldtype("rawdata").is_some())
 }
 
 /// Free what nothing reads once a section is processed: the entries'

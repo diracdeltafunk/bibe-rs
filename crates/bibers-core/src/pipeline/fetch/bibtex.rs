@@ -772,7 +772,9 @@ fn create_entry_inner(
     let mut be = Entry::default();
     be.set_field("citekey", Some(Value::Str(k.to_string())));
     debug!(ctx.log, "Creating biber Entry object with key '{k}'");
-    be.set_field("rawdata", Some(Value::Str(print_s(e, tbkey))));
+    if !ctx.run.skip_rawdata {
+        be.set_field("rawdata", Some(Value::Str(print_s(e, tbkey))));
+    }
     be.set_field("entrytype", Some(Value::Str(fc(&e.entrytype))));
     for (f, _) in &e.fields {
         let value = raw_get(e, f).unwrap_or("");
