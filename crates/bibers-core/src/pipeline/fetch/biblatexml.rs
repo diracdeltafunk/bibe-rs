@@ -1099,7 +1099,7 @@ fn parsename(
                     }
                 }
                 part.string = Some(s.into());
-                part.initial = Some(inits);
+                part.initial = Some(inits.into());
             } else {
                 let t = dom.text_content(npnode);
                 if perl_compat::perl_truthy(&t) {
@@ -1112,8 +1112,8 @@ fn parsename(
                         npnode
                     };
                     part.initial = Some(match truthy_attr(dom, holder, "initial") {
-                        Some(i) => vec![i.into()],
-                        None => gen_initials(std::slice::from_ref(&t)),
+                        Some(i) => Box::new([i.into()]),
+                        None => gen_initials(std::slice::from_ref(&t)).into(),
                     });
                     part.string = Some(t.into());
                 }

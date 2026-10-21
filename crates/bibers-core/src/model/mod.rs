@@ -325,7 +325,7 @@ pub struct NameId(pub u32);
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct NamePart {
     pub string: Option<CompactString>,
-    pub initial: Option<Vec<CompactString>>,
+    pub initial: Option<Box<[CompactString]>>,
 }
 
 /// `Biber::Entry::Name`.

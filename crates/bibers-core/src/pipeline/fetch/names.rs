@@ -147,7 +147,8 @@ fn split_dash(s: &str) -> Vec<String> {
 
 /// `gen_initials` (Utils.pm:1843).
 pub fn gen_initials(strings: &[String]) -> Vec<CompactString> {
-    let mut out = Vec::new();
+    // (one initial per string: boxing the vector needs no reallocation)
+    let mut out = Vec::with_capacity(strings.len());
     for s in strings {
         let wholly_braced = s.chars().nth(2).is_some()
             && s.starts_with('{')
@@ -444,7 +445,7 @@ pub fn parsename(cfg: &NameCfg, namestr: &str) -> ParsedName {
             let p = strip_noinit(&p, cfg.noinit);
             let inits = gen_initials(&split_initial_parts(&p));
             part.string = Some(stripped.into());
-            part.initial = Some(inits);
+            part.initial = Some(inits.into());
             strip = Some(if flag { "1" } else { "0" }.into());
         }
         if let Some(st) = part
