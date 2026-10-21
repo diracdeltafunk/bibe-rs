@@ -94,7 +94,13 @@ impl Loader {
         }
         if let Some(st) = o.get("strip").and_then(J::as_object) {
             for (k, v) in st {
-                n.strip.insert(k.clone(), s(v).map(Into::into));
+                let flag = match s(v).as_deref() {
+                    None => None,
+                    Some("1") => Some(true),
+                    Some("0") => Some(false),
+                    Some(other) => return Err(format!("strip flag {other:?}")),
+                };
+                n.strip.insert(k.clone(), flag);
             }
         }
         for (k, v) in o {
@@ -484,7 +490,10 @@ impl Dumper<'_> {
                 J::Object(
                     n.strip
                         .iter()
-                        .map(|(k, v)| (k.to_string(), opt_cstr(v)))
+                        .map(|(k, v)| {
+                            let flag = v.map_or(J::Null, |f| J::from(if f { "1" } else { "0" }));
+                            (k.to_string(), flag)
+                        })
                         .collect(),
                 ),
             );

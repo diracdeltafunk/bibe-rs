@@ -687,12 +687,7 @@ fn name_template(ctx: &Ctx, nameparts: &[String], n: &Name, un: bool) -> NameT {
         if !perl_truthy(s) {
             continue;
         }
-        let npc = if n
-            .strip
-            .get(np)
-            .and_then(|v| v.as_deref())
-            .is_some_and(perl_truthy)
-        {
+        let npc = if n.strip.get(np).copied().flatten() == Some(true) {
             format!("{{{s}}}")
         } else {
             join_name(s)

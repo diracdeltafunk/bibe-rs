@@ -446,7 +446,7 @@ pub fn parsename(cfg: &NameCfg, namestr: &str) -> ParsedName {
             let inits = gen_initials(&split_initial_parts(&p));
             part.string = Some(stripped.into());
             part.initial = Some(inits.into());
-            strip = Some(if flag { "1" } else { "0" }.into());
+            strip = Some(flag);
         }
         if let Some(st) = part
             .string

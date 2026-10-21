@@ -337,8 +337,9 @@ pub struct Name {
     /// Name parts by part name (`family`, `given`, `prefix`, `suffix`, and
     /// any data-model-defined parts).
     pub nameparts: SymMap<NamePart>,
-    /// Per-part "outer braces were stripped" flags.
-    pub strip: SymMap<Option<CompactString>>,
+    /// Per-part "outer braces were stripped" flags (biber's `"1"`/`"0"`;
+    /// `None` is `undef`).
+    pub strip: SymMap<Option<bool>>,
     /// `rawstring` (joined in Perl hash order upstream: nondeterministic,
     /// only used for the "others" test).
     pub rawstring: Option<String>,
