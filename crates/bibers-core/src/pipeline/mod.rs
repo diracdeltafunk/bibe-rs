@@ -38,7 +38,7 @@ use crate::datamodel::DataModel;
 use crate::env::Env;
 use crate::info;
 use crate::log::{Fatal, Logger};
-use crate::model::SectionState;
+use crate::model::{DataList, SectionState};
 
 /// Everything a phase can read or write besides the section state.
 pub struct Ctx<'a> {
@@ -120,9 +120,8 @@ fn rawdata_unread(ctx: &Ctx) -> bool {
 /// writers read the entries and part of the lists' state):
 /// - the entries' `rawdata` (their source text; only biber's state dumps
 ///   show it, and the writers output data model fields only);
-/// - the per-name and per-name-list data that only the per-list phases
-///   read: the disambiguation strings and schema, `unall`, `unmininfo` and
-///   the visible name counts.
+/// - the names' disambiguation schema and the visible name counts, which
+///   only the per-list phases read.
 fn release_processed(ctx: &Ctx, st: &mut SectionState) {
     let rawdata = ctx.dm.get_fieldtype("rawdata").is_some();
     for e in st.section.entries.values_mut_unordered() {
@@ -133,31 +132,64 @@ fn release_processed(ctx: &Ctx, st: &mut SectionState) {
         e.datafields.shrink_to_fit();
         e.derivedfields.shrink_to_fit();
     }
-    const NAME_KEYS: [&str; 6] = [
-        "basenamestring",
-        "namedisschema",
-        "namestring",
-        "namestrings",
-        "unall",
-        "unmininfo",
-    ];
-    const LIST_KEYS: [&str; 4] = ["visalpha", "visbib", "viscite", "vissort"];
     for dl in &mut st.datalists {
-        let Some(state) = &mut dl.state else { continue };
-        for f in state.fields_mut().into_iter().flat_map(|m| m.values_mut()) {
-            if let Some(f) = f.as_object_mut() {
-                f.shrink_to_fit();
+        if let Some(state) = &mut dl.state {
+            for f in state.fields_mut().into_iter().flat_map(|m| m.values_mut()) {
+                if let Some(f) = f.as_object_mut() {
+                    f.shrink_to_fit();
+                }
             }
         }
-        for nl in state.namelistdata_mut().into_iter().flat_map(|m| m.values_mut()) {
-            let Some(nl) = nl.as_object_mut() else { continue };
-            nl.retain(|k, v| {
-                if let Some(n) = v.as_object_mut().filter(|_| k.starts_with("#n")) {
-                    n.retain(|k, _| !NAME_KEYS.contains(&k));
+        release_name_data(
+            dl,
+            &["namedisschema"],
+            &["visalpha", "visbib", "viscite", "vissort"],
+            true,
+        );
+    }
+}
+
+/// Free the state only `uniqueness` reads, once it has run on the list `dl`
+/// (the phases after it read `un`, `namedisschema` and the name hashes):
+/// its counters and the names' disambiguation strings, `unall` and
+/// `unmininfo`.
+pub(crate) fn release_uniqueness_data(dl: &mut DataList) {
+    if let Some(state) = &mut dl.state {
+        for k in ["uniquenamecount", "uniquenamecount_all", "uniquelistcount"] {
+            state.remove(k);
+        }
+    }
+    release_name_data(
+        dl,
+        &[
+            "basenamestring",
+            "namestring",
+            "namestrings",
+            "unall",
+            "unmininfo",
+        ],
+        &[],
+        true,
+    );
+}
+
+/// Remove the keys `name_keys` of every name's data and `list_keys` of
+/// every name list's data in the state of `dl` (`namelistdata.{nlid}.{nid}`
+/// and `namelistdata.{nlid}`), optionally releasing the maps' spare room.
+fn release_name_data(dl: &mut DataList, name_keys: &[&str], list_keys: &[&str], shrink: bool) {
+    let Some(state) = &mut dl.state else { return };
+    for nl in state.namelistdata_mut().into_iter().flat_map(|m| m.values_mut()) {
+        let Some(nl) = nl.as_object_mut() else { continue };
+        nl.retain(|k, v| {
+            if let Some(n) = v.as_object_mut().filter(|_| k.starts_with("#n")) {
+                n.retain(|k, _| !name_keys.contains(&k));
+                if shrink {
                     n.shrink_to_fit();
                 }
-                !LIST_KEYS.contains(&k)
-            });
+            }
+            !list_keys.contains(&k)
+        });
+        if shrink {
             nl.shrink_to_fit();
         }
     }
