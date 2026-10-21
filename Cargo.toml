@@ -34,6 +34,9 @@ roxmltree = "0.21"
 memchr = "2"
 serde_json = "1"
 rustc-hash = "2"
+# The global allocator of the bibers binary: less memory than the system
+# allocators (fragmentation) and faster.
+mimalloc = { version = "0.1.48", default-features = false }
 # Short strings stored inline (the generic list state, `model::PV`).
 compact_str = "0.9"
 md-5 = "0.10"
