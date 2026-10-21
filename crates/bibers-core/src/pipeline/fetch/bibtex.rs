@@ -522,10 +522,15 @@ fn cache_data(
     push_diags(x, &p1);
     let recoder = &opts.recoder;
     let verbs = &opts.verbs;
-    let decode = |f: &str, v: &str| -> String {
+    fn decode<'v>(
+        verbs: &[String],
+        recoder: &latex_recode::Recoder,
+        f: &str,
+        v: &'v str,
+    ) -> Cow<'v, str> {
         // (`verbs` are case-folded already)
         if verbs.iter().any(|vb| fc_eq(vb, f)) {
-            v.to_string()
+            Cow::Borrowed(v)
         } else {
             let d = recoder.decode_cow(v);
             // DC-003: a decoded value with unbalanced braces (e.g. `\char"7B`
@@ -533,19 +538,19 @@ fn cache_data(
             // swallowed: BB-003). Leave such a value undecoded instead: the
             // macro then reaches the .bbl, where LaTeX typesets it.
             if !btparse::compat::braces_round_trip(&d) && btparse::compat::braces_round_trip(v) {
-                v.to_string()
+                Cow::Borrowed(v)
             } else {
-                d.into_owned()
+                d
             }
         }
-    };
+    }
     // The pass-1 text, one piece per entry, decoded in parallel. biber
     // writes the decoded buffer to its temp file through PerlIO's
     // :utf8_strict layer (slurp_switchw), which turns noncharacters (e.g.
     // from `\char"FDD0`) into U+FFFD.
     let pieces: Vec<String> = par::map(&p1.entries, |e| {
         let mut out = String::new();
-        btparse::compat::reserialise_entry(e, &mut out, |f, v| Cow::Owned(decode(f, v)));
+        btparse::compat::reserialise_entry(e, &mut out, |f, v| decode(verbs, recoder, f, v));
         replace_noncharacters(out)
     });
     if !opts.nostdmacros {

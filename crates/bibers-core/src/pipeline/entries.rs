@@ -1649,8 +1649,27 @@ impl PostHashes {
             }
             Ok(out)
         });
-        let namehash_u = namelists()
-            .map(|(_, nlid)| {
+        // (for the labelname and the name lists `extradatecontext` names;
+        // `namehash_u` computes any other at once)
+        let mut wanted: Vec<NameListId> = names_field(be, lni).into_iter().collect();
+        if let Some(OptValue::Multi(edc)) = h.cfg.blx.global("extradatecontext") {
+            for item in edc {
+                let f = item.content().unwrap_or("");
+                let f = if f.len() > 5 && f.starts_with("label") {
+                    label_info(be, f)
+                } else {
+                    Some(f.to_string())
+                };
+                if let Some(nlid) = names_field(be, f.as_deref())
+                    && !wanted.contains(&nlid)
+                {
+                    wanted.push(nlid);
+                }
+            }
+        }
+        let namehash_u = wanted
+            .into_iter()
+            .map(|nlid| {
                 let (s, read) = getnamehash_u(h, sec, dl, key, nlid);
                 (nlid, s, read)
             })
