@@ -213,9 +213,9 @@ pub fn sections_to_process(doc: &Document) -> Vec<String> {
 /// The per-section phase sequence of `Biber::prepare` (after
 /// `fetch::init_section`). Phase tests run individual steps of this.
 pub fn prepare_section(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
-    for (_, phase) in SECTION_PHASES {
+    for (name, phase) in SECTION_PHASES {
         phase(ctx, st)?;
-        if *n == "validate_datamodel" && ctx.run.free_dead_state {
+        if *name == "validate_datamodel" && ctx.run.free_dead_state {
             // Read by data source reading and validation only.
             for slot in ["everykey", "everykey_lc", "keytods"] {
                 st.section.slots.remove(slot);
