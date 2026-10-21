@@ -52,12 +52,12 @@ pub fn uniqueness(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<(
         section, datalists, ..
     } = st;
     let entries = entry_infos(ctx, section);
-    let converged = run_counting(
+    let converged = run_with(
         ctx.cfg.quirks,
         &section.names,
         &entries,
         &mut datalists[list],
-        // Only biber's dumps show the counters after this phase.
+        // Only biber's dumps show some of it after this phase.
         !ctx.run.free_dead_state,
     );
     if !converged {
@@ -129,17 +129,19 @@ fn entry_infos(ctx: &Ctx, section: &Section) -> Vec<EntryInfo> {
 /// [`uniqueness`] that doesn't need the option store).
 /// Returns `false` if the iteration was stopped at [`MAX_PASSES`].
 pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut DataList) -> bool {
-    run_counting(quirks, names, entries, dl, true)
+    run_with(quirks, names, entries, dl, true)
 }
 
-/// [`run`], leaving the counters (`uniquenamecount`, `uniquenamecount_all`,
-/// `uniquelistcount`) in the state only if `keep_counts`.
-fn run_counting(
+/// [`run`]. Unless `whole_state`, what no later phase reads is left out of
+/// the state: the counters (`uniquenamecount`, `uniquenamecount_all`,
+/// `uniquelistcount`) and the names' `basenamestring` and `namestring(s)`
+/// (moved into the passes' cache instead of copied).
+fn run_with(
     quirks: Quirks,
     names: &NameArena,
     entries: &[EntryInfo],
     dl: &mut DataList,
-    keep_counts: bool,
+    whole_state: bool,
 ) -> bool {
     let changed = dl
         .slots
@@ -156,6 +158,7 @@ fn run_counting(
         unc_all: None,
         ulc: None,
         statics: HashMap::default(),
+        move_statics: !whole_state,
         lists: HashMap::default(),
     };
     let converged = u.iterate();
@@ -171,7 +174,7 @@ fn run_counting(
     } = u;
     drop((statics, lists));
     nld.finish(&mut state);
-    let (unc, unc_all, ulc) = if keep_counts {
+    let (unc, unc_all, ulc) = if whole_state {
         (unc, unc_all, ulc)
     } else {
         (None, None, None)
@@ -750,6 +753,9 @@ struct Uniq<'a> {
     ulc: Option<ListCount>,
     /// Cache of [`NameStatic`] by name.
     statics: HashMap<crate::model::NameId, Rc<NameStatic>>,
+    /// Move the [`NameStatic`] data out of the state instead of copying it
+    /// (in a full run, where no later phase reads it).
+    move_statics: bool,
     /// Cache of the names of each list.
     lists: HashMap<NameListId, Rc<Vec<NameRef>>>,
 }
@@ -810,6 +816,11 @@ impl<'a> Uniq<'a> {
             Some(st) => st.clone(),
             None => {
                 let st = Rc::new(NameStatic::read(d));
+                if self.move_statics {
+                    for k in ["basenamestring", "namestring", "namestrings"] {
+                        d.remove(k);
+                    }
+                }
                 self.statics.insert(n.id, st.clone());
                 st
             }
