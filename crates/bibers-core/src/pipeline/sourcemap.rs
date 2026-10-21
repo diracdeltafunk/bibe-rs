@@ -258,17 +258,29 @@ pub fn apply_maps_in(
     datasource: &str,
     entry: &mut RawEntry,
 ) -> Result<MapOutcome, Fatal> {
-    let mut run = std::mem::take(&mut ctx.cfg.sourcemap_run);
+    apply_maps_logged(ctx.cfg, ctx.log, st, datatype, datasource, entry)
+}
+
+/// [`apply_maps_in`] with its messages going to `log`.
+pub fn apply_maps_logged(
+    cfg: &mut Config,
+    log: &mut Logger,
+    st: &mut SectionState,
+    datatype: &str,
+    datasource: &str,
+    entry: &mut RawEntry,
+) -> Result<MapOutcome, Fatal> {
+    let mut run = std::mem::take(&mut cfg.sourcemap_run);
     let res = {
         let mut eng = Engine {
-            cfg: ctx.cfg,
-            log: ctx.log,
+            cfg,
+            log,
             run: &mut run,
             sec: &mut st.section,
         };
         eng.apply(datatype, datasource, entry)
     };
-    ctx.cfg.sourcemap_run = run;
+    cfg.sourcemap_run = run;
     res
 }
 

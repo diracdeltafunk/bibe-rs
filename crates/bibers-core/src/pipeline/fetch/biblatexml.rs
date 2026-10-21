@@ -568,7 +568,7 @@ fn run_handler(
             let bee = be.entrytype().to_string();
             let ds = st.section.get_keytods(key).unwrap_or_default();
             warn_entry(
-                ctx,
+                ctx.log,
                 be,
                 format!(
                     "Datamodel: {bee} entry '{key}' ({ds}): Field '{nf}' (fieldtype '{ft}', format '{fmt}', datatype '{dt}') cannot be given in BibLaTeXML data - ignoring"
@@ -623,7 +623,7 @@ fn literal(
     let mut setval = dom.text_content(node);
     if let Some(x) = truthy_attr(dom, node, "xdata") {
         let xdatav = xdata_ref(opts, x);
-        add_xdata_ref(ctx, opts, be, nf, XRef::Str(&xdatav), None, src.secnum);
+        add_xdata_ref(ctx.log, opts, be, nf, XRef::Str(&xdatav), None, src.secnum);
         setval = xdatav;
     }
     // BB-050: `fc(_norm($f) eq "$NS:eprint")` is never true, so the type and
@@ -657,7 +657,15 @@ fn xsv(
     let node = field_node(ctx, dom, e, f, src)?;
     if fc(nf) == "xdata" {
         let value = split_list(ctx, opts, src, dom, be, node, nf, true);
-        add_xdata_ref(ctx, opts, be, "xdata", XRef::List(&value), None, src.secnum);
+        add_xdata_ref(
+            ctx.log,
+            opts,
+            be,
+            "xdata",
+            XRef::List(&value),
+            None,
+            src.secnum,
+        );
         be.set_datafield(nf, Some(Value::List(value)));
     } else {
         let value = split_list(ctx, opts, src, dom, be, node, nf, false);
@@ -682,7 +690,7 @@ fn uri(
     let mut setval = dom.text_content(node);
     if let Some(x) = truthy_attr(dom, node, "xdata") {
         let xdatav = xdata_ref(opts, x);
-        add_xdata_ref(ctx, opts, be, nf, XRef::Str(&xdatav), None, src.secnum);
+        add_xdata_ref(ctx.log, opts, be, nf, XRef::Str(&xdatav), None, src.secnum);
         setval = xdatav;
     } else if !setval.contains('%') && ctx.cfg.quirks.on(Quirk::BltxmlUriEscape) {
         // BB-051: escaped here, from NFD text (the .bbl writer escapes
@@ -711,7 +719,7 @@ fn range(
     let node = field_node(ctx, dom, e, f, src)?;
     if let Some(x) = truthy_attr(dom, node, "xdata") {
         let xdatav = xdata_ref(opts, x);
-        add_xdata_ref(ctx, opts, be, nf, XRef::Str(&xdatav), None, src.secnum);
+        add_xdata_ref(ctx.log, opts, be, nf, XRef::Str(&xdatav), None, src.secnum);
         be.set_datafield(nf, Some(Value::List(vec![xdatav])));
         return Ok(());
     }
@@ -758,7 +766,15 @@ fn split_list(
         if let Some(x) = truthy_attr(dom, item, "xdata") {
             let xdatav = xdata_ref(opts, x);
             if !noxdata {
-                add_xdata_ref(ctx, opts, be, nf, XRef::Str(&xdatav), Some(i), src.secnum);
+                add_xdata_ref(
+                    ctx.log,
+                    opts,
+                    be,
+                    nf,
+                    XRef::Str(&xdatav),
+                    Some(i),
+                    src.secnum,
+                );
             }
             out.push(xdatav);
         } else {
@@ -921,7 +937,7 @@ fn datetime(
                         "{bee} entry '{key}' ({ds}): Invalid format '{text}' of date field '{f}' - ignoring"
                     )
                 };
-                warn_entry(ctx, be, msg);
+                warn_entry(ctx.log, be, msg);
             }
         }
         if !is_range {
@@ -947,7 +963,7 @@ fn datetime(
             Parsed::Undef => {
                 let et = etext.unwrap_or_default();
                 warn_entry(
-                    ctx,
+                    ctx.log,
                     be,
                     format!(
                         "{bee} entry '{key}' ({ds}): Invalid format '{et}' of date field '{f}' range end - ignoring"
@@ -1036,7 +1052,15 @@ fn name(
     for (i, nn) in name_nodes.into_iter().enumerate() {
         if let Some(x) = truthy_attr(dom, nn, "xdata") {
             let xdatav = xdata_ref(opts, x);
-            if add_xdata_ref(ctx, opts, be, nf, XRef::Str(&xdatav), Some(i), src.secnum) {
+            if add_xdata_ref(
+                ctx.log,
+                opts,
+                be,
+                nf,
+                XRef::Str(&xdatav),
+                Some(i),
+                src.secnum,
+            ) {
                 let mut n = Name::default();
                 n.slots.insert("xdata", J::from(xdatav));
                 n.index = Some((ids.len() + 1).to_string());

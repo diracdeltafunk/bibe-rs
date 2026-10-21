@@ -6,8 +6,9 @@ use super::dates::{self, DateParser, JulianOpts, Parsed};
 use super::names::{self, NameCfg, remove_outer};
 use super::{SecExt, encoding};
 use crate::config::blx::{OptValue, Scope, expand_option_input};
-use crate::log::Fatal;
-use crate::model::{AnnotationScope, Entry, Name, SectionState, Value};
+use crate::log::{Fatal, Logger};
+use crate::model::{AnnotationScope, Entry, Name, NameArena, SectionState, Value};
+use crate::par;
 use crate::perlish::{fc, lc, nfc, nfd, nfd_string, truthy};
 use crate::pipeline::Ctx;
 use crate::pipeline::sourcemap::{self, RawEntry};
@@ -171,7 +172,6 @@ fn parse_gs(s: &str) -> Option<(i64, u32, u32)> {
 /// Per-`extract_entries` state: the captured libbtparse stderr.
 struct Extract<'a> {
     filename: &'a str,
-    secnum: String,
     btlines: Vec<String>,
 }
 
@@ -292,7 +292,6 @@ pub fn extract_entries(
     let text = text.unwrap_or_default();
     let mut x = Extract {
         filename,
-        secnum: secnum.clone(),
         btlines: Vec::new(),
     };
 
@@ -320,13 +319,18 @@ pub fn extract_entries(
             .or_default()
             .keys
             .clone();
+        let mut stage = Stage::default();
         for key in &fkeys {
             st.section.set_keytods(key, filename);
             let entry = ctx.run.bibcache.data[filename].entries[key].clone();
-            if !create_entry(ctx, st, opts, &mut x, key, &entry, filename, &mut rkeys)? {
+            let created = create_entry(
+                ctx, st, opts, &mut x, &mut stage, key, &entry, filename, &mut rkeys,
+            )?;
+            if !created {
                 prune_orig_order(ctx, filename, key);
             }
         }
+        stage.flush(ctx, st, opts, &mut x)?;
         let aliases: Vec<(String, String)> = ctx
             .run
             .bibcache
@@ -368,6 +372,7 @@ pub fn extract_entries(
         }
         // (keys found: removed from `rkeys` once, after the loop)
         let mut found: std::collections::HashSet<&str> = std::collections::HashSet::new();
+        let mut stage = Stage::default();
         for wanted in keys {
             st.section.set_keytods(wanted, filename);
             let cached = ctx
@@ -379,7 +384,10 @@ pub fn extract_entries(
                 .cloned();
             if let Some(entry) = cached {
                 if !st.section.entries.contains_key(wanted)
-                    && !create_entry(ctx, st, opts, &mut x, wanted, &entry, filename, &mut rkeys)?
+                    && !stage.has(wanted)
+                    && !create_entry(
+                        ctx, st, opts, &mut x, &mut stage, wanted, &entry, filename, &mut rkeys,
+                    )?
                 {
                     st.section.del_citekey(wanted);
                     prune_orig_order(ctx, filename, wanted);
@@ -391,9 +399,13 @@ pub fn extract_entries(
             } else if let Some(rk) = ctx.run.bibcache.citekey_aliases.get(wanted).cloned() {
                 st.section.citekey_alias.insert(wanted.clone(), rk.clone());
                 if !st.section.entries.contains_key(&rk)
+                    && !stage.has(&rk)
                     && let Some(entry) = ctx.run.bibcache.globalds.get(&rk).cloned()
                 {
-                    if !create_entry(ctx, st, opts, &mut x, &rk, &entry, filename, &mut rkeys)? {
+                    let created = create_entry(
+                        ctx, st, opts, &mut x, &mut stage, &rk, &entry, filename, &mut rkeys,
+                    )?;
+                    if !created {
                         st.section.del_citekey(wanted);
                         prune_orig_order(ctx, filename, &rk);
                         ctx.log.biber_warn(format!(
@@ -406,11 +418,13 @@ pub fn extract_entries(
                 }
                 found.insert(wanted.as_str());
             } else if let Some(okey) = st.section.has_badcasekey(wanted) {
+                stage.flush(ctx, st, opts, &mut x)?;
                 ctx.log.biber_warn(format!(
                     "Possible typo (case mismatch) between citation and datasource keys: '{wanted}' and '{okey}' in file '{filename}'"
                 ));
             }
         }
+        stage.flush(ctx, st, opts, &mut x)?;
         if !found.is_empty() {
             rkeys.retain(|k| !found.contains(k.as_str()));
         }
@@ -697,13 +711,74 @@ fn push_diags(x: &mut Extract, p: &btparse::ParsedFile) {
     }
 }
 
-/// `create_entry` (bibtex.pm:356).
+/// Entries whose source maps have run, waiting to be created.
+///
+/// `create_entry` runs the source maps (which are order-dependent) at once,
+/// but defers `_create_entry` (the field handlers, most of the work): the
+/// deferred entries are built in parallel and applied in order by
+/// [`Stage::flush`]. Building an entry only changes the section in ways the
+/// rest of the loop cannot observe, except when it skips the entry (which
+/// deletes its citekey); entries that might be skipped ([`may_skip`]) are
+/// therefore created at once, after flushing. The loop flushes before it
+/// logs, before it reads anything an entry's creation changes, and at its
+/// end.
+#[derive(Default)]
+struct Stage {
+    /// Per entry, in order: the source maps' messages and the entries to
+    /// create.
+    items: Vec<(Logger, Vec<CreateJob>)>,
+    /// The keys of the entries in `items` (`exists $bibentries{$key}` must
+    /// see them).
+    keys: rustc_hash::FxHashSet<String>,
+}
+
+impl Stage {
+    fn has(&self, key: &str) -> bool {
+        self.keys.contains(key)
+    }
+
+    /// Create the staged entries.
+    fn flush(
+        &mut self,
+        ctx: &mut Ctx,
+        st: &mut SectionState,
+        opts: &FetchOpts,
+        x: &mut Extract,
+    ) -> Result<(), Fatal> {
+        if self.items.is_empty() {
+            return Ok(());
+        }
+        self.keys.clear();
+        let items = std::mem::take(&mut self.items);
+        let secnum = st.section.number.clone();
+        let jobs: Vec<&CreateJob> = items.iter().flat_map(|(_, j)| j).collect();
+        let built: Vec<Built> = {
+            let c: &Ctx = ctx;
+            par::map(&jobs, |job| build_entry(c, opts, &secnum, job))
+        };
+        let mut built = built.into_iter();
+        for (map_log, jobs) in items {
+            ctx.log.join(map_log);
+            for job in &jobs {
+                let b = built.next().expect("one build per job");
+                apply_built(ctx, st, x, &job.key, b)?;
+            }
+        }
+        Ok(())
+    }
+}
+
+/// `create_entry` (bibtex.pm:356): runs the source maps, then creates the
+/// entry (and any the maps made) or stages it ([`Stage`]). Returns false if
+/// the entry was not created (skipped by a map or a field handler); the
+/// stage is then empty.
 #[allow(clippy::too_many_arguments)]
 fn create_entry(
     ctx: &mut Ctx,
     st: &mut SectionState,
     opts: &FetchOpts,
     x: &mut Extract,
+    stage: &mut Stage,
     key: &str,
     entry: &btparse::Entry,
     datasource: &str,
@@ -714,19 +789,87 @@ fn create_entry(
     }
     let mut raw = to_raw(entry);
     raw.key = key.to_string();
-    let outcome = sourcemap::apply_maps_in(ctx, st, "bibtex", datasource, &mut raw)?;
+    let mut map_log = ctx.log.fork();
+    let outcome =
+        sourcemap::apply_maps_logged(ctx.cfg, &mut map_log, st, "bibtex", datasource, &mut raw);
+    let outcome = match outcome {
+        Ok(o) => o,
+        Err(e) => {
+            stage.flush(ctx, st, opts, x)?;
+            ctx.log.join(map_log);
+            return Err(e);
+        }
+    };
     for k in &outcome.created_keys {
         rkeys.retain(|r| r != k);
     }
     if outcome.skip {
+        stage.flush(ctx, st, opts, x)?;
+        ctx.log.join(map_log);
         return Ok(false);
     }
-    let crret = create_entry_inner(ctx, st, opts, x, key, &raw, &raw.key)?;
-    for (i, e) in outcome.new_entries.iter().enumerate() {
-        let tbkey = outcome.tb_keys.get(i).unwrap_or(&e.key);
-        create_entry_inner(ctx, st, opts, x, &e.key.clone(), e, tbkey)?;
+    let ds = |k: &str| st.section.get_keytods(k).unwrap_or_default();
+    let tbkey = raw.key.clone();
+    let mut jobs = vec![CreateJob {
+        key: key.to_string(),
+        ds: ds(key),
+        raw,
+        tbkey,
+    }];
+    for (i, e) in outcome.new_entries.into_iter().enumerate() {
+        let tbkey = outcome.tb_keys.get(i).unwrap_or(&e.key).clone();
+        jobs.push(CreateJob {
+            key: e.key.clone(),
+            ds: ds(&e.key),
+            raw: e,
+            tbkey,
+        });
     }
-    Ok(crret)
+    if jobs.iter().any(|j| may_skip(ctx, opts, &j.raw)) {
+        // Created now, in order.
+        stage.flush(ctx, st, opts, x)?;
+        ctx.log.join(map_log);
+        let mut crret = true;
+        for (i, job) in jobs.iter().enumerate() {
+            let b = build_entry(ctx, opts, &st.section.number.clone(), job);
+            let r = apply_built(ctx, st, x, &job.key, b)?;
+            if i == 0 {
+                crret = r;
+            }
+        }
+        return Ok(crret);
+    }
+    stage.keys.extend(jobs.iter().map(|j| j.key.clone()));
+    stage.items.push((map_log, jobs));
+    Ok(true)
+}
+
+/// Whether creating `e` could skip it (the name handler's empty-name and
+/// comma checks, `_name` in bibtex.pm:1201): a superset of the entries
+/// that are skipped.
+fn may_skip(ctx: &Ctx, opts: &FetchOpts, e: &RawEntry) -> bool {
+    e.fields.iter().any(|(f, _)| {
+        let value = raw_get(e, f).unwrap_or("");
+        if value.is_empty() {
+            return false;
+        }
+        let fcf = fc(f);
+        let is_name = ctx
+            .dm
+            .field_id(&fcf)
+            .map(|id| ctx.dm.field(id))
+            .is_some_and(|d| {
+                d.fieldtype.as_deref() == Some("list") && d.datatype.as_deref() == Some("name")
+            });
+        if !is_name {
+            return false;
+        }
+        let v = nfc(value);
+        btparse::split_list(&v, &opts.namesep)
+            .items
+            .iter()
+            .any(|n| !perl_compat::perl_truthy(n) || n.contains(",,") || n.matches(',').count() > 2)
+    })
 }
 
 /// What a field handler returns.
@@ -739,7 +882,7 @@ enum HRes {
 }
 
 /// `biber_warn($msg, $entry)`.
-pub(super) fn warn_entry(ctx: &mut Ctx, be: &mut Entry, msg: String) {
+pub(super) fn warn_entry(log: &mut Logger, be: &mut Entry, msg: String) {
     let w = be
         .derivedfields
         .entry("warnings")
@@ -747,24 +890,106 @@ pub(super) fn warn_entry(ctx: &mut Ctx, be: &mut Entry, msg: String) {
     if let Some(Value::List(l)) = w {
         l.push(msg.clone());
     }
-    ctx.log.biber_warn(msg);
+    log.biber_warn(msg);
 }
 
-/// `_create_entry` (bibtex.pm:940).
-fn create_entry_inner(
-    ctx: &mut Ctx,
-    st: &mut SectionState,
+/// What `_create_entry` (bibtex.pm:940) does outside the entry it builds,
+/// recorded so that entries can be built in parallel ([`build_entry`]) and
+/// their effects applied in the serial order ([`apply_built`]).
+pub(super) struct Build<'c> {
+    cfg: &'c crate::config::Config,
+    dm: &'c crate::datamodel::DataModel,
+    secnum: &'c str,
+    log: Logger,
+    /// libbtparse messages (`Extract::btlines`).
+    btlines: Vec<String>,
+    /// The entry's name lists and names, numbered from 0: moved into the
+    /// section's arena (renumbered) when applied.
+    names: NameArena,
+    /// `process_entry_options` settings for the entry.
+    options: Vec<(String, OptValue)>,
+    annotations: Vec<AnnotationCall>,
+    /// `set_np_length` calls.
+    np_lengths: Vec<(String, usize)>,
+    /// `del_citekey` of the entry's key (a skipped entry).
+    deleted: bool,
+}
+
+/// A finished [`Build`] (without its borrows of the configuration).
+struct Built {
+    log: Logger,
+    btlines: Vec<String>,
+    names: NameArena,
+    options: Vec<(String, OptValue)>,
+    annotations: Vec<AnnotationCall>,
+    np_lengths: Vec<(String, usize)>,
+    deleted: bool,
+    /// The entry, or `None` when it is skipped (`_create_entry` returns
+    /// false).
+    result: Result<Option<Entry>, Fatal>,
+}
+
+/// A recorded `Biber::Annotation->set_annotation` call.
+struct AnnotationCall {
+    scope: AnnotationScope,
+    key: String,
+    field: String,
+    name: String,
+    value: Option<String>,
+    literal: bool,
+}
+
+/// One entry to create: its key, data (after source maps), the key that
+/// goes into `rawdata` and its data source.
+struct CreateJob {
+    key: String,
+    raw: RawEntry,
+    tbkey: String,
+    ds: String,
+}
+
+/// `_create_entry` (bibtex.pm:940) up to the section changes: builds the
+/// entry and records everything else it does ([`Build`]).
+fn build_entry(ctx: &Ctx, opts: &FetchOpts, secnum: &str, job: &CreateJob) -> Built {
+    let mut b = Build {
+        cfg: &*ctx.cfg,
+        dm: ctx.dm,
+        secnum,
+        log: ctx.log.fork(),
+        btlines: Vec::new(),
+        names: NameArena::default(),
+        options: Vec::new(),
+        annotations: Vec::new(),
+        np_lengths: Vec::new(),
+        deleted: false,
+    };
+    let result = build_entry_in(&mut b, opts, job);
+    Built {
+        log: b.log,
+        btlines: b.btlines,
+        names: b.names,
+        options: b.options,
+        annotations: b.annotations,
+        np_lengths: b.np_lengths,
+        deleted: b.deleted,
+        result,
+    }
+}
+
+fn build_entry_in(
+    b: &mut Build,
     opts: &FetchOpts,
-    x: &mut Extract,
-    k: &str,
-    e: &RawEntry,
-    tbkey: &str,
-) -> Result<bool, Fatal> {
-    let secnum = st.section.number.clone();
-    let ds = st.section.get_keytods(k).unwrap_or_default();
+    job: &CreateJob,
+) -> Result<Option<Entry>, Fatal> {
+    let (k, e, tbkey, ds) = (
+        job.key.as_str(),
+        &job.raw,
+        job.tbkey.as_str(),
+        job.ds.as_str(),
+    );
     let mut be = Entry::default();
     be.set_field("citekey", Some(Value::Str(k.to_string())));
-    debug!(ctx.log, "Creating biber Entry object with key '{k}'");
+    debug!(b.log, "Creating biber Entry object with key '{k}'");
     be.set_field("rawdata", Some(Value::Str(print_s(e, tbkey))));
     be.set_field("entrytype", Some(Value::Str(fc(&e.entrytype))));
     for (f, _) in &e.fields {
@@ -772,24 +997,24 @@ fn create_entry_inner(
         let fcf = fc(f);
         if fcf == "options" {
             let list = opts.split_xsv(value);
-            process_entry_options(ctx, k, &list, &secnum);
+            let set = entry_option_settings(&b.cfg.blx.registry, &list);
+            b.options.extend(set);
         }
-        if ctx
-            .dm
+        if b.dm
             .is_field(&fcf, &opts.annotation_marker, &opts.named_annotation_marker)
         {
             if value.is_empty() {
                 continue;
             }
-            let r = run_handler(ctx, st, opts, x, &mut be, e, f, &fcf, value, k, &ds)?;
+            let r = run_handler(b, opts, &mut be, e, f, &fcf, value, k, ds)?;
             match r {
                 HRes::None => {}
-                HRes::Skip => return Ok(false),
+                HRes::Skip => return Ok(None),
                 HRes::Set(v) => be.set_datafield(fcf, Some(v)),
             }
         } else if opts.validate_datamodel {
             warn_entry(
-                ctx,
+                &mut b.log,
                 &mut be,
                 format!(
                     "Datamodel: {} entry '{k}' ({ds}): Field '{f}' invalid in data model - ignoring",
@@ -799,8 +1024,62 @@ fn create_entry_inner(
         }
     }
     be.set_field("datatype", Some(Value::Str("bibtex".into())));
-    st.section.entries.insert(k.to_string(), be);
-    Ok(true)
+    Ok(Some(be))
+}
+
+/// Apply a [`build_entry`] in order: its messages, option settings,
+/// annotations, name lists, name part lengths and the entry itself. Returns
+/// `_create_entry`'s result (false: skipped).
+fn apply_built(
+    ctx: &mut Ctx,
+    st: &mut SectionState,
+    x: &mut Extract,
+    key: &str,
+    b: Built,
+) -> Result<bool, Fatal> {
+    let Built {
+        log,
+        btlines,
+        names,
+        options,
+        annotations,
+        np_lengths,
+        deleted,
+        result,
+    } = b;
+    ctx.log.join(log);
+    x.btlines.extend(btlines);
+    for (opt, v) in options {
+        ctx.cfg.blx.set_entry(&st.section.number, key, &opt, v);
+    }
+    for a in annotations {
+        ctx.run
+            .annotations
+            .set_annotation(a.scope, &a.key, &a.field, &a.name, a.value, a.literal);
+    }
+    let lists = st.section.names.append(names);
+    for (np, len) in np_lengths {
+        st.section.set_np_length(&np, len);
+    }
+    if deleted {
+        st.section.del_citekey(key);
+    }
+    match result? {
+        Some(mut be) => {
+            for v in be
+                .datafields
+                .values_mut()
+                .chain(be.derivedfields.values_mut())
+            {
+                if let Some(Value::Names(id)) = v {
+                    *id = lists(*id);
+                }
+            }
+            st.section.entries.insert(key.to_string(), be);
+            Ok(true)
+        }
+        None => Ok(false),
+    }
 }
 
 /// `process_entry_options` (Utils.pm:1290).
@@ -810,6 +1089,17 @@ pub(crate) fn process_entry_options(
     options: &[String],
     secnum: &str,
 ) {
+    for (opt, v) in entry_option_settings(&ctx.cfg.blx.registry, options) {
+        ctx.cfg.blx.set_entry(secnum, citekey, &opt, v);
+    }
+}
+
+/// The per-entry option values `process_entry_options` sets, in order.
+fn entry_option_settings(
+    reg: &crate::config::blx::Registry,
+    options: &[String],
+) -> Vec<(String, OptValue)> {
+    let mut out = Vec::new();
     for o in options {
         // s/\s+=\s+/=/g
         let o = collapse_eq(o);
@@ -824,16 +1114,16 @@ pub(crate) fn process_entry_options(
             None => continue,
         };
         let val = val.unwrap_or_else(|| "1".into());
-        let reg = &ctx.cfg.blx.registry;
         let input = reg
             .decl(&lc(&name), Scope::Entry)
             .and_then(|d| d.input.clone());
         let oo = expand_option_input(reg, &name, Some(&val), input.as_ref());
         for (opt, v) in oo {
             let v = v.map_or(OptValue::Undef, OptValue::Str);
-            ctx.cfg.blx.set_entry(secnum, citekey, &opt, v);
+            out.push((opt, v));
         }
     }
+    out
 }
 
 /// `s/\s+=\s+/=/g`.
@@ -885,10 +1175,8 @@ fn is_annotation_field(f: &str, ann: &str, nam: &str) -> bool {
 
 #[allow(clippy::too_many_arguments)]
 fn run_handler(
-    ctx: &mut Ctx,
-    st: &mut SectionState,
+    b: &mut Build,
     opts: &FetchOpts,
-    x: &mut Extract,
     be: &mut Entry,
     e: &RawEntry,
     field: &str,
@@ -898,11 +1186,11 @@ fn run_handler(
     ds: &str,
 ) -> Result<HRes, Fatal> {
     if is_annotation_field(fcf, &opts.annotation_marker, &opts.named_annotation_marker) {
-        annotation(ctx, opts, fcf, value, key);
+        annotation(b, opts, fcf, value, key);
         return Ok(HRes::None);
     }
     // (`get_fieldtype`, `get_fieldformat`, `get_datatype` with one lookup)
-    let def = ctx.dm.field_id(fcf).map(|id| ctx.dm.field(id));
+    let def = b.dm.field_id(fcf).map(|id| b.dm.field(id));
     let ft = def.and_then(|d| d.fieldtype.as_deref()).unwrap_or("");
     let fmt = def
         .map(|d| d.format.as_str())
@@ -911,45 +1199,37 @@ fn run_handler(
     let dt = def.and_then(|d| d.datatype.as_deref()).unwrap_or("");
     Ok(match (ft, fmt, dt) {
         ("field", "default", "code" | "datepart" | "entrykey" | "integer" | "key" | "literal") => {
-            literal(ctx, opts, x, be, field, fcf, value, key)
+            literal(b, opts, be, field, fcf, value, key)
         }
         ("field", "default", "date") => {
-            datetime(ctx, opts, be, e, field, value, key, ds);
+            datetime(&mut b.log, opts, be, e, field, value, key, ds);
             HRes::None
         }
-        ("field", "default", "range") => range(ctx, opts, x, be, field, value, key),
+        ("field", "default", "range") => range(b, opts, be, field, value, key),
         ("field", "default", "verbatim" | "uri") => {
             add_xdata_ref(
-                ctx,
+                &mut b.log,
                 opts,
                 be,
                 field,
                 XRef::Str(value),
                 None,
-                &st.section.number,
+                b.secnum,
             );
             HRes::Set(Value::Str(value.to_string()))
         }
         ("field", "xsv", "entrykey" | "literal" | "keyword" | "option") => {
             let v = opts.split_xsv(value);
-            add_xdata_ref(
-                ctx,
-                opts,
-                be,
-                field,
-                XRef::List(&v),
-                None,
-                &st.section.number,
-            );
+            add_xdata_ref(&mut b.log, opts, be, field, XRef::List(&v), None, b.secnum);
             HRes::Set(Value::List(v))
         }
         ("list", "default", "key" | "literal" | "verbatim" | "uri") => {
-            list(ctx, st, opts, x, be, field, value, dt != "uri")
+            list(b, opts, be, field, value, dt != "uri")
         }
-        ("list", "default", "name") => name_handler(ctx, st, opts, x, be, field, fcf, value, key),
+        ("list", "default", "name") => name_handler(b, opts, be, field, fcf, value, key),
         _ => {
             biber_error!(
-                ctx.log,
+                b.log,
                 "No field handler for field '{fcf}' (fieldtype '{ft}', format '{fmt}', datatype '{dt}') in entry '{key}'"
             )?;
             HRes::None
@@ -965,7 +1245,7 @@ pub(super) enum XRef<'a> {
 
 /// `Biber::Entry::add_xdata_ref` (Entry.pm:225).
 pub(super) fn add_xdata_ref(
-    ctx: &mut Ctx,
+    log: &mut Logger,
     opts: &FetchOpts,
     be: &mut Entry,
     reffield: &str,
@@ -1028,7 +1308,7 @@ pub(super) fn add_xdata_ref(
         let ek = be.citekey().to_string();
         let bee = be.entrytype().to_string();
         warn_entry(
-            ctx,
+            log,
             be,
             format!(
                 "{bee} entry '{ek}' has XDATA reference from field '{reffield}' that contains no source field (section {secnum})"
@@ -1050,7 +1330,7 @@ pub(super) fn add_xdata_ref(
 }
 
 /// `_annotation` (bibtex.pm:1007).
-fn annotation(ctx: &mut Ctx, opts: &FetchOpts, field: &str, value: &str, key: &str) {
+fn annotation(b: &mut Build, opts: &FetchOpts, field: &str, value: &str, key: &str) {
     let ann = &opts.annotation_marker;
     let nam = &opts.named_annotation_marker;
     let mut f = fc(field);
@@ -1093,9 +1373,14 @@ fn annotation(ctx: &mut Ctx, opts: &FetchOpts, field: &str, value: &str, key: &s
         } else {
             AnnotationScope::Field
         };
-        ctx.run
-            .annotations
-            .set_annotation(scope, key, &f, &name, anns, literal);
+        b.annotations.push(AnnotationCall {
+            scope,
+            key: key.to_string(),
+            field: f.clone(),
+            name: name.clone(),
+            value: anns,
+            literal,
+        });
     }
 }
 
@@ -1151,16 +1436,23 @@ fn parse_annotation_item(a: &str) -> (Option<String>, Option<String>, Option<Str
 /// `_literal` (bibtex.pm:1042).
 #[allow(clippy::too_many_arguments)]
 fn literal(
-    ctx: &mut Ctx,
+    b: &mut Build,
     opts: &FetchOpts,
-    x: &Extract,
     be: &mut Entry,
     field: &str,
     fcf: &str,
     value: &str,
     key: &str,
 ) -> HRes {
-    if add_xdata_ref(ctx, opts, be, field, XRef::Str(value), None, &x.secnum) {
+    if add_xdata_ref(
+        &mut b.log,
+        opts,
+        be,
+        field,
+        XRef::Str(value),
+        None,
+        b.secnum,
+    ) {
         return HRes::Set(Value::Str(value.to_string()));
     }
     let dtruthy = |be: &Entry, f: &str| truthy(be.get_datafield(f).and_then(Value::as_str));
@@ -1169,7 +1461,7 @@ fn literal(
             return HRes::None;
         }
         if perl_compat::perl_truthy(value) && perl_compat::unicode::ucd_num(value).is_none() {
-            ctx.log.biber_warn(format!(
+            b.log.biber_warn(format!(
                 "legacy year field '{value}' in entry '{key}' is not an integer - this will probably not sort properly."
             ));
         }
@@ -1179,7 +1471,7 @@ fn literal(
             return HRes::None;
         }
         if perl_compat::perl_truthy(value) && perl_compat::unicode::ucd_num(value).is_none() {
-            ctx.log.biber_warn(format!(
+            b.log.biber_warn(format!(
                 "legacy month field '{value}' in entry '{key}' is not an integer - this will probably not sort properly."
             ));
         }
@@ -1187,7 +1479,7 @@ fn literal(
     let mut value = value.to_string();
     if fcf == "isbn" {
         let Some(isbn) = perl_compat::isbn::Isbn::new(&value).filter(|i| i.is_valid()) else {
-            ctx.log.biber_warn(format!(
+            b.log.biber_warn(format!(
                 "ISBN '{value}' in entry '{key}' is invalid - run biber with '--validate_datamodel' for details."
             ));
             return HRes::Set(Value::Str(value));
@@ -1247,15 +1539,22 @@ fn hack_month(m: &str) -> Option<String> {
 
 /// `_range` (bibtex.pm:1152).
 fn range(
-    ctx: &mut Ctx,
+    b: &mut Build,
     opts: &FetchOpts,
-    x: &Extract,
     be: &mut Entry,
     field: &str,
     value: &str,
     key: &str,
 ) -> HRes {
-    if add_xdata_ref(ctx, opts, be, field, XRef::Str(value), None, &x.secnum) {
+    if add_xdata_ref(
+        &mut b.log,
+        opts,
+        be,
+        field,
+        XRef::Str(value),
+        None,
+        b.secnum,
+    ) {
         return HRes::Set(Value::Str(value.to_string()));
     }
     static RES: std::sync::OnceLock<[Arc<PerlRegex>; 5]> = std::sync::OnceLock::new();
@@ -1317,7 +1616,7 @@ fn range(
             out.push(vec![start, end]);
         } else {
             warn_entry(
-                ctx,
+                &mut b.log,
                 be,
                 format!(
                     "Range field '{field}' in entry '{key}' is malformed, falling back to literal"
@@ -1335,10 +1634,8 @@ fn range(
 /// `_list` / `_urilist` (bibtex.pm:1446, 1474).
 #[allow(clippy::too_many_arguments)]
 fn list(
-    ctx: &mut Ctx,
-    st: &mut SectionState,
+    b: &mut Build,
     opts: &FetchOpts,
-    x: &mut Extract,
     be: &mut Entry,
     field: &str,
     value: &str,
@@ -1346,7 +1643,7 @@ fn list(
 ) -> HRes {
     let v = nfc(value);
     let sl = btparse::split_list(&v, &opts.listsep);
-    record_split_diags(x, &sl);
+    record_split_diags(&mut b.btlines, &sl);
     let mut out = Vec::new();
     for (i, item) in sl.items.iter().enumerate() {
         let item = nfd(item);
@@ -1356,26 +1653,25 @@ fn list(
             item
         };
         add_xdata_ref(
-            ctx,
+            &mut b.log,
             opts,
             be,
             field,
             XRef::Str(&item),
             Some(i),
-            &st.section.number,
+            b.secnum,
         );
         out.push(item);
     }
     HRes::Set(Value::List(out))
 }
 
-fn record_split_diags(x: &mut Extract, sl: &btparse::SplitList) {
+fn record_split_diags(btlines: &mut Vec<String>, sl: &btparse::SplitList) {
     for d in &sl.diags {
-        x.btlines.push(d.render(""));
+        btlines.push(d.render(""));
     }
     if sl.crash && !sl.diags.iter().any(|d| d.render("").contains("error")) {
-        x.btlines
-            .push("error: libbtparse would abort on this list".into());
+        btlines.push("error: libbtparse would abort on this list".into());
     }
 }
 
@@ -1404,44 +1700,49 @@ fn namelist_option<'a>(s: &'a str, sep: &str) -> Option<(&'a str, Option<&'a str
 /// `_name` (bibtex.pm:1201).
 #[allow(clippy::too_many_arguments)]
 fn name_handler(
-    ctx: &mut Ctx,
-    st: &mut SectionState,
+    b: &mut Build,
     opts: &FetchOpts,
-    x: &mut Extract,
     be: &mut Entry,
     field: &str,
     fcf: &str,
     value: &str,
     key: &str,
 ) -> HRes {
-    let secnum = st.section.number.clone();
+    let secnum = b.secnum;
     let v = nfc(value);
     let sl = btparse::split_list(&v, &opts.namesep);
-    record_split_diags(x, &sl);
+    record_split_diags(&mut b.btlines, &sl);
     let items: Vec<String> = sl.items.iter().map(|s| nfd(s)).collect();
-    let listid = st.section.names.new_list();
-    st.section.names.list_mut(listid).type_ = Some(fcf.to_string());
+    let listid = b.names.new_list();
+    b.names.list_mut(listid).type_ = Some(fcf.to_string());
     let mut names: Vec<crate::model::NameId> = Vec::new();
     let nps = &opts.nameparts;
     for (i, name) in items.iter().enumerate() {
-        if add_xdata_ref(ctx, opts, be, field, XRef::Str(name), Some(i), &secnum) {
+        if add_xdata_ref(
+            &mut b.log,
+            opts,
+            be,
+            field,
+            XRef::Str(name),
+            Some(i),
+            secnum,
+        ) {
             let mut n = Name::default();
             n.slots.insert("xdata", J::from(name.clone()));
             n.index = Some((names.len() + 1).to_string());
-            names.push(st.section.names.new_name(n));
+            names.push(b.names.new_name(n));
             continue;
         }
         if let Some((o, ov)) = namelist_option(name, &opts.xnamesep) {
             let nlo = lc(o);
             let nlov = ov.unwrap_or("1");
-            let reg = &ctx.cfg.blx.registry;
+            let reg = &b.cfg.blx.registry;
             if reg.has_scope(&nlo, Scope::NameList) {
                 let input = reg
                     .decl(&nlo, Scope::NameList)
                     .and_then(|d| d.input.clone());
                 for (opt, val) in expand_option_input(reg, &nlo, Some(nlov), input.as_ref()) {
-                    st.section
-                        .names
+                    b.names
                         .list_mut(listid)
                         .slots
                         .insert(opt, val.map_or(J::Null, J::from));
@@ -1451,13 +1752,13 @@ fn name_handler(
         }
         if !perl_compat::perl_truthy(name) {
             warn_entry(
-                ctx,
+                &mut b.log,
                 be,
                 format!(
                     "Name in key '{key}' is empty (probably consecutive 'and'): skipping entry '{key}'"
                 ),
             );
-            st.section.del_citekey(key);
+            b.deleted = true;
             return HRes::Skip;
         }
         let cfg = NameCfg {
@@ -1465,7 +1766,7 @@ fn name_handler(
             fixinits: opts.fixinits,
             nameparts: nps,
             xnamesep: &opts.xnamesep,
-            registry: &ctx.cfg.blx.registry,
+            registry: &b.cfg.blx.registry,
         };
         let is_x = !opts.noxname
             && nps.iter().any(|np| {
@@ -1481,62 +1782,61 @@ fn name_handler(
             let escaped = name.starts_with('{') && name.ends_with('}') && name.len() > 2;
             if !escaped {
                 if name.matches(',').count() > 2 {
-                    ctx.log.biber_error_nodie(
+                    b.log.biber_error_nodie(
                         crate::loc!(),
                         &format!("Name \"{name}\" has too many commas, skipping entry '{key}'"),
                     );
-                    st.section.del_citekey(key);
+                    b.deleted = true;
                     return HRes::Skip;
                 }
                 if name.contains(",,") {
-                    ctx.log.biber_error_nodie(
+                    b.log.biber_error_nodie(
                         crate::loc!(),
                         &format!(
                             "Name \"{name}\" is malformed (consecutive commas): skipping entry '{key}'"
                         ),
                     );
-                    st.section.del_citekey(key);
+                    b.deleted = true;
                     return HRes::Skip;
                 }
             }
             names::parsename(&cfg, name)
         };
-        x.btlines.extend(parsed.btlines.iter().cloned());
+        b.btlines.extend(parsed.btlines.iter().cloned());
         if parsed.crash {
-            x.btlines.push(format!(
+            b.btlines.push(format!(
                 "error: libbtparse would crash on the name \"{name}\" in entry '{key}'"
             ));
         }
         for w in parsed.warnings {
-            ctx.log.biber_warn(w);
+            b.log.biber_warn(w);
         }
         for (np, len) in &parsed.lengths {
-            st.section.set_np_length(np, *len);
+            b.np_lengths.push((np.clone(), *len));
         }
         let n = parsed.name;
         if lc(n.rawstring.as_deref().unwrap_or("")) == opts.others_string {
-            st.section
-                .names
+            b.names
                 .list_mut(listid)
                 .slots
                 .insert("morenames", J::from("1"));
         } else {
             let mut n = n;
             n.index = Some((names.len() + 1).to_string());
-            names.push(st.section.names.new_name(n));
+            names.push(b.names.new_name(n));
         }
     }
     if names.is_empty() {
         return HRes::None;
     }
-    st.section.names.list_mut(listid).names = names;
+    b.names.list_mut(listid).names = names;
     HRes::Set(Value::Names(listid))
 }
 
 /// `_datetime` (bibtex.pm:1302).
 #[allow(clippy::too_many_arguments)]
 fn datetime(
-    ctx: &mut Ctx,
+    log: &mut Logger,
     opts: &FetchOpts,
     be: &mut Entry,
     e: &RawEntry,
@@ -1553,7 +1853,7 @@ fn datetime(
     let s1 = |v: &str| Some(Value::Str(v.to_string()));
     let Some(r) = r else {
         warn_entry(
-            ctx,
+            log,
             be,
             format!(
                 "{bee} entry '{key}' ({ds}): Invalid format '{date}' of date field '{field}' - ignoring"
@@ -1572,7 +1872,7 @@ fn datetime(
     }
     if !r.start.is_defined() {
         warn_entry(
-            ctx,
+            log,
             be,
             format!(
                 "{bee} entry '{key}' ({ds}): Invalid format '{date}' of date field '{field}' - ignoring"
@@ -1589,7 +1889,7 @@ fn datetime(
                 && (sd.year as f64) != perl_compat::truth::numify(y)
             {
                 warn_entry(
-                    ctx,
+                    log,
                     be,
                     format!(
                         "Overwriting field 'year' with year value from field 'date' for entry '{key}'"
@@ -1602,7 +1902,7 @@ fn datetime(
                 && f64::from(sd.month) != perl_compat::truth::numify(m)
             {
                 warn_entry(
-                    ctx,
+                    log,
                     be,
                     format!(
                         "Overwriting field 'month' with month value from field 'date' for entry '{key}'"
@@ -1716,7 +2016,7 @@ fn datetime(
             }
             Parsed::Zero => be.set_datafield(format!("{dtype}endyear"), s1("")),
             Parsed::Undef => warn_entry(
-                ctx,
+                log,
                 be,
                 format!(
                     "{bee} entry '{key}' ({ds}): Invalid format '{date}' of end date field '{field}' - ignoring"
