@@ -184,6 +184,7 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 
 | Id | Extension | Status |
 |---|---|---|
-| DC-050 | `--fix-quirks` option (§2) | planned |
+| DC-050 | `--fix-quirks=<name>[,<name>…]` (or `=all`) option (§2): switch off reproduced biber bugs | implemented |
 | DC-051 | `--compat=2.22` (pin quirk defaults to a biber version once upstream fixes change them) | planned |
 | DC-052 | The uniquename/uniquelist iteration has no bound in biber, and some inputs make it loop forever (BB-149) | Capped at 1,000 passes (real data converges in 2–3); hitting the cap emits a WARN naming the list and section | BB-149 | implemented (uniqueness) |
+| DC-068 | `--threads N` (bibers only; accepted only when spelt in full, like `--fix-quirks`): worker threads for the per-entry work of data reading (BibTeX parsing and LaTeX decoding, source maps without entry creation or `$MAPUNIQ`, field handlers), the per-entry list phases (name strings, visibility, name hashes, sort keys, static label steps) and `.bbl` rendering. Default (or `0`): `$BIBERS_THREADS` if set, else the number of cores; `1` is fully serial. Loops over fewer than 64 items stay serial (`$BIBERS_PAR_MIN_ITEMS`). Output, log messages and their order, warnings and exit codes are identical for every thread count (checked on the whole corpus, the benchmarks and all TeX Live `.bib` files); peak memory is somewhat higher with threads (per-thread allocator heaps). `$BIBERS_TIMINGS=1` prints per-phase wall times to stderr (a development aid). | implemented |
