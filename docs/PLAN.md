@@ -336,7 +336,7 @@ Original M4 scope:
 
 Not planned at all: the deprecated `bblxml` and `dot` outputs (with `--dot-include`), and `bibjson` (unimplemented upstream).
 
-**M5: Performance and release.**
+**M5: Performance and release.** *Performance done (2026-10-24): every §1 time target met (`docs/M5.md`); release workflow ready (dry runs green); open: x184 memory with threads, tagging v0.1.0, filing upstream bug reports.*
 - Parallel pipeline with the serial == parallel tests; benchmark targets of §1 met; memory profile.
 - Packaging: static binaries for macOS, Linux and Windows, and drop-in instructions (latexmk `$biber`, TeXstudio/Overleaf-style setups).
 - `docs/compat.md` completed; upstream bug reports filed.
