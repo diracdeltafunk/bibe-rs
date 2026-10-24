@@ -16,6 +16,7 @@ pub mod files;
 pub mod log;
 pub mod model;
 pub mod output;
+pub mod par;
 pub mod perlish;
 pub mod pipeline;
 pub mod quirks;

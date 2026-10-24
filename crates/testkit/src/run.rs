@@ -14,6 +14,8 @@ pub struct Runner {
     pub name: String,
     /// The program and any leading arguments.
     pub argv: Vec<String>,
+    /// Extra environment variables (after [`BASE_ENV`]).
+    pub env: Vec<(String, String)>,
 }
 
 /// The fixed environment every run gets, so the oracle and bibers see the
@@ -30,6 +32,9 @@ pub struct RunOutput {
     pub outputs: BTreeMap<String, Option<Vec<u8>>>,
     /// Normalised, sorted WARN/ERROR messages from the case's `.blg`.
     pub messages: Vec<String>,
+    /// The case's `.blg` (empty if there is none), with the work directory
+    /// replaced by `<WORK>`.
+    pub blg: String,
     pub stdout: String,
     pub stderr: String,
     pub elapsed: Duration,
@@ -42,7 +47,14 @@ impl Runner {
         Runner {
             name: name.into(),
             argv,
+            env: Vec::new(),
         }
+    }
+
+    /// The same runner with the environment variable `k` set to `v`.
+    pub fn with_env(mut self, k: &str, v: &str) -> Runner {
+        self.env.push((k.to_string(), v.to_string()));
+        self
     }
 
     /// Run `case` in a fresh temporary work directory. If `keep` is set, the
@@ -65,6 +77,9 @@ impl Runner {
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());
         for (k, v) in BASE_ENV {
+            cmd.env(k, v);
+        }
+        for (k, v) in &self.env {
             cmd.env(k, v);
         }
         // The PAR-packed O1 unpacks itself into a cache under $TMPDIR, which
@@ -130,6 +145,7 @@ impl Runner {
             timed_out,
             outputs,
             messages,
+            blg: blg.replace(&*work.to_string_lossy(), "<WORK>"),
             stdout,
             stderr,
             elapsed,

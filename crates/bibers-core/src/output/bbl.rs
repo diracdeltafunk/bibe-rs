@@ -37,11 +37,12 @@ use serde_json::Value as J;
 use crate::biber_error;
 use crate::config::blx::{OptValue, Scope, map_boolean_tostring_raw};
 use crate::datamodel::{DataModel, Helpers};
-use crate::log::Fatal;
+use crate::log::{Fatal, Logger};
 use crate::model::{
     DataList, Entry, Name, NameArena, NameId, NameListId, PV, PerlData, SectionState, Sym, Value,
 };
 use crate::output::Text;
+use crate::par;
 use crate::pipeline::{Ctx, Processed};
 use crate::quirks::Quirk;
 
@@ -401,6 +402,18 @@ enum Item {
     Text(String),
     Slot(Slot),
     Names(NameBlockT),
+    /// A list whose array may be shared with other entries (05-B21), output
+    /// by [`resolve_shared`] in citekey order.
+    Shared(SharedListT),
+}
+
+/// A list field of an [`Item::Shared`]: its field name, its value in the
+/// entry, and whether it is a verbatim list.
+#[derive(Clone, Debug)]
+struct SharedListT {
+    field: String,
+    list: Vec<String>,
+    verbatim: bool,
 }
 
 /// The per-section part of an entry's output (biber's placeholder string).
@@ -415,35 +428,49 @@ struct EntryTemplate {
     hash_src: HashMap<NameId, NameListId>,
 }
 
-/// Mutable writer state that lives across sections.
-struct Writer {
-    /// `$dmh->{datefields}`, which the date-meta loop mutates in place
-    /// (BB-028).
-    datefields: Vec<String>,
-    /// The date field stems (`datefields` without the `date` suffix).
-    date_stems: Vec<String>,
-    /// The current section's shared list arrays: `(citekey, field)` →
-    /// group, and each group's live value (B21).
+/// The current section's shared list arrays (05-B21), which
+/// `set_output_entry` changes in place: their output is left to
+/// [`resolve_shared`], which runs in citekey order, while the rest of the
+/// entries' templates are built in any order.
+#[derive(Default)]
+struct SharedLists {
+    /// `(citekey, field)` → group.
     shared: HashMap<(String, String), usize>,
-    shared_vals: Vec<Option<Vec<String>>>,
+    /// Each group's live value, once changed or read.
+    vals: HashMap<usize, Vec<String>>,
+    /// The citekeys with a shared list.
+    keys: rustc_hash::FxHashSet<String>,
 }
 
-impl Writer {
-    fn start_section(&mut self, st: &SectionState) {
-        self.shared.clear();
-        self.shared_vals.clear();
+impl SharedLists {
+    fn new(st: &SectionState) -> Self {
+        let mut sl = SharedLists::default();
         for (i, g) in st.shared_lists.iter().flatten().enumerate() {
             for m in g {
-                self.shared.insert(m.clone(), i);
+                sl.keys.insert(m.0.clone());
+                sl.shared.insert(m.clone(), i);
             }
-            self.shared_vals.push(None);
         }
+        sl
+    }
+
+    /// Whether `key` has a shared list.
+    fn has_key(&self, key: &str) -> bool {
+        self.keys.contains(key)
+    }
+
+    /// Whether `key`'s `field` is a shared list.
+    fn is_shared(&self, key: &str, field: &str) -> bool {
+        self.has_key(key)
+            && self
+                .shared
+                .contains_key(&(key.to_string(), field.to_string()))
     }
 
     /// Replace the live value of a shared list.
     fn set_live(&mut self, key: &str, field: &str, v: Vec<String>) {
         if let Some(&g) = self.shared.get(&(key.to_string(), field.to_string())) {
-            self.shared_vals[g] = Some(v);
+            self.vals.insert(g, v);
         }
     }
 
@@ -458,23 +485,102 @@ impl Writer {
         orig: &[String],
         others: &str,
     ) -> (bool, Vec<String>) {
-        let is_others = |l: &[String]| l.last().map(|x| lc(x)).unwrap_or_default() == others;
         match self.shared.get(&(key.to_string(), field.to_string())) {
             Some(&g) => {
-                let live = self.shared_vals[g].get_or_insert_with(|| orig.to_vec());
-                let popped = is_others(live);
+                let live = self.vals.entry(g).or_insert_with(|| orig.to_vec());
+                let popped = live.last().map(|x| lc(x)).unwrap_or_default() == others;
                 if popped {
                     live.pop();
                 }
                 (popped, live.clone())
             }
-            None => {
-                let popped = is_others(orig);
-                let n = orig.len() - usize::from(popped);
-                (popped, orig[..n].to_vec())
-            }
+            None => pop_plain(orig, others),
         }
     }
+}
+
+/// biber's `pop` of a trailing `others` on a list that is not shared.
+fn pop_plain(orig: &[String], others: &str) -> (bool, Vec<String>) {
+    let popped = orig.last().map(|x| lc(x)).unwrap_or_default() == others;
+    let n = orig.len() - usize::from(popped);
+    (popped, orig[..n].to_vec())
+}
+
+/// The output of a list field (bbl.pm:335), after the `pop` of `others`.
+fn list_text(text: &mut String, listfield: &str, popped: bool, lf: &[String]) {
+    if popped {
+        text.push_str(&format!("      \\true{{more{listfield}}}\n"));
+    }
+    text.push_str(&format!("      \\list{{{listfield}}}{{{}}}{{%\n", lf.len()));
+    for f in lf {
+        text.push_str(&format!("        {{{f}}}%\n"));
+    }
+    text.push_str("      }\n");
+}
+
+/// The output of a verbatim list field (bbl.pm:567), after the `pop` of
+/// `others`. Returns the URI-encoded list of a URI list (the loop variable
+/// aliases the live array, so the encoded values stay in it).
+fn vlist_text(
+    text: &mut String,
+    log: &mut Logger,
+    vlist: &str,
+    is_uri: bool,
+    popped: bool,
+    vlf: &[String],
+) -> Result<Option<Vec<String>>, Fatal> {
+    if popped {
+        text.push_str(&format!("      \\true{{more{vlist}}}\n"));
+    }
+    let total = vlf.len();
+    if is_uri {
+        text.push_str(&format!("      \\lverb{{{vlist}raw}}{{{total}}}\n"));
+        for f in vlf {
+            text.push_str(&format!("      \\lverb {f}\n"));
+        }
+        text.push_str("      \\endlverb\n");
+    }
+    text.push_str(&format!("      \\lverb{{{vlist}}}{{{total}}}\n"));
+    let mut enc = Vec::with_capacity(vlf.len());
+    for f in vlf {
+        let f = if is_uri {
+            uri_string(log, f)?
+        } else {
+            f.clone()
+        };
+        text.push_str(&format!("      \\lverb {f}\n"));
+        enc.push(f);
+    }
+    text.push_str("      \\endlverb\n");
+    Ok(is_uri.then_some(enc))
+}
+
+/// Output the [`Item::Shared`] lists of `key`'s template (in citekey order
+/// over the section's entries): `pop` the trailing `others` off the live
+/// arrays, and keep URI-encoded values in them.
+fn resolve_shared(
+    t: &mut EntryTemplate,
+    dm: &DataModel,
+    log: &mut Logger,
+    sl: &mut SharedLists,
+    key: &str,
+    others: &str,
+) -> Result<(), Fatal> {
+    for item in &mut t.items {
+        let Item::Shared(s) = item else { continue };
+        let (popped, lf) = sl.pop_others(key, &s.field, &s.list, others);
+        let mut text = String::new();
+        if s.verbatim {
+            let is_uri = dm.get_datatype(&s.field) == Some("uri");
+            if let Some(enc) = vlist_text(&mut text, log, &s.field, is_uri, popped, &lf)? {
+                sl.set_live(key, &s.field, enc);
+            }
+        } else {
+            list_text(&mut text, &s.field, popped, &lf);
+        }
+        *item = Item::Text(text);
+    }
+    Ok(())
 }
 
 fn add_names(
@@ -583,7 +689,6 @@ struct Prep {
     /// `$dm->get_constant_value('nameparts')`.
     nameparts: Vec<String>,
     /// The date stems last built (they change under BB-028).
-    date_stems: Vec<DateStem>,
     /// [`wraplines`].
     wrap: Option<i64>,
 }
@@ -603,7 +708,6 @@ impl Prep {
             lists,
             index,
             nameparts: dm.get_constant_value("nameparts"),
-            date_stems: Vec::new(),
             wrap,
         }
     }
@@ -631,15 +735,52 @@ impl Prep {
         let list = &self.lists[h as usize];
         at[h as usize].iter().map(move |&i| list[i])
     }
+}
 
-    /// The date stems for `stems`, rebuilt when they changed.
-    fn date_stems(&mut self, stems: &[String]) -> &[DateStem] {
-        if self.date_stems.len() != stems.len()
-            || self.date_stems.iter().zip(stems).any(|(d, s)| d.stem != *s)
-        {
-            self.date_stems = stems.iter().map(|d| DateStem::new(d)).collect();
+/// The date field stems each `set_output_entry` call sees.
+///
+/// BB-028: the date-meta loop's variable aliases the shared helper list
+/// `$dmh->{datefields}`, so `s/date$//` strips it in place: the n-th entry
+/// that reaches the loop (counted across sections) sees the list stripped n
+/// times. The lists only change until no name ends in `date` any more, so
+/// they are computed up front: `states[min(n, last)]`.
+struct DateStems {
+    states: Vec<Vec<DateStem>>,
+    /// The quirk is on (otherwise `states` has one list, the plain stems).
+    mutating: bool,
+}
+
+impl DateStems {
+    fn new(datefields: &[String], mutating: bool) -> Self {
+        let build = |l: &[String]| l.iter().map(|d| DateStem::new(d)).collect::<Vec<_>>();
+        let strip = |l: &[String]| -> Vec<String> {
+            l.iter()
+                .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
+                .collect()
+        };
+        if !mutating {
+            return DateStems {
+                states: vec![build(&strip(datefields))],
+                mutating,
+            };
         }
-        &self.date_stems
+        let mut cur = datefields.to_vec();
+        let mut states = vec![build(&cur)];
+        loop {
+            let next = strip(&cur);
+            if next == cur {
+                break;
+            }
+            states.push(build(&next));
+            cur = next;
+        }
+        DateStems { states, mutating }
+    }
+
+    /// The stems for the `n`-th entry (1-based) to reach the date loop.
+    fn for_call(&self, n: usize) -> &[DateStem] {
+        let i = if self.mutating { n } else { 0 };
+        &self.states[i.min(self.states.len() - 1)]
     }
 }
 
@@ -803,22 +944,34 @@ fn printfield(cols: Option<i64>, dm: &DataModel, e: &Entry, field: &str, s: &str
     format!("      \\{field_type}{{{outfield}}}{{{s}}}\n")
 }
 
-fn uri_string(ctx: &mut Ctx, s: &str) -> Result<String, Fatal> {
+fn uri_string(log: &mut Logger, s: &str) -> Result<String, Fatal> {
     match perl_compat::uri::uri_as_string(&nfc(s)) {
         Ok(u) => Ok(u),
         Err(e) => {
-            biber_error!(ctx.log, "{e}")?;
+            biber_error!(log, "{e}")?;
             Ok(String::new())
         }
     }
 }
 
+/// Whether `set_output_entry` reaches the date-meta loop for `key` (BB-028).
+fn reaches_date_loop(dm: &DataModel, st: &SectionState, key: &str) -> bool {
+    st.section.bibentry(key).is_some_and(|be| {
+        let et = be.entrytype();
+        et != "set" && !dm.entrytype_is_skipout(et)
+    })
+}
+
 /// `set_output_entry` (bbl.pm:196): the template of one entry, or `None`
-/// for entry types the data model skips.
+/// for entry types the data model skips. `stems` are the date field stems
+/// this call sees ([`DateStems`]); lists shared with other entries are left
+/// to [`resolve_shared`].
 fn set_output_entry(
-    ctx: &mut Ctx,
-    w: &mut Writer,
-    p: &mut Prep,
+    ctx: &Ctx,
+    log: &mut Logger,
+    w: &SharedLists,
+    p: &Prep,
+    stems: &[DateStem],
     st: &SectionState,
     key: &str,
 ) -> Result<Option<EntryTemplate>, Fatal> {
@@ -827,7 +980,7 @@ fn set_output_entry(
     let secnum = section.number.as_str();
     let arena = &section.names;
     let Some(be) = section.bibentry(key) else {
-        biber_error!(ctx.log, "Cannot find entry with key '{key}' to output")?;
+        biber_error!(log, "Cannot find entry with key '{key}' to output")?;
         return Ok(None);
     };
     let bee = be.entrytype().to_string();
@@ -996,15 +1149,17 @@ fn set_output_entry(
         let Some(Value::List(lf)) = be.get_field_sym(listfield_sym) else {
             continue;
         };
-        let (popped, lf) = w.pop_others(key, listfield, lf, &others);
-        if popped {
-            text.push_str(&format!("      \\true{{more{listfield}}}\n"));
+        if w.is_shared(key, listfield) {
+            flush(&mut text, &mut items);
+            items.push(Item::Shared(SharedListT {
+                field: listfield.to_string(),
+                list: lf.clone(),
+                verbatim: false,
+            }));
+            continue;
         }
-        text.push_str(&format!("      \\list{{{listfield}}}{{{}}}{{%\n", lf.len()));
-        for f in &lf {
-            text.push_str(&format!("        {{{f}}}%\n"));
-        }
-        text.push_str("      }\n");
+        let (popped, lf) = pop_plain(lf, &others);
+        list_text(&mut text, listfield, popped, &lf);
     }
 
     for h in ["namehash", "fullhash", "fullhashraw", "bibnamehash"] {
@@ -1108,18 +1263,9 @@ fn set_output_entry(
     }
 
     // Date meta-information. BB-028: the loop variable aliases the shared
-    // helper list, so `s/date$//` strips it in place for later entries.
-    let stems: &[String] = if ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation) {
-        for d in &mut w.datefields {
-            if let Some(s) = d.strip_suffix("date") {
-                *d = s.to_string();
-            }
-        }
-        &w.datefields
-    } else {
-        &w.date_stems
-    };
-    for d in p.date_stems(stems) {
+    // helper list, so `s/date$//` strips it in place for later entries
+    // (`stems`, see [`DateStems`]).
+    for d in stems {
         let stem = &d.stem;
         let unspec = be.get_field(&d.unspecified);
         if val_truthy(unspec) {
@@ -1221,47 +1367,33 @@ fn set_output_entry(
         if dm.get_datatype(vfield) == Some("uri") {
             text.push_str(&format!("      \\verb{{{vfield}raw}}\n"));
             text.push_str(&format!("      \\verb {vf}\n      \\endverb\n"));
-            vf = uri_string(ctx, &vf)?;
+            vf = uri_string(log, &vf)?;
         }
         text.push_str(&format!("      \\verb{{{vfield}}}\n"));
         text.push_str(&format!("      \\verb {vf}\n      \\endverb\n"));
     }
 
-    // Verbatim lists
+    // Verbatim lists. After a shared one, all are left to
+    // `resolve_shared`, so that their URI errors are logged in order.
+    let mut defer = false;
     for vlist_sym in p.fields(&present, Helper::VLists) {
         let vlist = vlist_sym.as_str();
         let Some(Value::List(vlf)) = be.get_field_sym(vlist_sym) else {
             continue;
         };
-        let (popped, vlf) = w.pop_others(key, vlist, vlf, &others);
-        if popped {
-            text.push_str(&format!("      \\true{{more{vlist}}}\n"));
+        if defer || w.is_shared(key, vlist) {
+            defer = true;
+            flush(&mut text, &mut items);
+            items.push(Item::Shared(SharedListT {
+                field: vlist.to_string(),
+                list: vlf.clone(),
+                verbatim: true,
+            }));
+            continue;
         }
-        let total = vlf.len();
+        let (popped, vlf) = pop_plain(vlf, &others);
         let is_uri = dm.get_datatype(vlist) == Some("uri");
-        if is_uri {
-            text.push_str(&format!("      \\lverb{{{vlist}raw}}{{{total}}}\n"));
-            for f in &vlf {
-                text.push_str(&format!("      \\lverb {f}\n"));
-            }
-            text.push_str("      \\endlverb\n");
-        }
-        text.push_str(&format!("      \\lverb{{{vlist}}}{{{total}}}\n"));
-        let mut enc = Vec::with_capacity(vlf.len());
-        for f in &vlf {
-            let f = if is_uri {
-                uri_string(ctx, f)?
-            } else {
-                f.clone()
-            };
-            text.push_str(&format!("      \\lverb {f}\n"));
-            enc.push(f);
-        }
-        text.push_str("      \\endlverb\n");
-        // The loop variable aliases the live array: URIs stay encoded.
-        if is_uri {
-            w.set_live(key, vlist, enc);
-        }
+        vlist_text(&mut text, log, vlist, is_uri, popped, &vlf)?;
     }
 
     if val_truthy(be.get_field("keywords")) {
@@ -1426,6 +1558,7 @@ fn instantiate_entry(lv: &ListView, t: &EntryTemplate, key: &str) -> String {
     for item in &t.items {
         match item {
             Item::Text(x) => s.push_str(x),
+            Item::Shared(_) => unreachable!("resolved by resolve_shared"),
             Item::Slot(slot) => match slot {
                 Slot::EntrySet => match field("entryset") {
                     Some(PV::Array(a)) => {
@@ -1772,20 +1905,27 @@ pub fn render(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<String>
     Ok(render_text(ctx, processed)?.map(Text::into_string))
 }
 
+/// The number of entries whose templates are built and instantiated at a
+/// time.
+const RENDER_BLOCK: usize = 1024;
+
 /// [`render`] in pieces (one per entry and per header line), each
 /// normalised to NFC. Each entry's data is freed once its text is made
 /// (only its text is needed after that), so that the text takes the place
 /// of the entries in memory.
 pub fn render_text(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Text>, Fatal> {
-    let mut prep = Prep::new(ctx.dm, wraplines(ctx));
-    let mut w = Writer {
-        datefields: ctx.dm.helpers.datefields.clone(),
-        date_stems: (ctx.dm.helpers.datefields.iter())
-            .map(|d| d.strip_suffix("date").unwrap_or(d).to_string())
-            .collect(),
-        shared: HashMap::default(),
-        shared_vals: Vec::new(),
-    };
+    let prep = Prep::new(ctx.dm, wraplines(ctx));
+    let stems = DateStems::new(
+        &ctx.dm.helpers.datefields,
+        ctx.cfg.quirks.on(Quirk::DatefieldHelperMutation),
+    );
+    let mut date_calls = 0;
+    let others = ctx
+        .cfg
+        .biber
+        .get_str("others_string")
+        .unwrap_or("others")
+        .to_string();
     let comma_quirk = ctx.cfg.quirks.on(Quirk::BblCommaCleanup);
 
     // The sortinit collators, one per sorting locale of a data list.
@@ -1808,9 +1948,15 @@ pub fn render_text(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Te
     // order-dependent: BB-028, 05-B21) and instantiated for every output
     // list right away: an instantiation only depends on the template and
     // the list's final state, and the templates are never all alive at once.
+    //
+    // Here in blocks of citekeys: a block's templates are built in
+    // parallel, then their shared lists output (05-B21) and their messages
+    // emitted in citekey order, then they are instantiated in parallel and
+    // the entries' data freed. The BB-028 date stems of each call are known
+    // up front ([`DateStems`]).
     let mut sections: Vec<SectionOut> = Vec::new();
     for st in processed.sections.iter_mut() {
-        w.start_section(st);
+        let mut shared = SharedLists::new(st);
         let lists = output_list_indices(ctx, &st.datalists);
         let colls: Vec<&ucollate::Collator> = (lists.iter())
             .map(|&l| &collators[&template_locale(ctx, &st.datalists[l].sortingtemplatename)])
@@ -1830,34 +1976,97 @@ pub fn render_text(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Te
             .map(|(i, k)| (k.as_str(), i))
             .collect();
         let mut has_entries = false;
-        for (i, k) in st.section.citekeys.iter().enumerate() {
-            let Some(t) = set_output_entry(ctx, &mut w, &mut prep, st, k)? else {
-                continue;
+        let keys = st.section.citekeys.clone();
+        // The date-loop call number of each citekey's entry.
+        let calls: Vec<usize> = keys
+            .iter()
+            .map(|k| {
+                if reaches_date_loop(ctx.dm, st, k) {
+                    date_calls += 1;
+                }
+                date_calls
+            })
+            .collect();
+        let idx: Vec<usize> = (0..keys.len()).collect();
+        let mut result = Ok(());
+        for block in idx.chunks(RENDER_BLOCK) {
+            let built = {
+                let (c, sti, sh): (&Ctx, &SectionState, &SharedLists) = (ctx, st, &shared);
+                par::map(block, |&i| {
+                    let mut log = c.log.fork();
+                    let t = set_output_entry(
+                        c,
+                        &mut log,
+                        sh,
+                        &prep,
+                        stems.for_call(calls[i]),
+                        sti,
+                        &keys[i],
+                    );
+                    (t, log)
+                })
             };
-            has_entries = true;
-            for &(li, pos) in places.get(k.as_str()).into_iter().flatten() {
-                let dl = &st.datalists[lists[li]];
-                let lv = ListView {
-                    dl,
-                    state: dl.state.as_ref(),
-                    collator: colls[li],
+            let mut temps: Vec<(usize, EntryTemplate)> = Vec::with_capacity(block.len());
+            for (&i, (t, mut log)) in block.iter().zip(built) {
+                let t = match t {
+                    Ok(Some(mut t)) if shared.has_key(&keys[i]) => {
+                        resolve_shared(&mut t, ctx.dm, &mut log, &mut shared, &keys[i], &others)
+                            .map(|()| Some(t))
+                    }
+                    t => t,
                 };
-                let mut es = instantiate_entry(&lv, &t, k);
-                if comma_quirk {
-                    es = dangling_comma_cleanup(&es);
+                ctx.log.join(log);
+                match t {
+                    Ok(Some(t)) => temps.push((i, t)),
+                    Ok(None) => {}
+                    Err(e) => {
+                        result = Err(e);
+                        break;
+                    }
                 }
-                texts[li][pos] = es;
             }
-            if last[k.as_str()] == i {
-                // Only the text is needed from now on.
-                if let Some(e) = st.section.entries.get_mut(k) {
-                    *e = Entry::default();
+            has_entries |= !temps.is_empty();
+            let made: Vec<Vec<(usize, usize, String)>> = {
+                let sti: &SectionState = st;
+                par::map(&temps, |(i, t)| {
+                    let k = &keys[*i];
+                    let mut out = Vec::new();
+                    for &(li, pos) in places.get(k.as_str()).into_iter().flatten() {
+                        let dl = &sti.datalists[lists[li]];
+                        let lv = ListView {
+                            dl,
+                            state: dl.state.as_ref(),
+                            collator: colls[li],
+                        };
+                        let mut es = instantiate_entry(&lv, t, k);
+                        if comma_quirk {
+                            es = dangling_comma_cleanup(&es);
+                        }
+                        out.push((li, pos, es));
+                    }
+                    out
+                })
+            };
+            for ((i, _), out) in temps.into_iter().zip(made) {
+                for (li, pos, es) in out {
+                    texts[li][pos] = es;
                 }
-                for &l in &lists {
-                    forget_entry(&mut st.datalists[l], k);
+                let k = &keys[i];
+                if last[k.as_str()] == i {
+                    // Only the text is needed from now on.
+                    if let Some(e) = st.section.entries.get_mut(k) {
+                        *e = Entry::default();
+                    }
+                    for &l in &lists {
+                        forget_entry(&mut st.datalists[l], k);
+                    }
                 }
+            }
+            if result.is_err() {
+                break;
             }
         }
+        result?;
         let st: &SectionState = st;
         sections.push(SectionOut {
             st,

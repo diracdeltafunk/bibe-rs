@@ -192,6 +192,19 @@ enum Sink {
     Memory(Vec<String>),
 }
 
+/// A message recorded by a forked logger ([`Logger::fork`]), replayed by
+/// [`Logger::join`].
+enum Event {
+    /// [`Logger::log`] (level already checked against the `main` level).
+    Log(Level, Loc, String),
+    /// [`Logger::screen_info`].
+    ScreenInfo(String),
+    /// [`Logger::logfile_info`].
+    LogfileInfo(Loc, String),
+    /// [`Logger::biber_warn`].
+    Warn(String),
+}
+
 /// The logger: writes the `.blg` and stdout, queues warnings and counts
 /// errors. One per run.
 pub struct Logger {
@@ -201,6 +214,8 @@ pub struct Logger {
     warnings: Vec<String>,
     errors: u32,
     nodieonerror: bool,
+    /// A forked logger's recorded messages, in emission order.
+    events: Option<Vec<Event>>,
 }
 
 impl Logger {
@@ -219,6 +234,7 @@ impl Logger {
             warnings: Vec::new(),
             errors: 0,
             nodieonerror: false,
+            events: None,
         })
     }
 
@@ -237,6 +253,7 @@ impl Logger {
             warnings: Vec::new(),
             errors: 0,
             nodieonerror: false,
+            events: None,
         }
     }
 
@@ -254,7 +271,37 @@ impl Logger {
             warnings: Vec::new(),
             errors: 0,
             nodieonerror: false,
+            events: None,
         }
+    }
+
+    /// A logger for one parallel work item ([`crate::par`]): same settings,
+    /// but it records every message (and counts errors) instead of writing
+    /// them. [`Logger::join`] replays them into this logger, so messages come
+    /// out in the serial order when the forks are joined in that order.
+    pub fn fork(&self) -> Logger {
+        Logger {
+            settings: self.settings.clone(),
+            file: None,
+            screen: None,
+            warnings: Vec::new(),
+            errors: 0,
+            nodieonerror: self.nodieonerror,
+            events: Some(Vec::new()),
+        }
+    }
+
+    /// Replay the messages of a [`Logger::fork`] of this logger.
+    pub fn join(&mut self, mut fork: Logger) {
+        for e in fork.events.take().unwrap_or_default() {
+            match e {
+                Event::Log(level, loc, msg) => self.log(level, loc, &msg),
+                Event::ScreenInfo(msg) => self.screen_info(&msg),
+                Event::LogfileInfo(loc, msg) => self.logfile_info(loc, &msg),
+                Event::Warn(msg) => self.biber_warn(msg),
+            }
+        }
+        self.errors += fork.errors;
     }
 
     /// Set `--nodieonerror`.
@@ -327,22 +374,38 @@ impl Logger {
         if level < self.settings.main_level {
             return;
         }
+        if let Some(ev) = &mut self.events {
+            ev.push(Event::Log(level, loc, msg.to_string()));
+            return;
+        }
         self.write_file(level, loc, msg);
         self.write_screen(level, msg);
     }
 
     /// Log to the `screen` category only (e.g. the `DEBUG mode` notice).
     pub fn screen_info(&mut self, msg: &str) {
+        if let Some(ev) = &mut self.events {
+            ev.push(Event::ScreenInfo(msg.to_string()));
+            return;
+        }
         self.write_screen(Level::Info, msg);
     }
 
     /// Log to the `logfile` category only (the `=== <date>` line).
     pub fn logfile_info(&mut self, loc: Loc, msg: &str) {
+        if let Some(ev) = &mut self.events {
+            ev.push(Event::LogfileInfo(loc, msg.to_string()));
+            return;
+        }
         self.write_file(Level::Info, loc, msg);
     }
 
     /// `biber_warn`: queue a warning for [`Logger::display_end`].
     pub fn biber_warn(&mut self, msg: impl Into<String>) {
+        if let Some(ev) = &mut self.events {
+            ev.push(Event::Warn(msg.into()));
+            return;
+        }
         self.warnings.push(msg.into());
     }
 
@@ -449,6 +512,30 @@ mod tests {
         );
         assert_eq!(file.len(), 5);
         assert!(file[0].starts_with("F:log.rs:"));
+    }
+
+    #[test]
+    fn forks_replay_in_join_order() {
+        let mut lg = Logger::memory(LogSettings::new(false, false, 0, false, false));
+        lg.set_nodieonerror(true);
+        lg.log(Level::Info, crate::loc!(), "a");
+        let mut f1 = lg.fork();
+        let mut f2 = lg.fork();
+        f2.log(Level::Info, crate::loc!(), "c");
+        f2.biber_warn("w2");
+        f1.log(Level::Info, crate::loc!(), "b");
+        f1.log(Level::Debug, crate::loc!(), "hidden");
+        f1.biber_warn("w1");
+        assert!(f1.biber_error(crate::loc!(), "e1").is_ok());
+        lg.join(f1);
+        lg.join(f2);
+        assert_eq!(lg.warnings(), ["w1", "w2"]);
+        assert_eq!(lg.errors(), 1);
+        let (screen, _) = lg.memory_lines();
+        assert_eq!(
+            screen,
+            vec!["S:INFO - a", "S:INFO - b", "S:ERROR - e1", "S:INFO - c"]
+        );
     }
 
     #[test]

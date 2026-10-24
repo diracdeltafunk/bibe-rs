@@ -22,10 +22,11 @@
 
 use rustc_hash::FxHashMap;
 use std::borrow::Cow;
+use std::cell::RefCell;
 use std::cmp::Ordering;
 use std::fmt;
 use std::hash::{Hash, Hasher};
-use std::sync::atomic::{AtomicBool, Ordering as AtomicOrdering};
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering as AtomicOrdering};
 use std::sync::{LazyLock, RwLock};
 
 /// The interned record behind a [`Sym`].
@@ -91,6 +92,7 @@ impl Sym {
         let sym = Sym(Box::leak(Box::new(SymData::new(name))));
         dynamic.insert(name, sym);
         DYNAMIC_USED.store(true, AtomicOrdering::Release);
+        DYNAMIC_GEN.fetch_add(1, AtomicOrdering::Release);
         sym
     }
 
@@ -104,11 +106,29 @@ impl Sym {
         if !DYNAMIC_USED.load(AtomicOrdering::Acquire) {
             return None;
         }
-        DYNAMIC
-            .read()
-            .unwrap_or_else(|e| e.into_inner())
-            .get(s)
-            .copied()
+        // Through this thread's cache: the lock's state is one cache line,
+        // which parallel loops reading it at once would keep bouncing.
+        let generation = DYNAMIC_GEN.load(AtomicOrdering::Acquire);
+        LOOKUPS.with(|c| {
+            let mut c = c.borrow_mut();
+            if c.0 != generation {
+                c.0 = generation;
+                c.1.clear();
+            }
+            if let Some(r) = c.1.get(s) {
+                return *r;
+            }
+            let r = DYNAMIC
+                .read()
+                .unwrap_or_else(|e| e.into_inner())
+                .get(s)
+                .copied();
+            if c.1.len() >= 4096 {
+                c.1.clear();
+            }
+            c.1.insert(s.into(), r);
+            r
+        })
     }
 
     /// The name.
@@ -730,6 +750,20 @@ fn slot_of(k: u128) -> usize {
 /// Whether any name has been interned in [`DYNAMIC`] (lets lookups of
 /// unknown names skip the lock while it is empty).
 static DYNAMIC_USED: AtomicBool = AtomicBool::new(false);
+
+/// A thread's cache of [`DYNAMIC`] lookups.
+type LookupCache = FxHashMap<Box<str>, Option<Sym>>;
+
+/// Incremented whenever a name is added to [`DYNAMIC`]: [`LOOKUPS`] caches
+/// are valid for one generation.
+static DYNAMIC_GEN: AtomicU64 = AtomicU64::new(0);
+
+thread_local! {
+    /// This thread's cache of [`DYNAMIC`] lookups (found or not), for the
+    /// generation it was filled in.
+    static LOOKUPS: RefCell<(u64, LookupCache)> =
+        RefCell::new((0, FxHashMap::default()));
+}
 
 /// Names interned later.
 static DYNAMIC: LazyLock<RwLock<FxHashMap<&'static str, Sym>>> =

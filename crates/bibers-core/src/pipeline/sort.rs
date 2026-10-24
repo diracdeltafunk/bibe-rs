@@ -22,6 +22,7 @@ use crate::log::Fatal;
 use crate::model::{
     DataList, Entry, LabelDateInfo, PerlData, Section, SectionState, SortData, Value,
 };
+use crate::par;
 use crate::perlish::{numify, truthy};
 use crate::quirks::Quirk;
 use perl_compat::grapheme::gcstring;
@@ -160,28 +161,38 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
     };
     let keys = st.datalists[list].keys.clone().unwrap_or_default();
     let mut results = Vec::with_capacity(keys.len());
-    let warnings = {
+    let mut warnings = Vec::new();
+    let mut viv = Vec::new();
+    {
         let dl = &st.datalists[list];
         let tmpl = list_sorting_template(ctx.cfg, dl).unwrap_or(&empty);
-        let mut g = Gen {
-            cfg: ctx.cfg,
-            dm: ctx.dm,
-            sec: &st.section,
-            secnum: &st.section.number,
-            dl,
-            config_state: &st.config_state,
-            snk: sortingnamekey_templates(ctx.cfg),
-            warnings: Vec::new(),
-            viv: Default::default(),
-            nosort: Default::default(),
-            citeorder: Default::default(),
-        };
-        for k in &keys {
-            results.push((k.clone(), g.sortinfo(k, tmpl)));
+        let citeorder = std::sync::OnceLock::new();
+        let (cfg, dm, sec, config_state) = (&*ctx.cfg, ctx.dm, &st.section, &st.config_state);
+        // The keys' sort objects in parallel chunks; each chunk's warnings
+        // and autovivifications are merged in key order.
+        let chunks = par::map_slices(&keys, |chunk| {
+            let mut g = Gen {
+                cfg,
+                dm,
+                sec,
+                secnum: &sec.number,
+                dl,
+                config_state,
+                snk: sortingnamekey_templates(cfg),
+                warnings: Vec::new(),
+                viv: Default::default(),
+                nosort: Default::default(),
+                citeorder: &citeorder,
+            };
+            let r: Vec<Option<SortInfo>> = chunk.iter().map(|k| g.sortinfo(k, tmpl)).collect();
+            (r, g.warnings, g.viv.into_inner())
+        });
+        for (r, w, v) in chunks {
+            results.extend(r);
+            warnings.extend(w);
+            viv.extend(v);
         }
-        (g.warnings, g.viv.into_inner())
-    };
-    let (warnings, viv) = warnings;
+    }
     for w in warnings {
         ctx.log.biber_warn(w);
     }
@@ -191,7 +202,7 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
     let had_si = dl.sortinitdata.is_some();
     let mut sd = dl.sortdata.take().unwrap_or_default();
     let mut si = dl.sortinitdata.take().unwrap_or_default();
-    for (k, info) in results {
+    for (k, info) in keys.into_iter().zip(results) {
         let Some(info) = info else { continue };
         if let Some(init) = info.init {
             si.insert(k.clone(), init);
@@ -237,7 +248,8 @@ struct Gen<'a> {
     nosort: std::cell::RefCell<rustc_hash::FxHashMap<String, std::rc::Rc<[usize]>>>,
     /// `_sort_citeorder` with `allkeys`: the largest key order and the
     /// first position of each key in `orig_order_citekeys`.
-    citeorder: std::cell::OnceCell<(f64, rustc_hash::FxHashMap<&'a str, usize>)>,
+    /// (Shared by the parallel chunks of a list.)
+    citeorder: &'a std::sync::OnceLock<(f64, rustc_hash::FxHashMap<&'a str, usize>)>,
 }
 
 /// A hash entry biber autovivifies by reading through it.

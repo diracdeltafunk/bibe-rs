@@ -39,7 +39,7 @@ pub use translate::translate;
 
 use std::borrow::Cow;
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, OnceLock};
+use std::sync::{Arc, OnceLock};
 
 use pcre2::bytes::{CaptureLocations, Regex, RegexBuilder};
 
@@ -115,29 +115,31 @@ impl PerlRegex {
         })
     }
 
-    /// A shared compiled copy of `qr/$pattern/` from a process-wide cache
-    /// (biber recompiles user regexes for every entry; compiling PCRE2
-    /// patterns with perl's large `\w` class is comparatively expensive).
+    /// A compiled copy of `qr/$pattern/` from a per-thread cache (biber
+    /// recompiles user regexes for every entry; compiling PCRE2 patterns with
+    /// perl's large `\w` class is comparatively expensive). Per thread, so
+    /// that parallel loops share no lock, reference count or PCRE2 match
+    /// data: each thread compiles the few patterns it uses once.
     pub fn cached(pattern: &str, ci: bool) -> Result<Arc<PerlRegex>, RegexError> {
-        type Cache = Mutex<HashMap<(String, bool), Arc<PerlRegex>>>;
-        static CACHE: OnceLock<Cache> = OnceLock::new();
-        let cache = CACHE.get_or_init(Default::default);
-        let key = (pattern.to_string(), ci);
-        if let Some(r) = cache
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner)
-            .get(&key)
-        {
-            return Ok(Arc::clone(r));
+        type Cache = HashMap<String, [Option<Arc<PerlRegex>>; 2]>;
+        thread_local! {
+            static CACHE: std::cell::RefCell<Cache> = Default::default();
+        }
+        if let Some(r) = CACHE.with(|c| {
+            c.borrow()
+                .get(pattern)
+                .and_then(|e| e[usize::from(ci)].clone())
+        }) {
+            return Ok(r);
         }
         let re = Arc::new(PerlRegex::new(pattern, ci)?);
-        let mut g = cache
-            .lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner);
-        if g.len() > 4096 {
-            g.clear();
-        }
-        g.insert(key, Arc::clone(&re));
+        CACHE.with(|c| {
+            let mut c = c.borrow_mut();
+            if c.len() > 4096 {
+                c.clear();
+            }
+            c.entry(pattern.to_string()).or_default()[usize::from(ci)] = Some(Arc::clone(&re));
+        });
         Ok(re)
     }
 

@@ -220,7 +220,7 @@ pub fn sections_to_process(doc: &Document) -> Vec<String> {
 /// `fetch::init_section`). Phase tests run individual steps of this.
 pub fn prepare_section(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     for (name, phase) in SECTION_PHASES {
-        phase(ctx, st)?;
+        crate::par::timed(name, || phase(ctx, st))?;
         if *name == "validate_datamodel" && ctx.run.free_dead_state {
             // Read by data source reading and validation only.
             for slot in ["everykey", "everykey_lc", "keytods"] {

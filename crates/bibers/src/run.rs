@@ -259,6 +259,17 @@ pub fn setup(args: &[String], env: &Env) -> SetupResult {
         eprint_flush(&format!("bibers: {e}\n"));
         return Exit(2);
     }
+    // DC-068: worker threads for the per-entry loops (0 or absent: the
+    // default, `$BIBERS_THREADS` or the number of cores).
+    let threads = match opts.remove("threads") {
+        Some(Val::Scalar(n)) => n.parse::<usize>().ok(),
+        _ => Some(0),
+    };
+    let Some(threads) = threads else {
+        eprint_flush("bibers: ERROR - --threads needs a number of threads (0 = all cores)\n");
+        return Exit(2);
+    };
+    bibers_core::par::set_threads(threads);
     if let Some(msg) = unsupported(&opts) {
         eprint_flush(&format!("bibers: ERROR - {msg}\n"));
         return Exit(2);
@@ -442,7 +453,7 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         Ok(p) => p,
         Err(_) => return log.display_end(),
     };
-    let text = match format.render(&mut ctx, &mut processed) {
+    let text = match bibers_core::par::timed("render", || format.render(&mut ctx, &mut processed)) {
         Ok(Some(t)) => t,
         Ok(None) => {
             let _ = biber_error!(

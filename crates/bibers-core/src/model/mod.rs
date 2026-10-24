@@ -399,6 +399,25 @@ impl NameArena {
         id
     }
 
+    /// Move `other`'s lists and names to the end of this arena, renumbered;
+    /// returns the renumbering of `other`'s list ids.
+    pub fn append(&mut self, other: NameArena) -> impl Fn(NameListId) -> NameListId + use<> {
+        let lists = self.lists.len() as u32;
+        let names = self.names.len() as u32;
+        self.names.extend(other.names.into_iter().map(|mut n| {
+            n.id.0 += names;
+            n
+        }));
+        self.lists.extend(other.lists.into_iter().map(|mut l| {
+            l.id.0 += lists;
+            for n in &mut l.names {
+                n.0 += names;
+            }
+            l
+        }));
+        move |id| NameListId(id.0 + lists)
+    }
+
     /// The names of a list.
     pub fn names_of(&self, id: NameListId) -> impl Iterator<Item = &Name> {
         self.list(id).names.iter().map(|n| self.name(*n))
