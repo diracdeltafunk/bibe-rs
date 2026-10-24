@@ -6,18 +6,24 @@
 //! caller applies them, and their side effects (state changes, log messages
 //! from a forked [`Logger`](crate::log::Logger)), in the serial order:
 //!
-//! - [`map`] maps a function over a slice and returns the results in order;
-//! - [`map_chunks`] does the same with per-chunk state (a cache, a forked
-//!   logger, recorded side effects) that the caller merges chunk by chunk.
+//! - [`map`] maps a function over a slice and returns the results in order
+//!   ([`map_mut`]: with mutable access to the items);
+//! - [`map_chunks`] and [`map_slices`] do the same with per-chunk state (a
+//!   cache, a forked logger, recorded side effects) that the caller merges
+//!   chunk by chunk;
+//! - [`map_logged`] gives each chunk a fork of a logger and joins the forks
+//!   in order, stopping at the first error like a serial loop with `?`;
+//! - [`join`] runs two computations.
 //!
-//! Both run serially with one thread (`--threads 1`) and for slices shorter
+//! They run serially with one thread (`--threads 1`) and for inputs shorter
 //! than the threshold (thread start-up and splitting would cost more than
 //! they save on a small input).
 //!
 //! Settings: `--threads N` (bibers' command line) or `$BIBERS_THREADS`; the
 //! default is the number of available cores. `$BIBERS_PAR_MIN_ITEMS` lowers
 //! or raises the threshold (tests set it to 1 so that the corpus's small
-//! inputs exercise the parallel paths).
+//! inputs exercise the parallel paths). `$BIBERS_TIMINGS` prints each
+//! phase's wall time to stderr ([`timed`]), to find the serial parts.
 
 use crate::log::{Fatal, Logger};
 use rayon::prelude::*;
@@ -81,6 +87,10 @@ fn pool_for(len: usize) -> Option<&'static rayon::ThreadPool> {
         rayon::ThreadPoolBuilder::new()
             .num_threads(n)
             .thread_name(|i| format!("bibers-{i}"))
+            // The main thread's usual size (rayon's default is 2 MiB): an
+            // input that parses or decodes serially must not overflow a
+            // worker's stack. (Only touched pages are resident.)
+            .stack_size(8 << 20)
             .build()
             .ok()
     })
