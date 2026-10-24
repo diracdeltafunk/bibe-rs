@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security issue
+    url: https://github.com/diracdeltafunk/bibe-rs/security/advisories/new
+    about: Please report security problems privately.
+  - name: A bug in biber itself
+    url: https://github.com/plk/biber/issues
+    about: If biber 2.22 also behaves wrongly, it is a biber bug (bibers reproduces it). See docs/biber-bugs.md first, then consider reporting it to biber.

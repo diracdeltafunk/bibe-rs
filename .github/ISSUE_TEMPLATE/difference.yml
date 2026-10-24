@@ -1,0 +1,37 @@
+name: Output differs from biber
+description: bibers and biber 2.22 produce different output, messages or exit codes on the same input
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! Differences from biber are the most useful reports. Please check [docs/compat.md](https://github.com/diracdeltafunk/bibe-rs/blob/main/docs/compat.md) first: some differences are deliberate.
+  - type: textarea
+    id: what
+    attributes:
+      label: What differs
+      description: The relevant part of each program's `.bbl` (or `.blg` messages, exit code, …).
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Input files
+      description: Attach (drag in) the `.bcf` and `.bib` files, or paste a cut-down example. The `.bcf` is written by LaTeX next to your document.
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command line
+      placeholder: bibers mydoc
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Output of `bibers --version` and `biber --version`, and your OS.
+      placeholder: "bibers version: 0.1.0 (biber 2.22 compatible); biber version: 2.22; macOS 26"
+    validations:
+      required: true

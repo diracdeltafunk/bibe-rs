@@ -1,0 +1,22 @@
+name: Other bug or request
+description: A crash, a problem with installing or running bibers, or a feature request
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead (error messages, exit code).
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Input files
+      description: If an input triggers it, attach the `.bcf` and `.bib` (or a cut-down example).
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Output of `bibers --version`, and your OS.
+    validations:
+      required: true

@@ -2,11 +2,16 @@
 
 A fast, behaviour-compatible Rust port of [biber](https://github.com/plk/biber), the biblatex backend. The binary is called **`bibers`**. It aims to produce byte-identical `.bbl` output to biber 2.22, at least 50× faster.
 
-Status: M0–M4 done; M5's performance work done (about 100× faster than biber on large bibliographies, see below); release v0.1.0 being prepared. `bibers` produces output byte-identical to biber 2.22 on all 776 corpus cases (`.bbl`, tool mode and bibtex output, biblatexml, validation, remote sources, every Perl encoding), on all 964 TeX Live `.bib` files across 8 styles, on 163 real biblatex documents, and across ~100k random differential tests, apart from documented deliberate differences (`docs/compat.md`).
+**Status: 0.1.0, a preview release.** `bibers` produces output byte-identical to biber 2.22, apart from the documented deliberate differences in [docs/compat.md](docs/compat.md). That holds on all 776 test-corpus cases (`.bbl`, tool mode and bibtex output, biblatexml, validation, remote sources, every Perl encoding), on all 964 TeX Live `.bib` files across 8 styles, on 163 real biblatex documents, and across about 100,000 random differential tests. It is about 100× faster than biber on large bibliographies (see below). It implements biber 2.22, so it works with biblatex 3.22 (control file format 3.11).
+
+As a preview, it hasn't yet met the variety of real documents biber has. If bibers and biber disagree on one of yours, please [open an issue](https://github.com/diracdeltafunk/bibe-rs/issues/new/choose) with the `.bcf` and `.bib`. That is the most useful thing you can do.
 
 - [docs/PLAN.md](docs/PLAN.md): goals, feature inventory, architecture, correctness strategy, milestones, decisions.
 - [docs/compat.md](docs/compat.md): every behavioural difference between bibers and biber.
-- [docs/biber-bugs.md](docs/biber-bugs.md): bugs found in biber itself, to be reported upstream.
+- [CHANGELOG.md](CHANGELOG.md): release notes.
+- [CONTRIBUTING.md](CONTRIBUTING.md): how to build, test and contribute (including the clean-room rule for the BibTeX parser).
+- [SECURITY.md](SECURITY.md): reporting security issues.
+- [docs/biber-bugs.md](docs/biber-bugs.md): bugs found in biber itself, some reported upstream ([docs/upstream/](docs/upstream/)).
 - [docs/research/](docs/research/): subsystem deep-dives into biber 2.22.
 - `vendor/biber`: upstream biber, pinned at `v2.22` (git submodule).
 
@@ -47,7 +52,7 @@ Each [release](https://github.com/diracdeltafunk/bibe-rs/releases) has an archiv
 2. Unpack it and put `bibers` in a directory on your `PATH`, for example `~/.local/bin` or `/usr/local/bin` (on Windows, any folder listed in the `Path` environment variable).
 3. Check: `bibers --version` prints `bibers version: <version> (biber 2.22 compatible)`.
 
-The macOS binary is not notarised. If macOS refuses to run a copy downloaded with a browser, remove the quarantine flag: `xattr -d com.apple.quarantine bibers`.
+The binaries are not code-signed. On macOS, if Gatekeeper refuses to run a copy downloaded with a browser, remove the quarantine flag: `xattr -d com.apple.quarantine bibers`. On Windows, SmartScreen may warn the first time you run `bibers.exe`; choose "More info" and then "Run anyway".
 
 ### From source
 
@@ -77,7 +82,7 @@ latexmk then runs bibers whenever it would run biber, and reruns it as usual (it
 
 ### arara
 
-arara's `biber` rule always runs `biber`. Add a `bibers` rule: save this as `bibers.yaml` in a rules directory, for example `rules/` next to the document, and list that directory in `araraconfig.yaml` (`paths: ['./rules']`):
+arara's `biber` rule always runs `biber`. Add a `bibers` rule (modelled on arara's own `biber` rule; it has not yet been tested with arara itself, so reports are welcome): save this as `bibers.yaml` in a rules directory, for example `rules/` next to the document, and list that directory in `araraconfig.yaml` (`paths: ['./rules']`):
 
 ```yaml
 !config
