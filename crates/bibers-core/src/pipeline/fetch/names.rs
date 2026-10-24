@@ -6,6 +6,7 @@
 use crate::config::blx::{Registry, Scope, expand_option_input};
 use crate::model::{Name, NamePart};
 use crate::perlish::{lc, nfc_string, nfd_string};
+use compact_str::CompactString;
 use perl_compat::grapheme::{gcstring, perl};
 use perl_compat::regex::PerlRegex;
 use perl_compat::unicode::{Prop, is_perl_space};
@@ -145,8 +146,9 @@ fn split_dash(s: &str) -> Vec<String> {
 }
 
 /// `gen_initials` (Utils.pm:1843).
-pub fn gen_initials(strings: &[String]) -> Vec<String> {
-    let mut out = Vec::new();
+pub fn gen_initials(strings: &[String]) -> Vec<CompactString> {
+    // (one initial per string: boxing the vector needs no reallocation)
+    let mut out = Vec::with_capacity(strings.len());
     for s in strings {
         let wholly_braced = s.chars().nth(2).is_some()
             && s.starts_with('{')
@@ -159,14 +161,14 @@ pub fn gen_initials(strings: &[String]) -> Vec<String> {
             .zip(s.chars().skip(2))
             .any(|((a, b), c)| a != '{' && Prop::Dash.contains(b) && c != '}');
         if !wholly_braced && hyphenated {
-            out.push(gen_initials(&split_dash(s)).join("-"));
+            out.push(gen_initials(&split_dash(s)).join("-").into());
         } else {
             let t = s.trim_start_matches('{');
             let chr = gcstring::substr(t, 0, Some(1));
             if chr.chars().next().is_some_and(|x| Prop::Dia.contains(x)) {
-                out.push(gcstring::substr(t, 0, Some(2)).to_string());
+                out.push(gcstring::substr(t, 0, Some(2)).into());
             } else {
-                out.push(chr.to_string());
+                out.push(chr.into());
             }
         }
     }
@@ -442,9 +444,9 @@ pub fn parsename(cfg: &NameCfg, namestr: &str) -> ParsedName {
             }
             let p = strip_noinit(&p, cfg.noinit);
             let inits = gen_initials(&split_initial_parts(&p));
-            part.string = Some(stripped);
-            part.initial = Some(inits);
-            strip = Some(if flag { "1" } else { "0" }.to_string());
+            part.string = Some(stripped.into());
+            part.initial = Some(inits.into());
+            strip = Some(flag);
         }
         if let Some(st) = part
             .string
@@ -574,14 +576,14 @@ pub fn parsename_x(cfg: &NameCfg, namestr: &str, fieldname: &str, key: &str) -> 
                 stripped.clone()
             };
             let p = strip_noinit(&p, cfg.noinit);
-            let ini: Vec<Option<String>> = match inits.get(&format!("{np}-i")) {
-                Some(i) => i.clone(),
+            let ini: Vec<Option<CompactString>> = match inits.get(&format!("{np}-i")) {
+                Some(i) => i.iter().map(|x| x.as_deref().map(Into::into)).collect(),
                 None => gen_initials(&split_on(&p, |c| c == '~' || is_perl_space(c)))
                     .into_iter()
                     .map(Some)
                     .collect(),
             };
-            part.string = Some(stripped);
+            part.string = Some(stripped.into());
             // undef initials (a stray `}`) are kept as empty strings
             part.initial = Some(ini.into_iter().map(Option::unwrap_or_default).collect());
         }

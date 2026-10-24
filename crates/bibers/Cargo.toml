@@ -19,6 +19,13 @@ path = "src/main.rs"
 [dependencies]
 bibers-core.workspace = true
 jiff.workspace = true
+mimalloc.workspace = true
+dhat = { workspace = true, optional = true }
+
+[features]
+# Heap profiling: with this feature, bibers writes dhat-heap.json (peak heap
+# by allocation site) on exit; see tools/bench/dhat_report.py.
+dhat-heap = ["dep:dhat"]
 
 [dev-dependencies]
 bibers-testkit.workspace = true

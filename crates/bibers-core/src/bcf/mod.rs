@@ -641,6 +641,7 @@ pub fn parse_ctrlfile(
     cfg.ctrlfile_path = Some(path.clone());
 
     let raw = read_ctrlfile(env, &path, log)?;
+    cfg.names_rawdata |= raw.contains("rawdata");
     // biber checks the NFD of the whole file, then reads a copy where data
     // source lines are not normalised. The two texts are usually the same
     // (ASCII or already-NFD data source names, `\n` line ends), and then

@@ -40,6 +40,9 @@ pub fn process_lists(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> 
                 filter_list(ctx, st, i)?;
             }
             phase(ctx, st, i)?;
+            if *name == "uniqueness" && ctx.run.free_dead_state {
+                super::release_uniqueness_data(&mut st.datalists[i]);
+            }
         }
     }
     Ok(())
@@ -170,7 +173,7 @@ pub fn generate_contextdata(
     list: usize,
 ) -> Result<(), Fatal> {
     use super::entries::{H, info_slot, ls, uniquename_value};
-    use serde_json::Value as J;
+    use crate::model::PV as J;
     let secnum = st.section.number.clone();
     let h = H::new(ctx.cfg, ctx.dm, &secnum);
     let opt_undef = |opt: &str, et: &str, key: &str| {
@@ -187,7 +190,7 @@ pub fn generate_contextdata(
     let sec = &st.section;
     let dl = &mut st.datalists[list];
     let keys = dl.keys.clone().unwrap_or_default();
-    let jstr = |s: &str| J::String(s.to_string());
+    let jstr = |s: &str| J::from(s.to_string());
     // `first_index` over the keys, built on first use.
     let mut key_index: Option<rustc_hash::FxHashMap<String, usize>> = None;
     for key in &keys {
@@ -253,7 +256,7 @@ pub fn generate_contextdata(
                 let lnh = ls::str_of(&lnh).unwrap_or_default();
                 if ls::num_at(dl, &["seen_labelname", &lnh]) > 1.0 {
                     let v = ls::incr(dl, &["seen_extraname", &lnh]);
-                    ls::set(dl, &["extranamedata", key], J::String(v.to_string()));
+                    ls::set(dl, &["extranamedata", key], J::from(v.to_string()));
                 }
             }
             for (opt, field, seen, extra, data) in [
@@ -285,7 +288,7 @@ pub fn generate_contextdata(
                 let v = ls::str_of(&ls::entryfield(dl, key, field)).unwrap_or_default();
                 if ls::num_at(dl, &[seen, &v]) > 1.0 {
                     let n = ls::incr(dl, &[extra, &v]);
-                    ls::set(dl, &[data, key], J::String(n.to_string()));
+                    ls::set(dl, &[data, key], J::from(n.to_string()));
                 }
             }
             if opt_undef("labelalpha", et, key) {
@@ -294,7 +297,7 @@ pub fn generate_contextdata(
                 let la = ls::str_of(&la).unwrap_or_default();
                 if ls::num_at(dl, &["ladisambiguation", &la]) > 1.0 {
                     let n = ls::incr(dl, &["seen_extraalpha", &la]);
-                    ls::set(dl, &["extraalphadata", key], J::String(n.to_string()));
+                    ls::set(dl, &["extraalphadata", key], J::from(n.to_string()));
                 }
             }
         }
@@ -320,7 +323,7 @@ pub fn generate_contextdata(
                 let schema: &[J] = nd
                     .get("namedisschema")
                     .and_then(J::as_array)
-                    .map_or(&[], Vec::as_slice);
+                    .map_or(&[], |a| a.as_slice());
                 let mut pnun: std::collections::BTreeMap<&str, &str> = Default::default();
                 for (i, nss) in schema.iter().enumerate() {
                     if Some(nss) == un {
@@ -362,7 +365,7 @@ pub fn generate_contextdata(
                     .as_object_mut()
                     .expect("object");
                 for (np, v) in values {
-                    unparts.insert(np, J::String(v.to_string()));
+                    unparts.insert(np.to_string(), J::from(v.to_string()));
                 }
             }
         }

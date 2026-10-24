@@ -57,6 +57,15 @@ pub struct BibCache {
     pub rstrings: HashMap<String, String>,
 }
 
+impl BibCache {
+    /// Free the cached entries (once no data source will be read again);
+    /// what the output writers use (`rstrings`, `master_comments`) stays.
+    pub fn release_entries(&mut self) {
+        self.data = HashMap::new();
+        self.globalds = HashMap::new();
+    }
+}
+
 /// Option values used while reading data, looked up once per `fetch_data`.
 pub struct FetchOpts {
     pub xsvsep: Option<Arc<PerlRegex>>,
@@ -274,7 +283,10 @@ pub fn extract_entries(
     }
     let utf16_chunks = ctx.cfg.quirks.on(crate::quirks::Quirk::Utf16ChunkSurrogate);
     let text = match encoding::decode(&bytes, encoding, utf16_chunks) {
-        Ok(t) => Some(t),
+        Ok(t) => {
+            drop(bytes);
+            Some(t)
+        }
         Err(e) => {
             biber_error!(
                 ctx.log,
@@ -308,6 +320,7 @@ pub fn extract_entries(
         );
         cache_data(ctx, st, opts, &mut x, filename, encoding, &text)?;
     }
+    drop(text);
 
     if st.section.allkeys {
         let fkeys = ctx
@@ -488,8 +501,8 @@ fn cache_data(
     if encoding == "ascii" {
         info!(ctx.log, "Reading ascii input as UTF-8");
     }
-    let buf = perl_compat::unicode::nfd(text);
-    let buf = buf.strip_prefix('\u{feff}').unwrap_or(&buf);
+    let nfd_text = perl_compat::unicode::nfd(text);
+    let buf = nfd_text.strip_prefix('\u{feff}').unwrap_or(&nfd_text);
     let buf = normalise_newlines(buf);
 
     // Pass 1 (parse_decode)
@@ -515,6 +528,12 @@ fn cache_data(
             }
         }
     });
+    // Pass 1's entries and the input text are done with: free them before
+    // pass 2 builds the cache (a large file is three copies otherwise).
+    drop(p1);
+    drop(buf);
+    drop(nfd_text);
+
     // biber writes the decoded buffer to its temp file through PerlIO's
     // :utf8_strict layer (slurp_switchw), which turns noncharacters (e.g.
     // from `\char"FDD0`) into U+FFFD.
@@ -527,6 +546,7 @@ fn cache_data(
 
     // Pass 2 (cache_data proper)
     let p2 = ctx.run.bt.parse(&lbuf);
+    drop(lbuf);
     push_diags(x, &p2);
     info!(ctx.log, "Found BibTeX data source '{filename}'");
 
@@ -763,7 +783,9 @@ fn create_entry_inner(
     let mut be = Entry::default();
     be.set_field("citekey", Some(Value::Str(k.to_string())));
     debug!(ctx.log, "Creating biber Entry object with key '{k}'");
-    be.set_field("rawdata", Some(Value::Str(print_s(e, tbkey))));
+    if !ctx.run.skip_rawdata {
+        be.set_field("rawdata", Some(Value::Str(print_s(e, tbkey))));
+    }
     be.set_field("entrytype", Some(Value::Str(fc(&e.entrytype))));
     for (f, _) in &e.fields {
         let value = raw_get(e, f).unwrap_or("");
@@ -1425,7 +1447,7 @@ fn name_handler(
         if add_xdata_ref(ctx, opts, be, field, XRef::Str(name), Some(i), &secnum) {
             let mut n = Name::default();
             n.slots.insert("xdata", J::from(name.clone()));
-            n.index = Some((names.len() + 1).to_string());
+            n.index = Some((names.len() + 1).to_string().into());
             names.push(st.section.names.new_name(n));
             continue;
         }
@@ -1520,7 +1542,7 @@ fn name_handler(
                 .insert("morenames", J::from("1"));
         } else {
             let mut n = n;
-            n.index = Some((names.len() + 1).to_string());
+            n.index = Some((names.len() + 1).to_string().into());
             names.push(st.section.names.new_name(n));
         }
     }

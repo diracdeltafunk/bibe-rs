@@ -19,7 +19,9 @@ use crate::bcf::templates::{
 use crate::config::{Config, OptValue};
 use crate::datamodel::DataModel;
 use crate::log::Fatal;
-use crate::model::{DataList, Entry, LabelDateInfo, PerlData, Section, SectionState, Value};
+use crate::model::{
+    DataList, Entry, LabelDateInfo, PerlData, Section, SectionState, SortData, Value,
+};
 use crate::perlish::{numify, truthy};
 use crate::quirks::Quirk;
 use perl_compat::grapheme::gcstring;
@@ -185,45 +187,34 @@ pub fn generate_sortinfo(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> R
     }
     apply_viv(st, list, viv);
     let dl = &mut st.datalists[list];
-    let had_sd = dl.slots.contains_key("sortdata");
-    let had_si = dl.slots.contains_key("sortinitdata");
-    let mut sd = match dl.slots.remove("sortdata") {
-        Some(J::Object(m)) => m,
-        _ => Map::new(),
-    };
-    let mut si = match dl.slots.remove("sortinitdata") {
-        Some(J::Object(m)) => m,
-        _ => Map::new(),
-    };
+    let had_sd = dl.sortdata.is_some();
+    let had_si = dl.sortinitdata.is_some();
+    let mut sd = dl.sortdata.take().unwrap_or_default();
+    let mut si = dl.sortinitdata.take().unwrap_or_default();
     for (k, info) in results {
         let Some(info) = info else { continue };
-        sd.insert(
-            k.clone(),
-            J::Array(vec![
-                J::from(info.string),
-                J::Array(info.obj.into_iter().map(J::from).collect()),
-            ]),
-        );
         if let Some(init) = info.init {
-            let mut o = Map::new();
-            o.insert("init".into(), J::from(init));
-            si.insert(k, J::Object(o));
+            si.insert(k.clone(), init);
         }
+        sd.insert(
+            k,
+            SortData {
+                obj: info.obj.into_iter().map(Into::into).collect(),
+            },
+        );
     }
     // The hashes only exist once something was stored in them.
     if !sd.is_empty() || had_sd {
-        dl.slots.insert("sortdata", J::Object(sd));
+        dl.sortdata = Some(sd);
     }
     if !si.is_empty() || had_si {
-        dl.slots.insert("sortinitdata", J::Object(si));
+        dl.sortinitdata = Some(si);
     }
     Ok(())
 }
 
 /// The sort information of one key.
 struct SortInfo {
-    /// The sort string (`join(',', @sortobj)`).
-    string: String,
     /// One value per sort set.
     obj: Vec<String>,
     /// sortinit, if the sort string is non-empty.
@@ -416,11 +407,7 @@ impl<'a> Gen<'a> {
         } else {
             None
         };
-        Some(SortInfo {
-            string: ss,
-            obj,
-            init,
-        })
+        Some(SortInfo { obj, init })
     }
 
     /// `_sortset` (Internals.pm:1275): the first true value among the
@@ -504,7 +491,7 @@ impl<'a> Gen<'a> {
                     .as_ref()
                     .and_then(|st| st.peek2("fields", key))
                     .and_then(|f| f.get("sortlabelalpha"))
-                    .and_then(J::as_str)
+                    .and_then(crate::model::PV::as_str)
                     .unwrap_or("");
                 return Some(process_sort_attributes(s, a));
             }
@@ -794,7 +781,9 @@ impl<'a> Gen<'a> {
         } else {
             "vissort"
         };
-        let visible = num(nld.and_then(|d| d.get(vis_key)).and_then(J::as_str));
+        let visible = num(nld
+            .and_then(|d| d.get(vis_key))
+            .and_then(crate::model::PV::as_str));
         if let Some(u) = slot_str(&names.slots, "useprefix") {
             useprefix = Some(u.to_string());
         }

@@ -34,6 +34,16 @@ roxmltree = "0.21"
 memchr = "2"
 serde_json = "1"
 rustc-hash = "2"
+# The global allocator of the bibers binary: less memory than the system
+# allocators (fragmentation) and faster. mimalloc 2 rather than 3: 5-15%
+# lower peak RSS on the benchmarks at the same speed.
+mimalloc = { version = "0.1.48", default-features = false, features = ["v2"] }
+# Short strings stored inline (the generic list state, `model::PV`).
+compact_str = "0.9"
+# Heap profiling of the bibers binary (feature `dhat-heap`, docs/M5.md).
+dhat = "0.3"
+# Vectors one pointer wide (the generic list state, `model::PV`).
+thin-vec = "0.2"
 md-5 = "0.10"
 # Local time for the log's "=== <date>" line. Not chrono: its `clock` feature
 # links CoreFoundation on macOS, which costs ~1 ms at every process start.

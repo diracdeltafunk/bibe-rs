@@ -30,10 +30,11 @@
 use super::Ctx;
 use crate::log::Fatal;
 use crate::model::{DataList, ListState, NameArena, NameListId, Section, SectionState, Value};
+use crate::model::{PMap as Map, PV as J};
 use crate::perlish::{numify, truthy};
 use crate::quirks::{Quirk, Quirks};
 use rustc_hash::FxHashMap as HashMap;
-use serde_json::{Map, Value as J};
+use serde_json::Value as SJ;
 use std::rc::Rc;
 
 /// The separator biber joins namestrings and name lists with.
@@ -51,11 +52,13 @@ pub fn uniqueness(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<(
         section, datalists, ..
     } = st;
     let entries = entry_infos(ctx, section);
-    let converged = run(
+    let converged = run_with(
         ctx.cfg.quirks,
         &section.names,
         &entries,
         &mut datalists[list],
+        // Only biber's dumps show some of it after this phase.
+        !ctx.run.free_dead_state,
     );
     if !converged {
         // biber never terminates here (BB-149); bibers stops (DC-052).
@@ -103,7 +106,7 @@ fn entry_infos(ctx: &Ctx, section: &Section) -> Vec<EntryInfo> {
         };
         let bee = be.entrytype();
         // `next unless defined($lni)`
-        let Some(lni) = be.slots.get("labelnameinfo").and_then(J::as_str) else {
+        let Some(lni) = be.slots.get("labelnameinfo").and_then(SJ::as_str) else {
             continue;
         };
         let Some(nl) = be.get_field(lni).and_then(Value::as_names) else {
@@ -126,6 +129,20 @@ fn entry_infos(ctx: &Ctx, section: &Section) -> Vec<EntryInfo> {
 /// [`uniqueness`] that doesn't need the option store).
 /// Returns `false` if the iteration was stopped at [`MAX_PASSES`].
 pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut DataList) -> bool {
+    run_with(quirks, names, entries, dl, true)
+}
+
+/// [`run`]. Unless `whole_state`, what no later phase reads is left out of
+/// the state: the counters (`uniquenamecount`, `uniquenamecount_all`,
+/// `uniquelistcount`) and the names' `basenamestring` and `namestring(s)`
+/// (moved into the passes' cache instead of copied).
+fn run_with(
+    quirks: Quirks,
+    names: &NameArena,
+    entries: &[EntryInfo],
+    dl: &mut DataList,
+    whole_state: bool,
+) -> bool {
     let changed = dl
         .slots
         .get("unulchanged")
@@ -141,6 +158,7 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         unc_all: None,
         ulc: None,
         statics: HashMap::default(),
+        move_statics: !whole_state,
         lists: HashMap::default(),
     };
     let converged = u.iterate();
@@ -150,9 +168,17 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         unc_all,
         ulc,
         nld,
+        statics,
+        lists,
         ..
     } = u;
+    drop((statics, lists));
     nld.finish(&mut state);
+    let (unc, unc_all, ulc) = if whole_state {
+        (unc, unc_all, ulc)
+    } else {
+        (None, None, None)
+    };
     if let Some(c) = unc {
         state.insert("uniquenamecount", c.to_json());
     }
@@ -164,7 +190,7 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
     }
     dl.state = Some(state);
     dl.slots
-        .insert("unulchanged", J::from(if changed { "1" } else { "0" }));
+        .insert("unulchanged", SJ::from(if changed { "1" } else { "0" }));
     converged
 }
 
@@ -182,10 +208,10 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
 struct NameListData {
     /// `namelistdata` as found (`None` if absent), minus the lists taken.
     orig: Option<HashMap<String, J>>,
-    lists: HashMap<NameListId, Map<String, J>>,
+    lists: HashMap<NameListId, Map>,
 }
 
-fn obj_entry<'m>(m: &'m mut Map<String, J>, k: &str) -> &'m mut Map<String, J> {
+fn obj_entry<'m>(m: &'m mut Map, k: &str) -> &'m mut Map {
     if !matches!(m.get(k), Some(J::Object(_))) {
         m.insert(k.to_string(), J::Object(Map::new()));
     }
@@ -203,7 +229,7 @@ fn defined(v: Option<&J>) -> Option<&J> {
 /// A scalar as Perl would stringify it (`undef` → `""`).
 fn s_or_empty(v: Option<&J>) -> String {
     match v {
-        Some(J::String(s)) => s.clone(),
+        Some(J::String(s)) => s.to_string(),
         Some(J::Null) | None => String::new(),
         Some(other) => other.to_string(),
     }
@@ -234,7 +260,7 @@ impl NameListData {
         state.set_namelistdata(Some(m));
     }
 
-    fn nl(&mut self, nlid: NameListId) -> &mut Map<String, J> {
+    fn nl(&mut self, nlid: NameListId) -> &mut Map {
         let orig = &mut self.orig;
         self.lists
             .entry(nlid)
@@ -247,7 +273,7 @@ impl NameListData {
             })
     }
 
-    fn nd(&mut self, nlid: NameListId, nid: &str) -> &mut Map<String, J> {
+    fn nd(&mut self, nlid: NameListId, nid: &str) -> &mut Map {
         obj_entry(self.nl(nlid), nid)
     }
 
@@ -269,7 +295,7 @@ struct NameStatic {
 }
 
 impl NameStatic {
-    fn read(d: &Map<String, J>) -> NameStatic {
+    fn read(d: &Map) -> NameStatic {
         let opt_s = |k: &str| defined(d.get(k)).map(|v| s_or_empty(Some(v)));
         let namestrings: Vec<Option<String>> = match d.get("namestrings") {
             Some(J::Array(a)) => a
@@ -288,7 +314,7 @@ impl NameStatic {
 }
 
 /// A name's `namedisschema` (`[]` if unset).
-fn schema(d: &Map<String, J>) -> &[J] {
+fn schema(d: &Map) -> &[J] {
     match d.get("namedisschema") {
         Some(J::Array(a)) => a,
         _ => &[],
@@ -536,13 +562,13 @@ impl ListCount {
     fn to_json(&self) -> J {
         let mut o = Map::new();
         if let Some(g) = &self.global {
-            let mut go: Map<String, J> = g
+            let mut go: Map = g
                 .prefix
                 .iter()
                 .map(|(k, c)| (k.clone(), count_json(*c)))
                 .collect();
             if let Some(f) = &g.fin {
-                let mut fo: Map<String, J> = f
+                let mut fo: Map = f
                     .lists
                     .iter()
                     .map(|(k, c)| (k.clone(), count_json(*c)))
@@ -727,6 +753,9 @@ struct Uniq<'a> {
     ulc: Option<ListCount>,
     /// Cache of [`NameStatic`] by name.
     statics: HashMap<crate::model::NameId, Rc<NameStatic>>,
+    /// Move the [`NameStatic`] data out of the state instead of copying it
+    /// (in a full run, where no later phase reads it).
+    move_statics: bool,
     /// Cache of the names of each list.
     lists: HashMap<NameListId, Rc<Vec<NameRef>>>,
 }
@@ -737,7 +766,11 @@ fn is_min(un: &str) -> bool {
 
 /// A name slot as a defined string (`$n->get_uniquename` etc.).
 fn slot(slots: &crate::model::Slots, k: &str) -> Option<String> {
-    defined(slots.get(k)).map(|v| s_or_empty(Some(v)))
+    match slots.get(k) {
+        None | Some(SJ::Null) => None,
+        Some(SJ::String(s)) => Some(s.clone()),
+        Some(other) => Some(other.to_string()),
+    }
 }
 
 /// One name of a labelname list, as the passes see it.
@@ -783,6 +816,11 @@ impl<'a> Uniq<'a> {
             Some(st) => st.clone(),
             None => {
                 let st = Rc::new(NameStatic::read(d));
+                if self.move_statics {
+                    for k in ["basenamestring", "namestring", "namestrings"] {
+                        d.remove(k);
+                    }
+                }
                 self.statics.insert(n.id, st.clone());
                 st
             }
@@ -1040,7 +1078,7 @@ impl<'a> Uniq<'a> {
                     // `reset_uniquename`: no change flag.
                     let d = self.nld.nd(nlid, &n.nid);
                     let parts = d.get("basenamestringparts").cloned().unwrap_or(J::Null);
-                    d.insert("un".into(), J::Array(vec![J::from("base"), parts]));
+                    d.insert("un".into(), J::from(vec![J::from("base"), parts]));
                 }
             }
 
@@ -1354,13 +1392,13 @@ mod tests {
             let mut lj = Map::new();
             for (i, f) in fams.iter().enumerate() {
                 let mut name = Name {
-                    index: Some((i + 1).to_string()),
+                    index: Some((i + 1).to_string().into()),
                     ..Name::default()
                 };
                 name.nameparts.insert(
                     "family",
                     NamePart {
-                        string: Some(f.clone()),
+                        string: Some(f.into()),
                         initial: None,
                     },
                 );
@@ -1368,13 +1406,13 @@ mod tests {
                 arena.list_mut(nl).names.push(id);
                 lj.insert(
                     id.key(),
-                    serde_json::json!({
+                    J::from_json(serde_json::json!({
                         "basenamestring": f,
                         "basenamestringparts": ["family"],
                         "namedisschema": [["base", ["family"]], ["given", "init"]],
                         "namestring": format!("{f}J"),
                         "namestrings": [f, format!("{f}J")],
-                    }),
+                    })),
                 );
             }
             nld.insert(nl.key(), J::Object(lj));
@@ -1390,10 +1428,10 @@ mod tests {
         let mut state = Map::new();
         state.insert("namelistdata".into(), J::Object(nld));
         let mut dl = DataList {
-            state: Some(ListState::from_json(J::Object(state))),
+            state: Some(ListState::from_json(J::Object(state).to_json())),
             ..DataList::default()
         };
-        dl.slots.insert("unulchanged", J::from("1"));
+        dl.slots.insert("unulchanged", SJ::from("1"));
         let t = std::time::Instant::now();
         run(Quirks::default(), &arena, &entries, &mut dl);
         let elapsed = t.elapsed();

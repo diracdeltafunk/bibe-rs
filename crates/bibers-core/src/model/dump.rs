@@ -72,7 +72,7 @@ impl Loader {
             return Ok(*id);
         }
         let mut n = Name {
-            index: o.get("index").and_then(s),
+            index: o.get("index").and_then(s).map(Into::into),
             rawstring: o.get("rawstring").and_then(s),
             ..Name::default()
         };
@@ -80,13 +80,13 @@ impl Loader {
             for (part, pv) in np {
                 let po = obj(pv)?;
                 let initial = match po.get("initial") {
-                    Some(J::Array(a)) => Some(a.iter().filter_map(s).collect()),
+                    Some(J::Array(a)) => Some(a.iter().filter_map(s).map(Into::into).collect()),
                     _ => None,
                 };
                 n.nameparts.insert(
                     part.clone(),
                     NamePart {
-                        string: po.get("string").and_then(s),
+                        string: po.get("string").and_then(s).map(Into::into),
                         initial,
                     },
                 );
@@ -94,7 +94,13 @@ impl Loader {
         }
         if let Some(st) = o.get("strip").and_then(J::as_object) {
             for (k, v) in st {
-                n.strip.insert(k.clone(), s(v));
+                let flag = match s(v).as_deref() {
+                    None => None,
+                    Some("1") => Some(true),
+                    Some("0") => Some(false),
+                    Some(other) => return Err(format!("strip flag {other:?}")),
+                };
+                n.strip.insert(k.clone(), flag);
             }
         }
         for (k, v) in o {
@@ -302,11 +308,18 @@ pub fn load_state(state: &J) -> Result<SectionState, String> {
                 state: d
                     .get("state")
                     .map(|v| ListState::from_json(l.internalise(v))),
+                sortdata: None,
+                sortinitdata: None,
                 slots: Slots::new(),
             };
             for (k, v) in d {
-                if !DATALIST_TYPED.contains(&k.as_str()) {
-                    dl.slots.insert(k.clone(), l.internalise(v));
+                match k.as_str() {
+                    "sortdata" => dl.set_sortdata_json(&l.internalise(v))?,
+                    "sortinitdata" => dl.set_sortinitdata_json(&l.internalise(v))?,
+                    k if DATALIST_TYPED.contains(&k) => {}
+                    _ => {
+                        dl.slots.insert(k.to_string(), l.internalise(v));
+                    }
                 }
             }
             datalists.push(dl);
@@ -453,16 +466,16 @@ impl Dumper<'_> {
         o.insert("__class".into(), J::from(NAME_CLASS));
         o.insert("id".into(), J::from(self.ids[&id.key()].clone()));
         if let Some(i) = &n.index {
-            o.insert("index".into(), J::from(i.clone()));
+            o.insert("index".into(), J::from(i.as_str()));
         }
         let mut np = Map::new();
         for (part, p) in &n.nameparts {
             let mut po = Map::new();
-            po.insert("string".into(), opt_str(&p.string));
+            po.insert("string".into(), opt_cstr(&p.string));
             po.insert(
                 "initial".into(),
                 match &p.initial {
-                    Some(v) => J::Array(v.iter().map(|x| J::from(x.clone())).collect()),
+                    Some(v) => J::Array(v.iter().map(|x| J::from(x.as_str())).collect()),
                     None => J::Null,
                 },
             );
@@ -477,7 +490,10 @@ impl Dumper<'_> {
                 J::Object(
                     n.strip
                         .iter()
-                        .map(|(k, v)| (k.to_string(), opt_str(v)))
+                        .map(|(k, v)| {
+                            let flag = v.map_or(J::Null, |f| J::from(if f { "1" } else { "0" }));
+                            (k.to_string(), flag)
+                        })
                         .collect(),
                 ),
             );
@@ -545,6 +561,10 @@ impl Dumper<'_> {
         }
         J::Object(o)
     }
+}
+
+fn opt_cstr(v: &Option<compact_str::CompactString>) -> J {
+    v.as_deref().map_or(J::Null, J::from)
 }
 
 fn opt_str(v: &Option<String>) -> J {
@@ -640,6 +660,12 @@ pub fn dump_state(st: &SectionState) -> J {
             }
             for (k, v) in &dl.slots {
                 o.insert(k.to_string(), d.canon(v));
+            }
+            if let Some(v) = dl.sortdata_json() {
+                o.insert("sortdata".into(), d.canon(&v));
+            }
+            if let Some(v) = dl.sortinitdata_json() {
+                o.insert("sortinitdata".into(), d.canon(&v));
             }
             J::Object(o)
         })
