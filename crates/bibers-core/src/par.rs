@@ -218,15 +218,16 @@ pub struct Chunk<S, R, E> {
     pub error: Option<E>,
 }
 
-/// Run `a` and `b`, in parallel when enabled; returns both results.
-pub fn join<A, B, RA, RB>(a: A, b: B) -> (RA, RB)
+/// Run `a` and `b`, in parallel when a loop over `len` items would be;
+/// returns both results.
+pub fn join<A, B, RA, RB>(len: usize, a: A, b: B) -> (RA, RB)
 where
     A: FnOnce() -> RA + Send,
     B: FnOnce() -> RB + Send,
     RA: Send,
     RB: Send,
 {
-    match pool_for(usize::MAX) {
+    match pool_for(len) {
         None => (a(), b()),
         Some(pool) => pool.join(a, b),
     }

@@ -153,14 +153,27 @@ pub fn run(quirks: Quirks, names: &NameArena, entries: &[EntryInfo], dl: &mut Da
         ..
     } = u;
     nld.finish(&mut state);
+    // (The counters' state form, in parallel.)
+    let n = entries.len();
+    let (unc, (unc_all, ulc)) = crate::par::join(
+        n,
+        || unc.map(|c| c.to_json()),
+        || {
+            crate::par::join(
+                n,
+                || unc_all.map(|c| c.to_json()),
+                || ulc.map(|c| c.to_json()),
+            )
+        },
+    );
     if let Some(c) = unc {
-        state.insert("uniquenamecount", c.to_json());
+        state.insert("uniquenamecount", c);
     }
     if let Some(c) = unc_all {
-        state.insert("uniquenamecount_all", c.to_json());
+        state.insert("uniquenamecount_all", c);
     }
     if let Some(c) = ulc {
-        state.insert("uniquelistcount", c.to_json());
+        state.insert("uniquelistcount", c);
     }
     dl.state = Some(state);
     dl.slots
