@@ -1,0 +1,73 @@
+name: Homebrew
+
+# When a release is published, regenerate Formula/bibers.rb in the tap
+# diracdeltafunk/homebrew-tap from the release's SHA256SUMS
+# (tools/release/homebrew.py), check it with brew (audit, install, test), and
+# push it. Needs the secret HOMEBREW_TAP_TOKEN: a fine-grained token with
+# "Contents: read and write" on diracdeltafunk/homebrew-tap only.
+# Run by hand (Actions -> Homebrew -> Run workflow) to redo a release.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 0.1.0)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  formula:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Version
+        id: v
+        env:
+          INPUT: ${{ inputs.version }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          v="${INPUT:-${TAG#v}}"
+          [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.+].*)?$ ]] || { echo "::error::bad version '$v'"; exit 1; }
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Generate the formula
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/release/homebrew.py "${{ steps.v.outputs.version }}" > bibers.rb
+
+      - name: Check it with brew (audit, install, test)
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_INSTALL_CLEANUP: "1"
+        run: |
+          brew tap-new --no-git bibersci/check
+          cp bibers.rb "$(brew --repository bibersci/check)/Formula/bibers.rb"
+          brew audit --strict --online --formula bibersci/check/bibers
+          brew install bibersci/check/bibers
+          brew test bibersci/check/bibers
+
+      - name: Push to the tap
+        env:
+          TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Secret HOMEBREW_TAP_TOKEN is not set (see the comment at the top of this workflow)."
+            exit 1
+          fi
+          git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/diracdeltafunk/homebrew-tap.git" tap
+          cp bibers.rb tap/Formula/bibers.rb
+          cd tap
+          if git diff --quiet; then
+            echo "Formula already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "bibers ${VERSION}"
+          git push

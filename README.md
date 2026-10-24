@@ -38,6 +38,14 @@ Startup: `bibers --version` takes about 2 ms (biber: 0.55–0.7 s).
 
 bibers is a single self-contained executable. It needs no Perl and no data files, and it can be installed next to biber: it does not replace or change your TeX distribution's `biber`.
 
+### Homebrew (macOS and Linux)
+
+```sh
+brew install diracdeltafunk/tap/bibers
+```
+
+This installs the prebuilt binary, with no Gatekeeper prompt on macOS, and `brew upgrade` keeps it current. Then set up your tools as in [Using bibers instead of biber](#using-bibers-instead-of-biber).
+
 ### Prebuilt binaries
 
 Each [release](https://github.com/diracdeltafunk/bibe-rs/releases) has an archive per platform, holding `bibers` (`bibers.exe` on Windows), the licence files (`LICENSE`, `NOTICE.md`, `LICENSES/`, `THIRD-PARTY-LICENSES.md`), `README.md` and `docs/compat.md`:
