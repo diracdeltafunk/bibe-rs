@@ -381,7 +381,7 @@ fn granular(
             };
             for (i, id) in ids.iter().take(n).enumerate() {
                 let idx = if quirk_index { i } else { i + 1 };
-                arena.name_mut(*id).index = Some(idx.to_string());
+                arena.name_mut(*id).index = Some(idx.to_string().into());
             }
             let count = arena.list(src).names.len();
             for i in 1..=count {
@@ -409,9 +409,9 @@ fn granular(
             let i = if i < 0 { size + i } else { i };
             let name = names[i as usize];
             arena.name_mut(name).index = Some(if quirk_index {
-                (refposition - 1).to_string()
+                (refposition - 1).to_string().into()
             } else {
-                refposition.to_string()
+                refposition.to_string().into()
             });
             let tl = arena.list_mut(target);
             if refidx < tl.names.len() {

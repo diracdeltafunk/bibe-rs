@@ -370,7 +370,7 @@ pub fn sort_list(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<()
 
     // Key extraction, in biber's order (keys in list order, columns in
     // order), with the per-call cache (`$cache->{$code} ||= eval $code`).
-    let sortdata = dl.slots.get("sortdata");
+    let sortdata = dl.sortdata.as_ref();
     let mut cache: HashMap<(usize, String), Rc<[u8]>> = HashMap::new();
     let mut code_ids: HashMap<String, usize> = HashMap::new();
     let col_code: Vec<usize> = cols
@@ -385,9 +385,7 @@ pub fn sort_list(ctx: &mut Ctx, st: &mut SectionState, list: usize) -> Result<()
     for k in &keys {
         let obj: Vec<&str> = sortdata
             .and_then(|m| m.get(k))
-            .and_then(|d| d.get(1))
-            .and_then(J::as_array)
-            .map(|a| a.iter().map(|v| v.as_str().unwrap_or("")).collect())
+            .map(|d| d.obj.iter().map(|s| s.as_str()).collect())
             .unwrap_or_default();
         let mut row = Vec::with_capacity(obj.len());
         for (i, v) in obj.iter().enumerate() {

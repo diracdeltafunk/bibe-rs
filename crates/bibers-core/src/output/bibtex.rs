@@ -553,11 +553,7 @@ impl Writer {
                 .unwrap_or_default();
             if perl_truthy(&s) {
                 let mut s = s.replace('~', " ");
-                if n.strip
-                    .get(np)
-                    .and_then(|v| v.as_deref())
-                    .is_some_and(perl_truthy)
-                {
+                if n.strip.get(np).copied().flatten() == Some(true) {
                     s = format!("{{{s}}}");
                 }
                 parts.insert(np, s);

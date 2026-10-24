@@ -100,8 +100,8 @@ fn render_final_states(case: &Case, extra_args: &[&str]) -> Result<(Vec<u8>, Str
         env: &env,
         run: Default::default(),
     };
-    let processed = Processed { sections: states };
-    let text = match bibers_core::output::bbl::render(&mut ctx, &processed) {
+    let mut processed = Processed { sections: states };
+    let text = match bibers_core::output::bbl::render(&mut ctx, &mut processed) {
         Ok(Some(t)) => t,
         Ok(None) => return Err("render returned None".into()),
         Err(_) => return Err("render: fatal error".into()),

@@ -1063,13 +1063,13 @@ fn name(
             ) {
                 let mut n = Name::default();
                 n.slots.insert("xdata", J::from(xdatav));
-                n.index = Some((ids.len() + 1).to_string());
+                n.index = Some((ids.len() + 1).to_string().into());
                 ids.push(st.section.names.new_name(n));
                 continue;
             }
         }
         let mut n = parsename(ctx, st, opts, src, dom, nn)?;
-        n.index = Some((ids.len() + 1).to_string());
+        n.index = Some((ids.len() + 1).to_string().into());
         ids.push(st.section.names.new_name(n));
     }
     if truthy_attr(dom, node, "morenames").is_some() {
@@ -1118,12 +1118,12 @@ fn parsename(
                 let mut inits = Vec::new();
                 for p in &subs {
                     match truthy_attr(dom, *p, "initial") {
-                        Some(i) => inits.push(i.to_string()),
+                        Some(i) => inits.push(i.into()),
                         None => inits.extend(gen_initials(&[dom.text_content(*p)])),
                     }
                 }
-                part.string = Some(s);
-                part.initial = Some(inits);
+                part.string = Some(s.into());
+                part.initial = Some(inits.into());
             } else {
                 let t = dom.text_content(npnode);
                 if perl_compat::perl_truthy(&t) {
@@ -1136,10 +1136,10 @@ fn parsename(
                         npnode
                     };
                     part.initial = Some(match truthy_attr(dom, holder, "initial") {
-                        Some(i) => vec![i.to_string()],
-                        None => gen_initials(std::slice::from_ref(&t)),
+                        Some(i) => Box::new([i.into()]),
+                        None => gen_initials(std::slice::from_ref(&t)).into(),
                     });
-                    part.string = Some(t);
+                    part.string = Some(t.into());
                 }
             }
         }

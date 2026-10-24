@@ -12,8 +12,7 @@
 //!   cache, a forked logger, recorded side effects) that the caller merges
 //!   chunk by chunk;
 //! - [`map_logged`] gives each chunk a fork of a logger and joins the forks
-//!   in order, stopping at the first error like a serial loop with `?`;
-//! - [`join`] runs two computations.
+//!   in order, stopping at the first error like a serial loop with `?`.
 //!
 //! They run serially with one thread (`--threads 1`) and for inputs shorter
 //! than the threshold (thread start-up and splitting would cost more than
@@ -226,21 +225,6 @@ pub struct Chunk<S, R, E> {
     pub results: Vec<R>,
     /// The error that stopped the chunk.
     pub error: Option<E>,
-}
-
-/// Run `a` and `b`, in parallel when a loop over `len` items would be;
-/// returns both results.
-pub fn join<A, B, RA, RB>(len: usize, a: A, b: B) -> (RA, RB)
-where
-    A: FnOnce() -> RA + Send,
-    B: FnOnce() -> RB + Send,
-    RA: Send,
-    RB: Send,
-{
-    match pool_for(len) {
-        None => (a(), b()),
-        Some(pool) => pool.join(a, b),
-    }
 }
 
 /// Run `f`; with `$BIBERS_TIMINGS` set, print its wall time to stderr under

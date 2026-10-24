@@ -136,6 +136,19 @@ pub fn read_conf(env: &Env, path: &str) -> Result<XHash, ConfError> {
     parse_conf(&text, path)
 }
 
+/// Whether a key or string of the tree contains `needle`.
+pub fn mentions(h: &XHash, needle: &str) -> bool {
+    fn val(v: &XVal, needle: &str) -> bool {
+        match v {
+            XVal::Str(s) => s.contains(needle),
+            XVal::Hash(h) => mentions(h, needle),
+            XVal::Array(a) => a.iter().any(|v| val(v, needle)),
+        }
+    }
+    h.0.iter()
+        .any(|(k, v)| k.contains(needle) || val(v, needle))
+}
+
 /// Parse config file text (`path` names it in errors).
 pub fn parse_conf(text: &str, path: &str) -> Result<XHash, ConfError> {
     let buf = nfd(text);

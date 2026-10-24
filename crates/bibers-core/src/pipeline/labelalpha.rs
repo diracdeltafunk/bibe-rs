@@ -22,7 +22,7 @@ use crate::config::Config;
 use crate::config::blx::OptValue;
 use crate::datamodel::DataModel;
 use crate::log::Fatal;
-use crate::model::{ListState, NameArena, NameListId, SectionState, Value};
+use crate::model::{ListState, NameArena, NameListId, PMap, PV, SectionState, Value};
 use crate::perlish::{numify, sort_by_order, truthy};
 use crate::quirks::Quirk;
 use crate::xmlin::{XHash, XVal};
@@ -128,13 +128,13 @@ pub(crate) fn process_labelalpha_in(
         &mut dl.state,
         citekey,
         "labelalpha",
-        label.map_or(J::Null, J::from),
+        label.map_or(PV::Null, PV::from),
     );
     set_entryfield(
         &mut dl.state,
         citekey,
         "sortlabelalpha",
-        slabel.map_or(J::Null, J::from),
+        slabel.map_or(PV::Null, PV::from),
     );
     Ok(())
 }
@@ -172,14 +172,14 @@ pub(crate) fn process_extraalpha_in(
     // get_entryfield autovivifies state.fields{citekey}
     let label = hash2(state, "fields", citekey)
         .get("labelalpha")
-        .and_then(J::as_str)
+        .and_then(PV::as_str)
         .filter(|s| truthy(Some(s)))
         .map(str::to_string);
     if let Some(la) = label {
         // incr_la_disambiguation
         let m = state_obj(state).level1("ladisambiguation");
-        let n = m.get(&la).and_then(J::as_str).map_or(0.0, numify);
-        m.insert(&la, J::from(perl_compat::truth::format_nv(n + 1.0)));
+        let n = m.get(&la).and_then(PV::as_str).map_or(0.0, numify);
+        m.insert(&la, PV::from(perl_compat::truth::format_nv(n + 1.0)));
     }
     Ok(())
 }
@@ -203,15 +203,15 @@ fn state_obj(state: &mut Option<ListState>) -> &mut ListState {
 }
 
 /// `$state->{k0}{k1}` as a hash, autovivified.
-fn hash2<'j>(state: &'j mut Option<ListState>, k0: &str, k1: &str) -> &'j mut Map<String, J> {
+fn hash2<'j>(state: &'j mut Option<ListState>, k0: &str, k1: &str) -> &'j mut PMap {
     match state_obj(state).level1(k0).hash(k1) {
-        J::Object(o) => o,
+        PV::Object(o) => o,
         _ => unreachable!(),
     }
 }
 
 /// `$dlist->set_entryfield($citekey, $f, $v)`.
-fn set_entryfield(state: &mut Option<ListState>, citekey: &str, f: &str, v: J) {
+fn set_entryfield(state: &mut Option<ListState>, citekey: &str, f: &str, v: PV) {
     hash2(state, "fields", citekey).insert(f.to_string(), v);
 }
 
@@ -220,7 +220,7 @@ fn set_entryfield(state: &mut Option<ListState>, citekey: &str, f: &str, v: J) {
 fn visible_alpha(state: &mut Option<ListState>, nlid: NameListId) -> Option<String> {
     hash2(state, "namelistdata", &nlid.key())
         .get("visalpha")
-        .and_then(J::as_str)
+        .and_then(PV::as_str)
         .map(str::to_string)
 }
 
@@ -1098,7 +1098,7 @@ impl<'a> Gen<'a> {
                         })
                         .collect();
                     let k = normalise_string_label(self.cfg, &s);
-                    indices.insert(k, n.index.clone().map_or(J::Null, J::from));
+                    indices.insert(k, n.index.as_deref().map_or(J::Null, J::from));
                 }
             } else if let Some(v) = f {
                 indices.insert(value_string(v), J::from("0"));

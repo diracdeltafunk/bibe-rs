@@ -4,12 +4,13 @@
 //! sub-hashes have an entry per citekey or per name list (`fields` and
 //! `namelistdata`) and are read and written for every entry in every
 //! per-list phase, so they are kept in hash maps by key here; everything
-//! else stays generic. [`ListState::from_json`] and [`ListState::to_json`]
-//! convert to and from the dumped form (and are exact inverses).
+//! else stays generic. Values are compact [`PV`](super::PV)s.
+//! [`ListState::from_json`] and [`ListState::to_json`] convert to and from
+//! the dumped form (and are exact inverses).
 
 use super::PerlData;
+use super::pv::{PMap, PV as J};
 use rustc_hash::FxHashMap;
-use serde_json::{Map, Value as J};
 
 /// The sub-hashes kept by key.
 const FIELDS: &str = "fields";
@@ -23,7 +24,7 @@ pub struct ListState {
     /// `{namelistdata}`: name list id → its data (`None`: absent).
     namelistdata: Option<FxHashMap<String, J>>,
     /// The other keys.
-    rest: Map<String, J>,
+    rest: PMap,
     /// The state as found when it was not a hash (kept as is).
     raw: Option<PerlData>,
 }
@@ -31,7 +32,7 @@ pub struct ListState {
 /// A first-level sub-hash of the state, `$state->{k0}`.
 pub enum Level1<'a> {
     Keyed(&'a mut FxHashMap<String, J>),
-    Plain(&'a mut Map<String, J>),
+    Plain(&'a mut PMap),
 }
 
 impl<'a> Level1<'a> {
@@ -80,7 +81,7 @@ impl<'a> Level1<'a> {
     pub fn hash(self, k: &str) -> &'a mut J {
         let v = self.slot(k);
         if !v.is_object() {
-            *v = J::Object(Map::new());
+            *v = J::Object(PMap::new());
         }
         v
     }
@@ -113,11 +114,14 @@ impl<'a> Level1<'a> {
 impl ListState {
     /// The state of a dump.
     pub fn from_json(v: PerlData) -> ListState {
-        let J::Object(mut m) = v else {
+        let serde_json::Value::Object(_) = v else {
             return ListState {
                 raw: Some(v),
                 ..Default::default()
             };
+        };
+        let J::Object(mut m) = J::from_json(v) else {
+            unreachable!()
         };
         let mut split = |k: &str| match m.remove(k) {
             Some(J::Object(o)) => Some(o.into_iter().collect()),
@@ -143,16 +147,16 @@ impl ListState {
         if let Some(raw) = &self.raw {
             return raw.clone();
         }
-        let mut m = self.rest.clone();
+        let mut m = self.rest.to_json();
         for (k, v) in [(FIELDS, &self.fields), (NAMELISTDATA, &self.namelistdata)] {
             if let Some(h) = v {
                 m.insert(
                     k.to_string(),
-                    J::Object(h.iter().map(|(k, v)| (k.clone(), v.clone())).collect()),
+                    PerlData::Object(h.iter().map(|(k, v)| (k.clone(), v.to_json())).collect()),
                 );
             }
         }
-        J::Object(m)
+        PerlData::Object(m)
     }
 
     /// `$state->{k0}` as a hash, autovivified (as is the state itself).
@@ -174,7 +178,7 @@ impl ListState {
             return Level1::Keyed(h.get_or_insert_with(FxHashMap::default));
         }
         if !matches!(self.rest.get(k0), Some(J::Object(_))) {
-            self.rest.insert(k0.to_string(), J::Object(Map::new()));
+            self.rest.insert(k0.to_string(), J::Object(PMap::new()));
         }
         match self.rest.get_mut(k0) {
             Some(J::Object(m)) => Level1::Plain(m),
@@ -198,12 +202,44 @@ impl ListState {
         }
     }
 
+    /// `delete $state->{k0}{k1}` (nothing is vivified).
+    pub fn remove2(&mut self, k0: &str, k1: &str) -> Option<J> {
+        if self.raw.is_some() {
+            return None;
+        }
+        let keyed = match k0 {
+            FIELDS => Some(&mut self.fields),
+            NAMELISTDATA => Some(&mut self.namelistdata),
+            _ => None,
+        };
+        match keyed {
+            Some(h) if !self.rest.contains_key(k0) => h.as_mut()?.remove(k1),
+            _ => self.rest.get_mut(k0)?.as_object_mut()?.remove(k1),
+        }
+    }
+
     /// Take `$state->{namelistdata}` out (if it is a hash).
     pub fn take_namelistdata(&mut self) -> Option<FxHashMap<String, J>> {
         if self.rest.contains_key(NAMELISTDATA) {
             return None;
         }
         self.namelistdata.take()
+    }
+
+    /// `$state->{fields}` by citekey, if it is a hash.
+    pub fn fields_mut(&mut self) -> Option<&mut FxHashMap<String, J>> {
+        if self.rest.contains_key(FIELDS) {
+            return None;
+        }
+        self.fields.as_mut()
+    }
+
+    /// `$state->{namelistdata}` by name list id, if it is a hash.
+    pub fn namelistdata_mut(&mut self) -> Option<&mut FxHashMap<String, J>> {
+        if self.rest.contains_key(NAMELISTDATA) {
+            return None;
+        }
+        self.namelistdata.as_mut()
     }
 
     /// Set `$state->{namelistdata}` (`None`: absent).
@@ -255,12 +291,12 @@ mod tests {
     fn vivification() {
         let mut s = ListState::default();
         s.level1("fields").hash("k");
-        s.level1("seen").insert("x", json!("1"));
+        s.level1("seen").insert("x", J::from("1"));
         assert_eq!(
             s.to_json(),
             json!({"fields": {"k": {}}, "seen": {"x": "1"}})
         );
-        assert_eq!(s.peek2("seen", "x"), Some(&json!("1")));
+        assert_eq!(s.peek2("seen", "x"), Some(&J::from("1")));
         assert_eq!(s.peek2("namelistdata", "x"), None);
         let mut odd = ListState::from_json(json!({"fields": "odd"}));
         odd.level1("fields");

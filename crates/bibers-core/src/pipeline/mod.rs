@@ -38,7 +38,7 @@ use crate::datamodel::DataModel;
 use crate::env::Env;
 use crate::info;
 use crate::log::{Fatal, Logger};
-use crate::model::SectionState;
+use crate::model::{DataList, SectionState};
 
 /// Everything a phase can read or write besides the section state.
 pub struct Ctx<'a> {
@@ -73,6 +73,14 @@ pub struct RunState {
     pub annotations: crate::model::Annotations,
     /// Label generation helper state (citekey index map).
     pub labelalpha: labelalpha::LabelRunCache,
+    /// Don't set the entries' `rawdata` field (their source text): set by
+    /// [`prepare`] when nothing can read it ([`rawdata_unread`]). Phases run
+    /// on their own (the phase tests) keep it, as biber's dumps show it.
+    pub skip_rawdata: bool,
+    /// Free state as soon as no later phase reads it (set by [`prepare`]):
+    /// a phase run on its own (the phase tests) leaves the whole state for
+    /// biber's dump.
+    pub free_dead_state: bool,
     /// biber's shared `$dmh->{datefields}` once a `foreach … s/date$//`
     /// loop has mutated it in place (BB-028); `None` while pristine. See
     /// [`resolve::datefield_stems`].
@@ -89,22 +97,123 @@ pub struct Processed {
 /// `Biber::prepare`: process every section with citations.
 pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
     let mut out = Processed::default();
-    let numbers: Vec<String> = ctx
-        .doc
-        .sorted_sections()
-        .iter()
-        .filter(|s| !s.citekeys.is_empty() || s.allkeys)
-        .map(|s| s.number.clone())
-        .collect();
-    for secnum in numbers {
+    ctx.run.skip_rawdata = rawdata_unread(ctx);
+    ctx.run.free_dead_state = true;
+    for secnum in sections_to_process(ctx.doc) {
         info!(ctx.log, "Processing section {secnum}");
         let mut st = fetch::init_section(ctx, &secnum)?;
         // biber's preamble list is global: carry it across sections.
         st.preamble = out.sections.last().and_then(|p| p.preamble.clone());
         prepare_section(ctx, &mut st)?;
+        release_processed(ctx, &mut st);
         out.sections.push(st);
     }
     Ok(out)
+}
+
+/// Whether nothing can read the entries' `rawdata` field. biber sets it on
+/// every entry (bibtex.pm:955) and never reads it itself: it can only be
+/// reached by name, from the control file or config file (a sorting or
+/// label template, a list filter, a data model field, …). If neither
+/// mentions it (and not in tool mode, which writes data back), the field is
+/// unobservable and isn't made: 20 MB for 17,000 entries.
+fn rawdata_unread(ctx: &Ctx) -> bool {
+    !(ctx.cfg.biber.tool() || ctx.cfg.names_rawdata || ctx.dm.get_fieldtype("rawdata").is_some())
+}
+
+/// Free what nothing reads once a section is processed (the output
+/// writers read the entries and part of the lists' state):
+/// - the entries' `rawdata` (their source text; only biber's state dumps
+///   show it, and the writers output data model fields only);
+/// - the names' disambiguation schema and the visible name counts, which
+///   only the per-list phases read.
+fn release_processed(ctx: &Ctx, st: &mut SectionState) {
+    let rawdata = ctx.dm.get_fieldtype("rawdata").is_some();
+    for e in st.section.entries.values_mut_unordered() {
+        if !rawdata {
+            e.derivedfields.remove(&crate::model::sym::RAWDATA);
+        }
+        // Done growing: the field maps' spare room goes too.
+        e.datafields.shrink_to_fit();
+        e.derivedfields.shrink_to_fit();
+    }
+    for dl in &mut st.datalists {
+        if let Some(state) = &mut dl.state {
+            for f in state.fields_mut().into_iter().flat_map(|m| m.values_mut()) {
+                if let Some(f) = f.as_object_mut() {
+                    f.shrink_to_fit();
+                }
+            }
+        }
+        release_name_data(
+            dl,
+            &["namedisschema"],
+            &["visalpha", "visbib", "viscite", "vissort"],
+            true,
+        );
+    }
+}
+
+/// Free the state only `uniqueness` reads, once it has run on the list `dl`
+/// (the phases after it read `un`, `namedisschema` and the name hashes):
+/// its counters and the names' disambiguation strings, `unall` and
+/// `unmininfo`.
+pub(crate) fn release_uniqueness_data(dl: &mut DataList) {
+    if let Some(state) = &mut dl.state {
+        for k in ["uniquenamecount", "uniquenamecount_all", "uniquelistcount"] {
+            state.remove(k);
+        }
+    }
+    release_name_data(
+        dl,
+        &[
+            "basenamestring",
+            "namestring",
+            "namestrings",
+            "unall",
+            "unmininfo",
+        ],
+        &[],
+        true,
+    );
+}
+
+/// Remove the keys `name_keys` of every name's data and `list_keys` of
+/// every name list's data in the state of `dl` (`namelistdata.{nlid}.{nid}`
+/// and `namelistdata.{nlid}`), optionally releasing the maps' spare room.
+fn release_name_data(dl: &mut DataList, name_keys: &[&str], list_keys: &[&str], shrink: bool) {
+    let Some(state) = &mut dl.state else { return };
+    for nl in state
+        .namelistdata_mut()
+        .into_iter()
+        .flat_map(|m| m.values_mut())
+    {
+        let Some(nl) = nl.as_object_mut() else {
+            continue;
+        };
+        nl.retain(|k, v| {
+            if let Some(n) = v.as_object_mut().filter(|_| k.starts_with("#n")) {
+                n.retain(|k, _| !name_keys.contains(&k));
+                if shrink {
+                    n.shrink_to_fit();
+                }
+            }
+            !list_keys.contains(&k)
+        });
+        if shrink {
+            nl.shrink_to_fit();
+        }
+    }
+}
+
+/// The numbers of the sections [`prepare`] processes (those with
+/// citations), in processing order.
+pub fn sections_to_process(doc: &Document) -> Vec<String> {
+    doc.sorted_sections()
+        .iter()
+        .filter(|s| !s.citekeys.is_empty() || s.allkeys)
+        .map(|s| s.number.clone())
+        .collect()
 }
 
 /// The per-section phase sequence of `Biber::prepare` (after
@@ -112,6 +221,12 @@ pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
 pub fn prepare_section(ctx: &mut Ctx, st: &mut SectionState) -> Result<(), Fatal> {
     for (name, phase) in SECTION_PHASES {
         crate::par::timed(name, || phase(ctx, st))?;
+        if *name == "validate_datamodel" && ctx.run.free_dead_state {
+            // Read by data source reading and validation only.
+            for slot in ["everykey", "everykey_lc", "keytods"] {
+                st.section.slots.remove(slot);
+            }
+        }
     }
     Ok(())
 }

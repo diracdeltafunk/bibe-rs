@@ -58,6 +58,15 @@ pub struct BibCache {
     pub rstrings: HashMap<String, String>,
 }
 
+impl BibCache {
+    /// Free the cached entries (once no data source will be read again);
+    /// what the output writers use (`rstrings`, `master_comments`) stays.
+    pub fn release_entries(&mut self) {
+        self.data = HashMap::new();
+        self.globalds = HashMap::new();
+    }
+}
+
 /// Option values used while reading data, looked up once per `fetch_data`.
 pub struct FetchOpts {
     pub xsvsep: Option<Arc<PerlRegex>>,
@@ -274,7 +283,10 @@ pub fn extract_entries(
     }
     let utf16_chunks = ctx.cfg.quirks.on(crate::quirks::Quirk::Utf16ChunkSurrogate);
     let text = match encoding::decode(&bytes, encoding, utf16_chunks) {
-        Ok(t) => Some(t),
+        Ok(t) => {
+            drop(bytes);
+            Some(t)
+        }
         Err(e) => {
             biber_error!(
                 ctx.log,
@@ -309,6 +321,7 @@ pub fn extract_entries(
             cache_data(ctx, st, opts, &mut x, filename, encoding, &text)
         })?;
     }
+    drop(text);
 
     if st.section.allkeys {
         let fkeys = ctx
@@ -512,8 +525,8 @@ fn cache_data(
     if encoding == "ascii" {
         info!(ctx.log, "Reading ascii input as UTF-8");
     }
-    let buf = perl_compat::unicode::nfd(text);
-    let buf = buf.strip_prefix('\u{feff}').unwrap_or(&buf);
+    let nfd_text = perl_compat::unicode::nfd(text);
+    let buf = nfd_text.strip_prefix('\u{feff}').unwrap_or(&nfd_text);
     let buf = normalise_newlines(buf);
 
     // Pass 1 (parse_decode)
@@ -553,6 +566,12 @@ fn cache_data(
         btparse::compat::reserialise_entry(e, &mut out, |f, v| decode(verbs, recoder, f, v));
         replace_noncharacters(out)
     });
+    let kinds: Vec<btparse::Metatype> = p1.entries.iter().map(|e| e.metatype).collect();
+    // Pass 1's entries and the input text are done with: free them before
+    // pass 2 builds the cache (a large file is three copies otherwise).
+    drop(p1);
+    drop(buf);
+    drop(nfd_text);
     if !opts.nostdmacros {
         for (k, v) in btparse::BIBER_MONTHS {
             ctx.run.bt.macros.define(k, v);
@@ -560,7 +579,8 @@ fn cache_data(
     }
 
     // Pass 2 (cache_data proper)
-    let p2 = parse_pieces(&mut ctx.run.bt, &p1.entries, &pieces);
+    let p2 = parse_pieces(&mut ctx.run.bt, &kinds, &pieces);
+    drop(pieces);
     push_diags(x, &p2);
     info!(ctx.log, "Found BibTeX data source '{filename}'");
 
@@ -835,7 +855,7 @@ fn parse_piece(
 }
 
 /// `BtState::parse` of the concatenation of `pieces`, the pass-1 texts of
-/// the entries `p1` (one each).
+/// the entries of types `p1` (one each).
 ///
 /// Pass 2 reads text bibers wrote itself, so it normally parses cleanly,
 /// one entry per piece. A regular entry's piece has only braced values (no
@@ -848,13 +868,13 @@ fn parse_piece(
 /// instead, from the state before.
 fn parse_pieces(
     bt: &mut btparse::BtState,
-    p1: &[btparse::Entry],
+    p1: &[btparse::Metatype],
     pieces: &[String],
 ) -> btparse::ParsedFile {
     if !par::is_parallel(pieces.len()) {
         return bt.parse(&pieces.concat());
     }
-    let regular = |i: usize| p1[i].metatype == btparse::Metatype::Regular;
+    let regular = |i: usize| p1[i] == btparse::Metatype::Regular;
     let idx: Vec<usize> = (0..pieces.len()).collect();
     let mut parsed: Vec<Option<btparse::ParsedFile>> = par::map(&idx, |&i| {
         regular(i).then(|| btparse::BtState::new(btparse::MacroTable::default()).parse(&pieces[i]))
@@ -877,7 +897,7 @@ fn parse_pieces(
             && pf.entries.len() == 1
             && pf.entries[0].parse_ok
             && pf.entries[0].diags.iter().all(harmless)
-            && pf.entries[0].metatype == p1[i].metatype;
+            && pf.entries[0].metatype == p1[i];
         if !clean {
             *bt = saved;
             return bt.parse(&pieces.concat());
@@ -1189,6 +1209,8 @@ pub(super) struct Build<'c> {
     cfg: &'c crate::config::Config,
     dm: &'c crate::datamodel::DataModel,
     secnum: &'c str,
+    /// `RunState::skip_rawdata`.
+    skip_rawdata: bool,
     log: Logger,
     /// libbtparse messages (`Extract::btlines`).
     btlines: Vec<String>,
@@ -1244,6 +1266,7 @@ fn build_entry(ctx: &Ctx, opts: &FetchOpts, secnum: &str, job: &CreateJob) -> Bu
         cfg: &*ctx.cfg,
         dm: ctx.dm,
         secnum,
+        skip_rawdata: ctx.run.skip_rawdata,
         log: ctx.log.fork(),
         btlines: Vec::new(),
         names: NameArena::default(),
@@ -1279,7 +1302,9 @@ fn build_entry_in(
     let mut be = Entry::default();
     be.set_field("citekey", Some(Value::Str(k.to_string())));
     debug!(b.log, "Creating biber Entry object with key '{k}'");
-    be.set_field("rawdata", Some(Value::Str(print_s(e, tbkey))));
+    if !b.skip_rawdata {
+        be.set_field("rawdata", Some(Value::Str(print_s(e, tbkey))));
+    }
     be.set_field("entrytype", Some(Value::Str(fc(&e.entrytype))));
     for (f, _) in &e.fields {
         let value = raw_get(e, f).unwrap_or("");
@@ -2018,7 +2043,7 @@ fn name_handler(
         ) {
             let mut n = Name::default();
             n.slots.insert("xdata", J::from(name.clone()));
-            n.index = Some((names.len() + 1).to_string());
+            n.index = Some((names.len() + 1).to_string().into());
             names.push(b.names.new_name(n));
             continue;
         }
@@ -2111,7 +2136,7 @@ fn name_handler(
                 .insert("morenames", J::from("1"));
         } else {
             let mut n = n;
-            n.index = Some((names.len() + 1).to_string());
+            n.index = Some((names.len() + 1).to_string().into());
             names.push(b.names.new_name(n));
         }
     }

@@ -449,11 +449,11 @@ pub fn process(s: Setup, env: &Env) -> u8 {
     } else {
         pipeline::prepare(&mut ctx)
     };
-    let processed = match prepared {
+    let mut processed = match prepared {
         Ok(p) => p,
         Err(_) => return log.display_end(),
     };
-    let text = match bibers_core::par::timed("render", || format.render(&mut ctx, &processed)) {
+    let text = match bibers_core::par::timed("render", || format.render(&mut ctx, &mut processed)) {
         Ok(Some(t)) => t,
         Ok(None) => {
             let _ = biber_error!(
@@ -471,18 +471,22 @@ pub fn process(s: Setup, env: &Env) -> u8 {
         if ctx.cfg.biber.is_true("output_safechars") {
             info!(ctx.log, "{}", format.safechars_message());
         }
-        match bibers_core::output::bbl::encode_output_owned(&mut ctx, text) {
+        match bibers_core::output::bbl::encode_output_text(&mut ctx, text) {
             Ok(b) => b,
             Err(_) => return log.display_end(),
         }
     } else {
-        text.into_bytes()
+        text.into_pieces()
+            .into_iter()
+            .map(String::into_bytes)
+            .collect()
     };
     if outfile == "-" {
         let mut o = std::io::stdout().lock();
-        let _ = o.write_all(&bytes);
-        let _ = o.flush();
-    } else if let Err(e) = std::fs::write(env.resolve(&outfile), &bytes) {
+        let _ = write_pieces(&mut o, &bytes);
+    } else if let Err(e) = std::fs::File::create(env.resolve(&outfile))
+        .and_then(|f| write_pieces(&mut std::io::BufWriter::with_capacity(1 << 16, f), &bytes))
+    {
         let _ = biber_error!(ctx.log, "Cannot write output file '{outfile}': {e}");
         return log.display_end();
     }
@@ -497,6 +501,14 @@ pub fn process(s: Setup, env: &Env) -> u8 {
     }
     show_tmp_dir(&mut cfg, &mut log);
     log.display_end()
+}
+
+/// Write the output's pieces and flush.
+fn write_pieces(w: &mut impl Write, pieces: &[Vec<u8>]) -> std::io::Result<()> {
+    for p in pieces {
+        w.write_all(p)?;
+    }
+    w.flush()
 }
 
 /// `display_end`'s `--show-tmp-dir` report (Biber.pm:120-127). biber's temp
