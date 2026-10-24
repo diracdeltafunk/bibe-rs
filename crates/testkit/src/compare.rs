@@ -120,6 +120,27 @@ pub fn compare_in(case: &Case, run: &RunOutput, exp_dir: &std::path::Path) -> Re
             (None, None) => {}
             (Some(_), None) => mismatches.push(Mismatch::MissingOutput { name: name.clone() }),
             (None, Some(_)) => mismatches.push(Mismatch::UnexpectedOutput { name: name.clone() }),
+            (Some(e), Some(a)) if e == a => {}
+            (Some(e), Some(a))
+                if std::str::from_utf8(&e).is_err() || std::str::from_utf8(&a).is_err() =>
+            {
+                // Encoded (non-UTF-8) output must match byte for byte: a lossy
+                // decode would hide differences (BOMs, invalid sequences).
+                let at = e
+                    .iter()
+                    .zip(&a)
+                    .position(|(x, y)| x != y)
+                    .unwrap_or(e.len().min(a.len()));
+                mismatches.push(Mismatch::Output {
+                    name: name.clone(),
+                    diff: format!(
+                        "bytes differ at offset {at} (expected {} bytes, got {}; not UTF-8, compared exactly)\n{}",
+                        e.len(),
+                        a.len(),
+                        diff(&String::from_utf8_lossy(&e), &String::from_utf8_lossy(&a))
+                    ),
+                });
+            }
             (Some(e), Some(a)) => {
                 let e = normalize_output(case, name, &e);
                 let a = normalize_output(case, name, &a);
@@ -181,7 +202,40 @@ pub fn diff(expected: &str, actual: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::exit_codes_match;
+    use super::*;
+
+    /// Non-UTF-8 output compares byte for byte (a UTF-16 BOM `FE FF` turned
+    /// into `FF FF` decodes to the same lossy text).
+    #[test]
+    fn encoded_outputs_compare_byte_for_byte() {
+        let root = crate::corpus_root();
+        let case = Case::load(&root, &root.join("io/enc-out-utf-16")).unwrap();
+        let exp = case.expected_dir();
+        let name = case.spec.outputs[0].clone();
+        let bytes = std::fs::read(exp.join(&name)).unwrap();
+        assert_eq!(&bytes[..2], [0xFE, 0xFF]);
+        let run = |b: Vec<u8>| RunOutput {
+            exit_code: Some(0),
+            timed_out: false,
+            outputs: [(name.clone(), Some(b))].into(),
+            messages: Vec::new(),
+            blg: String::new(),
+            stdout: String::new(),
+            stderr: String::new(),
+            elapsed: std::time::Duration::ZERO,
+            workdir: None,
+        };
+        let output_mismatch = |o: Outcome| match o {
+            Outcome::Pass => false,
+            Outcome::Fail(ms) => ms.iter().any(|m| matches!(m, Mismatch::Output { .. })),
+        };
+        assert!(!output_mismatch(
+            compare(&case, &run(bytes.clone())).unwrap()
+        ));
+        let mut bom = bytes;
+        bom[0] = 0xFF;
+        assert!(output_mismatch(compare(&case, &run(bom)).unwrap()));
+    }
 
     #[test]
     fn crash_exit_codes_form_one_class() {

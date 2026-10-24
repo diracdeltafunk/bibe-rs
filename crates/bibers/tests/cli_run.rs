@@ -130,3 +130,82 @@ fn uniqueness_terminates_where_biber_loops_forever() {
     );
     assert!(read(&d.path().join("t.bbl")).contains("\\entry{k}{misc}"));
 }
+
+/// Copy a corpus case's inputs into a fresh directory.
+fn case_dir(case: &str) -> tempfile::TempDir {
+    let d = tempfile::tempdir().unwrap();
+    for e in std::fs::read_dir(corpus(case)).unwrap().flatten() {
+        if e.path().is_file() {
+            std::fs::copy(e.path(), d.path().join(e.file_name())).unwrap();
+        }
+    }
+    d
+}
+
+/// A data source that exists but can't be read is an ERROR (exit 2), as in
+/// biber, not an "empty" data source (biber's `check_empty` is a stat).
+#[cfg(unix)]
+#[test]
+fn unreadable_data_source_is_an_error() {
+    use std::os::unix::fs::PermissionsExt;
+    let d = case_dir("tdata/general");
+    let bib = d.path().join("examples.bib");
+    std::fs::set_permissions(&bib, std::fs::Permissions::from_mode(0o000)).unwrap();
+    if std::fs::read(&bib).is_ok() {
+        return; // running as root: permissions don't apply
+    }
+    let code = run(d.path(), &["--noconf", "general.bcf"]);
+    std::fs::set_permissions(&bib, std::fs::Permissions::from_mode(0o644)).unwrap();
+    assert_eq!(code, 2);
+    let blg = read(&d.path().join("general.blg"));
+    assert!(
+        blg.contains("ERROR - Data file 'examples.bib' cannot be read in encoding")
+            && blg.contains("Couldn't open examples.bib: Permission denied"),
+        "{blg}"
+    );
+    assert!(!blg.contains("is empty, ignoring"));
+}
+
+/// `-O -` into a pipe whose reader has gone is an ERROR (exit 2), not a
+/// silent success (DC-069).
+#[cfg(unix)]
+#[test]
+fn stdout_write_failure_is_an_error() {
+    let d = case_dir("tdata/general");
+    let mut child = std::process::Command::new(env!("CARGO_BIN_EXE_bibers"))
+        .args(["--noconf", "-q", "-O", "-", "general.bcf"])
+        .current_dir(d.path())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+        .unwrap();
+    drop(child.stdout.take()); // close the reading end
+    let status = child.wait().unwrap();
+    assert_eq!(status.code(), Some(2));
+    let blg = read(&d.path().join("general.blg"));
+    assert!(
+        blg.contains("ERROR - Cannot write output file '-': Broken pipe"),
+        "{blg}"
+    );
+}
+
+/// A user regex option that can't be compiled (here a Perl-only construct,
+/// DC-036) is an ERROR naming the option, never a silent fallback that
+/// changes the data (DC-071).
+#[test]
+fn unusable_regex_option_is_an_error() {
+    let d = case_dir("tdata/general");
+    let code = run(
+        d.path(),
+        &[
+            "--noconf",
+            r"--xsvsep=\N{LATIN CAPITAL LETTER A}",
+            "general.bcf",
+        ],
+    );
+    assert_eq!(code, 2);
+    let blg = read(&d.path().join("general.blg"));
+    assert!(
+        blg.contains(r"ERROR - Option 'xsvsep' ('\N{LATIN CAPITAL LETTER A}'): unsupported regular expression feature"),
+        "{blg}"
+    );
+}

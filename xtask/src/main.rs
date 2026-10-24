@@ -399,6 +399,26 @@ fn corpus(opts: &Opts) -> Result<ExitCode> {
             bail!("--update-passing requires running the whole corpus (no filters)");
         }
         let path = passing_file();
+        // The ratchet only grows: a listed case that now fails is a
+        // regression to fix, not a line to drop (cases deleted from the
+        // corpus do disappear).
+        let listed = std::fs::read_to_string(&path).unwrap_or_default();
+        let ids: std::collections::BTreeSet<&str> = cases.iter().map(|c| c.id.as_str()).collect();
+        let passed: std::collections::BTreeSet<&str> = passing.iter().map(String::as_str).collect();
+        let regressed: Vec<&str> = listed
+            .lines()
+            .map(str::trim)
+            .filter(|l| !l.is_empty() && !l.starts_with('#'))
+            .filter(|id| ids.contains(id) && !passed.contains(id))
+            .collect();
+        if !regressed.is_empty() {
+            bail!(
+                "not updating {}: {} listed case(s) now fail: {}",
+                path.display(),
+                regressed.len(),
+                regressed.join(", ")
+            );
+        }
         let mut text = String::from(PASSING_HEADER);
         for id in &passing {
             text.push_str(id);

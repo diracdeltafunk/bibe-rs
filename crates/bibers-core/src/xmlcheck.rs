@@ -53,14 +53,7 @@ pub fn builtin_schema(kind: SchemaKind<'_>) -> &'static Schema {
     cell.get_or_init(|| Schema::parse(text).expect("the built-in schemas are correct"))
 }
 
-/// Perl's `$!` text for an I/O error (Rust appends ` (os error N)`).
-fn errno_text(e: &std::io::Error) -> String {
-    let s = e.to_string();
-    match s.rfind(" (os error ") {
-        Some(i) => s[..i].to_string(),
-        None => s,
-    }
-}
+use crate::perlish::errno_text;
 
 /// Read an XML file as text: UTF-8, or else bytes as Latin-1.
 fn read_xml(env: &Env, file: &str) -> std::io::Result<String> {

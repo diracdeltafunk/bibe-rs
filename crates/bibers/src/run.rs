@@ -481,13 +481,20 @@ pub fn process(s: Setup, env: &Env) -> u8 {
             .map(String::into_bytes)
             .collect()
     };
-    if outfile == "-" {
-        let mut o = std::io::stdout().lock();
-        let _ = write_pieces(&mut o, &bytes);
-    } else if let Err(e) = std::fs::File::create(env.resolve(&outfile))
-        .and_then(|f| write_pieces(&mut std::io::BufWriter::with_capacity(1 << 16, f), &bytes))
-    {
-        let _ = biber_error!(ctx.log, "Cannot write output file '{outfile}': {e}");
+    let written = if outfile == "-" {
+        // A closed pipe or full disk is an error, not a silent success
+        // (biber dies of SIGPIPE; DC-069).
+        write_pieces(&mut std::io::stdout().lock(), &bytes)
+    } else {
+        std::fs::File::create(env.resolve(&outfile))
+            .and_then(|f| write_pieces(&mut std::io::BufWriter::with_capacity(1 << 16, f), &bytes))
+    };
+    if let Err(e) = written {
+        let _ = biber_error!(
+            ctx.log,
+            "Cannot write output file '{outfile}': {}",
+            bibers_core::perlish::errno_text(&e)
+        );
         return log.display_end();
     }
     info!(ctx.log, "Output to {outfile}");

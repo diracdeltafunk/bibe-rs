@@ -34,7 +34,7 @@
 //!    the original entry is then dropped);
 //! 3. unless [`MapOutcome::skip`], runs `_create_entry` (field handlers) on
 //!    the mapped entry, then on each of [`MapOutcome::new_entries`] (biber
-//!    iterates `%newentries` in hash order; we give creation order, DC-016).
+//!    iterates `%newentries` in hash order; we give creation order, DC-037).
 //!    A new entry's [`RawEntry::key`] is the citekey biber passes to
 //!    `_create_entry`. `fieldlist` order and NFD values are maintained by
 //!    this module, so iterate [`RawEntry::fields`] (or

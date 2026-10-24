@@ -399,3 +399,39 @@ fn output_encoding_errors() {
         r.stdout
     );
 }
+
+/// A server that answers every request with `response`, then closes.
+fn raw_server(response: &'static [u8]) -> String {
+    use std::io::{Read, Write};
+    let l = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+    let addr = l.local_addr().unwrap();
+    std::thread::spawn(move || {
+        for s in l.incoming().flatten() {
+            let mut s = s;
+            let mut buf = [0u8; 4096];
+            let _ = s.read(&mut buf);
+            let _ = s.write_all(response);
+        }
+    });
+    format!("http://{addr}")
+}
+
+/// Malformed chunked bodies are fetch errors (exit 2), never panics: the
+/// advertised chunk size is not trusted.
+#[test]
+fn hostile_chunked_responses() {
+    for resp in [
+        &b"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\nFFFFFFFFFFFFFFFF\r\nabc"[..],
+        &b"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n10\r\nabc"[..],
+        &b"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n1FFFFFFFFFFFFFFFF\r\nabc"[..],
+    ] {
+        let base = raw_server(resp);
+        let r = run(&[format!("{base}/a.bib")], &[], &[]);
+        assert_eq!(r.code, 2, "{}", r.stdout);
+        assert!(
+            r.messages().iter().any(|m| m.starts_with("ERROR - ")),
+            "{}",
+            r.stdout
+        );
+    }
+}

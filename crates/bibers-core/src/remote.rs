@@ -450,15 +450,10 @@ impl Response {
 
 /// An I/O error's text as perl's `$!` shows it.
 fn errno_text(e: &std::io::Error) -> String {
-    let s = e.to_string();
-    let s = s
-        .split(" (os error")
-        .next()
-        .unwrap_or(&s)
-        .trim_start_matches("failed to lookup address information: ")
-        .to_string();
     // Rust and perl agree on strerror()/gai_strerror() texts.
-    s
+    crate::perlish::errno_text(e)
+        .trim_start_matches("failed to lookup address information: ")
+        .to_string()
 }
 
 fn connect_tcp(host: &str, port: u16) -> std::io::Result<TcpStream> {
@@ -560,7 +555,7 @@ fn http_exchange(
             let l = read_line(&mut r)
                 .map_err(|e| errno_text(&e))?
                 .ok_or("Premature end of chunked content")?;
-            let size = usize::from_str_radix(l.split(';').next().unwrap_or("").trim(), 16)
+            let size = u64::from_str_radix(l.split(';').next().unwrap_or("").trim(), 16)
                 .map_err(|_| format!("Bad chunk-size in HTTP response: {l}"))?;
             if size == 0 {
                 while let Some(t) = read_line(&mut r).map_err(|e| errno_text(&e))? {
@@ -570,9 +565,15 @@ fn http_exchange(
                 }
                 break;
             }
-            let mut buf = vec![0; size];
-            r.read_exact(&mut buf).map_err(|e| errno_text(&e))?;
-            resp.body.extend(buf);
+            // Stream the chunk: the advertised size is untrusted (no
+            // allocation up front), and a short chunk is a fetch error.
+            let got = (&mut r)
+                .take(size)
+                .read_to_end(&mut resp.body)
+                .map_err(|e| errno_text(&e))?;
+            if (got as u64) < size {
+                return Err("Premature end of chunked content".into());
+            }
             read_line(&mut r).map_err(|e| errno_text(&e))?;
         }
     } else if let Some(n) = resp

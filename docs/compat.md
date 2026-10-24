@@ -6,7 +6,7 @@ This is the authoritative list of every way **bibers** behaves differently from 
 1. Any observable difference from biber 2.22 must have an entry here *before* it is merged: `.bbl` content, other output files, `.blg`/stdout/stderr messages, exit codes, CLI behaviour, or file side effects. Performance is the exception.
 2. Each entry gets a stable id `DC-NNN`. Code that implements a difference cites the id in a comment. The differential-test harness allow-list is keyed by these ids, so an unexplained diff against biber is always a test failure.
 3. If the difference comes from a biber bug, link its `BB-NNN` entry in [biber-bugs.md](biber-bugs.md).
-4. *Status* is one of: **planned** (decided, not implemented), **implemented**, or **withdrawn** (kept for history).
+4. *Status* is one of: **planned** (decided, not implemented), **implemented**, **future** (an idea, not scheduled), or **withdrawn** (kept for history).
 
 **Default policy** (PLAN.md §6.4, §10): bibers reproduces biber's logic, *including* bugs that silently affect output. Each reproduced bug sits behind a named `Quirk` switch (§2), so the default output matches biber. Crashes, data loss and nondeterminism are always fixed (§1). Deprecated features are dropped (§3).
 
@@ -33,7 +33,9 @@ Biber dies with a Perl error and usually leaves an empty `.bbl`. bibers produces
 | DC-038 | An invalid user regex in a sourcemap makes Perl die ("Unmatched ( in regex", …) | ERROR naming the map step and the regex, exit 2 | — | implemented (sourcemap) |
 | DC-029 | btparse-level crashes and process exits on malformed input (BB-123, 125, 126, 127, 128): SEGV, abort, exit, mangled error text | An ERROR naming the user's file and line (with the literal offending text), then biber's normal error handling. *Whether parsing continues with the next entry is decided in M2.* | BB-123, 125–128 | implemented (fetch: ERROR naming file and line) |
 | DC-035 | `--isbn10` on a 979-prefix ISBN crashes | ISBN left in its ISBN-13 form, with a WARN | BB-130 | implemented (fetch) |
-| DC-065 | biblatexml input and output crash on: unparseable dates, fields without a biblatexml handler, malformed XML, a namespace not bound to `bltx`, invalid map XPaths or node names, several map steps (`per_type`, `map_notfield`, `map_matches`, `map_null`, `map_entry_null`, `map_entry_clone`), cited keys containing `'`, unresolved range XDATA references in output | Intended behaviour (warning, field ignored, step performed, reference written), or an ERROR naming the file, exit 2 | BB-176…181, 185 | implemented (bltxml) |
+| DC-065 | biblatexml input and output crash on: unparseable dates, fields without a biblatexml handler, malformed XML, a namespace not bound to `bltx`, invalid map XPaths or node names, several map steps (`per_type`, `map_notfield`, `map_matches`, `map_null`, `map_entry_null`, `map_entry_clone`), cited keys containing `'`, unresolved range XDATA references in output, a data file that exists but can't be read | Intended behaviour (warning, field ignored, step performed, reference written), or an ERROR naming the file, exit 2 | BB-176…181, 185 | implemented (bltxml) |
+| DC-069 | Writing the output to stdout (`-O -`) into a closed pipe: biber dies of SIGPIPE ("Caught a SIGPIPE", exit 25) | ERROR `Cannot write output file '-': Broken pipe`, exit 2; any other write failure on stdout is reported the same way | — | implemented |
+| DC-071 | A user regex option (`xsvsep`, `noinit`, `nolabel`, `nolabelwidthcount`, `nonamestring`, `nosort`) that perl can't compile makes biber die | Every such option is compiled before processing; one that can't be (invalid, or a Perl-only construct PCRE2 can't run, DC-036) is an ERROR naming the option and pattern, exit 2 | — | implemented |
 | DC-058 | An unknown `--output-encoding` crashes ("Unknown encoding", empty output, exit 25) | ERROR, exit 2 | BB-165 | implemented (io) |
 | DC-059 | A missing or unparsable `--recodedata` file dies without naming it | ERROR naming the file, exit 2 | BB-167 | implemented (io) |
 | DC-060 | ISO-2022 input with 8-bit bytes or an unknown escape sequence makes biber hang forever | ERROR naming the file | BB-166 | implemented (io) |
@@ -55,7 +57,7 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-013 | Per-name / per-namelist option lists in `\name{…}{n}{<opts>}` and `{{<opts>}{%` | Option declaration order from the `.bcf` `<optionscope>`. *Confirm against biblatex parsing during M2.* | BB-060 | implemented (output: `.bcf` optionscope declaration order) |
 | DC-014 | Order in which mincrossrefs/minxrefs-promoted entries are added (visible with `sorting=none` or sort ties) | First-reference order | BB-061 | implemented (resolve) |
 | DC-015 | Order of dynamic sets under `\nocite{*}` | `.bcf` declaration order | BB-062 | implemented (fetch) |
-| DC-016 | Order of deferred WARN messages in `.blg`/stdout | Emission order (deterministic) | BB-065 | planned |
+| DC-016 | Order of deferred WARN messages in `.blg`/stdout | Emission order (deterministic) | BB-065 | implemented (log) |
 | DC-017 | Which cycle (and in which order its two keys) is named in the fatal "Circular XDATA inheritance" error, and which warnings come before it | Cycles are detected walking entries in citekey/`.bib` order, so the first cycle found is always reported | BB-112 | implemented (resolve) |
 | DC-037 | Order in which entries created by sourcemap (bibtex and biblatexml) `entry_new`/`entry_clone` steps are instantiated (`%newentries` hash order) | Creation order | — | implemented (sourcemap) |
 | DC-039 | Sort keys of verbatim/URI *list* fields: biber's `_sort_verbatim` stringifies the array reference (`ARRAY(0x…)`, a memory address), so these entries sort arbitrarily | The fixed string `ARRAY` (equal keys, so citation order decides) | BB-135 | implemented (sort) |
@@ -83,6 +85,7 @@ Biber's output varies between identical runs because of Perl hash ordering. bibe
 | DC-026 | `-O -` leaves an empty file named `-` (and with `--output-directory` writes `<dir>/-` instead of stdout) | Writes to stdout; no stray file | BB-069 | implemented (CLI/output; also tool and bibtex output) |
 | DC-027 | With `--nodieonerror`, a missing control file cascades into a libxml crash | Stops after the "Cannot find control file" error, exit 2 | BB-071 | implemented |
 | DC-028 | `--fix-quirks` doesn't exist | Accepted only when spelt in full, so it never makes biber's abbreviations of other options ambiguous | — | implemented |
+| DC-070 | Datasource globbing (`--glob-datasources`, `\addbibresource[glob]`) expands `~user` from the password database | `~user` is left unexpanded (`~` and `~/…` use `$HOME`, as biber); everything else follows perl's `csh_glob` exactly (quoting, escapes, braces, sorting) | — | implemented |
 
 ## 2. Reproduced biber bugs (Quirk switches)
 
@@ -148,9 +151,9 @@ Some silent biber behaviours are judged to be design decisions rather than bugs 
 
 | Id | Feature | bibers behaviour | Status |
 |---|---|---|---|
-| DC-020 | `--output-format=bblxml` (deprecated upstream) | Error: unsupported output format, exit 2 | planned |
-| DC-021 | `--output-format=dot`, `--dot-include` (deprecated upstream) | Error: unsupported output format, exit 2 | planned |
-| DC-022 | `--output-format=bibjson` (accepted but unimplemented upstream) | Error: unsupported output format, exit 2 | planned |
+| DC-020 | `--output-format=bblxml` (deprecated upstream) | Error: unsupported output format, exit 2 | implemented |
+| DC-021 | `--output-format=dot`, `--dot-include` (deprecated upstream) | Error: unsupported output format, exit 2 | implemented |
+| DC-022 | `--output-format=bibjson` (accepted but unimplemented upstream) | Error: unsupported output format, exit 2 | implemented |
 | DC-023 | Perl code in sourcemap replacement strings (`@{[ … ]}`, `${\ … }`). biber evaluates these in a Safe compartment. | Not executed. bibers warns, and inserts the stringified regex `(?^u:…)` exactly as biber does when evaluation fails. Plain interpolation (`$1`, `\u`, `\L…\E`, escapes) is fully supported. | implemented (sourcemap) |
 | DC-036 | User regexes (sourcemaps, `noinit`/`nosort`/`nolabel`/`nonamestring`, `xsvsep`) are Perl regexes | Run on PCRE2 behind a Perl-syntax translation layer. A few Perl-only constructs are unsupported and give an ERROR naming the construct: `\N{NAME}` (named characters; `\N{U+…}` works), `\b{gcb}`/`\b{wb}`-style boundaries, `/i` multi-character case folds (ß ↔ ss), `$<`/`$(` in replacements. Verified on 17,933 Perl-vs-PCRE2 differential cases. | implemented (perl-compat) |
 
@@ -169,10 +172,10 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 | Id | biber | bibers | Status |
 |---|---|---|---|
 | DC-040 | `This is Biber 2.22` banner; `--version` prints `biber version: 2.22` | `This is bibers <version> (biber 2.22 compatible)`; `--version` prints `bibers version: <version> (biber 2.22 compatible)`. *Check latexmk/arara don't parse these.* | implemented |
-| DC-041 | Location tag `Biber.pm:4487>` (Perl file:line) | A Rust module/location tag. The format is kept and the contents are not meaningful across implementations. | planned |
+| DC-041 | Location tag `Biber.pm:4487>` (Perl file:line) | A Rust module/location tag. The format is kept and the contents are not meaningful across implementations. | implemented |
 | DC-042 | btparse diagnostics and the "Invalid or undefined BibTeX entry key in file '…'" warning name a temp file (`<md5>_<pid>.utf8`) and use pass-2 line numbers | Name the user's `.bib` file and its real line numbers | BB-076 | implemented (fetch) |
-| DC-043 | `INFO` lines specific to biber internals (PAR cache, Perl modules, …) | Omitted or replaced | planned |
-| DC-044 | `--debug`/`--trace` output (Perl data dumps) | Different content. Also, `--debug` does **not** stop btparse errors being fatal (BB-075). | planned |
+| DC-043 | `INFO` lines specific to biber internals (PAR cache, Perl modules, …) | Omitted or replaced | implemented (not printed) |
+| DC-044 | `--debug`/`--trace` output (Perl data dumps) | Different content. Also, `--debug` does **not** stop btparse errors being fatal (BB-075). | implemented |
 | DC-046 | Error text for undecodable bytes in a data file (Perl's `Encode` message, e.g. `utf8 "\xA6" does not map to Unicode`) | A similar message naming the file, encoding and byte; not byte-identical | implemented (fetch) |
 | DC-067 | Messages for the biblatexml crashes of DC-065 | bibers' own WARN/ERROR texts (biber dies with a Perl or libxml2 error). Also: a `literal` annotation attribute is kept as a flag, so values other than 0/1 are written back as `1` | implemented |
 | DC-064 | Network errors: LWP/IO::Socket::SSL message texts | The OS's text for low-level errors (identical on macOS for refused connections and DNS failures); TLS errors other than "certificate verify failed" and "hostname verification failed" are worded differently. Read-error texts also lack Perl's ` at FILE line N.` (extends DC-046) | implemented |
@@ -185,6 +188,6 @@ The `.blg` keeps biber's line format (`[ms] location> LEVEL - message`) and mess
 | Id | Extension | Status |
 |---|---|---|
 | DC-050 | `--fix-quirks=<name>[,<name>…]` (or `=all`) option (§2): switch off reproduced biber bugs | implemented |
-| DC-051 | `--compat=2.22` (pin quirk defaults to a biber version once upstream fixes change them) | planned |
+| DC-051 | `--compat=2.22`: pin quirk defaults to a biber version, once upstream fixes change them | future (not in 0.1.0) |
 | DC-052 | The uniquename/uniquelist iteration has no bound in biber, and some inputs make it loop forever (BB-149) | Capped at 1,000 passes (real data converges in 2–3); hitting the cap emits a WARN naming the list and section | BB-149 | implemented (uniqueness) |
 | DC-068 | `--threads N` (bibers only; accepted only when spelt in full, like `--fix-quirks`): worker threads for the per-entry work of data reading (BibTeX parsing and LaTeX decoding, source maps without entry creation or `$MAPUNIQ`, field handlers), the per-entry list phases (name strings, visibility, name hashes, sort keys, static label steps) and `.bbl` rendering. Default (or `0`): `$BIBERS_THREADS` if set, else the number of cores; `1` is fully serial. Loops over fewer than 64 items stay serial (`$BIBERS_PAR_MIN_ITEMS`). Output, log messages and their order, warnings and exit codes are identical for every thread count (checked on the whole corpus, the benchmarks and all TeX Live `.bib` files); peak memory is somewhat higher with threads (per-thread allocator heaps). `$BIBERS_TIMINGS=1` prints per-phase wall times to stderr (a development aid). | implemented |

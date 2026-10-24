@@ -95,6 +95,16 @@ pub fn sort_by_order<T>(items: &mut [T], order: impl Fn(&T) -> Option<&str>) {
     items.sort_by(|a, b| num_cmp(order(a), order(b)));
 }
 
+/// Perl's `$!` text for an I/O error (Rust's `Display` appends
+/// ` (os error N)`; both use the C library's `strerror` text).
+pub fn errno_text(e: &std::io::Error) -> String {
+    let s = e.to_string();
+    match s.rfind(" (os error ") {
+        Some(i) => s[..i].to_string(),
+        None => s,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

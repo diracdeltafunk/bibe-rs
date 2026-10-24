@@ -275,18 +275,24 @@ pub fn extract_entries(
     let secnum = st.section.number.clone();
     let mut rkeys: Vec<String> = keys.to_vec();
     let path = ctx.env.resolve(filename);
-    let bytes = std::fs::read(&path).unwrap_or_default();
-    if bytes.is_empty() {
+    // `check_empty` is `-s $filename`, a stat: a file that exists but can't be
+    // read is not "empty", its read fails below.
+    if std::fs::metadata(&path).map_or(true, |m| m.len() == 0) {
         ctx.log
             .biber_warn(format!("Data source '{filename}' is empty, ignoring"));
         return Ok(rkeys);
     }
     let utf16_chunks = ctx.cfg.quirks.on(crate::quirks::Quirk::Utf16ChunkSurrogate);
-    let text = match encoding::decode(&bytes, encoding, utf16_chunks) {
-        Ok(t) => {
-            drop(bytes);
-            Some(t)
-        }
+    let text = match std::fs::read(&path)
+        .map_err(|e| {
+            format!(
+                "Couldn't open {filename}: {}",
+                crate::perlish::errno_text(&e)
+            )
+        })
+        .and_then(|bytes| encoding::decode(&bytes, encoding, utf16_chunks))
+    {
+        Ok(t) => Some(t),
         Err(e) => {
             biber_error!(
                 ctx.log,

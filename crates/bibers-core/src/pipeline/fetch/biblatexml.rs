@@ -153,13 +153,27 @@ pub fn extract_entries(
     let secnum = st.section.number.clone();
     let mut rkeys: Vec<String> = keys.to_vec();
     let path = ctx.env.resolve(filename);
-    let bytes = std::fs::read(&path).unwrap_or_default();
-    if bytes.is_empty() {
+    // `check_empty` is a stat: an unreadable file is not "empty".
+    if std::fs::metadata(&path).map_or(true, |m| m.len() == 0) {
         ctx.log
             .biber_warn(format!("Data source '{filename}' is empty, ignoring"));
         return Ok(rkeys);
     }
     info!(ctx.log, "Found BibLaTeXML data file '{filename}'");
+    // biber's `slurp_switchr` here is outside any eval, so a read error dies
+    // (DC-065: bibers reports it as an ERROR).
+    let bytes = match std::fs::read(&path) {
+        Ok(b) => b,
+        Err(e) => {
+            return Err(die(
+                ctx,
+                &format!(
+                    "Data file '{filename}' cannot be read: Couldn't open {filename}: {}",
+                    crate::perlish::errno_text(&e)
+                ),
+            ));
+        }
+    };
     let text = match encoding::decode(&bytes, "UTF-8", false) {
         Ok(t) => t,
         Err(e) => {

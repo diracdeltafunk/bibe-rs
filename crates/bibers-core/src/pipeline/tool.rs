@@ -86,6 +86,7 @@ pub const TOOL_PHASES: &[(&str, SectionPhase)] = &[
 
 /// `prepare_tool` (Biber.pm:4520-4549): process the tool-mode section.
 pub fn prepare_tool(ctx: &mut Ctx) -> Result<Processed, Fatal> {
+    super::check_user_regexes(ctx)?;
     let mut st = fetch::init_section(ctx, TOOL_SECTION)?;
     for (_, phase) in TOOL_PHASES {
         phase(ctx, &mut st)?;

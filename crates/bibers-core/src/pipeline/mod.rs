@@ -95,7 +95,40 @@ pub struct Processed {
 }
 
 /// `Biber::prepare`: process every section with citations.
+/// Compile every user-supplied regex option once, before processing. biber
+/// compiles these with `qr//` and dies on an invalid one; a construct PCRE2
+/// can't run (docs/compat.md DC-036) must not silently change the data
+/// either, so both are an ERROR naming the option and the pattern (DC-071).
+pub fn check_user_regexes(ctx: &mut Ctx) -> Result<(), Fatal> {
+    let b = &ctx.cfg.biber;
+    let mut pats: Vec<(&str, String)> = Vec::new();
+    if let Some(x) = b.get_str("xsvsep") {
+        pats.push(("xsvsep", x.to_string()));
+    }
+    for opt in [
+        "noinit",
+        "nolabel",
+        "nolabelwidthcount",
+        "nonamestring",
+        "nosort",
+    ] {
+        for p in b.patterns(opt) {
+            if let Some(v) = p.value.as_deref() {
+                pats.push((opt, v.to_string()));
+            }
+        }
+    }
+    for (opt, pat) in pats {
+        if let Err(e) = perl_compat::regex::PerlRegex::cached(&pat, false) {
+            ctx.log
+                .biber_error(crate::loc!(), &format!("Option '{opt}' ('{pat}'): {e}"))?;
+        }
+    }
+    Ok(())
+}
+
 pub fn prepare(ctx: &mut Ctx) -> Result<Processed, Fatal> {
+    check_user_regexes(ctx)?;
     let mut out = Processed::default();
     ctx.run.skip_rawdata = rawdata_unread(ctx);
     ctx.run.free_dead_state = true;

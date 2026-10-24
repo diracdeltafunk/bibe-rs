@@ -6,6 +6,7 @@ pub mod biblatexml;
 mod bibtex;
 pub mod dates;
 pub mod encoding;
+mod glob;
 pub mod names;
 
 pub use bibtex::{BibCache, FetchOpts};
@@ -398,141 +399,6 @@ fn bool_norm(b: Option<&str>) -> bool {
     l.contains("true") || l.contains('1')
 }
 
-/// Match one path component against a glob pattern (`*`, `?`, `[...]`).
-fn glob_match(pat: &[char], s: &[char]) -> bool {
-    match pat.first() {
-        None => s.is_empty(),
-        Some('*') => (0..=s.len()).any(|i| glob_match(&pat[1..], &s[i..])),
-        Some('?') => !s.is_empty() && glob_match(&pat[1..], &s[1..]),
-        Some('[') => {
-            let Some(end) = pat.iter().skip(2).position(|&c| c == ']').map(|p| p + 2) else {
-                return !s.is_empty() && s[0] == '[' && glob_match(&pat[1..], &s[1..]);
-            };
-            if s.is_empty() {
-                return false;
-            }
-            let (neg, set) = match pat[1] {
-                '!' | '^' => (true, &pat[2..end]),
-                _ => (false, &pat[1..end]),
-            };
-            let mut hit = false;
-            let mut i = 0;
-            while i < set.len() {
-                if i + 2 < set.len() && set[i + 1] == '-' {
-                    hit |= set[i] <= s[0] && s[0] <= set[i + 2];
-                    i += 3;
-                } else {
-                    hit |= set[i] == s[0];
-                    i += 1;
-                }
-            }
-            hit != neg && glob_match(&pat[end + 1..], &s[1..])
-        }
-        Some('\\') if pat.len() > 1 => {
-            !s.is_empty() && s[0] == pat[1] && glob_match(&pat[2..], &s[1..])
-        }
-        Some(c) => !s.is_empty() && s[0] == *c && glob_match(&pat[1..], &s[1..]),
-    }
-}
-
-/// Expand `{a,b}` alternatives (GLOB_BRACE).
-fn brace_expand(p: &str) -> Vec<String> {
-    let Some(open) = p.find('{') else {
-        return vec![p.to_string()];
-    };
-    let mut depth = 0;
-    let mut close = None;
-    let mut commas = Vec::new();
-    for (i, c) in p[open..].char_indices() {
-        match c {
-            '{' => depth += 1,
-            '}' => {
-                depth -= 1;
-                if depth == 0 {
-                    close = Some(open + i);
-                    break;
-                }
-            }
-            ',' if depth == 1 => commas.push(open + i),
-            _ => {}
-        }
-    }
-    let Some(close) = close else {
-        return vec![p.to_string()];
-    };
-    let mut bounds = vec![open];
-    bounds.extend(commas);
-    bounds.push(close);
-    let mut out = Vec::new();
-    for w in bounds.windows(2) {
-        let alt = &p[w[0] + 1..w[1]];
-        out.extend(brace_expand(&format!(
-            "{}{}{}",
-            &p[..open],
-            alt,
-            &p[close + 1..]
-        )));
-    }
-    out
-}
-
-/// Perl's `glob` (File::Glob `csh_glob`) on one pattern, relative to `cwd`.
-fn glob1(env: &crate::env::Env, pattern: &str) -> Vec<String> {
-    let mut out = Vec::new();
-    for word in pattern.split_whitespace() {
-        for p in brace_expand(word) {
-            if !p.contains(['*', '?', '[']) {
-                out.push(p);
-                continue;
-            }
-            let abs = p.starts_with('/');
-            let comps: Vec<&str> = p.split('/').filter(|c| !c.is_empty()).collect();
-            let mut cur: Vec<String> = vec![if abs { "/".into() } else { String::new() }];
-            for (ci, comp) in comps.iter().enumerate() {
-                let last = ci + 1 == comps.len();
-                let mut next = Vec::new();
-                for base in &cur {
-                    let join = |n: &str| {
-                        if base.is_empty() {
-                            n.to_string()
-                        } else if base.ends_with('/') {
-                            format!("{base}{n}")
-                        } else {
-                            format!("{base}/{n}")
-                        }
-                    };
-                    if !comp.contains(['*', '?', '[']) {
-                        next.push(join(comp));
-                        continue;
-                    }
-                    let dir = env.resolve(if base.is_empty() { "." } else { base });
-                    let Ok(rd) = std::fs::read_dir(dir) else {
-                        continue;
-                    };
-                    let pc: Vec<char> = comp.chars().collect();
-                    let mut names: Vec<String> = rd
-                        .filter_map(|e| e.ok()?.file_name().into_string().ok())
-                        .filter(|n| !n.starts_with('.') || comp.starts_with('.'))
-                        .filter(|n| glob_match(&pc, &n.chars().collect::<Vec<_>>()))
-                        .collect();
-                    names.sort_by(|a, b| {
-                        a.to_lowercase()
-                            .cmp(&b.to_lowercase())
-                            .then_with(|| a.cmp(b))
-                    });
-                    next.extend(names.iter().map(|n| join(n)));
-                }
-                cur = next;
-                if !last {
-                    cur.retain(|d| env.resolve(d).is_dir());
-                }
-            }
-            out.extend(cur.into_iter().filter(|f| env.exists(f)));
-        }
-    }
-    out
-}
-
 /// `glob_data_file` (Utils.pm:127).
 fn glob_data_file(ctx: &mut Ctx, source: &str, globflag: Option<&str>) -> Vec<String> {
     if crate::files::is_remote(source) || !bool_norm(globflag) {
@@ -540,14 +406,14 @@ fn glob_data_file(ctx: &mut Ctx, source: &str, globflag: Option<&str>) -> Vec<St
     }
     info!(ctx.log, "Globbing data source '{source}'");
     // globU: raw, then NFC and NFD variants of the pattern if they differ
-    let mut sources = glob1(ctx.env, source);
+    let mut sources = glob::glob(ctx.env, source);
     let c = crate::perlish::nfc(source);
     if c != source {
-        sources.extend(glob1(ctx.env, &c));
+        sources.extend(glob::glob(ctx.env, &c));
     }
     let d = crate::perlish::nfd(source);
     if d != source {
-        sources.extend(glob1(ctx.env, &d));
+        sources.extend(glob::glob(ctx.env, &d));
     }
     info!(
         ctx.log,
