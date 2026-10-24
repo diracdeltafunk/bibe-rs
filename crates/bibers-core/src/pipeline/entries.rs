@@ -1554,6 +1554,9 @@ impl<T> Logged<T> {
     }
 }
 
+/// `process_namehash`'s entry fields, and the name lists whose data it read.
+type NameHashes = (Vec<(String, J)>, Vec<NameListId>);
+
 /// [`getnamehash_u`] of each name list of an entry.
 type NamehashU = Vec<(NameListId, String, Vec<NameId>)>;
 
@@ -1571,7 +1574,7 @@ struct PostHashes {
     uniquework_fh: Option<Logged<String>>,
     /// `process_namehash`'s entry fields, and the name lists whose data it
     /// read.
-    namehash: Logged<(Vec<(String, J)>, Vec<NameListId>)>,
+    namehash: Logged<NameHashes>,
     /// `process_pername_hashes`: each name's hash.
     pername: Logged<Vec<(NameListId, NameId, String)>>,
     /// [`getnamehash_u`] of each name list (extradate/extraname/extratitle).
@@ -1988,7 +1991,7 @@ fn process_namehash(
     st: &mut SectionState,
     list: usize,
     key: &str,
-    namehash: Logged<(Vec<(String, J)>, Vec<NameListId>)>,
+    namehash: Logged<NameHashes>,
 ) -> Result<(), Fatal> {
     let dl = &mut st.datalists[list];
     let (out, read) = namehash.take(log)?;

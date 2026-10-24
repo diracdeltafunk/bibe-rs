@@ -751,6 +751,9 @@ fn slot_of(k: u128) -> usize {
 /// unknown names skip the lock while it is empty).
 static DYNAMIC_USED: AtomicBool = AtomicBool::new(false);
 
+/// A thread's cache of [`DYNAMIC`] lookups.
+type LookupCache = FxHashMap<Box<str>, Option<Sym>>;
+
 /// Incremented whenever a name is added to [`DYNAMIC`]: [`LOOKUPS`] caches
 /// are valid for one generation.
 static DYNAMIC_GEN: AtomicU64 = AtomicU64::new(0);
@@ -758,7 +761,7 @@ static DYNAMIC_GEN: AtomicU64 = AtomicU64::new(0);
 thread_local! {
     /// This thread's cache of [`DYNAMIC`] lookups (found or not), for the
     /// generation it was filled in.
-    static LOOKUPS: RefCell<(u64, FxHashMap<Box<str>, Option<Sym>>)> =
+    static LOOKUPS: RefCell<(u64, LookupCache)> =
         RefCell::new((0, FxHashMap::default()));
 }
 
