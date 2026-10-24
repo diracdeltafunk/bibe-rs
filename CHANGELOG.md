@@ -2,7 +2,7 @@
 
 All notable changes to bibers are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] - unreleased
+## [0.1.0] - 2026-10-24
 
 The first release: a preview of bibers, a Rust port of biber 2.22 that runs as a drop-in replacement for it.
 
