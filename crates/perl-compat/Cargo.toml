@@ -4,7 +4,8 @@ description = "Perl-isms and small CPAN-library behaviours that biber's output d
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
-license.workspace = true
+# Ports of Perl modules under Perl's terms, and Unicode data: see NOTICE.md.
+license = "Artistic-2.0 AND (Artistic-1.0-Perl OR GPL-1.0-or-later) AND Unicode-3.0"
 repository.workspace = true
 authors.workspace = true
 publish = false
@@ -12,10 +13,10 @@ publish = false
 [dependencies]
 pcre2.workspace = true
 regex.workspace = true
+serde_json.workspace = true
 unicode-normalization.workspace = true
 
 [dev-dependencies]
-serde_json.workspace = true
 sha2.workspace = true
 
 [lints]

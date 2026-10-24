@@ -33,7 +33,7 @@ bibers is a single self-contained executable. It needs no Perl and no data files
 
 ### Prebuilt binaries
 
-Each [release](https://github.com/diracdeltafunk/bibe-rs/releases) has an archive per platform, holding `bibers` (`bibers.exe` on Windows), `LICENSE`, `README.md` and `docs/compat.md`:
+Each [release](https://github.com/diracdeltafunk/bibe-rs/releases) has an archive per platform, holding `bibers` (`bibers.exe` on Windows), the licence files (`LICENSE`, `NOTICE.md`, `LICENSES/`, `THIRD-PARTY-LICENSES.md`), `README.md` and `docs/compat.md`:
 
 | Platform | Archive |
 |---|---|
@@ -161,3 +161,5 @@ Before replacing biber, check [docs/compat.md](docs/compat.md) for the differenc
 ## Licence
 
 bibers is a modified version of biber (© François Charette and Philip Kime, Artistic License 2.0). It is not affiliated with or endorsed by the biber authors. bibers is distributed under the Artistic License 2.0 (see [LICENSE](LICENSE)); differences from biber are documented in [docs/compat.md](docs/compat.md). The source code of each release is the release's git tag in this repository.
+
+Parts of bibers are ported from Perl modules (Unicode::Collate, Encode, Lingua::Translit and others) and keep their own terms, mostly Perl's (Artistic 1.0 or GPL); they also contain Unicode data under the Unicode License v3. See [NOTICE.md](NOTICE.md) and [LICENSES/](LICENSES/). Release archives also list the licences of the third-party Rust crates and C libraries in the binary (`THIRD-PARTY-LICENSES.md`), and [tests/corpus/LICENSES.md](tests/corpus/LICENSES.md) covers the test data.

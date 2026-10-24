@@ -366,7 +366,7 @@ Not planned at all: the deprecated `bblxml` and `dot` outputs (with `--dot-inclu
 
 **Decision: bibers is licensed under the Artistic License 2.0** (SPDX `Artistic-2.0`), keeping the copyright notices of François Charette and Philip Kime alongside ours. This is the only choice with no grey area: it matches upstream, lets the maintainers take our fixes, and is still permissive (commercial use and embedding allowed). MIT OR Apache-2.0 is the Rust norm, but because of §10 it would be misleading for the biber-derived crates.
 
-**Third-party-derived crates keep their upstream terms,** each crate with its own `license` field and NOTICE:
+**Third-party-derived crates keep their upstream terms** (done 2026-10-24: `ucollate` and `perl-compat` are `Artistic-2.0 AND (Artistic-1.0-Perl OR GPL-1.0-or-later) AND Unicode-3.0`; `NOTICE.md` credits every ported module and data source; `LICENSES/` holds the texts; release archives carry a generated `THIRD-PARTY-LICENSES.md` for the crates and bundled C libraries; `tests/corpus/LICENSES.md` lists the test data's origins and licences):
 - `ucollate` ports Unicode::Collate and its tables, which are under Perl 5 terms (Artistic 1.0 or GPL-1.0+). DUCET is under the Unicode License v3, which is permissive.
 - **btparse is LGPL-2.0-or-later** (verified from the Text-BibTeX 0.91 dist; its PCCTS-generated parts are public domain). **Decision: spec-first reimplementation (§10 #8).** We do *not* translate btparse's C code (`names.c`, `format_name.c`, the lexer/parser). Instead we:
   1. write a behavioural specification (`docs/spec/btparse.md`) from btparse's documentation, BibTeX's documented rules, and black-box experiments against O1/O3;
@@ -375,7 +375,7 @@ Not planned at all: the deprecated `bblxml` and `dot` outputs (with `--dot-inclu
 
   Contributors to the `btparse` crate work from the spec and test results, not from the LGPL C sources. The spec may describe *behaviour* in any detail, but must not paraphrase code. The crate is Artistic-2.0 like the rest of bibers.
 - `ucollate`'s tailoring data (`Locale/*.pl`) is itself derived from CLDR (Unicode licence, permissive).
-- Lingua::Translit tables are under Perl terms.
+- Lingua::Translit tables are under Perl terms (in `perl-compat::translit`).
 - ISBN ranges: `data/isbn/RangeMessage.xml` is vendored verbatim from Business-ISBN-Data 20260218.001 (Artistic-2.0), byte-identical to biber 2.22's bundled copy. It is compiled into the binary at build time, so there is no network dependency, and `ISBN_RANGE_MESSAGE` overrides it at run time. See `data/isbn/README.md`.
 - biber's `recode_data.xml` is Artistic-2.0, same as us.
 

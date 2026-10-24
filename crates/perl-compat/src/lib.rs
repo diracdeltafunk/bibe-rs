@@ -32,6 +32,7 @@ pub mod roman;
 pub mod sort;
 mod tables;
 pub mod textwrap;
+pub mod translit;
 pub mod truth;
 pub mod unicode;
 pub mod uri;

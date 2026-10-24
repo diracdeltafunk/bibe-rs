@@ -39,3 +39,4 @@ Requirements: Python ≥ 3.12, TeX Live with biblatex (`pdflatex`, `lualatex`, `
 
 - `bugs/bb-061-…` and `bugs/bb-062-…` (BB-061/062) use `compare = "unordered-lines"`, which is stable.
 - BB-112 (xdata cycles) and BB-113 (`$MAPUNIQ`) can't be stabilised by the harness, so they have no case. See `gen_bugs.py` `NO_CASE`.
+- `corpus_licenses.py`: writes `tests/corpus/LICENSES.md` (origins and licences of third-party corpus files, from TeX Live's package database; `--check` verifies).

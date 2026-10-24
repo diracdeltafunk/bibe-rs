@@ -4,8 +4,9 @@
 #     tools/release/package.sh VERSION PLATFORM BINARY [OUTDIR]
 #
 # Writes OUTDIR/bibers-VERSION-PLATFORM.tar.gz (or .zip when BINARY ends in
-# .exe) holding bibers[.exe], LICENSE, README.md and docs/compat.md in a
-# top-level bibers-VERSION-PLATFORM/ directory, and prints the archive path.
+# .exe) holding bibers[.exe], LICENSE, NOTICE.md, LICENSES/, the generated
+# THIRD-PARTY-LICENSES.md, README.md and docs/compat.md in a top-level
+# bibers-VERSION-PLATFORM/ directory, and prints the archive path.
 # OUTDIR defaults to target/dist. Used by .github/workflows/release.yml.
 set -euo pipefail
 
@@ -28,8 +29,12 @@ exe=bibers
 [[ $binary == *.exe ]] && exe=bibers.exe
 cp "$binary" "$stage/$name/$exe"
 chmod 755 "$stage/$name/$exe"
-cp "$root/LICENSE" "$root/README.md" "$stage/$name/"
+cp "$root/LICENSE" "$root/NOTICE.md" "$root/README.md" "$stage/$name/"
+cp -R "$root/LICENSES" "$stage/$name/"
 cp "$root/docs/compat.md" "$stage/$name/docs/"
+# The licences of the third-party crates and C libraries in the binary.
+py=$(command -v python3 || command -v python)
+"$py" "$root/tools/release/third_party_licenses.py" "$stage/$name/THIRD-PARTY-LICENSES.md" >&2
 
 outdir=$(cd "$outdir" && pwd)
 if [[ $exe == bibers.exe ]]; then
