@@ -1,6 +1,8 @@
 # bibe-rs
 
-A fast, behaviour-compatible Rust port of [biber](https://github.com/plk/biber), the biblatex backend. The binary is called **`bibers`**. It aims to produce byte-identical `.bbl` output to biber 2.22, at least 50× faster.
+A fast, behaviour-compatible Rust port of [biber](https://github.com/plk/biber), the biblatex backend. The binary is called **`bibers`**. It aims to produce byte-identical `.bbl` output to biber 2.22, while being much faster.
+
+🤖 This project is entirely vibecoded -- 100% of the code was written by Claude Opus 5.5.
 
 **Status: 0.1.0, a preview release.** `bibers` produces output byte-identical to biber 2.22, apart from the documented deliberate differences in [docs/compat.md](docs/compat.md). That holds on all 776 test-corpus cases (`.bbl`, tool mode and bibtex output, biblatexml, validation, remote sources, every Perl encoding), on all 964 TeX Live `.bib` files across 8 styles, on 163 real biblatex documents, and across about 100,000 random differential tests. It is about 100× faster than biber on large bibliographies (see below). It implements biber 2.22, so it works with biblatex 3.22 (control file format 3.11).
 
