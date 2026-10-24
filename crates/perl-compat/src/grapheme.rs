@@ -143,10 +143,10 @@ pub mod gcstring {
         match g {
             Gcb8::Lf | Gcb8::Control => return end,
             Gcb8::Cr => {
-                if let Some((_, c1)) = it.next() {
-                    if gcb(c1) == Gcb8::Lf {
-                        end += c1.len_utf8();
-                    }
+                if let Some((_, c1)) = it.next()
+                    && gcb(c1) == Gcb8::Lf
+                {
+                    end += c1.len_utf8();
                 }
                 return end;
             }

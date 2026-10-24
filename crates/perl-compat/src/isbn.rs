@@ -787,10 +787,10 @@ impl Ismn {
             .collect();
         tuples.sort_by_key(|t| t.1);
         for (country, lo, hi) in tuples {
-            if let Some(h) = hi {
-                if code > h {
-                    continue;
-                }
+            if let Some(h) = hi
+                && code > h
+            {
+                continue;
             }
             if code < lo {
                 break;

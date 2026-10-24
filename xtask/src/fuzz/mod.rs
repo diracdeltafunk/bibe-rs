@@ -266,7 +266,7 @@ pub fn fuzz(args: &[String]) -> Result<ExitCode> {
                             eprintln!("error on input {index} / {}: {err:#}", tpl.id);
                         }
                     }
-                    if d.0 % 50 == 0 || d.0 == tasks.len() {
+                    if d.0.is_multiple_of(50) || d.0 == tasks.len() {
                         let el = start.elapsed().as_secs_f64();
                         eprintln!(
                             "  {}/{} runs, {} mismatches ({} signatures), {} errors, {:.0}s elapsed, ~{:.0}s left",

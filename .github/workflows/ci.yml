@@ -21,6 +21,16 @@ jobs:
       - run: cargo fmt --all --check
       - run: cargo clippy --workspace --all-targets
 
+  # The minimum supported Rust version (`rust-version` in Cargo.toml) must
+  # stay true: build everything, tests and tools included, with it.
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.88
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo check --workspace --all-targets --locked
+
   test:
     strategy:
       fail-fast: false

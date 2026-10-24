@@ -410,7 +410,7 @@ impl DataType {
                 Val::Duration(m, sec)
             }
             HexBinary => {
-                if s.len() % 2 != 0 || !s.bytes().all(|b| b.is_ascii_hexdigit()) {
+                if !s.len().is_multiple_of(2) || !s.bytes().all(|b| b.is_ascii_hexdigit()) {
                     return None;
                 }
                 let bytes = (0..s.len())
@@ -473,12 +473,11 @@ impl DataType {
         {
             return None;
         }
-        if let Val::Dec(d) = &v {
-            if self.total_digits.is_some_and(|t| d.total_digits() > t)
-                || self.fraction_digits.is_some_and(|f| d.frac.len() > f)
-            {
-                return None;
-            }
+        if let Val::Dec(d) = &v
+            && (self.total_digits.is_some_and(|t| d.total_digits() > t)
+                || self.fraction_digits.is_some_and(|f| d.frac.len() > f))
+        {
+            return None;
         }
         Some(v)
     }
@@ -960,7 +959,7 @@ fn add_abs(a: &Decimal, b: &Decimal) -> Decimal {
 
 fn parse_base64(s: &str) -> Option<Vec<u8>> {
     let chars: Vec<u8> = s.bytes().filter(|b| *b != b' ').collect();
-    if chars.len() % 4 != 0 {
+    if !chars.len().is_multiple_of(4) {
         return None;
     }
     let val = |c: u8| -> Option<u32> {

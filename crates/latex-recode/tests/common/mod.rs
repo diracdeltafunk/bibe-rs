@@ -32,6 +32,12 @@ impl Rng {
     pub fn pick<'a, T>(&mut self, v: &'a [T]) -> &'a T {
         &v[self.below(v.len())]
     }
+
+    /// [`Self::pick`] for strings, as `&str` (explicit so that type inference
+    /// doesn't depend on the compiler version, e.g. at `push_str(…)`).
+    pub fn pick_str<'a, S: AsRef<str>>(&mut self, v: &'a [S]) -> &'a str {
+        self.pick(v).as_ref()
+    }
 }
 
 /// Keys of the built-in data.
@@ -165,7 +171,7 @@ const TERMS: &[&str] = &[
 fn letter(r: &mut Rng) -> String {
     let mut s = r.pick(LETTERS).to_string();
     if r.chance(15) {
-        s.push_str(r.pick(&["\u{301}", "\u{300}", "\u{308}", "\u{327}", "\u{303}\u{304}"]));
+        s.push_str(r.pick_str(&["\u{301}", "\u{300}", "\u{308}", "\u{327}", "\u{303}\u{304}"]));
     }
     s
 }
@@ -392,9 +398,9 @@ pub fn gen_chaos(r: &mut Rng, k: &Keys) -> String {
     for _ in 0..n {
         if r.chance(12) {
             let (_, names) = r.pick(&k.from);
-            s.push_str(r.pick(names));
+            s.push_str(r.pick_str(names));
         } else {
-            s.push_str(r.pick(TOK));
+            s.push_str(r.pick_str(TOK));
         }
     }
     s
@@ -406,7 +412,7 @@ pub fn gen_encode(r: &mut Rng, k: &Keys) -> String {
     let mut s = String::new();
     for _ in 0..n {
         match r.below(10) {
-            0..=2 => s.push_str(r.pick(&k.to)),
+            0..=2 => s.push_str(r.pick_str(&k.to)),
             3..=4 => {
                 if r.chance(20) {
                     s.push('{');
@@ -416,16 +422,25 @@ pub fn gen_encode(r: &mut Rng, k: &Keys) -> String {
                     s.push('}');
                 }
                 for _ in 0..r.below(4) {
-                    s.push_str(r.pick(&k.marks));
+                    s.push_str(r.pick_str(&k.marks));
                 }
             }
             5 => {
                 s.push('i');
-                s.push_str(r.pick(&k.marks));
+                s.push_str(r.pick_str(&k.marks));
             }
-            6 => s.push_str(r.pick(ODD)),
-            7 => s.push_str(r.pick(&k.marks)),
-            8 => s.push_str(r.pick(&["Muḥammad", "Ðandđandć, H.", "°C", "Åå", "ı̆", "–", "÷", "ﬀ"])),
+            6 => s.push_str(r.pick_str(ODD)),
+            7 => s.push_str(r.pick_str(&k.marks)),
+            8 => s.push_str(r.pick_str(&[
+                "Muḥammad",
+                "Ðandđandć, H.",
+                "°C",
+                "Åå",
+                "ı̆",
+                "–",
+                "÷",
+                "ﬀ",
+            ])),
             _ => s.push_str(&letter(r)),
         }
     }

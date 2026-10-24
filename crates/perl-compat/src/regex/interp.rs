@@ -108,10 +108,10 @@ impl MatchCtx<'_> {
     fn last_closed(&self) -> usize {
         let mut best: Option<(usize, usize)> = None; // (end, group)
         for (i, g) in self.groups.iter().enumerate().skip(1) {
-            if let Some((_, e)) = g {
-                if best.is_none_or(|(be, _)| *e > be) {
-                    best = Some((*e, i));
-                }
+            if let Some((_, e)) = g
+                && best.is_none_or(|(be, _)| *e > be)
+            {
+                best = Some((*e, i));
             }
         }
         best.map_or(0, |b| b.1)
@@ -637,15 +637,15 @@ impl Template {
             }
         }
         if c == '^' {
-            if let Some(&x) = chars.get(i + 1) {
-                if x.is_ascii_uppercase() || matches!(x, '[' | ']' | '^' | '_' | '?' | '\\') {
-                    let tok = match x {
-                        'N' => Tok::Var(Var::LastClosed),
-                        'W' => Tok::Var(Var::Const("0")),
-                        _ => Tok::Var(Var::Const("")),
-                    };
-                    return Ok((tok, i + 2));
-                }
+            if let Some(&x) = chars.get(i + 1)
+                && (x.is_ascii_uppercase() || matches!(x, '[' | ']' | '^' | '_' | '?' | '\\'))
+            {
+                let tok = match x {
+                    'N' => Tok::Var(Var::LastClosed),
+                    'W' => Tok::Var(Var::Const("0")),
+                    _ => Tok::Var(Var::Const("")),
+                };
+                return Ok((tok, i + 2));
             }
             return Ok((Tok::Var(Var::Const("STDOUT_TOP")), i + 1));
         }

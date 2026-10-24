@@ -478,10 +478,10 @@ pub fn expand_imatches(
             };
             let len = imatches.len() as i64;
             let real = if idx < 0 { len + idx } else { idx };
-            if (0..len).contains(&real) {
-                if let Some(v) = &imatches[real as usize] {
-                    out.push_str(v);
-                }
+            if (0..len).contains(&real)
+                && let Some(v) = &imatches[real as usize]
+            {
+                out.push_str(v);
             }
             i += 1 + k;
             continue;

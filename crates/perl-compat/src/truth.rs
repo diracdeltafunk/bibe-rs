@@ -519,20 +519,20 @@ impl PerlNum {
 
     /// Perl `$a + $b`.
     pub fn plus(self, o: PerlNum) -> PerlNum {
-        if let (Some(a), Some(b)) = (self.as_int(), o.as_int()) {
-            if let Some(r) = PerlNum::from_i128(a + b) {
-                return r;
-            }
+        if let (Some(a), Some(b)) = (self.as_int(), o.as_int())
+            && let Some(r) = PerlNum::from_i128(a + b)
+        {
+            return r;
         }
         PerlNum::Float(self.as_f64() + o.as_f64())
     }
 
     /// Perl `$a - $b`.
     pub fn minus(self, o: PerlNum) -> PerlNum {
-        if let (Some(a), Some(b)) = (self.as_int(), o.as_int()) {
-            if let Some(r) = PerlNum::from_i128(a - b) {
-                return r;
-            }
+        if let (Some(a), Some(b)) = (self.as_int(), o.as_int())
+            && let Some(r) = PerlNum::from_i128(a - b)
+        {
+            return r;
         }
         PerlNum::Float(self.as_f64() - o.as_f64())
     }

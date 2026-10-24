@@ -52,7 +52,7 @@ fn digest_map(f: impl Fn(&str) -> String) -> String {
             h.update(line.as_bytes());
         }
     }
-    format!("{:x}", h.finalize())
+    hex(&h.finalize())
 }
 
 fn digest_prop(p: Prop) -> String {
@@ -62,7 +62,7 @@ fn digest_prop(p: Prop) -> String {
             h.update(format!("{:X}\n", c as u32).as_bytes());
         }
     }
-    format!("{:x}", h.finalize())
+    hex(&h.finalize())
 }
 
 fn digest_num() -> String {
@@ -73,7 +73,7 @@ fn digest_num() -> String {
             h.update(format!("{:X}:{}\n", c as u32, v).as_bytes());
         }
     }
-    format!("{:x}", h.finalize())
+    hex(&h.finalize())
 }
 
 fn digest_clusters(f: impl Fn(&str) -> Vec<usize>) -> String {
@@ -82,7 +82,7 @@ fn digest_clusters(f: impl Fn(&str) -> Vec<usize>) -> String {
         let lens: Vec<String> = f(&context(c)).iter().map(ToString::to_string).collect();
         h.update(format!("{:X}:{}\n", c as u32, lens.join(",")).as_bytes());
     }
-    format!("{:x}", h.finalize())
+    hex(&h.finalize())
 }
 
 fn compute(key: &str) -> Option<String> {
@@ -204,4 +204,9 @@ fn oracle_live() {
     };
     let live: BTreeMap<String, String> = serde_json::from_slice(&out).unwrap();
     assert_eq!(live, committed(), "committed digests are stale");
+}
+
+/// Lowercase hex of a digest.
+fn hex(bytes: &[u8]) -> String {
+    bytes.iter().map(|b| format!("{b:02x}")).collect()
 }

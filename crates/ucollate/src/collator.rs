@@ -83,7 +83,7 @@ fn hst(cp: u32) -> Hst {
         0x1160..=0x11A7 | 0xD7B0..=0xD7C6 => Hst::V,
         0x11A8..=0x11FF | 0xD7CB..=0xD7FB => Hst::T,
         0xAC00..=0xD7A3 => {
-            if (cp - 0xAC00) % 28 == 0 {
+            if (cp - 0xAC00).is_multiple_of(28) {
                 Hst::Lv
             } else {
                 Hst::Lvt
@@ -160,12 +160,12 @@ impl Collator {
         if let Some(l) = o.level {
             self.level = crate::options::check_level(l as i64, "level")?;
         }
-        if let Some(v) = o.uca_version {
-            if v != 43 {
-                return Err(Error::Unsupported(format!(
-                    "UCA_Version {v} is not supported (only 43)"
-                )));
-            }
+        if let Some(v) = o.uca_version
+            && v != 43
+        {
+            return Err(Error::Unsupported(format!(
+                "UCA_Version {v} is not supported (only 43)"
+            )));
         }
         if let Some(b) = &o.backwards {
             for &l in b {
@@ -282,10 +282,10 @@ impl Collator {
 
     #[inline]
     fn single(&self, cp: u32) -> Option<&[Ce]> {
-        if let Some(t) = &self.tailoring {
-            if let Some(c) = t.single(cp) {
-                return Some(c);
-            }
+        if let Some(t) = &self.tailoring
+            && let Some(c) = t.single(cp)
+        {
+            return Some(c);
         }
         tables::ducet_single(cp)
     }
@@ -305,13 +305,13 @@ impl Collator {
         if ml > 0 && self.suppressed(cp) {
             ml = 0;
         }
-        if let Some(t) = &self.tailoring {
-            if let Some(st) = t.start(cp) {
-                if let Some(s) = t.single_of(st) {
-                    single = Some(s);
-                }
-                ml = ml.max(st.maxlen);
+        if let Some(t) = &self.tailoring
+            && let Some(st) = t.start(cp)
+        {
+            if let Some(s) = t.single_of(st) {
+                single = Some(s);
             }
+            ml = ml.max(st.maxlen);
         }
         (single, ml)
     }
@@ -323,10 +323,10 @@ impl Collator {
 
     #[inline]
     fn contraction(&self, cps: &[u32]) -> Option<&[Ce]> {
-        if let Some(t) = &self.tailoring {
-            if let Some(c) = t.contraction(cps) {
-                return Some(c);
-            }
+        if let Some(t) = &self.tailoring
+            && let Some(c) = t.contraction(cps)
+        {
+            return Some(c);
         }
         if self.suppressed(cps[0]) {
             return None;

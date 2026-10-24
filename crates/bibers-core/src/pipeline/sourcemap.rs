@@ -459,10 +459,10 @@ impl Engine<'_> {
         for smap in select_maps(cfg, datatype) {
             let level = smap.level.as_deref().unwrap_or("");
             for map in &smap.maps {
-                if let Some(rs) = &map.refsection {
-                    if num_cmp_str(&secnum, rs) != Some(Ordering::Equal) {
-                        continue;
-                    }
+                if let Some(rs) = &map.refsection
+                    && num_cmp_str(&secnum, rs) != Some(Ordering::Equal)
+                {
+                    continue;
                 }
                 if !map.per_type.is_empty()
                     && !map

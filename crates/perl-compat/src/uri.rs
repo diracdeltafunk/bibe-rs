@@ -253,11 +253,11 @@ fn server_uric_escape(s: &str) -> String {
         // $ui = $host =~ s/(.*@)// ? $1 : ""   (`.` excludes "\n"; leftmost)
         let (ui, host) = split_userinfo(auth);
         let (host, port) = split_port(&host, is_perl_digit);
-        if host.chars().any(|c| !is_uric4host(c)) {
-            if let Some(h) = idna_encode(host) {
-                let rebuilt = format!("{}//{ui}{h}{port}{tail}", &s[..start]);
-                return uric_escape(&rebuilt);
-            }
+        if host.chars().any(|c| !is_uric4host(c))
+            && let Some(h) = idna_encode(host)
+        {
+            let rebuilt = format!("{}//{ui}{h}{port}{tail}", &s[..start]);
+            return uric_escape(&rebuilt);
         }
     }
     uric_escape(s)
@@ -399,10 +399,11 @@ pub fn encode_punycode(input: &str) -> String {
 /// an escaped `/%23` at that position is unescaped.
 fn irc_fix(s: &mut String) {
     let mut i = 0;
-    if let Some(c) = s.find([':', '/', '?', '#']) {
-        if c > 0 && s.as_bytes()[c] == b':' {
-            i = c + 1;
-        }
+    if let Some(c) = s.find([':', '/', '?', '#'])
+        && c > 0
+        && s.as_bytes()[c] == b':'
+    {
+        i = c + 1;
     }
     if s[i..].starts_with("//") {
         let rest = &s[i + 2..];
@@ -417,11 +418,12 @@ fn irc_fix(s: &mut String) {
 fn uri_split(s: &str) -> (Option<&str>, Option<&str>, &str, Option<&str>, Option<&str>) {
     let mut rest = s;
     let mut scheme = None;
-    if let Some(c) = rest.find([':', '/', '?', '#']) {
-        if c > 0 && rest.as_bytes()[c] == b':' {
-            scheme = Some(&rest[..c]);
-            rest = &rest[c + 1..];
-        }
+    if let Some(c) = rest.find([':', '/', '?', '#'])
+        && c > 0
+        && rest.as_bytes()[c] == b':'
+    {
+        scheme = Some(&rest[..c]);
+        rest = &rest[c + 1..];
     }
     let mut auth = None;
     if let Some(r) = rest.strip_prefix("//") {
@@ -486,11 +488,11 @@ fn parse_geo(path: &str) -> Option<Geo<'_>> {
     let r = r.strip_prefix(',')?;
     let (_lon, mut r) = take_num(r, true)?;
     let mut alt = None;
-    if let Some(x) = r.strip_prefix(',') {
-        if let Some((a, rr)) = take_num(x, true) {
-            alt = Some(a);
-            r = rr;
-        }
+    if let Some(x) = r.strip_prefix(',')
+        && let Some((a, rr)) = take_num(x, true)
+    {
+        alt = Some(a);
+        r = rr;
     }
     let mut crs = None;
     if let Some(x) = r.strip_prefix(";crs=") {
@@ -505,13 +507,12 @@ fn parse_geo(path: &str) -> Option<Geo<'_>> {
         }
     }
     let mut unc = None;
-    if let Some(x) = r.strip_prefix(";u=") {
-        if let Some((u, rr)) = take_num(x, false) {
-            if at_end(rr) || rr.starts_with(';') {
-                unc = Some(u);
-                r = rr;
-            }
-        }
+    if let Some(x) = r.strip_prefix(";u=")
+        && let Some((u, rr)) = take_num(x, false)
+        && (at_end(rr) || rr.starts_with(';'))
+    {
+        unc = Some(u);
+        r = rr;
     }
     let mut parm = None;
     if !at_end(r) {

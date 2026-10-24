@@ -25,7 +25,6 @@ use rustc_hash::FxHashMap as HashMap;
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
 
-use md5::{Digest, Md5};
 use perl_compat::encoding::{Encoding, Lookup, lookup};
 use perl_compat::grapheme::gcstring;
 use perl_compat::textwrap;
@@ -1613,10 +1612,7 @@ fn instantiate_entry(lv: &ListView, t: &EntryTemplate, key: &str) -> String {
                 }
                 Slot::SortInitHash => {
                     if let Some(si) = lv.sortinit(key) {
-                        let h = format!(
-                            "{:x}",
-                            Md5::digest(lv.collator.view_sort_key(si).as_bytes())
-                        );
+                        let h = crate::pipeline::entries::md5_hex(&lv.collator.view_sort_key(si));
                         let _ = writeln!(s, "      \\field{{sortinithash}}{{{h}}}");
                     }
                 }
@@ -2105,10 +2101,10 @@ pub fn render_text(ctx: &mut Ctx, processed: &mut Processed) -> Result<Option<Te
     let mut headtext = head();
     if let Some(pa) = sections.last().and_then(|s| s.st.preamble.as_ref()) {
         let mut pa = pa.join("%\n");
-        if let Some(r) = &recoder {
-            if safechars || enc.is_some_and(|e| unencodable(e, nul_check, &nfc(&pa))) {
-                pa = r.encode(&pa);
-            }
+        if let Some(r) = &recoder
+            && (safechars || enc.is_some_and(|e| unencodable(e, nul_check, &nfc(&pa))))
+        {
+            pa = r.encode(&pa);
         }
         headtext.push_str(&format!("\\preamble{{%\n{pa}%\n}}\n\n"));
     }

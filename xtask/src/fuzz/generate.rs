@@ -1343,10 +1343,11 @@ impl Gen {
             ws.insert(0, a.to_string());
         }
         let mut t = ws.join(" ");
-        if let Some(first) = t.get(..1) {
-            if first.chars().all(|c| c.is_ascii_lowercase()) && self.r.chance(0.6) {
-                t = first.to_uppercase() + &t[1..];
-            }
+        if let Some(first) = t.get(..1)
+            && first.chars().all(|c| c.is_ascii_lowercase())
+            && self.r.chance(0.6)
+        {
+            t = first.to_uppercase() + &t[1..];
         }
         match self.r.below(30) {
             0 => t.push_str(" -- Part II"),
@@ -1429,7 +1430,7 @@ impl Gen {
         let mut out = String::new();
         for (i, name) in names.iter().enumerate() {
             if i > 0 {
-                out.push_str(self.r.weighted(&[
+                out.push_str(self.r.weighted::<&str>(&[
                     (40, " and "),
                     (1, " AND "),
                     (1, "\n    and "),

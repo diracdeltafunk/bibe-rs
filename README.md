@@ -51,7 +51,7 @@ The macOS binary is not notarised. If macOS refuses to run a copy downloaded wit
 
 ### From source
 
-With [Rust](https://rustup.rs) 1.85 or later and a C compiler (for the bundled PCRE2 and for `ring`):
+With [Rust](https://rustup.rs) 1.88 or later and a C compiler (for the bundled PCRE2 and for `ring`):
 
 ```sh
 git clone https://github.com/diracdeltafunk/bibe-rs

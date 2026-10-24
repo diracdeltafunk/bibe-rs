@@ -6,7 +6,7 @@ default-members = ["crates/*"]
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.88"
 license = "Artistic-2.0"
 repository = "https://github.com/diracdeltafunk/bibe-rs"
 authors = ["the bibe-rs contributors"]
@@ -23,40 +23,39 @@ relaxng = { path = "crates/relaxng" }
 anyhow = "1"
 regex = "1"
 serde = { version = "1", features = ["derive"] }
-toml = "0.9"
+toml = "1"
 tempfile = "3"
-similar = "2"
+similar = "3"
 wait-timeout = "0.2"
 # Pinned: 0.1.24 is the last release on Unicode 16.0.0, the Unicode version of
 # biber's perl 5.42 (docs/PLAN.md §4 risk 2); 0.1.25 moved to Unicode 17.
 unicode-normalization = "=0.1.24"
-roxmltree = "0.21"
+roxmltree = "0.21.2"
 memchr = "2"
-serde_json = "1"
+serde_json = "1.0.154"
 rustc-hash = "2"
 # Data parallelism for the per-entry loops (bibers_core::par, DC-068).
 rayon = "1.11"
-# The global allocator of the bibers binary: less memory than the system
-# allocators (fragmentation) and faster. mimalloc 2 rather than 3: 5-15%
-# lower peak RSS on the benchmarks at the same speed.
-mimalloc = { version = "0.1.48", default-features = false, features = ["v2"] }
+# The global allocator of the bibers binary (mimalloc v3, the crate's
+# default): less memory than the system allocators (fragmentation) and faster.
+mimalloc = { version = "0.1.52", default-features = false }
 # Short strings stored inline (the generic list state, `model::PV`).
-compact_str = "0.9"
+compact_str = "0.10"
 # Heap profiling of the bibers binary (feature `dhat-heap`, docs/M5.md).
 dhat = "0.3"
 # Vectors one pointer wide (the generic list state, `model::PV`).
 thin-vec = "0.2"
-md-5 = "0.10"
+md-5 = "0.11"
 # Local time for the log's "=== <date>" line. Not chrono: its `clock` feature
 # links CoreFoundation on macOS, which costs ~1 ms at every process start.
 jiff = "0.2.15"
 pcre2 = "0.2.11"
-sha2 = "0.10"
+sha2 = "0.11.1"
 # Remote data sources (DC-032): pure-Rust TLS (ring provider); webpki-roots is
 # Mozilla's CA list, like biber's bundled Mozilla::CA.
-rustls = { version = "0.23.45", default-features = false, features = ["ring", "std", "tls12"] }
+rustls = { version = "0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
 rustls-pki-types = "1.15.1"
-webpki-roots = "1.0.9"
+webpki-roots = "1.0.11"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
