@@ -472,7 +472,10 @@ mod tests {
         assert_eq!(words(r"ref\\ space1.bib"), [r"ref\\", "space1.bib"]);
     }
 
-    /// Vectors recorded with perl 5.42's `glob` (File::Glob 1.42).
+    /// Vectors recorded with perl 5.42's `glob` (File::Glob 1.42) on a Unix
+    /// system: Windows forbids `*` in file names, and there a backslash only
+    /// quotes `[]-{}~\` (it is a path separator).
+    #[cfg(unix)]
     #[test]
     fn matches_perl() {
         let d = tempfile::tempdir().unwrap();
@@ -524,5 +527,30 @@ mod tests {
         assert_eq!(g("a{b.bib"), ["a"], "unbalanced brace globs the prefix");
         assert_eq!(g("{}"), ["{}"]);
         assert_eq!(g("~nosuchuser/x"), ["~nosuchuser/x"]);
+    }
+
+    /// The behaviour shared by every platform.
+    #[test]
+    fn portable_patterns() {
+        let d = tempfile::tempdir().unwrap();
+        let cwd = d.path().join("cwd");
+        let home = d.path().join("home");
+        std::fs::create_dir_all(&home).unwrap();
+        std::fs::create_dir_all(&cwd).unwrap();
+        for f in ["a.bib", "b.bib", "c.txt", "ref space1.bib"] {
+            std::fs::write(cwd.join(f), "").unwrap();
+        }
+        std::fs::write(home.join("h1.bib"), "").unwrap();
+        let mut env = Env::isolated(&cwd);
+        env.home = Some(home.to_str().unwrap().replace('\\', "/"));
+        let h = env.home.clone().unwrap();
+        let g = |p: &str| glob(&env, p);
+        assert_eq!(g("*.bib"), ["a.bib", "b.bib", "ref space1.bib"]);
+        assert_eq!(g("{a,b}.bib"), ["a.bib", "b.bib"]);
+        assert_eq!(g("[!a].bib"), ["b.bib"]);
+        assert_eq!(g(r#""ref space*.bib""#), ["ref space1.bib"]);
+        assert_eq!(g("missing.bib"), ["missing.bib"]);
+        assert!(g("nomatch*.bib").is_empty());
+        assert_eq!(g("~/*.bib"), [format!("{h}/h1.bib")]);
     }
 }
