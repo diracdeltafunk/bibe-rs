@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+  <title id="title">BibTeX source becomes a formatted bibliography</title>
+  <desc id="description">A dark BibTeX source card points to a typeset bibliography entry on a white page.</desc>
+  <defs>
+    <filter id="shadow" x="-12%" y="-12%" width="124%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#22313b" flood-opacity="0.11"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="#f8f7f4"/>
+  <g transform="translate(0 -55)">
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="180" width="475" height="550" rx="20" fill="#26343d"/>
+    <path d="M90 180h435a20 20 0 0 1 20 20v65H70v-65a20 20 0 0 1 20-20z" fill="#1d2a32"/>
+    <rect x="655" y="180" width="475" height="550" rx="20" fill="#ffffff"/>
+  </g>
+
+  <text x="104" y="225" fill="#c6d0d2" font-family="Menlo, Consolas, monospace" font-size="27">references.bib</text>
+  <line x1="104" y1="296" x2="511" y2="296" stroke="#43525a" stroke-width="2"/>
+
+  <g font-family="Menlo, Consolas, monospace">
+    <text x="105" y="367" fill="#ec926c" font-size="38" font-weight="700">@book</text>
+    <text x="224" y="367" fill="#e9eceb" font-size="38" font-weight="700">{texbook,</text>
+    <text x="129" y="449" fill="#8ed2bc" font-size="30">title</text>
+    <text x="222" y="449" fill="#e9eceb" font-size="30">={The TeXbook},</text>
+    <text x="129" y="521" fill="#8ed2bc" font-size="27">author</text>
+    <text x="228" y="521" fill="#e9eceb" font-size="27">={D. E. Knuth},</text>
+    <text x="129" y="595" fill="#8ed2bc" font-size="30">year</text>
+    <text x="204" y="595" fill="#e9eceb" font-size="30">={1984}</text>
+    <text x="105" y="677" fill="#e9eceb" font-size="38" font-weight="700">}</text>
+  </g>
+
+  <circle cx="600" cy="455" r="72" fill="#bd603f"/>
+  <path d="M570 455h59m-22-22 22 22-22 22" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="9"/>
+
+  <text x="701" y="297" fill="#26343d" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="700">References</text>
+  <line x1="701" y1="327" x2="1085" y2="327" stroke="#d8dcda" stroke-width="2"/>
+  <text x="704" y="426" fill="#bd603f" font-family="Georgia, 'Times New Roman', serif" font-size="49" font-weight="700">[1]</text>
+  <text x="789" y="419" fill="#26343d" font-family="Georgia, 'Times New Roman', serif" font-size="41">D. E. Knuth</text>
+  <text x="789" y="488" fill="#26343d" font-family="Georgia, 'Times New Roman', serif" font-size="46" font-style="italic">The TeXbook</text>
+  <text x="789" y="552" fill="#59666a" font-family="Georgia, 'Times New Roman', serif" font-size="37">1984</text>
+
+  </g>
+</svg>
