@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Checked with biber 2.22 and `dev` (1686b9c), Perl 5.36, Encode 3.17.
+Checked with biber 2.22 and `dev` (1686b9c), Perl 5.38.2, Encode 3.21.
 
 biber reads data files with `File::Slurper::read_text($filename, $encoding)` and writes the `.bbl` (and tool-mode `.bib`) through handles opened with `:encoding($enc)`. PerlIO's `:encoding` layer converts in chunks of 1024 bytes, and characters that fall across a chunk boundary are not handled correctly. Arguably these are bugs in `PerlIO::encoding`, but biber can avoid the layer completely, since it reads whole files anyway and writes whole entries.
 
