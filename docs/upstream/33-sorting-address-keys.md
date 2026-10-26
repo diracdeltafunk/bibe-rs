@@ -25,7 +25,7 @@ Checked with biber 2.22 and current `dev` (1686b9c).
 
 `sorting=yr` gives `y3 y5 y1 y2 y4` (−50, 80, 999, 1000, 2000), but `sorting=ly` gives `y3 y2 y4 y5 y1` (−50, 1000, 2000, 80, 999).
 
-**2. A sort column's type is taken from its first item only.** In `instantiate_sortingtemplate` (around `Biber.pm:3338`) the column type is `sortdataschema` of the first `\field`, but the other items are fallbacks for entries without the first. With `\sort{\field{year}\field{title}}`, the whole column is numeric, so for entries without a year the title is turned into the "not a number" default and ignored:
+**2. A sort column's type is taken from its first item only.** In `generate_sortdataschema` (`Biber.pm:3338`) the column type is `sortdataschema` of the first `\field`, but the other items are fallbacks for entries without the first. With `\sort{\field{year}\field{title}}`, the whole column is numeric, so for entries without a year the title is turned into the "not a number" default and ignored:
 
 ```bibtex
 @book{n1, title={Zeta}}
