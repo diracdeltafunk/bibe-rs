@@ -61,8 +61,10 @@ class Bibers < Formula
   def caveats
     <<~EOS
       bibers is a drop-in replacement for biber 2.22 (biblatex 3.22).
-      To make latexmk use it, add this line to ~/.latexmkrc:
-        $biber = 'bibers %O %S';
+      It is installed next to biber; nothing uses it until you say so.
+      To make latexmk (and VS Code's LaTeX Workshop) use it, add this
+      line to ~/.latexmkrc, and delete it to switch back to biber:
+        $biber = '#{{HOMEBREW_PREFIX}}/bin/bibers %O %S';
       For other editors and build tools, see:
         https://github.com/{repo}#using-bibers-instead-of-biber
     EOS
