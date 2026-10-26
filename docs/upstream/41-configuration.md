@@ -20,7 +20,7 @@ Checked with biber 2.22 and `dev` (1686b9c).
 </sourcemap>
 ```
 
-and `@book{a, author={Doe, J}, title={T}, date={2000}, note={orig}}`, the note becomes `from biber.conf` with a normal `.bcf`, but stays `orig` if the `.bcf`'s `<bcf:sourcemap>` has only user-level maps (e.g. after `\DeclareDriverSourcemap[datatype=bibtex]{}`). In `parse_ctrlfile`, the document's user maps are merged into the config file's maps, but then the `else` branch ("no driver defaults") replaces the whole option with the `.bcf` maps:
+and `@book{a, author={Doe, J}, title={T}, date={2000}, note={orig}}`, the note becomes `from biber.conf` with a normal `.bcf`, but stays `orig` if the `.bcf`'s `<bcf:sourcemap>` has only user-level maps (I tested this by deleting the `level="driver"` block from the `.bcf`). In `parse_ctrlfile`, the document's user maps are merged into the config file's maps, but then the `else` branch ("no driver defaults") replaces the whole option with the `.bcf` maps:
 
 ```perl
       else { # no driver defaults, just override the config file user map settings
