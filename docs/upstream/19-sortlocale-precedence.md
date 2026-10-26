@@ -35,8 +35,6 @@ The manual (§ "Sorting") gives the locale precedence for collating a field as `
 
 Same behaviour on biber 2.22 and current `dev` (1686b9c).
 
-A related, minor documentation point (BB-079): the manual says biber *warns* when it overrides a locale's tailoring with user collation options (e.g. Danish `upper_before_lower`, Thai `variable`), but `Biber::UCollate` only logs an INFO line.
-
 ### Suggested fix
 
 For (1), `sort_list` should not make a separate collator for a sortset's `locale` when `--sortlocale` is set, i.e. add `and not Biber::Config->getoption('sortlocale')` to the condition `if (defined($sl) and $sl ne $thislocale)`. For (2), use `--sortlocale` for the `sortinit` collator too:
