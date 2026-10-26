@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-155, BB-156, BB-153, BB-154, BB-056, BB-047, BB-162, BB-046, BB-161 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-155, BB-156, BB-153, BB-154, BB-056, BB-047, BB-162, BB-046, BB-161, BB-190 (docs/biber-bugs.md). -->
 
 **Title:** Tool mode / `--output-format=bibtex` loses or corrupts data: `@comment`s of all but the last file, `@preamble`s, `XX` dates, literal annotations, zero values, seasons, short years; `--output-safechars` recodes keys and URLs
 

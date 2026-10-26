@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-182, BB-183, BB-184, BB-185, BB-186, BB-187, BB-188, BB-114, BB-047 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-182, BB-183, BB-184, BB-185, BB-186, BB-187, BB-188, BB-114, BB-047, BB-191, BB-192 (docs/biber-bugs.md). -->
 
 **Title:** biblatexml output can't be read back: aliases, keywords and related entries are lost, dates are unreadable, entries are unsorted; an unresolved XDATA reference in a range field crashes every writer
 

@@ -1,6 +1,6 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-087, BB-088, BB-099, BB-194 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-079, BB-087, BB-088, BB-099, BB-194 (docs/biber-bugs.md). -->
 
-**Title:** Manual and config schema out of date: Windows config path, malformed sample `biber.conf`, options missing from `config.rnc`, `mincrossrefs` description; `--output-format=bibjson` is accepted but the module is gone
+**Title:** Manual and config schema out of date: Windows config path, malformed sample `biber.conf`, options missing from `config.rnc`, `mincrossrefs` and locale-override descriptions; `--output-format=bibjson` is accepted but the module is gone
 
 ---
 
@@ -33,6 +33,8 @@ ERROR - Error loading data source package 'Biber::Output::bibjson': Can't locate
 ```
 
 The patch removes `bibjson` from the accepted formats, so this gives the normal "Output format in tool mode must be one of …" message. (`Name.pm` still has `name_to_bibjson`/`name_part_to_bibjson`, which are now unused; I left them alone.)
+
+**6. Locale-mandated collation settings.** The section on sorting says that some locales enforce `upper_before_lower` (e.g. Danish) and that "you will be able to override it but biber will warn you if you do". It only logs INFO: `biber --sortlocale=da_DK --sortupper=false` gives `INFO - Overriding locale 'da_DK' defaults 'upper_before_lower = 1' with 'upper_before_lower = 0'`, and no warning. Since the same kind of message is logged in every default run (`INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'`), making it a warning would be noisy, so the patch changes the manual.
 
 ### Suggested fix
 
@@ -191,6 +193,15 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
    <validate_bltxml>0</validate_bltxml>
    <validate_config>0</validate_config>
    <validate_control>0</validate_control>
+@@ -1963,7 +1964,7 @@
+ sort some fields uppercase before lower and others lower before upper. See the
+ \biblatex\ manual. Be aware though that some locales rightly enforce a
+ particular setting for this (for example, Danish). You will be able to
+-override it but \biber\ will warn you if you do.
++override it, and \biber\ notes this in the log (as an informational message).
+ 
+ There are in fact many options to \verb+Unicode::Collate+
+ which can tailor the collation in various ways in
 ```
 
 `config.rng` needs the same additions. I edited it by hand rather than regenerating it, since I didn't have `trang`; the change is mechanical (an `<optional><element name="…">` per option, with `<choice><value>0</value><value>1</value></choice>`, `<text/>` or `<data type="unsignedByte"/>`, plus `<value>bblxml</value>`), and I can attach it. With both files changed, the manual's sample `biber.conf`, the `nolabelwidthcount` example above and `data/biber-tool.conf` all validate with `--validate-config` and `xmllint --relaxng`. All tests in `t/` pass on `dev` (1686b9c) with this patch.

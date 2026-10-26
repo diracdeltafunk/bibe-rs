@@ -1,6 +1,6 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-055, BB-057, BB-058, BB-059 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-055, BB-057, BB-058, BB-059, BB-137 (docs/biber-bugs.md). -->
 
-**Title:** A value of `0` is treated as missing: year 0 and `sortkey={0}` sort wrongly, and `month={0}` passes a `rangemin=1` constraint
+**Title:** A value of `0` is treated as missing: year 0 and `sortkey={0}` sort wrongly, `month={0}` passes a `rangemin=1` constraint, and a keyword `0` never matches a keyword filter
 
 ---
 
@@ -41,6 +41,8 @@ and `--validate-datamodel`, `month={13}` gives `Invalid value of field 'month' m
 **4.** The other string normalisers in `Utils.pm` (`normalise_string_label`, `normalise_string_bblxml`, `normalise_string_hash`, `normalise_string_underscore`, `escape_label`, `unescape_label`, `strip_noinit`, `strip_nonamestring`) have the same `return '' unless $str` test; e.g. `normalise_string_bblxml("0")` returns `''`, so a field whose value is `0` is written empty in bblxml output. The patch changes them all to test `length`, except `normalise_string`, which is used to compute `sortinit`: for an entry whose only sort data is the `\literal{0}` fallback of nty's volume column, the sort string is just `0`, and three tests in `t/basic-misc.t` expect an empty `sortinit` for such entries.
 
 The tool-mode output side of the same pattern (fields with value `0`, year-0 dates and midnight times are dropped from `--tool` output) is covered by the report on tool-mode output.
+
+**5. A keyword `0` never matches.** `Entry::has_keyword` returns `(first {$_ eq $keyword} @$keywords) ? 1 : 0`, and `first` returns the matching element, which is false when it is `0`. With `@book{a, …, keywords={0}}`, `@book{b, …, keywords={1}}` and two datalists filtered with `<bcf:filter type="keyword">0</bcf:filter>` and `…>1</…`, as `\printbibliography[keyword=0]` writes them, the `.bbl` has no `kw0` list at all, while `kw1` contains `b`. The second patch below uses `any`.
 
 ### Suggested fix
 
@@ -203,4 +205,29 @@ The tool-mode output side of the same pattern (fields with value `0`, year-0 dat
    $str =~ s/\{\\textgreater\}/>/g;
 ```
 
-With this patch the examples sort `y0, y1, y2` and `s0, s1, n`, and `month={0}` gives `Invalid value of field 'month' must be '>=1' - ignoring field`. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this patch the examples sort `y0, y1, y2` and `s0, s1, n`, and `month={0}` gives `Invalid value of field 'month' must be '>=1' - ignoring field`. For the keyword filter:
+
+```diff
+--- a/lib/Biber/Entry.pm
++++ b/lib/Biber/Entry.pm
+@@ -10,7 +10,7 @@
+ use Digest::MD5 qw( md5_hex );
+ use Encode;
+ use Log::Log4perl qw( :no_extra_logdie_message );
+-use List::Util qw( first );
++use List::Util qw( any first );
+ 
+ my $logger = Log::Log4perl::get_logger('main');
+ 
+@@ -632,7 +632,7 @@
+   my $self = shift;
+   my $keyword = shift;
+   if (my $keywords = $self->{datafields}{keywords}) {
+-    return (first {$_ eq $keyword} @$keywords) ? 1 : 0;
++    return (any {$_ eq $keyword} @$keywords) ? 1 : 0;
+   }
+   else {
+     return 0;
+```
+
+All tests in `t/` pass on `dev` (1686b9c) with these patches.

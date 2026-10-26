@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-152, BB-166, BB-168 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-152, BB-166, BB-168, BB-193 (docs/biber-bugs.md). -->
 
 **Title:** Non-UTF-8 input and output encodings break on characters that straddle PerlIO's 1024-byte `:encoding` buffer, and ISO-2022-JP input can hang
 
