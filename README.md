@@ -44,7 +44,15 @@ bibers is a single self-contained executable. It needs no Perl and no data files
 brew install diracdeltafunk/tap/bibers
 ```
 
-This installs the prebuilt binary, with no Gatekeeper prompt on macOS, and `brew upgrade` keeps it current. Then set up your tools as in [Using bibers instead of biber](#using-bibers-instead-of-biber).
+This installs the prebuilt binary as `$(brew --prefix)/bin/bibers`, with no Gatekeeper prompt on macOS, and `brew upgrade` keeps it current. That is `/opt/homebrew/bin/bibers` on Apple silicon, `/usr/local/bin/bibers` on Intel Macs and `/home/linuxbrew/.linuxbrew/bin/bibers` on Linux; the examples below use the Apple silicon path. Check it with `bibers --version`.
+
+bibers is installed next to your TeX distribution's `biber`, not in place of it: nothing changes until you tell your tools to run bibers, as in [Using bibers instead of biber](#using-bibers-instead-of-biber). For latexmk (which is also what VS Code's LaTeX Workshop runs by default), that is one line in `~/.latexmkrc`:
+
+```perl
+$biber = '/opt/homebrew/bin/bibers %O %S';
+```
+
+[Switching back to biber](#switching-back-to-biber) undoes it. To remove bibers itself: `brew uninstall bibers` (and `brew untap diracdeltafunk/tap`).
 
 ### Prebuilt binaries
 
@@ -90,6 +98,10 @@ $biber = 'bibers %O %S';
 
 latexmk then runs bibers whenever it would run biber, and reruns it as usual (it finds the data files from the `.bcf` and `.blg`, which bibers writes in biber's format).
 
+On macOS, write the full path (`$biber = '/opt/homebrew/bin/bibers %O %S';` for a Homebrew install) if latexmk is started by an app opened from the Dock or Finder, such as TeXShop: those don't read your shell's startup files, so their `PATH` may not include `/opt/homebrew/bin`, and latexmk then fails with `bibers: command not found`. The full path works everywhere.
+
+To run biber instead for one build, without editing `~/.latexmkrc`: `latexmk -e '$biber=q/biber %O %S/' doc.tex`.
+
 ### arara
 
 arara's `biber` rule always runs `biber`. Add a `bibers` rule (modelled on arara's own `biber` rule; it has not yet been tested with arara itself, so reports are welcome): save this as `bibers.yaml` in a rules directory, for example `rules/` next to the document, and list that directory in `araraconfig.yaml` (`paths: ['./rules']`):
@@ -127,11 +139,11 @@ Then use `% arara: bibers` where you had `% arara: biber`.
 
 ### TeXShop
 
-*TeXShop → Settings → Engine*: set **BibTeX Engine** to `bibers`. *Typeset → BibTeX* (⌘⇧B) then runs bibers. If you typeset with TeXShop's latexmk engines instead, use the latexmk setting above.
+*TeXShop → Settings → Engine*: set **BibTeX Engine** to `bibers`, or to the full path (`/opt/homebrew/bin/bibers` for a Homebrew install) if TeXShop reports that it cannot find it. *Typeset → BibTeX* (⌘⇧B) then runs bibers. If you typeset with TeXShop's latexmk engines instead, use the latexmk setting above.
 
 ### VS Code (LaTeX Workshop)
 
-The default recipe runs latexmk, so the latexmk setting above is enough. For recipes that call biber directly, define a `bibers` tool in `settings.json` and use it in your recipes, for example:
+The default recipe (*latexmk*) runs latexmk, so the `$biber` line in `~/.latexmkrc` above is enough: LaTeX Workshop needs no setting of its own. For recipes that call biber directly (such as the built-in *pdflatex ➞ biber ➞ pdflatex × 2*), define a `bibers` tool in `settings.json` (*Preferences: Open User Settings (JSON)*) and use it in your recipes. Give the full path, since VS Code started from the Dock may not have `/opt/homebrew/bin` on its `PATH`. For example:
 
 ```json
 "latex-workshop.latex.tools": [
@@ -140,7 +152,7 @@ The default recipe runs latexmk, so the latexmk setting above is enough. For rec
     "command": "pdflatex",
     "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "%DOC%"]
   },
-  { "name": "bibers", "command": "bibers", "args": ["%DOCFILE%"] }
+  { "name": "bibers", "command": "/opt/homebrew/bin/bibers", "args": ["%DOCFILE%"] }
 ],
 "latex-workshop.latex.recipes": [
   { "name": "pdflatex → bibers → pdflatex × 2", "tools": ["pdflatex", "bibers", "pdflatex", "pdflatex"] }
@@ -148,6 +160,17 @@ The default recipe runs latexmk, so the latexmk setting above is enough. For rec
 ```
 
 (Setting `latex-workshop.latex.tools` replaces the built-in list, so include every tool your recipes use.)
+
+### Switching back to biber
+
+Nothing above touches biber, so switching back only undoes the configuration:
+
+- **latexmk** (and VS Code with the default recipe): delete or comment out the `$biber` line in `~/.latexmkrc` (or the project's `.latexmkrc`); latexmk's default is `biber %O %S`.
+- **VS Code recipes**: use the `biber` tool again in place of `bibers` in `latex-workshop.latex.recipes`, or delete your `latex-workshop.latex.tools` and `latex-workshop.latex.recipes` settings to get the built-in ones back.
+- **TeXstudio**: set **Biber** back to `biber %`. **TeXShop**: set **BibTeX Engine** back to what it was (`bibtex` by default, or `biber`). **arara**: `% arara: biber`.
+- **A `biber` link** (see [Replacing `biber` itself](#replacing-biber-itself)): `rm ~/.local/bin/biber`.
+
+The `.bbl` files bibers writes are the ones biber would, so documents need no cleanup. latexmk reruns biber only when the `.bcf` or the `.bib` files change, so to rebuild a document with biber at once, delete its `.bbl` first.
 
 ### Servers and CI (self-hosted Overleaf, Docker images)
 
