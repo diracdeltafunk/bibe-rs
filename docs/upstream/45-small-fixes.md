@@ -1,12 +1,12 @@
 <!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-064, BB-089, BB-090, BB-096, BB-097, BB-102, BB-106, BB-139 (docs/biber-bugs.md). -->
 
-**Title:** Small fixes: `langid={sr-Latn}` becomes `latin`, repeated transliteration warnings, and several latent slips
+**Title:** Small fixes: `langid={sr-Latn}` becomes `latin`, repeated transliteration warnings, a `vf` labelalpha width of 1 ignored, and several latent slips
 
 ---
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Checked with biber 2.22 and `dev` (1686b9c). The first two items have a visible effect; the others were found by reading the code, and I could not construct an input where they change the output. I've collected them in one issue because each fix is a line or two.
+Checked with biber 2.22 and `dev` (1686b9c). Items 1–3 have a visible effect; the others were found by reading the code, and I could not construct an input where they change the output. I've collected them in one issue because each fix is a line or two.
 
 **1. Serbian `langid`s are mapped to the wrong babel languages.** `%LOCALE_MAP_R` (Constants.pm), which turns BCP 47 `langid`s into babel/polyglossia names, has `'sr-Latn' => 'latin'` and `'sr-Cyrl' => 'serbian'`. So
 
@@ -19,7 +19,20 @@ gives `\field{langid}{latin}` and `\field{langid}{serbian}` in the `.bbl`. In ba
 
 **2. Transliteration objects are rebuilt, and warnings repeated, for every string.** `call_transliterator` calls `get_transliterator` for each value, which constructs a new `Lingua::Translit` object and re-checks the pair. With a `<bcf:translit langids="german" target="title" from="german" to="ala-lc"/>` and 21 German entries, biber prints `WARN - Invalid transliteration from/to pair (german/ala-lc)` 21 times. Caching the transliterator (or `undef`) per pair gives one warning; the `.bbl` is unchanged. (In my test with 2000 Russian titles the construction cost itself was small, so this is mainly about the noise.)
 
-**3. A computed global labelalpha index of 0 is ignored.** In `_process_label_attributes` (Internals.pm), `$lcache->{globalindices}{$field_string} || $lcache->{$field_string}{index}` falls back to the per-entry index when the global index computed for `substring_fixed_threshold` is 0, which is a valid index. It should be `//`.
+**3. A computed fixed labelalpha width of 1 is ignored.** In `_process_label_attributes` (Internals.pm), `$lcache->{globalindices}{$field_string} || $lcache->{$field_string}{index}` falls back to the per-entry index when the global index computed for `substring_width="vf"` is 0, which is a valid index (width 1). With the label template
+
+```xml
+<bcf:labelalphatemplate type="global">
+  <bcf:labelelement order="1">
+    <bcf:labelpart substring_width="vf" substring_fixed_threshold="3">labelname</bcf:labelpart>
+  </bcf:labelelement>
+  <bcf:labelelement order="2">
+    <bcf:labelpart substring_width="2" substring_side="right">year</bcf:labelpart>
+  </bcf:labelelement>
+</bcf:labelalphatemplate>
+```
+
+and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two names share any first letter, so the fixed width should be 1 and Cat and Cow should both get `C00` (with `extraalpha` 1 and 2). biber gives `A00`, `B00`, `Ca00`, `Co00`, `D00`: the per-entry widths are used for Cat and Cow. It should be `//`.
 
 **4. `uniquelist=minyear` counts every complete name list twice.** `create_uniquelist_info` calls `add_uniquelistcount_final($namelist)` and then, for `minyear`, `add_uniquelistcount_final($namelist, $labelyear)`, which increments the same `final` counter again (as well as `finalyear`). `DataList::set_uniquelist` treats a `final` count above 1 as "identical lists", so with `minyear` every list goes down that branch. In 60 random small examples (2–4 entries, 1–4 names, two years) the `ul=` values were the same with and without the fix, so this may be latent, but the count is plainly not what the comment describes.
 

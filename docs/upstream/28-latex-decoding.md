@@ -47,7 +47,7 @@ gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=nul
 
 **6. `\t{oo}` puts the tie on the brace.** `\t` maps to U+0311 like a one-letter accent, so `\t{oo}` gives `{̑oo}` (the combining mark sits on `{`, and the braces stay). The tie spans two letters: `o͡o` (U+0361 between them).
 
-**7. Punctuation and symbol macros at the end of the string, or before `{}`, are not decoded.** The terminator for the `punctuation`, `symbols` and `greek` types is written `(?: \{\}|\s+|\b)`, with a literal space before `\{\}` (the pattern isn't `/x`). So `\textdollar{}5` is decoded but leaves `{}` behind (`${}5` before item 1's change), and since `\b` needs a word character on one side, a non-letter macro at the end of the value is never decoded: `y\---` stays as it is, while `y\--- z` and `\--x` are decoded.
+**7. Punctuation and symbol macros at the end of the string, or before `{}`, are not decoded.** The terminator for the `punctuation`, `symbols` and `greek` types is written `(?: \{\}|\s+|\b)`, with a literal space before `\{\}` (the pattern isn't `/x`). So `\textdollar{}5` is decoded but leaves `{}` behind (`${}5` before item 1's change), and since `\b` needs a word character on one side, a non-letter macro at the end of the value is never decoded: `y\---` stays as it is, while `y\--- z` and `\--x` are decoded. Conversely, `\b` never matches between a letter macro and a following digit, although TeX ends a macro name at the first non-letter: `number = {C\textendash118/07}` (from the `.bib` of biblatex-oxref's documentation) stays as it is, where it should become `C–118/07`. The patch's terminator (`(?<![a-zA-Z])|(?![a-zA-Z])`) handles both cases.
 
 ### Suggested fix
 
