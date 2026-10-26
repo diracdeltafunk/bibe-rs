@@ -1,10 +1,15 @@
 name: Upstream watch
 
-# Once a week, check biber and biblatex upstream for changes bibers may need to
-# port: new releases, processing-code commits on biber's dev branch since the
-# vendor/biber pin, a new .bcf version or default data model on biblatex's dev
-# branch (tools/upstream/watch.py). Findings go to one open issue labelled
-# `upstream-watch`, which gets a comment only when they change.
+# Once a week, check biber and biblatex upstream (tools/upstream/watch.py).
+# bibers follows releases, so there are two reports:
+#   * a new biber or biblatex release tag is the only thing to port. It goes
+#     to the open `upstream-watch` issue, which gets a comment (and so a
+#     notification) only when the findings change;
+#   * unreleased activity (processing-code commits on biber's dev branch since
+#     the vendor/biber pin, with fixes of our filed issues marked; a new .bcf
+#     version or default data model on biblatex's dev branch) is information
+#     only. It goes to the `upstream-preview` issue, whose body is edited in
+#     place, which sends no notifications.
 # Run by hand (Actions -> Upstream watch -> Run workflow); tick "dry run" to
 # print the report without touching issues.
 
