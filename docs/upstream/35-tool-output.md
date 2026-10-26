@@ -17,6 +17,9 @@
 @misc{a3, title={Times}, date={2020-01-01T00:30:00/2020-01-02T00:00:00}}
 @misc{a4, title={Seasons}, date={2020-21/2021-32}}
 @misc{a5, title={Short year}, year={380}}
+@misc{a6, title={Unknown start}, date={/2000}}
+@misc{a7, title={Open start}, date={../2000}}
+@misc{a8, title={Open end}, date={2000/..}}
 ```
 
 ```bibtex
@@ -58,6 +61,21 @@
   TITLE = {Short year},
 }
 
+@MISC{a6,
+  ENDYEAR = {2000},
+  TITLE = {Unknown start},
+}
+
+@MISC{a7,
+  ENDYEAR = {2000},
+  TITLE = {Open start},
+}
+
+@MISC{a8,
+  DATE = {2000/},
+  TITLE = {Open end},
+}
+
 @MISC{b1,
   TITLE = {B},
 }
@@ -72,7 +90,8 @@
 5. **Zero values are dropped** (the "0 is false" pattern): `volume={0}` (`if (my $val = $be->get_field($field))`), year 0 (`date={0000}`, 1 BCE), hour 0 (`T00:30:00` loses its time, and the minute is left over as a `MINUTE` field) and an end year 0 (`…/0000` becomes an open range `…/`). The `next unless $be->get_field("${d}year")` in `set_output_entry` and the `if (my $x = …)` tests in `construct_datetime` all treat `0` as missing.
 6. **Seasons.** The year-division map in `construct_datetime` has `'WinterS' => 32`, but the value stored is `winterS` (`%YEARDIVISIONS` in Constants.pm), so the southern winter is lost. In addition, the `yeardivision`/`endyeardivision` fields are never deleted after use, so they are also written as separate fields.
 7. **Years with fewer than four digits are written as they are** (`DATE = {380}`), which biber then rejects as an invalid date (`year={380}` is accepted as a legacy field, and `date={0380}` as an ISO date).
-8. **`OPTIONS` is written in hash order** (`getblxentryoptions` returns `keys`), so the output changes between identical runs.
+8. **Ranges with an unknown or open start are lost, and open ends become unknown.** The start year of `/2000` and `../2000` is stored as `''` (with `dateunknown` set for the first), so the `next unless $be->get_field("${d}year")` test skips the date, and only the end year is left over as an `ENDYEAR` field. For the end, `construct_datetime` writes `2000/` whether or not `enddateunknown` is set, so `2000/..` comes back as `2000/`.
+9. **`OPTIONS` is written in hash order** (`getblxentryoptions` returns `keys`), so the output changes between identical runs.
 
 With the patch below, the output is
 
@@ -108,6 +127,21 @@ With the patch below, the output is
   TITLE = {Short year},
 }
 
+@MISC{a6,
+  DATE = {/2000},
+  TITLE = {Unknown start},
+}
+
+@MISC{a7,
+  DATE = {../2000},
+  TITLE = {Open start},
+}
+
+@MISC{a8,
+  DATE = {2000/..},
+  TITLE = {Open end},
+}
+
 @MISC{b1,
   TITLE = {B},
 }
@@ -120,8 +154,8 @@ and running `biber --tool` on this output reproduces it exactly.
 
 Two related problems in the same code:
 
-9. **`--output-safechars` (and the forced recoding when an entry can't be encoded in `--output-encoding`) is applied to the whole entry string**, including the entry key and verbatim fields. For `@misc{café, title={Café}, url={http://example.org/café}}`, tool mode writes `@MISC{caf\'{e},` and `URL = {http://example.org/caf\'{e}}`, and the `.bbl` gets `\entry{caf\'{e}}`, `\verb http://example.org/caf\'{e}` and `\verb 10.1/\'{e}` for a DOI. The key no longer matches `\cite{café}` (or the unrecoded `\keyalias` lines), and the URL is wrong. The patch recodes field by field in the BibTeX writer, and line by line in the `.bbl` writer, skipping the key lines (`\entry`, `\set`, `\inset`) and `\verb`/`\lverb` blocks. Keys and verbatim data are still recoded if they can't be encoded in the output encoding at all, as before.
-10. **Latent:** `Output/bibtex.pm`'s `output` looks up the section-99999 list by a name built from the global `sortingtemplatename`, while `tool_mode_setup` names it `tool/global//global/global/global`. These agree only because `%CONFIG_DEFAULT_BIBLATEX` overwrites the user's config with `sortingtemplatename => 'tool'` (a separate report). If that is fixed, a `biber.conf` setting `sortingtemplatename` makes tool mode die with `Can't call method "get_keys" on an undefined value`. The patch takes the section's list directly.
+10. **`--output-safechars` (and the forced recoding when an entry can't be encoded in `--output-encoding`) is applied to the whole entry string**, including the entry key and verbatim fields. For `@misc{café, title={Café}, url={http://example.org/café}}`, tool mode writes `@MISC{caf\'{e},` and `URL = {http://example.org/caf\'{e}}`, and the `.bbl` gets `\entry{caf\'{e}}`, `\verb http://example.org/caf\'{e}` and `\verb 10.1/\'{e}` for a DOI. The key no longer matches `\cite{café}` (or the unrecoded `\keyalias` lines), and the URL is wrong. The patch recodes field by field in the BibTeX writer, and line by line in the `.bbl` writer, skipping the key lines (`\entry`, `\set`, `\inset`) and `\verb`/`\lverb` blocks. Keys and verbatim data are still recoded if they can't be encoded in the output encoding at all, as before.
+11. **Latent:** `Output/bibtex.pm`'s `output` looks up the section-99999 list by a name built from the global `sortingtemplatename`, while `tool_mode_setup` names it `tool/global//global/global/global`. These agree only because `%CONFIG_DEFAULT_BIBLATEX` overwrites the user's config with `sortingtemplatename => 'tool'` (a separate report). If that is fixed, a `biber.conf` setting `sortingtemplatename` makes tool mode die with `Can't call method "get_keys" on an undefined value`. The patch takes the section's list directly.
 
 ### Suggested fix
 
@@ -405,7 +439,7 @@ Two related problems in the same code:
                          'Q1'      => 33,
                          'Q2'      => 34,
                          'Q3'      => 35,
-@@ -715,25 +746,33 @@
+@@ -715,25 +746,34 @@
    # Seasons derived from ISO 8601 dates
    if (my $s = $be->get_field("${d}yeardivision")) {
      $overridem = $yeardivisions{$s};
@@ -426,7 +460,8 @@ Two related problems in the same code:
 -    $datestring .= $sy;
 +  my $sy = $overridey // $be->get_field("${d}year");
 +  if (defined($sy)) {
-+    $datestring .= $ypad->($sy);
++    # An empty start year is an open start ('..') unless it is unknown ('')
++    $datestring .= ($sy eq '' and not $be->get_field("${d}dateunknown")) ? '..' : $ypad->($sy);
      $be->del_field("${d}year");
  
      # Start month
@@ -445,7 +480,7 @@ Two related problems in the same code:
        $be->del_field("${d}day");
      }
  
-@@ -755,7 +794,7 @@
+@@ -755,7 +795,7 @@
      }
  
      # If start hour, there must be minute and second
@@ -454,7 +489,7 @@ Two related problems in the same code:
        $datestring .= 'T' . sprintf('%.2d', $sh) . ':' .
          sprintf('%.2d', $be->get_field("${d}minute")) . ':' .
            sprintf('%.2d', $be->get_field("${d}second"));
-@@ -777,19 +816,20 @@
+@@ -777,19 +817,20 @@
      }
  
      # End year
@@ -481,7 +516,7 @@ Two related problems in the same code:
          $be->del_field("${d}endday");
        }
  
-@@ -811,7 +851,7 @@
+@@ -811,7 +852,7 @@
        }
  
        # If end hour, there must be minute and second
@@ -490,6 +525,17 @@ Two related problems in the same code:
          $datestring .= 'T' . sprintf('%.2d', $eh) . ':' .
            sprintf('%.2d', $be->get_field("${d}endminute")) . ':' .
              sprintf('%.2d', $be->get_field("${d}endsecond"));
+@@ -827,6 +868,10 @@
+         $be->del_field("${d}endtimezone");
+       }
+     }
++    # Likewise for an empty end year
++    elsif (defined($ey) and not $be->get_field("${d}enddateunknown")) {
++      $datestring .= '..';
++    }
+   }
+   return $datestring;
+ }
 ```
 
 The patch is on top of the one for the `$dmh->{datefields}` report (whose `my $d = $datefield =~ s/date$//r;` lines appear as context). All tests in `t/` pass on `dev` (1686b9c) with both.

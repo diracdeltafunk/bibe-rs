@@ -583,4 +583,4 @@ Three related problems found on the way:
        <bltx:end></bltx:end>
 ```
 
-`t/tool-bltxml.t` also needs its two expected strings updated: aliases as `<bltx:key>`, the `keywords` of entry `i3Š`, and the entries in the order of the sorted list (the order the test already asserts with `get_keys`). That change is mechanical and long, so it is not shown. The patch is on top of the one for the date-field report. All tests in `t/` pass on `dev` (1686b9c) with these changes.
+`t/tool-bltxml.t` also needs its two expected strings updated: aliases as `<bltx:key>`, the `keywords` of entry `i3Š`, and the entries in the order of the sorted list (the order the test already asserts with `get_keys`). That change is mechanical and long, so it is not shown. The `Output/bibtex.pm` hunks are on top of the patch in the tool-mode BibTeX output report. All tests in `t/` pass on `dev` (1686b9c) with these changes.
