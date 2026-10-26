@@ -58,7 +58,7 @@ the parents (included because of `mincrossrefs=2`) came out as `p3, p1, p2`, `p1
 
 With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6yn2Slw6EV`, then `4nuT2xDKQO, 4pDdep5HUS`, then `2l9Rpg6mm7, 2nebml7f7t`. (Outside `map_foreach`, `$MAPUNIQ` is not replaced at all on `dev`; that is a separate report.) The patch uses a counter (`mapuniq1`, `mapuniq2`, …). Even with a counter, which source entry gets which value depended on hash order, because `extract_entries` (BibTeX input, `\nocite{*}`) creates the entries with `each` over the parse cache; the patch creates them in file order (`orig_key_order`, which already exists for `sorting=none`).
 
-**6.** The order of warnings in the `.blg` also varied between runs (e.g. with `-V`), largely for the reasons above. I have not checked every source of warnings after the patch, but the examples above give identical `.blg` files from run to run.
+**6.** The order of warnings in the `.blg` also varied between runs (e.g. with `-V`), largely for the reasons above. I have not checked every source of warnings after the patch, but the examples above give identical `.blg` files from run to run, apart from the date line and timings (on `dev`, four runs of the XDATA example gave four different logs).
 
 ### Suggested fix
 
