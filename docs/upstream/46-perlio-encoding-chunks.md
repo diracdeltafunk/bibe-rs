@@ -1,6 +1,6 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-152, BB-168 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-152, BB-166, BB-168 (docs/biber-bugs.md). -->
 
-**Title:** Non-UTF-8 input and output encodings break on characters that straddle PerlIO's 1024-byte `:encoding` buffer
+**Title:** Non-UTF-8 input and output encodings break on characters that straddle PerlIO's 1024-byte `:encoding` buffer, and ISO-2022-JP input can hang
 
 ---
 
@@ -33,6 +33,8 @@ The file is valid UTF-16 (Python and `Encode::decode('UTF-16', …)` read it).
 ```
 
 `€` has no LaTeX macro in biber's recoding data, so the layer writes it with its `\x{20ac}` fallback. But the `.bbl` has only 398 `\x{20ac}`, and in their place `\x{fffd}\x{220ac}`: the encoder got the first byte of a `€` at the end of one chunk, and the rest with the next character at the start of the following one. Without the `x`, all 400 are correct; where the damage happens depends only on where characters fall in the file. The same happens with other encodings: in our regression corpus, the KOI8-R, CP1251, ISO-2022-JP and 7-bit JIS outputs of a test file with CJK text contain `\x{fffd}` and wrong code points, the HZ output has redundant `~}~{` pairs, and the ISO-2022-KR output repeats its `ESC $ ) C` designator at the start of every line (175 times in a 164-line file).
+
+**3. Reading stateful encodings can hang.** With `--input-encoding=iso-2022-jp` (also `iso-2022-jp-1`, `7bit-jis`), a single 8-bit byte in the data file, e.g. `title={T\xe9}`, makes biber loop forever at the end of the file inside `Encode.pm` (I stopped it after 20 s). Decoding the whole file avoids the loop; but `Encode`'s ISO-2022-JP decoder doesn't croak on such a byte even with `FB_CROAK`, it just stops and leaves the rest of the input unconsumed, so the patch checks for that and reports `ERROR - Data file 'j.bib' cannot be read in encoding 'iso-2022-jp': invalid data at byte 34` instead of passing on truncated data.
 
 ### Suggested fix
 
@@ -120,7 +122,7 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
    glob_data_file globU globU1 locate_data_file makenamesid makenameid stringify_hash
    normalise_string normalise_string_hash normalise_string_underscore
    normalise_string_sort normalise_string_label reduce_array remove_outer
-@@ -181,7 +182,10 @@
+@@ -181,7 +182,14 @@
      $fh->close;
    }
    else {
@@ -128,11 +130,15 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
 +    # Decode the whole file at once: PerlIO's :encoding layer works in 1024-byte chunks
 +    # and fails on (UTF-16) or mangles characters that straddle a chunk boundary
 +    my $bytes = File::Slurper::read_binary($filename);
++    my $size = length($bytes);
 +    $slurp = decode($encoding, $bytes, Encode::FB_CROAK);
++    # Some decoders (e.g. iso-2022-jp) stop at invalid input instead of croaking,
++    # leaving the rest in $bytes
++    die "invalid data at byte " . ($size - length($bytes)) . "\n" if length($bytes);
    }
    return \$slurp;
  }
-@@ -1588,7 +1592,53 @@
+@@ -1588,7 +1596,53 @@
  
  sub out {
    my ($fh, $string) = @_;
