@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-165, BB-167 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/537 (2026-10-28). Tracks BB-165, BB-167 (docs/biber-bugs.md). -->
 
 **Title:** An unknown `--output-encoding` leaves an empty `.bbl` instead of giving an error, and a `--recodedata` file that can't be found dies without naming it
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-**1. Encoding names are never checked.** `--output-encoding=foo` (or any name Encode doesn't know) is passed straight to `binmode($fh, ':encoding(foo)')`. With biber 2.22 and current `dev` (1686b9c) run from source, the log says
+**1. Encoding names are never checked.** `--output-encoding=foo` (or any name Encode doesn't know) is passed straight to `binmode($fh, ':encoding(foo)')`. With biber 2.22 and current `dev` (012ba95) run from source, the log says
 
 ```
 Cannot find encoding "foo" at .../IO/File.pm line 58.
@@ -116,4 +116,4 @@ Check encoding names where they are normalised, and also call that in tool mode 
  
 ```
 
-With this change, `--output-encoding=foo` gives `ERROR - Unknown encoding 'foo' for option 'output_encoding'` (exit 2) before anything is written, `--input-encoding` is checked the same way in normal and tool mode, and `--recodedata=nosuch.xml` gives `ERROR - Cannot find recode data file 'nosuch.xml'` (exit 2) with or without kpsewhich. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change, `--output-encoding=foo` gives `ERROR - Unknown encoding 'foo' for option 'output_encoding'` (exit 2) before anything is written, `--input-encoding` is checked the same way in normal and tool mode, and `--recodedata=nosuch.xml` gives `ERROR - Cannot find recode data file 'nosuch.xml'` (exit 2) with or without kpsewhich. All tests in `t/` pass on `dev` (012ba95) with this patch.

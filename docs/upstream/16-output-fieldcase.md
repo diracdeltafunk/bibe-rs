@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-008 and BB-159 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/534 (2026-10-28). Tracks BB-008 and BB-159 (docs/biber-bugs.md). -->
 
 **Title:** `--output-fieldcase=Upper` (any non-lowercase spelling) and an invalid `output_fieldcase` in `biber.conf` crash biber
 
@@ -24,7 +24,7 @@ The validation also only looks at the command line, so a bad value in `biber.con
 </config>
 ```
 
-`biber --tool --configfile=b.conf test.bib` dies with the same message. Same on biber 2.22 and current `dev` (1686b9c). Both cases apply to tool mode and to `--output-format=bibtex`.
+`biber --tool --configfile=b.conf test.bib` dies with the same message. Same on biber 2.22 and current `dev` (012ba95). Both cases apply to tool mode and to `--output-format=bibtex`.
 
 ### Minimal example
 
@@ -72,4 +72,4 @@ Check the option after the config file has been read, and normalise it to lower 
  my $screen  = Log::Log4perl::get_logger('screen');
 ```
 
-With this change, `--output-fieldcase=Title` writes `@Book{a,` / `Author = {Doe, J},`, and the `biber.conf` value `bogus` gives the existing "Invalid argument for 'output_fieldcase' option" message with exit code 2. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change, `--output-fieldcase=Title` writes `@Book{a,` / `Author = {Doe, J},`, and the `biber.conf` value `bogus` gives the existing "Invalid argument for 'output_fieldcase' option" message with exit code 2. All tests in `t/` pass on `dev` (012ba95) with this patch.

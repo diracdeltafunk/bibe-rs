@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-003 and BB-116 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/531 (2026-10-28). Tracks BB-003 and BB-116 (docs/biber-bugs.md). -->
 
 **Title:** `\char` decoding: `\char"7D` and `\char0` are fatal, `\char012` is read as octal, and some values silently vanish
 
@@ -28,7 +28,7 @@ This goes wrong in several ways. Each line below is a one-entry `.bib` file foll
 | `{[\char99999999999999999999]}` | `[]` (same) |
 | `{[\char٣]}` (Arabic-Indic digit) | `[]`: `\d` matches non-ASCII digits, which Perl can't evaluate |
 
-Current `dev` (1686b9c) behaves the same.
+Current `dev` (012ba95) behaves the same.
 
 ### Minimal example
 
@@ -96,4 +96,4 @@ Parse the number the way TeX does, without `eval`, and leave the macro alone whe
  Converts UTF-8 to LaTeX
 ```
 
-With this change, `\char"E9`, `\char233` and `\char'351` still give `é`, and every other row of the table above is passed through unchanged (e.g. `\field{title}{[\char"7D]}`), with no errors. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change, `\char"E9`, `\char233` and `\char'351` still give `é`, and every other row of the table above is passed through unchanged (e.g. `\field{title}{[\char"7D]}`), with no errors. All tests in `t/` pass on `dev` (012ba95) with this patch.

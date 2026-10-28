@@ -8,7 +8,7 @@
 
 Three problems with granular XDATA references (`field = {xdata=entry-field[-position]}`). Same behaviour on biber 2.22 and current `dev` (1686b9c).
 
-**1. An XDATA entry's own references are re-resolved for every referrer (BB-025).** `Biber::Entry::resolve_xdata` recurses into an XDATA entry that has XDATA references of its own each time the entry is referenced, and granular name references splice into the XDATA entry's name list again each time:
+**1. An XDATA entry's own references are re-resolved for every referrer.** `Biber::Entry::resolve_xdata` recurses into an XDATA entry that has XDATA references of its own each time the entry is referenced, and granular name references splice into the XDATA entry's name list again each time:
 
 ```bibtex
 @xdata{Y, author = {Alpha, Ann and Beta, Bob}}
@@ -20,7 +20,7 @@ Three problems with granular XDATA references (`field = {xdata=entry-field[-posi
 
 With `\cite{A1,A2,A3}`, all three entries get `\name{author}{5}`: Alpha, Beta, Beta, Beta, Doe, instead of Alpha, Beta, Doe.
 
-**2. Spliced names get 0-based indices (BB-024).** `Names::replace_name` and `Names::splice` set `$position-1` / `$i` as the name's index, but `add_name` (used for all other names) sets 1-based indices, and visibility (`maxcitenames` etc.) compares against them. `splice` also stops one name short (`$i<$#{…}`). So after a granular reference, one more name than allowed counts as visible for uniquename:
+**2. Spliced names get 0-based indices.** `Names::replace_name` and `Names::splice` set `$position-1` / `$i` as the name's index, but `add_name` (used for all other names) sets 1-based indices, and visibility (`maxcitenames` etc.) compares against them. `splice` also stops one name short (`$i<$#{…}`). So after a granular reference, one more name than allowed counts as visible for uniquename:
 
 ```bibtex
 @xdata{X, author = {Smith, John and Brown, Alice and Jones, Jim}}
@@ -30,7 +30,7 @@ With `\cite{A1,A2,A3}`, all three entries get `\name{author}{5}`: Alpha, Beta, B
 
 With `style=authoryear,uniquename=init,maxcitenames=1` and `\cite{A,B}`, Brown in both entries gets `un=1` (initials), although in `A` Brown is the second name and not visible.
 
-**3. Granular references in xsv fields are output literally (BB-035).** `_xsv` (Input/file/bibtex.pm) passes the whole array to `add_xdata_ref`, which matches a granular reference against a string, so `keywords = {xdata=xd-keywords}` is never recorded. The `.bbl` gets `\keyw{xdata=xd-keywords}`. Also, `resolve_xdata` only treats `list` fields as lists, so an xsv field would be replaced as a whole.
+**3. Granular references in xsv fields are output literally.** `_xsv` (Input/file/bibtex.pm) passes the whole array to `add_xdata_ref`, which matches a granular reference against a string, so `keywords = {xdata=xd-keywords}` is never recorded. The `.bbl` gets `\keyw{xdata=xd-keywords}`. Also, `resolve_xdata` only treats `list` fields as lists, so an xsv field would be replaced as a whole.
 
 ```bibtex
 @misc{a, title = {T}, keywords = {xdata=xd-keywords}}

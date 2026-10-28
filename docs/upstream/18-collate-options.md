@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-010, BB-045 and BB-120 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/535 (2026-10-28). Tracks BB-010, BB-045 and BB-120 (docs/biber-bugs.md). -->
 
 **Title:** `--collate-options`: the old `"key => value"` syntax (still in the manual) is silently ignored, `ignoreChar` and other creation-only options crash, and invalid values die without an ERROR
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-**1. The syntax removed in 2.21 is still documented, and silently ignored (BB-045).** Since 2.21, `-c` takes `key=value`, once per option (Changes: *"the 'collate-options' option no longer accepts a single string in perl hash notation"*). The manual (§ "Sorting") still says *"Options are passed using the `--collate-options|-c` option as a single quoted string, each option separated by comma, each key and value separated by `=>`"*, with the examples `--collate-options="backwards => 2"`, `--collate-options="variable => 'shifted'"` and `-c 'locale => "de_DE"'`.
+**1. The syntax removed in 2.21 is still documented, and silently ignored.** Since 2.21, `-c` takes `key=value`, once per option (Changes: *"the 'collate-options' option no longer accepts a single string in perl hash notation"*). The manual (§ "Sorting") still says *"Options are passed using the `--collate-options|-c` option as a single quoted string, each option separated by comma, each key and value separated by `=>`"*, with the examples `--collate-options="backwards => 2"`, `--collate-options="variable => 'shifted'"` and `-c 'locale => "de_DE"'`.
 
 Getopt::Long splits such a value at the first `=`, so `variable => 'shifted'` becomes the key `variable ` with the value `> 'shifted'`. The debug log shows
 
@@ -14,18 +14,18 @@ Getopt::Long splits such a value at the first `=`, so `variable => 'shifted'` be
 Sorting with Unicode::Collate (normalization => prenormalized, variable  => > 'shifted', level => 3, variable => non-ignorable, …
 ```
 
-and the option has no effect, without any message. Worse, for sort fields with their own `locale`, the bogus value makes such lists come out **unsorted**.
+and the option has no effect, without any message.
 
-**2. Creation-only options crash (BB-010).** `Biber::UCollate::new` creates the collator with only the locale and applies every other option with `change()`. Unicode::Collate refuses some options in `change()` (`@Unicode::Collate::ChangeNG`: `ignoreChar`, `ignoreName`, `undefChar`, `undefName`, `entry`, `rewrite`, `suppress`, …):
+**2. Creation-only options crash.** `Biber::UCollate::new` creates the collator with only the locale and applies every other option with `change()`. Unicode::Collate refuses some options in `change()` (`@Unicode::Collate::ChangeNG`: `ignoreChar`, `ignoreName`, `undefChar`, `undefName`, `entry`, `rewrite`, `suppress`, …):
 
 ```
 $ biber -c ignoreChar=- test
 change of ignoreChar via change() is not allowed! at .../Biber.pm line 4311.
 ```
 
-**3. Invalid values die without an ERROR (BB-120).** `-c level=5`, `-c level=0` and `-c variable=bogus` make Unicode::Collate croak, and biber dies with the raw Perl message (exit code 255 from source, 25 for the TeX Live binary; with the TeX Live 2.22 binary on macOS, `level=5` even ends in "Out of memory in perl:util:safesysmalloc"). Nothing is written to the `.blg`, and the `.bbl` is empty.
+**3. Invalid values die without an ERROR.** `-c level=5`, `-c level=0` and `-c variable=bogus` make Unicode::Collate croak, and biber dies with the raw Perl message (exit code 255 from source, 25 for the TeX Live binary; with the TeX Live 2.22 binary on macOS, `level=5` even ends in "Out of memory in perl:util:safesysmalloc"). Nothing is written to the `.blg`, and the `.bbl` is empty.
 
-Same behaviour on biber 2.22 and current `dev` (1686b9c).
+Same behaviour on biber 2.22 and current `dev` (012ba95).
 
 ### Minimal example
 
@@ -158,4 +158,4 @@ With this change:
 * `-c ignoreChar=-` runs and sorts normally;
 * `-c level=5` gives `ERROR - Invalid collation options: Unsupported level 5 (in value for key 'level') higher than 4.` and exit code 2; `-c variable=bogus` gives `ERROR - Invalid collation options: Unicode::Collate unknown variable parameter name: bogus`.
 
-All tests in `t/` pass on `dev` (1686b9c) with this patch.
+All tests in `t/` pass on `dev` (012ba95) with this patch.

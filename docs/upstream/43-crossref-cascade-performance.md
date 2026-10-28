@@ -111,3 +111,5 @@ Keep the inheritance relation as an adjacency hash (which also collapses the rep
 ```
 
 With this patch the same files take 3.5 s (500 children) and 6.3 s (1000 children), with byte-identical `.bbl` files. `$CONFIG->{state}{crossref}` and `{xdata}` are only accessed through these three methods. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+
+I saw your answer on #529, so to be clear about why this one seemed worth reporting: the time grows with the cube of the number of children (about 4 minutes for 2,000), and the fix is a plain adjacency hash with a visited set rather than a new data structure.

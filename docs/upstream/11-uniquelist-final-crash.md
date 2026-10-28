@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-001 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/530 (2026-10-28). Tracks BB-001 (docs/biber-bugs.md). -->
 
 **Title:** uniquelist crashes ("Can't use string ("1") as a HASH ref") when a name list starts with the family name `final`
 
@@ -38,7 +38,7 @@ The same sharing also affects `uniquelist=minyear`: the per-year counts live in 
 \end{document}
 ```
 
-biber 2.22 and current `dev` (1686b9c) both die as above (exit code 25 for the TeX Live binary).
+biber 2.22 and current `dev` (012ba95) both die as above (exit code 25 for the TeX Live binary).
 
 ### Suggested fix
 
@@ -109,4 +109,4 @@ Give the three kinds of counts their own hashes:
    foreach my $l_s (keys $unames->%*) {
 ```
 
-With this change the example runs, and its `.bbl` is the same (apart from names, hashes and `sortinit`) as for the same data with `final` replaced by `Doe`. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change the example runs, and its `.bbl` is the same (apart from names, hashes and `sortinit`) as for the same data with `final` replaced by `Doe`. All tests in `t/` pass on `dev` (012ba95) with this patch.

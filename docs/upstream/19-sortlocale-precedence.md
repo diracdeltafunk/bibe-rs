@@ -8,7 +8,7 @@
 
 The manual (§ "Sorting") gives the locale precedence for collating a field as `--collate-options` locale → `--sortlocale` → per-sortset `locale` → per-template `locale` → global `sortlocale`, and the comment in `sort_list` says the same. Two places don't follow it.
 
-**1. A per-sortset `locale` wins over `--sortlocale` (BB-043).** `sort_list` makes a separate collator whenever the sortset's locale differs from `$thislocale`, without checking whether `--sortlocale` was given:
+**1. A per-sortset `locale` wins over `--sortlocale`.** `sort_list` makes a separate collator whenever the sortset's locale differs from `$thislocale`, without checking whether `--sortlocale` was given:
 
 ```bibtex
 @book{s1, title = {Apple}}
@@ -31,7 +31,7 @@ The manual (§ "Sorting") gives the locale precedence for collating a field as `
 
 `biber --sortlocale=en_US test` still sorts with Swedish rules: `s1, s3, s2` (Äpple after Zebra). With `en_US` it should be `s1, s2, s3`.
 
-**2. `sortinithash` uses only the template/global locale (BB-044).** The `sortinit` collator (Biber.pm:1084, 1119, 1219) is created from the sorting template's locale only. With the same `.bib`, `sorting=nyt` and `biber --sortlocale=sv_SE test`, the list is sorted as Swedish (`s1, s3, s2`), but `Ä` gets the same `sortinithash` as `A` (`2f401846…`), because the hash is computed with the `.bcf` locale. The hash is what biblatex uses to decide where `\bibinitsep` goes and for initial-letter headings, so these then disagree with the sort order. In the opposite case (`.bcf` locale Swedish, `--sortlocale=en_US`), `Apple` and `Äpple` are adjacent but get different hashes.
+**2. `sortinithash` uses only the template/global locale.** The `sortinit` collator (Biber.pm:1084, 1119, 1219) is created from the sorting template's locale only. With the same `.bib`, `sorting=nyt` and `biber --sortlocale=sv_SE test`, the list is sorted as Swedish (`s1, s3, s2`), but `Ä` gets the same `sortinithash` as `A` (`2f401846…`), because the hash is computed with the `.bcf` locale. The hash is what biblatex uses to decide where `\bibinitsep` goes and for initial-letter headings, so these then disagree with the sort order. In the opposite case (`.bcf` locale Swedish, `--sortlocale=en_US`), `Apple` and `Äpple` are adjacent but get different hashes.
 
 Same behaviour on biber 2.22 and current `dev` (1686b9c).
 

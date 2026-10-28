@@ -8,7 +8,7 @@
 
 Two guards in `Biber::Entry::inherit_from` (Entry.pm:1047-1081 on `dev`) don't work as intended.
 
-**1. Derived date metadata is always inherited (BB-022).** The loop that copies `datecirca`, `dateuncertain`, `dateera`, `datejulian`, `yeardivision`, … from the parent is meant to skip dates the child already has:
+**1. Derived date metadata is always inherited.** The loop that copies `datecirca`, `dateuncertain`, `dateera`, `datejulian`, `yeardivision`, … from the parent is meant to skip dates the child already has:
 
 ```perl
       next if first {$_ eq $datefield} @removed_fields;
@@ -16,7 +16,7 @@ Two guards in `Biber::Entry::inherit_from` (Entry.pm:1047-1081 on `dev`) don't w
 
 but `@removed_fields` holds date *part* names (`year`, `month`, …) and `$datefield` is a date *field* name (`date`, `origdate`, …), so this never matches.
 
-**2. The date-part guard only looks at the main date (BB-023).** Date parts are skipped only if `$parent->get_field('datesplit') and $self->get_field('datesplit')`, i.e. only if both entries have a `date`. For `origdate`, `eventdate` and `urldate`, a child that has only some parts of the date gets the remaining parts from the parent.
+**2. The date-part guard only looks at the main date.** Date parts are skipped only if `$parent->get_field('datesplit') and $self->get_field('datesplit')`, i.e. only if both entries have a `date`. For `origdate`, `eventdate` and `urldate`, a child that has only some parts of the date gets the remaining parts from the parent.
 
 ```bibtex
 @mvbook{P, title = {Parent}, date = {1999~}, origdate = {1990-05}, editor = {Ed, Ed}}

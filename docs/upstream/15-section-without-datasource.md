@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-007, BB-070 and BB-145 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/533 (2026-10-28). Tracks BB-007, BB-070 and BB-145 (docs/biber-bugs.md). -->
 
 **Title:** A refsection with citations but no data sources crashes biber when another refsection has data sources; with no data sources at all the warning is never shown
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-**1. Crash.** If any refsection has a data source, biber does not stop early, and `fetch_data` then dereferences the undefined data source list of a section that has none (Biber.pm:4614 on `dev`):
+**1. Crash.** If any refsection has a data source, biber does not stop early, and `fetch_data` then dereferences the undefined data source list of a section that has none (Biber.pm:4595 on `dev`):
 
 ```latex
 \documentclass{article}
@@ -24,7 +24,7 @@
 (`refs.bib` contains an entry `lamport`.)
 
 ```
-Can't use an undefined value as an ARRAY reference at .../Biber.pm line 4614.
+Can't use an undefined value as an ARRAY reference at .../Biber.pm line 4595.
 ```
 
 The `.bbl` is empty (exit code 25 for the TeX Live 2.22 binary), so section 1's bibliography is lost too. This is easy to hit by forgetting `\addbibresource` when using `\begin{refsection}[file.bib]` for some sections.
@@ -42,7 +42,7 @@ but `biber_warn` only queues the warning, and the queue is printed by `display_e
 
 **3. (Found while reading the same code.)** In `fetch_data`, a data source whose type isn't `file` is pushed onto the list and then *also* passed through `glob_data_file` and pushed again.
 
-Same behaviour on biber 2.22 and current `dev` (1686b9c).
+Same behaviour on biber 2.22 and current `dev` (012ba95).
 
 ### Suggested fix
 
@@ -73,4 +73,4 @@ Same behaviour on biber 2.22 and current `dev` (1686b9c).
        push $ds->@*, { type     => $datasource->{type},
 ```
 
-With this change, example 1 gives `WARN - I didn't find a database entry for 'knuth' (section 0)` and section 1 is written normally; example 2 prints `WARN - No data sources defined!` and `INFO - WARNINGS: 1` and still exits 0. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change, example 1 gives `WARN - I didn't find a database entry for 'knuth' (section 0)` and section 1 is written normally; example 2 prints `WARN - No data sources defined!` and `INFO - WARNINGS: 1` and still exits 0. All tests in `t/` pass on `dev` (012ba95) with this patch.

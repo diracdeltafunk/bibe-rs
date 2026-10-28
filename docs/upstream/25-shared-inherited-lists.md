@@ -8,7 +8,7 @@
 
 Crossref/XDATA inheritance (`set_datafield($field, $parent->get_field($field))` in `Biber::Entry::inherit_from`) copies the *reference* to the parent's list and `Names` objects. Two things then go wrong. Same behaviour on biber 2.22 and current `dev` (1686b9c).
 
-**1. Writing one entry changes the others (BB-138).** When writing a list field that ends in `others`, the `.bbl` writer pops `others` off the entry's list (Output/bbl.pm:335-337, and 567-569 for verbatim lists):
+**1. Writing one entry changes the others.** When writing a list field that ends in `others`, the `.bbl` writer pops `others` off the entry's list (Output/bbl.pm:335-337, and 567-569 for verbatim lists):
 
 ```perl
       if ( lc($lf->[-1]) eq Biber::Config->getoption('others_string') ) {
@@ -27,7 +27,7 @@ Since the list is shared, `others` is removed for the parent and every other chi
 
 With `\nocite{*}` and `style=authoryear`, `child1` and `child2` have no `\true{morelocation}` or `\true{morepublisher}`, so their "et al." is lost. The URI encoding of verbatim URI lists (line 586) is written back into the shared list in the same way.
 
-**2. Per-list state is keyed by the shared list's id (BB-026).** Visibility, uniquelist and uniquename state is stored per name-list id, so a child that inherits the parent's `Names` object shares that state with the parent, and the last entry processed wins:
+**2. Per-list state is keyed by the shared list's id.** Visibility, uniquelist and uniquename state is stored per name-list id, so a child that inherits the parent's `Names` object shares that state with the parent, and the last entry processed wins:
 
 ```bibtex
 @collection{P, editor = {Alpha, Ann and Beta, Bob and Gamma, Gil}, title = {Coll}, year = {2000}}

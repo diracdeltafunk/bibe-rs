@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-004 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/532 (2026-10-28). Tracks BB-004 (docs/biber-bugs.md). -->
 
 **Title:** `presort` values are used as a regex: `presort = {a(b}` crashes biber, and `|`, `+`, `?` give the wrong `sortinit`
 
@@ -30,7 +30,7 @@ and `sorting=nyt`, the `sortinit` of `p1` should be `B` whatever the `presort` v
 | `zz\|a` | `\field{sortinit}{a}` |
 | `a+`, `x?` | `\field{sortinit}{a}` / `{x}` (the prefix isn't stripped) |
 
-A wrong `sortinit` puts the entry under the wrong heading with `\bibbysortinit`-style headings and changes `sortinithash`. Current `dev` (1686b9c) behaves the same.
+A wrong `sortinit` puts the entry under the wrong heading with `\bibbysortinit`-style headings and changes `sortinithash`. Current `dev` (012ba95) behaves the same.
 
 ### Minimal example
 
@@ -65,4 +65,4 @@ A wrong `sortinit` puts the entry under the wrong heading with `\bibbysortinit`-
    }
 ```
 
-With this change, every row of the table gives `\field{sortinit}{B}`. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change, every row of the table gives `\field{sortinit}{B}`. All tests in `t/` pass on `dev` (012ba95) with this patch.
