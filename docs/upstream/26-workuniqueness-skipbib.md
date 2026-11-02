@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-027 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/545 (2026-11-02). Tracks BB-027 (docs/biber-bugs.md). -->
 
 **Title:** `singletitle`/`uniquetitle`/`uniquework` only ignore entries whose `options` field contains the literal token `skipbib`; `skipbib=true` and `dataonly` still count
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-`process_workuniqueness` leaves entries that are not in the bibliography out of the work-uniqueness counts, but it recognises them by looking for the exact string `skipbib` in the raw `options` field. Equivalent spellings are missed:
+`process_workuniqueness` leaves entries that are not in the bibliography out of the work-uniqueness counts, but it recognises them by looking for the exact string `skipbib` in the raw `options` field. (The check was added for #496, and related-entry clones work.) Equivalent spellings are missed:
 
 ```bibtex
 @book{a, author={Smith, John}, title={T1}, year={2000}}
@@ -27,7 +27,7 @@
 \end{document}
 ```
 
-biber 2.22 and current `dev` (1686b9c) give `\true{singletitle}` to `a` only. `c` and `e` are in exactly the same situation (one bibliography work by the author, plus one entry that is not printed), but `d` (`skipbib=true`) and `f` (`dataonly`, which implies `skipbib`) are counted, so `c` and `e` lose `singletitle`. The same check guards `uniquetitle`, `uniquebaretitle` and `uniquework`.
+biber 2.22 and current `dev` (79a1edc) give `\true{singletitle}` to `a` only. `c` and `e` are in exactly the same situation (one bibliography work by the author, plus one entry that is not printed), but `d` (`skipbib=true`) and `f` (`dataonly`, which implies `skipbib`) are counted, so `c` and `e` lose `singletitle`. The same check guards `uniquetitle`, `uniquebaretitle` and `uniquework`.
 
 ### Suggested fix
 
@@ -54,4 +54,4 @@ Use the processed per-entry option instead of the raw field. This also covers se
    # singletitle
 ```
 
-With this change `a`, `c` and `e` all get `\true{singletitle}`. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change `a`, `c` and `e` all get `\true{singletitle}`. All tests in `t/` pass on `dev` (79a1edc) with this patch, applied together with the others I'm filing alongside it.

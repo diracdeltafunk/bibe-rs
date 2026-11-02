@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-024, BB-025 and BB-035 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/543 (2026-11-02). Tracks BB-024, BB-025 and BB-035 (docs/biber-bugs.md). -->
 
 **Title:** Granular XDATA: names are duplicated when an XDATA entry has its own references, spliced names get 0-based indices, and references in xsv fields (`keywords`) are not resolved
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Three problems with granular XDATA references (`field = {xdata=entry-field[-position]}`). Same behaviour on biber 2.22 and current `dev` (1686b9c).
+Three problems with granular XDATA references (`field = {xdata=entry-field[-position]}`). Same behaviour on biber 2.22 and current `dev` (79a1edc).
 
 **1. An XDATA entry's own references are re-resolved for every referrer.** `Biber::Entry::resolve_xdata` recurses into an XDATA entry that has XDATA references of its own each time the entry is referenced, and granular name references splice into the XDATA entry's name list again each time:
 
@@ -129,4 +129,4 @@ Resolve each entry's own XDATA references once, use 1-based indices in `replace_
  }
 ```
 
-With this change, (1) gives Alpha, Beta, Doe for all three entries; in (2) both Browns get `un=0`; and (3) gives `\keyw{k1,k2}` for `a` and `\keyw{first,k2,last}` for `b`. All tests in `t/` pass on `dev` (1686b9c) with this patch, including `t/xdata.t`.
+With this change, (1) gives Alpha, Beta, Doe for all three entries; in (2) both Browns get `un=0`; and (3) gives `\keyw{k1,k2}` for `a` and `\keyw{first,k2,last}` for `b`. All tests in `t/` pass on `dev` (79a1edc) with this patch, applied together with the others I'm filing alongside it, including `t/xdata.t`.

@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-022 and BB-023 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/542 (2026-11-02). Tracks BB-022 and BB-023 (docs/biber-bugs.md). -->
 
 **Title:** Crossref date inheritance: a child with its own date gets the parent's `datecirca`/era/…, and a child `origdate = {2005}` gets the parent's `origmonth`
 
@@ -34,7 +34,7 @@ but `@removed_fields` holds date *part* names (`year`, `month`, …) and `$datef
 \end{document}
 ```
 
-With biber 2.22 and current `dev` (1686b9c):
+With biber 2.22 and current `dev` (79a1edc):
 
 * `C` has `\field{year}{2000}` and `\true{datecirca}`: its own, exact date is printed as "circa 2000";
 * `D` has `\field{origyear}{2005}` and `\field{origmonth}{5}`: the original date becomes May 2005.
@@ -78,4 +78,4 @@ Check the `…datesplit` flag of the date the part belongs to, and remember whic
                         'dateuncertain', 'enddateuncertain', 'yeardivision', 'endyeardivision',
 ```
 
-With this change, `C` keeps its year without `datecirca`, and `D` has `origyear` 2005 without `origmonth`; nothing else in the two entries changes. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change, `C` keeps its year without `datecirca`, and `D` has `origyear` 2005 without `origmonth`; nothing else in the two entries changes. All tests in `t/` pass on `dev` (79a1edc) with this patch, applied together with the others I'm filing alongside it.

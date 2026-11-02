@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-028 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/546 (2026-11-02). Tracks BB-028 (docs/biber-bugs.md). -->
 
 **Title:** Loops over `$dmh->{datefields}` strip `date` from the shared data-model array in place: custom date fields lose their flags, and `--output-field-order` treats `URL` as a date
 
@@ -13,7 +13,7 @@ foreach my $d ($dmh->{datefields}->@*) {
   $d =~ s/date$//;
 ```
 
-The loop variable is an alias, so this rewrites the data-model helper array itself (`date` → `''`, `urldate` → `url`, …), and every later user of `$dmh->{datefields}` sees the stems instead of the field names. The sites are `Output/bbl.pm:458`, `Output/bibtex.pm:234`, `Entry.pm:175`, `696` and `1125` (line numbers on current `dev`, 1686b9c). This has two visible effects.
+The loop variable is an alias, so this rewrites the data-model helper array itself (`date` → `''`, `urldate` → `url`, …), and every later user of `$dmh->{datefields}` sees the stems instead of the field names. The sites are `Output/bbl.pm:458`, `Output/bibtex.pm:235`, `Entry.pm:176`, `697` and `1118` (line numbers on current `dev`, 79a1edc). This has two visible effects.
 
 **1. A date field whose stem itself ends in `date` only works for the first entry.** With a data model that adds `updatedate`:
 
@@ -60,11 +60,11 @@ biber 2.22 and `dev` write `\true{updatedatecirca}` and `\field{updatedateera}{c
 }
 ```
 
-where `DATE` should come right after `AUTHOR` and `URL` should be with the remaining fields in alphabetical order. The expected output in `t/bibtex-output.t` currently encodes the wrong position of `DATE`.
+where `DATE` should come right after `AUTHOR` and `URL` should be with the remaining fields in alphabetical order. The expected outputs in `t/bibtex-output.t` and `t/tdata/full-bibtex_biber.bib` (checked by `t/full-bibtex.t`) currently encode the wrong position of `DATE`.
 
 ### Suggested fix
 
-Compute the stem in a new variable everywhere (as `Entry.pm:1076` already does), and correct the test:
+Compute the stem in a new variable everywhere (as `Entry.pm:1068` already does), and correct the two test expectations:
 
 ```diff
 --- a/lib/Biber/Entry.pm
@@ -140,6 +140,30 @@ Compute the stem in a new variable everywhere (as `Entry.pm:1076` already does),
    INDEXTITLE   = {Alkanethiolate gold cluster molecules},
    JOURNALTITLE = {Langmuir},
    LANGID       = {english},
+--- a/t/tdata/full-bibtex_biber.bib
++++ b/t/tdata/full-bibtex_biber.bib
+@@ -15,8 +15,8 @@
+ @ARTICLE{kastenholz,
+   ABSTRACT     = {The computation of ionic solvation free energies from atomistic simulations is a surprisingly difficult problem that has found no satisfactory solution for more than 15 years. The reason is that the charging free energies evaluated from such simulations are affected by very large errors. One of these is related to the choice of a specific convention for summing up the contributions of solvent charges to the electrostatic potential in the ionic cavity, namely, on the basis of point charges within entire solvent molecules (M scheme) or on the basis of individual point charges (P scheme). The use of an inappropriate convention may lead to a charge-independent offset in the calculated potential, which depends on the details of the summation scheme, on the quadrupole-moment trace of the solvent molecule, and on the approximate form used to represent electrostatic interactions in the system. However, whether the M or P scheme (if any) represents the appropriate convention is still a matter of on-going debate. The goal of the present article is to settle this long-standing controversy by carefully analyzing (both analytically and numerically) the properties of the electrostatic potential in molecular liquids (and inside cavities within them).},
+   AUTHOR       = {Kastenholz, M. A. and Hünenberger, Philippe H.},
+-  ANNOTATION   = {An \texttt{article} entry with an \texttt{eid} and a \texttt{doi} field. Note that the \textsc{doi} is transformed into a clickable link if \texttt{hyperref} support has been enabled},
+   DATE         = {2006},
++  ANNOTATION   = {An \texttt{article} entry with an \texttt{eid} and a \texttt{doi} field. Note that the \textsc{doi} is transformed into a clickable link if \texttt{hyperref} support has been enabled},
+   DOI          = {10.1063/1.2172593},
+   EID          = {124106},
+   INDEXTITLE   = {Computation of ionic solvation free energies},
+@@ -32,10 +32,10 @@
+   EDITOR       = {Westfahl, Gary},
+   LOCATION     = {Westport, Conn. and London},
+   PUBLISHER    = {Greenwood},
++  DATE         = {2000},
+   ANNOTATION   = {This is a \texttt{collection} entry. Note the format of the \texttt{location} field as well as the \texttt{subtitle} and \texttt{booksubtitle} fields},
+   BOOKSUBTITLE = {The Frontier Theme in Science Fiction},
+   BOOKTITLE    = {Space and Beyond},
+-  DATE         = {2000},
+   LANGID       = {english},
+   LANGIDOPTS   = {variant=american},
+   SUBTITLE     = {The Frontier Theme in Science Fiction},
 ```
 
-With this change all three entries get their `updatedate` flags, the tool output puts `DATE` after `AUTHOR` and `URL` after `TITLE`, and all tests in `t/` pass on `dev` (1686b9c).
+With this change all three entries get their `updatedate` flags, the tool output puts `DATE` after `AUTHOR` and `URL` after `TITLE`, and all tests in `t/` pass on `dev` (79a1edc), including the end-to-end tests run with `BIBER_DEV_TESTS=1`, with this patch applied together with the others I'm filing alongside it.

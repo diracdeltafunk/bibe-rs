@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-138 and BB-026 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/544 (2026-11-02). Tracks BB-138 and BB-026 (docs/biber-bugs.md). -->
 
 **Title:** Inherited lists and name lists are shared by reference with the parent: `\true{morelocation}` disappears from crossref children, and children's name hashes depend on processing order
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Crossref/XDATA inheritance (`set_datafield($field, $parent->get_field($field))` in `Biber::Entry::inherit_from`) copies the *reference* to the parent's list and `Names` objects. Two things then go wrong. Same behaviour on biber 2.22 and current `dev` (1686b9c).
+Crossref/XDATA inheritance (`set_datafield($field, $parent->get_field($field))` in `Biber::Entry::inherit_from`) copies the *reference* to the parent's list and `Names` objects. Two things then go wrong. Same behaviour on biber 2.22 and current `dev` (79a1edc).
 
 **1. Writing one entry changes the others.** When writing a list field that ends in `others`, the `.bbl` writer pops `others` off the entry's list (Output/bbl.pm:335-337, and 567-569 for verbatim lists):
 
@@ -67,6 +67,6 @@ For (1), the writer should work on a copy:
          pop $vlf->@*; # remove the last element in the array
 ```
 
-With this change all three entries in example 1 get `\true{morelocation}` and `\true{morepublisher}`. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change all three entries in example 1 get `\true{morelocation}` and `\true{morepublisher}`. All tests in `t/` pass on `dev` (79a1edc) with this patch, applied together with the others I'm filing alongside it.
 
 For (2), inherited `Names` objects need their own ids (a copy of the list with fresh name-list and name ids), so that per-list state is computed per entry. I haven't attached a patch for this part.

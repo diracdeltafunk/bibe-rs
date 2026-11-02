@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-019 and BB-020 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/541 (2026-11-02). Tracks BB-019 and BB-020 (docs/biber-bugs.md). -->
 
 **Title:** Per-name options (`useprefix`, name templates, `uniquename`) leak to the following names in the list, and a per-name `uniquename=false` drops the whole entry from uniquename
 
@@ -58,7 +58,7 @@ which abandons the whole entry, not just that name. With `style=authoryear,uniqu
 \end{document}
 ```
 
-Same results on biber 2.22 and current `dev` (1686b9c).
+Same results on biber 2.22 and current `dev` (79a1edc).
 
 ### Suggested fix
 

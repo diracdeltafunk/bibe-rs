@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-043 and BB-044 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/539 (2026-11-02). Tracks BB-043 and BB-044 (docs/biber-bugs.md). -->
 
 **Title:** `--sortlocale` doesn't override a per-sortset `locale`, and `sortinithash` ignores `--sortlocale`
 
@@ -33,7 +33,7 @@ The manual (§ "Sorting") gives the locale precedence for collating a field as `
 
 **2. `sortinithash` uses only the template/global locale.** The `sortinit` collator (Biber.pm:1084, 1119, 1219) is created from the sorting template's locale only. With the same `.bib`, `sorting=nyt` and `biber --sortlocale=sv_SE test`, the list is sorted as Swedish (`s1, s3, s2`), but `Ä` gets the same `sortinithash` as `A` (`2f401846…`), because the hash is computed with the `.bcf` locale. The hash is what biblatex uses to decide where `\bibinitsep` goes and for initial-letter headings, so these then disagree with the sort order. In the opposite case (`.bcf` locale Swedish, `--sortlocale=en_US`), `Apple` and `Äpple` are adjacent but get different hashes.
 
-Same behaviour on biber 2.22 and current `dev` (1686b9c).
+Same behaviour on biber 2.22 and current `dev` (79a1edc).
 
 ### Suggested fix
 
@@ -71,4 +71,4 @@ For (1), `sort_list` should not make a separate collator for a sortset's `locale
  
 ```
 
-With this change, example 1 sorts `s1, s2, s3`, and in example 2 `Ä` gets its own `sortinithash` (`db0c88ee…`). All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change, example 1 sorts `s1, s2, s3`, and in example 2 `Ä` gets its own `sortinithash` (`db0c88ee…`). All tests in `t/` pass on `dev` (79a1edc) with this patch, applied together with the others I'm filing alongside it.

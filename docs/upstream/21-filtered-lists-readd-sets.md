@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-018 and part of BB-137 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/540 (2026-11-02). Tracks BB-018 and part of BB-137 (docs/biber-bugs.md). -->
 
 **Title:** Filtered lists (e.g. the shorthand list) get every set and set member re-added once any set passes the filter
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-After filtering a list, `process_lists` adds back the members of sets that passed the filter (Biber.pm:3164-3170 on `dev`):
+After filtering a list, `process_lists` adds back the members of sets that passed the filter (Biber.pm:3164-3170 on `dev`; this was added in 2.20 for #457):
 
 ```perl
       my @sets = grep {$section->bibentry($_)->get_field('entrytype') eq 'set'} $flist->@*;
@@ -41,7 +41,7 @@ The block passed to `first` doesn't use `$_`, so it is true for every entry that
 \end{document}
 ```
 
-biber 2.22 and current `dev` (1686b9c) write `S2, a, b, c, d, S1` into `\datalist[list]{shorthand:…}`; it should be `a, b, S1`. With `first`, a set key `0` would also count as "not found".
+biber 2.22 and current `dev` (79a1edc) write `S2, a, b, c, d, S1` into `\datalist[list]{shorthand:…}`; it should be `a, b, S1`. With `first`, a set key `0` would also count as "not found".
 
 ### Suggested fix
 
@@ -64,4 +64,4 @@ biber 2.22 and current `dev` (1686b9c) write `S2, a, b, c, d, S1` into `\datalis
        }
 ```
 
-With this change the shorthand list contains `a, b, S1`. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change the shorthand list contains `a, b, S1`. All tests in `t/` pass on `dev` (79a1edc) with this patch, applied together with the others I'm filing alongside it.
