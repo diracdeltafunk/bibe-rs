@@ -1,12 +1,12 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-030, BB-031, BB-032, BB-033, BB-034, BB-134 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/548 (2026-11-02). Tracks BB-030, BB-031, BB-032, BB-033, BB-034, BB-134 (docs/biber-bugs.md). -->
 
-**Title:** Sourcemap (bibtex input) problems: `fieldsource` with `entrytarget` reads the wrong entry, `entrykeystarnocited` matches cited entries, failed `replace` strings silently insert the regex, `foreach` on a missing field loops over its name, and `$MAPUNIQ` only works inside `foreach`
+**Title:** Sourcemaps (BibTeX input): `fieldsource` with `entrytarget` reads the wrong entry, `starnocited` matches cited entries, failed `replace` strings insert the regex, `foreach` on a missing field loops over its name, `$MAPUNIQ` only works in `foreach`
 
 ---
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-All of these are in `Biber::Input::file::bibtex::create_entry` and the helpers in `Utils.pm`, and were checked with biber 2.22 and current `dev` (1686b9c). The examples use `\nocite{*}` unless stated otherwise.
+All of these are in `Biber::Input::file::bibtex::create_entry` and the helpers in `Utils.pm`, and were checked with biber 2.22 and current `dev` (6003c07). The examples use `\nocite{*}` unless stated otherwise.
 
 **1. `fieldsource`/`fieldtarget` with `entrytarget` reads the value from the current entry.**
 
@@ -50,15 +50,21 @@ gives `addendum = [o|o||o]`: `$2` is the first group of the *second* match, and 
 **4. A `replace` string that can't be evaluated silently replaces the match with the stringified regex.** `ireplace` evaluates the replacement as a Perl double-quoted string in a `Safe` compartment, and on any error substitutes `$val_match`, i.e. the `qr//` object:
 
 ```latex
-\map{\step[fieldsource=title, match=\regexp{(?<rest>big)}, replace={[$+{rest}]}]}
-\map{\step[fieldsource=publisher, match=\regexp{(a)(b)?}, replace={$1"}]}
+\map{\step[fieldsource=publisher, match=\regexp{(a)(b)?}, replace={$1$}]}
 ```
 
 ```bibtex
 @misc{s1, title={A big one}, publisher={ab}}
 ```
 
-gives `\field{title}{A (?^u:(?<rest>big)) one}` and a publisher `(?^u:(a)(b)?)`, with no warning. Named captures always fail (reading `%+` needs `require Tie::Hash::NamedCapture`, which the compartment forbids), and so does any replacement containing a `"`. The evaluation also means that a replacement such as `@{[ uc $1 ]}` runs Perl code (inside the compartment), which the manual doesn't mention.
+gives a publisher `(?^u:(a)(b)?)`, with no warning. Named captures always fail (reading `%+` needs `require Tie::Hash::NamedCapture`, which the compartment forbids), and so does any replacement containing a `"`. These two can only be written in `biber.conf` at the moment, because biblatex writes `<` and `"` into the `.bcf` unescaped, which makes it malformed. With
+
+```xml
+<map><map_step map_field_source="title" map_match="(?&lt;rest&gt;big)" map_replace="[$+{rest}]"/></map>
+<map><map_step map_field_source="publisher" map_match="(a)(b)?" map_replace="$1&quot;"/></map>
+```
+
+in `biber.conf`, the title becomes `A (?^u:(?<rest>big)) one` and the publisher `(?^u:(a)(b)?)`. The evaluation also means that a replacement such as `@{[ uc $1 ]}` runs Perl code (inside the compartment), which the manual doesn't mention.
 
 **5. `foreach` on a field the entry doesn't have loops over the field's name.** If `map_foreach` names a data-model field that the entry lacks (or whose value is `0`), the value falls through to the "explicit CSV" branch:
 
@@ -91,7 +97,7 @@ For 1, 2, 4, 5 and 6:
 ```diff
 --- a/lib/Biber/Input/file/bibtex.pm
 +++ b/lib/Biber/Input/file/bibtex.pm
-@@ -416,15 +416,16 @@
+@@ -416,15 +416,16 @@ sub create_entry {
          my @imatches; # For persisting parenthetical matches over several steps
  
          # Set up any mapping foreach loop
@@ -111,7 +117,7 @@ For 1, 2, 4, 5 and 6:
            }
            else { # explicit CSV
              @maploop = split(/\s*,\s*/, $foreach);
-@@ -681,17 +682,18 @@
+@@ -681,17 +682,18 @@ sub create_entry {
  
              # \nocite{*}
              if ($step->{map_entrykey_starnocited}) {
@@ -133,7 +139,7 @@ For 1, 2, 4, 5 and 6:
                    }
                    next;
                  }
-@@ -841,7 +843,7 @@
+@@ -841,7 +843,7 @@ sub create_entry {
                  # $target and $fieldsource are already casefolded, which is correct as it
                  # does not come from Text::BibTeX's list of fields
                  $etarget->set(encode('UTF-8', NFC($target)),
@@ -144,7 +150,7 @@ For 1, 2, 4, 5 and 6:
              }
 --- a/lib/Biber/Utils.pm
 +++ b/lib/Biber/Utils.pm
-@@ -1180,8 +1180,15 @@
+@@ -1178,8 +1178,15 @@ sub ireplace {
      my $cpt = Safe->new;
      $cpt->permit_only(qw(:default));
      $value =~ s{$val_match}{
@@ -161,7 +167,7 @@ For 1, 2, 4, 5 and 6:
        }egxms;
      return $value;
  }
-@@ -1777,8 +1784,8 @@
+@@ -1775,8 +1782,8 @@ sub maploopreplace {
    no strict 'vars';
    my ($string, $maploop) = @_;
    return undef unless defined($string);
@@ -174,4 +180,4 @@ For 1, 2, 4, 5 and 6:
      my $MAPUNIQ = suniqid;
 ```
 
-With this change: `newk` gets `note = NEWTITLE`; the `starnocited` step no longer applies to `\cite{a}` (and still applies to keys that come only from `\nocite{*}`); the two failing replacements leave the values unchanged and give `WARN - Cannot use sourcemap replacement '[$+{rest}]' for 'big', leaving it unchanged: 'require' trapped by operation mask …` and `… Can't find string terminator '"' …`; `b` gets no `note` and `c` gets `kw=0`; and `$MAPUNIQ` gives a unique id outside `foreach` too. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change: `newk` gets `note = NEWTITLE`; the `starnocited` step no longer applies to `\cite{a}` (and still applies to keys that come only from `\nocite{*}`); the failing replacements leave the values unchanged and give `WARN - Cannot use sourcemap replacement '$1$' for 'ab', leaving it unchanged: Final $ should be \$ or $name …`, `… '[$+{rest}]' for 'big', leaving it unchanged: 'require' trapped by operation mask …` and `… Can't find string terminator '"' …`; `b` gets no `note` and `c` gets `kw=0`; and `$MAPUNIQ` gives a unique id outside `foreach` too. All tests in `t/` pass on `dev` (6003c07) with this patch, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.

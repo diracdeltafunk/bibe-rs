@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-029, BB-115, BB-117, BB-118, BB-119 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/547 (2026-11-02). Tracks BB-029, BB-115, BB-117, BB-118, BB-119 (docs/biber-bugs.md). -->
 
 **Title:** LaTeX macro decoding: `\textdollar`/`\textpercent`/`\textampersand` decode to raw TeX specials, `\ding` reads its argument as hex, `--decodecharsset=null` strips protecting braces, and smaller accent/dash problems
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-These are all in `Biber::LaTeX::Recode::latex_decode` and `recode_data.xml`. Each item was checked on biber 2.22 and current `dev` (1686b9c), both by calling `latex_decode` directly and in the `.bbl`.
+These are all in `Biber::LaTeX::Recode::latex_decode` and `recode_data.xml`. Each item was checked on biber 2.22 and current `dev` (6003c07), both by calling `latex_decode` directly and in the `.bbl`.
 
 **1. `\textdollar`, `\textpercent` and `\textampersand` become raw `$`, `%` and `&`.** With
 
@@ -39,7 +39,7 @@ Encoding has the matching error: with `--output-safecharsset=full`, ✓ is writt
 @misc{a, title={Part {I} x}, note={\char65}}
 ```
 
-gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=null`, compared with `Part {I} x` without it. The case protection is lost, and `\'{e}` turns into `\'e`.
+gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=null`, compared with `Part {I} x` without it. The case protection is lost, and `\'{e}` turns into `\'e`. This is the part of #501 that is still open: the `\hbox` special case fixed its example, but other macros still lose the braces around their arguments, so `{$\frac {a}{b}$}` becomes `{$\frac ab$}`.
 
 **4. A space before a braced accent argument stops decoding.** `\' {a}` is left as it is (TeX prints á). The `{\X}` protection step only looks for the accent macro *immediately* before the brace, so it protects `{a}` first, and the accent regex then no longer matches.
 
@@ -54,17 +54,19 @@ gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=nul
 ```diff
 --- a/lib/Biber/LaTeX/Recode.pm
 +++ b/lib/Biber/LaTeX/Recode.pm
-@@ -212,6 +212,9 @@
+@@ -212,7 +212,10 @@ sub latex_decode {
      # Special case for \h?box which requires braces around single chars
      $text =~ s/\\(h?box)\s+\{(\X)\}/\\$1\{$2\}/g;
  
+-    # Deal with raw TeX \char macros: \char"7B (hex), \char'173 (octal), \char123 (decimal)
 +    # The virtual 'null' set turns decoding off
 +    return $text if $set_d eq 'null';
 +
-     # Deal with raw TeX \char macros.
-     $text =~ s/\\char"(\p{ASCII_Hex_Digit}+)/"chr(0x$1)"/gee; # hex chars
++    # Deal with raw TeX \char macros:\char"7B (hex), \char'173 (octal), \char123 (decimal)
+     $text =~ s/(\\char(?:"([0-9A-Fa-f]+)|'([0-7]+)|([0-9]+)))/_tex_char($1, $2, $3, $4)/ge;
  
-@@ -233,13 +236,14 @@
+     $text =~ s/(\\[a-zA-Z]+)\\(\s+)/$1\{\}$2/g;    # \foo\ bar -> \foo{} bar
+@@ -233,13 +236,14 @@ sub latex_decode {
          $text =~ s/\\textsuperscript\{\\($re)\}/$map->{$1}/ge;
        }
        elsif ($type eq 'dings') {
@@ -81,7 +83,7 @@ gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=nul
        }
        elsif ($type eq 'diacritics') {
  
-@@ -255,7 +259,10 @@
+@@ -255,7 +259,10 @@ sub latex_decode {
          # braces
          # Using the VLB method from the link below, this is equivalent to:
          # $text =~ s/(?<!\\$re)\{(\X)\}/\x{f}$1\x{e}/g;
@@ -93,7 +95,7 @@ gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=nul
  
          # Rename protecting braces so that they are not broken by RE manipulations
          $text =~ s/(\{?)\\($re)\s*\{(\pL\pM*)\}(\}?)/$bracemap->{$1} . $3 . $map->{$2} . $bracemap->{$4}/ge;
-@@ -282,7 +289,7 @@
+@@ -282,7 +289,7 @@ sub latex_decode {
                         (?(?{$2}) # code block condition (space matched earlier after diacritic?)
                           \pL # yes pattern
                         | # no pattern
@@ -102,7 +104,7 @@ gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=nul
                         ) # close conditional
                       ) # close conditional
                       \pM* # optional marks
-@@ -386,7 +393,7 @@
+@@ -386,7 +393,7 @@ sub latex_encode {
        $text =~ s/($re)/"\\textsuperscript{\\" . $map->{$1} . "}"/ge;
      }
      elsif ($type eq 'dings') {
@@ -125,7 +127,7 @@ gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=nul
      <char>"</char>
 --- a/t/utils.t
 +++ b/t/utils.t
-@@ -75,7 +75,7 @@
+@@ -75,7 +75,7 @@ eq_or_diff(normalise_string_underscore('{Foo de Bar, Graf Ludwig}', 1), 'Foo_de_
  # There is a "\x{131}\x{304}" but might look like nothing in current font
  eq_or_diff(NFC(latex_decode('Mu\d{h}ammad ibn M\=us\=a al-Khw\=arizm\={\i} \r{a}')), 'Muḥammad ibn Mūsā al-Khwārizmı̄ å', 'latex decode 1');
  eq_or_diff(latex_decode('\alpha'), '\alpha', 'latex decode 2'); # no greek decoding by default
@@ -136,4 +138,4 @@ gives `\field{title}{Part I x}` and `\field{note}{A}` with `--decodecharsset=nul
  eq_or_diff(NFC(latex_decode("{M{\\'a}t{\\'e}}")), '{Máté}', 'latex decode accent 1 (with redundant explicit brace protection)');
 ```
 
-With these changes, item 1's example gives `\field{title}{Price \textdollar 5 and 10\textpercent{} \textampersand{} more}`; `\ding{51}`, `\ding{33}`, `\ding{99}` and `\ding{120}` give ✓ ✁ ❃ ❘, and ✓ is encoded as `\ding{51}`; `--decodecharsset=null` leaves `Part {I} x`, `\'{e}` and `\char65` unchanged; `\' {a}` gives á; `\c  ,` is left alone; `\t{oo}` gives o͡o; and `y\---` gives `y—`. The `\hbox` normalisation still runs for the `null` set, which `t/utils.t` tests. All tests in `t/` pass on `dev` (1686b9c) with this patch, with the `t/utils.t` change above.
+With these changes, item 1's example gives `\field{title}{Price \textdollar 5 and 10\textpercent{} \textampersand{} more}`; `\ding{51}`, `\ding{33}`, `\ding{99}` and `\ding{120}` give ✓ ✁ ❃ ❘, and ✓ is encoded as `\ding{51}`; `--decodecharsset=null` leaves `Part {I} x`, `\'{e}`, `\char65` and `{$\frac {a}{b}$}` unchanged; `\' {a}` gives á; `\c  ,` is left alone; `\t{oo}` gives o͡o; and `y\---` gives `y—`. The `\hbox` normalisation still runs for the `null` set, which `t/utils.t` tests. All tests in `t/` pass on `dev` (6003c07) with this patch and the `t/utils.t` change above, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.

@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-155, BB-156, BB-153, BB-154, BB-056, BB-047, BB-162, BB-046, BB-161, BB-190 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/553 (2026-11-02). Tracks BB-155, BB-156, BB-153, BB-154, BB-056, BB-047, BB-162, BB-046, BB-161, BB-190 (docs/biber-bugs.md). -->
 
 **Title:** Tool mode / `--output-format=bibtex` loses or corrupts data: `@comment`s of all but the last file, `@preamble`s, `XX` dates, literal annotations, zero values, seasons, short years; `--output-safechars` recodes keys and URLs
 
@@ -28,7 +28,7 @@
 @misc{b1, title={B}}
 ```
 
-`biber --tool --noconf -O - r1.bib r2.bib` (2.22 and `dev` at 1686b9c) prints `Argument "XX" isn't numeric in sprintf at .../Output/bibtex.pm line 730.` and writes
+`biber --tool --noconf -O - r1.bib r2.bib` (2.22 and `dev` at 6003c07) prints `Argument "XX" isn't numeric in sprintf at .../Output/bibtex.pm line 730.` and writes
 
 ```bibtex
 @MISC{a1,
@@ -155,14 +155,14 @@ and running `biber --tool` on this output reproduces it exactly.
 Two related problems in the same code:
 
 10. **`--output-safechars` (and the forced recoding when an entry can't be encoded in `--output-encoding`) is applied to the whole entry string**, including the entry key and verbatim fields. For `@misc{café, title={Café}, url={http://example.org/café}}`, tool mode writes `@MISC{caf\'{e},` and `URL = {http://example.org/caf\'{e}}`, and the `.bbl` gets `\entry{caf\'{e}}`, `\verb http://example.org/caf\'{e}` and `\verb 10.1/\'{e}` for a DOI. The key no longer matches `\cite{café}` (or the unrecoded `\keyalias` lines), and the URL is wrong. The patch recodes field by field in the BibTeX writer, and line by line in the `.bbl` writer, skipping the key lines (`\entry`, `\set`, `\inset`) and `\verb`/`\lverb` blocks. Keys and verbatim data are still recoded if they can't be encoded in the output encoding at all, as before.
-11. **Latent:** `Output/bibtex.pm`'s `output` looks up the section-99999 list by a name built from the global `sortingtemplatename`, while `tool_mode_setup` names it `tool/global//global/global/global`. These agree only because `%CONFIG_DEFAULT_BIBLATEX` overwrites the user's config with `sortingtemplatename => 'tool'` (a separate report). If that is fixed, a `biber.conf` setting `sortingtemplatename` makes tool mode die with `Can't call method "get_keys" on an undefined value`. The patch takes the section's list directly.
+11. **Latent:** `Output/bibtex.pm`'s `output` looks up the section-99999 list by a name built from the global `sortingtemplatename`, while `tool_mode_setup` names it `tool/global//global/global/global`. These agree only because `%CONFIG_DEFAULT_BIBLATEX` overwrites the user's config with `sortingtemplatename => 'tool'` (which I'll report separately). If that is fixed, a `biber.conf` setting `sortingtemplatename` makes tool mode die with `Can't call method "get_keys" on an undefined value`. The patch takes the section's list directly.
 
 ### Suggested fix
 
 ```diff
 --- a/lib/Biber.pm
 +++ b/lib/Biber.pm
-@@ -4581,6 +4581,7 @@
+@@ -4526,6 +4526,7 @@ sub prepare_tool {
    $self->process_lists;        # process the output lists (sort and filtering)
    $out->create_output_section; # Generate and push the section output into the
                                 # into the output object ready for writing
@@ -172,7 +172,7 @@ Two related problems in the same code:
  
 --- a/lib/Biber/Input/file/bibtex.pm
 +++ b/lib/Biber/Input/file/bibtex.pm
-@@ -336,8 +336,9 @@
+@@ -336,8 +336,9 @@ sub extract_entries {
  
    # Save comments if in tool mode
    if (Biber::Config->getoption('tool')) {
@@ -186,7 +186,7 @@ Two related problems in the same code:
  
 --- a/lib/Biber/Output/bbl.pm
 +++ b/lib/Biber/Output/bbl.pm
-@@ -96,6 +96,39 @@
+@@ -96,6 +96,39 @@ sub create_output_misc {
    return;
  }
  
@@ -226,7 +226,7 @@ Two related problems in the same code:
  =head2 _printfield
  
    Add the .bbl for a text field to the output accumulator.
-@@ -732,7 +765,7 @@
+@@ -732,7 +765,7 @@ sub output {
  
          # If requested to convert UTF-8 to macros ...
          if (Biber::Config->getoption('output_safechars')) {
@@ -235,7 +235,7 @@ Two related problems in the same code:
          }
          else { # ... or, check for encoding problems and force macros
            my $outenc = Biber::Config->getoption('output_encoding');
-@@ -740,7 +773,7 @@
+@@ -740,7 +773,7 @@ sub output {
              # Can this entry be represented in the output encoding?
              if (not eval { encode($outenc, NFC($entry_string), Encode::FB_CROAK | Encode::LEAVE_SRC); 1 }) { # Malformed data encoding char
                # So convert to macro
@@ -246,7 +246,7 @@ Two related problems in the same code:
            }
 --- a/lib/Biber/Output/bibtex.pm
 +++ b/lib/Biber/Output/bibtex.pm
-@@ -141,9 +141,15 @@
+@@ -141,9 +141,15 @@ sub set_output_entry {
      $outmap = sub {my $f = shift; ucfirst($CONFIG_OUTPUT_FIELDREPLACE{$f} // $f)};
    }
  
@@ -263,7 +263,7 @@ Two related problems in the same code:
  
    # hash accumulator so we can gather all the data before formatting so that things like
    # $max_field_len can be calculated
-@@ -225,7 +231,7 @@
+@@ -225,7 +231,7 @@ sub set_output_entry {
  
    # Per-entry options
    my @entryoptions;
@@ -272,7 +272,7 @@ Two related problems in the same code:
      push @entryoptions, $opt . '=' . Biber::Config->getblxoption($secnum, $opt, undef, $key);
    }
    $acc{$outmap->('options')} = join(',', @entryoptions) if @entryoptions;
-@@ -233,7 +239,7 @@
+@@ -233,7 +239,7 @@ sub set_output_entry {
    # Date fields
    foreach my $datefield ($dmh->{datefields}->@*) {
      my $d = $datefield =~ s/date$//r;
@@ -281,7 +281,7 @@ Two related problems in the same code:
  
      # Output legacy dates for YEAR/MONTH if requested
      if (not $d and Biber::Config->getoption('output_legacy_dates')) {
-@@ -275,13 +281,14 @@
+@@ -275,13 +281,14 @@ sub set_output_entry {
  
    # Standard fields
    foreach my $field ($dmh->{fields}->@*) {
@@ -298,7 +298,7 @@ Two related problems in the same code:
      }
    }
  
-@@ -343,6 +350,29 @@
+@@ -343,6 +350,29 @@ sub set_output_entry {
      }
    }
  
@@ -328,7 +328,7 @@ Two related problems in the same code:
    # Determine maximum length of field names
    my $max_field_len;
    if (Biber::Config->getoption('output_align')) {
-@@ -368,7 +398,7 @@
+@@ -368,7 +398,7 @@ sub set_output_entry {
        }
        delete @acc{@donefields};
      }
@@ -337,7 +337,7 @@ Two related problems in the same code:
        $acc .= bibfield($outmap->($field), $value, $max_field_len);
      }
    }
-@@ -380,22 +410,6 @@
+@@ -380,22 +410,6 @@ sub set_output_entry {
  
    $acc .= "}\n\n";
  
@@ -360,7 +360,7 @@ Two related problems in the same code:
    # Create an index by keyname for easy retrieval
    $self->{output_data}{ENTRIES}{$secnum}{index}{$key} = \$acc;
  
-@@ -457,15 +471,9 @@
+@@ -457,15 +471,9 @@ sub output {
    }
  
    # Bibtex output uses just one special section, always sorted by global sorting spec
@@ -379,7 +379,7 @@ Two related problems in the same code:
      out($target, ${$data->{ENTRIES}{99999}{index}{$key}});
    }
  
-@@ -483,6 +491,23 @@
+@@ -483,6 +491,23 @@ sub output {
    return;
  }
  
@@ -403,7 +403,7 @@ Two related problems in the same code:
  =head2 create_output_section
  
      Create the output from the sections data and push it into the
-@@ -595,17 +620,23 @@
+@@ -595,17 +620,23 @@ sub construct_annotation {
    my ($key, $field, $name) = @_;
    my @annotations;
  
@@ -430,7 +430,7 @@ Two related problems in the same code:
      }
    }
  
-@@ -662,7 +693,7 @@
+@@ -662,7 +693,7 @@ sub construct_datetime {
                          'springS' => 29,
                          'summerS' => 30,
                          'autumnS' => 31,
@@ -439,7 +439,7 @@ Two related problems in the same code:
                          'Q1'      => 33,
                          'Q2'      => 34,
                          'Q3'      => 35,
-@@ -715,25 +746,34 @@
+@@ -715,25 +746,34 @@ sub construct_datetime {
    # Seasons derived from ISO 8601 dates
    if (my $s = $be->get_field("${d}yeardivision")) {
      $overridem = $yeardivisions{$s};
@@ -480,7 +480,7 @@ Two related problems in the same code:
        $be->del_field("${d}day");
      }
  
-@@ -755,7 +795,7 @@
+@@ -755,7 +795,7 @@ sub construct_datetime {
      }
  
      # If start hour, there must be minute and second
@@ -489,7 +489,7 @@ Two related problems in the same code:
        $datestring .= 'T' . sprintf('%.2d', $sh) . ':' .
          sprintf('%.2d', $be->get_field("${d}minute")) . ':' .
            sprintf('%.2d', $be->get_field("${d}second"));
-@@ -777,19 +817,20 @@
+@@ -777,19 +817,20 @@ sub construct_datetime {
      }
  
      # End year
@@ -516,7 +516,7 @@ Two related problems in the same code:
          $be->del_field("${d}endday");
        }
  
-@@ -811,7 +852,7 @@
+@@ -811,7 +852,7 @@ sub construct_datetime {
        }
  
        # If end hour, there must be minute and second
@@ -525,7 +525,7 @@ Two related problems in the same code:
          $datestring .= 'T' . sprintf('%.2d', $eh) . ':' .
            sprintf('%.2d', $be->get_field("${d}endminute")) . ':' .
              sprintf('%.2d', $be->get_field("${d}endsecond"));
-@@ -827,6 +868,10 @@
+@@ -827,6 +868,10 @@ sub construct_datetime {
          $be->del_field("${d}endtimezone");
        }
      }
@@ -538,4 +538,4 @@ Two related problems in the same code:
  }
 ```
 
-The patch is on top of the one for the `$dmh->{datefields}` report (whose `my $d = $datefield =~ s/date$//r;` lines appear as context). All tests in `t/` pass on `dev` (1686b9c) with both.
+The patch applies to `dev` (6003c07), which has the fix for #546 (its `my $d = $datefield =~ s/date$//r;` lines appear as context). All tests in `t/` pass there with this patch, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.

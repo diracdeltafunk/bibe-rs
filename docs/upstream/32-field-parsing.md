@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-036, BB-037, BB-039, BB-143 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/550 (2026-11-02). Tracks BB-036, BB-037, BB-039, BB-143 (docs/biber-bugs.md). -->
 
 **Title:** BibTeX field parsing: literal annotations containing `;` are broken up, unsupported `X` dates and `YYYY-20` silently become empty or bare years, and the range parser splits braced values and keeps trailing spaces
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-All four are in `Biber::Input::file::bibtex` and the date helpers, and were checked with biber 2.22 and current `dev` (1686b9c).
+All four are in `Biber::Input::file::bibtex` and the date helpers, and were checked with biber 2.22 and current `dev` (6003c07).
 
 **1. Annotations are split on `;` before quoted literals are recognised.**
 
@@ -41,7 +41,7 @@ both give `\field{year}{}` and no message, whereas `date={2000-13}` gives `Inval
 ```diff
 --- a/lib/Biber/Date/Format.pm
 +++ b/lib/Biber/Date/Format.pm
-@@ -170,7 +170,7 @@
+@@ -170,7 +170,7 @@ sub _pre {
    }
  
    # ISO8601-2:2016 4.8 (yeardivisions)
@@ -52,7 +52,7 @@ both give `\field{year}{}` and no message, whereas `date={2000-13}` gives `Inval
  
 --- a/lib/Biber/Input/file/bibtex.pm
 +++ b/lib/Biber/Input/file/bibtex.pm
-@@ -1024,8 +1024,15 @@
+@@ -1022,8 +1022,15 @@ sub _annotation {
    }
    $fc =~ s/$ann$//;
  
@@ -69,7 +69,7 @@ both give `\field{year}{}` and no message, whereas `date={2000-13}` gives `Inval
      # Is the annotations a literal annotation?
      my $literal = 0;
      if ($annotations =~ m/^\s*"(.+)"\s*$/) {
-@@ -1192,10 +1199,10 @@
+@@ -1190,10 +1197,10 @@ sub _range {
    foreach my $value (@values) {
      my $ovalue = $value;
      $value =~ s/~/ /g; # Some normalisation for malformed fields
@@ -86,7 +86,7 @@ both give `\field{year}{}` and no message, whereas `date={2000-13}` gives `Inval
      if ($2) {
 --- a/lib/Biber/Utils.pm
 +++ b/lib/Biber/Utils.pm
-@@ -1424,7 +1424,10 @@
+@@ -1415,7 +1415,10 @@ sub parse_date_range {
  
    my $unspec;
    if ($sd =~ /X/) {# ISO8601-2 4.3 unspecified format
@@ -98,7 +98,7 @@ both give `\field{year}{}` and no message, whereas `date={2000-13}` gives `Inval
    }
    # Set start date unknown flag
    if ($sep and not $sd) {
-@@ -1485,6 +1488,8 @@
+@@ -1476,6 +1479,8 @@ sub parse_date_unspecified {
    elsif ($d =~ m/^(\d{4})\p{Dash}XX\p{Dash}XX$/) {
      return ("${1}-01-01", '/', "${1}-12-31", 'dayinyear');
    }
@@ -109,4 +109,4 @@ both give `\field{year}{}` and no message, whereas `date={2000-13}` gives `Inval
  
 ```
 
-With this change, `title+an:alt = {="literal; x"}` gives `\annotation{field}{title}{alt}{}{}{1}{literal; x}`, and a stray item without `=` gives a warning instead of erasing the annotation; `199X-05`, `XXXX` and `2000-20` give the usual `Invalid format … - ignoring` warning; and `r6` gives `\field{pages}{12-15}`, `r8` gives `\field{pages}{12}` with `\range{pages}{1}`. Values such as `M-1--M-4`, `12~--~15, 17; 20–22` and `xii--xv` are parsed as before. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this change, `title+an:alt = {="literal; x"}` gives `\annotation{field}{title}{alt}{}{}{1}{literal; x}`, and a stray item without `=` gives a warning instead of erasing the annotation; `199X-05`, `XXXX` and `2000-20` give the usual `Invalid format … - ignoring` warning; and `r6` gives `\field{pages}{12-15}`, `r8` gives `\field{pages}{12}` with `\range{pages}{1}`. Values such as `M-1--M-4`, `12~--~15, 17; 20–22` and `xii--xv` are parsed as before. All tests in `t/` pass on `dev` (6003c07) with this patch, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.

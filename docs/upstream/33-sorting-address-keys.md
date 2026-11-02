@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-042, BB-135, BB-146 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/551 (2026-11-02). Tracks BB-042, BB-135, BB-146 (docs/biber-bugs.md). -->
 
 **Title:** Sorting and title uniqueness: `labelyear` sorts as a string, a numeric first sort item makes its fallbacks numeric, verbatim list fields sort by memory address, and name-list labeltitles are compared by memory address
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Checked with biber 2.22 and current `dev` (1686b9c).
+Checked with biber 2.22 and current `dev` (6003c07).
 
 **1. `labelyear`, `labelmonth` and `labelday` sort as strings.** `sortdataschema` only types `datepart`/`integer` fields (and `citeorder` etc.) as `int`, and the label date fields aren't data-model fields. With
 
@@ -23,9 +23,9 @@ Checked with biber 2.22 and current `dev` (1686b9c).
 @book{y5, title={T}, date={0080}}
 ```
 
-`sorting=yr` gives `y3 y5 y1 y2 y4` (−50, 80, 999, 1000, 2000), but `sorting=ly` gives `y3 y2 y4 y5 y1` (−50, 1000, 2000, 80, 999).
+With `style=authoryear` (so that there is a `labelyear`), `sorting=yr` gives `y3 y5 y1 y2 y4` (−50, 80, 999, 1000, 2000), but `sorting=ly` gives `y3 y2 y4 y5 y1` (−50, 1000, 2000, 80, 999).
 
-**2. A sort column's type is taken from its first item only.** In `generate_sortdataschema` (`Biber.pm:3338`) the column type is `sortdataschema` of the first `\field`, but the other items are fallbacks for entries without the first. With `\sort{\field{year}\field{title}}`, the whole column is numeric, so for entries without a year the title is turned into the "not a number" default and ignored:
+**2. A sort column's type is taken from its first item only.** In `generate_sortdataschema` (`Biber.pm:3324`) the column type is `sortdataschema` of the first `\field`, but the other items are fallbacks for entries without the first. With `\sort{\field{year}\field{title}}`, the whole column is numeric, so for entries without a year the title is turned into the "not a number" default and ignored:
 
 ```bibtex
 @book{n1, title={Zeta}}
@@ -63,7 +63,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
 ```diff
 --- a/lib/Biber.pm
 +++ b/lib/Biber.pm
-@@ -2181,6 +2181,21 @@
+@@ -2162,6 +2162,21 @@ sub process_uniqueprimaryauthor {
    }
  }
  
@@ -85,7 +85,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
  =head2 process_workuniqueness
  
      Track seen work combination for generation of singletitle, uniquetitle, uniquebaretitle and
-@@ -2229,7 +2244,7 @@
+@@ -2210,7 +2225,7 @@ sub process_workuniqueness {
    # uniquetitle
    # Don't generate information for entries with no labeltitle
    if ($lti and Biber::Config->getblxoption($secnum, 'uniquetitle', $bee, $citekey)) {
@@ -94,7 +94,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
  
      # Skip due to ignore settings?
      unless (first {fc($lti) eq fc($_)} $ignore->{uniquetitle}->@*) {
-@@ -2241,7 +2256,7 @@
+@@ -2222,7 +2237,7 @@ sub process_workuniqueness {
    # uniquebaretitle
    # Don't generate information for entries with no labeltitle and with labelname
    if ($lti and not $lni and Biber::Config->getblxoption($secnum, 'uniquebaretitle', $bee, $citekey)) {
@@ -103,7 +103,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
  
      # Skip due to ignore settings?
      unless (first {fc($lti) eq fc($_)} $ignore->{uniquebaretitle}->@*) {
-@@ -2254,7 +2269,7 @@
+@@ -2235,7 +2250,7 @@ sub process_workuniqueness {
    # Don't generate information for entries with no labelname and labeltitle
    # Should use fullhash this is not a test of uniqueness of only visible information
    if ($lni and $lti and Biber::Config->getblxoption($secnum, 'uniquework', $bee, $citekey)) {
@@ -112,7 +112,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
  
      # Skip due to ignore settings?
      unless (first {fc($lni) eq fc($_)} $ignore->{uniquework}->@* and
-@@ -2413,8 +2428,7 @@
+@@ -2394,8 +2409,7 @@ sub process_extratitle {
        $namehash = $self->_getnamehash_u($citekey, $be->get_field($lni), $dlist);
      }
  
@@ -122,7 +122,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
  
      my $nametitle_string = "$namehash,$title_string";
      if ($logger->is_trace()) {# performance tune
-@@ -2461,8 +2475,7 @@
+@@ -2442,8 +2456,7 @@ sub process_extratitleyear {
        $logger->trace("Creating extratitleyear information for '$citekey'");
      }
  
@@ -132,7 +132,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
  
      # Takes into account the labelyear which can be a range
      my $year_string = $be->get_field('labelyear') || $be->get_field('year') || '';
-@@ -3340,7 +3353,17 @@
+@@ -3321,7 +3334,17 @@ sub generate_sortdataschema {
          }
        }
      }
@@ -153,7 +153,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
  
 --- a/lib/Biber/DataModel.pm
 +++ b/lib/Biber/DataModel.pm
-@@ -334,7 +334,9 @@
+@@ -334,7 +334,9 @@ sub new {
    # Mapping of sorting fields to Sort::Key sort data types which are not 'str'
    $self->{sortdataschema} = sub {
      my $f = shift;
@@ -166,7 +166,7 @@ Type the label date fields as integers; make a column numeric only if all its fi
      else {
 --- a/lib/Biber/Internals.pm
 +++ b/lib/Biber/Internals.pm
-@@ -1140,7 +1140,8 @@
+@@ -1128,7 +1128,8 @@ sub _dispatch_table_sorting {
    if ($dmf->{fieldtype} eq 'list' and $dmf->{datatype} eq 'name') {
      return [\&_sort_name, [$field]];
    }
@@ -178,4 +178,4 @@ Type the label date fields as integers; make a column numeric only if all its fi
    elsif ($dmf->{fieldtype} eq 'field' and $dmf->{datatype} eq 'literal' ) {
 ```
 
-With this change, `sorting=ly` gives `y3 y5 y1 y2 y4`, the year/title column gives `y1 n2 n3 n1`, the `verblist` example sorts `a b c`, and in the last example `a` and `b` lose `uniquetitle` and get `extratitle` 1 and 2. All tests in `t/` pass on `dev` (1686b9c) with this patch (`t/sorting.t` checks the schema of `nyt`, whose last column is `\field{volume}\literal{0}` and stays `int`).
+With this change, `sorting=ly` gives `y3 y5 y1 y2 y4`, the year/title column gives `y1 n2 n3 n1`, the `verblist` example sorts `a b c`, and in the last example `a` and `b` lose `uniquetitle` and get `extratitle` 1 and 2. All tests in `t/` pass on `dev` (6003c07) with this patch, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1` (`t/sorting.t` checks the schema of `nyt`, whose last column is `\field{volume}\literal{0}` and stays `int`).
