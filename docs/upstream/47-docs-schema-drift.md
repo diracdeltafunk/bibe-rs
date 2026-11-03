@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-079, BB-087, BB-088, BB-099, BB-194 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/565 (2026-11-03). Tracks BB-079, BB-087, BB-088, BB-099, BB-194 (docs/biber-bugs.md). -->
 
 **Title:** Manual and config schema out of date: Windows config path, malformed sample `biber.conf`, options missing from `config.rnc`, `mincrossrefs` and locale-override descriptions; `--output-format=bibjson` is accepted but the module is gone
 
@@ -6,9 +6,9 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Checked against `dev` (1686b9c).
+Checked against current `dev` (a91aae4).
 
-**1. Windows config file location.** The manual (section on the config file) lists `$APPDATA/biber.conf`, but `Biber::Config::config_file` looks for `%APPDATA%\biber\biber.conf` (`catfile($ENV{APPDATA}, "biber", $BIBER_CONF_NAME)`).
+**1. Windows config file location.** The manual (section on the config file) lists `$APPDATA/biber.conf`, but `Biber::Config::config_file` looks for `%APPDATA%\biber\biber.conf` (`catfile($ENV{APPDATA}, "biber", $BIBER_CONF_NAME)`). The POD of `Config.pm` has the same mistake.
 
 **2. The sample `biber.conf` in the manual is not well-formed XML.** It contains `<ouput_align>0</output_align>`, so `xmllint` stops with "Opening and ending tag mismatch: ouput_align … and output_align", and biber can't read the file if a user copies it. After fixing that tag, `--validate-config` still rejects it: it has `<graph>0</graph>` (replaced by `--output-format=dot` long ago, and not in the schema), and `<sortcase>true</sortcase>`, `<sortupper>true</sortupper>`, `<tool>false</tool>`, `<trace>false</trace>` where the schema only allows `0`/`1`.
 
@@ -26,7 +26,7 @@ Checked against `dev` (1686b9c).
 
 **4. `mincrossrefs` in the manual.** The description of the processing steps says that entries are promoted if "CROSSREF'ed or XREF'ed at least `mincrosref` times". The option name is misspelt, and the code counts the two separately: crossrefs against `mincrossrefs` and xrefs against `minxrefs` (`Biber.pm`, the two loops after "at least mincrossrefs times are included in the bibliography").
 
-**5. `bibjson` output.** `bin/biber` accepts `--output-format=bibjson` (and lists it in `--help`), but `Biber::Output::bibjson` was removed in "Removed some JSON things" (0a0460ec). `biber --tool --output-format=bibjson file.bib` fails with
+**5. `bibjson` output.** `bin/biber` accepts `--output-format=bibjson` (and lists it in `--help`), but `Biber::Output::bibjson`, which you added during #421, was removed in "Removed some JSON things" (0a0460ec). `biber --tool --output-format=bibjson file.bib` fails with
 
 ```
 ERROR - Error loading data source package 'Biber::Output::bibjson': Can't locate Biber/Output/bibjson.pm in @INC …
@@ -41,7 +41,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
 ```diff
 --- a/bin/biber
 +++ b/bin/biber
-@@ -252,8 +252,8 @@
+@@ -252,8 +252,8 @@ if ($opts->{output_macro_fields}) {
  
  # Check the output_format option
  if (my $of = $opts->{output_format}) {
@@ -52,7 +52,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
      exit EXIT_ERROR;
    }
    if ($opts->{output_format} eq 'bblxml' or $opts->{output_format} eq 'dot') {
-@@ -275,8 +275,8 @@
+@@ -275,8 +275,8 @@ if (exists($opts->{tool}) and
  # Check output-format value
  if (exists($opts->{tool}) and
      exists($opts->{output_format}) and
@@ -63,7 +63,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
      exit EXIT_ERROR;
  }
  
-@@ -369,9 +369,6 @@
+@@ -369,9 +369,6 @@ else {
      elsif (Biber::Config->getoption('output_format') eq 'biblatexml') { # tool .blxtxml output
        $outfile = $ARGV[0] =~ s/(?:\.[^.\/\\]*)?\z/_bibertool.bltxml/r;
      }
@@ -73,7 +73,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
    }
    else {
      if (Biber::Config->getoption('output_format') eq 'dot') { # .dot output
-@@ -801,7 +798,7 @@
+@@ -801,7 +798,7 @@ filename only). F<file> can be absolute if B<--output-directory> is not
  set. F<file> can be '-' to output directly to STDOUT. The legacy option
  B<--outfile> is supported as an alias.
  
@@ -84,7 +84,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
  to output a GraphViz DOT file instead of F<.bbl>. This is a directed graph of
 --- a/data/schemata/config.rnc
 +++ b/data/schemata/config.rnc
-@@ -76,6 +76,13 @@
+@@ -76,6 +76,13 @@ start =
          empty
        }+
      }? &
@@ -98,7 +98,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
      # nosort specification
      element nosort     {
        element option {
-@@ -101,7 +108,7 @@
+@@ -101,7 +108,7 @@ start =
      element output_fieldcase     { "upper" | "lower" | "title" }? &
      element output_field_replace { text }? &
      element output_file          { text }? &
@@ -107,7 +107,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
      element output_indent        { xsd:string { pattern = "\d+t?" } }? &
      element output_legacy_dates  { "0" | "1" }? &
      element output_listsep       { text }? &
-@@ -155,6 +162,29 @@
+@@ -155,6 +162,29 @@ start =
      element tool                 { "0" | "1" }? &
      element tool_config          { text }? &
      element trace                { "0" | "1" }? &
@@ -137,9 +137,205 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
      element validate_config      { "0" | "1" }? &
      element validate_control     { "0" | "1" }? &
      element validate_datamodel   { "0" | "1" }? &
+--- a/data/schemata/config.rng
++++ b/data/schemata/config.rng
+@@ -261,6 +261,19 @@
+             </oneOrMore>
+           </element>
+         </optional>
++        <optional>
++          <!-- nolabelwidthcount specification -->
++          <element name="nolabelwidthcount">
++            <oneOrMore>
++              <element name="option">
++                <attribute name="value">
++                  <data type="string"/>
++                </attribute>
++                <empty/>
++              </element>
++            </oneOrMore>
++          </element>
++        </optional>
+         <optional>
+           <!-- nosort specification -->
+           <element name="nosort">
+@@ -364,6 +377,7 @@
+               <value>bibtex</value>
+               <value>bbl</value>
+               <value>biblatexml</value>
++              <value>bblxml</value>
+               <value>dot</value>
+             </choice>
+           </element>
+@@ -612,6 +626,165 @@
+             </choice>
+           </element>
+         </optional>
++        <optional>
++          <!-- options without a dedicated place above -->
++          <element name="glob_datasources">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="input_format">
++            <text/>
++          </element>
++        </optional>
++        <optional>
++          <element name="isbn10">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="isbn13">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="isbn_normalise">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="minxrefs">
++            <data type="unsignedByte"/>
++          </element>
++        </optional>
++        <optional>
++          <element name="named_annotation_marker">
++            <text/>
++          </element>
++        </optional>
++        <optional>
++          <element name="no_bblxml_schema">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="no_bltxml_schema">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="no_default_datamodel">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="noskipduplicates">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="nouri_encode">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="output_field_order">
++            <text/>
++          </element>
++        </optional>
++        <optional>
++          <element name="output_named_annotation_marker">
++            <text/>
++          </element>
++        </optional>
++        <optional>
++          <element name="remove_tmp_dir">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="sortdebug">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="strip_comments">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="tool_noremove_missing_dependants">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="validate_bblxml">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="winunicode">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
++        <optional>
++          <element name="xsvsep">
++            <text/>
++          </element>
++        </optional>
++        <optional>
++          <element name="validate_bltxml">
++            <choice>
++              <value>0</value>
++              <value>1</value>
++            </choice>
++          </element>
++        </optional>
+         <optional>
+           <element name="validate_config">
+             <choice>
 --- a/doc/biber.tex
 +++ b/doc/biber.tex
-@@ -457,8 +457,10 @@
+@@ -457,8 +457,10 @@ entry can take as it passes through \biber.
    \begin{itemize}
    \item Entries instantiated by being members of a set.
    \item Entries instantiated by being mentioned as a \bibfield{CROSSREF} are
@@ -152,7 +348,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
    \item Clones of entries mentioned as a «related» entry of a cited entry.
    \end{itemize}
  \item Some of these auto-cited entries have the «dataonly» option set on
-@@ -630,7 +632,7 @@
+@@ -630,7 +632,7 @@ looked for in the following places, in decreasing order of preference:\\[2ex]
  \hspace*{1em}\verb+$HOME/.biber.conf+ $\rightarrow$\\
  \hspace*{2em}\verb+$XDG_CONFIG_HOME/biber/biber.conf+ $\rightarrow$\\
  \hspace*{3em}\verb+$HOME/Library/biber/biber.conf+ (Mac OSX only)\\
@@ -161,7 +357,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
  \hspace*{4em}the output of «\verb+kpsewhich biber.conf+» (if available on the
  system)\\[2ex]
  
-@@ -650,7 +652,6 @@
+@@ -650,7 +652,6 @@ an example config file which displays the \biber\ defaults:
    <decodecharsset>base</decodecharsset>
    <dieondatamodel>0</dieondatamodel>
    <dieonwarning>0</dieonwarning>
@@ -169,7 +365,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
    <input_encoding>UTF-8</input_encoding>
    <listsep>and</listsep>
    <mincrossrefs>0</mincrossrefs>
-@@ -676,7 +677,7 @@
+@@ -676,7 +677,7 @@ an example config file which displays the \biber\ defaults:
    </nosort>
    <onlylog>0</onlylog>
    <others_string>others</others_string>
@@ -178,7 +374,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
    <output_encoding>UTF-8</output_encoding>
    <output_fieldcase>upper</output_fieldcase>
    <output_format>bbl</output_format>
-@@ -690,10 +691,10 @@
+@@ -690,10 +691,10 @@ an example config file which displays the \biber\ defaults:
    <output_xdatasep>-</output_xdatasep>
    <output_xnamesep>=</output_xnamesep>
    <quiet>0</quiet>
@@ -193,7 +389,7 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
    <validate_bltxml>0</validate_bltxml>
    <validate_config>0</validate_config>
    <validate_control>0</validate_control>
-@@ -1963,7 +1964,7 @@
+@@ -1966,7 +1967,7 @@ You can reverse this globally for all sorting using the \biber\ option
  sort some fields uppercase before lower and others lower before upper. See the
  \biblatex\ manual. Be aware though that some locales rightly enforce a
  particular setting for this (for example, Danish). You will be able to
@@ -202,6 +398,17 @@ The patch removes `bibjson` from the accepted formats, so this gives the normal 
  
  There are in fact many options to \verb+Unicode::Collate+
  which can tailor the collation in various ways in
+--- a/lib/Biber/Config.pm
++++ b/lib/Biber/Config.pm
+@@ -664,7 +664,7 @@ It returns the first file found among:
+ 
+ =item * C<$HOME/Library/biber/biber.conf> (Mac OSX only)
+ 
+-=item * C<$ENV{APPDATA}/biber.conf> (Windows only)
++=item * C<$ENV{APPDATA}/biber/biber.conf> (Windows only)
+ 
+ =item * the output of C<kpsewhich biber.conf> (if available on the system).
+ 
 ```
 
-`config.rng` needs the same additions. I edited it by hand rather than regenerating it, since I didn't have `trang`; the change is mechanical (an `<optional><element name="…">` per option, with `<choice><value>0</value><value>1</value></choice>`, `<text/>` or `<data type="unsignedByte"/>`, plus `<value>bblxml</value>`), and I can attach it. With both files changed, the manual's sample `biber.conf`, the `nolabelwidthcount` example above and `data/biber-tool.conf` all validate with `--validate-config` and `xmllint --relaxng`. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+The `config.rng` part of the patch adds the same elements. I wrote it by hand, since I didn't have `trang`, following the patterns already in the file. With both files changed, the manual's sample `biber.conf`, the `nolabelwidthcount` example above and `data/biber-tool.conf` all validate with `--validate-config` and `xmllint --relaxng`; on `dev`, the first two fail. All tests in `t/` pass on `dev` (a91aae4) with this patch, both with the others I'm filing alongside it and with the patches of #555–562 added as well, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.

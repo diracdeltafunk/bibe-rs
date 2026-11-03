@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-064, BB-089, BB-090, BB-096, BB-097, BB-102, BB-106, BB-139 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/563 (2026-11-03). Tracks BB-064, BB-089, BB-090, BB-096, BB-097, BB-102, BB-106, BB-139 (docs/biber-bugs.md). -->
 
 **Title:** Small fixes: `langid={sr-Latn}` becomes `latin`, repeated transliteration warnings, a `vf` labelalpha width of 1 ignored, and several latent slips
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Checked with biber 2.22 and `dev` (1686b9c). Items 1–3 have a visible effect; the others were found by reading the code, and I could not construct an input where they change the output. I've collected them in one issue because each fix is a line or two.
+Checked with biber 2.22 and current `dev` (a91aae4). Items 1–3 have a visible effect; the others were found by reading the code, and I could not construct an input where they change the output. I've collected them in one issue because each fix is a line or two.
 
 **1. Serbian `langid`s are mapped to the wrong babel languages.** `%LOCALE_MAP_R` (Constants.pm), which turns BCP 47 `langid`s into babel/polyglossia names, has `'sr-Latn' => 'latin'` and `'sr-Cyrl' => 'serbian'`. So
 
@@ -15,7 +15,7 @@ Checked with biber 2.22 and `dev` (1686b9c). Items 1–3 have a visible effect; 
 @book{b, author={Smith, J}, title={T}, date={2000}, langid={sr-Cyrl}}
 ```
 
-gives `\field{langid}{latin}` and `\field{langid}{serbian}` in the `.bbl`. In babel, `serbian` is the Latin-script language and `serbianc` the Cyrillic one (the forward map `%LOCALE_MAP` already has `'serbian' => 'sr-Latn'` and `'serbianc' => 'sr-Cyrl'`), so these should be `serbian` and `serbianc`. The reverse map also has duplicate keys (`en-US` three times, `fr-CA` twice; only the last one takes effect), and the forward map has `'UKenglish' => 'en-UK'`, which is not a valid BCP 47 tag (`en-GB` is). The patch removes the dead duplicates and uses `en-GB`; `en-UK` stays accepted as input.
+gives `\field{langid}{latin}` and `\field{langid}{serbian}` in the `.bbl`. In babel, `serbian` is the Latin-script language and `serbianc` the Cyrillic one (the forward map `%LOCALE_MAP` already has `'serbian' => 'sr-Latn'` and `'serbianc' => 'sr-Cyrl'`), so these should be `serbian` and `serbianc` (`serbianc` is also what moewew recommends for Cyrillic entries in #348). The reverse map also has duplicate keys (`en-US` three times, `fr-CA` twice; only the last one takes effect), and the forward map has `'UKenglish' => 'en-UK'`, which is not a valid BCP 47 tag (`en-GB` is). The patch removes the dead duplicates and uses `en-GB`; `en-UK` stays accepted as input.
 
 **2. Transliteration objects are rebuilt, and warnings repeated, for every string.** `call_transliterator` calls `get_transliterator` for each value, which constructs a new `Lingua::Translit` object and re-checks the pair. With a `<bcf:translit langids="german" target="title" from="german" to="ala-lc"/>` and 21 German entries, biber prints `WARN - Invalid transliteration from/to pair (german/ala-lc)` 21 times. Caching the transliterator (or `undef`) per pair gives one warning; the `.bbl` is unchanged. (In my test with 2000 Russian titles the construction cost itself was small, so this is mainly about the noise.)
 
@@ -47,7 +47,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
 ```diff
 --- a/lib/Biber.pm
 +++ b/lib/Biber.pm
-@@ -3896,12 +3896,8 @@
+@@ -3866,12 +3866,8 @@ sub create_uniquelist_info {
      # one count. We therefore need to distinguish counts which are of the final, complete
      # list of names. If there is more than one count for these, (meaning that there are
      # two or more identical name lists), we don't expand them at all as there is no point.
@@ -64,7 +64,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
      unless (Compare($ulminyear_namelist, [])) {
 --- a/lib/Biber/Constants.pm
 +++ b/lib/Biber/Constants.pm
-@@ -486,7 +486,7 @@
+@@ -486,7 +486,7 @@ our %LOCALE_MAP = (
                     'turkmen'         => 'tk-TM',
                     'ukrainian'       => 'uk-UA',
                     'urdu'            => 'ur-IN',
@@ -73,7 +73,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
                     'uppersorbian'    => 'hsb-DE',
                     'USenglish'       => 'en-US',
                     'usorbian'        => 'hsb-DE',
-@@ -541,8 +541,6 @@
+@@ -541,8 +541,6 @@ our %LOCALE_MAP_R = (
                       'en-UK'      => 'UKenglish',
                       'en-GB'      => 'british',
                       'en-NZ'      => 'newzealand',
@@ -82,7 +82,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
                       'en-US'      => 'english',
                       'eo'         => 'esperanto',
                       'eo-001'     => 'esperanto',
-@@ -557,7 +555,6 @@
+@@ -557,7 +555,6 @@ our %LOCALE_MAP_R = (
                       'fi'         => 'finnish',
                       'fi-FI'      => 'finnish',
                       'fr'         => 'french',
@@ -90,7 +90,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
                       'fr-CA'      => 'canadien',
                       'fr-FR'      => 'french',
                       'fur'        => 'friulan',
-@@ -638,8 +635,8 @@
+@@ -638,8 +635,8 @@ our %LOCALE_MAP_R = (
                       'sq'         => 'albanian',
                       'sq-AL'      => 'albanian',
                       'sr'         => 'serbian',
@@ -103,7 +103,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
                       'syc'        => 'syriac',
 --- a/lib/Biber/DataList.pm
 +++ b/lib/Biber/DataList.pm
-@@ -1986,7 +1986,7 @@
+@@ -1986,7 +1986,7 @@ sub instantiate_entry {
            $entry_string =~ s|<BDS>$nid-PERNAMEHASH</BDS>|$str|gxms;
          }
          else {
@@ -114,7 +114,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
      }
 --- a/lib/Biber/Input/file/bibtex.pm
 +++ b/lib/Biber/Input/file/bibtex.pm
-@@ -1447,7 +1447,6 @@
+@@ -1437,7 +1437,6 @@ sub _datetime {
            # Save end yeardivision date information
            if (my $yeardivision = $CONFIG_DATE_PARSERS{end}->yeardivision) {
              $bibentry->set_field($datetype . 'endyeardivision', $yeardivision);
@@ -124,7 +124,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
            # must be an hour if there is a time but could be 00 so use defined()
 --- a/lib/Biber/Internals.pm
 +++ b/lib/Biber/Internals.pm
-@@ -716,7 +716,7 @@
+@@ -704,7 +704,7 @@ sub _process_label_attributes {
              $logger->debug("Using label disambiguation cache (name) for '$field' in section $secnum");
            }
            # Use the global index override if set (substring_width =~ /f/)
@@ -133,7 +133,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
          }
          else {
            # This contains a mapping of strings to substrings of increasing lengths
-@@ -782,7 +782,7 @@
+@@ -770,7 +770,7 @@ sub _process_label_attributes {
            }
  
            # Use the global index override if set (substring_width =~ /f/)
@@ -144,7 +144,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
                             ($nameparts ? '(' . join(',', $nameparts->@*) . ') ' : '') .
 --- a/lib/Biber/LangTags.pm
 +++ b/lib/Biber/LangTags.pm
-@@ -38,7 +38,7 @@
+@@ -38,7 +38,7 @@ regular: 'art-lojban'|'cel-gaulish'|'no-bok'|'no-nyn'|'zh-guoyu'|'zh-hakka'|'zh-
  
  alphanum: ALPHA|DIGIT
  
@@ -155,7 +155,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
  
 --- a/lib/Biber/Output/dot.pm
 +++ b/lib/Biber/Output/dot.pm
-@@ -342,7 +342,7 @@
+@@ -342,7 +342,7 @@ sub _graph_inheritance {
      else {
        foreach my $f_entry (sort keys $gr->%*) {
          my $v = $gr->{$f_entry};
@@ -166,7 +166,7 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
              next unless $state->{$secnum}{"${secnum}/${t_entry}"};
 --- a/lib/Biber/Utils.pm
 +++ b/lib/Biber/Utils.pm
-@@ -1812,8 +1812,16 @@
+@@ -1812,8 +1812,16 @@ sub maploopreplace {
  
  =cut
  
@@ -185,4 +185,4 @@ and five books by Adams, Brown, Cat, Cow and Davis, all `year=2000`, at most two
    unless (first {$from eq $_} @valid_from and
 ```
 
-All tests in `t/` pass on `dev` (1686b9c) with this patch.
+All tests in `t/` pass on `dev` (a91aae4) with this patch, both with the others I'm filing alongside it and with the patches of #555–562 added as well, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.

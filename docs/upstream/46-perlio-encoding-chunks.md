@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-152, BB-166, BB-168, BB-193 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/564 (2026-11-03). Tracks BB-152, BB-166, BB-168, BB-193 (docs/biber-bugs.md). -->
 
 **Title:** Non-UTF-8 input and output encodings break on characters that straddle PerlIO's 1024-byte `:encoding` buffer, and ISO-2022-JP input can hang
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Checked with biber 2.22 and `dev` (1686b9c), Perl 5.38.2, Encode 3.21.
+Checked with biber 2.22 and current `dev` (a91aae4), with Perl 5.38.2 and 5.42.0 (Encode 3.21).
 
 biber reads data files with `File::Slurper::read_text($filename, $encoding)` and writes the `.bbl` (and tool-mode `.bib`) through handles opened with `:encoding($enc)`. PerlIO's `:encoding` layer converts in chunks of 1024 bytes, and characters that fall across a chunk boundary are not handled correctly. Arguably these are bugs in `PerlIO::encoding`, but biber can avoid the layer completely, since it reads whole files anyway and writes whole entries.
 
@@ -32,9 +32,9 @@ The file is valid UTF-16 (Python and `Encode::decode('UTF-16', …)` read it).
 @book{a, author={Doe, J}, date={2000}, title={x€€€…€}}   % "x" followed by 400 "€"
 ```
 
-`€` has no LaTeX macro in biber's recoding data, so the layer writes it with its `\x{20ac}` fallback. But the `.bbl` has only 398 `\x{20ac}`, and in their place `\x{fffd}\x{220ac}`: the encoder got the first byte of a `€` at the end of one chunk, and the rest with the next character at the start of the following one. Without the `x`, all 400 are correct; where the damage happens depends only on where characters fall in the file. The same happens with other encodings: in our regression corpus, the KOI8-R, CP1251, ISO-2022-JP and 7-bit JIS outputs of a test file with CJK text contain `\x{fffd}` and wrong code points, the HZ output has redundant `~}~{` pairs, and the ISO-2022-KR output repeats its `ESC $ ) C` designator at the start of every line (175 times in a 164-line file).
+`€` has no LaTeX macro in biber's recoding data, so the layer writes it with its `\x{20ac}` fallback. But with Perl 5.42.0 the `.bbl` has only 399 `\x{20ac}`, and `\x{fffd}\x{fffd}` in place of one of them: the encoder got part of a `€` at the end of one chunk. With Perl 5.38.2 it was 398 and `\x{fffd}\x{220ac}`, where the rest of the cut character was combined with the next one. Without the `x`, all 400 are correct; where the damage happens depends only on where characters fall in the file. The same happens with other encodings: in our regression corpus, the KOI8-R, CP1251, ISO-2022-JP and 7-bit JIS outputs of a test file with CJK text contain `\x{fffd}` (8 to 12 per file) where the input had valid characters, and so does tool-mode ISO-2022-JP output, the HZ output has redundant `~}~{` pairs, and the ISO-2022-KR output repeats its `ESC $ ) C` designator at the start of every line (175 times in a 164-line file).
 
-**3. Reading stateful encodings can hang.** With `--input-encoding=iso-2022-jp` (also `iso-2022-jp-1`, `7bit-jis`), a single 8-bit byte in the data file, e.g. `title={T\xe9}`, makes biber loop forever at the end of the file inside `Encode.pm` (I stopped it after 20 s). Decoding the whole file avoids the loop; but `Encode`'s ISO-2022-JP decoder doesn't croak on such a byte even with `FB_CROAK`, it just stops and leaves the rest of the input unconsumed, so the patch checks for that and reports `ERROR - Data file 'j.bib' cannot be read in encoding 'iso-2022-jp': invalid data at byte 34` instead of passing on truncated data.
+**3. Reading stateful encodings can hang.** With `--input-encoding=iso-2022-jp` (also `iso-2022-jp-1`, `7bit-jis`), a single 8-bit byte in the data file, e.g. `title={T\xe9}`, makes biber loop forever at the end of the file inside `Encode.pm` (I stopped it after 15 s). Decoding the whole file avoids the loop; but `Encode`'s ISO-2022-JP decoder doesn't croak on such a byte even with `FB_CROAK`, it just stops and leaves the rest of the input unconsumed, so the patch checks for that and reports `ERROR - Data file 'j.bib' cannot be read in encoding 'iso-2022-jp': invalid data at byte 34` instead of passing on truncated data.
 
 ### Suggested fix
 
@@ -43,7 +43,7 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
 ```diff
 --- a/lib/Biber/Output/base.pm
 +++ b/lib/Biber/Output/base.pm
-@@ -58,21 +58,16 @@
+@@ -58,18 +58,14 @@ sub set_output_target_file {
  
    my $file_bytes = encode_CS_system( $file );
    $self->{output_target_file} = $file;
@@ -51,9 +51,6 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
 -  if (my $enc = Biber::Config->getoption('output_encoding')) {
 -    $enc_out = ":encoding($enc)";
 -  }
--
-   # STDOUT: don't create a file called '-' (the output methods open STDOUT)
-   return undef if not ref($file) and $file eq '-';
  
    # This is only for test suite when output is to a scalar ref
    if (ref($file) eq 'SCALAR') {
@@ -69,7 +66,7 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
  
 --- a/lib/Biber/Output/bbl.pm
 +++ b/lib/Biber/Output/bbl.pm
-@@ -702,11 +702,7 @@
+@@ -697,11 +697,7 @@ sub output {
    }
  
    if (not $target or $target_string eq '-') {
@@ -84,7 +81,7 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
    if ($logger->is_debug()) {# performance tune
 --- a/lib/Biber/Output/bibtex.pm
 +++ b/lib/Biber/Output/bibtex.pm
-@@ -437,17 +437,7 @@
+@@ -435,17 +435,7 @@ sub output {
  
    # Instantiate output file now that input is read in case we want to do in-place
    # output for tool mode
@@ -105,7 +102,7 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
      $logger->debug('Preparing final output using class ' . __PACKAGE__ . '...');
 --- a/lib/Biber/Utils.pm
 +++ b/lib/Biber/Utils.pm
-@@ -12,6 +12,7 @@
+@@ -12,6 +12,7 @@ use constant {
  use Carp;
  use Encode;
  use File::Find;
@@ -113,7 +110,7 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
  use File::Spec;
  use IPC::Cmd qw( can_run );
  use IPC::Run3; # This works with PAR::Packer and Windows. IPC::Run doesn't
-@@ -45,7 +46,7 @@
+@@ -46,7 +47,7 @@ All functions are exported by default.
  
  =cut
  
@@ -122,7 +119,7 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
    glob_data_file globU globU1 locate_data_file makenamesid makenameid stringify_hash
    normalise_string normalise_string_hash normalise_string_underscore
    normalise_string_sort normalise_string_label reduce_array remove_outer
-@@ -181,7 +182,14 @@
+@@ -182,7 +183,14 @@ sub slurp_switchr {
      $fh->close;
    }
    else {
@@ -138,7 +135,7 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
    }
    return \$slurp;
  }
-@@ -1588,7 +1596,53 @@
+@@ -1592,7 +1600,53 @@ sub biber_decode_utf8 {
  
  sub out {
    my ($fh, $string) = @_;
@@ -195,4 +192,4 @@ Decode the whole file with `Encode::decode`, and for non-UTF-8 output open the h
  =head2 process_comment
 ```
 
-With this patch, the UTF-16 file is read, the latin1 `.bbl` has 400 correct `\x{20ac}`, and for the 64 encoding cases of our regression corpus the output is byte-identical except for the damaged places above (ISO-2022-KR now repeats its designator once per entry, which is valid). Stateful encodings are encoded one entry at a time, and Encode returns to ASCII at the end of each string, so the output stays valid. The read change does not touch the Windows code-page branch of `slurp_switchr`. It also fixes `-O -` with a non-UTF-8 `--output-encoding`, which currently writes UTF-8 to standard output: `IO::File->new(">-$enc_out")` is a two-argument open, which opens STDOUT but ignores the layer (`title={café}` comes out as `caf\303\251` instead of `caf\351` with `--output-encoding=latin1`). All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this patch, the UTF-16 file is read, the latin1 `.bbl` has 400 correct `\x{20ac}`, and for the 57 encoding cases of our regression corpus the output is byte-identical except for the damaged places above (ISO-2022-KR now repeats its designator once per entry, 10 times instead of 175, which is valid). If you apply #557 first, the `'-'` check it adds to `set_output_target_file` stays where it is, above the two `open_output` calls. Stateful encodings are encoded one entry at a time, and Encode returns to ASCII at the end of each string, so the output stays valid. The read change does not touch the Windows code-page branch of `slurp_switchr`. It also fixes `-O -` with a non-UTF-8 `--output-encoding`, which currently writes UTF-8 to standard output: `IO::File->new(">-$enc_out")` is a two-argument open, which opens STDOUT but ignores the layer (`title={café}` comes out as `caf\303\251` instead of `caf\351` with `--output-encoding=latin1`). All tests in `t/` pass on `dev` (a91aae4) with this patch, both with the others I'm filing alongside it and with the patches of #555–562 added as well, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.
