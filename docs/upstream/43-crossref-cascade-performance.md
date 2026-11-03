@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-110 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/561 (2026-11-03). Tracks BB-110 (docs/biber-bugs.md). -->
 
 **Title:** Cascading crossrefs take cubic time in the number of children (`is_inheritance_path` rescans the whole inheritance list)
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Checked with `dev` (1686b9c); 2.22 has the same code.
+Checked with `dev` (a91aae4); 2.22 has the same code.
 
 A common shape of data is many `@inproceedings` that crossref one `@proceedings`, which in turn crossrefs an `@mvproceedings`:
 
@@ -19,7 +19,7 @@ with open('c1000.bib', 'w') as f:
         f.write(f'@inproceedings{{c{i}, author={{A{i}, B}}, title={{T{i}}}, crossref={{p}}}}\n')
 ```
 
-With `\nocite{*}` and the standard style, biber takes 8.2 s for 500 children and 46.5 s for 1000 children; our earlier measurements with 2000 children took about 245 s. Almost all of the time is spent in `Biber::Config::is_inheritance_path`.
+With `\nocite{*}` and the standard style, `dev` takes 5.2 s for 500 children, 29.3 s for 1,000 and 222 s for 2,000. Almost all of the time is spent in `Biber::Config::is_inheritance_path`.
 
 `set_inheritance` pushes every `{s => $source, t => $target}` pair onto a list, and `Entry::inherit_from` records `p → c_i` for each child and then, because the cascade recurses for every child, records `gp → p` again each time. To detect loops, `inherit_from` calls `is_inheritance_path($target, $source)`, which follows edges out of `$target` by `grep`ping the whole list at each step, with no visited set. When `p` inherits from `gp` for the *k*-th time, the search starts at `p`, finds the *k* edges `p → c_i`, and greps the whole list (size about 2*k*) once for each of them. That is O(*k*²) per call and O(*N*³) in total. `get_inheritance` (used in `Biber.pm` to skip crossref inheritance that was already done) is another linear scan.
 
@@ -30,7 +30,7 @@ Keep the inheritance relation as an adjacency hash (which also collapses the rep
 ```diff
 --- a/lib/Biber/Config.pm
 +++ b/lib/Biber/Config.pm
-@@ -69,8 +69,8 @@
+@@ -69,8 +69,8 @@ $CONFIG->{state}{xrefkeys} = {};
  $CONFIG->{state}{citkey_aliases} = {};
  
  # Record of which entries have inherited from other fields. Used for loop detection.
@@ -41,7 +41,7 @@ Keep the inheritance relation as an adjacency hash (which also collapses the rep
  
  # Record of which entries have inherited what from whom, with the fields inherited.
  # Used for generating inheritance trees
-@@ -99,8 +99,8 @@
+@@ -99,8 +99,8 @@ sub _init {
    $CONFIG->{state}{crossrefkeys} = {};
    $CONFIG->{state}{xrefkeys} = {};
    $CONFIG->{state}{datafiles} = [];
@@ -52,7 +52,7 @@ Keep the inheritance relation as an adjacency hash (which also collapses the rep
  
    return;
  }
-@@ -1133,7 +1133,7 @@
+@@ -1124,7 +1124,7 @@ sub get_graph {
  sub set_inheritance {
    shift; # class method so don't care about class name
    my ($type, $source, $target) = @_;
@@ -61,7 +61,7 @@ Keep the inheritance relation as an adjacency hash (which also collapses the rep
    return;
  }
  
-@@ -1148,7 +1148,7 @@
+@@ -1139,7 +1139,7 @@ sub set_inheritance {
  sub get_inheritance {
    shift; # class method so don't care about class name
    my ($type, $source, $target) = @_;
@@ -70,7 +70,7 @@ Keep the inheritance relation as an adjacency hash (which also collapses the rep
  }
  
  =head2 is_inheritance_path
-@@ -1156,24 +1156,24 @@
+@@ -1147,24 +1147,24 @@ sub get_inheritance {
    Checks for an inheritance path from entry $e1 to $e2
    Can be used for crossrefs and xdata
  
@@ -110,6 +110,6 @@ Keep the inheritance relation as an adjacency hash (which also collapses the rep
  }
 ```
 
-With this patch the same files take 3.5 s (500 children) and 6.3 s (1000 children), with byte-identical `.bbl` files. `$CONFIG->{state}{crossref}` and `{xdata}` are only accessed through these three methods. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this patch the same files take 2.2 s, 3.8 s and 7.9 s, with identical `.bbl` files (apart from the timestamp line). `$CONFIG->{state}{crossref}` and `{xdata}` are only accessed through these three methods. All tests in `t/` pass on `dev` (a91aae4) with this patch, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.
 
-I saw your answer on #529, so to be clear about why this one seemed worth reporting: the time grows with the cube of the number of children (about 4 minutes for 2,000), and the fix is a plain adjacency hash with a visited set rather than a new data structure.
+I saw your answer on #529, so to be clear about why this one seemed worth reporting: the time grows with the cube of the number of children (almost 4 minutes for 2,000), and the fix is a plain adjacency hash with a visited set rather than a new data structure.

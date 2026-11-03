@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-077, BB-078, BB-142, BB-140 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/558 (2026-11-03). Tracks BB-077, BB-078, BB-142, BB-140 (docs/biber-bugs.md). -->
 
 **Title:** BibTeX input: `--input-encoding=ascii` no longer reads UTF-8 leniently, misleading "not an integer" warning for `month={February}`, dates mixing ASCII and other digits lose the ASCII digits
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Three small problems in `Input/file/bibtex.pm` and `Date/Format.pm` (biber 2.22 and `dev` at 1686b9c), and one line that doesn't do what its comment says.
+Three small problems in `Input/file/bibtex.pm` and `Date/Format.pm` (biber 2.22 and `dev` at a91aae4), and one line that doesn't do what its comment says.
 
 **1. The ascii → UTF-8 leniency is dead code.** `preprocess_file` has
 
@@ -43,7 +43,7 @@ biber warns `legacy month field 'February' in entry 'c' is not an integer - this
 ```diff
 --- a/lib/Biber/Date/Format.pm
 +++ b/lib/Biber/Date/Format.pm
-@@ -142,7 +142,8 @@
+@@ -142,7 +142,8 @@ sub _pre {
      }
    }
    if (defined($p{self}{scriptmap})) {
@@ -55,7 +55,7 @@ biber warns `legacy month field 'February' in entry 'c' is not an integer - this
    # ISO 8601-2:2016 4.2.1 (uncertain)
 --- a/lib/Biber/Input/file/bibtex.pm
 +++ b/lib/Biber/Input/file/bibtex.pm
-@@ -123,9 +123,11 @@
+@@ -123,9 +123,11 @@ sub extract_entries {
    }
  
    # Check for files with no macros - they also confuse btparse
@@ -69,7 +69,7 @@ biber warns `legacy month field 'February' in entry 'c' is not an integer - this
    }
    unless ($tbuf =~ m/\@/) {
      biber_warn("Data source '$filename' contains no BibTeX entries/macros, ignoring");
-@@ -1079,7 +1081,8 @@
+@@ -1074,7 +1076,8 @@ sub _literal {
    }
    if ($fc eq 'month') {
      return if $bibentry->get_datafield('month');
@@ -79,7 +79,7 @@ biber warns `legacy month field 'February' in entry 'c' is not an integer - this
        biber_warn("legacy month field '$value' in entry '$key' is not an integer - this will probably not sort properly.");
      }
    }
-@@ -1819,7 +1822,7 @@
+@@ -1812,7 +1815,7 @@ sub parsename {
    my ($section, $namestr, $fieldname) = @_;
  
    # First sanitise the namestring due to Text::BibTeX::Name limitations on whitespace
@@ -90,4 +90,4 @@ biber warns `legacy month field 'February' in entry 'c' is not an integer - this
    $namestr =~ s/\A\{\{+([^\{\}]+)\}+\}\z/{$1}/xms; # Allow only one enveloping set of braces
 ```
 
-All tests in `t/` pass on `dev` (1686b9c) with this patch.
+All tests in `t/` pass on `dev` (a91aae4) with this patch, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.

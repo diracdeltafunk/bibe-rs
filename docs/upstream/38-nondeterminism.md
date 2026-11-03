@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-060, BB-061, BB-062, BB-112, BB-113, BB-065 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/556 (2026-11-03). Tracks BB-060, BB-061, BB-062, BB-112, BB-113, BB-065 (docs/biber-bugs.md). -->
 
 **Title:** The `.bbl` (and errors) change between identical runs: per-name options, promoted crossref targets and dynamic sets in hash order, XDATA cycle errors, `$MAPUNIQ`
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Running biber twice on the same input should give the same `.bbl`: latexmk and similar tools rerun LaTeX when the `.bbl` changes, and reproducible builds compare outputs. In the cases below, biber 2.22 and `dev` (1686b9c) give different output from run to run, because of Perl's hash-order randomisation or the clock.
+Running biber twice on the same input should give the same `.bbl`: latexmk and similar tools rerun LaTeX when the `.bbl` changes, and reproducible builds compare outputs. In the cases below, biber 2.22 and `dev` (a91aae4) give different output from run to run, because of Perl's hash-order randomisation or the clock.
 
 **1. Per-name options are written in hash order.** With `uniquename=true` and
 
@@ -14,14 +14,14 @@ Running biber twice on the same input should give the same `.bbl`: latexmk and s
 @book{a, author={useprefix=true, sortingnamekeytemplatename=global, uniquenametemplatename=global, labelalphanametemplatename=global, family=Doe, given=John}, title={A}, date={2000}}
 ```
 
-eight runs gave eight different `.bbl` files on `dev`, e.g.
+eight runs on `dev` gave seven different `.bbl` files, e.g.
 
 ```
 {{un=0,uniquepart=base,labelalphanametemplatename=global,uniquenametemplatename=global,useprefix=true,sortingnamekeytemplatename=global,hash=…}{%
 {{un=0,uniquepart=base,useprefix=true,uniquenametemplatename=global,sortingnamekeytemplatename=global,labelalphanametemplatename=global,hash=…}{%
 ```
 
-The loops over `keys $CONFIG_SCOPEOPT_BIBLATEX{NAME}` in `Entry/Name.pm` (`name_to_bbl`, `name_to_bblxml`, `name_to_bibjson`) and over `…{NAMELIST}` in `Output/bbl.pm` and `Output/bblxml.pm` are unsorted. (The same loops in the biblatexml and BibTeX writers are covered in the reports on those writers.)
+The loops over `keys $CONFIG_SCOPEOPT_BIBLATEX{NAME}` in `Entry/Name.pm` (`name_to_bbl`, `name_to_bblxml`, `name_to_bibjson`) and over `…{NAMELIST}` in `Output/bbl.pm` and `Output/bblxml.pm` are unsorted. (The BibTeX writer's `OPTIONS` field has the same problem; that was #553.)
 
 **2. Promoted crossref/xref targets are added in hash order.** With `sorting=none` and `\cite{c1,c2,c3,c4,c5,c6}`:
 
@@ -37,11 +37,11 @@ The loops over `keys $CONFIG_SCOPEOPT_BIBLATEX{NAME}` in `Entry/Name.pm` (`name_
 @book{p3, title={P3}}
 ```
 
-the parents (included because of `mincrossrefs=2`) came out as `p3, p1, p2`, `p1, p3, p2`, `p1, p2, p3`, `p3, p2, p1`, … in six runs, so their labelnumbers change. `Config::get_crossrefkeys` and `get_xrefkeys` return `keys`.
+the parents (included because of `mincrossrefs=2`) came out in five different orders in eight runs (`p1, p2, p3`, `p2, p1, p3`, `p2, p3, p1`, `p3, p1, p2`, `p3, p2, p1`), so their labelnumbers change. `Config::get_crossrefkeys` and `get_xrefkeys` return `keys`.
 
-**3. Dynamic sets are added in hash order under `\nocite{*}`.** With `sorting=none`, `\nocite{*}` and `\defbibentryset{setA}{c1,c2}`, `\defbibentryset{setB}{c3,c4}`, `\defbibentryset{setC}{c5,c6}`, the sets came out in a different order in almost every run. `Section::dynamic_set_keys` returns `keys`; the patch returns them in the order of definition.
+**3. Dynamic sets are added in hash order under `\nocite{*}`.** With `sorting=none`, `\nocite{*}` and `\defbibentryset{setA}{c1,c2}`, `\defbibentryset{setB}{c3,c4}`, `\defbibentryset{setC}{c5,c6}`, the sets came out in four different orders in eight runs. `Section::dynamic_set_keys` returns `keys`; the patch returns them in the order of definition.
 
-**4. Circular XDATA errors depend on hash order.** In a copy of `t/tdata`, `biber --noconf xdata.bcf` stops with either `Circular XDATA inheritance between 'loop'<->'loop:3'` or `… between 'lxd1:loop'<->'lxd2:loop'`, after 8 to 19 warnings (8 runs). `resolve_xdata` iterates over `$section->bibentries->entries`, which is `values` of the entries hash. The patch makes `Entries::entries` return the entries in key order, so every caller is deterministic.
+**4. Circular XDATA errors depend on hash order.** In a copy of `t/tdata`, `biber --noconf xdata.bcf` stops with either `Circular XDATA inheritance between 'loop'<->'loop:3'` (5 of 8 runs) or `… between 'lxd1:loop'<->'lxd2:loop'` (3 of 8 runs). `resolve_xdata` iterates over `$section->bibentries->entries`, which is `values` of the entries hash. The patch makes `Entries::entries` return the entries in key order, so every caller is deterministic.
 
 **5. `$MAPUNIQ` comes from the clock.** `maploopreplace` uses `Data::Uniqid::suniqid`, so a sourcemap that keys new entries with `$MAPUNIQ` (the pattern of biblatex's `95-customlists.tex`) gives new keys, and therefore a new `.bbl`, on every run:
 
@@ -56,16 +56,16 @@ the parents (included because of `mincrossrefs=2`) came out as `p3, p1, p2`, `p1
 </map>
 ```
 
-With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6yn2Slw6EV`, then `4nuT2xDKQO, 4pDdep5HUS`, then `2l9Rpg6mm7, 2nebml7f7t`. (Outside `map_foreach`, `$MAPUNIQ` is not replaced at all on `dev`; that is a separate report.) The patch uses a counter (`mapuniq1`, `mapuniq2`, …). Even with a counter, which source entry gets which value depended on hash order, because `extract_entries` (BibTeX input, `\nocite{*}`) creates the entries with `each` over the parse cache; the patch creates them in file order (`orig_key_order`, which already exists for `sorting=none`).
+With this map in `biber.conf` and two entries that have an abstract, three runs gave the keys `4EZKNjaIrI, 4FTirsT7P8`, then `6HJu6Zg8Hf, 6IC9bm4taF`, then `1mjd9KHT9W, 1ndy6eAWXW`. The patch uses a counter (`mapuniq1`, `mapuniq2`, …). Even with a counter, which source entry gets which value depended on hash order, because `extract_entries` (BibTeX input, `\nocite{*}`) creates the entries with `each` over the parse cache; the patch creates them in file order (`orig_key_order`, which already exists for `sorting=none`).
 
-**6.** The order of warnings in the `.blg` also varied between runs (e.g. with `-V`), largely for the reasons above. I have not checked every source of warnings after the patch, but the examples above give identical `.blg` files from run to run, apart from the date line and timings (on `dev`, four runs of the XDATA example gave four different logs).
+**6.** The order of warnings in the `.blg` also varied between runs (e.g. with `-V`), largely for the reasons above. I have not checked every source of warnings after the patch, but the examples above give identical `.blg` files from run to run, apart from the date line and timings (on `dev`, four runs of the XDATA example gave four different logs; with the patch, six runs gave identical ones).
 
 ### Suggested fix
 
 ```diff
 --- a/lib/Biber/Config.pm
 +++ b/lib/Biber/Config.pm
-@@ -1258,7 +1258,7 @@
+@@ -1258,7 +1258,7 @@ sub reset_keyorder {
  
  sub get_crossrefkeys {
    shift; # class method so don't care about class name
@@ -74,7 +74,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  }
  
  =head1 xrefkeys
-@@ -1271,7 +1271,7 @@
+@@ -1271,7 +1271,7 @@ sub get_crossrefkeys {
  
  sub get_xrefkeys {
    shift; # class method so don't care about class name
@@ -85,7 +85,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  =head2 get_crossrefkey
 --- a/lib/Biber/Entries.pm
 +++ b/lib/Biber/Entries.pm
-@@ -65,7 +65,9 @@
+@@ -65,7 +65,9 @@ sub entry {
  
  sub entries {
    my $self = shift;
@@ -98,7 +98,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  
 --- a/lib/Biber/Entry/Name.pm
 +++ b/lib/Biber/Entry/Name.pm
-@@ -310,7 +310,7 @@
+@@ -331,7 +331,7 @@ sub name_to_bibjson {
  
  
    # Add per-name options
@@ -107,7 +107,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
      if (defined($self->${\"get_$no"})) {
        my $nov = $self->${\"get_$no"};
  
-@@ -459,7 +459,7 @@
+@@ -480,7 +480,7 @@ sub name_to_bbl {
    }
  
    # Add per-name options
@@ -116,7 +116,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
      if (defined($self->${\"get_$no"})) {
        my $nov = $self->${\"get_$no"};
  
-@@ -519,7 +519,7 @@
+@@ -540,7 +540,7 @@ sub name_to_bblxml {
    }
  
    # Add per-name options
@@ -127,7 +127,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  
 --- a/lib/Biber/Input/file/bibtex.pm
 +++ b/lib/Biber/Input/file/bibtex.pm
-@@ -194,8 +194,12 @@
+@@ -194,8 +194,12 @@ sub extract_entries {
        $logger->debug("All citekeys will be used for section '$secnum'");
      }
  
@@ -142,7 +142,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  
        # Record a key->datasource name mapping for error reporting
        $section->set_keytods($key, $filename);
-@@ -209,8 +213,8 @@
+@@ -209,8 +213,8 @@ sub extract_entries {
      # Loop over all aliases, creating data in section object
      # Since this is allkeys, we are guaranteed that the real entry for the alias
      # will be available
@@ -155,7 +155,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
      # If allkeys, push all bibdata keys into citekeys (if they are not already there).
 --- a/lib/Biber/Output/bbl.pm
 +++ b/lib/Biber/Output/bbl.pm
-@@ -340,7 +340,7 @@
+@@ -340,7 +340,7 @@ sub set_output_entry {
          }
  
          # Add per-namelist options
@@ -166,7 +166,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  
 --- a/lib/Biber/Output/bblxml.pm
 +++ b/lib/Biber/Output/bblxml.pm
-@@ -243,7 +243,7 @@
+@@ -243,7 +243,7 @@ sub set_output_entry {
          }
  
          # Add per-namelist options
@@ -177,7 +177,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  
 --- a/lib/Biber/Section.pm
 +++ b/lib/Biber/Section.pm
-@@ -835,6 +835,8 @@
+@@ -835,6 +835,8 @@ sub set_dynamic_set {
    my $self = shift;
    my $dkey = shift;
    my @members = @_;
@@ -186,7 +186,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
    $self->{dkeys}{$dkey} = \@members;
    return;
  }
-@@ -866,7 +868,9 @@
+@@ -866,7 +868,9 @@ sub get_dynamic_set {
  
  sub dynamic_set_keys {
    my $self = shift;
@@ -199,7 +199,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  =head2 has_dynamic_sets
 --- a/lib/Biber/Utils.pm
 +++ b/lib/Biber/Utils.pm
-@@ -19,7 +19,6 @@
+@@ -19,7 +19,6 @@ use Biber::CodePage qw ( :DEFAULT string_analysis );
  use Biber::Constants;
  use Biber::LaTeX::Recode;
  use Biber::Entry::Name;
@@ -207,7 +207,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  use Regexp::Common qw( balanced );
  use List::AllUtils qw( first );
  use Log::Log4perl qw(:no_extra_logdie_message);
-@@ -1784,6 +1783,10 @@
+@@ -1788,6 +1787,10 @@ sub parse_range_alt {
  
  =cut
  
@@ -218,7 +218,7 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
  sub maploopreplace {
    # $MAPUNIQVAL is lexical here
    no strict 'vars';
-@@ -1793,7 +1796,7 @@
+@@ -1797,7 +1800,7 @@ sub maploopreplace {
    $string =~ s/\$MAPLOOP/$maploop/g if defined($maploop);
    $string =~ s/\$MAPUNIQVAL/$MAPUNIQVAL/g;
    if ($string =~ m/\$MAPUNIQ/) {
@@ -229,4 +229,4 @@ With two entries that have an abstract, three runs gave the keys `6weFaaUxhf, 6y
    }
 ```
 
-With this patch, each example gives the same output in repeated runs. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+With this patch, each example gives the same output in repeated runs. All tests in `t/` pass on `dev` (a91aae4) with this patch, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.

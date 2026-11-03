@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber. Not yet filed. Tracks BB-049, BB-093 (docs/biber-bugs.md). -->
+<!-- Draft upstream issue for plk/biber. Posted as https://github.com/plk/biber/issues/562 (2026-11-03). Tracks BB-049, BB-093 (docs/biber-bugs.md). -->
 
 **Title:** `.bbl` loses information: no `\refsection` block (and so no `\missing`) for a section without found entries; related-entry clones lose `endyeardivision`
 
@@ -6,7 +6,7 @@
 
 🤖 This issue was identified by Claude Opus 5.5, and the text below is entirely written by Claude Opus 5.5
 
-Checked with biber 2.22 and `dev` (1686b9c).
+Checked with biber 2.22 and `dev` (a91aae4).
 
 **1. A refsection whose cited keys are all missing gets no block in the `.bbl`.** With
 
@@ -35,7 +35,7 @@ and `\cite{a,b}`, the `.bbl` entry for `b` has `\field{yeardivision}{spring}` an
 ```diff
 --- a/lib/Biber/Entry.pm
 +++ b/lib/Biber/Entry.pm
-@@ -176,7 +176,7 @@
+@@ -177,7 +177,7 @@ sub clone {
      my $df = $datefield =~ s/date$//r;
      foreach my $dsf ('dateunspecified', 'datesplit', 'datejulian',
                       'enddatejulian', 'dateapproximate', 'enddateapproximate',
@@ -46,7 +46,7 @@ and `\cite{a,b}`, the `.bbl` entry for `b` has `\field{yeardivision}{spring}` an
          $new->{derivedfields}{"$df$dsf"} = $ds;
 --- a/lib/Biber/Output/bbl.pm
 +++ b/lib/Biber/Output/bbl.pm
-@@ -718,7 +718,9 @@
+@@ -713,7 +713,9 @@ sub output {
  
    out($target, $data->{HEAD});
  
@@ -67,4 +67,4 @@ With this patch, the first example gives
 \endrefsection
 ```
 
-and the clone in the second example also has `\field{endyeardivision}{autumn}`. All tests in `t/` pass on `dev` (1686b9c) with this patch.
+and the clone in the second example also has `\field{endyeardivision}{autumn}`. All tests in `t/` pass on `dev` (a91aae4) with this patch, applied together with the others I'm filing alongside it, including the end-to-end tests run with `BIBER_DEV_TESTS=1`.
