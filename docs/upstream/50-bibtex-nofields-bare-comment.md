@@ -1,4 +1,4 @@
-<!-- Draft upstream issue for plk/biber (the fix is in Text::BibTeX 1.0's parser). Not yet filed. Tracks the 01-B21 note in docs/biber-bugs.md ("Not bugs, but worth mentioning upstream"). -->
+<!-- Draft upstream issue for plk/biber (the fix is in Text::BibTeX 1.0's parser). Posted as https://github.com/plk/biber/issues/567 (2026-11-04). Tracks the 01-B21 note in docs/biber-bugs.md ("Not bugs, but worth mentioning upstream"). -->
 
 **Title:** Text::BibTeX 1.0: an entry with no fields (`@misc{key}`) or a bare `@comment` stops biber, though BibTeX accepts both
 
